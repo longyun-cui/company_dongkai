@@ -5364,6 +5364,7 @@ class DKClientRepository {
             ->with([
                 'order_er'=>function($query) { $query->select('*'); },
                 'project_er'=>function($query) { $query->select('id','name'); },
+                'client_staff_er'=>function($query) { $query->select(['id','username','true_name']); },
             ])
             ->whereIn('id',$ids_array);
 
@@ -5386,6 +5387,21 @@ class DKClientRepository {
 
             if($v['assign_status'] == 1) $cellData[$k]['assign_status'] = "已分配";
             else $cellData[$k]['assign_status'] = "未分配";
+
+            if($v['client_staff_er'])
+            {
+                $cellData[$k]['assign_status'] = "已分配";
+                $cellData[$k]['client_staff_er_name'] = $v['client_staff_er']['username'];
+            }
+            else
+            {
+                if($v['assign_status'] != 1)
+                {
+                    $cellData[$k]['assign_status'] = "未分配";
+                }
+                $cellData[$k]['client_staff_er_name'] = '';
+            }
+
 
 //            $cellData[$k]['project_er_name'] = $v['project_er']['name'];
 
@@ -5438,6 +5454,7 @@ class DKClientRepository {
             'created_time'=>'交付时间',
             'order_quality'=>'工单质量',
             'assign_status'=>'是否分配',
+            'client_staff_er_name'=>'分派员工',
 //            'project_er_name'=>'项目',
 //            'channel_source'=>'渠道来源',
             'client_type'=>'患者类型',
@@ -5491,14 +5508,14 @@ class DKClientRepository {
                     'D'=>16,
                     'E'=>16,
                     'F'=>16,
-                    'G'=>20,
-                    'H'=>10,
+                    'G'=>16,
+                    'H'=>16,
                     'I'=>16,
                     'J'=>16,
                     'K'=>16,
-                    'L'=>40,
+                    'L'=>16,
                     'M'=>40,
-                    'N'=>30,
+                    'N'=>40,
                     'O'=>30
                 ));
                 $sheet->setAutoSize(false);
@@ -5528,6 +5545,7 @@ class DKClientRepository {
             ->with([
                 'order_er'=>function($query) { $query->select('*'); },
                 'project_er'=>function($query) { $query->select('id','name'); },
+                'client_staff_er'=>function($query) { $query->select(['id','username','true_name']); },
             ])
             ->whereIn('id',$ids_array);
 
@@ -5548,6 +5566,21 @@ class DKClientRepository {
 
             if($v['assign_status'] == 1) $cellData[$k]['assign_status'] = "已分配";
             else $cellData[$k]['assign_status'] = "未分配";
+
+            if($v['client_staff_er'])
+            {
+                $cellData[$k]['assign_status'] = "已分配";
+                $cellData[$k]['client_staff_er_name'] = $v['client_staff_er']['username'];
+            }
+            else
+            {
+                if($v['assign_status'] != 1)
+                {
+                    $cellData[$k]['assign_status'] = "未分配";
+                }
+                $cellData[$k]['client_staff_er_name'] = '';
+            }
+
 
 //            $cellData[$k]['project_er_name'] = $v['project_er']['name'];
 
@@ -5571,6 +5604,8 @@ class DKClientRepository {
             $cellData[$k]['location_district'] = $v['order_er']['location_district'];
 
 //            $cellData[$k]['teeth_count'] = $v['order_er']['teeth_count'];
+
+            $cellData[$k]['follow_latest_description'] = $v['follow_latest_description'];
 
             $cellData[$k]['description'] = $v['order_er']['description'];
 //            $cellData[$k]['recording_address'] = $v['order_er']['recording_address'];
@@ -5599,6 +5634,7 @@ class DKClientRepository {
 //            'creator_name'=>'创建人',
             'created_time'=>'交付时间',
             'assign_status'=>'是否分配',
+            'client_staff_er_name'=>'分派员工',
 //            'project_er_name'=>'项目',
 //            'channel_source'=>'渠道来源',
             'field_1'=>'品类',
@@ -5609,6 +5645,7 @@ class DKClientRepository {
             'location_city'=>'所在城市',
             'location_district'=>'行政区',
 //            'teeth_count'=>'牙齿数量',
+            'follow_latest_description'=>'最新跟进状态',
             'description'=>'通话小结',
             'recording_address'=>'录音地址',
 //            'is_repeat'=>'是否重复',
@@ -5647,17 +5684,18 @@ class DKClientRepository {
                 $sheet->setWidth(array(
                     'A'=>10,
                     'B'=>20,
-                    'C'=>20,
-                    'D'=>20,
-                    'E'=>20,
-                    'F'=>20,
+                    'C'=>16,
+                    'D'=>16,
+                    'E'=>16,
+                    'F'=>16,
                     'G'=>16,
-                    'H'=>10,
-                    'I'=>10,
+                    'H'=>16,
+                    'I'=>16,
                     'J'=>16,
                     'K'=>40,
                     'L'=>30,
-                    'M'=>30
+                    'M'=>30,
+                    'N'=>30
                 ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
@@ -5686,6 +5724,7 @@ class DKClientRepository {
             ->with([
                 'order_er'=>function($query) { $query->select('*'); },
                 'project_er'=>function($query) { $query->select('id','name'); },
+                'client_staff_er'=>function($query) { $query->select(['id','username','true_name']); },
             ])
             ->whereIn('id',$ids_array);
 
@@ -5706,6 +5745,20 @@ class DKClientRepository {
 
             if($v['assign_status'] == 1) $cellData[$k]['assign_status'] = "已分配";
             else $cellData[$k]['assign_status'] = "未分配";
+
+            if($v['client_staff_er'])
+            {
+                $cellData[$k]['assign_status'] = "已分配";
+                $cellData[$k]['client_staff_er_name'] = $v['client_staff_er']['username'];
+            }
+            else
+            {
+                if($v['assign_status'] != 1)
+                {
+                    $cellData[$k]['assign_status'] = "未分配";
+                }
+                $cellData[$k]['client_staff_er_name'] = '';
+            }
 
 //            $cellData[$k]['project_er_name'] = $v['project_er']['name'];
 
@@ -5730,6 +5783,8 @@ class DKClientRepository {
             $cellData[$k]['location_district'] = $v['order_er']['location_district'];
 
 //            $cellData[$k]['teeth_count'] = $v['order_er']['teeth_count'];
+
+            $cellData[$k]['follow_latest_description'] = $v['follow_latest_description'];
 
             $cellData[$k]['description'] = $v['order_er']['description'];
 //            $cellData[$k]['recording_address'] = $v['order_er']['recording_address'];
@@ -5758,6 +5813,7 @@ class DKClientRepository {
 //            'creator_name'=>'创建人',
             'created_time'=>'交付时间',
             'assign_status'=>'是否分配',
+            'client_staff_er_name'=>'分派员工',
 //            'project_er_name'=>'项目',
 //            'channel_source'=>'渠道来源',
             'field_1'=>'品类',
@@ -5768,6 +5824,7 @@ class DKClientRepository {
             'location_city'=>'所在城市',
             'location_district'=>'行政区',
 //            'teeth_count'=>'牙齿数量',
+            'follow_latest_description'=>'最新跟进状态',
             'description'=>'通话小结',
             'recording_address'=>'录音地址',
 //            'is_repeat'=>'是否重复',
@@ -5806,17 +5863,18 @@ class DKClientRepository {
                 $sheet->setWidth(array(
                     'A'=>10,
                     'B'=>20,
-                    'C'=>20,
-                    'D'=>20,
-                    'E'=>20,
-                    'F'=>20,
+                    'C'=>16,
+                    'D'=>16,
+                    'E'=>16,
+                    'F'=>16,
                     'G'=>16,
-                    'H'=>10,
-                    'I'=>10,
+                    'H'=>16,
+                    'I'=>16,
                     'J'=>16,
                     'K'=>40,
                     'L'=>30,
-                    'M'=>30
+                    'M'=>30,
+                    'N'=>30
                 ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
