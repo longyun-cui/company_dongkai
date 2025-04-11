@@ -5723,6 +5723,7 @@ class DKAdminRepository {
             ->where('id','<>',$id)
             ->where('is_published','>',0)
             ->where('published_date',$date)
+            ->where('item_category',$item->item_category)
             ->count("*");
         if($is_today_repeat > 0)
         {
@@ -5730,7 +5731,10 @@ class DKAdminRepository {
         }
 
         $is_repeat = DK_Order::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])
-            ->where('id','<>',$id)->where('is_published','>',0)->count("*");
+            ->where('id','<>',$id)
+            ->where('is_published','>',0)
+            ->where('item_category',$item->item_category)
+            ->count("*");
         if($is_repeat == 0)
         {
             $is_repeat = DK_Pivot_Client_Delivery::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])->count("*");
