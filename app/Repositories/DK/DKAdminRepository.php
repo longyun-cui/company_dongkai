@@ -5694,6 +5694,9 @@ class DKAdminRepository {
             return response_error([],$messages->first());
         }
 
+        $time = time();
+        $date = date("Y-m-d");
+
         $operate = $post_data["operate"];
         if($operate != 'order-publish') return response_error([],"参数[operate]有误！");
         $id = $post_data["item_id"];
@@ -5716,15 +5719,22 @@ class DKAdminRepository {
         $project_id = $item->project_id;
         $client_phone = $item->client_phone;
 
+        $is_today_repeat = DK_Order::where(['client_phone'=>(int)$client_phone])
+            ->where('id','<>',$id)
+            ->where('is_published','>',0)
+            ->where('published_date',$date)
+            ->count("*");
+        if($is_today_repeat > 0)
+        {
+            return response_error([],"该号码今日已经提交过，不能重复提交！");
+        }
+
         $is_repeat = DK_Order::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])
             ->where('id','<>',$id)->where('is_published','>',0)->count("*");
         if($is_repeat == 0)
         {
             $is_repeat = DK_Pivot_Client_Delivery::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])->count("*");
         }
-
-        $time = time();
-        $date = date("Y-m-d");
 
         // 启动数据库事务
         DB::beginTransaction();
