@@ -449,6 +449,27 @@
 
                 </div>
 
+
+    {{--是否+V--}}
+                <div class="btn-group" id="option-list-for-field_2">
+
+                    <button type="button" class="btn">
+                        <span class="radio">
+                            <label>
+                                <input type="radio" name="field-set-radio-value" value="1" class="info-set-column"> 白班
+                            </label>
+                        </span>
+                    </button>
+                    <button type="button" class="btn">
+                        <span class="radio">
+                            <label>
+                                <input type="radio" name="field-set-radio-value" value="9" class="info-set-column"> 夜班
+                            </label>
+                        </span>
+                    </button>
+
+                </div>
+
         {{--是否分发--}}
                 <div class="btn-group" id="option-list-for-is-distributive">
 

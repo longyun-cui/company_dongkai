@@ -584,6 +584,34 @@
                     }
                 },
                 {
+                    "title": "班次",
+                    "data": "field_2",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        {
+                            $(nTd).attr('data-row-index',iRow);
+
+                            $(nTd).addClass('modal-show-for-field-set');
+                            $(nTd).attr('data-id',row.id).attr('data-name','班次');
+                            $(nTd).attr('data-key','field_2').attr('data-value',data);
+
+                            $(nTd).attr('data-column-type','radio');
+                            $(nTd).attr('data-column-name','班次');
+
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        if(data == 1) return '<small class="btn-xs bg-green">白班</small>';
+                        else if(data == 9) return '<small class="btn-xs bg-navy">夜班</small>';
+                        else return '--';
+                    }
+                },
+                {
                     "title": "项目",
                     "data": "project_id",
                     "className": "",

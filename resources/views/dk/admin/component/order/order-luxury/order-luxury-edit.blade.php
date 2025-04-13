@@ -166,6 +166,30 @@
                     </div>
                 </div>
 
+
+                {{--班次--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 班次</label>
+                    <div class="col-md-8 ">
+                        <div class="col-sm-4 col-md-4 padding-0">
+                            <div class="btn-group">
+
+                                <button type="button" class="btn">
+                                    <span class="radio">
+                                        <label><input type="radio" name="field_2" value="1" checked="checked"> 白班</label>
+                                    </span>
+                                </button>
+                                <button type="button" class="btn">
+                                    <span class="radio">
+                                        <label><input type="radio" name="field_2" value="9"> 夜班</label>
+                                    </span>
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             </form>
 

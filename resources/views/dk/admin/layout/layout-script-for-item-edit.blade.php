@@ -1016,6 +1016,9 @@
                         $modal.find('input[name="is_wx"]').prop('checked', false);
                         $modal.find('input[name="is_wx"][value="'+$response.data.is_wx+'"]').prop('checked', true).trigger('change');
 
+                        $modal.find('input[name="field_2"]').prop('checked', false);
+                        $modal.find('input[name="field_2"][value="'+$response.data.field_2+'"]').prop('checked', true).trigger('change');
+
                         $modal.find('input[name="wx_id"]').val($response.data.wx_id);
                         $modal.find('input[name="recording_address"]').val($response.data.recording_address);
                         $modal.find('textarea[name="description"]').val($response.data.description);
@@ -1171,6 +1174,9 @@
                         $modal.find('input[name="is_wx"]').prop('checked', false);
                         $modal.find('input[name="is_wx"][value="'+$response.data.is_wx+'"]').prop('checked', true).trigger('change');
 
+                        $modal.find('input[name="field_2"]').prop('checked', false);
+                        $modal.find('input[name="field_2"][value="'+$response.data.field_2+'"]').prop('checked', true).trigger('change');
+
                         $modal.find('input[name="wx_id"]').val($response.data.wx_id);
                         $modal.find('input[name="recording_address"]').val($response.data.recording_address);
                         $modal.find('textarea[name="description"]').val($response.data.description);
@@ -1325,6 +1331,9 @@
 
                         $modal.find('input[name="is_wx"]').prop('checked', false);
                         $modal.find('input[name="is_wx"][value="'+$response.data.is_wx+'"]').prop('checked', true).trigger('change');
+
+                        $modal.find('input[name="field_2"]').prop('checked', false);
+                        $modal.find('input[name="field_2"][value="'+$response.data.field_2+'"]').prop('checked', true).trigger('change');
 
                         $modal.find('input[name="wx_id"]').val($response.data.wx_id);
                         $modal.find('input[name="recording_address"]').val($response.data.recording_address);
@@ -1497,6 +1506,12 @@
                 else if($that.attr("data-key") == "is_distributive")
                 {
                     var $option_html = $('#option-list-for-is-distributive').html();
+                    $modal.find('.radio-wrapper').html($option_html).show();
+                    $modal.find('.radio-wrapper').find('input[name="field-set-radio-value"][value="'+$that.attr("data-value")+'"]').prop("checked",true);
+                }
+                else if($that.attr("data-key") == "field_2")
+                {
+                    var $option_html = $('#option-list-for-field_2').html();
                     $modal.find('.radio-wrapper').html($option_html).show();
                     $modal.find('.radio-wrapper').find('input[name="field-set-radio-value"][value="'+$that.attr("data-value")+'"]').prop("checked",true);
                 }
@@ -1830,6 +1845,26 @@
                             else if($radio_value == 1)
                             {
                                 $row.find('[data-key="is_distributive"]').attr('data-value',$radio_value).html('<small class="btn-xs btn-success">是</small>');
+                            }
+                            else
+                            {
+                            }
+                        }
+
+                        if(column_key == 'field_2')
+                        {
+                            var $radio_value = $response.data.data.value;
+                            if($radio_value == 0)
+                            {
+                                $row.find('[data-key="field_2"]').attr('data-value',$radio_value).html('--');
+                            }
+                            else if($radio_value == 1)
+                            {
+                                $row.find('[data-key="field_2"]').attr('data-value',$radio_value).html('<small class="btn-xs bg-green">白班</small>');
+                            }
+                            else if($radio_value == 9)
+                            {
+                                $row.find('[data-key="field_2"]').attr('data-value',$radio_value).html('<small class="btn-xs bg-navy">夜班</small>');
                             }
                             else
                             {
