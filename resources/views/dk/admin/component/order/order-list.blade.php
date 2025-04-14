@@ -184,7 +184,7 @@
             </button>
 
 
-            <button type="button" onclick="" class="btn btn-default btn-filter " id="bulk-submit-for-export">
+            <button type="button" onclick="" class="btn btn-default btn-filter bulk-submit-for-order-export" id="" data-item-category="1">
                 <i class="fa fa-download"></i> 批量导出
             </button>
             {{--<button type="button" onclick="" class="btn btn-default btn-filter"><i class="fa fa-trash-o"></i> 批量删除</button>--}}

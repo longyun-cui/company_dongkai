@@ -877,22 +877,22 @@ class DKAdminController extends Controller
 
 
 
-    // 【】
+    // 【数据-导出】工单-下载
     public function v1_operate_for_statistic_order_export()
     {
         $item_category = request('item_category',0);
 
         if($item_category == 1)
         {
-            return $this->repo->v1_operate_for_statistic_order_export(request()->all());
+            return $this->repo->v1_operate_for_statistic_order_export_for_dental(request()->all());
         }
         else if($item_category == 11)
         {
-            return $this->repo->v1_operate_for_statistic_aesthetic_export(request()->all());
+            return $this->repo->v1_operate_for_statistic_order_export_for_aesthetic(request()->all());
         }
         else if($item_category == 31)
         {
-            return $this->repo->v1_operate_for_statistic_order_luxury_export(request()->all());
+            return $this->repo->v1_operate_for_statistic_order_export_for_luxury(request()->all());
         }
         else
         {
@@ -900,22 +900,22 @@ class DKAdminController extends Controller
         }
 
     }
-    // 【统计】订单-导出
+    // 【数据-导出】工单-下载
     public function v1_operate_for_statistic_order_export_by_ids()
     {
         $item_category = request('item_category',0);
 
         if($item_category == 1)
         {
-            return $this->repo->v1_operate_for_statistic_order_export_by_ids(request()->all());
+            return $this->repo->v1_operate_for_statistic_order_export_by_ids_for_dental(request()->all());
         }
         else if($item_category == 11)
         {
-            return $this->repo->v1_operate_for_statistic_order_aesthetic_export_by_ids(request()->all());
+            return $this->repo->v1_operate_for_statistic_order_export_by_ids_for_aesthetic(request()->all());
         }
         else if($item_category == 31)
         {
-            return $this->repo->v1_operate_for_statistic_order_luxury_export_by_ids(request()->all());
+            return $this->repo->v1_operate_for_statistic_order_export_by_ids_for_luxury(request()->all());
         }
         else
         {
@@ -924,21 +924,22 @@ class DKAdminController extends Controller
     }
 
 
+    // 【数据-导出】交付-下载
     public function v1_operate_for_statistic_delivery_export()
     {
         $item_category = request('item_category',0);
 
         if($item_category == 1)
         {
-            return $this->repo->v1_operate_for_statistic_delivery_export(request()->all());
+            return $this->repo->v1_operate_for_statistic_delivery_export_for_dental(request()->all());
         }
         else if($item_category == 11)
         {
-            return $this->repo->v1_operate_for_statistic_delivery_aesthetic_export(request()->all());
+            return $this->repo->v1_operate_for_statistic_delivery_export_for_aesthetic(request()->all());
         }
         else if($item_category == 31)
         {
-            return $this->repo->v1_operate_for_statistic_delivery_luxury_export(request()->all());
+            return $this->repo->v1_operate_for_statistic_delivery_export_for_luxury(request()->all());
         }
         else
         {
@@ -947,6 +948,7 @@ class DKAdminController extends Controller
     }
 
 
+    // 【数据-导出】去重-下载
     public function v1_operate_for_statistic_duplicate_export()
     {
         $item_category = request('item_category',0);
@@ -954,31 +956,23 @@ class DKAdminController extends Controller
         if($item_category == 1)
         {
             return $this->repo->v1_operate_for_statistic_duplicate_export(request()->all());
-//            return $this->repo->v1_operate_for_statistic_duplicate_dental_export(request()->all());
+//            return $this->repo->v1_operate_for_statistic_duplicate_export_for_dental(request()->all());
         }
         else if($item_category == 11)
         {
             return $this->repo->v1_operate_for_statistic_duplicate_export(request()->all());
-//            return $this->repo->v1_operate_for_statistic_duplicate_aesthetic_export(request()->all());
+//            return $this->repo->v1_operate_for_statistic_duplicate_export_for_aesthetic(request()->all());
         }
         else if($item_category == 31)
         {
             return $this->repo->v1_operate_for_statistic_duplicate_export(request()->all());
-//            return $this->repo->v1_operate_for_statistic_duplicate_luxury_export(request()->all());
+//            return $this->repo->v1_operate_for_statistic_duplicate_export_for_luxury(request()->all());
         }
         else
         {
             return $this->repo->v1_operate_for_statistic_duplicate_export(request()->all());
         }
     }
-
-
-
-
-
-
-
-
 
 
 
