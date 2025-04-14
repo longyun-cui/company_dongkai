@@ -4976,15 +4976,16 @@ class DKAdminRepository {
 //        dd($post_data);
         $messages = [
             'operate.required' => 'operate.required.',
-            'project_id.required' => '请填选择项目！',
+            'project_id.required' => '请选择项目！',
             'project_id.numeric' => '选择项目参数有误！',
-            'project_id.min' => '请填选择项目！',
+            'project_id.min' => '请选择项目！',
             'client_name.required' => '请填写客户信息！',
             'client_phone.required' => '请填写客户电话！',
             'client_phone.numeric' => '客户电话格式有误！',
             'client_type.required' => '请患者类型！',
             'client_intention.required' => '请选择客户意向！',
             'teeth_count.required' => '请选择牙齿数量！',
+            'field_2.required' => '请选择班次！',
 //            'location_city.required' => '请选择城市！',
 //            'location_district.required' => '请选择行政区！',
             'description.required' => '请输入通话小结！',
@@ -4997,6 +4998,7 @@ class DKAdminRepository {
             'client_type' => 'required',
             'client_intention' => 'required',
             'teeth_count' => 'required',
+            'field_2' => 'required',
 //            'location_city' => 'required',
 //            'location_district' => 'required',
             'description' => 'required',
@@ -5136,15 +5138,16 @@ class DKAdminRepository {
 //        dd($post_data);
         $messages = [
             'operate.required' => 'operate.required.',
-            'project_id.required' => '请填选择项目！',
+            'project_id.required' => '请选择项目！',
             'project_id.numeric' => '选择项目参数有误！',
-            'project_id.min' => '请填选择项目！',
+            'project_id.min' => '请选择项目！',
             'client_name.required' => '请填写客户信息！',
             'client_phone.required' => '请填写客户电话！',
             'client_phone.numeric' => '客户电话格式有误！',
             'client_type.required' => '请患者类型！',
             'client_intention.required' => '请选择客户意向！',
             'teeth_count.required' => '请选择牙齿数量！',
+            'field_2.required' => '请选择班次！',
 //            'location_city.required' => '请选择城市！',
 //            'location_district.required' => '请选择行政区！',
             'description.required' => '请输入通话小结！',
@@ -5157,6 +5160,7 @@ class DKAdminRepository {
             'client_type' => 'required',
             'client_intention' => 'required',
             'teeth_count' => 'required',
+            'field_2' => 'required',
 //            'location_city' => 'required',
 //            'location_district' => 'required',
             'description' => 'required',
@@ -5296,15 +5300,16 @@ class DKAdminRepository {
 //        dd($post_data);
         $messages = [
             'operate.required' => 'operate.required.',
-            'project_id.required' => '请填选择项目！',
+            'project_id.required' => '请选择项目！',
             'project_id.numeric' => '选择项目参数有误！',
-            'project_id.min' => '请填选择项目！',
+            'project_id.min' => '请选择项目！',
             'client_name.required' => '请填写客户信息！',
             'client_phone.required' => '请填写客户电话！',
             'client_phone.numeric' => '客户电话格式有误！',
 //            'client_type.required' => '请患者类型！',
 //            'client_intention.required' => '请选择客户意向！',
             'field_1.required' => '请选择品类！',
+            'field_2.required' => '请选择班次！',
 //            'location_city.required' => '请选择城市！',
 //            'location_district.required' => '请选择行政区！',
             'description.required' => '请输入通话小结！',
@@ -5317,6 +5322,7 @@ class DKAdminRepository {
 //            'client_type' => 'required',
 //            'client_intention' => 'required',
             'field_1' => 'required',
+            'field_2' => 'required',
 //            'location_city' => 'required',
 //            'location_district' => 'required',
             'description' => 'required',
@@ -5456,15 +5462,16 @@ class DKAdminRepository {
 //        dd($post_data);
         $messages = [
             'operate.required' => 'operate.required.',
-            'project_id.required' => '请填选择项目！',
+            'project_id.required' => '请选择项目！',
             'project_id.numeric' => '选择项目参数有误！',
-            'project_id.min' => '请填选择项目！',
+            'project_id.min' => '请选择项目！',
             'client_name.required' => '请填写客户信息！',
             'client_phone.required' => '请填写客户电话！',
             'client_phone.numeric' => '客户电话格式有误！',
 //            'client_type.required' => '请患者类型！',
 //            'client_intention.required' => '请选择客户意向！',
             'field_1.required' => '请选择品类！',
+            'field_2.required' => '请选择班次！',
 //            'location_city.required' => '请选择城市！',
 //            'location_district.required' => '请选择行政区！',
             'description.required' => '请输入通话小结！',
@@ -5477,6 +5484,7 @@ class DKAdminRepository {
 //            'client_type' => 'required',
 //            'client_intention' => 'required',
             'field_1' => 'required',
+            'field_2' => 'required',
 //            'location_city' => 'required',
 //            'location_district' => 'required',
             'description' => 'required',
@@ -25014,9 +25022,9 @@ EOF;
     {
         $messages = [
             'operate.required' => 'operate.required',
-            'project_id.required' => '请填选择项目！',
+            'project_id.required' => '请选择项目！',
             'project_id.numeric' => '选择项目参数有误！',
-            'project_id.min' => '请填选择项目！',
+            'project_id.min' => '请选择项目！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
@@ -25297,12 +25305,12 @@ EOF;
     {
         $messages = [
             'operate.required' => 'operate.required',
-            'project_id.required' => '请填选择项目！',
+            'project_id.required' => '请选择项目！',
             'project_id.numeric' => '选择项目参数有误！',
-            'project_id.min' => '请填选择项目！',
-            'client_id.required' => '请填选择客户！',
+            'project_id.min' => '请选择项目！',
+            'client_id.required' => '请选择客户！',
             'client_id.numeric' => '选择客户参数有误！',
-            'client_id.min' => '请填选择客户！',
+            'client_id.min' => '请选择客户！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
@@ -25595,9 +25603,9 @@ EOF;
 //        dd($post_data);
         $messages = [
             'operate.required' => 'operate.required.',
-            'project_id.required' => '请填选择项目！',
+            'project_id.required' => '请选择项目！',
             'project_id.numeric' => '选择项目参数有误！',
-            'project_id.min' => '请填选择项目！',
+            'project_id.min' => '请选择项目！',
             'client_name.required' => '请填写客户信息！',
             'client_phone.required' => '请填写客户电话！',
             'client_phone.numeric' => '客户电话格式有误！',
@@ -25606,6 +25614,7 @@ EOF;
             'teeth_count.required' => '请选择牙齿数量！',
 //            'location_city.required' => '请选择城市！',
 //            'location_district.required' => '请选择行政区！',
+            'field_2.required' => '请选择班次！',
             'description.required' => '请输入通话小结！',
         ];
         $v = Validator::make($post_data, [
@@ -25618,6 +25627,7 @@ EOF;
             'teeth_count' => 'required',
 //            'location_city' => 'required',
 //            'location_district' => 'required',
+            'field_2' => 'required',
             'description' => 'required',
         ], $messages);
         if ($v->fails())
@@ -29462,7 +29472,7 @@ EOF;
 //        dd($post_data);
         $messages = [
             'operate.required' => 'operate.required.',
-            'assign_date.required' => '请填选择日期！',
+            'assign_date.required' => '请选择日期！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
