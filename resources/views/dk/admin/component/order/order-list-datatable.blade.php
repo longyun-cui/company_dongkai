@@ -70,7 +70,7 @@
                 "leftColumns": "@if($is_mobile_equipment) 1 @else 5 @endif",
                 "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
                 @else
-                "leftColumns": "@if($is_mobile_equipment) 1 @else 7 @endif",
+                "leftColumns": "@if($is_mobile_equipment) 1 @else 4 @endif",
                 "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
                 @endif
 
@@ -79,7 +79,7 @@
                     {{--@if(!in_array($me->user_type,[0,1,11]))--}}
                     @if($me->department_district_id != 0)
                 {
-                    "targets": [0,5,9,10,11],
+                    "targets": [0,5,6,7,8,9,10,11],
                     "visible": false,
                 }
                 @endif
@@ -1193,7 +1193,7 @@
                         }
                     }
                 },
-                    @endif
+                @endif
                 {
                     "title": "部门",
                     "data": "department_district_id",
@@ -1268,7 +1268,11 @@
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return row.inspector == null ? '--' : '<a href="javascript:void(0);">'+row.inspector.true_name+'</a>';
+                        @if(in_array($me->user_type,[41,81,84,88]))
+                            return row.inspector == null ? '--' : '****';
+                        @else
+                            return row.inspector == null ? '--' : '<a href="javascript:void(0);">'+row.inspector.true_name+'</a>';
+                        @endif
                     }
                 },
                 {
