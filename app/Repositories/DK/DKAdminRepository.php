@@ -7980,7 +7980,7 @@ class DKAdminRepository {
 
         // 分发当天数据
         $query_distributed_of_today = (clone $query_distributed)
-            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(updated_at))"),$the_date)
+            ->where('delivered_date',$the_date)
             ->select(DB::raw("
                     count(*) as distributed_count_for_all
                 "))
