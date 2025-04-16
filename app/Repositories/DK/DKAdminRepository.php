@@ -8144,7 +8144,7 @@ class DKAdminRepository {
 
         // 分发当月数据
         $query_distributed_of_month = (clone $query_distributed)
-            ->whereBetween('updated_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
+            ->whereBetween('delivered_date',[$the_month_start_date,$the_month_ended_date])
             ->select(DB::raw("
                     count(*) as distributed_count_for_all
                 "))
@@ -8155,7 +8155,7 @@ class DKAdminRepository {
 
 
         // 当月统计
-        $query_order_of_month = (clone $query)->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
+        $query_order_of_month = (clone $query)->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date])
             ->whereIn('created_type',[1,99])
             ->where('item_category',1)
             ->select(DB::raw("
@@ -8227,30 +8227,30 @@ class DKAdminRepository {
 
 
         $query_delivered_of_month = (clone $query)
-            ->whereBetween('delivered_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
+            ->whereBetween('delivered_date',[$the_month_start_date,$the_month_ended_date])
             ->whereIn('created_type',[1,99])
             ->select(DB::raw("
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as delivered_count_for_all,
-                    count(IF(delivered_status = 1 AND published_at > '{$the_month_start_timestamp}' AND published_at < '{$the_month_ended_timestamp}', TRUE, NULL)) as delivered_count_for_all_by_same_day,
-                    count(IF(delivered_status = 1 AND published_at < '{$the_month_start_timestamp}' AND published_at > '{$the_month_ended_timestamp}', TRUE, NULL)) as delivered_count_for_all_by_other_day,
+                    count(IF(delivered_status = 1 AND published_date > '{$the_month_start_date}' AND published_date < '{$the_month_ended_date}', TRUE, NULL)) as delivered_count_for_all_by_same_day,
+                    count(IF(delivered_status = 1 AND published_date < '{$the_month_start_date}' AND published_date > '{$the_month_ended_date}', TRUE, NULL)) as delivered_count_for_all_by_other_day,
                     
                     count(IF(delivered_result = '已交付', TRUE, NULL)) as delivered_count_for_completed,
-                    count(IF(delivered_result = '已交付' AND published_at > '{$the_month_start_timestamp}' AND published_at < '{$the_month_ended_timestamp}', TRUE, NULL)) as delivered_count_for_completed_by_same_day,
-                    count(IF(delivered_result = '已交付' AND published_at < '{$the_month_start_timestamp}' AND published_at > '{$the_month_ended_timestamp}', TRUE, NULL)) as delivered_count_for_completed_by_other_day,
+                    count(IF(delivered_result = '已交付' AND published_date > '{$the_month_start_date}' AND published_date < '{$the_month_ended_timestamp}', TRUE, NULL)) as delivered_count_for_completed_by_same_day,
+                    count(IF(delivered_result = '已交付' AND published_date < '{$the_month_start_date}' AND published_date > '{$the_month_ended_timestamp}', TRUE, NULL)) as delivered_count_for_completed_by_other_day,
                     
                     count(IF(delivered_result = '内部交付', TRUE, NULL)) as delivered_count_for_inside,
-                    count(IF(delivered_result = '内部交付' AND published_at > '{$the_month_start_timestamp}' AND published_at < '{$the_month_ended_timestamp}', TRUE, NULL)) as delivered_count_for_inside_by_same_day,
-                    count(IF(delivered_result = '内部交付' AND published_at < '{$the_month_start_timestamp}' AND published_at > '{$the_month_ended_timestamp}', TRUE, NULL)) as delivered_count_for_inside_by_other_day,
+                    count(IF(delivered_result = '内部交付' AND published_date > '{$the_month_start_date}' AND published_date < '{$the_month_ended_timestamp}', TRUE, NULL)) as delivered_count_for_inside_by_same_day,
+                    count(IF(delivered_result = '内部交付' AND published_date < '{$the_month_start_date}' AND published_date > '{$the_month_ended_timestamp}', TRUE, NULL)) as delivered_count_for_inside_by_other_day,
                     
                     count(IF(delivered_result = '隔日交付', TRUE, NULL)) as delivered_count_for_tomorrow,
                     
                     count(IF(delivered_result = '重复', TRUE, NULL)) as delivered_count_for_repeated,
-                    count(IF(delivered_result = '重复' AND published_at > '{$the_month_start_timestamp}' AND published_at < '{$the_month_ended_timestamp}', TRUE, NULL)) as delivered_count_for_repeated_by_same_day,
-                    count(IF(delivered_result = '重复' AND published_at < '{$the_month_start_timestamp}' AND published_at > '{$the_month_ended_timestamp}', TRUE, NULL)) as delivered_count_for_repeated_by_other_day,
+                    count(IF(delivered_result = '重复' AND published_date > '{$the_month_start_date}' AND published_date < '{$the_month_ended_date}', TRUE, NULL)) as delivered_count_for_repeated_by_same_day,
+                    count(IF(delivered_result = '重复' AND published_date < '{$the_month_start_date}' AND published_date > '{$the_month_ended_date}', TRUE, NULL)) as delivered_count_for_repeated_by_other_day,
                     
                     count(IF(delivered_result = '驳回', TRUE, NULL)) as delivered_count_for_rejected,
-                    count(IF(delivered_result = '驳回' AND published_at > '{$the_month_start_timestamp}' AND published_at < '{$the_month_ended_timestamp}', TRUE, NULL)) as delivered_count_for_rejected_by_same_day,
-                    count(IF(delivered_result = '驳回' AND published_at < '{$the_month_start_timestamp}' AND published_at > '{$the_month_ended_timestamp}', TRUE, NULL)) as delivered_count_for_rejected_by_other_day
+                    count(IF(delivered_result = '驳回' AND published_date > '{$the_month_start_date}' AND published_date < '{$the_month_ended_date}', TRUE, NULL)) as delivered_count_for_rejected_by_same_day,
+                    count(IF(delivered_result = '驳回' AND published_date < '{$the_month_start_date}' AND published_date > '{$the_month_ended_date}', TRUE, NULL)) as delivered_count_for_rejected_by_other_day
                 "))
             ->get();
 

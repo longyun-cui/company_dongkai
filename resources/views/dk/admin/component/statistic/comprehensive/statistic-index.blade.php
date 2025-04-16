@@ -10,7 +10,7 @@
             <button type="button" class="btn btn-default btn-filter time-picker-btn time-picker-move picker-move-pre date-pick-pre-for-comprehensive">
                 <i class="fa fa-chevron-left"></i>
             </button>
-            <input type="text" class="search-filter form-filter filter-keyup date_picker" name="comprehensive-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+            <input type="text" class="search-filter form-filter filter-keyup date_picker-c" name="comprehensive-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
             <button type="button" class="btn btn-default btn-filter time-picker-btn time-picker-move picker-move-next date-pick-next-for-comprehensive">
                 <i class="fa fa-chevron-right"></i>
             </button>
@@ -19,7 +19,7 @@
             <button type="button" class="btn btn-default btn-filter month-picker-btn time-picker-move picker-move-pre month-pick-pre-for-comprehensive">
                 <i class="fa fa-chevron-left"></i>
             </button>
-            <input type="text" class="search-filter form-filter filter-keyup month_picker" name="comprehensive-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" style="" />
+            <input type="text" class="search-filter form-filter filter-keyup month_picker-c" name="comprehensive-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" style="" />
             <button type="button" class="btn btn-default btn-filter month-picker-btn time-picker-move picker-move-next month-pick-next-for-comprehensive">
                 <i class="fa fa-chevron-right"></i>
             </button>
