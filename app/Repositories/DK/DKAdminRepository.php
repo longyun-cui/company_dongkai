@@ -4695,7 +4695,7 @@ class DKAdminRepository {
         // 员工
         if(!empty($post_data['staff']))
         {
-            if(!in_array($post_data['staff'],[-1,0]))
+            if(!in_array($post_data['staff'],[-1,0,'-1','0']))
             {
                 $query->where('creator_id', $post_data['staff']);
             }
@@ -4722,7 +4722,7 @@ class DKAdminRepository {
         // 客户
         if(isset($post_data['client']))
         {
-            if(!in_array($post_data['client'],[-1]))
+            if(!in_array($post_data['client'],[-1,0,'-1','0']))
             {
                 $query->where('client_id', $post_data['client']);
             }
@@ -4731,7 +4731,7 @@ class DKAdminRepository {
         // 项目
         if(isset($post_data['project']))
         {
-            if(!in_array($post_data['project'],[-1]))
+            if(!in_array($post_data['project'],[-1,0,'-1','0']))
             {
                 $query->where('project_id', $post_data['project']);
             }
