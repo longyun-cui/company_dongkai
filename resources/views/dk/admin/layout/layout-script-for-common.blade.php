@@ -111,7 +111,7 @@
             var $pre_month_str = $pre_year+'-'+$pre_month;
             $month_dom.val($pre_month_str);
 
-            $search_wrapper.find('.filter-submit-c').click();
+            $search_wrapper.find('.filter-submit-c[data-time-type=month]').click();
 
         });
         // 【通用【后一月】
@@ -146,7 +146,7 @@
             var $next_month_str = $next_year+'-'+$next_month;
             $month_dom.val($next_month_str);
 
-            $search_wrapper.find('.filter-submit-c').click();
+            $search_wrapper.find('.filter-submit-c[data-time-type=month]').click();
         });
 
         // 【通用【前一天】
@@ -174,7 +174,7 @@
             var $yesterday_date_str = $yesterday_year + '-' + $yesterday_month + '-' + $yesterday_day;
             $date_dom.val($yesterday_date_str);
 
-            $search_wrapper.find('.filter-submit-c').click();
+            $search_wrapper.find('.filter-submit-c[data-time-type=date]').click();
         });
         // 【通用【后一天】
         $(".main-content").on('click', ".date-next-c", function() {
@@ -201,7 +201,7 @@
             var $tomorrow_date_str = $tomorrow_year + '-' + $tomorrow_month + '-' + $tomorrow_day;
             $date_dom.val($tomorrow_date_str);
 
-            $search_wrapper.find('.filter-submit-c').click();
+            $search_wrapper.find('.filter-submit-c[data-time-type=date]').click();
         });
 
 
