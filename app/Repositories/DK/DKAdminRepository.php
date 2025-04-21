@@ -4890,11 +4890,14 @@ class DKAdminRepository {
             }
             else if(in_array($me->user_type,[71,77]))
             {
-                $time = time();
-                if(($v->published_at > 0) && (($time - $v->published_at) > 86400))
+                if($v->item_category == 1)
                 {
-                    $client_phone = $v->client_phone;
-                    $v->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
+                    $time = time();
+                    if(($v->published_at > 0) && (($time - $v->published_at) > 86400))
+                    {
+                        $client_phone = $v->client_phone;
+                        $v->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
+                    }
                 }
             }
             else if(in_array($me->user_type,[41,81,84,88]))
