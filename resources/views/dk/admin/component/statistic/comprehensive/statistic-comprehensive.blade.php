@@ -5,7 +5,7 @@
         <div class="pull-right">
 
 
-            <input type="hidden" name="statistic-comprehensive-time-type" class="time-type" value="" readonly>
+            <input type="hidden" name="statistic-comprehensive-time-type" class="time-type" value="date" readonly>
 
 {{--            <select class="search-filter form-filter filter-xl select2-project-c" name="comprehensive-project">--}}
 {{--                <option value="-1">选择项目</option>--}}
@@ -32,7 +32,7 @@
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre date-pre-c" data-target="statistic-comprehensive-date">
                 <i class="fa fa-chevron-left"></i>
             </button>
-            <input type="text" class="search-filter form-filter filter-keyup date_picker" name="statistic-comprehensive-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+            <input type="text" class="search-filter form-filter filter-keyup date_picker-c" name="statistic-comprehensive-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next date-next-c" data-target="statistic-comprehensive-date">
                 <i class="fa fa-chevron-right"></i>
             </button>
@@ -86,7 +86,7 @@
     <div class="col-md-12">
 
         <div class="box-header with-border" style="margin:4px 0;">
-            <h3 class="box-title comprehensive-title">【综合概览】</h3>
+            <h3 class="box-title comprehensive-title">【口腔统计】</h3>
         </div>
 
 
@@ -103,28 +103,28 @@
 
                 <div class="box-body">
                     <ul class="nav nav-stacked">
-                        <li class="order_of_for_published">
+                        <li class="order_dental_for_published">
                             <a href="javascript:void(0);">报单量<span class="pull-right"><b class="badge bg-black"></b> 单</span></a>
                         </li>
-                        <li class="order_count_for_inspected">
+                        <li class="order_dental_for_inspected_all">
                             <a href="javascript:void(0);">审核量<span class="pull-right"><b class="badge bg-blue"></b> 单</span></a>
                         </li>
-                        <li class="order_count_for_inspected_all">
+                        <li class="order_dental_for_inspected_accepted">
                             <a href="javascript:void(0);">通过<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
-                        <li class="order_count_for_delivered_effective_rate">
+                        <li class="order_dental_for_inspected_effective_rate">
                             <a href="javascript:void(0);">通过率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>
                         </li>
-                        <li class="order_count_for_delivered_repeated">
+                        <li class="order_dental_for_inspected_repeated">
                             <a href="javascript:void(0);">重复<span class="pull-right"><b class="badge bg-orange"></b> 单</span></a>
                         </li>
-                        <li class="order_count_for_delivered_rejected">
+                        <li class="order_dental_for_inspected_refused">
                             <a href="javascript:void(0);">拒绝<span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
                         </li>
-                        <li class="order_count_for_delivered_effective">
+                        <li class="order_dental_for_inspected_effective">
                             <a href="javascript:void(0);">有效量（客服业绩量） <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
-                        <li class="order_count_for_delivered_effective_rate">
+                        <li class="order_dental_for_inspected_effective_rate">
                             <a href="javascript:void(0);">有效率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>
                         </li>
                     </ul>
@@ -145,7 +145,7 @@
                 </div>
                 <div class="box-body">
                     <ul class="nav nav-stacked">
-                        <li class="order_count_for_inspected_all">
+                        <li class="order_dental_for_inspected_all">
                             <a href="javascript:void(0);">审核量 <span class="pull-right"><b class="badge bg-blue"></b> 单</span></a>
                         </li>
                         <li class="order_count_for_inspected_accepted">
@@ -252,17 +252,17 @@
                 </div>
                 <div class="box-body">
                     <ul class="nav nav-stacked">
-                        <li class="deliverer_of_all_for_completed">
+                        <li class="delivery_dental_for_all">
                             <a href="javascript:void(0);">总交付量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
-                        <li class="deliverer_of_all_for_completed_by_same_day">
-                            <a href="javascript:void(0);">-- 当日工单 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
-                        </li>
-                        <li class="deliverer_of_all_for_completed_by_other_day">
-                            <a href="javascript:void(0);">-- 昨转今工单 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
-                        </li>
+{{--                        <li class="deliverer_of_all_for_completed_by_same_day">--}}
+{{--                            <a href="javascript:void(0);">-- 当日工单 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>--}}
+{{--                        </li>--}}
+{{--                        <li class="deliverer_of_all_for_completed_by_other_day">--}}
+{{--                            <a href="javascript:void(0);">-- 昨转今工单 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>--}}
+{{--                        </li>--}}
                         @if(in_array($me->user_type,[0,1,9,11,61,66]))
-                            <li class="distributed_of_all_for_all">
+                            <li class="delivery_dental_for_distributed">
                                 <a href="javascript:void(0);">总分发量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                             </li>
                         @endif

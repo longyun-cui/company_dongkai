@@ -8316,33 +8316,35 @@ class DKAdminRepository {
         $me = $this->me;
 
 
-        $query_order = DK_Order::select('id','item_category')->where('is_published',1);
-        $query_delivery = DK_Pivot_Client_Delivery::select('id','order_category');
+        $query_order_published = DK_Order::where('is_published',1);
+        $query_order_inspected = DK_Order::where('is_published',1);
+        $query_order_delivered = DK_Order::where('is_published',1);
+        $query_delivery = DK_Pivot_Client_Delivery::select('order_category');
 
 
         if($me->user_type == 41)
         {
-            $query_order->where('department_district_id',$me->department_district_id);
+            $query_order_published->where('department_district_id',$me->department_district_id);
         }
         else if($me->user_type == 81)
         {
-            $query_order->where('department_manager_id',$me->id);
+            $query_order_published->where('department_manager_id',$me->id);
         }
         else if($me->user_type == 84)
         {
-            $query_order->where('department_supervisor_id',$me->id);
+            $query_order_published->where('department_supervisor_id',$me->id);
         }
         else if($me->user_type == 88)
         {
-            $query_order->where('creator_id',$me->id);
+            $query_order_published->where('creator_id',$me->id);
         }
         else if($me->user_type == 71)
         {
-            $query_order->where('inspector_id',$me->id);
+            $query_order_published->where('inspector_id',$me->id);
         }
         else if($me->user_type == 77)
         {
-            $query_order->where('inspector_id',$me->id);
+            $query_order_published->where('inspector_id',$me->id);
         }
 
 
@@ -8351,7 +8353,9 @@ class DKAdminRepository {
         {
             if(!in_array($post_data['project'],[-1,0,'-1','0']))
             {
-                $query_order->where('project_id', $post_data['project']);
+                $query_order_published->where('project_id', $post_data['project']);
+                $query_order_inspected->where('project_id', $post_data['project']);
+                $query_order_delivered->where('project_id', $post_data['project']);
                 $query_delivery->where('project_id', $post_data['project']);
             }
         }
@@ -8370,7 +8374,9 @@ class DKAdminRepository {
             $department_district_array = array_diff($post_data['department_district'], [-1,0,'-1','0']);
             if(count($department_district_array))
             {
-                $query_order->whereIn('department_district_id', $department_district_array);
+                $query_order_published->whereIn('department_district_id', $department_district_array);
+                $query_order_inspected->whereIn('department_district_id', $department_district_array);
+                $query_order_delivered->whereIn('department_district_id', $department_district_array);
             }
         }
 
@@ -8382,7 +8388,11 @@ class DKAdminRepository {
         if($time_type == 'date')
         {
             $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
-            $query_order->where('published_date',$the_date);
+
+            $query_order_published->where('published_date',$the_date);
+            $query_order_inspected->where('inspected_date',$the_date);
+            $query_order_delivered->where('delivered_date',$the_date);
+
             $query_delivery->where('delivered_date',$the_date);
         }
         else if($time_type == 'month')
@@ -8397,14 +8407,22 @@ class DKAdminRepository {
             $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
             $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
 
-//            $query_order->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
-            $query_order->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date]);
+            $query_order_published->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date]);
+            $query_order_inspected->whereBetween('inspected_date',[$the_month_start_date,$the_month_ended_date]);
+            $query_order_delivered->whereBetween('delivered_date',[$the_month_start_date,$the_month_ended_date]);
+
             $query_delivery->whereBetween('delivered_date',[$the_month_start_date,$the_month_ended_date]);
         }
         else if($time_type == 'period')
         {
-            if(!empty($post_data['date_start'])) $query_order->where('published_date', '>=', $post_data['date_start']);
-            if(!empty($post_data['date_ended'])) $query_order->where('published_date', '<=', $post_data['date_ended']);
+            if(!empty($post_data['date_start'])) $query_order_published->where('published_date', '>=', $post_data['date_start']);
+            if(!empty($post_data['date_ended'])) $query_order_published->where('published_date', '<=', $post_data['date_ended']);
+
+            if(!empty($post_data['date_start'])) $query_order_inspected->where('inspected_date', '>=', $post_data['date_start']);
+            if(!empty($post_data['date_ended'])) $query_order_inspected->where('inspected_date', '<=', $post_data['date_ended']);
+
+            if(!empty($post_data['date_start'])) $query_order_delivered->where('delivered_date', '>=', $post_data['date_start']);
+            if(!empty($post_data['date_ended'])) $query_order_delivered->where('delivered_date', '<=', $post_data['date_ended']);
 
             if(!empty($post_data['date_start'])) $query_delivery->where('delivered_date', '>=', $post_data['date_start']);
             if(!empty($post_data['date_ended'])) $query_delivery->where('delivered_date', '<=', $post_data['date_ended']);
@@ -8419,90 +8437,73 @@ class DKAdminRepository {
 
 
 
-
-
-
-        // 分发当天数据
-        $query_distributed_of_all = (clone $query_delivery)
-            ->addSelect(DB::raw("
-                    count(IF(pivot_type = 96, TRUE, NULL)) as distributed_count_for_all
-                "))
-            ->get();
-        $return_data['distributed_of_all_for_all'] = $query_distributed_of_all[0]->distributed_count_for_all;
-
-
-
-
         // 工单统计
-        $query_order = (clone $query_order)
+        $query_order_published_data = (clone $query_order_published)
             ->whereIn('created_type',[1,99])
 //            ->select('item_category')
             ->addSelect(DB::raw("
                     count(*) as order_count_for_published,
                     
-                    count(IF(inspected_status <> 0, TRUE, NULL)) as order_count_for_inspected_all,
-                    count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_inspected_accepted,
-                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_inspected_accepted_inside,
-                    count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_inspected_repeated,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_inspected_refused,
+                    count(IF(item_category = 1, TRUE, NULL)) as order_dental_for_published,
                     
-                    count(IF(delivered_status = 1, TRUE, NULL)) as order_count_for_delivered_all,
-                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
-                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
-                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
-                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
-                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
+                    count(IF(item_category = 1 and inspected_status <> 0, TRUE, NULL)) as order_dental_for_inspected_all,
+                    count(IF(item_category = 1 and inspected_result = '通过', TRUE, NULL)) as order_dental_for_inspected_accepted,
+                    count(IF(item_category = 1 and inspected_result = '内部通过', TRUE, NULL)) as order_dental_for_inspected_accepted_inside,
+                    count(IF(item_category = 1 and inspected_result = '重复', TRUE, NULL)) as order_dental_for_inspected_repeated,
+                    count(IF(item_category = 1 and inspected_result = '拒绝', TRUE, NULL)) as order_dental_for_inspected_refused,
+                    
+                    count(IF(item_category = 1 and delivered_status = 1, TRUE, NULL)) as order_dental_for_delivered_all,
+                    count(IF(item_category = 1 and delivered_result = '已交付', TRUE, NULL)) as order_dental_for_delivered_completed,
+                    count(IF(item_category = 1 and delivered_result = '内部交付', TRUE, NULL)) as order_dental_for_delivered_inside,
+                    count(IF(item_category = 1 and delivered_result = '隔日交付', TRUE, NULL)) as order_dental_for_delivered_tomorrow,
+                    count(IF(item_category = 1 and delivered_result = '重复', TRUE, NULL)) as order_dental_for_delivered_repeated,
+                    count(IF(item_category = 1 and delivered_result = '驳回', TRUE, NULL)) as order_dental_for_delivered_rejected,
+                    
+                    
+                    count(IF(item_category = 31, TRUE, NULL)) as order_luxury_for_published,
+                    
+                    count(IF(item_category = 31 and inspected_status <> 0, TRUE, NULL)) as order_luxury_for_inspected_all,
+                    count(IF(item_category = 31 and inspected_result = '通过', TRUE, NULL)) as order_luxury_for_inspected_accepted,
+                    count(IF(item_category = 31 and inspected_result = '内部通过', TRUE, NULL)) as order_luxury_for_inspected_accepted_inside,
+                    count(IF(item_category = 31 and inspected_result = '重复', TRUE, NULL)) as order_luxury_for_inspected_repeated,
+                    count(IF(item_category = 31 and inspected_result = '拒绝', TRUE, NULL)) as order_luxury_for_inspected_refused,
+                    
+                    count(IF(item_category = 31 and delivered_status = 1, TRUE, NULL)) as order_luxury_for_delivered_all,
+                    count(IF(item_category = 31 and delivered_result = '已交付', TRUE, NULL)) as order_luxury_for_delivered_completed,
+                    count(IF(item_category = 31 and delivered_result = '内部交付', TRUE, NULL)) as order_luxury_for_delivered_inside,
+                    count(IF(item_category = 31 and delivered_result = '隔日交付', TRUE, NULL)) as order_luxury_for_delivered_tomorrow,
+                    count(IF(item_category = 31 and delivered_result = '重复', TRUE, NULL)) as order_luxury_for_delivered_repeated,
+                    count(IF(item_category = 31 and delivered_result = '驳回', TRUE, NULL)) as order_luxury_for_delivered_rejected
                 "))
-            ->groupBy('item_category')
+//            ->groupBy('item_category')
             ->get();
-        dd($query_order->toArray());
+        if(count($query_order_published_data) > 0)
+        {
+            $order_data = $query_order_published_data[0];
+
+            $order_data->order_dental_for_inspected_effective = $order_data->order_dental_for_inspected_accepted + $order_data->order_dental_for_inspected_accepted_inside;
+            if($order_data->order_dental_for_published > 0)
+            {
+                $order_data->order_dental_for_inspected_effective_rate = round(($order_data->order_dental_for_inspected_effective / $order_data->order_dental_for_published * 100),2);
+            }
+            else $order_data->order_dental_for_inspected_effective_rate = 0;
+
+
+            $return_data['order_published_data'] = $order_data;
+        }
+        else $return_data['order_published_data'] = [];
 
 
 
 
-
-        $query_delivered_of_all = (clone $query_order)
-            ->whereIn('created_type',[1,99])
+        // 交付数据
+        $delivery_data = (clone $query_delivery)
             ->select(DB::raw("
-                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as delivered_count_for_all,
-                    count(IF(delivered_result = '已交付', TRUE, NULL)) as delivered_count_for_completed,
-                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as delivered_count_for_inside,
-                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as delivered_count_for_tomorrow,
-                    count(IF(delivered_result = '重复', TRUE, NULL)) as delivered_count_for_repeated,
-                    count(IF(delivered_result = '驳回', TRUE, NULL)) as delivered_count_for_rejected
+                    count(IF(order_category = 1, TRUE, NULL)) as delivery_dental_for_all,
+                    count(IF(pivot_type = 96, TRUE, NULL)) as delivery_dental_for_distributed
                 "))
             ->get();
-
-        $deliverer_of_all_for_all = $query_delivered_of_all[0]->delivered_count_for_all;
-        $deliverer_of_all_for_completed = $query_delivered_of_all[0]->delivered_count_for_completed;
-        $deliverer_of_all_for_inside = $query_delivered_of_all[0]->delivered_count_for_inside;
-        $deliverer_of_all_for_tomorrow = $query_delivered_of_all[0]->delivered_count_for_tomorrow;
-        $deliverer_of_all_for_repeated = $query_delivered_of_all[0]->delivered_count_for_repeated;
-        $deliverer_of_all_for_rejected = $query_delivered_of_all[0]->delivered_count_for_rejected;
-
-
-        $return_data['deliverer_of_all_for_all'] = $deliverer_of_all_for_all;
-        $return_data['deliverer_of_all_for_completed'] = $deliverer_of_all_for_completed;
-        $return_data['deliverer_of_all_for_inside'] = $deliverer_of_all_for_inside;
-        $return_data['deliverer_of_all_for_tomorrow'] = $deliverer_of_all_for_tomorrow;
-        $return_data['deliverer_of_all_for_repeated'] = $deliverer_of_all_for_repeated;
-        $return_data['deliverer_of_all_for_rejected'] = $deliverer_of_all_for_rejected;
-
-
-
-
-
-
-
-
-        // 分发当天数据
-        $query_distributed_of_today = (clone $query_distributed)
-            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(updated_at))"),$the_date)
-            ->select(DB::raw("
-                    count(*) as distributed_count_for_all
-                "))
-            ->get();
-        $return_data['distributed_of_today_for_all'] = $query_distributed_of_today[0]->distributed_count_for_all;
+        $return_data['delivery_data'] = $delivery_data[0];
 
 
         return response_success($return_data,"");

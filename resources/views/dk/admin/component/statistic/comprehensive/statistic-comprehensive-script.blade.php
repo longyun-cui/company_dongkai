@@ -517,18 +517,21 @@
                 else
                 {
                     $data = $response.data;
+                    console.log($data);
 
-                    $target.find(".order_for_published_all").find('b').html($data.order_for_published_all);
+                    $target.find(".order_dental_for_published").find('b').html($data.order_published_data.order_dental_for_published);
+                    $target.find(".order_dental_for_inspected_all").find('b').html($data.order_published_data.order_dental_for_inspected_all);
+                    $target.find(".order_dental_for_inspected_accepted").find('b').html($data.order_published_data.order_dental_for_inspected_accepted);
+                    $target.find(".order_dental_for_inspected_accepted_inside").find('b').html($data.order_published_data.order_dental_for_inspected_accepted_inside);
+                    $target.find(".order_dental_for_inspected_repeated").find('b').html($data.order_published_data.order_dental_for_inspected_repeated);
+                    $target.find(".order_dental_for_inspected_refused").find('b').html($data.order_published_data.order_dental_for_inspected_refused);
+                    $target.find(".order_dental_for_inspected_effective").find('b').html($data.order_published_data.order_dental_for_inspected_effective);
+                    $target.find(".order_dental_for_inspected_effective_rate").find('b').html($data.order_published_data.order_dental_for_inspected_effective_rate);
 
-                    $target.find(".order_for_inspected_all").find('b').html($data.order_for_inspected_all);
-                    $target.find(".order_for_inspected_accepted").find('b').html($data.order_for_inspected_accepted);
-                    $target.find(".order_for_inspected_accepted_inside").find('b').html($data.order_for_inspected_accepted_inside);
-                    $target.find(".order_for_inspected_refused").find('b').html($data.order_for_inspected_refused);
-                    $target.find(".order_for_inspected_repeated").find('b').html($data.order_for_inspected_repeated);
 
+                    $(".delivery_dental_for_all").find('b').html($data.delivery_data.delivery_dental_for_all);
+                    $(".delivery_dental_for_distributed").find('b').html($data.delivery_data.delivery_dental_for_distributed);
 
-                    $(".delivered_for_all").find('b').html($data.delivered_for_all);
-                    $(".order_for_delivered_effective").find('b').html($data.order_for_delivered_effective);
                     $(".order_for_delivered_completed").find('b').html($data.order_for_delivered_completed);
                     $(".order_for_delivered_inside").find('b').html($data.order_for_delivered_inside);
                     $(".order_for_delivered_tomorrow").find('b').html($data.order_for_delivered_tomorrow);
