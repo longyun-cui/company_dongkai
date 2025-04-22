@@ -458,6 +458,7 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     // 导入
     Route::match(['get','post'], '/item/order-import', $controller.'@operate_item_order_import');
     Route::match(['get','post'], '/item/order-import-for-admin', $controller.'@operate_item_order_import_for_admin');
+    Route::match(['get','post'], '/item/order-import-for-admin-by-txt', $controller.'@operate_item_order_import_for_admin_by_txt');
 
     // 获取
     Route::match(['get','post'], '/item/order-get', $controller.'@operate_item_order_get');
