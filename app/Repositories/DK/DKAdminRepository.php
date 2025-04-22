@@ -25598,7 +25598,7 @@ EOF;
                                 'client_id'=>$client_id,
                                 'project_id'=>$project_id,
                                 'is_published'=>1,
-                                'published_date'=>$date,
+//                                'published_date'=>$date,
                                 'inspected_status'=>1,
                                 'inspected_result'=>'通过',
                                 'created_at'=>$time,
