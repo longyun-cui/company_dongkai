@@ -103,28 +103,28 @@
 
                 <div class="box-body">
                     <ul class="nav nav-stacked">
-                        <li class="order_dental_for_published">
+                        <li class="order_published_dental_for_published">
                             <a href="javascript:void(0);">报单量<span class="pull-right"><b class="badge bg-black"></b> 单</span></a>
                         </li>
-                        <li class="order_dental_for_inspected_all">
+                        <li class="order_published_dental_for_inspected_all">
                             <a href="javascript:void(0);">审核量<span class="pull-right"><b class="badge bg-blue"></b> 单</span></a>
                         </li>
-                        <li class="order_dental_for_inspected_accepted">
+                        <li class="order_published_dental_for_inspected_accepted">
                             <a href="javascript:void(0);">通过<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
-                        <li class="order_dental_for_inspected_effective_rate">
+                        <li class="order_published_dental_for_inspected_effective_rate">
                             <a href="javascript:void(0);">通过率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>
                         </li>
-                        <li class="order_dental_for_inspected_repeated">
+                        <li class="order_published_dental_for_inspected_repeated">
                             <a href="javascript:void(0);">重复<span class="pull-right"><b class="badge bg-orange"></b> 单</span></a>
                         </li>
-                        <li class="order_dental_for_inspected_refused">
+                        <li class="order_published_dental_for_inspected_refused">
                             <a href="javascript:void(0);">拒绝<span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
                         </li>
-                        <li class="order_dental_for_inspected_effective">
+                        <li class="order_published_dental_for_inspected_effective">
                             <a href="javascript:void(0);">有效量（客服业绩量） <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
-                        <li class="order_dental_for_inspected_effective_rate">
+                        <li class="order_published_dental_for_inspected_effective_rate">
                             <a href="javascript:void(0);">有效率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>
                         </li>
                     </ul>
@@ -145,19 +145,19 @@
                 </div>
                 <div class="box-body">
                     <ul class="nav nav-stacked">
-                        <li class="order_dental_for_inspected_all">
+                        <li class="order_inspected_dental_for_inspected_all">
                             <a href="javascript:void(0);">审核量 <span class="pull-right"><b class="badge bg-blue"></b> 单</span></a>
                         </li>
-                        <li class="order_count_for_inspected_accepted">
+                        <li class="order_inspected_dental_for_inspected_accepted">
                             <a href="javascript:void(0);">通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
-                        <li class="order_count_for_inspected_accepted_inside">
+                        <li class="order_inspected_dental_for_inspected_accepted_inside">
                             <a href="javascript:void(0);">内部通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
-                        <li class="order_count_for_inspected_repeated">
+                        <li class="order_inspected_dental_for_inspected_repeated">
                             <a href="javascript:void(0);">重复量 <span class="pull-right"><b class="badge bg-orange"></b> 单</span></a>
                         </li>
-                        <li class="order_count_for_inspected_refused">
+                        <li class="order_inspected_dental_for_inspected_refused">
                             <a href="javascript:void(0);">拒绝量 <span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
                         </li>
                     </ul>
@@ -180,7 +180,85 @@
                 <div class="box-body">
                     <ul class="nav nav-stacked">
                         <li>
-                            <a href="javascript:void(0);" class="deliverer_of_all_for_all">
+                            <a href="javascript:void(0);" class="order_delivered_dental_for_all">
+                                总交付量（工作单量） <span class="pull-right"><b class="badge bg-blue"></b> 单</span>
+                            </a>
+                            <a href="javascript:void(0);" class="deliverer_of_all_for_all_by_same_day">
+                                -- 当日 <span class="pull-right"><b class="badge bg-blue"></b> 单</span>
+                            </a>
+                            <a href="javascript:void(0);" class="deliverer_of_all_for_all_by_other_day">
+                                -- 昨转今 <span class="pull-right"><b class="badge bg-blue"></b> 单</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="javascript:void(0);" class="order_delivered_dental_for_completed">
+                                已交付 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
+                            </a>
+                            <a href="javascript:void(0);" class="deliverer_of_all_for_completed_by_same_day">
+                                -- 当日 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
+                            </a>
+                            <a href="javascript:void(0);" class="deliverer_of_all_for_completed_by_other_day">
+                                -- 昨转今 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="order_delivered_dental_for_inside">
+                                内部交付 <span class="pull-right"><b class="badge bg-olive"></b> 单</span>
+                            </a>
+                            <a href="javascript:void(0);" class="deliverer_of_all_for_inside_by_same_day">
+                                -- 当日 <span class="pull-right"><b class="badge bg-olive"></b> 单</span>
+                            </a>
+                            <a href="javascript:void(0);" class="deliverer_of_all_for_inside_by_other_day">
+                                -- 昨转今 <span class="pull-right"><b class="badge bg-olive"></b> 单</span>
+                            </a>
+                        </li>
+
+                        <li class="deliverer_of_all_for_tomorrow">
+                            <a href="javascript:void(0);">隔日交付（今转明） <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                        </li>
+                        <li class="order_delivered_dental_for_repeated">
+                            <a href="javascript:void(0);">重复量 <span class="pull-right"><b class="badge bg-orange"></b> 单</span></a>
+                        </li>
+                        <li class="order_delivered_dental_for_rejected">
+                            <a href="javascript:void(0);">驳回量 <span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
+                        </li>
+                        {{--                                <li class="deliverer_of_all_for_effective">--}}
+                        {{--                                    <a href="javascript:void(0);">有效交付量（当日工单） <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>--}}
+                        {{--                                </li>--}}
+                        {{--                                <li class="deliverer_of_all_for_effective_rate">--}}
+                        {{--                                    <a href="javascript:void(0);">有效交付率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>--}}
+                        {{--                                </li>--}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        {{--甲方--}}
+        <div class="col-xs-12 col-sm-6 col-md-3">
+            <div class="box box-success box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title">甲方交付</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <ul class="nav nav-stacked">
+                        <li class="order_delivered_dental_for_all">
+                            <a href="javascript:void(0);">总交付量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                        </li>
+{{--                        <li class="deliverer_of_all_for_completed_by_same_day">--}}
+{{--                            <a href="javascript:void(0);">-- 当日工单 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>--}}
+{{--                        </li>--}}
+{{--                        <li class="deliverer_of_all_for_completed_by_other_day">--}}
+{{--                            <a href="javascript:void(0);">-- 昨转今工单 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>--}}
+{{--                        </li>--}}
+
+                        <li>
+                            <a href="javascript:void(0);" class="order_delivered_dental_for_delivered_all">
                                 总交付量（工作单量） <span class="pull-right"><b class="badge bg-blue"></b> 单</span>
                             </a>
                             <a href="javascript:void(0);" class="deliverer_of_all_for_all_by_same_day">
@@ -214,53 +292,7 @@
                             </a>
                         </li>
 
-                        <li class="deliverer_of_all_for_tomorrow">
-                            <a href="javascript:void(0);">隔日交付（今转明） <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
-                        </li>
-                        <li class="deliverer_of_all_for_repeated">
-                            <a href="javascript:void(0);">重复量 <span class="pull-right"><b class="badge bg-orange"></b> 单</span></a>
-                        </li>
-                        <li class="deliverer_of_all_for_rejected">
-                            <a href="javascript:void(0);">驳回量 <span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
-                        </li>
-                        {{--                                <li class="deliverer_of_all_for_effective">--}}
-                        {{--                                    <a href="javascript:void(0);">有效交付量（当日工单） <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>--}}
-                        {{--                                </li>--}}
-                        {{--                                <li class="deliverer_of_all_for_effective_rate">--}}
-                        {{--                                    <a href="javascript:void(0);">有效交付率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>--}}
-                        {{--                                </li>--}}
-                        @if(in_array($me->user_type,[0,1,9,11,61,66]))
-                            <li class="distributed_of_all_for_all">
-                                <a href="javascript:void(0);">总分发量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
-                            </li>
-                        @endif
-                    </ul>
-                </div>
-            </div>
-        </div>
 
-
-        {{--甲方--}}
-        <div class="col-xs-12 col-sm-6 col-md-3">
-            <div class="box box-success box-solid">
-                <div class="box-header with-border">
-                    <h3 class="box-title">甲方交付</h3>
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="box-body">
-                    <ul class="nav nav-stacked">
-                        <li class="delivery_dental_for_all">
-                            <a href="javascript:void(0);">总交付量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
-                        </li>
-{{--                        <li class="deliverer_of_all_for_completed_by_same_day">--}}
-{{--                            <a href="javascript:void(0);">-- 当日工单 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>--}}
-{{--                        </li>--}}
-{{--                        <li class="deliverer_of_all_for_completed_by_other_day">--}}
-{{--                            <a href="javascript:void(0);">-- 昨转今工单 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>--}}
-{{--                        </li>--}}
                         @if(in_array($me->user_type,[0,1,9,11,61,66]))
                             <li class="delivery_dental_for_distributed">
                                 <a href="javascript:void(0);">总分发量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
