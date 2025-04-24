@@ -24288,7 +24288,8 @@ EOF;
         if(empty($post_data['keyword']))
         {
             $list =DK_Client::select(['id','username as text'])
-                ->where(['user_status'=>1,'user_category'=>11])
+                ->where(['user_status'=>1])
+                ->whereIn('user_category',  [1,11,31])
 //                ->whereIn('user_type',[41,61,88])
                 ->get()->toArray();
         }
@@ -24297,6 +24298,7 @@ EOF;
             $keyword = "%{$post_data['keyword']}%";
             $list =DK_Client::select(['id','username as text'])->where('username','like',"%$keyword%")
                 ->where(['user_status'=>1])
+                ->whereIn('user_category',  [1,11,31])
 //                ->whereIn('user_type',[41,61,88])
                 ->get()->toArray();
         }
