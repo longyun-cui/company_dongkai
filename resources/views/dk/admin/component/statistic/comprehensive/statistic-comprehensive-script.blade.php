@@ -519,6 +519,8 @@
                     $data = $response.data;
                     console.log($data);
 
+
+                    // 坐席交付
                     $target.find(".order_published_dental_for_published").find('b').html($data.order_published_data.order_dental_for_published);
                     $target.find(".order_published_dental_for_inspected_all").find('b').html($data.order_published_data.order_dental_for_inspected_all);
                     $target.find(".order_published_dental_for_inspected_accepted").find('b').html($data.order_published_data.order_dental_for_inspected_accepted);
@@ -529,9 +531,7 @@
                     $target.find(".order_published_dental_for_inspected_effective_rate").find('b').html($data.order_published_data.order_dental_for_inspected_effective_rate);
 
 
-
-
-
+                    // 质检审核
                     $target.find(".order_inspected_dental_for_inspected_all").find('b').html($data.order_inspected_data.order_dental_for_inspected_all);
                     $target.find(".order_inspected_dental_for_inspected_accepted").find('b').html($data.order_inspected_data.order_dental_for_inspected_accepted);
                     $target.find(".order_inspected_dental_for_inspected_accepted_inside").find('b').html($data.order_inspected_data.order_dental_for_inspected_accepted_inside);
@@ -539,27 +539,27 @@
                     $target.find(".order_inspected_dental_for_inspected_refused").find('b').html($data.order_inspected_data.order_dental_for_inspected_refused);
 
 
-
-
+                    // 运营交付
                     $target.find(".order_delivered_dental_for_all").find('b').html($data.order_delivered_data.order_dental_for_delivered_all);
+                    $target.find(".order_delivered_dental_for_all_by_same_day").find('b').html($data.order_delivered_data.order_dental_for_delivered_all_by_same_day);
+                    $target.find(".order_delivered_dental_for_all_by_other_day").find('b').html($data.order_delivered_data.order_dental_for_delivered_all_by_other_day);
+
                     $target.find(".order_delivered_dental_for_completed").find('b').html($data.order_delivered_data.order_dental_for_delivered_completed);
+                    $target.find(".order_delivered_dental_for_completed_by_same_day").find('b').html($data.order_delivered_data.order_dental_for_delivered_completed_by_same_day);
+                    $target.find(".order_delivered_dental_for_completed_by_other_day").find('b').html($data.order_delivered_data.order_dental_for_delivered_completed_by_other_day);
+
                     $target.find(".order_delivered_dental_for_inside").find('b').html($data.order_delivered_data.order_dental_for_delivered_inside);
+                    $target.find(".order_delivered_dental_for_inside_by_same_day").find('b').html($data.order_delivered_data.order_dental_for_delivered_inside_by_same_day);
+                    $target.find(".order_delivered_dental_for_inside_by_other_day").find('b').html($data.order_delivered_data.order_dental_for_delivered_inside_by_other_day);
+
                     $target.find(".order_delivered_dental_for_tomorrow").find('b').html($data.order_delivered_data.order_dental_for_delivered_tomorrow);
                     $target.find(".order_delivered_dental_for_repeated").find('b').html($data.order_delivered_data.order_dental_for_delivered_repeated);
                     $target.find(".order_delivered_dental_for_rejected").find('b').html($data.order_delivered_data.order_dental_for_delivered_rejected);
 
 
-
-
+                    // 甲方交付
                     $(".delivery_dental_for_all").find('b').html($data.delivery_data.delivery_dental_for_all);
                     $(".delivery_dental_for_distributed").find('b').html($data.delivery_data.delivery_dental_for_distributed);
-
-                    $(".order_for_delivered_completed").find('b').html($data.order_for_delivered_completed);
-                    $(".order_for_delivered_inside").find('b').html($data.order_for_delivered_inside);
-                    $(".order_for_delivered_tomorrow").find('b').html($data.order_for_delivered_tomorrow);
-                    $(".order_for_delivered_repeated").find('b').html($data.order_for_delivered_repeated);
-                    $(".order_for_delivered_rejected").find('b').html($data.order_for_delivered_rejected);
-                    $(".order_rate_for_delivered_effective").find('b').html($data.order_rate_for_delivered_effective);
 
                 }
             })
