@@ -2,14 +2,14 @@
 
 
 @section('head_title')
-    {{ $title_text or '首页' }} - SUPER - {{ config('info.info.short_name') }}
+    SUPER - {{ config('info.info.short_name') }}
 @endsection
 
 
 
 
 @section('header','Super')
-@section('description'){{ $title_text or '首页' }} - SUPER - {{ config('info.info.short_name') }}@endsection
+@section('description')SUPER - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-dashboard"></i>首页</a></li>
     <li><a href="#"><i class="fa "></i>Here</a></li>
