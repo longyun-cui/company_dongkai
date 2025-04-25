@@ -2074,35 +2074,75 @@
 
 
         // select2 项目
-        $('.select2-project').select2({
-            ajax: {
-                url: "{{ url('/v1/operate/select2/select2_project') }}",
-                type: 'post',
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        _token: $('meta[name="_token"]').attr('content'),
-                        item_category: this.data('item-category'),
-                        keyword: params.term, // search term
-                        page: params.page
-                    };
-                },
-                processResults: function (data, params) {
+        {{--$('.select2-project').select2({--}}
+        {{--    ajax: {--}}
+        {{--        url: "{{ url('/v1/operate/select2/select2_project') }}",--}}
+        {{--        type: 'post',--}}
+        {{--        dataType: 'json',--}}
+        {{--        delay: 250,--}}
+        {{--        data: function (params) {--}}
+        {{--            return {--}}
+        {{--                _token: $('meta[name="_token"]').attr('content'),--}}
+        {{--                item_category: this.data('item-category'),--}}
+        {{--                keyword: params.term, // search term--}}
+        {{--                page: params.page--}}
+        {{--            };--}}
+        {{--        },--}}
+        {{--        processResults: function (data, params) {--}}
 
-                    params.page = params.page || 1;
-                    return {
-                        results: data,
-                        pagination: {
-                            more: (params.page * 30) < data.total_count
-                        }
-                    };
+        {{--            params.page = params.page || 1;--}}
+        {{--            return {--}}
+        {{--                results: data,--}}
+        {{--                pagination: {--}}
+        {{--                    more: (params.page * 30) < data.total_count--}}
+        {{--                }--}}
+        {{--            };--}}
+        {{--        },--}}
+        {{--        cache: true--}}
+        {{--    },--}}
+        {{--    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work--}}
+        {{--    minimumInputLength: 0,--}}
+        {{--    theme: 'classic'--}}
+        {{--});--}}
+
+        $('.select2-project').each(function() {
+            // 获取当前 Select2 元素的 jQuery 对象
+            const $select = $(this);
+
+            // 动态查找最近的模态框父容器
+            const $modalWrapper = $select.closest('.modal-wrapper');
+
+            // 初始化 Select2
+            $select.select2({
+                ajax: {
+                    url: "{{ url('/v1/operate/select2/select2_project') }}",
+                    type: 'post',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            item_category: $select.data('item-category'), // 使用 $select 获取 data 属性
+                            keyword: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function(data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
                 },
-                cache: true
-            },
-            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-            minimumInputLength: 0,
-            theme: 'classic'
+                escapeMarkup: function(markup) { return markup; },
+                dropdownParent: $modalWrapper, // 直接使用找到的模态框元素
+                minimumInputLength: 0,
+                theme: 'classic'
+            });
         });
 
 

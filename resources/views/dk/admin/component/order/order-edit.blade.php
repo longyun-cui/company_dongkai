@@ -32,7 +32,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 班次</label>
                     <div class="col-md-8 ">
-                        <select class="form-control select-select2 select2-box-c" name="field_2" id="" style="width:100%;">
+                        <select class="form-control modal-select2 select2-reset" name="field_2" id="" style="width:100%;">
                             <option value="">选择班次</option>
                             <option value ="1">白班</option>
                             <option value ="9">夜班</option>
@@ -67,7 +67,7 @@
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 所在城市</label>
                     <div class="col-md-8 ">
                         <div class="col-sm-6 col-md-6 padding-0">
-                            <select class="form-control select-select2 select2-box-c select2-district-city" name="location_city" id="select-city-1" data-target="#select-district-1" style="width:100%;">
+                            <select class="form-control modal-select2 select2-reset select2-district-city" name="location_city" id="select-city-1" data-target="#select-district-1" style="width:100%;">
                                 <option value="">选择城市</option>
                                 @if(!empty($district_city_list) && count($district_city_list) > 0)
                                     @foreach($district_city_list as $v)
@@ -77,7 +77,7 @@
                             </select>
                         </div>
                         <div class="col-sm-6 col-md-6 padding-0">
-                            <select class="form-control select-select2 select2-box-c select2-district-district" name="location_district" id="select-district-1" data-target="#select-city-1" style="width:100%;">
+                            <select class="form-control modal-select2 select2-reset select2-district-district" name="location_district" id="select-district-1" data-target="#select-city-1" style="width:100%;">
                                 <option value="">选择区域</option>
                             </select>
                         </div>
@@ -87,7 +87,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 患者类型</label>
                     <div class="col-md-8 ">
-                        <select class="form-control select-select2 select2-box-c" name="client_type" id="" style="width:100%;">
+                        <select class="form-control modal-select2 select2-reset" name="client_type" id="" style="width:100%;">
                             <option value="">选择患者类型</option>
                             @foreach(config('info.client_type') as $k => $v)
                                 <option value ="{{ $k }}">{{ $v }}</option>
@@ -99,7 +99,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 牙齿数量</label>
                     <div class="col-md-8 ">
-                        <select class="form-control select-select2 select2-box-c" name="teeth_count" id="" style="width:100%;">
+                        <select class="form-control modal-select2 select2-reset" name="teeth_count" id="" style="width:100%;">
                             <option value="">选择牙齿数量</option>
                             @foreach(config('info.teeth_count') as $v)
                                 <option value ="{{ $v }}">{{ $v }}</option>
@@ -111,7 +111,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户意向</label>
                     <div class="col-md-8 ">
-                        <select class="form-control select-select2 select2-box-c" name="client_intention" id="" style="width:100%;">
+                        <select class="form-control modal-select2 select2-reset" name="client_intention" id="" style="width:100%;">
                             <option value="">选择客户意向</option>
                             @foreach(config('info.client_intention') as $k => $v)
                                 <option value ="{{ $k }}">{{ $v }}</option>

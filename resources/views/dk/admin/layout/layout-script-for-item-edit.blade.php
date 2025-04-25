@@ -25,6 +25,14 @@
             $modal.find('.edit-submit').attr('data-datatable-list-id',$table_id);
             $modal.find('.radio-btn').show();
             $modal.modal('show');
+
+            $('.modal-select2').select2({
+                dropdownParent: $('#'+$modal_id), // 替换为你的模态框 ID
+                minimumInputLength: 0,
+                width: '100%',
+                theme: 'classic'
+            });
+
         });
         // 【通用】编辑-取消
         $(".main-content").on('click', ".edit-cancel", function() {
@@ -1941,6 +1949,10 @@
         // $form.find(".select2-box-c").val("-1").trigger("change");
         // selectFirstOption($form_id + " .select2-box-c");
         $.each( $form.find(".select2-box-c"), function(index, element) {
+            select2FirstOptionSelected(element);
+        });
+
+        $.each( $form.find(".select2-reset"), function(index, element) {
             select2FirstOptionSelected(element);
         });
 

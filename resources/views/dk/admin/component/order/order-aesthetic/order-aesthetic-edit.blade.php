@@ -33,7 +33,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-2"><sup class="text-red">*</sup> 班次</label>
                         <div class="col-md-8 ">
-                            <select class="form-control select-select2 select2-box-c" name="field_2" id="" style="width:100%;">
+                            <select class="form-control modal-select2 select2-reset" name="field_2" id="" style="width:100%;">
                                 <option value="">选择班次</option>
                                 <option value ="1">白班</option>
                                 <option value ="9">夜班</option>
@@ -68,7 +68,7 @@
                         <label class="control-label col-md-2"><sup class="text-red">*</sup> 所在城市</label>
                         <div class="col-md-8 ">
                             <div class="col-sm-6 col-md-6 padding-0">
-                                <select class="form-control select-select2 select2-box-c select2-district-city" name="location_city" id="select-city-3" data-target="#select-district-3" style="width:100%;">
+                                <select class="form-control modal-select2 select2-reset select2-district-city" name="location_city" id="select-city-3" data-target="#select-district-3" style="width:100%;">
                                     <option value="">选择城市</option>
                                     @if(!empty($district_city_list) && count($district_city_list) > 0)
                                         @foreach($district_city_list as $v)
@@ -88,7 +88,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-2"><sup class="text-red">*</sup> 品类</label>
                         <div class="col-md-8 ">
-                            <select class="form-control select-select2 select2-box-c" name="field_1" id="" style="width:100%;">
+                            <select class="form-control modal-select2 select2-reset" name="field_1" id="" style="width:100%;">
                                 <option value="">选择品类</option>
                                 @foreach(config('info.aesthetic_type') as $k => $v)
                                     <option value ="{{ $k }}">{{ $v }}</option>

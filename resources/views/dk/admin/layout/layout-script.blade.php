@@ -313,7 +313,7 @@
                             }
                         };
                     },
-                    cache: true
+                    cache: false
                 },
                 escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
                 minimumInputLength: 0,

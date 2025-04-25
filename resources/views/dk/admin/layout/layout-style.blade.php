@@ -1,5 +1,5 @@
 <style>
-    .select2-container { width:100%; height:100%; border-radius:0; float:left; }
+    .select2-container { height:100%; border-radius:0; float:left; }
     .select2-container .select2-selection--single { border-radius:0; }
     .select2-container--classic .select2-selection--multiple  { height:32px; border-radius:0; }
     .sidebar-menu>li>a {
