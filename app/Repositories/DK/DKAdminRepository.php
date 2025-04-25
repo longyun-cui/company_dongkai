@@ -8534,18 +8534,18 @@ class DKAdminRepository {
                     
                     
                     count(IF(item_category = 1 and delivered_status = 1, TRUE, NULL)) as order_dental_for_delivered_all,
-                    count(IF(item_category = 1 and delivered_status = 1 AND published_date = '{$the_date}', TRUE, NULL)) as order_dental_for_delivered_all_by_same_day,
-                    count(IF(item_category = 1 and delivered_status = 1 AND published_date <> '{$the_date}', TRUE, NULL)) as order_dental_for_delivered_all_by_other_day,
+                    count(IF(item_category = 1 and delivered_status = 1 AND published_date = delivered_date, TRUE, NULL)) as order_dental_for_delivered_all_by_same_day,
+                    count(IF(item_category = 1 and delivered_status = 1 AND published_date <> delivered_date, TRUE, NULL)) as order_dental_for_delivered_all_by_other_day,
                     
                     
                     count(IF(item_category = 1 and delivered_result = '已交付', TRUE, NULL)) as order_dental_for_delivered_completed,
-                    count(IF(item_category = 1 and delivered_result = '已交付' AND published_date = '{$the_date}', TRUE, NULL)) as order_dental_for_delivered_completed_by_same_day,
-                    count(IF(item_category = 1 and delivered_result = '已交付' AND published_date <> '{$the_date}', TRUE, NULL)) as order_dental_for_delivered_completed_by_other_day,
+                    count(IF(item_category = 1 and delivered_result = '已交付' AND published_date = delivered_date, TRUE, NULL)) as order_dental_for_delivered_completed_by_same_day,
+                    count(IF(item_category = 1 and delivered_result = '已交付' AND published_date <> delivered_date, TRUE, NULL)) as order_dental_for_delivered_completed_by_other_day,
                     
                     
                     count(IF(item_category = 1 and delivered_result = '内部交付', TRUE, NULL)) as order_dental_for_delivered_inside,
-                    count(IF(item_category = 1 and delivered_result = '内部交付' AND published_date = '{$the_date}', TRUE, NULL)) as order_dental_for_delivered_inside_by_same_day,
-                    count(IF(item_category = 1 and delivered_result = '内部交付' AND published_date <> '{$the_date}', TRUE, NULL)) as order_dental_for_delivered_inside_by_other_day,
+                    count(IF(item_category = 1 and delivered_result = '内部交付' AND published_date = delivered_date, TRUE, NULL)) as order_dental_for_delivered_inside_by_same_day,
+                    count(IF(item_category = 1 and delivered_result = '内部交付' AND published_date <> delivered_date, TRUE, NULL)) as order_dental_for_delivered_inside_by_other_day,
                   
                     
                     count(IF(item_category = 1 and delivered_result = '隔日交付', TRUE, NULL)) as order_dental_for_delivered_tomorrow,
@@ -8554,18 +8554,18 @@ class DKAdminRepository {
                     
                    
                     count(IF(item_category = 31 and delivered_status = 1, TRUE, NULL)) as order_luxury_for_delivered_all,
-                    count(IF(item_category = 31 and delivered_status = 1 AND published_date = '{$the_date}', TRUE, NULL)) as order_luxury_for_delivered_all_by_same_day,
-                    count(IF(item_category = 31 and delivered_status = 1 AND published_date <> '{$the_date}', TRUE, NULL)) as order_luxury_for_delivered_all_by_other_day,
+                    count(IF(item_category = 31 and delivered_status = 1 AND published_date = delivered_date, TRUE, NULL)) as order_luxury_for_delivered_all_by_same_day,
+                    count(IF(item_category = 31 and delivered_status = 1 AND published_date <> delivered_date, TRUE, NULL)) as order_luxury_for_delivered_all_by_other_day,
                     
                     
                     count(IF(item_category = 31 and delivered_result = '已交付', TRUE, NULL)) as order_luxury_for_delivered_completed,
-                    count(IF(item_category = 31 and delivered_result = '已交付' AND published_date = '{$the_date}', TRUE, NULL)) as order_luxury_for_delivered_completed_by_same_day,
-                    count(IF(item_category = 31 and delivered_result = '已交付' AND published_date <> '{$the_date}', TRUE, NULL)) as order_luxury_for_delivered_completed_by_other_day,
+                    count(IF(item_category = 31 and delivered_result = '已交付' AND published_date = delivered_date, TRUE, NULL)) as order_luxury_for_delivered_completed_by_same_day,
+                    count(IF(item_category = 31 and delivered_result = '已交付' AND published_date <> delivered_date, TRUE, NULL)) as order_luxury_for_delivered_completed_by_other_day,
                     
                     
                     count(IF(item_category = 31 and delivered_result = '内部交付', TRUE, NULL)) as order_luxury_for_delivered_inside,
-                    count(IF(item_category = 31 and delivered_result = '内部交付' AND published_date = '{$the_date}', TRUE, NULL)) as order_luxury_for_delivered_inside_by_same_day,
-                    count(IF(item_category = 31 and delivered_result = '内部交付' AND published_date <> '{$the_date}', TRUE, NULL)) as order_luxury_for_delivered_inside_by_other_day,
+                    count(IF(item_category = 31 and delivered_result = '内部交付' AND published_date = delivered_date, TRUE, NULL)) as order_luxury_for_delivered_inside_by_same_day,
+                    count(IF(item_category = 31 and delivered_result = '内部交付' AND published_date <> delivered_date, TRUE, NULL)) as order_luxury_for_delivered_inside_by_other_day,
                     
                     
                     count(IF(item_category = 31 and delivered_result = '隔日交付', TRUE, NULL)) as order_luxury_for_delivered_tomorrow,

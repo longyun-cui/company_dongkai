@@ -586,7 +586,7 @@
 
 
             {{--综合概览--}}
-            @if(in_array($me->user_type,[0,1,9]))
+            @if(in_array($me->user_type,[0,1,9,11,61]))
             <li class="treeview _none-">
                 <a class="tab-control comprehensive-control"
                    data-type="create"
