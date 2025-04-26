@@ -200,7 +200,7 @@
 
 
 {{--交付-deliver--}}
-<div class="modal fade modal-main-body" id="modal-body-for-deliver-set">
+<div class="modal fade modal-main-body modal-wrapper" id="modal-body-for-deliver-set">
     <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
 
         <div class="box- box-info- form-container">
@@ -322,7 +322,7 @@
 
 
 {{--分发-distribute--}}
-<div class="modal fade modal-main-body" id="modal-body-for-distribute-set">
+<div class="modal fade modal-main-body modal-wrapper" id="modal-body-for-distribute-set">
     <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
 
         <div class="box- box-info- form-container">
