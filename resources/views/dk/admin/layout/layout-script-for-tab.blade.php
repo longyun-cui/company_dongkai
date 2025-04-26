@@ -646,7 +646,6 @@
                         cache: true
                     },
                     escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-                    dropdownParent: $('#'+ this.parents('.modal-wrapper').attr('id')), // 模态框 ID
                     minimumInputLength: 0,
                     theme: 'classic'
                 });
