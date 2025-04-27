@@ -1560,6 +1560,10 @@
                 {
                     var $option_html = $('#option-list-for-client-type').html();
                 }
+                else if($that.attr("data-key") == "is_distributive_condition")
+                {
+                    var $option_html = $('#option-list-for-is_distributive_condition').html();
+                }
                 $('select[name=field-set-select-value]').html($option_html).show();
                 $('select[name=field-set-select-value]').find("option[value='"+$that.attr("data-value")+"']").prop("selected",true);
 
@@ -1837,6 +1841,26 @@
                             else if($radio_value == 1)
                             {
                                 $row.find('[data-key="is_wx"]').attr('data-value',$radio_value).html('<small class="btn-xs btn-primary">是</small>');
+                            }
+                            else
+                            {
+                            }
+                        }
+
+                        if(column_key == 'is_distributive_condition')
+                        {
+                            var $radio_value = $response.data.data.value;
+                            if($radio_value == 0)
+                            {
+                                $row.find('[data-key="is_distributive_condition"]').attr('data-value',$radio_value).html('--');
+                            }
+                            else if($radio_value == 1)
+                            {
+                                $row.find('[data-key="is_distributive_condition"]').attr('data-value',$radio_value).html('<small class="btn-xs btn-success">允许</small>');
+                            }
+                            else if($radio_value == 9)
+                            {
+                                $row.find('[data-key="is_distributive_condition"]').attr('data-value',$radio_value).html('<small class="btn-xs btn-danger">禁止</small>');
                             }
                             else
                             {

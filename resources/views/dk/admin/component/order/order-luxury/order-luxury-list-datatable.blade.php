@@ -304,14 +304,16 @@
                     "width": "72px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
                         {
-                            $(nTd).addClass('modal-show-for-info-radio-set');
-                            $(nTd).attr('data-id',row.id).attr('data-name','是否符合分发');
+                            $(nTd).attr('data-row-index',iRow);
+
+                            $(nTd).addClass('modal-show-for-field-set');
+                            $(nTd).attr('data-id',row.id).attr('data-name','是否分发');
                             $(nTd).attr('data-key','is_distributive_condition').attr('data-value',data);
 
-                            $(nTd).attr('data-column-type','radio');
-                            $(nTd).attr('data-column-name','是否符合分发');
+                            $(nTd).attr('data-column-type','select');
+                            $(nTd).attr('data-column-name','是否分发');
 
                             if(data) $(nTd).attr('data-operate-type','edit');
                             else $(nTd).attr('data-operate-type','add');
@@ -326,7 +328,11 @@
                         }
                         else if(data == 1)
                         {
-                            $result_html = '<small class="btn-xs bg-red">是</small>';
+                            $result_html = '<small class="btn-xs bg-green">允许</small>';
+                        }
+                        else if(data == 9)
+                        {
+                            $result_html = '<small class="btn-xs bg-red">禁止</small>';
                         }
                         else
                         {

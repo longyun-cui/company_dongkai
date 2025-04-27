@@ -491,7 +491,7 @@
                 </div>
 
         <div id="option-list-for-is_distributive_condition-2">
-            <label class="control-label col-md-2">是否符合分发</label>
+            <label class="control-label col-md-2">是否是否分发</label>
             <div class="col-md-8">
                 <div class="btn-group">
 
@@ -512,6 +512,15 @@
 
                 </div>
             </div>
+        </div>
+
+
+
+        {{--分发状态--}}
+        <div id="option-list-for-is_distributive_condition">
+            <option value="0">选择分发状态</option>
+            <option value="1">允许</option>
+            <option value="9">禁止</option>
         </div>
 
 
