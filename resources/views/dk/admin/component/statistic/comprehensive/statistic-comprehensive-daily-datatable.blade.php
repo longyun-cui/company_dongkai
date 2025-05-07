@@ -85,7 +85,7 @@
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        if(row.order_count_for_effective) return row.order_count_for_effective;
+                        if(row.order_rate_for_accepted) return row.order_rate_for_accepted + '%';
                         else return '';
                     }
                 },
@@ -96,7 +96,7 @@
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        if(row.order_rate_for_accepted) return row.order_rate_for_accepted + '%';
+                        if(row.order_count_for_effective) return row.order_count_for_effective;
                         else return '';
                     }
                 },
