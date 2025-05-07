@@ -470,6 +470,10 @@
                 {
                     Table_Datatable_Ajax_Statistic_Deliverer_Overview('#'+$config.id);
                 }
+                else if($id == "statistic-daily")
+                {
+                    Datatable_Statistic_Daily('#'+$config.id);
+                }
                 else if($id == "statistic-comprehensive-overview")
                 {
                     // 初始化

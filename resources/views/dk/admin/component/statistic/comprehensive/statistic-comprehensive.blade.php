@@ -54,8 +54,8 @@
             </button>
 
             {{--按时间段导出--}}
-            <input type="text" class="search-filter filter-keyup date_picker" name="statistic-comprehensive-start" placeholder="起始时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" style="margin-right:-3px;" />
-            <input type="text" class="search-filter filter-keyup date_picker" name="statistic-comprehensive-ended" placeholder="终止时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+            <input type="text" class="search-filter filter-keyup date_picker-c" name="statistic-comprehensive-start" placeholder="起始时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" style="margin-right:-3px;" />
+            <input type="text" class="search-filter filter-keyup date_picker-c" name="statistic-comprehensive-ended" placeholder="终止时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
 
             <button type="button" class="btn btn-success btn-filter filter-submit-c" data-time-type="period">
                 <i class="fa fa-search"></i> 按时间段搜索

@@ -88,6 +88,7 @@
 
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.comprehensive.statistic-index')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.comprehensive.statistic-comprehensive')
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.comprehensive.statistic-comprehensive-daily')
 
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.export.statistic-export')
 
@@ -171,6 +172,7 @@
 
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.comprehensive.statistic-index-script')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.comprehensive.statistic-comprehensive-script')
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.comprehensive.statistic-comprehensive-daily-datatable')
 
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.export.statistic-export-datatable')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.export.statistic-export-script')

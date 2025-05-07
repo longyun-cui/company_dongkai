@@ -154,6 +154,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/v1/operate/statistic/comprehensive-overview', $controller.'@v1_operate_for_get_statistic_data_of_comprehensive_overview');
 
     Route::post('/v1/operate/statistic/statistic-comprehensive', $controller.'@v1_operate_for_get_statistic_data_of_statistic_comprehensive');
+    Route::post('/v1/operate/statistic/statistic-daily', $controller.'@v1_operate_for_get_statistic_data_of_statistic_daily');
 
 
     Route::post('/v1/operate/statistic/marketing/company-overview', $controller.'@v1_operate_for_get_statistic_data_of_company_overview');

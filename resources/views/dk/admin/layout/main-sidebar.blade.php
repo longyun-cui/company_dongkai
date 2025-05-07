@@ -592,7 +592,7 @@
                    data-type="create"
                    data-unique="y"
                    data-id="tab-comprehensive"
-                   data-title='<i class="fa fa-file-text text-green"></i> 综合概览2'
+                   data-title='<i class="fa fa-pie-chart text-green"></i> 综合概览2'
                    data-content=''
 
                    data-comprehensive-type="create"
@@ -605,6 +605,29 @@
                     <span>综合概览2</span>
                 </a>
             </li>
+            @endif
+
+
+            {{--综合概览--}}
+            @if(in_array($me->user_type,[0,1,9]))
+                <li class="treeview _none-">
+                    <a class="tab-control datatable-control"
+                       data-type="create"
+                       data-unique="y"
+                       data-id="statistic-daily"
+                       data-title='<i class="fa fa-line-chart text-green"></i> 综合月报'
+                       data-content=''
+
+                       data-datatable-type="create"
+                       data-datatable-unique="y"
+                       data-datatable-id="statistic-daily"
+                       data-datatable-target="statistic-daily"
+                       data-datatable-clone-object="statistic-daily-clone"
+                    >
+                        <i class="fa fa-line-chart text-green"></i>
+                        <span>综合月报</span>
+                    </a>
+                </li>
             @endif
 
 

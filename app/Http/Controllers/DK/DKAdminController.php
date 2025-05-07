@@ -778,18 +778,23 @@ class DKAdminController extends Controller
 
 
 
-    // 【统计】公司概览
+    // 【统计】综合概览
     public function v1_operate_for_get_statistic_data_of_comprehensive_overview()
     {
         return $this->repo->v1_operate_for_get_statistic_data_of_comprehensive_overview(request()->all());
     }
 
-    // 【统计】公司概览
+    // 【统计】综合概览
     public function v1_operate_for_get_statistic_data_of_statistic_comprehensive()
     {
         return $this->repo->v1_operate_for_get_statistic_data_of_statistic_comprehensive(request()->all());
     }
 
+    // 【统计】综合日报
+    public function v1_operate_for_get_statistic_data_of_statistic_daily()
+    {
+        return $this->repo->v1_operate_for_get_statistic_data_of_statistic_daily(request()->all());
+    }
 
 
 
@@ -832,7 +837,7 @@ class DKAdminController extends Controller
     {
         return $this->repo->v1_operate_for_get_statistic_data_of_production_caller_recent(request()->all());
     }
-    // 【生产-统计】坐席近期
+    // 【生产-统计】坐席日报
     public function v1_operate_for_get_statistic_data_of_production_caller_daily()
     {
         return $this->repo->v1_operate_for_get_statistic_data_of_production_caller_daily(request()->all());
