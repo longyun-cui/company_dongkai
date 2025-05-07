@@ -8631,7 +8631,7 @@ class DKAdminRepository {
         $query_order = DK_Order::select('creator_id','published_at','published_date')
 //            ->whereBetween('published_at',[$this_month_start_timestamp,$this_month_ended_timestamp])  // 当月
 //            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
-            ->whereIn('created_type',[1,9,99])
+            ->whereIn('created_type',[1,99])
             ->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date])
             ->groupBy('published_date')
             ->addSelect(DB::raw("

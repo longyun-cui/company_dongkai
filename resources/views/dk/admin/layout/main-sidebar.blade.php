@@ -609,7 +609,7 @@
 
 
             {{--综合月报--}}
-            @if(in_array($me->user_type,[0,1,9]))
+            @if(in_array($me->user_type,[0,1,9,11]))
             <li class="treeview _none-">
                 <a class="tab-control datatable-control"
                    data-type="create"

@@ -110,6 +110,28 @@
                         if(row.order_rate_for_effective) return row.order_rate_for_effective + '%';
                         else return '';
                     }
+                },
+                {
+                    "title": "交付量",
+                    "data": "id",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.delivery_count_for_all) return row.delivery_count_for_all;
+                        else return '';
+                    }
+                },
+                {
+                    "title": "分发量",
+                    "data": "id",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.delivery_count_for_distributed) return row.delivery_count_for_distributed;
+                        else return '';
+                    }
                 }
             ],
             "drawCallback": function (settings) {
@@ -122,12 +144,16 @@
                 var $res_total = new Array();
                 var $res_accepted = new Array();
                 var $res_effective = new Array();
+                var $res_delivery_all = new Array();
+                var $res_delivery_distributed = new Array();
 
                 this.api().rows().every(function() {
                     var $rowData = this.data();
                     $res_total[($rowData.day - 1)] = { value:$rowData.order_count_for_all, name:$rowData.day };
                     $res_accepted[($rowData.day - 1)] = { value:$rowData.order_count_for_accepted, name:$rowData.day };
                     $res_effective[($rowData.day - 1)] = { value:$rowData.order_count_for_effective, name:$rowData.day };
+                    $res_delivery_all[($rowData.day - 1)] = { value:$rowData.delivery_count_for_all, name:$rowData.day };
+                    $res_delivery_distributed[($rowData.day - 1)] = { value:$rowData.delivery_count_for_distributed, name:$rowData.day };
                 });
 
                 var $option_statistics = {
@@ -144,7 +170,7 @@
                         }
                     },
                     legend: {
-                        data:['交付量']
+                        data:['提单量','通过量','有效量','交付量','分发量']
                     },
                     toolbox: {
                         feature: {
@@ -208,6 +234,30 @@
                             },
                             itemStyle : { normal: { label : { show: true } } },
                             data: $res_effective
+                        },
+                        {
+                            name:'交付量',
+                            type:'line',
+                            label: {
+                                normal: {
+                                    show: true,
+                                    position: 'top'
+                                }
+                            },
+                            itemStyle : { normal: { label : { show: true } } },
+                            data: $res_delivery_all
+                        },
+                        {
+                            name:'分发量',
+                            type:'line',
+                            label: {
+                                normal: {
+                                    show: true,
+                                    position: 'top'
+                                }
+                            },
+                            itemStyle : { normal: { label : { show: true } } },
+                            data: $res_delivery_distributed
                         }
                     ]
                 };
