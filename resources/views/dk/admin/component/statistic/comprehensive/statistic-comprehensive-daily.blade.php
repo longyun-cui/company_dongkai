@@ -21,12 +21,12 @@
 
 
             <button type="button" class="btn btn-success btn-filter filter-submit">
-                <i class="fa fa-search"></i> 全部查询
+                <i class="fa fa-search"></i> 查询
             </button>
 
-            <button type="button" class="btn btn-default btn-filter filter-empty">
-                <i class="fa fa-remove"></i> 清空
-            </button>
+{{--            <button type="button" class="btn btn-default btn-filter filter-empty">--}}
+{{--                <i class="fa fa-remove"></i> 清空--}}
+{{--            </button>--}}
 
             <button type="button" class="btn btn-default btn-filter filter-refresh">
                 <i class="fa fa-circle-o-notch"></i> 刷新

@@ -8628,9 +8628,10 @@ class DKAdminRepository {
         $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
 
 
-        $query_this_month = DK_Order::select('creator_id','published_at','published_date')
+        $query_order = DK_Order::select('creator_id','published_at','published_date')
 //            ->whereBetween('published_at',[$this_month_start_timestamp,$this_month_ended_timestamp])  // 当月
 //            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
+            ->whereIn('created_type',[1,9,99])
             ->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date])
             ->groupBy('published_date')
             ->addSelect(DB::raw("
@@ -8650,15 +8651,72 @@ class DKAdminRepository {
                 "))
             ->orderBy("published_date", "desc");
 
-        $total = $query_this_month->count();
+        $total = $query_order->count();
+
+
+        $query_delivery = DK_Pivot_Client_Delivery::select('creator_id','delivered_date')
+//            ->whereBetween('published_at',[$this_month_start_timestamp,$this_month_ended_timestamp])  // 当月
+//            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
+            ->whereBetween('delivered_date',[$the_month_start_date,$the_month_ended_date])
+            ->groupBy('delivered_date')
+            ->addSelect(DB::raw("
+                    DATE_FORMAT(delivered_date,'%Y-%m-%d') as date_day,
+                    DATE_FORMAT(delivered_date,'%e') as day,
+                    count(*) as sum
+                "))
+            ->addSelect(DB::raw("
+                    count(*) as delivery_count_for_all,
+                    
+                    count(IF(pivot_type = 96, TRUE, NULL)) as delivery_count_for_distributed
+                    
+                "))
+            ->orderBy("delivered_date", "desc");
+
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
-        $list = $query_this_month->get();
-//        dd($statistics_order_this_month_data);
+        $order_list = $query_order->get();
+        $delivery_list = $query_delivery->get();
 
+        // 转换为键值对的集合
+        $keyed1 = $order_list->keyBy('date_day');
+        $keyed2 = $delivery_list->keyBy('date_day');
+//        dd($keyed2->keys());
+
+        // 获取所有唯一键
+        $allIds = $keyed1->keys()->merge($keyed2->keys())->unique();
+//        dd($allIds);
+
+        // 合并对应元素
+        $merged = $allIds->map(function ($id) use ($keyed1, $keyed2) {
+            if($keyed1->get($id) && $keyed2->get($id))
+            {
+//                return $keyed1->get($id)->merge($keyed2->get($id));
+                return collect(array_merge(
+                    $keyed1->get($id)->toArray(),
+                    $keyed2->get($id)->toArray()
+                ));
+            }
+            else if($keyed1->get($id) && !$keyed2->get($id))
+            {
+                return $keyed1->get($id);
+            }
+            else if(!$keyed1->get($id) && $keyed2->get($id))
+            {
+                return $keyed2->get($id);
+            }
+//            return array_merge(
+//                $keyed1->get($id, [])->toArray(),
+//                $keyed2->get($id, [])->toArray()
+//            );
+        })->sortByDesc('date_day')->values(); // 重新索引为数字键
+
+//        dd($merged->toArray());
+
+
+        $total = $merged->count();
 
 
 
@@ -8676,35 +8734,35 @@ class DKAdminRepository {
 
 
 
-        foreach ($list as $k => $v)
+        foreach ($merged as $k => $v)
         {
 
             // 审核
-            $v->order_count_for_effective = $v->order_count_for_accepted + $v->order_count_for_repeated + $v->order_count_for_accepted_inside;
-            $list[$k]->order_count_for_effective = $v->order_count_for_effective;
+            $v['order_count_for_effective'] = $v['order_count_for_accepted'] + $v['order_count_for_repeated'] + $v['order_count_for_accepted_inside'];
+            $merged[$k]['order_count_for_effective'] = $v['order_count_for_effective'];
 
             // 通过率
-            if($v->order_count_for_all > 0)
+            if($v['order_count_for_all'] > 0)
             {
-                $list[$k]->order_rate_for_accepted = round(($v->order_count_for_accepted * 100 / $v->order_count_for_all),2);
+                $merged[$k]['order_rate_for_accepted'] = round(($v['order_count_for_accepted'] * 100 / $v['order_count_for_all']),2);
             }
-            else $list[$k]->order_rate_for_accepted = 0;
+            else $merged[$k]['order_rate_for_accepted'] = 0;
 
             // 有效率
-            if($v->order_count_for_all > 0)
+            if($v['order_count_for_all'] > 0)
             {
-                $list[$k]->order_rate_for_effective = round(($v->order_count_for_effective * 100 / $v->order_count_for_all),2);
+                $merged[$k]['order_rate_for_effective'] = round(($v['order_count_for_effective'] * 100 / $v['order_count_for_all']),2);
             }
-            else $list[$k]->order_rate_for_effective = 0;
+            else $merged[$k]['order_rate_for_effective'] = 0;
 
 
-            $total_data['order_count_for_all'] += $v->order_count_for_all;
-            $total_data['order_count_for_inspected'] += $v->order_count_for_inspected;
-            $total_data['order_count_for_accepted'] += $v->order_count_for_accepted;
-            $total_data['order_count_for_refused'] += $v->order_count_for_refused;
-            $total_data['order_count_for_repeated'] += $v->order_count_for_repeated;
-            $total_data['order_count_for_accepted_inside'] += $v->order_count_for_accepted_inside;
-            $total_data['order_count_for_effective'] += $list[$k]->order_count_for_effective;
+            $total_data['order_count_for_all'] += $v['order_count_for_all'];
+            $total_data['order_count_for_inspected'] += $v['order_count_for_inspected'];
+            $total_data['order_count_for_accepted'] += $v['order_count_for_accepted'];
+            $total_data['order_count_for_refused'] += $v['order_count_for_refused'];
+            $total_data['order_count_for_repeated'] += $v['order_count_for_repeated'];
+            $total_data['order_count_for_accepted_inside'] += $v['order_count_for_accepted_inside'];
+            $total_data['order_count_for_effective'] += $merged[$k]['order_count_for_effective'];
 
         }
 
@@ -8722,11 +8780,11 @@ class DKAdminRepository {
         }
         else $total_data['order_rate_for_effective'] = 0;
 
-        $list[] = $total_data;
+        $merged[] = $total_data;
 
 //        dd($list->toArray());
 
-        return datatable_response($list, $draw, $total);
+        return datatable_response($merged, $draw, $total);
     }
 
 
