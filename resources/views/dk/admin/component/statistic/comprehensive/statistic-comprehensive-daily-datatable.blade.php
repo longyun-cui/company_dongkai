@@ -1,6 +1,6 @@
 <script>
 
-    function Datatable_Statistic_Daily($tableId, $eChartId)
+    function Datatable_Statistic_Comprehensive_Daily($tableId, $eChartId)
     {
         let $that = $($tableId);
         let $datatable_wrapper = $that.parents('.datatable-wrapper');
@@ -18,21 +18,21 @@
             "order": [],
             "orderCellsTop": true,
             "ajax": {
-                'url': "{{ url('/v1/operate/statistic/statistic-daily') }}",
+                'url': "{{ url('/v1/operate/statistic/statistic-comprehensive-daily') }}",
                 "type": 'POST',
                 "dataType" : 'json',
                 "data": function (d) {
                     d._token = $('meta[name="_token"]').attr('content');
-                    d.id = $tableSearch.find('input[name="statistic-daily-id"]').val();
-                    d.name = $tableSearch.find('input[name="statistic-daily-name"]').val();
-                    d.title = $tableSearch.find('input[name="statistic-daily-title"]').val();
-                    d.keyword = $tableSearch.find('input[name="statistic-daily-keyword"]').val();
-                    d.status = $tableSearch.find('select[name="statistic-daily-status"]').val();
-                    d.time_type = $tableSearch.find('input[name="statistic-daily-time-type"]').val();
-                    d.time_month = $tableSearch.find('input[name="statistic-daily-month"]').val();
-                    d.time_date = $tableSearch.find('input[name="statistic-daily-date"]').val();
-                    d.date_start = $tableSearch.find('input[name="statistic-daily-start"]').val();
-                    d.date_ended = $tableSearch.find('input[name="statistic-daily-ended"]').val();
+                    d.id = $tableSearch.find('input[name="statistic-comprehensive-daily-id"]').val();
+                    d.name = $tableSearch.find('input[name="statistic-comprehensive-daily-name"]').val();
+                    d.title = $tableSearch.find('input[name="statistic-comprehensive-daily-title"]').val();
+                    d.keyword = $tableSearch.find('input[name="statistic-comprehensive-daily-keyword"]').val();
+                    d.status = $tableSearch.find('select[name="statistic-comprehensive-daily-status"]').val();
+                    d.time_type = $tableSearch.find('input[name="statistic-comprehensive-daily-time-type"]').val();
+                    d.time_month = $tableSearch.find('input[name="statistic-comprehensive-daily-month"]').val();
+                    d.time_date = $tableSearch.find('input[name="statistic-comprehensive-daily-date"]').val();
+                    d.date_start = $tableSearch.find('input[name="statistic-comprehensive-daily-start"]').val();
+                    d.date_ended = $tableSearch.find('input[name="statistic-comprehensive-daily-ended"]').val();
                 },
             },
             // "fixedColumns": {
@@ -122,6 +122,7 @@
                 var $res_total = new Array();
                 var $res_accepted = new Array();
                 var $res_effective = new Array();
+
                 this.api().rows().every(function() {
                     var $rowData = this.data();
                     $res_total[($rowData.day - 1)] = { value:$rowData.order_count_for_all, name:$rowData.day };

@@ -791,9 +791,9 @@ class DKAdminController extends Controller
     }
 
     // 【统计】综合日报
-    public function v1_operate_for_get_statistic_data_of_statistic_daily()
+    public function v1_operate_for_get_statistic_data_of_statistic_comprehensive_daily()
     {
-        return $this->repo->v1_operate_for_get_statistic_data_of_statistic_daily(request()->all());
+        return $this->repo->v1_operate_for_get_statistic_data_of_statistic_comprehensive_daily(request()->all());
     }
 
 

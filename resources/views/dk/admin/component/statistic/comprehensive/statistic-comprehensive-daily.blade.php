@@ -1,4 +1,4 @@
-<div class="row datatable-body datatable-wrapper statistic-daily-clone" data-datatable-item-category="statistic-daily">
+<div class="row datatable-body datatable-wrapper statistic-comprehensive-daily-clone" data-datatable-item-category="statistic-comprehensive-daily">
 
 
     <div class="col-md-12 datatable-search-row  datatable-search-box">
@@ -7,15 +7,15 @@
         <div class="pull-right">
 
 
-            <input type="hidden" name="statistic-caller-time-type" class="time-type" value="month" readonly>
+            <input type="hidden" name="statistic-comprehensive-daily-time-type" class="time-type" value="month" readonly>
 
 
             {{--按月查看--}}
-            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre month-pre" data-target="statistic-caller-daily-month">
+            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre month-pre" data-target="statistic-comprehensive-daily-month">
                 <i class="fa fa-chevron-left"></i>
             </button>
-            <input type="text" class="search-filter form-filter filter-keyup month_picker" name="statistic-daily-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
-            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next month-next" data-target="statistic-caller-daily-month">
+            <input type="text" class="search-filter form-filter filter-keyup month_picker" name="statistic-comprehensive-daily-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
+            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next month-next" data-target="statistic-comprehensive-daily-month">
                 <i class="fa fa-chevron-right"></i>
             </button>
 

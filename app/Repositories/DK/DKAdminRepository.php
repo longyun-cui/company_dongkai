@@ -8591,7 +8591,7 @@ class DKAdminRepository {
     }
 
     // 【统计】返回-综合-日报
-    public function v1_operate_for_get_statistic_data_of_statistic_daily($post_data)
+    public function v1_operate_for_get_statistic_data_of_statistic_comprehensive_daily($post_data)
     {
         $this->get_me();
         $me = $this->me;

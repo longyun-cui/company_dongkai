@@ -232,6 +232,7 @@
                 $clone.addClass('datatable-wrapper');
                 $clone.find('table').attr('id',$config.id);
 
+                console.log($config.chart_id);
                 $clone.find('.eChart').attr('id',$config.chart_id);
 
                 $('#'+$config.target).prepend($clone);
@@ -470,9 +471,9 @@
                 {
                     Table_Datatable_Ajax_Statistic_Deliverer_Overview('#'+$config.id);
                 }
-                else if($id == "statistic-daily")
+                else if($id == "datatable-statistic-comprehensive-daily")
                 {
-                    Datatable_Statistic_Daily('#'+$config.id);
+                    Datatable_Statistic_Comprehensive_Daily('#'+$config.id, $config.chart_id);
                 }
                 else if($id == "statistic-comprehensive-overview")
                 {

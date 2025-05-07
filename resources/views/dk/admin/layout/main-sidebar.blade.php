@@ -585,7 +585,7 @@
             </li>
 
 
-            {{--综合概览--}}
+            {{--综合概览2--}}
             @if(in_array($me->user_type,[0,1,9,11,61]))
             <li class="treeview _none-">
                 <a class="tab-control comprehensive-control"
@@ -608,26 +608,28 @@
             @endif
 
 
-            {{--综合概览--}}
+            {{--综合月报--}}
             @if(in_array($me->user_type,[0,1,9]))
-                <li class="treeview _none-">
-                    <a class="tab-control datatable-control"
-                       data-type="create"
-                       data-unique="y"
-                       data-id="statistic-daily"
-                       data-title='<i class="fa fa-line-chart text-green"></i> 综合月报'
-                       data-content=''
+            <li class="treeview _none-">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="statistic-comprehensive-daily"
+                   data-title='<i class="fa fa-line-chart text-green"></i> 综合月报'
+                   data-content=''
 
-                       data-datatable-type="create"
-                       data-datatable-unique="y"
-                       data-datatable-id="statistic-daily"
-                       data-datatable-target="statistic-daily"
-                       data-datatable-clone-object="statistic-daily-clone"
-                    >
-                        <i class="fa fa-line-chart text-green"></i>
-                        <span>综合月报</span>
-                    </a>
-                </li>
+                   data-chart-id='chart-comprehensive-daily'
+
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-statistic-comprehensive-daily"
+                   data-datatable-target="statistic-comprehensive-daily"
+                   data-datatable-clone-object="statistic-comprehensive-daily-clone"
+                >
+                    <i class="fa fa-line-chart text-green"></i>
+                    <span>综合月报</span>
+                </a>
+            </li>
             @endif
 
 
