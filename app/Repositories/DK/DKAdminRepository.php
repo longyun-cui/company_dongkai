@@ -8731,6 +8731,8 @@ class DKAdminRepository {
         $total_data['order_count_for_repeated'] = 0;
         $total_data['order_count_for_accepted_inside'] = 0;
         $total_data['order_count_for_effective'] = 0;
+        $total_data['delivery_count_for_all'] = 0;
+        $total_data['delivery_count_for_distributed'] = 0;
 
 
 
@@ -8763,6 +8765,9 @@ class DKAdminRepository {
             $total_data['order_count_for_repeated'] += $v['order_count_for_repeated'];
             $total_data['order_count_for_accepted_inside'] += $v['order_count_for_accepted_inside'];
             $total_data['order_count_for_effective'] += $merged[$k]['order_count_for_effective'];
+
+            $total_data['delivery_count_for_all'] += $merged[$k]['delivery_count_for_all'];
+            $total_data['delivery_count_for_distributed'] += $merged[$k]['delivery_count_for_distributed'];
 
         }
 
