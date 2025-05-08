@@ -11248,7 +11248,7 @@ class DKAdminRepository {
         {
         }
 
-        $query_order = $query_order->get()->keyBy('department_district_id')->toArray();
+        $query_order = $query_order->groupBy('department_district_id')->get()->keyBy('department_district_id')->toArray();
 
 
         $query = DK_Department::select('id','name')
