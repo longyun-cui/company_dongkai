@@ -57,6 +57,17 @@
                     }
                 },
                 {
+                    "title": "出席人力",
+                    "data": "id",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.attendance_manpower) return row.attendance_manpower;
+                        else return '';
+                    }
+                },
+                {
                     "title": "提单量",
                     "data": "id",
                     "className": "",

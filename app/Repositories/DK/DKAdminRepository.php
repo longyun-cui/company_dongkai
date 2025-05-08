@@ -8646,7 +8646,9 @@ class DKAdminRepository {
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
                     count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
-                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
+                    
+                    COUNT(DISTINCT creator_id) AS attendance_manpower
                     
                 "))
             ->orderBy("published_date", "desc");
