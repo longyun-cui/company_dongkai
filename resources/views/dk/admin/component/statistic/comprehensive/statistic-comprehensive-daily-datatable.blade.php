@@ -79,6 +79,17 @@
                     }
                 },
                 {
+                    "title": "次数/单",
+                    "data": "id",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.cnt_per) return row.cnt_per;
+                        else return '';
+                    }
+                },
+                {
                     "title": "通话分钟",
                     "data": "id",
                     "className": "",
@@ -86,6 +97,17 @@
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         if(row.minutes) return row.minutes;
+                        else return '';
+                    }
+                },
+                {
+                    "title": "分钟/单",
+                    "data": "id",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.minutes_per) return row.minutes_per;
                         else return '';
                     }
                 },

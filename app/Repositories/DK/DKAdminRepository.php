@@ -8788,6 +8788,9 @@ class DKAdminRepository {
         $total_data['delivery_count_for_all'] = 0;
         $total_data['delivery_count_for_distributed'] = 0;
 
+        $total_data['cnt'] = 0;
+        $total_data['minutes'] = 0;
+
 
 
         foreach ($merged as $k => $v)
@@ -8826,6 +8829,19 @@ class DKAdminRepository {
             }
 
 
+            // 单均通话 & 单均分钟
+            if($v['order_count_for_all'] > 0)
+            {
+                $merged[$k]['cnt_per'] = round(($v['cnt'] * 100 / $v['order_count_for_all']),2);
+                $merged[$k]['minutes_per'] = round(($v['minutes'] * 100 / $v['order_count_for_all']),2);
+            }
+            else
+            {
+                $merged[$k]['cnt_per'] = 0;
+                $merged[$k]['minutes_per'] = 0;
+            }
+
+
             $total_data['order_count_for_all'] += $v['order_count_for_all'];
             $total_data['order_count_for_inspected'] += $v['order_count_for_inspected'];
             $total_data['order_count_for_accepted'] += $v['order_count_for_accepted'];
@@ -8836,6 +8852,9 @@ class DKAdminRepository {
 
             $total_data['delivery_count_for_all'] += $merged[$k]['delivery_count_for_all'];
             $total_data['delivery_count_for_distributed'] += $merged[$k]['delivery_count_for_distributed'];
+
+            $total_data['cnt'] += $merged[$k]['cnt'];
+            $total_data['minutes'] += $merged[$k]['minutes'];
 
         }
 
@@ -8864,6 +8883,19 @@ class DKAdminRepository {
         {
             $total_data['order_count_for_all_per'] = 0;
             $total_data['order_count_for_accepted_per'] = 0;
+        }
+
+
+        // 单均通话 & 单均分钟
+        if($total_data['order_count_for_all'] > 0)
+        {
+            $total_data['cnt_per'] = round(($total_data['cnt'] / $total_data['order_count_for_all']),2);
+            $total_data['minutes_per'] = round(($total_data['minutes'] / $total_data['order_count_for_all']),2);
+        }
+        else
+        {
+            $total_data['cnt_per'] = 0;
+            $total_data['minutes_per'] = 0;
         }
 
         $merged[] = $total_data;
