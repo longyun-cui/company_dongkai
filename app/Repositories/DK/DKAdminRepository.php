@@ -8703,7 +8703,7 @@ class DKAdminRepository {
 //        dd($keyed2->keys());
 
         // 获取所有唯一键
-        $allIds = $keyed1->keys()->merge($keyed2->keys())->unique();
+        $allIds = $keyed1->keys()->merge($keyed2->keys())->merge($keyed3->keys())->unique();
 //        dd($allIds);
 
         // 合并对应元素
