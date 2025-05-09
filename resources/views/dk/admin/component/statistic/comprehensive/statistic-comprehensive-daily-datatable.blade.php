@@ -101,7 +101,7 @@
                     }
                 },
                 {
-                    "title": "人均提单",
+                    "title": "人均通过",
                     "data": "id",
                     "className": "",
                     "width": "80px",
