@@ -633,6 +633,31 @@
             @endif
 
 
+            {{--通话月报--}}
+            @if(in_array($me->user_type,[0,1,9,11]))
+                <li class="treeview _none-">
+                    <a class="tab-control datatable-control"
+                       data-type="create"
+                       data-unique="y"
+                       data-id="statistic-call-daily"
+                       data-title='<i class="fa fa-phone text-green"></i> 通话月报'
+                       data-content=''
+
+                       data-chart-id='chart-call-daily'
+
+                       data-datatable-type="create"
+                       data-datatable-unique="y"
+                       data-datatable-id="datatable-statistic-call-daily"
+                       data-datatable-target="statistic-call-daily"
+                       data-datatable-clone-object="statistic-call-daily-clone"
+                    >
+                        <i class="fa fa-phone text-green"></i>
+                        <span>通话月报</span>
+                    </a>
+                </li>
+            @endif
+
+
             {{----}}
             @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
             <li class="treeview _none-">

@@ -480,6 +480,10 @@
                     // 初始化
                     $("#filter-submit-for-comprehensive").click();
                 }
+                else if($id == "datatable-statistic-call-daily")
+                {
+                    Datatable_Statistic_Call_Daily('#'+$config.id, $config.chart_id);
+                }
                 else if($id == "datatable-statistic-export")
                 {
                     Datatable_for_ExportList('#'+$config.id);

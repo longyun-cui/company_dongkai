@@ -79,7 +79,7 @@
                     }
                 },
                 {
-                    "title": "次数/单",
+                    "title": "次数 / 单",
                     "data": "id",
                     "className": "",
                     "width": "80px",
@@ -101,7 +101,7 @@
                     }
                 },
                 {
-                    "title": "分钟/单",
+                    "title": "分钟 / 单",
                     "data": "id",
                     "className": "",
                     "width": "80px",
