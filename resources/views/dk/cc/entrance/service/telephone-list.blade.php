@@ -260,36 +260,36 @@
                             return data;
                         }
                     },
-                    {
-                        "title": "可用",
-                        "data": "count_for_1",
-                        "className": "",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "成单",
-                        "data": "count_for_sold",
-                        "className": "",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "黑名单",
-                        "data": "count_for_blacklist",
-                        "className": "",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
+                    // {
+                    //     "title": "可用",
+                    //     "data": "count_for_1",
+                    //     "className": "",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return data;
+                    //     }
+                    // },
+                    // {
+                    //     "title": "成单",
+                    //     "data": "count_for_sold",
+                    //     "className": "",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return data;
+                    //     }
+                    // },
+                    // {
+                    //     "title": "黑名单",
+                    //     "data": "count_for_blacklist",
+                    //     "className": "",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return data;
+                    //     }
+                    // },
                     {
                         "title": "最近提取",
                         "data": "last_task_time",

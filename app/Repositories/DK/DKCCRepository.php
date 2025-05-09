@@ -5005,14 +5005,17 @@ class DKCCRepository {
 
         $query = DK_CC_Telephone::select('item_status','provinceCode','cityCode','areaCode','tag')
             ->addSelect(DB::raw("
-                    count('*') as count_for_all,
-                    count(IF(item_status = 1 and is_blacklisted = 0, TRUE, NULL)) as count_for_1,
-                    count(IF(item_status = 9, TRUE, NULL)) as count_for_sold,
-                    count(IF(is_blacklisted = 1, TRUE, NULL)) as count_for_blacklist
+                    count('*') as count_for_all
                 "))
-            ->groupBy('provinceCode')
+//            ->addSelect(DB::raw("
+//                    count('*') as count_for_all,
+//                    count(IF(item_status = 1 and is_blacklisted = 0, TRUE, NULL)) as count_for_1,
+//                    count(IF(item_status = 9, TRUE, NULL)) as count_for_sold,
+//                    count(IF(is_blacklisted = 1, TRUE, NULL)) as count_for_blacklist
+//                "))
+//            ->groupBy('provinceCode')
             ->groupBy('cityCode')
-            ->groupBy('areaCode')
+//            ->groupBy('areaCode')
             ->groupBy('tag');
 
 
