@@ -8832,8 +8832,24 @@ class DKAdminRepository {
             // 单均通话 & 单均分钟
             if($v['order_count_for_all'] > 0)
             {
-                if(!empty($v['cnt'])) $merged[$k]['cnt_per'] = round(($v['cnt'] / $v['order_count_for_all']),2);
-                if(!empty($v['minutes']))  $merged[$k]['minutes_per'] = round(($v['minutes'] / $v['order_count_for_all']),2);
+                if(!empty($v['cnt']))
+                {
+                    $merged[$k]['cnt_per'] = round(($v['cnt'] / $v['order_count_for_all']),2);
+                }
+                else
+                {
+                    $merged[$k]['cnt'] = 0;
+                    $merged[$k]['cnt_per'] = 0;
+}
+                if(!empty($v['minutes']))
+                {
+                    $merged[$k]['minutes_per'] = round(($v['minutes'] / $v['order_count_for_all']),2);
+                }
+                else
+                {
+                    $merged[$k]['minutes'] = 0;
+                    $merged[$k]['minutes_per'] = 0;
+                }
             }
             else
             {
