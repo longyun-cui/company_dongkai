@@ -8861,14 +8861,14 @@ class DKAdminRepository {
         // 通过率
         if($total_data['order_count_for_all'] > 0)
         {
-            $total_data['order_rate_for_accepted'] = round(($total_data['order_count_for_accepted'] / $total_data['order_count_for_all']),2);
+            $total_data['order_rate_for_accepted'] = round(($total_data['order_count_for_accepted'] * 100 / $total_data['order_count_for_all']),2);
         }
         else $total_data['order_rate_for_accepted'] = 0;
 
         // 有效率
         if($total_data['order_count_for_all'] > 0)
         {
-            $total_data['order_rate_for_effective'] = round(($total_data['order_count_for_effective'] / $total_data['order_count_for_all']),2);
+            $total_data['order_rate_for_effective'] = round(($total_data['order_count_for_effective'] * 100 / $total_data['order_count_for_all']),2);
         }
         else $total_data['order_rate_for_effective'] = 0;
 
