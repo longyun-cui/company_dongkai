@@ -27,6 +27,8 @@ use App\Models\DK\YH_Item;
 use App\Models\DK_CC\DK_CC_Call_Record;
 use App\Models\DK_CC\DK_CC_Call_Statistic;
 
+use App\Models\DK_VOS\DK_VOS_CDR;
+
 use App\Repositories\Common\CommonRepository;
 
 use Response, Auth, Validator, DB, Exception, Cache, Blade, Carbon, DateTime;
@@ -8675,16 +8677,29 @@ class DKAdminRepository {
             ->orderBy("delivered_date", "desc");
 
 
+        $query_cdr = DK_VOS_CDR::select('holdtime','call_date')
+            ->whereBetween('call_date',[$the_month_start_date,$the_month_ended_date])
+            ->groupBy('call_date')
+            ->addSelect(DB::raw("
+                    DATE_FORMAT(call_date,'%Y-%m-%d') as date_day,
+                    DATE_FORMAT(call_date,'%e') as day,
+                    count(*) as cnt,
+                    sum(CEIL(holdtime / 60)) as minutes
+                "))
+            ->orderBy("delivered_date", "desc");
+
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         $order_list = $query_order->get();
         $delivery_list = $query_delivery->get();
+        $cdr_list = $query_cdr->get();
 
         // 转换为键值对的集合
         $keyed1 = $order_list->keyBy('date_day');
         $keyed2 = $delivery_list->keyBy('date_day');
+        $keyed3 = $cdr_list->keyBy('date_day');
 //        dd($keyed2->keys());
 
         // 获取所有唯一键
@@ -8692,27 +8707,62 @@ class DKAdminRepository {
 //        dd($allIds);
 
         // 合并对应元素
-        $merged = $allIds->map(function ($id) use ($keyed1, $keyed2) {
-            if($keyed1->get($id) && $keyed2->get($id))
+        $merged = $allIds->map(function ($id) use ($keyed1, $keyed2, $keyed3) {
+            if($keyed3->get($id))
             {
+                if($keyed1->get($id) && $keyed2->get($id))
+                {
 //                return $keyed1->get($id)->merge($keyed2->get($id));
-                return collect(array_merge(
-                    $keyed1->get($id)->toArray(),
-                    $keyed2->get($id)->toArray()
-                ));
+                    return collect(array_merge(
+                        $keyed1->get($id)->toArray(),
+                        $keyed2->get($id)->toArray(),
+                        $keyed3->get($id)->toArray()
+                    ));
+                }
+                else if($keyed1->get($id) && !$keyed2->get($id))
+                {
+//                    return $keyed1->get($id);
+                    return collect(array_merge(
+                        $keyed1->get($id)->toArray(),
+                        $keyed3->get($id)->toArray()
+                    ));
+                }
+                else if(!$keyed1->get($id) && $keyed2->get($id))
+                {
+//                    return $keyed2->get($id);
+                    return collect(array_merge(
+                        $keyed2->get($id)->toArray(),
+                        $keyed3->get($id)->toArray()
+                    ));
+                }
+                else
+                {
+                    return $keyed3->get($id);
+                }
             }
-            else if($keyed1->get($id) && !$keyed2->get($id))
+            else
             {
-                return $keyed1->get($id);
-            }
-            else if(!$keyed1->get($id) && $keyed2->get($id))
-            {
-                return $keyed2->get($id);
-            }
+                if($keyed1->get($id) && $keyed2->get($id))
+                {
+//                return $keyed1->get($id)->merge($keyed2->get($id));
+                    return collect(array_merge(
+                        $keyed1->get($id)->toArray(),
+                        $keyed2->get($id)->toArray()
+                    ));
+                }
+                else if($keyed1->get($id) && !$keyed2->get($id))
+                {
+                    return $keyed1->get($id);
+                }
+                else if(!$keyed1->get($id) && $keyed2->get($id))
+                {
+                    return $keyed2->get($id);
+                }
 //            return array_merge(
 //                $keyed1->get($id, [])->toArray(),
 //                $keyed2->get($id, [])->toArray()
 //            );
+            }
         })->sortByDesc('date_day')->values(); // 重新索引为数字键
 
 //        dd($merged->toArray());
