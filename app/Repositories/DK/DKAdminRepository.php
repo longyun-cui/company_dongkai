@@ -8725,10 +8725,12 @@ class DKAdminRepository {
         $total_data = [];
         $total_data['published_at'] = 0;
         $total_data['date_day'] = '统计';
-        $total_data['staff_count'] = 0;
+        $total_data['attendance_manpower'] = 0;
         $total_data['order_count_for_all'] = 0;
+        $total_data['order_count_for_all_per'] = 0;
         $total_data['order_count_for_inspected'] = 0;
         $total_data['order_count_for_accepted'] = 0;
+        $total_data['order_count_for_accepted_per'] = 0;
         $total_data['order_count_for_refused'] = 0;
         $total_data['order_count_for_repeated'] = 0;
         $total_data['order_count_for_accepted_inside'] = 0;
@@ -8740,6 +8742,7 @@ class DKAdminRepository {
 
         foreach ($merged as $k => $v)
         {
+            $total_data['attendance_manpower'] += $v['attendance_manpower'];
 
             // 审核
             $v['order_count_for_effective'] = $v['order_count_for_accepted'] + $v['order_count_for_repeated'] + $v['order_count_for_accepted_inside'];
@@ -8758,6 +8761,19 @@ class DKAdminRepository {
                 $merged[$k]['order_rate_for_effective'] = round(($v['order_count_for_effective'] * 100 / $v['order_count_for_all']),2);
             }
             else $merged[$k]['order_rate_for_effective'] = 0;
+
+
+            // 人均提交量 && 人均通过量
+            if($v['attendance_manpower'] > 0)
+            {
+                $merged[$k]['order_count_for_all_per'] = round(($v['order_count_for_all'] / $v['attendance_manpower']),2);
+                $merged[$k]['order_count_for_accepted_per'] = round(($v['order_count_for_accepted'] / $v['attendance_manpower']),2);
+            }
+            else
+            {
+                $merged[$k]['order_count_for_all_per'] = 0;
+                $merged[$k]['order_count_for_accepted_per'] = 0;
+            }
 
 
             $total_data['order_count_for_all'] += $v['order_count_for_all'];
@@ -8786,6 +8802,19 @@ class DKAdminRepository {
             $total_data['order_rate_for_effective'] = round(($total_data['order_count_for_effective'] * 100 / $total_data['order_count_for_all']),2);
         }
         else $total_data['order_rate_for_effective'] = 0;
+
+
+        // 人均提交量 && 人均通过量
+        if($total_data['attendance_manpower'] > 0)
+        {
+            $total_data['order_count_for_all_per'] = round(($total_data['order_count_for_all'] / $total_data['attendance_manpower']),2);
+            $total_data['order_count_for_accepted_per'] = round(($total_data['order_count_for_accepted'] / $total_data['attendance_manpower']),2);
+        }
+        else
+        {
+            $total_data['order_count_for_all_per'] = 0;
+            $total_data['order_count_for_accepted_per'] = 0;
+        }
 
         $merged[] = $total_data;
 

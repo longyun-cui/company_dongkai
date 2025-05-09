@@ -79,6 +79,17 @@
                     }
                 },
                 {
+                    "title": "人均提单",
+                    "data": "id",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.order_count_for_all_per) return row.order_count_for_all_per;
+                        else return '';
+                    }
+                },
+                {
                     "title": "通过量",
                     "data": "id",
                     "className": "",
@@ -86,6 +97,17 @@
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         if(row.order_count_for_accepted) return row.order_count_for_accepted;
+                        else return '';
+                    }
+                },
+                {
+                    "title": "人均提单",
+                    "data": "id",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.order_count_for_accepted_per) return row.order_count_for_accepted_per;
                         else return '';
                     }
                 },
