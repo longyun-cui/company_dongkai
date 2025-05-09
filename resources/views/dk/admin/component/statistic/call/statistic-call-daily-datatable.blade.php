@@ -135,8 +135,8 @@
 
                 this.api().rows().every(function() {
                     var $rowData = this.data();
-                    $res_total[($rowData.day - 1)] = { value:$rowData.cnt, name:$rowData.day };
-                    $res_accepted[($rowData.day - 1)] = { value:$rowData.minutes, name:$rowData.day };
+                    $res_cnt[($rowData.day - 1)] = { value:$rowData.cnt, name:$rowData.day };
+                    $res_minutes[($rowData.day - 1)] = { value:$rowData.minutes, name:$rowData.day };
                 });
 
                 var $option_statistics = {
@@ -192,7 +192,7 @@
                                 }
                             },
                             itemStyle : { normal: { label : { show: true } } },
-                            data: $res_total
+                            data: $res_cnt
                         },
                         {
                             name:'分钟数',
@@ -204,12 +204,12 @@
                                 }
                             },
                             itemStyle : { normal: { label : { show: true } } },
-                            data: $res_accepted
+                            data: $res_minutes
                         },
                     ]
                 };
-                // var $myChart_statistics = echarts.init(document.getElementById($eChartId));
-                // $myChart_statistics.setOption($option_statistics);
+                var $myChart_statistics = echarts.init(document.getElementById($eChartId));
+                $myChart_statistics.setOption($option_statistics);
 
             },
             "columnDefs": [
