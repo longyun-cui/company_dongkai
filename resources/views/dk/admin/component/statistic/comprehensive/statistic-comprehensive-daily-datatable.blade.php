@@ -68,6 +68,28 @@
                     }
                 },
                 {
+                    "title": "通话次数",
+                    "data": "id",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.cnt) return row.cnt;
+                        else return '';
+                    }
+                },
+                {
+                    "title": "通话分钟",
+                    "data": "id",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.minutes) return row.minutes;
+                        else return '';
+                    }
+                },
+                {
                     "title": "提单量",
                     "data": "id",
                     "className": "",

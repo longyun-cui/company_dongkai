@@ -8,12 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class DK_VOS_CDR extends Authenticatable
 {
     use Notifiable;
-    use SoftDeletes;
+//    use SoftDeletes;
 
 //    protected $connection = 'mysql0';
 //    protected $connection = 'mysql_def';
 
     protected $table = "vos_e_cdr";
+//    protected $table = "dk_vos";
 
     protected $fillable = [
         'active', 'status', 'user_active', 'user_status',
@@ -27,7 +28,7 @@ class DK_VOS_CDR extends Authenticatable
         'region'
     ];
 
-    protected $datas = ['deleted_at'];
+//    protected $datas = ['deleted_at'];
 
     protected $hidden = [
         'password', 'remember_token',
