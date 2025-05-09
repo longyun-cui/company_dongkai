@@ -8686,7 +8686,7 @@ class DKAdminRepository {
                     count(*) as cnt,
                     sum(CEIL(holdtime / 60)) as minutes
                 "))
-            ->orderBy("delivered_date", "desc");
+            ->orderBy("call_date", "desc");
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
