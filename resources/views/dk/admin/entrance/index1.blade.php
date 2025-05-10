@@ -36,7 +36,8 @@
             {{--content--}}
             <div class="tab-content">
 
-                <div class="tab-pane active" id="tab-home">
+                <div class="tab-pane active" id="tab-home" style="width:100%; margin:0;">
+                    &nbsp;
                 </div>
 
             </div>
