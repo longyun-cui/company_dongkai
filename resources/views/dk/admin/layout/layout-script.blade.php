@@ -20,6 +20,7 @@
 
         $('#home-default').click();
 
+
         var $city;
 
 

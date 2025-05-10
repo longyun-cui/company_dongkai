@@ -25,7 +25,7 @@
 
             {{--nav--}}
             <ul class="nav nav-tabs">
-                <li class="active-">
+                <li class="active-" id="home">
                     <a href="#tab-home" data-toggle="tab" aria-expanded="true" id="home-default">
                         <i class="fa fa-home text-green"></i> 首页
                     </a>
