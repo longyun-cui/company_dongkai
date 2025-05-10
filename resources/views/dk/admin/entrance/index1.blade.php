@@ -36,14 +36,8 @@
             {{--content--}}
             <div class="tab-content">
 
-                <div class="tab-pane active" id="tab-home" style="width:100%; margin:0;">
-                    <div class="row datatable-body datatable-wrapper home-clone" data-datatable-item-category="home">
-                        <div class="col-md-12 datatable-body" style="margin-top:40px;">
-                            <div class="eChart" id="" style="width:100%;min-width:480px;height:320px;">
-                                &nbsp;
-                            </div>
-                        </div>
-                    </div>
+                <div class="tab-pane active" id="tab-home">
+                    &nbsp;
                 </div>
 
             </div>
