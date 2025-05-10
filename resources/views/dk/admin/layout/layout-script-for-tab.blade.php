@@ -739,7 +739,7 @@
         if($('.nav-tabs .nav-item').length === 1)
         {
             $('.nav-tabs .nav-item:first-child a').addClass('active');
-            // $('.tab-content .tab-pane:first-child').addClass('show active');
+            $('.tab-content .tab-pane:first-child').addClass('show active');
         }
     }
 
