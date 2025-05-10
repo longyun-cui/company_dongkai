@@ -13,9 +13,6 @@
     $(function() {
 
 
-        $('#home-default').click();
-
-
         // localStorage.removeItem('last_delivery_id');
 
         setInterval(query_last_delivery, 60000);

@@ -33,10 +33,11 @@
             {{--content--}}
             <div class="tab-content">
 
+                <div class="tab-pane active" id="tab-pane-width" style="width:100%;">
+                    &nbsp;
+                </div>
+
                 <div class="tab-pane active" id="tab-home">
-                    <div class="row datatable-body datatable-wrapper home-clone" data-datatable-item-category="home" style="width:100%;">
-                        &nbsp;
-                    </div>
 {{--                    @component(env('TEMPLATE_DK_AGENCY').'page.home')--}}
 {{--                    @endcomponent--}}
                 </div>
