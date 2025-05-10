@@ -25,7 +25,7 @@
 
             {{--nav--}}
             <ul class="nav nav-tabs">
-                <li class="active-" id="home">
+                <li class="active" id="home">
                     <a href="#tab-home" data-toggle="tab" aria-expanded="true" id="home-default">
                         <i class="fa fa-home text-green"></i> 首页
                     </a>
@@ -36,8 +36,9 @@
             {{--content--}}
             <div class="tab-content" style="width:100%;">
 
-                <div class="tab-pane active-" id="tab-home" style="width:100%;">
+                <div class="tab-pane active" id="tab-home" style="width:100%;">
                     <div class="row datatable-body datatable-wrapper home-clone" data-datatable-item-category="home" style="width:100%;">
+                        &nbsp;
                     </div>
                 </div>
 
