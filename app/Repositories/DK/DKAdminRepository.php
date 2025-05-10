@@ -9057,8 +9057,8 @@ class DKAdminRepository {
             // 人均提交量 && 人均通过量
             if($v['attendance_manpower'] > 0)
             {
-                $merged[$k]['cnt_per_for_manpower'] = round(($v['cnt'] / $v['attendance_manpower']),2);
-                $merged[$k]['minutes_per_for_manpower'] = round(($v['minutes'] / $v['attendance_manpower']),2);
+                $merged[$k]['cnt_per_for_manpower'] = round((($v['cnt'] - $v['cnt_8']) / $v['attendance_manpower']),2);
+                $merged[$k]['minutes_per_for_manpower'] = round((($v['minutes'] - $v['cnt_8']) / $v['attendance_manpower']),2);
             }
             else
             {
@@ -9107,8 +9107,8 @@ class DKAdminRepository {
         // 人均通话量 && 人均通话分钟
         if($total_data['attendance_manpower'] > 0)
         {
-            $total_data['cnt_per_for_manpower'] = round(($total_data['cnt'] / $total_data['attendance_manpower']),2);
-            $total_data['minutes_per_for_manpower'] = round(($total_data['minutes'] / $total_data['attendance_manpower']),2);
+            $total_data['cnt_per_for_manpower'] = round((($total_data['cnt'] - $total_data['cnt_8']) / $total_data['attendance_manpower']),2);
+            $total_data['minutes_per_for_manpower'] = round((($total_data['minutes'] - $total_data['cnt_8']) / $total_data['attendance_manpower']),2);
         }
         else
         {

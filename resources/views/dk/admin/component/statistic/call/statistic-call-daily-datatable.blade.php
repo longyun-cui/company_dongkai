@@ -79,6 +79,28 @@
                     }
                 },
                 {
+                    "title": "8秒内",
+                    "data": "id",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.cnt_8) return row.cnt_8;
+                        else return '';
+                    }
+                },
+                {
+                    "title": "有效通话",
+                    "data": "id",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.cnt) return row.cnt - row.cnt_8;
+                        else return '';
+                    }
+                },
+                {
                     "title": "次数 / 人",
                     "data": "id",
                     "className": "",
@@ -101,6 +123,17 @@
                     }
                 },
                 {
+                    "title": "有效分钟",
+                    "data": "id",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.minutes) return row.minutes - row.cnt_8;
+                        else return '';
+                    }
+                },
+                {
                     "title": "分钟 / 人",
                     "data": "id",
                     "className": "",
@@ -108,17 +141,6 @@
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         if(row.minutes_per_for_manpower) return row.minutes_per_for_manpower;
-                        else return '';
-                    }
-                },
-                {
-                    "title": "8秒内",
-                    "data": "id",
-                    "className": "",
-                    "width": "80px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(row.cnt_8) return row.cnt_8;
                         else return '';
                     }
                 }
