@@ -33,6 +33,10 @@
             {{--content--}}
             <div class="tab-content">
 
+                <div class="tab-pane active" id="tab-pane-width" style="width:100%;">
+                    &nbsp;
+                </div>
+
                 @if($me->client_er->user_category == 1)
                     @include(env('TEMPLATE_DK_CLIENT').'component.home.home-for-dental')
                 @elseif($me->client_er->user_category == 31)

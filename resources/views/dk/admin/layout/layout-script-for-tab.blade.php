@@ -4,8 +4,6 @@
         // 通用标签控制逻辑
         $(".wrapper").on('click', ".tab-control", function() {
 
-            $('#home-default').click();
-
             const $btn = $(this);
             const $unique = $btn.data('unique');
 

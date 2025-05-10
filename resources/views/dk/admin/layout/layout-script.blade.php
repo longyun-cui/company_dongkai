@@ -18,9 +18,6 @@
     $(function() {
 
 
-        $('#home-default').click();
-
-
         var $city;
 
 
