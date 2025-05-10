@@ -1,4 +1,4 @@
-<div class="row datatable-body datatable-wrapper statistic-call-daily-clone" data-datatable-item-category="statistic-call-daily">
+<div class="row datatable-body datatable-wrapper statistic-call-daily-clone" data-datatable-item-category="statistic-call-daily" style="width:100%">
 
 
     <div class="col-md-12 datatable-search-row  datatable-search-box">
