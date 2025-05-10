@@ -9045,6 +9045,7 @@ class DKAdminRepository {
         $total_data['order_count_for_all_per'] = 0;
 
         $total_data['cnt'] = 0;
+        $total_data['cnt_8'] = 0;
         $total_data['minutes'] = 0;
 
 
@@ -9099,6 +9100,7 @@ class DKAdminRepository {
             $total_data['order_count_for_all'] += $v['order_count_for_all'];
 
             $total_data['cnt'] += $merged[$k]['cnt'];
+            $total_data['cnt_8'] += $merged[$k]['cnt_8'];
             $total_data['minutes'] += $merged[$k]['minutes'];
 
         }
