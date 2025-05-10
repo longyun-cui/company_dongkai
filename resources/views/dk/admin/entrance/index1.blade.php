@@ -37,7 +37,7 @@
             <div class="tab-content" style="width:100%;">
 
                 <div class="tab-pane active" id="tab-" style="width:100%;">
-                    <div class="row datatable-body datatable-wrapper home-clone" style="width:100%;">
+                    <div class="row datatable-body datatable-wrapper tab-pane-width" style="width:100%;">
                         &nbsp;
                     </div>
                 </div>
