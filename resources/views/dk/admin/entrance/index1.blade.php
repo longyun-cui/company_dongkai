@@ -34,9 +34,11 @@
 
 
             {{--content--}}
-            <div class="tab-content">
+            <div class="tab-content" style="width:100%;">
 
-                <div class="tab-pane active-" id="tab-home1">
+                <div class="tab-pane fade active-" id="tab-home1" style="width:100%;">
+                    <div class="row datatable-body datatable-wrapper home-clone" data-datatable-item-category="home" style="width:100%;">
+                    </div>
                 </div>
 
             </div>
