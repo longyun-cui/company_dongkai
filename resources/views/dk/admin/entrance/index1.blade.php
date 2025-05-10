@@ -20,7 +20,7 @@
 <div class="row">
     <div class="col-md-12">
 
-        <div class="nav-tabs-custom" id="index-nav-box">
+        <div class="nav-tabs-custom" id="index-nav-box" style="width:100%;">
 
 
             {{--nav--}}
