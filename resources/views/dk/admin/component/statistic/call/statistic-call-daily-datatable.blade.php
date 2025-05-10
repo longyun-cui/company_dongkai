@@ -230,6 +230,7 @@
                         },
                     ]
                 };
+                console.log($('#tab-pane-width').width());
                 var $myChart_statistics = echarts.init(document.getElementById($eChartId), null, {
                     width: $('#tab-pane-width').width(),   // 最高优先级
                     height: 320

@@ -36,10 +36,8 @@
             {{--content--}}
             <div class="tab-content" style="width:100%;">
 
-                <div class="tab-pane active" id="tab-" style="width:100%;">
-                    <div class="row datatable-body datatable-wrapper tab-pane-width" style="width:100%;">
-                        &nbsp;
-                    </div>
+                <div class="tab-pane active" id="tab-pane-width" style="width:100%;">
+                    &nbsp;
                 </div>
 
                 <div class="tab-pane active" id="tab-home" style="width:100%;">
