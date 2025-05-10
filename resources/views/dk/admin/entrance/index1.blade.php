@@ -36,8 +36,14 @@
             {{--content--}}
             <div class="tab-content" style="width:100%;">
 
+                <div class="tab-pane active" id="tab-" style="width:100%;">
+                    <div class="row datatable-body datatable-wrapper home-clone" style="width:100%;">
+                        &nbsp;
+                    </div>
+                </div>
+
                 <div class="tab-pane active" id="tab-home" style="width:100%;">
-                    <div class="row datatable-body datatable-wrapper home-clone" data-datatable-item-category="home" style="width:100%;">
+                    <div class="row datatable-body datatable-wrapper home-clone" style="width:100%;">
                         &nbsp;
                     </div>
                 </div>
