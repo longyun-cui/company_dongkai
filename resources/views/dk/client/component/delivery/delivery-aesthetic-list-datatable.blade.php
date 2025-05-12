@@ -352,19 +352,15 @@
                             }
                             else if($field_1 == 1)
                             {
-                                $result_html = '<small class="btn-xs bg-blue">鞋帽服装</small>';
+                                $result_html = '<small class="btn-xs bg-blue">脸部</small>';
                             }
-                            else if($field_1 == 2)
+                            else if($field_1 == 21)
                             {
-                                $result_html = '<small class="btn-xs bg-green">包</small>';
+                                $result_html = '<small class="btn-xs bg-green">植发</small>';
                             }
-                            else if($field_1 == 3)
+                            else if($field_1 == 31)
                             {
-                                $result_html = '<small class="btn-xs bg-orange">手表</small>';
-                            }
-                            else if($field_1 == 4)
-                            {
-                                $result_html = '<small class="btn-xs bg-red">珠宝</small>';
+                                $result_html = '<small class="btn-xs bg-orange">身体</small>';
                             }
                             else if($field_1 == 99)
                             {

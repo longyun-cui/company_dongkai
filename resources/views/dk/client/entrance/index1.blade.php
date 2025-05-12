@@ -67,6 +67,8 @@
 
     @if($me->client_er->user_category == 1)
         @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-list')
+    @elseif($me->client_er->user_category == 11)
+        @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-aesthetic-list')
     @elseif($me->client_er->user_category == 31)
         @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-luxury-list')
     @endif
@@ -140,6 +142,8 @@
 
     @if($me->client_er->user_category == 1)
         @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-list-datatable')
+    @elseif($me->client_er->user_category == 11)
+        @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-aesthetic-list-datatable')
     @elseif($me->client_er->user_category == 31)
         @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-luxury-list-datatable')
     @endif
