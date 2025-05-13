@@ -96,6 +96,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     {{--layout-style--}}
     @include(env('TEMPLATE_DK_ADMIN').'layout.layout-style')
+{{--    @include(env('TEMPLATE_DK_ADMIN').'layout.layout-style-for-mobile')--}}
 
 </head>
 <!--
