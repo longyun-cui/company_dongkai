@@ -1,4 +1,17 @@
 <style>
+
+    @media (max-width: 991px) {
+        .navbar-collapse.pull-left+.navbar-custom-menu {
+            right: 0;
+        }
+    }
+    @media (max-width: 767px) {
+        .skin-blue .main-header .navbar .dropdown-menu li a {
+            color: #444;
+        }
+    }
+
+
     .select2-container { height:100%; border-radius:0; float:left; }
     .select2-container .select2-selection--single { border-radius:0; }
     .select2-container--classic .select2-selection--multiple  { height:32px; border-radius:0; }
@@ -22,6 +35,8 @@
             margin-left: 150px;
         }
     }
+
+    .datatable-body { clear:both; }
 
     .datatable-search-row { margin-top:8px; margin-bottom:8px; font-size:12px; }
     .datatable-search-row .btn-filter { padding: 4px; }
