@@ -13,12 +13,12 @@
                 {{--            </select>--}}
 
                 {{--选择项目--}}
-                <select class="search-filter form-filter filter-lg select2-box-c- select2-project-c" name="call-project">
-                    <option value="-1">选择项目</option>
-                    @foreach($project_list as $v)
-                        <option value="{{ $v->id }}">{{ $v->name }}</option>
-                    @endforeach
-                </select>
+{{--                <select class="search-filter form-filter filter-lg select2-box-c- select2-project-c" name="call-project">--}}
+{{--                    <option value="-1">选择项目</option>--}}
+{{--                    @foreach($project_list as $v)--}}
+{{--                        <option value="{{ $v->id }}">{{ $v->name }}</option>--}}
+{{--                    @endforeach--}}
+{{--                </select>--}}
 
                 {{--按天查看--}}
                 <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre date-pre-c" data-target="statistic-call-date">
