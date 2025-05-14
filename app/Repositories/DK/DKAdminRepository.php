@@ -9079,7 +9079,6 @@ class DKAdminRepository {
                     count(*) as call_for_all
                 "))
             ->first();
-        dd($call_total);
         $call_data['call_for_all'] = $call_total->call_for_all;
 
         $call_dealt = (clone $query_call)
