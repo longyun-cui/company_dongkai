@@ -9080,7 +9080,7 @@ class DKAdminRepository {
             ->join('vos_e_cdr', 'vos_e_cdr.phone', '=', 'dk_admin_order.client_phone')
             ->groupBy('dk_admin_order.client_phone')
         ->get();
-        dd($query_order_s_data->toArray());
+        dd($query_order_s_data->countBy('call_count')->toArray());
 
 //        SELECT
 //    do.client_phone,
