@@ -8925,6 +8925,43 @@ class DKAdminRepository {
 
 
 
+    // 【统计】返回-通话-日报-月览
+    public function v1_operate_for_get_statistic_data_of_statistic_call_list($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        $query = DK_VOS_CDR::select('*');
+
+//        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+        if(!empty($post_data['phone'])) $query->where('phone', $post_data['phone']);
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 100;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+//        dd($list->toArray());
+
+        return datatable_response($list, $draw, $total);
+    }
     // 【统计】返回-综合-日报-概览
     public function v1_operate_for_get_statistic_data_of_statistic_call_daily_overview($post_data)
     {
@@ -9117,7 +9154,7 @@ class DKAdminRepository {
         return response_success($return_data,"");
     }
     // 【统计】返回-通话-日报-月览
-    public function v1_operate_for_get_statistic_data_of_statistic_call_daily($post_data)
+    public function v1_operate_for_get_statistic_data_of_statistic_call_daily_month($post_data)
     {
         $this->get_me();
         $me = $this->me;

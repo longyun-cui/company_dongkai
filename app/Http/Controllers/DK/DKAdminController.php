@@ -800,15 +800,20 @@ class DKAdminController extends Controller
 
 
 
+    // 【通话统计】通话记录
+    public function v1_operate_for_get_statistic_data_of_statistic_call_list()
+    {
+        return $this->repo->v1_operate_for_get_statistic_data_of_statistic_call_list(request()->all());
+    }
     // 【统计】每日概览
     public function v1_operate_for_get_statistic_data_of_statistic_call_daily_overview()
     {
         return $this->repo->v1_operate_for_get_statistic_data_of_statistic_call_daily_overview(request()->all());
     }
     // 【统计】通话日报
-    public function v1_operate_for_get_statistic_data_of_statistic_call_daily()
+    public function v1_operate_for_get_statistic_data_of_statistic_call_daily_month()
     {
-        return $this->repo->v1_operate_for_get_statistic_data_of_statistic_call_daily(request()->all());
+        return $this->repo->v1_operate_for_get_statistic_data_of_statistic_call_daily_month(request()->all());
     }
 
 

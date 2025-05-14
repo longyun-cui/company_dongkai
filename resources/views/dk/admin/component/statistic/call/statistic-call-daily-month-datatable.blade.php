@@ -1,6 +1,6 @@
 <script>
 
-    function Datatable_Statistic_Call_Daily($tableId, $eChartId)
+    function Datatable_Statistic_Call_Daily_Month($tableId, $eChartId)
     {
         let $that = $($tableId);
         let $datatable_wrapper = $that.parents('.datatable-wrapper');
@@ -18,7 +18,7 @@
             "order": [],
             "orderCellsTop": true,
             "ajax": {
-                'url': "{{ url('/v1/operate/statistic/statistic-call-daily') }}",
+                'url': "{{ url('/v1/operate/statistic/statistic-call-daily-month') }}",
                 "type": 'POST',
                 "dataType" : 'json',
                 "data": function (d) {

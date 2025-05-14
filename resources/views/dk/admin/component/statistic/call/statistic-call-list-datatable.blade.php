@@ -14,7 +14,7 @@
             "serverSide": true,
             "searching": false,
             "pagingType": "simple_numbers",
-            "sDom": '<t>',
+            "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t> <"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p>',
             "order": [],
             "orderCellsTop": true,
             "ajax": {
@@ -27,6 +27,7 @@
                     d.name = $tableSearch.find('input[name="statistic-call-list-name"]').val();
                     d.title = $tableSearch.find('input[name="statistic-call-list-title"]').val();
                     d.keyword = $tableSearch.find('input[name="statistic-call-list-keyword"]').val();
+                    d.phone = $tableSearch.find('input[name="statistic-call-list-phone"]').val();
                     d.status = $tableSearch.find('select[name="statistic-call-list-status"]').val();
                     d.time_type = $tableSearch.find('input[name="statistic-call-list-time-type"]').val();
                     d.time_month = $tableSearch.find('input[name="statistic-call-list-month"]').val();

@@ -8,6 +8,9 @@
 
 
 
+            {{--电话号码--}}
+            <input type="text" class="search-filter form-filter filter-md filter-keyup" name="statistic-call-list-phone" placeholder="电话号码" value="" />
+
 
             <button type="button" class="btn btn-success btn-filter filter-submit">
                 <i class="fa fa-search"></i> 查询
@@ -29,11 +32,6 @@
         </div>
 
 
-    </div>
-
-
-    <div class="col-md-12 datatable-body" style="margin-top:40px;">
-        <div class="eChart" id="" style="width:100%;min-width:480px;height:320px;"></div>
     </div>
 
 

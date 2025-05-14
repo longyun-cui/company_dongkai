@@ -633,6 +633,27 @@
             @endif
 
 
+            {{--通话记录--}}
+            @if(in_array($me->user_type,[0,1,9,11]))
+                <li class="treeview _none-">
+                    <a class="tab-control datatable-control"
+                       data-type="create"
+                       data-unique="y"
+                       data-id="statistic-call-list"
+                       data-title='<i class="fa fa-phone text-red"></i> 通话记录'
+                       data-content=''
+
+                       data-datatable-type="create"
+                       data-datatable-unique="y"
+                       data-datatable-id="datatable-statistic-call-list"
+                       data-datatable-target="statistic-call-list"
+                       data-datatable-clone-object="statistic-call-list-clone"
+                    >
+                        <i class="fa fa-phone text-red"></i>
+                        <span>通话记录</span>
+                    </a>
+                </li>
+            @endif
             {{--通话日报--}}
             @if(in_array($me->user_type,[0,1,9,11]))
                 <li class="treeview _none-">
@@ -641,7 +662,7 @@
                        data-type="create"
                        data-unique="y"
                        data-id="tab-call-daily-overview"
-                       data-title='<i class="fa fa-pie-chart text-green"></i> 通话日报'
+                       data-title='<i class="fa fa-pie-chart text-red"></i> 通话日报'
                        data-content=''
 
                        data-control-type="create"
@@ -650,7 +671,7 @@
                        data-control-target="tab-call-daily-overview"
                        data-control-clone-object="statistic-call-daily-overview-clone"
                     >
-                        <i class="fa fa-pie-chart text-green"></i>
+                        <i class="fa fa-pie-chart text-red"></i>
                         <span>通话日报</span>
                     </a>
                 </li>
@@ -661,19 +682,19 @@
                     <a class="tab-control datatable-control"
                        data-type="create"
                        data-unique="y"
-                       data-id="statistic-call-daily"
-                       data-title='<i class="fa fa-phone text-green"></i> 通话月报'
+                       data-id="statistic-call-daily-month"
+                       data-title='<i class="fa fa-line-chart text-red"></i> 通话月报'
                        data-content=''
 
-                       data-chart-id='chart-call-daily'
+                       data-chart-id='chart-call-daily-month'
 
                        data-datatable-type="create"
                        data-datatable-unique="y"
-                       data-datatable-id="datatable-statistic-call-daily"
-                       data-datatable-target="statistic-call-daily"
-                       data-datatable-clone-object="statistic-call-daily-clone"
+                       data-datatable-id="datatable-statistic-call-daily-month"
+                       data-datatable-target="statistic-call-daily-month"
+                       data-datatable-clone-object="statistic-call-daily-month-clone"
                     >
-                        <i class="fa fa-phone text-green"></i>
+                        <i class="fa fa-line-chart text-red"></i>
                         <span>通话月报</span>
                     </a>
                 </li>
