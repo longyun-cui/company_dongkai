@@ -9082,8 +9082,8 @@ class DKAdminRepository {
             ->groupBy('dk_admin_order.client_phone')
         ->get();
 //        dd($query_order_s_data->groupBy('call_count')->toArray());
-        $call_s_data = $query_order_s_data->groupBy('call_count');
-        $return_data['call_s_data'] = $call_s_data;
+        $order_s_data = $query_order_s_data->groupBy('call_count');
+        $return_data['order_s_data'] = $order_s_data;
 
 //        SELECT
 //    do.client_phone,
