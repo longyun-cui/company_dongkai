@@ -99,8 +99,6 @@
                     <div class="box-body">
                         <ul class="nav nav-stacked">
                             <li class="order_s">
-                                <a href="javascript:void(0);">通话量 <span class="pull-right"><b class="badge bg-blue"></b> 单</span></a>
-                                <a href="javascript:void(0);">通话量 <span class="pull-right"><b class="badge bg-blue"></b> 单</span></a>
                             </li>
                         </ul>
                     </div>
@@ -121,21 +119,7 @@
                     </div>
                     <div class="box-body">
                         <ul class="nav nav-stacked">
-                            <li class="call_for_all">
-                                <a href="javascript:void(0);">通话量 <span class="pull-right"><b class="badge bg-blue"></b> 单</span></a>
-                            </li>
-                            <li class="order_inspected_dental_for_inspected_accepted">
-                                <a href="javascript:void(0);">通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
-                            </li>
-                            <li class="order_inspected_dental_for_inspected_accepted_inside">
-                                <a href="javascript:void(0);">内部通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
-                            </li>
-                            <li class="order_inspected_dental_for_inspected_repeated">
-                                <a href="javascript:void(0);">重复量 <span class="pull-right"><b class="badge bg-orange"></b> 单</span></a>
-                            </li>
-                            <li class="order_inspected_dental_for_inspected_refused">
-                                <a href="javascript:void(0);">拒绝量 <span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
-                            </li>
+                            <li class="call_s">
                         </ul>
                     </div>
                 </div>
