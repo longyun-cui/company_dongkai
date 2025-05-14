@@ -9050,7 +9050,7 @@ class DKAdminRepository {
 
 
         // 坐席发布-数据统计
-        $query_order_published_data = $query_order_published
+        $query_order_published_data = (clone $query_order_published)
             ->whereIn('created_type',[1,99])
 //            ->select('item_category')
             ->addSelect(DB::raw("
@@ -9070,6 +9070,24 @@ class DKAdminRepository {
         }
         else $return_data['order_data'] = [];
 
+
+        $query_order_s_data = (clone $query_order_published)
+            ->addSelect(DB::raw("
+                    client_phone,
+                    COUNT(vos_e_cdr.phone) AS call_count
+                "))
+            ->whereIn('dk_admin_order.created_type',[1,99])
+            ->join('vos_e_cdr', 'vos_e_cdr.phone', '=', 'dk_admin_order.client_phone')
+            ->groupBy('dk_admin_order.client_phone')
+        ->get();
+        dd($query_order_s_data->toArray());
+
+//        SELECT
+//    do.client_phone,
+//    COUNT(vc.phone) AS call_count
+//FROM (SELECT DISTINCT client_phone FROM dk_admin_order) do
+//        LEFT JOIN vos_e_cdr vc ON do.client_phone = vc.phone
+//GROUP BY do.client_phone;
 
 
 

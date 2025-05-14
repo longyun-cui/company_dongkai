@@ -87,7 +87,7 @@
 
             <div class="box box-success box-solid">
                 <div class="box-header with-border">
-                    <h3 class="box-title">质检工作量</h3>
+                    <h3 class="box-title">成单分析</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                         </button>
@@ -116,12 +116,12 @@
 
         </div>
 
-
-        {{--运营--}}
+        {{--审核--}}
         <div class="col-xs-12 col-sm-6 col-md-3">
+
             <div class="box box-success box-solid">
                 <div class="box-header with-border">
-                    <h3 class="box-title">运营工作量</h3>
+                    <h3 class="box-title">成单分析</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                         </button>
@@ -129,43 +129,25 @@
                 </div>
                 <div class="box-body">
                     <ul class="nav nav-stacked">
-                        <li>
-                            <a href="javascript:void(0);" class="order_delivered_dental_for_all">
-                                总交付量（工作单量） <span class="pull-right"><b class="badge bg-blue"></b> 单</span>
-                            </a>
-                            <a href="javascript:void(0);" class="order_delivered_dental_for_all_by_same_day">
-                                -- 当日 <span class="pull-right"><b class="badge bg-blue"></b> 单</span>
-                            </a>
-                            <a href="javascript:void(0);" class="order_delivered_dental_for_all_by_other_day">
-                                -- 昨转今 <span class="pull-right"><b class="badge bg-blue"></b> 单</span>
-                            </a>
+                        <li class="call_for_all">
+                            <a href="javascript:void(0);">通话量 <span class="pull-right"><b class="badge bg-blue"></b> 单</span></a>
                         </li>
-
-                        <li>
-                            <a href="javascript:void(0);" class="order_delivered_dental_for_completed">
-                                已交付 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
-                            </a>
-                            <a href="javascript:void(0);" class="order_delivered_dental_for_completed_by_same_day">
-                                -- 当日 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
-                            </a>
-                            <a href="javascript:void(0);" class="order_delivered_dental_for_completed_by_other_day">
-                                -- 昨转今 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
-                            </a>
+                        <li class="order_inspected_dental_for_inspected_accepted">
+                            <a href="javascript:void(0);">通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
-                        <li>
-                            <a href="javascript:void(0);" class="order_delivered_dental_for_inside">
-                                内部交付 <span class="pull-right"><b class="badge bg-olive"></b> 单</span>
-                            </a>
-                            <a href="javascript:void(0);" class="order_delivered_dental_for_inside_by_same_day">
-                                -- 当日 <span class="pull-right"><b class="badge bg-olive"></b> 单</span>
-                            </a>
-                            <a href="javascript:void(0);" class="order_delivered_dental_for_inside_by_other_day">
-                                -- 昨转今 <span class="pull-right"><b class="badge bg-olive"></b> 单</span>
-                            </a>
+                        <li class="order_inspected_dental_for_inspected_accepted_inside">
+                            <a href="javascript:void(0);">内部通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                        </li>
+                        <li class="order_inspected_dental_for_inspected_repeated">
+                            <a href="javascript:void(0);">重复量 <span class="pull-right"><b class="badge bg-orange"></b> 单</span></a>
+                        </li>
+                        <li class="order_inspected_dental_for_inspected_refused">
+                            <a href="javascript:void(0);">拒绝量 <span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
                         </li>
                     </ul>
                 </div>
             </div>
+
         </div>
 
 
