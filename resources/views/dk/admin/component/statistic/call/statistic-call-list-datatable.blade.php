@@ -8,7 +8,7 @@
 
         $($tableId).DataTable({
 
-            "aLengthMenu": [[10, 50, 200, 500], ["10", "50", "200", "500"]],
+            "aLengthMenu": [[50, 200, 500], ["50", "200", "500"]],
             // "aLengthMenu": [[-1], ["全部"]],
             "processing": true,
             "serverSide": true,

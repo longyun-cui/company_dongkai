@@ -8942,9 +8942,9 @@ class DKAdminRepository {
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 10;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
-        if(!empty($post_data['length']) && $post_data['length'] = -1) $limit = 10;
+        if(!empty($post_data['length']) && $post_data['length'] = -1) $limit = 50;
 
 
         if(!empty($post_data['phone']))
