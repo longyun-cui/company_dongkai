@@ -38,7 +38,7 @@
 
     .datatable-body { clear:both; }
 
-    .datatable-search-row { margin-top:8px; margin-bottom:8px; font-size:12px; }
+    .datatable-search-row { margin-top:8px; margin-bottom:8px; font-size:12px; clear:both; }
     .datatable-search-row .btn-filter { padding: 4px; }
     .datatable-search-row .btn-filter { height:32px; height:32px; font-size:12px; padding:0 12px; margin:2px; float:left; }
     .datatable-search-row .time-picker-move { width:30px; padding:0; text-align:center; }

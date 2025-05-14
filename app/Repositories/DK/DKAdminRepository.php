@@ -9077,8 +9077,8 @@ class DKAdminRepository {
                     COUNT(vos_e_cdr.phone) AS call_count
                 "))
             ->whereIn('dk_admin_order.created_type',[1,99])
-            ->where('vos_e_cdr.call_date', '<', $the_date)
             ->join('vos_e_cdr', 'vos_e_cdr.phone', '=', 'dk_admin_order.client_phone')
+            ->where('vos_e_cdr.call_date', '<', $the_date)
             ->groupBy('dk_admin_order.client_phone')
         ->get();
         dd($query_order_s_data->countBy('call_count')->toArray());
