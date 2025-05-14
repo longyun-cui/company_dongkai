@@ -54,7 +54,7 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        return row.date_day;
+                        return data;
                     }
                 },
                 {
@@ -69,8 +69,19 @@
                     }
                 },
                 {
+                    "title": "电话号码",
+                    "data": "phone",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(data) return data;
+                        else return '';
+                    }
+                },
+                {
                     "title": "通话时长",
-                    "data": "id",
+                    "data": "holdtime",
                     "className": "",
                     "width": "80px",
                     "orderable": false,
