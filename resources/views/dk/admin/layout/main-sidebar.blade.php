@@ -633,6 +633,28 @@
             @endif
 
 
+            {{--通话日报--}}
+            @if(in_array($me->user_type,[0,1,9,11]))
+                <li class="treeview _none-">
+                    <a class="tab-control call-daily-overview-control"
+
+                       data-type="create"
+                       data-unique="y"
+                       data-id="tab-call-daily-overview"
+                       data-title='<i class="fa fa-pie-chart text-green"></i> 通话日报'
+                       data-content=''
+
+                       data-control-type="create"
+                       data-control-unique="y"
+                       data-control-id="statistic-call-daily-overview"
+                       data-control-target="tab-call-daily-overview"
+                       data-control-clone-object="statistic-call-daily-overview-clone"
+                    >
+                        <i class="fa fa-pie-chart text-green"></i>
+                        <span>通话日报</span>
+                    </a>
+                </li>
+            @endif
             {{--通话月报--}}
             @if(in_array($me->user_type,[0,1,9,11]))
                 <li class="treeview _none-">

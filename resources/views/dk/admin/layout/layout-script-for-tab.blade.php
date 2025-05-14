@@ -711,6 +711,214 @@
         });
 
 
+        // 通用标签控制逻辑
+        $(".wrapper").on('click', ".call-daily-overview-control", function() {
+
+            const $btn = $(this);
+            const $id = $btn.data('control-id');
+            const $unique = $btn.data('control-unique');
+            const $reload = $btn.data('control-reload');
+
+            if($unique == 'y')
+            {
+                var $config = {
+                    type: $btn.data('control-type'),
+                    unique: $btn.data('control-unique'),
+                    id: $btn.data('control-id'),
+                    target: $btn.data('control-target'),
+                    clone_object: $btn.data('control-clone-object'),
+
+                    chart_id: $btn.data('chart-id')
+                };
+
+            }
+            else
+            {
+                let $session_unique_id = sessionStorage.getItem('session_unique_id');
+
+                var $config = {
+                    type: $btn.data('control-type'),
+                    unique: $btn.data('control-unique'),
+                    id: $btn.data('control-id') + '-' + $session_unique_id,
+                    target: $btn.data('control-target') + '-' + $session_unique_id,
+                    clone_object: $btn.data('control-clone-object'),
+
+                    chart_id: $btn.data('chart-id')
+                };
+            }
+
+
+            if($('#'+$config.id).length)
+            {
+                console.log('control 已存在！');
+            }
+            else
+            {
+                console.log('control 未初始化！');
+
+                let $clone = $('.'+$config.clone_object).clone(true);
+                $clone.removeClass($config.clone_object);
+                $clone.addClass('control-wrapper');
+                $clone.attr('id',$config.id);
+
+                $clone.find('.eChart').attr('id',$config.chart_id);
+
+                $('#'+$config.target).prepend($clone);
+
+                $('#'+$config.target).find('.time_picker-c').datetimepicker({
+                    locale: moment.locale('zh-cn'),
+                    format: "YYYY-MM-DD HH:mm",
+                    ignoreReadonly: true
+                });
+                $('#'+$config.target).find('.date_picker-c').datetimepicker({
+                    locale: moment.locale('zh-cn'),
+                    format: "YYYY-MM-DD",
+                    ignoreReadonly: true
+                });
+                $('#'+$config.target).find('.month_picker-c').datetimepicker({
+                    locale: moment.locale('zh-cn'),
+                    format: "YYYY-MM",
+                    ignoreReadonly: true
+                });
+
+                $('#'+$config.target).find('.select2-box-c').select2({
+                    theme: 'classic'
+                });
+                $('#'+$config.target).find('.select2-box-change').select2({
+                    theme: 'classic'
+                });
+                $('#'+$config.target).find('.select2-box-change').change(function() {
+
+                    var $that = $(this);
+                    var $target = $that.data('target');
+
+                    var $select2_wrapper = $that.parents('.select2-wrapper');
+
+                    console.log($select2_wrapper.find($target).val());
+                    // $form.find(".select2-box").val(-1).trigger("change");
+                    // $form.find(".select2-box").val("-1").trigger("change");
+                    // $select2_wrapper.find($target).val(-1).trigger("change");
+                    // $select2_wrapper.find($target).find('-1').trigger("change");
+                    $select2_wrapper.find($target).find('option:eq(0)').prop('selected', true).trigger("change");
+                });
+
+
+
+                // select2
+                $('#'+$config.target).find('.select2-department-group').select2({
+                    ajax: {
+                        url: "{{ url('/v1/operate/select2/select2_department') }}",
+                        type: 'post',
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                _token: $('meta[name="_token"]').attr('content'),
+                                keyword: params.term, // search term
+                                page: params.page,
+                                type: 'group',
+                                superior_id: $(this).parents('.select2-wrapper').find($(this).data('target')).val()
+                            };
+                        },
+                        processResults: function (data, params) {
+
+                            params.page = params.page || 1;
+                            return {
+                                results: data,
+                                pagination: {
+                                    more: (params.page * 30) < data.total_count
+                                }
+                            };
+                        },
+                        cache: true
+                    },
+                    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+                    minimumInputLength: 0,
+                    theme: 'classic'
+                });
+                $('#'+$config.target).find('.select2-project-c').select2({
+                    ajax: {
+                        url: "{{ url('/v1/operate/select2/select2_project') }}",
+                        type: 'post',
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                _token: $('meta[name="_token"]').attr('content'),
+                                item_category: this.data('item-category'),
+                                keyword: params.term, // search term
+                                page: params.page
+                            };
+                        },
+                        processResults: function (data, params) {
+
+                            params.page = params.page || 1;
+                            return {
+                                results: data,
+                                pagination: {
+                                    more: (params.page * 30) < data.total_count
+                                }
+                            };
+                        },
+                        cache: true
+                    },
+                    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+                    minimumInputLength: 0,
+                    theme: 'classic'
+                });
+                $('#'+$config.target).find('.select2-client-c').select2({
+                    ajax: {
+                        url: "{{ url('/v1/operate/select2/select2_client') }}",
+                        type: 'post',
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                _token: $('meta[name="_token"]').attr('content'),
+                                user_category: this.data('user-category'),
+                                keyword: params.term, // search term
+                                page: params.page
+                            };
+                        },
+                        processResults: function (data, params) {
+
+                            params.page = params.page || 1;
+                            return {
+                                results: data,
+                                pagination: {
+                                    more: (params.page * 30) < data.total_count
+                                }
+                            };
+                        },
+                        cache: true
+                    },
+                    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+                    minimumInputLength: 0,
+                    theme: 'classic'
+                });
+
+
+
+
+                if($id == "comprehensive-list")
+                {
+                }
+                else if($id == "statistic-call-daily-overview")
+                {
+                    statistic_get_data_for_call_daily_overview('#'+$config.target);
+                }
+                else if($id == "statistic-comprehensive-overview")
+                {
+                    // 初始化
+                    $("#filter-submit-for-comprehensive").click();
+                }
+
+            }
+
+
+        });
+
+
     });
 
 

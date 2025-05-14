@@ -8924,7 +8924,176 @@ class DKAdminRepository {
 
 
 
-    // 【统计】返回-综合-日报
+
+    // 【统计】返回-综合-日报-概览
+    public function v1_operate_for_get_statistic_data_of_statistic_call_daily_overview($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        $query_order = DK_Order::where('is_published',1);
+        $query_call = DK_VOS_CDR::select('phone');
+
+
+        if($me->user_type == 41)
+        {
+            $query_order->where('department_district_id',$me->department_district_id);
+        }
+        else if($me->user_type == 81)
+        {
+            $query_order->where('department_manager_id',$me->id);
+        }
+        else if($me->user_type == 84)
+        {
+            $query_order->where('department_supervisor_id',$me->id);
+        }
+        else if($me->user_type == 88)
+        {
+            $query_order->where('creator_id',$me->id);
+        }
+        else if($me->user_type == 71)
+        {
+            $query_order->where('inspector_id',$me->id);
+        }
+        else if($me->user_type == 77)
+        {
+            $query_order->where('inspector_id',$me->id);
+        }
+
+
+        // 项目
+        if(isset($post_data['project']))
+        {
+            if(!in_array($post_data['project'],[-1,0,'-1','0']))
+            {
+                $query_order->where('project_id', $post_data['project']);
+            }
+        }
+
+
+        // 部门-大区
+//        if(!empty($post_data['department_district']))
+//        {
+//            if(!in_array($post_data['department_district'],[-1,0]))
+//            {
+//                $query->where('department_district_id', $post_data['department_district']);
+//            }
+//        }
+        if(!empty($post_data['department_district']))
+        {
+            $department_district_array = array_diff($post_data['department_district'], [-1,0,'-1','0']);
+            if(count($department_district_array))
+            {
+                $query_order->whereIn('department_district_id', $department_district_array);
+            }
+        }
+
+
+        $query_order_published = (clone $query_order);
+        $query_order_inspected = (clone $query_order);
+        $query_order_delivered = (clone $query_order);
+
+
+        // 时间
+        $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';
+        if($time_type == 'date')
+        {
+            $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+
+            $query_order_published->where('published_date',$the_date);
+            $query_order_inspected->where('inspected_date',$the_date);
+            $query_order_delivered->where('delivered_date',$the_date);
+
+            $query_call->where('call_date',$the_date);
+        }
+        else if($time_type == 'month')
+        {
+            $the_month  = isset($post_data['time_month']) ? $post_data['time_month']  : date('Y-m');
+            $the_month_timestamp = strtotime($the_month);
+
+            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+            $query_order_published->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date]);
+            $query_order_inspected->whereBetween('inspected_date',[$the_month_start_date,$the_month_ended_date]);
+            $query_order_delivered->whereBetween('delivered_date',[$the_month_start_date,$the_month_ended_date]);
+
+            $query_call->whereBetween('delivered_date',[$the_month_start_date,$the_month_ended_date]);
+        }
+        else if($time_type == 'period')
+        {
+            if(!empty($post_data['date_start'])) $query_order_published->where('published_date', '>=', $post_data['date_start']);
+            if(!empty($post_data['date_ended'])) $query_order_published->where('published_date', '<=', $post_data['date_ended']);
+
+            if(!empty($post_data['date_start'])) $query_order_inspected->where('inspected_date', '>=', $post_data['date_start']);
+            if(!empty($post_data['date_ended'])) $query_order_inspected->where('inspected_date', '<=', $post_data['date_ended']);
+
+            if(!empty($post_data['date_start'])) $query_order_delivered->where('delivered_date', '>=', $post_data['date_start']);
+            if(!empty($post_data['date_ended'])) $query_order_delivered->where('delivered_date', '<=', $post_data['date_ended']);
+
+            if(!empty($post_data['date_start'])) $query_call->where('call_date', '>=', $post_data['date_start']);
+            if(!empty($post_data['date_ended'])) $query_call->where('call_date', '<=', $post_data['date_ended']);
+        }
+        else
+        {
+//            $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+//            $query_order->where('published_date',$the_date);
+//            $query_delivery->where('delivered_date',$the_date);
+        }
+
+
+
+
+        // 坐席发布-数据统计
+        $query_order_published_data = $query_order_published
+            ->whereIn('created_type',[1,99])
+//            ->select('item_category')
+            ->addSelect(DB::raw("
+                    count(*) as order_for_all,
+                    
+                    count(IF(item_category = 1, TRUE, NULL)) as dental_for_all,
+                    
+                    count(IF(item_category = 1 and inspected_status <> 0, TRUE, NULL)) as dental_for_inspected_all,
+                    count(IF(item_category = 1 and inspected_result = '通过', TRUE, NULL)) as dental_for_inspected_accepted
+                "))
+//            ->groupBy('item_category')
+            ->get();
+        if(count($query_order_published_data) > 0)
+        {
+            $order_published_data = $query_order_published_data[0];
+
+            $return_data['order_data'] = $order_published_data;
+        }
+        else $return_data['order_data'] = [];
+
+
+
+
+        // 交付数据
+        $call_data = (clone $query_call)
+            ->select(DB::raw("
+                    count(*) as call_for_all
+                "))
+            ->get();
+        $call_data = (clone $query_call)
+            ->join('dk_admin_order', 'vos_e_cdr.phone', '=', 'dk_admin_order.client_phone')
+            ->where('dk_admin_order.published_date', '<', $the_date)
+            ->select(DB::raw("
+                    count(*) as call_for_dealt
+                "))
+
+            ->get();
+        $return_data['call_data'] = $call_data[0];
+
+
+        return response_success($return_data,"");
+    }
+    // 【统计】返回-通话-日报-月览
     public function v1_operate_for_get_statistic_data_of_statistic_call_daily($post_data)
     {
         $this->get_me();
