@@ -535,7 +535,7 @@
                     $.each($data.order_s_data, function(index, value)
                     {
 
-                        var $html = '<a href="javascript:void(0);">' + index + ' <span class="pull-right"><b class="badge bg-blue"></b> ' + value.length + '</span></a>';
+                        var $html = '<a href="javascript:void(0);">' + index + ' 次 <span class="pull-right"><b class="badge bg-blue">' + value.length + '</b> 单</span></a>';
                         $return_html += $html;
                     });
                     $target.find(".order_s").html($return_html);
