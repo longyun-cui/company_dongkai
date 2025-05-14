@@ -528,7 +528,7 @@
 
                     // 通话统计
                     $target.find(".call_for_all").find('b').html($data.call_data.call_for_all);
-                    $target.find(".call_for_deal").find('b').html($data.call_data.call_for_deal);
+                    $target.find(".call_for_dealt").find('b').html($data.call_data.call_for_dealt);
 
                 }
             })

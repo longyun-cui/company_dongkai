@@ -182,11 +182,11 @@
                 <div class="box-body">
                     <ul class="nav nav-stacked">
                         <li class="call_for_all">
-                            <a href="javascript:void(0);">总交付量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                            <a href="javascript:void(0);">通话量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
 
                         <li class="call_for_dealt">
-                            <a href="javascript:void(0);">总分发量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                            <a href="javascript:void(0);">成单通话量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
                     </ul>
                 </div>
