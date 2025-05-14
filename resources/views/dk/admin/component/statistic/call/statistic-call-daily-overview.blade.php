@@ -1,4 +1,4 @@
-<div class="row module-wrapper control-wrapper statistic-call-daily-overview-clone" data-item-category="statistic-call"  data-function="statistic_get_data_for_call">
+<div class="row module-wrapper control-wrapper statistic-call-daily-overview-clone" data-item-category="statistic-call"  data-function="statistic_get_data_for_call_daily_overview">
 
 
     <div class="col-md-12 datatable-search-row search-wrapper ">
