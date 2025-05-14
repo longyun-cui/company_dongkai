@@ -530,6 +530,16 @@
                     $target.find(".call_for_all").find('b').html($data.call_data.call_for_all);
                     $target.find(".call_for_dealt").find('b').html($data.call_data.call_for_dealt);
 
+
+                    var $return_html = '';
+                    $.each($data.order_s_data, function(index, value)
+                    {
+
+                        var $html = '<a href="javascript:void(0);">' + index + ' <span class="pull-right"><b class="badge bg-blue"></b> ' + value.length + '</span></a>';
+                        $return_html += $html;
+                    });
+                    $target.find(".order_s").html($return_html);
+
                 }
             })
             .fail(function(jqXHR, status, error) {
