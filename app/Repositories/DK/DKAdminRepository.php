@@ -8947,17 +8947,23 @@ class DKAdminRepository {
         if(!empty($post_data['length']) && $post_data['length'] = -1) $limit = 10;
 
 
-        if(isset($post_data['order']))
+        if(!empty($post_data['phone']))
         {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
-
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
+            $query->orderBy("call_date", "desc");
         }
         else $query->orderBy("id", "desc");
+
+//        if(isset($post_data['order']))
+//        {
+//            $columns = $post_data['columns'];
+//            $order = $post_data['order'][0];
+//            $order_column = $order['column'];
+//            $order_dir = $order['dir'];
+//
+//            $field = $columns[$order_column]["data"];
+//            $query->orderBy($field, $order_dir);
+//        }
+//        else $query->orderBy("id", "desc");
 
         if($limit == -1) $list = $query->get();
         else $list = $query->skip($skip)->take($limit)->get();
