@@ -9057,7 +9057,6 @@ class DKAdminRepository {
                     count(*) as order_for_all,
                     
                     count(IF(item_category = 1, TRUE, NULL)) as dental_for_all,
-                    
                     count(IF(item_category = 1 and inspected_status <> 0, TRUE, NULL)) as dental_for_inspected_all,
                     count(IF(item_category = 1 and inspected_result = '通过', TRUE, NULL)) as dental_for_inspected_accepted
                 "))
@@ -9074,21 +9073,24 @@ class DKAdminRepository {
 
 
 
-        // 交付数据
-        $call_data = (clone $query_call)
+        // 通话数据
+        $call_total = (clone $query_call)
             ->select(DB::raw("
                     count(*) as call_for_all
                 "))
-            ->get();
-        $call_data = (clone $query_call)
+            ->first();
+        $call_data['call_for_all'] = $call_total->call_for_all;
+
+        $call_dealt = (clone $query_call)
             ->join('dk_admin_order', 'vos_e_cdr.phone', '=', 'dk_admin_order.client_phone')
             ->where('dk_admin_order.published_date', '<', $the_date)
             ->select(DB::raw("
                     count(*) as call_for_dealt
                 "))
+            ->first();
+        $call_data['call_for_dealt'] = $call_dealt->call_for_dealt;
 
-            ->get();
-        $return_data['call_data'] = $call_data[0];
+        $return_data['call_data'] = $call_data;
 
 
         return response_success($return_data,"");
