@@ -28,6 +28,13 @@ class DKAdminController extends Controller
 
 
 
+    // 【订单管理】导入
+    public function operate_data_phone_import_by_txt()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_data_phone_import_by_txt();
+        else if (request()->isMethod('post')) return $this->repo->operate_data_phone_import_by_txt_save(request()->all());
+    }
+
 
     // 账号唯一登录
     public function check_is_only_me()

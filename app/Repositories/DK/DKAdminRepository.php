@@ -386,6 +386,132 @@ class DKAdminRepository {
     }
 
 
+
+
+    // 【工单】返回-导入-视图
+    public function view_data_phone_import_by_txt()
+    {
+        $this->get_me();
+        $me = $this->me;
+//        if(!in_array($me->user_type,[0,1,9])) return view(env('TEMPLATE_ROOT_FRONT').'errors.404');
+
+        $operate_category = 'item';
+        $operate_type = 'item';
+        $operate_type_text = '电话';
+        $title_text = '导入'.$operate_type_text;
+        $list_text = $operate_type_text.'列表';
+        $list_link = '/data/phone-list';
+
+        $return['operate'] = 'create';
+        $return['operate_id'] = 0;
+        $return['operate_category'] = $operate_category;
+        $return['operate_type'] = $operate_type;
+        $return['operate_type_text'] = $operate_type_text;
+        $return['title_text'] = $title_text;
+        $return['list_text'] = $list_text;
+        $return['list_link'] = $list_link;
+
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.data.phone-import-by-txt';
+        return view($view_blade)->with($return);
+    }
+    // 【工单】保存-导入-数据
+    public function operate_data_phone_import_by_txt_save($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required',
+            'table_id.required' => '请选择项目！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'table_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $time = time();
+        $date = date('Y-m-d');
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+        $table_id = $post_data['table_id'];
+        if(!in_array($table_id,['pool_bj'])) return response_error([],"数据表有误！");
+
+        // 单文件
+        if(!empty($post_data["txt-file"]))
+        {
+
+            $result = upload_file_storage($post_data["txt-file"],null,'dk/unique/attachment','');
+            if($result["result"])
+            {
+//                $mine->attachment_name = $result["name"];
+//                $mine->attachment_src = $result["local"];
+//                $mine->save();
+                $attachment_file = storage_resource_path($result["local"]);
+
+                $file_data = file($attachment_file);
+
+                $collection = collect($file_data)->map(function ($line) {
+                    return trim($line);
+                });
+                $chunks = $collection->chunk(1000);
+                $chunks = $chunks->toArray();
+//                dd($chunks);
+
+                $insert_data = [];
+                foreach($chunks as $key => $value)
+                {
+                    $data = [];
+                    foreach($value as $v)
+                    {
+                        if(is_numeric(trim($v)))
+                        {
+                            $data[] = [
+                                'phone'=>trim($v)
+                            ];
+                        }
+                    }
+                    $insert_data[] = $data;
+                }
+
+
+
+                // 启动数据库事务
+                DB::beginTransaction();
+                try
+                {
+                    foreach($insert_data as $insert_value)
+                    {
+//                        $modal_order = new DK_Order;
+//                        $bool = $modal_order->insert($insert_value);
+                        $bool = DB::table($table_id)->insert($insert_value);
+
+                        if(!$bool) throw new Exception("DK_Order--insert--fail");
+                    }
+
+                    DB::commit();
+                    return response_success(['count'=>$collection->count()]);
+                }
+                catch (Exception $e)
+                {
+                    DB::rollback();
+                    $msg = '操作失败，请重试！';
+                    $msg = $e->getMessage();
+//                    exit($e->getMessage());
+                    return response_fail([],$msg);
+                }
+            }
+            else return response_error([],"upload--attachment--fail");
+        }
+        else return response_error([],"清选择Txt文件！");
+
+    }
+
+
     // 【api】登录
     public function operate_company_team_login_okcc($post_data)
     {

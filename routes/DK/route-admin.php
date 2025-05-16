@@ -30,6 +30,8 @@ Route::match(['get','post'], 'login', $controller.'@login');
 Route::match(['get','post'], 'logout', $controller.'@logout');
 Route::match(['get','post'], 'logout_without_token', $controller.'@logout_without_token');
 
+Route::match(['get','post'], 'test-', $controller.'@logout_without_token');
+
 
 /*
  * 超级管理员系统（后台）
@@ -38,6 +40,10 @@ Route::match(['get','post'], 'logout_without_token', $controller.'@logout_withou
 Route::group(['middleware' => ['yh.admin.login']], function () {
 
     $controller = 'DKAdminController';
+
+
+    Route::match(['get','post'], '/data/phone-import-by-txt', $controller.'@operate_data_phone_import_by_txt');
+
 
     Route::post('/is_only_me', $controller.'@check_is_only_me');
 
