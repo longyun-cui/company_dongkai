@@ -67,13 +67,15 @@
             </select>
 
 
+            <input type="text" class="search-filter form-filter date_picker-c search-date" name="delivery-callback-date" placeholder="回访日期" readonly="readonly" value="" data-default="" />
+
+
             <select class="search-filter form-filter" name="delivery-is-come">
                 <option value="-1">上门状态</option>
                 <option value="0">不上门</option>
                 <option value="9">预约中</option>
                 <option value="11">已上门</option>
             </select>
-
 
             <input type="text" class="search-filter form-filter date_picker-c search-date" name="delivery-come-date" placeholder="上门日期" readonly="readonly" value="" data-default="" />
 

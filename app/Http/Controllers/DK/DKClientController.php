@@ -361,6 +361,11 @@ class DKClientController extends Controller
         return $this->repo->v1_operate_for_delivery_item_customer_save(request()->all());
     }
     // 【工单-管理】编辑-保存
+    public function v1_operate_for_delivery_item_callback_save()
+    {
+        return $this->repo->v1_operate_for_delivery_item_callback_save(request()->all());
+    }
+    // 【工单-管理】编辑-保存
     public function v1_operate_for_delivery_item_come_save()
     {
         return $this->repo->v1_operate_for_delivery_item_come_save(request()->all());

@@ -56,6 +56,9 @@
                     d.date_start = $tableSearch.find('input[name="delivery-start"]').val();
                     d.date_ended = $tableSearch.find('input[name="delivery-ended"]').val();
 
+                    d.is_callback = $tableSearch.find('select[name="delivery-is-callback"]').val();
+                    d.callback_date = $tableSearch.find('input[name="delivery-callback-date"]').val();
+
                     d.is_come = $tableSearch.find('select[name="delivery-is-come"]').val();
                     d.come_date = $tableSearch.find('input[name="delivery-come-date"]').val();
 
@@ -111,7 +114,7 @@
                     "title": "操作",
                     "data": 'id',
                     "className": "",
-                    "width": "240px",
+                    "width": "280px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
@@ -127,6 +130,7 @@
                         var $html_edit = '';
                         var $html_quality = '<a class="btn btn-xs bg-default item-quality-evaluate-submit" data-id="'+data+'">质量评价</a>';
                         var $html_update = '<a class="btn btn-xs bg-default item-modal-show-for-customer-update" data-id="'+data+'">更新</a>';
+                        var $html_callback = '<a class="btn btn-xs bg-default item-modal-show-for-callback-update" data-id="'+data+'">回访</a>';
                         var $html_come = '<a class="btn btn-xs bg-default item-modal-show-for-come-update" data-id="'+data+'">上门</a>';
                         var $html_trade = '<a class="btn btn-xs bg-default item-modal-show-for-trade-create" data-id="'+data+'">成交</a>';
                         var $html_follow = '<a class="btn btn-xs bg-default item-modal-show-for-follow-create" data-id="'+data+'">跟进</a>';
@@ -136,6 +140,7 @@
                         var $html =
                             $html_quality+
                             $html_update+
+                            $html_callback+
                             $html_come+
                             $html_trade+
                             $html_follow+
@@ -452,6 +457,28 @@
                 {
                     "title": "上门时间",
                     "data": "come_datetime",
+                    "className": "",
+                    "width": "120px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(data)
+                        {
+                            let d = new Date(data);
+                            let year = d.getFullYear();
+                            let month = ('0' + (d.getMonth() + 1)).slice(-2); // 月份是从0开始的
+                            let day = ('0' + d.getDate()).slice(-2);
+                            let hours = ('0' + d.getHours()).slice(-2);
+                            let minutes = ('0' + d.getMinutes()).slice(-2);
+                            let seconds = ('0' + d.getSeconds()).slice(-2);
+
+                            return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes;
+                        }
+                        else return '--';
+                    }
+                },
+                {
+                    "title": "回访时间",
+                    "data": "callback_datetime",
                     "className": "",
                     "width": "120px",
                     "orderable": false,

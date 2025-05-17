@@ -67,6 +67,7 @@
                         render: function(data, type, row, meta) {
                             if(data == 1) return '<small class="btn-xs bg-green">跟进记录</small>';
                             else if(data == 11) return '<small class="btn-xs bg-teal">用户信息</small>';
+                            else if(data == 21) return '<small class="btn-xs bg-teal">客户回访</small>';
                             else if(data == 31) return '<small class="btn-xs bg-yellow">上门状态</small>';
                             else if(data == 88) return '<small class="btn-xs bg-red">成交记录</small>';
                             else return '有误';
@@ -135,6 +136,41 @@
                                             {
                                                 if($value.before == '') $return_html += '【联系渠道】' + $value.after + ' <br>';
                                                 else $return_html  += '【联系渠道】' + $value.before + ' → ' + $value.after + ' <br>';
+                                            }
+                                        });
+                                        return $return_html;
+                                    }
+                                    catch(e)
+                                    {
+                                        return '';
+                                    }
+                                }
+                                else return '';
+                            }
+                            else if(row.follow_type == 21)
+                            {
+                                if($.trim(data))
+                                {
+                                    try
+                                    {
+                                        var $customer_list = JSON.parse(data);
+
+                                        var $return_html = '';
+                                        $.each($customer_list, function($index, $value) {
+                                            if($value.field == 'is_callback')
+                                            {
+                                                if($value.after == 0) $return_html += '【上门状态】否 <br>';
+                                                else if($value.after == 9) $return_html += '【上门状态】预约上门 <br>';
+                                                else if($value.after == 11) $return_html += '【上门状态】已上门 <br>';
+                                                else $return_html += '';
+                                            }
+                                            else if($value.field == 'callback_datetime')
+                                            {
+                                                $return_html += '【回访时间】' + $value.after + ' <br>';
+                                            }
+                                            else if($value.field == 'callback_description')
+                                            {
+                                                $return_html += '【回访备注】' + $value.after + ' <br>';
                                             }
                                         });
                                         return $return_html;
@@ -222,7 +258,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "60px",
+                        "width": "120px",
                         "title": "操作人",
                         "data": "creator_id",
                         "orderable": false,

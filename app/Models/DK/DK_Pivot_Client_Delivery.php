@@ -51,6 +51,9 @@ class DK_Pivot_Client_Delivery extends Model
         'follow_latest_datetime',
         'follow_latest_date',
 
+        'callback_datetime',
+        'callback_date',
+
         'is_come',
         'come_datetime',
         'come_date',

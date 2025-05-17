@@ -3910,6 +3910,18 @@ class DKClientRepository {
         }
 
 
+        // 回访状态
+        if(isset($post_data['is_callback']))
+        {
+            if(!in_array($post_data['is_callback'],[-1,'-1']))
+            {
+                $query->where('is_callback', $post_data['is_callback']);
+            }
+        }
+        // 回访时间
+        if(!empty($post_data['callback_date'])) $query->where('callback_date', $post_data['callback_date']);
+
+
         // 上门状态
         if(isset($post_data['is_come']))
         {
@@ -4181,6 +4193,123 @@ class DKClientRepository {
         $follow_data["custom_text_1"] = json_encode($follow_update);
         $follow_data["follow_datetime"] = $datetime;
         $follow_data["follow_date"] = $datetime;
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $bool = $follow->fill($follow_data)->save();
+            if($bool)
+            {
+//                $mine->timestamps = false;
+                $mine->last_operation_datetime = $datetime;
+                $mine->last_operation_date = $datetime;
+                $bool_d = $mine->save();
+            }
+            else throw new Exception("DK_Client_Follow_Record--insert--fail");
+
+            DB::commit();
+            return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【交付-管理】保存数据
+    public function v1_operate_for_delivery_item_callback_save($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+//            'follow-datetime.required' => '请输入跟进时间！',
+//            'is_come.required' => '请选择上门状态！',
+            'callback-datetime.required' => '请选择回访时间！',
+//            'name.unique' => '该部门号已存在！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+//            'callback-datetime' => 'required',
+//            'is_come' => 'required',
+            'callback-datetime' => 'required',
+//            'name' => 'required|unique:dk_department,name',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,81,84,88])) return response_error([],"你没有操作权限！");
+
+
+        $operate = $post_data["operate"];
+        $operate_type = $operate["type"];
+        $operate_id = $operate['id'];
+
+
+        $mine = DK_Pivot_Client_Delivery::with([
+        ])->withTrashed()->find($operate_id);
+        if(!$mine) return response_error([],"不存在警告，请刷新页面重试！");
+
+
+        $datetime = date('Y-m-d H:i:s');
+
+
+        $follow_update = [];
+
+        // 回访状态
+//        $is_callback = $post_data["is_callback"];
+//        if($is_callback != $mine->is_callback)
+//        {
+//            $update['field'] = 'is_callback';
+//            $update['before'] = $mine->is_callback;
+//            $update['after'] = $is_callback;
+//            $follow_update[] = $update;
+//
+//            $mine->is_callback = $is_callback;
+//        }
+        // 回访时间
+        $callback_datetime = $post_data['callback-datetime'];
+        if(!empty($callback_datetime))
+        {
+            $update['field'] = 'callback_datetime';
+            $update['before'] = '';
+            $update['after'] = $callback_datetime;
+            $follow_update[] = $update;
+
+            $mine->callback_datetime = $callback_datetime;
+            $mine->callback_date = $callback_datetime;
+        }
+        // 回访备注
+        $trade_data["description"] = $post_data['callback-description'];
+        if(!empty($trade_data["description"]))
+        {
+            $update['field'] = 'callback_description';
+            $update['before'] = '';
+            $update['after'] = $trade_data["description"];
+            $follow_update[] = $update;
+        }
+
+
+
+        $follow = new DK_Client_Follow_Record;
+
+        $follow_data["follow_category"] = 1;
+        $follow_data["follow_type"] = 21;
+        $follow_data["client_id"] = $me->client_id;
+        $follow_data["delivery_id"] = $operate_id;
+        $follow_data["creator_id"] = $me->id;
+        $follow_data["custom_text_1"] = json_encode($follow_update);
+//        $follow_data["follow_datetime"] = $post_data['follow-datetime'];
+//        $follow_data["follow_date"] = $post_data['follow-datetime'];
 
 
         // 启动数据库事务
