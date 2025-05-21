@@ -98,6 +98,8 @@
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.call.statistic-call-daily-overview')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.call.statistic-call-daily-month')
 
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.call.statistic-order-daily-month')
+
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.export.statistic-export')
 
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.marketing.company.statistic-company-overview')
@@ -185,6 +187,8 @@
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.call.statistic-call-list-datatable')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.call.statistic-call-daily-overview-script')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.call.statistic-call-daily-month-datatable')
+
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.call.statistic-order-daily-month-datatable')
 
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.export.statistic-export-datatable')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.export.statistic-export-script')

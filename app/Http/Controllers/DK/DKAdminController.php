@@ -823,6 +823,12 @@ class DKAdminController extends Controller
         return $this->repo->v1_operate_for_get_statistic_data_of_statistic_call_daily_month(request()->all());
     }
 
+    // 【统计】成单-通话日报
+    public function v1_operate_for_get_statistic_data_of_statistic_call_order_daily_month()
+    {
+        return $this->repo->v1_operate_for_get_statistic_data_of_statistic_call_order_daily_month(request()->all());
+    }
+
 
 
 

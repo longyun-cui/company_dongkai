@@ -500,6 +500,10 @@
                 {
                     Datatable_Statistic_Call_Daily_Month('#'+$config.id, $config.chart_id);
                 }
+                else if($id == "datatable-statistic-call-order-daily-month")
+                {
+                    Datatable_Statistic_Call_Order_Daily_Month('#'+$config.id, $config.chart_id);
+                }
 
             }
 

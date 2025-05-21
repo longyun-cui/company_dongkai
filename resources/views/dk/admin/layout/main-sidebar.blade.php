@@ -699,6 +699,29 @@
                     </a>
                 </li>
             @endif
+            {{--通话月报--}}
+            @if(in_array($me->user_type,[0,1,9,11]))
+                <li class="treeview _none-">
+                    <a class="tab-control datatable-control"
+                       data-type="create"
+                       data-unique="y"
+                       data-id="statistic-call-order-daily-month"
+                       data-title='<i class="fa fa-pie-chart text-red"></i> 成单通话'
+                       data-content=''
+
+                       data-chart-id='chart-call-order-daily-month'
+
+                       data-datatable-type="create"
+                       data-datatable-unique="y"
+                       data-datatable-id="datatable-statistic-call-order-daily-month"
+                       data-datatable-target="statistic-call-order-daily-month"
+                       data-datatable-clone-object="statistic-call-order-daily-month-clone"
+                    >
+                        <i class="fa fa-pie-chart text-red"></i>
+                        <span>成单通话</span>
+                    </a>
+                </li>
+            @endif
 
 
             {{----}}

@@ -29,6 +29,8 @@ use App\Models\DK_CC\DK_CC_Call_Statistic;
 
 use App\Models\DK_VOS\DK_VOS_CDR;
 
+use App\Models\DK_A\DK_A_Order;
+
 use App\Repositories\Common\CommonRepository;
 
 use Response, Auth, Validator, DB, Exception, Cache, Blade, Carbon, DateTime;
@@ -9500,6 +9502,161 @@ class DKAdminRepository {
 //        dd($list->toArray());
 
         return datatable_response($merged, $draw, $total);
+    }
+
+
+    // 【统计】返回-通话-日报-月览
+    public function v1_operate_for_get_statistic_data_of_statistic_call_order_daily_month($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        $this_month = date('Y-m');
+        $this_month_start_date = date('Y-m-01'); // 本月开始日期
+        $this_month_ended_date = date('Y-m-t'); // 本月结束日期
+        $this_month_start_datetime = date('Y-m-01 00:00:00'); // 本月开始时间
+        $this_month_ended_datetime = date('Y-m-t 23:59:59'); // 本月结束时间
+        $this_month_start_timestamp = strtotime($this_month_start_date); // 本月开始时间戳
+        $this_month_ended_timestamp = strtotime($this_month_ended_datetime); // 本月结束时间戳
+
+        $last_month_start_date = date('Y-m-01',strtotime('last month')); // 上月开始时间
+        $last_month_ended_date = date('Y-m-t',strtotime('last month')); // 上月开始时间
+        $last_month_start_datetime = date('Y-m-01 00:00:00',strtotime('last month')); // 上月开始时间
+        $last_month_ended_datetime = date('Y-m-t 23:59:59',strtotime('last month')); // 上月结束时间
+        $last_month_start_timestamp = strtotime($last_month_start_date); // 上月开始时间戳
+        $last_month_ended_timestamp = strtotime($last_month_ended_datetime); // 上月月结束时间戳
+
+
+
+
+        $the_month  = isset($post_data['time_month']) ? $post_data['time_month']  : date('Y-m');
+        $the_month_timestamp = strtotime($the_month);
+
+        $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+        $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+        $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+        $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+        $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+        $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+        $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+
+
+        $query_order = DK_A_Order::select('order_date')
+//            ->whereBetween('published_at',[$this_month_start_timestamp,$this_month_ended_timestamp])  // 当月
+//            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
+            ->whereBetween('order_date',[$the_month_start_date,$the_month_ended_date])
+            ->groupBy('order_date')
+            ->addSelect(DB::raw("
+                    DATE_FORMAT(order_date,'%Y-%m-%d') as date_day,
+                    DATE_FORMAT(order_date,'%e') as day,
+                    count(*) as count,
+                    sum(call_cnt_8) as sum_call_cnt_8,
+                    sum(call_cnt_9_15) as sum_call_cnt_9_15,
+                    sum(call_cnt_16_25) as sum_call_cnt_16_25,
+                    sum(call_cnt_26_45) as sum_call_cnt_26_45,
+                    sum(call_cnt_46_90) as sum_call_cnt_46_90,
+                    sum(call_cnt_91) as sum_call_cnt_91
+                "))
+            ->orderBy("order_date", "desc");
+
+        $total = $query_order->count();
+
+
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
+
+        $list = $query_order->get();
+
+
+
+        $total_data = [];
+        $total_data['order_date'] = 0;
+        $total_data['date_day'] = '统计';
+        $total_data['count'] = 0;
+        $total_data['sum_all'] = 0;
+        $total_data['sum_call_cnt_8'] = 0;
+        $total_data['sum_call_cnt_9_15'] = 0;
+        $total_data['sum_call_cnt_16_25'] = 0;
+        $total_data['sum_call_cnt_26_45'] = 0;
+        $total_data['sum_call_cnt_46_90'] = 0;
+        $total_data['sum_call_cnt_91'] = 0;
+
+        $total_data['cnt'] = 0;
+        $total_data['cnt_8'] = 0;
+        $total_data['minutes'] = 0;
+
+
+
+        foreach ($list as $k => $v)
+        {
+
+            $v->sum_all = $v->sum_call_cnt_8
+                        + $v->sum_call_cnt_9_15
+                        + $v->sum_call_cnt_16_25
+                        + $v->sum_call_cnt_26_45
+                        + $v->sum_call_cnt_46_90
+                        + $v->sum_call_cnt_91;
+//            $list[$v]->sum_all = $v->sum_all;
+
+            // 单均通话次数
+            if($v->count > 0)
+            {
+                $v->per_call_cnt_8 = round(($v->sum_call_cnt_8 / $v->count),2);
+                $v->per_call_cnt_9_15 = round(($v->sum_call_cnt_9_15 / $v->count),2);
+                $v->per_call_cnt_16_25 = round(($v->sum_call_cnt_16_25 / $v->count),2);
+                $v->per_call_cnt_26_45 = round(($v->sum_call_cnt_26_45 / $v->count),2);
+                $v->per_call_cnt_46_90 = round(($v->sum_call_cnt_46_90 / $v->count),2);
+                $v->per_call_cnt_91 = round(($v->sum_call_cnt_91 / $v->count),2);
+            }
+            else
+            {
+                $v->per_call_cnt_8 = 0;
+                $v->per_call_cnt_9_15 = 0;
+                $v->per_call_cnt_16_25 = 0;
+                $v->per_call_cnt_26_45 = 0;
+                $v->per_call_cnt_46_90 = 0;
+                $v->per_call_cnt_91 = 0;
+            }
+
+            $total_data['count'] += $v->count;
+            $total_data['sum_all'] += $v->sum_all;
+            $total_data['sum_call_cnt_8'] += $v->sum_call_cnt_8;
+            $total_data['sum_call_cnt_9_15'] += $v->sum_call_cnt_9_15;
+            $total_data['sum_call_cnt_16_25'] += $v->sum_call_cnt_16_25;
+            $total_data['sum_call_cnt_26_45'] += $v->sum_call_cnt_26_45;
+            $total_data['sum_call_cnt_46_90'] += $v->sum_call_cnt_46_90;
+            $total_data['sum_call_cnt_91'] += $v->sum_call_cnt_91;
+
+            if($total_data['count'] > 0)
+            {
+                $total_data['per_call_cnt_8'] = round(($total_data['sum_call_cnt_8'] / $total_data['count']),2);
+                $total_data['per_call_cnt_9_15'] = round(($total_data['sum_call_cnt_9_15'] / $total_data['count']),2);
+                $total_data['per_call_cnt_16_25'] = round(($total_data['sum_call_cnt_16_25'] / $total_data['count']),2);
+                $total_data['per_call_cnt_26_45'] = round(($total_data['sum_call_cnt_26_45'] / $total_data['count']),2);
+                $total_data['per_call_cnt_46_90'] = round(($total_data['sum_call_cnt_46_90'] / $total_data['count']),2);
+                $total_data['per_call_cnt_91'] = round(($total_data['sum_call_cnt_91'] / $total_data['count']),2);
+            }
+            else
+            {
+                $total_data['per_call_cnt_8'] = 0;
+                $total_data['per_call_cnt_9_15'] = 0;
+                $total_data['per_call_cnt_16_25'] = 0;
+                $total_data['per_call_cnt_26_45'] = 0;
+                $total_data['per_call_cnt_46_90'] = 0;
+                $total_data['per_call_cnt_91'] = 0;
+            }
+
+        }
+
+        $list[] = $total_data;
+
+//        dd($list->toArray());
+
+        return datatable_response($list, $draw, $total);
     }
 
 
