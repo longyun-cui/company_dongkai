@@ -9619,6 +9619,7 @@ class DKAdminRepository {
             // 单均通话次数
             if($v->count > 0)
             {
+                $v->per_call = round(($v->sum_all / $v->count),2);
                 $v->per_call_cnt_8 = round(($v->sum_call_cnt_8 / $v->count),2);
                 $v->per_call_cnt_9_15 = round(($v->sum_call_cnt_9_15 / $v->count),2);
                 $v->per_call_cnt_16_25 = round(($v->sum_call_cnt_16_25 / $v->count),2);
@@ -9628,6 +9629,7 @@ class DKAdminRepository {
             }
             else
             {
+                $v->per_call = 0;
                 $v->per_call_cnt_8 = 0;
                 $v->per_call_cnt_9_15 = 0;
                 $v->per_call_cnt_16_25 = 0;
@@ -9647,6 +9649,7 @@ class DKAdminRepository {
 
             if($total_data['count'] > 0)
             {
+                $total_data['per_call'] = round(($total_data['sum_all'] / $total_data['count']),2);
                 $total_data['per_call_cnt_8'] = round(($total_data['sum_call_cnt_8'] / $total_data['count']),2);
                 $total_data['per_call_cnt_9_15'] = round(($total_data['sum_call_cnt_9_15'] / $total_data['count']),2);
                 $total_data['per_call_cnt_16_25'] = round(($total_data['sum_call_cnt_16_25'] / $total_data['count']),2);
@@ -9656,6 +9659,7 @@ class DKAdminRepository {
             }
             else
             {
+                $total_data['per_call'] = 0;
                 $total_data['per_call_cnt_8'] = 0;
                 $total_data['per_call_cnt_9_15'] = 0;
                 $total_data['per_call_cnt_16_25'] = 0;

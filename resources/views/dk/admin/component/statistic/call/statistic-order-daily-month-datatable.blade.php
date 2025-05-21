@@ -146,6 +146,17 @@
                     }
                 },
                 {
+                    "title": "通话/单",
+                    "data": "per_call",
+                    "className": "_bold",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(data) return data;
+                        else return '';
+                    }
+                },
+                {
                     "title": "8秒内/单",
                     "data": "per_call_cnt_8",
                     "className": "",
