@@ -9542,11 +9542,23 @@ class DKAdminRepository {
 
         $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
 
+        // 城市
+        $city = 0;
+        if(isset($post_data['city']))
+        {
+            if(!in_array($post_data['city'],['-1','0']))
+            {
+                $city = $post_data['city'];
+            }
+        }
 
         $query_order = DK_A_Order::select('order_date')
 //            ->whereBetween('published_at',[$this_month_start_timestamp,$this_month_ended_timestamp])  // 当月
 //            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
             ->whereBetween('order_date',[$the_month_start_date,$the_month_ended_date])
+            ->when($city, function ($query) use ($city) {
+                return $query->where('region_name', $city);
+            })
             ->groupBy('order_date')
             ->addSelect(DB::raw("
                     DATE_FORMAT(order_date,'%Y-%m-%d') as date_day,
@@ -9560,6 +9572,8 @@ class DKAdminRepository {
                     sum(call_cnt_91) as sum_call_cnt_91
                 "))
             ->orderBy("order_date", "desc");
+
+
 
         $total = $query_order->count();
 

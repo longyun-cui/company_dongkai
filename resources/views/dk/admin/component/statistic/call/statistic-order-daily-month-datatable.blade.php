@@ -33,6 +33,7 @@
                     d.time_date = $tableSearch.find('input[name="statistic-order-daily-date"]').val();
                     d.date_start = $tableSearch.find('input[name="statistic-order-daily-start"]').val();
                     d.date_ended = $tableSearch.find('input[name="statistic-order-daily-ended"]').val();
+                    d.city = $tableSearch.find('select[name="statistic-order-city"]').val();
                 },
             },
             // "fixedColumns": {
