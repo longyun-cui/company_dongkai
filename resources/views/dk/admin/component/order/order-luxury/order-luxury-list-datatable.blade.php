@@ -79,7 +79,7 @@
                     {{--@if(!in_array($me->user_type,[0,1,11]))--}}
                     @if($me->department_district_id != 0)
                 {
-                    "targets": [0,5,9,10,11],
+                    "targets": [0,6,9,10,11],
                     "visible": false,
                 }
                 @endif
