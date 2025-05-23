@@ -99,6 +99,7 @@
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.call.statistic-call-daily-month')
 
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.call.statistic-order-daily-month')
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.call.statistic-order-city')
 
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.export.statistic-export')
 
@@ -189,6 +190,7 @@
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.call.statistic-call-daily-month-datatable')
 
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.call.statistic-order-daily-month-datatable')
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.call.statistic-order-city-datatable')
 
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.export.statistic-export-datatable')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.export.statistic-export-script')
