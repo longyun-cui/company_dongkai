@@ -10,23 +10,23 @@
             <input type="hidden" name="statistic-order-daily-time-type" class="time-type" value="month" readonly>
 
 
-            <select class="search-filter form-filter filter-md select2-box-c" name="statistic-order-city">
-                <option value="-1">选择城市</option>
-                @if(!empty($district_city_list) && count($district_city_list) > 0)
-                    @foreach($district_city_list as $v)
-                        <option value="{{ $v->district_city }}">{{ $v->district_city }}</option>
-                    @endforeach
-                @endif
-            </select>
+{{--            <select class="search-filter form-filter filter-md select2-box-c" name="statistic-order-city">--}}
+{{--                <option value="-1">选择城市</option>--}}
+{{--                @if(!empty($district_city_list) && count($district_city_list) > 0)--}}
+{{--                    @foreach($district_city_list as $v)--}}
+{{--                        <option value="{{ $v->district_city }}">{{ $v->district_city }}</option>--}}
+{{--                    @endforeach--}}
+{{--                @endif--}}
+{{--            </select>--}}
 
             {{--按月查看--}}
-            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre month-pre" data-target="statistic-order-city">
-                <i class="fa fa-chevron-left"></i>
-            </button>
-            <input type="text" class="search-filter form-filter filter-keyup month_picker" name="statistic-order-city" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
-            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next month-next" data-target="statistic-order-city">
-                <i class="fa fa-chevron-right"></i>
-            </button>
+{{--            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre month-pre" data-target="statistic-order-city">--}}
+{{--                <i class="fa fa-chevron-left"></i>--}}
+{{--            </button>--}}
+{{--            <input type="text" class="search-filter form-filter filter-keyup month_picker" name="statistic-order-city" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />--}}
+{{--            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next month-next" data-target="statistic-order-city">--}}
+{{--                <i class="fa fa-chevron-right"></i>--}}
+{{--            </button>--}}
 
 
             <button type="button" class="btn btn-success btn-filter filter-submit">
