@@ -699,29 +699,6 @@
                     </a>
                 </li>
             @endif
-            {{--城市成单--}}
-            @if(in_array($me->user_type,[0,1,9,11]))
-                <li class="treeview _none-">
-                    <a class="tab-control datatable-control"
-                       data-type="create"
-                       data-unique="y"
-                       data-id="statistic-call-order-city"
-                       data-title='<i class="fa fa-pie-chart text-red"></i> 城市成单'
-                       data-content=''
-
-                       data-chart-id='chart-call-order-city'
-
-                       data-datatable-type="create"
-                       data-datatable-unique="y"
-                       data-datatable-id="datatable-statistic-call-order-city"
-                       data-datatable-target="statistic-call-order-city"
-                       data-datatable-clone-object="statistic-call-order-city-clone"
-                    >
-                        <i class="fa fa-pie-chart text-red"></i>
-                        <span>城市成单</span>
-                    </a>
-                </li>
-            @endif
             {{--成单通话--}}
             @if(in_array($me->user_type,[0,1,9,11]))
                 <li class="treeview _none-">
@@ -742,6 +719,29 @@
                     >
                         <i class="fa fa-pie-chart text-red"></i>
                         <span>成单通话</span>
+                    </a>
+                </li>
+            @endif
+            {{--城市成单--}}
+            @if(in_array($me->user_type,[0,1,9,11]))
+                <li class="treeview _none-">
+                    <a class="tab-control datatable-control"
+                       data-type="create"
+                       data-unique="y"
+                       data-id="statistic-call-order-city"
+                       data-title='<i class="fa fa-location-arrow text-red"></i> 城市成单'
+                       data-content=''
+
+                       data-chart-id='chart-call-order-city'
+
+                       data-datatable-type="create"
+                       data-datatable-unique="y"
+                       data-datatable-id="datatable-statistic-call-order-city"
+                       data-datatable-target="statistic-call-order-city"
+                       data-datatable-clone-object="statistic-call-order-city-clone"
+                    >
+                        <i class="fa fa-location-arrow text-red"></i>
+                        <span>城市成单</span>
                     </a>
                 </li>
             @endif

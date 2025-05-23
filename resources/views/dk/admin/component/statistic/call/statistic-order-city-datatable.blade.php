@@ -44,7 +44,7 @@
                 {
                     "title": "城市",
                     "data": "region_name",
-                    "className": "text-center",
+                    "className": "text-center _bold",
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
