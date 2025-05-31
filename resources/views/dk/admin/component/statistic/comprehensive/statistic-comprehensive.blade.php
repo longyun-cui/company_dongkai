@@ -247,7 +247,7 @@
                 </div>
                 <div class="box-body">
                     <ul class="nav nav-stacked">
-                        <li class="order_delivered_dental_for_all">
+                        <li class="delivery_dental_for_all">
                             <a href="javascript:void(0);">总交付量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
 {{--                        <li class="deliverer_of_all_for_completed_by_same_day">--}}
