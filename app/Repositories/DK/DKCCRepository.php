@@ -1,6 +1,11 @@
 <?php
 namespace App\Repositories\DK;
 
+use App\Models\DK_A\DK_A_Order;
+
+use App\Models\DK_A\DK_POOL;
+use App\Models\DK_A\DK_POOL_BJ;
+
 use App\Models\DK_CC\DK_CC_Team;
 use App\Models\DK_CC\DK_CC_Telephone;
 use App\Models\DK_CC\DK_CC_Telephone_Blacklist;
@@ -4952,6 +4957,1048 @@ class DKCCRepository {
 
             DB::commit();
             return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
+     * TELEPHONE 电话池
+     */
+    // 【任务】返回-列表-视图
+    public function view_pool_telephone_list($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,41])) return view($this->view_blade_403);
+
+        $city_list = config('location_city.city_list');
+        $view_data['city_list'] = $city_list;
+//        $flattened = collect($city_list)->flatMap(function ($values) {
+//            return $values;
+//        })->toArray();
+//        $collapsed = collect($city_list)->collapse()->toArray();
+//        dd($city_list);
+
+        $view_data['menu_active_of_service_telephone_list'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.pool.telephone-list';
+        return view($view_blade)->with($view_data);
+    }
+    // 【任务】返回-列表-数据
+    public function get_pool_telephone_list_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_POOL::select('*');
+//            ->addSelect(DB::raw("
+//                    count('*') as count_for_all
+//                "));
+//            ->addSelect(DB::raw("
+//                    count('*') as count_for_all,
+//                    count(IF(item_status = 1 and is_blacklisted = 0, TRUE, NULL)) as count_for_1,
+//                    count(IF(item_status = 9, TRUE, NULL)) as count_for_sold,
+//                    count(IF(is_blacklisted = 1, TRUE, NULL)) as count_for_blacklist
+//                "))
+//            ->groupBy('tag');
+
+
+
+
+        $list = $query->get();
+        $total = $list->count();
+//        dd($data);
+//
+//        $total = $query->count();
+//
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+//        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+//        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
+//
+//        if(isset($post_data['order']))
+//        {
+//            $columns = $post_data['columns'];
+//            $order = $post_data['order'][0];
+//            $order_column = $order['column'];
+//            $order_dir = $order['dir'];
+//
+//            $field = $columns[$order_column]["data"];
+//            $query->orderBy($field, $order_dir);
+//        }
+//        else $query->orderBy("id", "asc");
+//
+//        if($limit == -1) $list = $query->get();
+//        else $list = $query->skip($skip)->take($limit)->get();
+//        dd($list->toArray());
+
+        foreach($list as $k => $v)
+        {
+//            // 省
+//            if($v->provinceCode)
+//            {
+//                $v->provinceName = config('location_city.province.'.$v->provinceCode);
+//                $task_where['provinceCode'] = $v->provinceCode;
+//            }
+//            else $v->provinceName = '--';
+//            // 市
+//            if($v->cityCode)
+//            {
+//                $v->cityName = config('location_city.city.'.$v->provinceCode.'.'.$v->cityCode);
+//                $task_where['cityCode'] = $v->cityCode;
+//            }
+//            else $v->cityName = '--';
+//            // 区
+//            if($v->areaCode)
+//            {
+//                $v->areaName = config('location_city.district.'.$v->cityCode.'.'.$v->areaCode);
+//                $task_where['areaCode'] = $v->areaCode;
+//            }
+//            else $v->areaName = '--';
+//
+//            // 标签
+//            if($v->tag)
+//            {
+//                $task_where['tag'] = $v->tag;
+//            }
+//
+//            $call_task = DK_CC_Task::where($task_where)->orderby('id','desc')->first();
+//            if($call_task) $v->last_task_time = $call_task->created_at->format('Y-m-d H:i:s');
+//            else $v->last_task_time = '';
+        }
+//        $list = $list->sortBy(['district_id'=>'asc'])->values();
+//        $list = $list->sortBy(function ($item, $key) {
+//            return $item['district_group_id'];
+//        })->values();
+//        dd($list->toArray());
+
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【电话池】返回-导入-视图
+    public function view_pool_telephone_import()
+    {
+        $this->get_me();
+        $me = $this->me;
+//        if(!in_array($me->user_type,[0,1,9])) return view(env('TEMPLATE_ROOT_FRONT').'errors.404');
+
+        $item_category = 'item';
+        $item_type = 'team';
+        $item_type_text = '电话';
+        $title_text = '导入'.$item_type_text;
+        $list_text = $item_type_text.'列表';
+        $list_link = '/service/telephone-list';
+
+        $view_data['operate_category'] = 'operate';
+        $view_data['operate_type'] = 'import';
+        $view_data['operate_id'] = 0;
+        $view_data['operate_item_category'] = $item_category;
+        $view_data['operate_item_type'] = $item_type;
+        $view_data['operate_item_type_text'] = $item_type_text;
+        $view_data['operate_title_text'] = $title_text;
+        $view_data['operate_list_text'] = $list_text;
+        $view_data['operate_list_link'] = $list_link;
+
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.service.telephone-import';
+        return view($view_blade)->with($view_data);
+    }
+    // 【电话池】保存-导入-数据
+    public function operate_pool_telephone_import_save($post_data)
+    {
+        set_time_limit(600);
+
+        $messages = [
+            'operate.required' => 'operate.required',
+            'location_province.required' => '请填选择省份！',
+            'location_city.required' => '请填选择城市！',
+            'tag.required' => '请填选择标签！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'location_province' => 'required',
+            'location_city' => 'required',
+            'tag' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+//        $project_id = $post_data['project_id'];
+//        $client_id = $post_data['client_id'];
+//        if($project_id > 0 || $client_id > 0)
+//        {
+//        }
+//        else return response_error([],"项目和客户必须选择一个！");
+
+        $location_province = $post_data["location_province"];
+        $location_city = $post_data["location_city"];
+        $location_district = $post_data["location_district"];
+        $tag = $post_data["tag"];
+        $time = time();
+
+
+        // 单文件
+        if(!empty($post_data["txt-file"]))
+        {
+
+//            $result = upload_storage($post_data["attachment"]);
+//            $result = upload_storage($post_data["attachment"], null, null, 'assign');
+            $result = upload_file_storage($post_data["txt-file"],null,'dk/unique/attachment','');
+            if($result["result"])
+            {
+//                $mine->attachment_name = $result["name"];
+//                $mine->attachment_src = $result["local"];
+//                $mine->save();
+
+                $attachment_file = storage_resource_path($result["local"]);
+
+                $file_data = file($attachment_file);
+
+                $collection = collect($file_data)->map(function ($line) {
+                    return trim($line);
+                });
+
+
+                $exist_where['provinceCode'] = $location_province;
+                $exist_where['cityCode'] = $location_city;
+                $exist_where['areaCode'] = $location_district;
+                $exist_where['tag'] = $tag;
+                $exist_data = DK_CC_Telephone::select('telephone_number')->where($exist_where)->get();
+                if($exist_data)
+                {
+//                    dd($exist_data->toArray());
+                    $exist_plucked = $exist_data->pluck('telephone_number')->all();
+//                    dd($exist_plucked);
+                    $collection = $collection->diff($exist_plucked);
+                }
+
+
+                if ($collection->isEmpty())
+                {
+                    return response_error([],"数据全部重复！");
+                }
+
+
+                $chunks = $collection->chunk(1000);
+                $chunks = $chunks->toArray();
+//                dd($chunks);
+
+                $insert_data = [];
+                foreach($chunks as $key => $value)
+                {
+                    $data = [];
+                    foreach($value as $v)
+                    {
+                        if(is_numeric(trim($v)))
+                        {
+                            $data[] = [
+                                'telephone_number'=>trim($v),
+                                'provinceCode'=>$location_province,
+                                'cityCode'=>$location_city,
+                                'areaCode'=>$location_district,
+                                'tag'=>$tag,
+                                'created_at'=>$time,
+                                'updated_at'=>$time
+                            ];
+                        }
+                    }
+                    $insert_data[] = $data;
+                }
+//                dd($insert_data);
+
+
+                // 启动数据库事务
+//                DB::beginTransaction();
+                try
+                {
+                    foreach($insert_data as $insert_value)
+                    {
+                        $modal_telephone = new DK_CC_Telephone;
+                        $bool = $modal_telephone->insert($insert_value);
+
+//                        dd($bool);
+                        if(!$bool) throw new Exception("DK_CC_Telephone--insert--fail");
+                    }
+
+//                    DB::commit();
+                    return response_success(['count'=>count($collection)]);
+                }
+                catch (Exception $e)
+                {
+//                    DB::rollback();
+                    $msg = '操作失败，请重试！';
+                    $msg = $e->getMessage();
+//                    exit($e->getMessage());
+                    return response_fail([],$msg);
+                }
+            }
+            else return response_error([],"upload--attachment--fail");
+        }
+        else return response_error([],"请上传txt文件！");
+
+
+        // 多文件
+//        dd($post_data["multiple-excel-file"]);
+        $count = 0;
+        $multiple_files = [];
+        if(!empty($post_data["multiple-excel-file"]))
+        {
+            // 添加图片
+            foreach ($post_data["multiple-excel-file"] as $n => $f)
+            {
+                if(!empty($f))
+                {
+                    $result = upload_file_storage($f,null,'dk/unique/attachment','');
+                    if($result["result"])
+                    {
+                        $attachment_file = storage_resource_path($result["local"]);
+                        $data = Excel::load($attachment_file, function($reader) {
+
+                            $reader->limitColumns(1);
+                            $reader->limitRows(5001);
+
+                        })->get()->toArray();
+
+                        $order_data = [];
+                        foreach($data as $key => $value)
+                        {
+                            if($value['client_phone'])
+                            {
+                                $temp_date['client_phone'] = intval($value['client_phone']);
+                                $order_data[] = $temp_date;
+                            }
+                        }
+
+                        // 启动数据库事务
+                        DB::beginTransaction();
+                        try
+                        {
+
+                            foreach($order_data as $key => $value)
+                            {
+                                $order = new DK_Order;
+
+                                $order->project_id = $project_id;
+                                $order->creator_id = $me->id;
+                                $order->created_type = 9;
+                                $order->is_published = 1;
+                                $order->inspected_status = 1;
+                                $order->inspected_result = '通过';
+                                $order->client_phone = $value['client_phone'];
+
+                                $bool = $order->save();
+                                if(!$bool) throw new Exception("insert--order--fail");
+                            }
+
+                            DB::commit();
+                            $count += count($order_data);
+                        }
+                        catch (Exception $e)
+                        {
+                            DB::rollback();
+                            $msg = '操作失败，请重试！';
+                            $msg = $e->getMessage();
+                            return response_fail([],$msg);
+                        }
+
+                    }
+                    else return response_error([],"upload--attachment--fail");
+                }
+
+            }
+
+            return response_success(['count'=>$count]);
+        }
+
+    }
+    // 【电话池】返回-导入-视图
+    public function view_pool_telephone_blacklist_import()
+    {
+        $this->get_me();
+        $me = $this->me;
+//        if(!in_array($me->user_type,[0,1,9])) return view(env('TEMPLATE_ROOT_FRONT').'errors.404');
+
+        $item_category = 'item';
+        $item_type = 'team';
+        $item_type_text = '电话黑名单';
+        $title_text = '导入'.$item_type_text;
+        $list_text = $item_type_text.'列表';
+        $list_link = '/service/telephone-list';
+
+        $view_data['operate_category'] = 'operate';
+        $view_data['operate_type'] = 'import';
+        $view_data['operate_id'] = 0;
+        $view_data['operate_item_category'] = $item_category;
+        $view_data['operate_item_type'] = $item_type;
+        $view_data['operate_item_type_text'] = $item_type_text;
+        $view_data['operate_title_text'] = $title_text;
+        $view_data['operate_list_text'] = $list_text;
+        $view_data['operate_list_link'] = $list_link;
+
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.service.telephone-blacklist-import';
+        return view($view_blade)->with($view_data);
+    }
+    // 【电话池】保存-导入-数据
+    public function operate_pool_telephone_blacklist_import_save($post_data)
+    {
+        set_time_limit(600);
+
+        $messages = [
+            'operate.required' => 'operate.required',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+        // 单文件
+        if(!empty($post_data["txt-file"]))
+        {
+
+//            $result = upload_storage($post_data["attachment"]);
+//            $result = upload_storage($post_data["attachment"], null, null, 'assign');
+            $result = upload_file_storage($post_data["txt-file"],null,'dk/unique/attachment','');
+            if($result["result"])
+            {
+//                $mine->attachment_name = $result["name"];
+//                $mine->attachment_src = $result["local"];
+//                $mine->save();
+
+                $attachment_file = storage_resource_path($result["local"]);
+
+                $file_data = file($attachment_file);
+
+                $collection = collect($file_data)->map(function ($line) {
+                    return trim($line);
+                });
+
+
+                $exist_data = DK_CC_Telephone_Blacklist::select('telephone_number')->get();
+                if($exist_data)
+                {
+                    $exist_plucked = $exist_data->pluck('telephone_number')->all();
+                    $collection_diff = $collection->diff($exist_plucked);
+                }
+                else $collection_diff = $collection;
+
+
+                if(!$collection_diff->isEmpty())
+                {
+                    $insert_chunks = $collection_diff->chunk(1000);
+                    $insert_chunks = $insert_chunks->toArray();
+
+                    $insert_data = [];
+                    foreach($insert_chunks as $key => $value)
+                    {
+                        $data = [];
+                        foreach($value as $v)
+                        {
+                            if(is_numeric(trim($v)))
+                            {
+                                $data[] = [
+                                    'telephone_number'=>trim($v)
+                                ];
+                            }
+                        }
+                        $insert_data[] = $data;
+                    }
+                }
+                else
+                {
+                    $insert_data = [];
+//                    return response_error([],"数据全部重复！");
+                }
+
+
+                $update_chunks = $collection->chunk(1000);
+
+
+                // 启动数据库事务
+//                DB::beginTransaction();
+                try
+                {
+                    if(!$collection_diff->isEmpty())
+                    {
+                        foreach($insert_data as $insert_value)
+                        {
+                            $modal_telephone = new DK_CC_Telephone_Blacklist;
+                            $bool = $modal_telephone->insert($insert_value);
+                            if(!$bool) throw new Exception("DK_CC_Telephone_Blacklist--insert--fail");
+                        }
+                    }
+
+                    foreach($update_chunks as $update_value)
+                    {
+                        $bool_t = DK_CC_Telephone::whereIn('telephone_number',$update_value)->update(['is_blacklisted'=>1]);
+//                        dd($bool_t);
+                    }
+
+//                    DB::commit();
+                    return response_success(['count'=>count($collection)]);
+                }
+                catch (Exception $e)
+                {
+//                    DB::rollback();
+                    $msg = '操作失败，请重试！';
+                    $msg = $e->getMessage();
+//                    exit($e->getMessage());
+                    return response_fail([],$msg);
+                }
+            }
+            else return response_error([],"upload--attachment--fail");
+        }
+        else return response_error([],"请上传txt文件！");
+
+
+        // 多文件
+//        dd($post_data["multiple-excel-file"]);
+        $count = 0;
+        $multiple_files = [];
+        if(!empty($post_data["multiple-excel-file"]))
+        {
+            // 添加图片
+            foreach ($post_data["multiple-excel-file"] as $n => $f)
+            {
+                if(!empty($f))
+                {
+                    $result = upload_file_storage($f,null,'dk/unique/attachment','');
+                    if($result["result"])
+                    {
+                        $attachment_file = storage_resource_path($result["local"]);
+                        $data = Excel::load($attachment_file, function($reader) {
+
+                            $reader->limitColumns(1);
+                            $reader->limitRows(5001);
+
+                        })->get()->toArray();
+
+                        $order_data = [];
+                        foreach($data as $key => $value)
+                        {
+                            if($value['client_phone'])
+                            {
+                                $temp_date['client_phone'] = intval($value['client_phone']);
+                                $order_data[] = $temp_date;
+                            }
+                        }
+
+                        // 启动数据库事务
+                        DB::beginTransaction();
+                        try
+                        {
+
+                            foreach($order_data as $key => $value)
+                            {
+                                $order = new DK_Order;
+
+                                $order->project_id = $project_id;
+                                $order->creator_id = $me->id;
+                                $order->created_type = 9;
+                                $order->is_published = 1;
+                                $order->inspected_status = 1;
+                                $order->inspected_result = '通过';
+                                $order->client_phone = $value['client_phone'];
+
+                                $bool = $order->save();
+                                if(!$bool) throw new Exception("insert--order--fail");
+                            }
+
+                            DB::commit();
+                            $count += count($order_data);
+                        }
+                        catch (Exception $e)
+                        {
+                            DB::rollback();
+                            $msg = '操作失败，请重试！';
+                            $msg = $e->getMessage();
+                            return response_fail([],$msg);
+                        }
+
+                    }
+                    else return response_error([],"upload--attachment--fail");
+                }
+
+            }
+
+            return response_success(['count'=>$count]);
+        }
+
+    }
+    // 【电话池】返回-添加-视图
+    public function view_pool_telephone_create()
+    {
+        $this->get_me();
+        $me = $this->me;
+//        if(!in_array($me->user_type,[0,1,9])) return view(env('TEMPLATE_ROOT_FRONT').'errors.404');
+
+        $operate_category = 'item';
+        $operate_type = 'item';
+        $operate_type_text = '内容';
+        $title_text = '添加'.$operate_type_text;
+        $list_text = $operate_type_text.'列表';
+        $list_link = '/item/item-list';
+
+        $return['operate'] = 'create';
+        $return['operate_id'] = 0;
+        $return['operate_category'] = $operate_category;
+        $return['operate_type'] = $operate_type;
+        $return['operate_type_text'] = $operate_type_text;
+        $return['title_text'] = $title_text;
+        $return['list_text'] = $list_text;
+        $return['list_link'] = $list_link;
+
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.item-edit';
+        return view($view_blade)->with($return);
+    }
+    // 【电话池】返回-编辑-视图
+    public function view_pool_telephone_edit($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,21,22])) return view(env('TEMPLATE_DK_CC').'errors.404');
+
+        $id = $post_data["item-id"];
+        $mine = $this->modelItem->with(['owner'])->find($id);
+        if(!$mine) return view(env('TEMPLATE_DK_CC').'errors.404');
+
+
+        $operate_category = 'item';
+
+        if($mine->item_type == 0)
+        {
+            $operate_type = 'item';
+            $operate_type_text = '内容';
+            $list_link = '/home/item/item-list-for-all';
+        }
+        else if($mine->item_type == 1)
+        {
+            $operate_type = 'article';
+            $operate_type_text = '文章';
+            $list_link = '/home/item/item-article-list';
+        }
+        else if($mine->item_type == 9)
+        {
+            $operate_type = 'activity';
+            $operate_type_text = '活动';
+            $list_link = '/home/item/item-list-for-activity';
+        }
+        else if($mine->item_type == 11)
+        {
+            $operate_type = 'menu_type';
+            $operate_type_text = '书目';
+            $list_link = '/home/item/item-list-for-menu_type';
+        }
+        else if($mine->item_type == 18)
+        {
+            $operate_type = 'time_line';
+            $operate_type_text = '时间线';
+            $list_link = '/home/item/item-list-for-time_line';
+        }
+        else if($mine->item_type == 88)
+        {
+            $operate_type = 'advertising';
+            $operate_type_text = '广告';
+            $list_link = '/home/item/item-list-for-advertising';
+        }
+        else
+        {
+            $operate_type = 'item';
+            $operate_type_text = '内容';
+            $list_link = '/admin/item/item-list';
+        }
+
+        $title_text = '编辑'.$operate_type_text;
+        $list_text = $operate_type_text.'列表';
+
+
+        $return['operate_id'] = $id;
+        $return['operate_category'] = $operate_category;
+        $return['operate_type'] = $operate_type;
+        $return['operate_type_text'] = $operate_type_text;
+        $return['title_text'] = $title_text;
+        $return['list_text'] = $list_text;
+        $return['list_link'] = $list_link;
+
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.item-edit';
+        if($id == 0)
+        {
+            $return['operate'] = 'create';
+            return view($view_blade)->with($return);
+        }
+        else
+        {
+            $mine = $this->modelItem->with(['owner'])->find($id);
+            if($mine)
+            {
+                $mine->custom = json_decode($mine->custom);
+                $mine->custom2 = json_decode($mine->custom2);
+                $mine->custom3 = json_decode($mine->custom3);
+
+                $return['operate'] = 'edit';
+                $return['data'] = $mine;
+                return view($view_blade)->with($return);
+            }
+            else return response("该内容不存在！", 404);
+        }
+    }
+    // 【电话池】保存-数据
+    public function operate_pool_telephone_save($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required',
+            'title.required' => '请输入标题！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'title' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+//        if(!in_array($me->user_type,[0,1,9])) return response_error([],"用户类型错误！");
+
+
+        $operate = $post_data["operate"];
+        $operate_id = $post_data["operate_id"];
+        $operate_category = $post_data["operate_category"];
+        $operate_type = $post_data["operate_type"];
+
+        if($operate == 'create') // 添加 ( $id==0，添加一个内容 )
+        {
+            $mine = new YH_Item;
+            $post_data["item_category"] = 1;
+            $post_data["owner_id"] = $me->id;
+            $post_data["creator_id"] = $me->id;
+            $post_data["item_category"] = 11;
+
+//            if($type == 'item') $post_data["item_type"] = 0;
+//            else if($type == 'article') $post_data["item_type"] = 1;
+//            else if($type == 'activity') $post_data["item_type"] = 9;
+//            else if($type == 'menu_type') $post_data["item_type"] = 11;
+//            else if($type == 'time_line') $post_data["item_type"] = 18
+//            else if($type == 'advertising') $post_data["item_type"] = 88;
+        }
+        else if($operate == 'edit') // 编辑
+        {
+            $mine = $this->modelItem->find($operate_id);
+            if(!$mine) return response_error([],"该内容不存在，刷新页面重试！");
+//            if($me->id != $me_admin->id)
+//            {
+//                if($mine->creator_id != $me_admin->id) return response_error([],"不是你创建的，你没有操作权限！");
+//            }
+//            $post_data["updater_id"] = $me_admin->id;
+        }
+        else return response_error([],"参数【operate】有误！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if(!empty($post_data['custom']))
+            {
+                $post_data['custom'] = json_encode($post_data['custom']);
+            }
+
+
+            $mine_data = $post_data;
+            unset($mine_data['operate']);
+            unset($mine_data['operate_id']);
+            unset($mine_data['operate_category']);
+            unset($mine_data['operate_type']);
+
+            if(!empty($post_data['start'])) {
+                $mine_data['time_type'] = 1;
+                $mine_data['start_time'] = strtotime($post_data['start']);
+            }
+
+            if(!empty($post_data['end'])) {
+                $mine_data['time_type'] = 1;
+                $mine_data['end_time'] = strtotime($post_data['end']);
+            }
+
+            $bool = $mine->fill($mine_data)->save();
+            if($bool)
+            {
+
+                // 封面图片
+                if(!empty($post_data["cover"]))
+                {
+                    // 删除原封面图片
+                    $mine_cover_pic = $mine->cover_pic;
+                    if(!empty($mine_cover_pic) && file_exists(storage_resource_path($mine_cover_pic)))
+                    {
+                        unlink(storage_resource_path($mine_cover_pic));
+                    }
+
+                    $result = upload_img_storage($post_data["cover"],'','dk/common');
+                    if($result["result"])
+                    {
+                        $mine->cover_pic = $result["local"];
+                        $mine->save();
+                    }
+                    else throw new Exception("upload--cover_pic--fail");
+                }
+
+                // 附件
+                if(!empty($post_data["attachment"]))
+                {
+                    // 删除原附件
+                    $mine_cover_pic = $mine->attachment;
+                    if(!empty($mine_cover_pic) && file_exists(storage_resource_path($mine_cover_pic)))
+                    {
+                        unlink(storage_resource_path($mine_cover_pic));
+                    }
+
+                    $result = upload_file_storage($post_data["attachment"],'','attachment');
+                    if($result["result"])
+                    {
+                        $mine->attachment_name = $result["name"];
+                        $mine->attachment_src = $result["local"];
+                        $mine->save();
+                    }
+                    else throw new Exception("upload--attachment_file--fail");
+                }
+
+            }
+            else throw new Exception("insert--item--fail");
+
+            DB::commit();
+            return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【电话池】下载
+    public function operate_pool_telephone_download($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'telephone_count.required' => '请输入电话数量！',
+            'telephone_count.numeric' => '电话数量必须为大于等于0的整数！',
+            'telephone_count.min' => '电话数量必须为大于等于0的整数！',
+            'file_num.required' => '请输入文件数量！',
+            'file_num.numeric' => '文件数量必须为大于等于1的整数！',
+            'file_num.min' => '文件数量必须为大于等于1的整数！',
+            'file_size.required' => '请输入文件大小！',
+            'file_size.numeric' => '文件大小必须为大于等于0的整数！',
+            'file_size.min' => '文件大小必须为大于等于0的整数！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'telephone_count' => 'required|numeric|min:1',
+            'file_num' => 'required|numeric|min:1',
+            'file_size' => 'required|numeric|min:0',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'service-telephone-download') return response_error([],"参数[operate]有误！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
+
+        $date = date('Y-m-d');
+
+        $telephone_count = $post_data["telephone_count"];
+        $file_num = $post_data["file_num"];
+        $file_size = $post_data["file_size"];
+
+        $provinceCode = $post_data["provinceCode"];
+        $cityCode = $post_data["cityCode"];
+        $areaCode = $post_data["areaCode"];
+        $tag = $post_data["tag"];
+        $extraction_name = $post_data["extraction_name"];
+
+        $provinceName = config('location_city.province.'.$provinceCode);
+        $cityName = config('location_city.city.'.$provinceCode.'.'.$cityCode);
+        $areaName = config('location_city.district.'.$cityCode.'.'.$areaCode);
+
+        if($extraction_name)
+        {
+            $name = $extraction_name;
+        }
+        else
+        {
+            if($areaName) $name = $date.'-'.$cityName.'-'.$areaName;
+            else $name = $date.'-'.$cityName;
+            if($tag) $name.= "-".$tag;
+        }
+
+        $telephone_where['provinceCode'] = $provinceCode;
+        $telephone_where['cityCode'] = $cityCode;
+        $telephone_where['areaCode'] = $areaCode;
+        $telephone_where['tag'] = $post_data["tag"];
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+
+            $task = new DK_CC_Task;
+
+            $task_insert['creator_id'] = $me->id;
+            $task_insert['name'] = $name;
+            $task_insert['provinceCode'] = $provinceCode;
+            $task_insert['cityCode'] = $cityCode;
+            $task_insert['areaCode'] = $areaCode;
+            $task_insert['tag'] = $tag;
+            $task_insert['extraction_telephone_count'] = $telephone_count;
+            $task_insert['extraction_file_num'] = $file_num;
+            $task_insert['extraction_file_size'] = $file_size;
+
+            $bool_t = $task->fill($task_insert)->save();
+
+            $task_id = $task->id;
+
+//            dd(now()->subDays(7)->startOfDay());
+
+            $telephone = DK_CC_Telephone::select('telephone_number')->withTrashed()
+//                ->where(function ($query) {
+//                    $query->whereNull('last_extraction_time')
+//                        ->orWhereDate('last_extraction_time', '<=', now()->subDays(7));
+//                })
+                ->where($telephone_where)
+                ->where(['item_status'=>1,'is_blacklisted'=>0])
+                ->orderby('task_id','asc')
+                ->limit($telephone_count);
+
+
+            $telephone_update['task_id'] = $task_id;
+            $telephone_update['last_extraction_time'] = $date;
+            $telephone->update($telephone_update);
+            $telephone_list = DK_CC_Telephone::where('task_id',$task_id)->get();
+
+
+            $upload_path = <<<EOF
+resource/dk/cc/telephone/$date/
+EOF;
+            $url_path = env('DOMAIN_CDN').'/dk/cc/telephone/'.$date.'/';
+
+            $storage_path = storage_path($upload_path);
+            if (!is_dir($storage_path))
+            {
+                mkdir($storage_path, 0766, true);
+            }
+            $filename = $name.'-'.$task_id;
+            $extension = '.txt';
+
+
+            if($file_num > 1)
+            {
+                if($file_size == 0) $file_size = ceil($telephone_count / $file_num);
+                $chunks = $telephone_list->chunk($file_size);
+
+                $count = 1;
+                $file_list = [];
+                foreach($chunks as $chunk)
+                {
+                    $file_name = $filename.'-第'.$count.'批'.$extension;
+                    $file_url = $url_path.$file_name;
+                    $file_path = $storage_path.$file_name;
+
+                    // 打开文件准备写入
+                    $file = fopen($file_path, 'w');
+                    $count++;
+
+                    $i['name'] = $file_name;
+                    $i['path'] = $file_path;
+                    $i['url'] = $file_url;
+                    $file_list[] = $i;
+
+                    // 遍历电话号码数组，逐行写入文件
+                    foreach ($chunk as $phoneNumber)
+                    {
+                        fwrite($file, $phoneNumber->telephone_number . PHP_EOL);
+                    }
+
+                    // 关闭文件
+                    fclose($file);
+                }
+
+            }
+            else
+            {
+                $file_list = [];
+
+                $file_name = $filename.$extension;
+                $file_url = $url_path.$filename.$extension;
+                $file_path = $storage_path.$filename.$extension;
+
+                // 打开文件准备写入
+                $file = fopen($file_path, 'w');
+
+                // 遍历电话号码数组，逐行写入文件
+                foreach ($telephone_list as $phoneNumber)
+                {
+                    fwrite($file, $phoneNumber->telephone_number . PHP_EOL);
+                }
+
+                // 关闭文件
+                fclose($file);
+
+                $i['name'] = $file_name;
+                $i['path'] = $file_path;
+                $i['url'] = $file_url;
+                $file_list[] = $i;
+
+            }
+
+            DB::commit();
+
+            $task->content = json_encode($file_list);
+            $task->save();
+
+            return response_success(json_encode($file_list));
         }
         catch (Exception $e)
         {

@@ -118,7 +118,7 @@
 
             @if(in_array($me->user_type,[0,1,9,11,61,66]))
             <li class="treeview {{ $menu_active_of_service_telephone_list or '' }}">
-                <a href="{{ url('/service/telephone-list')}}">
+                <a href="{{ url('/pool/telephone-list')}}">
                     <i class="fa fa-file-text text-green"></i>
                     <span>电话数据</span>
                 </a>
@@ -126,7 +126,7 @@
             @endif
             @if(in_array($me->user_type,[0,1,9,11,41,61,66,71,77,81,84,88]))
             <li class="treeview {{ $menu_active_of_service_task_list or '' }}">
-                <a href="{{ url('/service/task-list')}}">
+                <a href="{{ url('/pool/task-list')}}">
                     <i class="fa fa-file-text text-green"></i>
                     <span>任务管理</span>
                 </a>

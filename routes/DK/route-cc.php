@@ -169,6 +169,30 @@ Route::group(['middleware' => ['dk.cc.login','dk.cc.password_change']], function
      * 电话管理
      */
     // 列表
+    Route::match(['get','post'], '/pool/telephone-list', $controller.'@view_pool_telephone_list');
+    // 导入 & 创建 & 修改
+    Route::match(['get','post'], '/pool/telephone-import', $controller.'@operate_pool_telephone_import');
+    Route::match(['get','post'], '/pool/telephone-blacklist-import', $controller.'@operate_service__telephone_blacklist_import');
+    Route::match(['get','post'], '/pool/telephone-create', $controller.'@operate_service_telephone_create');
+    Route::match(['get','post'], '/pool/telephone-edit', $controller.'@operate_service_telephone_edit');
+    Route::match(['get','post'], '/pool/telephone-blacklist-import', $controller.'@operate_service_telephone_blacklist_import');
+    // 下载
+    Route::post('/pool/telephone-download', $controller.'@operate_pool_telephone_download');
+
+
+
+
+
+
+
+
+
+
+
+    /*
+     * 电话管理
+     */
+    // 列表
     Route::match(['get','post'], '/service/telephone-list', $controller.'@view_service_telephone_list');
     // 导入 & 创建 & 修改
     Route::match(['get','post'], '/service/telephone-import', $controller.'@operate_service_telephone_import');

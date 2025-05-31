@@ -21,7 +21,7 @@
             @endif
 
             {{--选择项目--}}
-            <select class="search-filter form-filter filter-lg select2-box-c- select2-project-c" name="comprehensive-project">
+            <select class="search-filter form-filter filter-lg select2-box-c- select2-project-c" name="statistic-comprehensive-project">
                 <option value="-1">选择项目</option>
                 @foreach($project_list as $v)
                     <option value="{{ $v->id }}">{{ $v->name }}</option>
