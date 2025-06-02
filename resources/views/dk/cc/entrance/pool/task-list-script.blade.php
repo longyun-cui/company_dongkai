@@ -2,54 +2,48 @@
     $(function() {
 
         // 【搜索】
-        $("#search-row-for-telephone-list").on('click', ".filter-submit", function() {
+        $("#search-row-for-task-list").on('click', ".filter-submit", function() {
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【重置】
-        $("#search-row-for-telephone-list").on('click', ".filter-cancel", function() {
-            $("#search-row-for-telephone-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $("#search-row-for-task-list").on('click', ".filter-cancel", function() {
+            $("#search-row-for-task-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
 
 //            $('select.form-filter').selectpicker('refresh');
-            $("#search-row-for-telephone-list").find('select.form-filter option').attr("selected",false);
-            $("#search-row-for-telephone-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#search-row-for-task-list").find('select.form-filter option').attr("selected",false);
+            $("#search-row-for-task-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【清空重选】
         $("#search-row-for-telephone-list").on('click', ".filter-empty", function() {
-            $("#search-row-for-telephone-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+            $("#search-row-for-task-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
             $("#select2-box").val(-1).trigger("change");
             $("#select2-box").select2("val", "");
 
 //            $('select.form-filter').selectpicker('refresh');
-            $("#search-row-for-telephone-list").find('select.form-filter option').attr("selected",false);
-            $("#search-row-for-telephone-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#search-row-for-task-list").find('select.form-filter option').attr("selected",false);
+            $("#search-row-for-task-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
         });
         // 【查询】回车
-        $("#search-row-for-telephone-list").on('keyup', ".item-search-keyup", function(event) {
+        $("#search-row-for-task-list").on('keyup', ".item-search-keyup", function(event) {
             if(event.keyCode ==13)
             {
-                $(".search-row-for-telephone-list").find(".filter-submit").click();
+                $("#search-row-for-task-list").find(".filter-submit").click();
             }
         });
 
 
+
+
         // 【下载】
-        $(".main-content").on('click', ".item-down-submit", function() {
+        $(".main-content").on('click', ".item-download-submit", function() {
             var $that = $(this);
             var $row = $that.parents('tr');
-
-            var $telephone_count = $row.find('.telephone_count').val();
-            var $file_num = $row.find('.file_num').val();
-            var $file_size = $row.find('.file_size').val();
-            var $extraction_name = $row.find('.extraction_name').val();
-
-            var $id = $that.attr('data-id');
-
 
             var $index = layer.load(1, {
                 shade: [0.3, '#fff'],
@@ -67,15 +61,11 @@
             });
 
             $.post(
-                "{{ url('/pool/telephone-download') }}",
+                "{{ url('/pool/task-file-download') }}",
                 {
                     _token: $('meta[name="_token"]').attr('content'),
-                    operate: "service-telephone-download",
-                    telephone_count: $telephone_count,
-                    file_num: $file_num,
-                    file_size: $file_size,
-                    pool_id: $id,
-                    extraction_name: $extraction_name
+                    operate: "service-task-file-download",
+                    item_id: $that.attr('data-id')
                 },
                 'json'
             )
@@ -91,10 +81,10 @@
                         layer.msg("请求成功！");
                         // console.log(JSON.parse($response.data));
                         $.each(JSON.parse($response.data), function(index, value) {
-                            // console.log(value);
-                            // console.log(value.url);
-                            // console.log(value.path);
-                            // console.log(value.name);
+                            console.log(value);
+                            console.log(value.url);
+                            console.log(value.path);
+                            console.log(value.name);
 
                             var $obj = new Object();
                             $obj.path = value.path;
@@ -121,8 +111,6 @@
                 });
 
         });
-
-
 
 
 
@@ -178,10 +166,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/telephone/telephone-admin-delete') }}",
+                        "{{ url('/department/department-admin-delete') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "telephone-admin-delete",
+                            operate: "department-admin-delete",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -205,10 +193,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/telephone/telephone-admin-restore') }}",
+                        "{{ url('/department/department-admin-restore') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "telephone-admin-restore",
+                            operate: "department-admin-restore",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -232,10 +220,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/telephone/telephone-admin-delete-permanently') }}",
+                        "{{ url('/department/department-admin-delete-permanently') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "telephone-admin-delete-permanently",
+                            operate: "department-admin-delete-permanently",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -292,10 +280,10 @@
             //     }
             // });
                     $.post(
-                        "{{ url('/telephone/telephone-admin-enable') }}",
+                        "{{ url('/department/department-admin-enable') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "telephone-admin-enable",
+                            operate: "department-admin-enable",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -319,10 +307,10 @@
             //     }
             // });
                     $.post(
-                        "{{ url('/telephone/telephone-admin-disable') }}",
+                        "{{ url('/department/department-admin-disable') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "telephone-admin-disable",
+                            operate: "department-admin-disable",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -393,7 +381,7 @@
             // });
 
                     $.post(
-                        "{{ url('/telephone/telephone-info-text-set') }}",
+                        "{{ url('/department/department-info-text-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-text-set-operate"]').val(),
@@ -482,8 +470,8 @@
             // });
 
                     $.post(
-                        "{{ url('/telephone/telephone-info-text-set') }}",
-                        {{--"{{ url('/telephone/telephone-info-time-set') }}",--}}
+                        "{{ url('/department/department-info-text-set') }}",
+                        {{--"{{ url('/department/department-info-time-set') }}",--}}
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-time-set-operate"]').val(),
@@ -535,7 +523,7 @@
             $('input[name=info-select-set-operate-type]').val($that.attr('data-operate-type'));
 
 
-            $('select[name=info-select-set-column-value]').removeClass('select2-telephone').removeClass('select2-client');
+            $('select[name=info-select-set-column-value]').removeClass('select2-department').removeClass('select2-client');
             if($that.attr("data-key") == "receipt_status")
             {
                 var $option_html = $('#receipt_status-option-list').html();
@@ -581,7 +569,7 @@
             $('.info-select-set-column-name').html($that.attr("data-name"));
             $('input[name=info-select-set-item-id]').val($that.attr("data-id"));
             $('input[name=info-select-set-column-key]').val($that.attr("data-key"));
-            $('input[name=info-select-set-column-key]').prop('data-telephone-type',$that.attr("data-telephone-type"));
+            $('input[name=info-select-set-column-key]').prop('data-department-type',$that.attr("data-department-type"));
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).prop("selected",true);
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).attr("selected","selected");
             $('select[name=info-select-set-column-value]').find('option').eq(0).val($that.attr("data-value"));
@@ -597,14 +585,14 @@
                 $('select[name=info-select-set-column-value]').addClass('select2-leader');
                 $('.select2-leader').select2({
                     ajax: {
-                        url: "{{ url('/telephone/telephone_select2_leader') }}",
+                        url: "{{ url('/department/department_select2_leader') }}",
                         dataType: 'json',
                         delay: 250,
                         data: function (params) {
                             return {
                                 keyword: params.term, // search term
                                 page: params.page,
-                                type: $('input[name=info-select-set-column-key]').prop('data-telephone-type')
+                                type: $('input[name=info-select-set-column-key]').prop('data-department-type')
                             };
                         },
                         processResults: function (data, params) {
@@ -647,7 +635,7 @@
             // });
 
                     $.post(
-                        "{{ url('/telephone/telephone-info-select-set') }}",
+                        "{{ url('/department/department-info-select-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-select-set-operate"]').val(),
@@ -687,7 +675,7 @@
 
             $('.attachment-set-title').html($that.attr("data-id"));
             $('.info-set-column-name').html($that.attr("data-name"));
-            $('input[name=attachment-set-telephone-id]').val($that.attr("data-id"));
+            $('input[name=attachment-set-department-id]').val($that.attr("data-id"));
             $('input[name=attachment-set-column-key]').val($that.attr("data-key"));
             $('input[name=attachment-set-column-value]').val($that.attr("data-value"));
             $('input[name=attachment-set-operate-type]').val($that.attr('data-operate-type'));
@@ -704,7 +692,7 @@
                 type:"post",
                 dataType:'json',
                 async:false,
-                url: "{{ url('/telephone/telephone-get-attachment-html') }}",
+                url: "{{ url('/department/department-get-attachment-html') }}",
                 data: {
                     _token: $('meta[name="_token"]').attr('content'),
                     operate:"item-get",
@@ -759,7 +747,7 @@
             });
 
                     var options = {
-                        url: "{{ url('/telephone/telephone-info-attachment-set') }}",
+                        url: "{{ url('/department/department-info-attachment-set') }}",
                         type: "post",
                         dataType: "json",
                         // target: "#div2",
@@ -786,7 +774,7 @@
                                     type:"post",
                                     dataType:'json',
                                     async:false,
-                                    url: "{{ url('/telephone/telephone-get-attachment-html') }}",
+                                    url: "{{ url('/department/department-get-attachment-html') }}",
                                     data: {
                                         _token: $('meta[name="_token"]').attr('content'),
                                         operate:"item-get",
@@ -826,10 +814,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/telephone/telephone-info-attachment-delete') }}",
+                        "{{ url('/department/department-info-attachment-delete') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "telephone-attachment-delete",
+                            operate: "department-attachment-delete",
                             item_id: $that.attr('data-id')
                         },
                         function(data){

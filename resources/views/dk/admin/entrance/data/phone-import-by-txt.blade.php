@@ -54,11 +54,13 @@
 
                 {{--选择项目--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">选择数据表</label>
+                    <label class="control-label col-md-2">数据表</label>
                     <div class="col-md-8 ">
                         <select class="form-control" name="table_id">
-                            <option value="">选择项目</option>
-                            <option value="pool_bj">pool_bj</option>
+                            <option value="">选择数据表</option>
+                            @foreach(config('sys.data.phone_table_kv') as $k => $v)
+                                <option value="{{ $k }}">{{ $v }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>

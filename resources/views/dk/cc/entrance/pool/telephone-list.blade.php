@@ -157,9 +157,9 @@
                 },
                 "columns": [
                    {
-                       "width": "40px",
                        "title": "选择",
                        "data": "id",
+                       "width": "40px",
                        'orderable': false,
                        render: function(data, type, row, meta) {
                            return '<label><input type="checkbox" name="bulk-id" class="minimal"></label>';
@@ -172,6 +172,16 @@
 //                        "targets": 0,
 //                        'orderable': false
 //                    },
+                    {
+                        "title": "ID",
+                        "data": "id",
+                        "className": "",
+                        "width": "40px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
                     {
                         "title": "城市",
                         "data": "region_name",
@@ -232,6 +242,56 @@
                             return data;
                         }
                     },
+                    {
+                        "title": "成单",
+                        "data": "order_count",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "黑名单",
+                        "data": "blacklist_count",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "优",
+                        "data": "excellent_count",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "良",
+                        "data": "good_count",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "差",
+                        "data": "poor_count",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
                     // {
                     //     "title": "可用",
                     //     "data": "count_for_1",
@@ -266,7 +326,7 @@
                         "title": "最近提取",
                         "data": "last_task_datetime",
                         "className": "",
-                        "width": "60px",
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
@@ -286,7 +346,7 @@
                         "title": "文件数量",
                         "data": "id",
                         "className": "",
-                        "width": "60px",
+                        "width": "40px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return '<input type="text" class="form-control file_num" placeholder="文件数量" value="1">';
@@ -296,7 +356,7 @@
                         "title": "文件大小",
                         "data": "id",
                         "className": "",
-                        "width": "60px",
+                        "width": "40px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return '<input type="text" class="form-control file_size" placeholder="0为平均" value="0">';
@@ -315,7 +375,7 @@
                     {
                         "title": "操作",
                         "data": "id",
-                        "width": "160px",
+                        "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 

@@ -704,6 +704,27 @@ class DKCCController extends Controller
 
 
 
+    /*
+     * 任务管理
+     */
+
+    // 【任务】返回-列表-视图（全部任务）
+    public function view_pool_task_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_pool_task_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_pool_task_list_datatable(request()->all());
+    }
+
+
+    // 【任务】
+    public function operate_pool_task_file_download()
+    {
+        return $this->repo->operate_pool_task_file_download(request()->all());
+    }
+
+
+
+
 
 
 

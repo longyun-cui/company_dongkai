@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use DB;
 
-class DK_POOL_BJ extends Model
+class DK_Pool_BJ extends Model
 {
 //    use SoftDeletes;
     //
@@ -46,6 +46,9 @@ class DK_POOL_BJ extends Model
         'created_date'
     ];
 //    protected $dateFormat = 'U';
+
+//    public $timestamps = false; // 完全禁用时间戳
+    const UPDATED_AT = null; // 禁用 updated_at
 
     protected $hidden = ['content','custom'];
 

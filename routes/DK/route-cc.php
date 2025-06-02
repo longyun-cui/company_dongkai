@@ -178,6 +178,13 @@ Route::group(['middleware' => ['dk.cc.login','dk.cc.password_change']], function
     Route::match(['get','post'], '/pool/telephone-blacklist-import', $controller.'@operate_service_telephone_blacklist_import');
     // 下载
     Route::post('/pool/telephone-download', $controller.'@operate_pool_telephone_download');
+    /*
+     * 任务管理
+     */
+    // 列表
+    Route::match(['get','post'], '/pool/task-list', $controller.'@view_pool_task_list');
+    // 【任务】下载
+    Route::post('/pool/task-file-download', $controller.'@operate_pool_task_file_download');
 
 
 

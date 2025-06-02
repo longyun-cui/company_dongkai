@@ -441,7 +441,7 @@ class DKAdminRepository {
         if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
 
         $table_id = $post_data['table_id'];
-        if(!in_array($table_id,['pool_bj'])) return response_error([],"数据表有误！");
+        if(!in_array($table_id,config('sys.data.phone_table'))) return response_error([],"数据表有误！");
 
         // 单文件
         if(!empty($post_data["txt-file"]))

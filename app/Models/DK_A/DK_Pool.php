@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use DB;
 
-class DK_POOL extends Model
+class DK_Pool extends Model
 {
 //    use SoftDeletes;
     //

@@ -3,8 +3,9 @@ namespace App\Repositories\DK;
 
 use App\Models\DK_A\DK_A_Order;
 
-use App\Models\DK_A\DK_POOL;
-use App\Models\DK_A\DK_POOL_BJ;
+use App\Models\DK_A\DK_Pool_Task;
+use App\Models\DK_A\DK_Pool;
+use App\Models\DK_A\DK_Pool_BJ;
 
 use App\Models\DK_CC\DK_CC_Team;
 use App\Models\DK_CC\DK_CC_Telephone;
@@ -4998,7 +4999,7 @@ class DKCCRepository {
 //        $collapsed = collect($city_list)->collapse()->toArray();
 //        dd($city_list);
 
-        $view_data['menu_active_of_service_telephone_list'] = 'active menu-open';
+        $view_data['menu_active_of_pool_telephone_list'] = 'active menu-open';
         $view_blade = env('TEMPLATE_DK_CC').'entrance.pool.telephone-list';
         return view($view_blade)->with($view_data);
     }
@@ -5008,7 +5009,7 @@ class DKCCRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = DK_POOL::select('*');
+        $query = DK_Pool::select('*');
 //            ->addSelect(DB::raw("
 //                    count('*') as count_for_all
 //                "));
@@ -5847,36 +5848,48 @@ class DKCCRepository {
         if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
 
         $date = date('Y-m-d');
+        $date_Ymd = date('Ymd');
 
         $telephone_count = $post_data["telephone_count"];
         $file_num = $post_data["file_num"];
         $file_size = $post_data["file_size"];
 
-        $provinceCode = $post_data["provinceCode"];
-        $cityCode = $post_data["cityCode"];
-        $areaCode = $post_data["areaCode"];
-        $tag = $post_data["tag"];
+        $pool_id = $post_data["pool_id"];
+        $pool = DK_Pool::find($pool_id);
+        if($pool)
+        {
+            $region_name = $pool->region_name;
+            $pool_name = $pool->region_name;
+        }
+        else return response_error([],"电话池不存在！");
+
+
+
+//        $provinceCode = $post_data["provinceCode"];
+//        $cityCode = $post_data["cityCode"];
+//        $areaCode = $post_data["areaCode"];
+//        $tag = $post_data["tag"];
+//
+//
+//        $provinceName = config('location_city.province.'.$provinceCode);
+//        $cityName = config('location_city.city.'.$provinceCode.'.'.$cityCode);
+//        $areaName = config('location_city.district.'.$cityCode.'.'.$areaCode);
+
+
         $extraction_name = $post_data["extraction_name"];
-
-        $provinceName = config('location_city.province.'.$provinceCode);
-        $cityName = config('location_city.city.'.$provinceCode.'.'.$cityCode);
-        $areaName = config('location_city.district.'.$cityCode.'.'.$areaCode);
-
         if($extraction_name)
         {
             $name = $extraction_name;
         }
         else
         {
-            if($areaName) $name = $date.'-'.$cityName.'-'.$areaName;
-            else $name = $date.'-'.$cityName;
-            if($tag) $name.= "-".$tag;
+            $name = $pool_name.'-'.$date_Ymd;
         }
 
-        $telephone_where['provinceCode'] = $provinceCode;
-        $telephone_where['cityCode'] = $cityCode;
-        $telephone_where['areaCode'] = $areaCode;
-        $telephone_where['tag'] = $post_data["tag"];
+//        $telephone_where['provinceCode'] = $provinceCode;
+//        $telephone_where['cityCode'] = $cityCode;
+//        $telephone_where['areaCode'] = $areaCode;
+//        $telephone_where['tag'] = $post_data["tag"];
 
 
         // 启动数据库事务
@@ -5884,14 +5897,16 @@ class DKCCRepository {
         try
         {
 
-            $task = new DK_CC_Task;
+            $task = new DK_Pool_Task;
 
             $task_insert['creator_id'] = $me->id;
             $task_insert['name'] = $name;
-            $task_insert['provinceCode'] = $provinceCode;
-            $task_insert['cityCode'] = $cityCode;
-            $task_insert['areaCode'] = $areaCode;
-            $task_insert['tag'] = $tag;
+            $task_insert['pool_id'] = $pool_id;
+            $task_insert['region_name'] = $region_name;
+//            $task_insert['provinceCode'] = $provinceCode;
+//            $task_insert['cityCode'] = $cityCode;
+//            $task_insert['areaCode'] = $areaCode;
+//            $task_insert['tag'] = $tag;
             $task_insert['extraction_telephone_count'] = $telephone_count;
             $task_insert['extraction_file_num'] = $file_num;
             $task_insert['extraction_file_size'] = $file_size;
@@ -5900,23 +5915,27 @@ class DKCCRepository {
 
             $task_id = $task->id;
 
+//            dd(now()->subDays(7)->format('Y-m-d'));
 //            dd(now()->subDays(7)->startOfDay());
 
-            $telephone = DK_CC_Telephone::select('telephone_number')->withTrashed()
+//            $telephone = DK_Pool_BJ::select('phone')->withTrashed()
+            $telephone = DK_Pool_BJ::select('phone')
 //                ->where(function ($query) {
-//                    $query->whereNull('last_extraction_time')
-//                        ->orWhereDate('last_extraction_time', '<=', now()->subDays(7));
+//                    $query->whereNull('last_extraction_date')
+//                        ->orWhereDate('last_extraction_date', '<=', now()->subDays(7)->format('Y-m-d'));
 //                })
-                ->where($telephone_where)
-                ->where(['item_status'=>1,'is_blacklisted'=>0])
+//                ->where($telephone_where)
+//                ->where(['item_status'=>1,'is_blacklisted'=>0])
+//                ->where(['quality'=>1])
+                ->whereIn('quality',[1])
                 ->orderby('task_id','asc')
                 ->limit($telephone_count);
 
 
             $telephone_update['task_id'] = $task_id;
-            $telephone_update['last_extraction_time'] = $date;
+            $telephone_update['last_extraction_date'] = $date;
             $telephone->update($telephone_update);
-            $telephone_list = DK_CC_Telephone::where('task_id',$task_id)->get();
+            $telephone_list = DK_Pool_BJ::where('task_id',$task_id)->get();
 
 
             $upload_path = <<<EOF
@@ -5929,7 +5948,8 @@ EOF;
             {
                 mkdir($storage_path, 0766, true);
             }
-            $filename = $name.'-'.$task_id;
+//            $filename = $name.'-'.$task_id;
+            $filename = $task_id.'-'.$name;
             $extension = '.txt';
 
 
@@ -5958,7 +5978,7 @@ EOF;
                     // 遍历电话号码数组，逐行写入文件
                     foreach ($chunk as $phoneNumber)
                     {
-                        fwrite($file, $phoneNumber->telephone_number . PHP_EOL);
+                        fwrite($file, $phoneNumber->phone . PHP_EOL);
                     }
 
                     // 关闭文件
@@ -5980,7 +6000,7 @@ EOF;
                 // 遍历电话号码数组，逐行写入文件
                 foreach ($telephone_list as $phoneNumber)
                 {
-                    fwrite($file, $phoneNumber->telephone_number . PHP_EOL);
+                    fwrite($file, $phoneNumber->phone . PHP_EOL);
                 }
 
                 // 关闭文件
@@ -5998,7 +6018,165 @@ EOF;
             $task->content = json_encode($file_list);
             $task->save();
 
+//            return response_success();
             return response_success(json_encode($file_list));
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+
+
+
+
+
+
+    /*
+     * TASK 任务管理
+     */
+    // 【任务】返回-列表-视图
+    public function view_pool_task_list($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,41])) return view($this->view_blade_403);
+
+        $return['menu_active_of_pool_task_list'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.pool.task-list';
+        return view($view_blade)->with($return);
+    }
+    // 【任务】返回-列表-数据
+    public function get_pool_task_list_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_Pool_Task::select('*')
+            ->withTrashed()
+            ->with([
+                'creator'=>function($query) { $query->select(['id','username','true_name']); }
+            ]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+//        dd($list->toArray());
+
+        foreach($list as $k => $v)
+        {
+            // 省
+            if($v->provinceCode)
+            {
+                $v->provinceName = config('location_city.province.'.$v->provinceCode);
+            }
+            else $v->provinceName = '--';
+            // 市
+            if($v->cityCode)
+            {
+                $v->cityName = config('location_city.city.'.$v->provinceCode.'.'.$v->cityCode);
+            }
+            else $v->cityName = '--';
+            // 区
+            if($v->areaCode)
+            {
+                $v->areaName = config('location_city.district.'.$v->cityCode.'.'.$v->areaCode);
+            }
+            else $v->areaName = '--';
+        }
+//        $list = $list->sortBy(['district_id'=>'asc'])->values();
+//        $list = $list->sortBy(function ($item, $key) {
+//            return $item['district_group_id'];
+//        })->values();
+//        dd($list->toArray());
+
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【任务】文件下载
+    public function operate_pool_task_file_download($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'service-task-file-download') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Pool_Task::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【任务】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,19,61])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[88]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+
+        $project_id = $item->project_id;
+        $client_phone = $item->client_phone;
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+//            $record = new DK_Record;
+//
+//            $record_data["ip"] = Get_IP();
+//            $record_data["record_object"] = 21;
+//            $record_data["record_category"] = 11;
+//            $record_data["record_type"] = 1;
+//            $record_data["creator_id"] = $me->id;
+//            $record_data["order_id"] = $id;
+//            $record_data["operate_object"] = 71;
+//            $record_data["operate_category"] = 11;
+//            $record_data["operate_type"] = 1;
+//
+//            $bool_1 = $record->fill($record_data)->save();
+//            if(!$bool_1) throw new Exception("insert--record--fail");
+
+            DB::commit();
+            return response_success($item->content);
         }
         catch (Exception $e)
         {
