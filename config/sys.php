@@ -18,11 +18,13 @@
             'phone_table_kv' => [
                 'a_pool_bj' => '北京',
                 'a_pool_tj' => '天津',
+                'a_pool_wh' => '武汉',
             ],
 
             'phone_table' => [
                 'a_pool_bj',
                 'a_pool_tj',
+                'a_pool_wh',
             ],
 
             'wb_address' => '',
@@ -30,40 +32,6 @@
 
 
 
-        'inspected_status' => [
-            '待审核',
-            '已审核',
-            '已处理',
-            '已操作'
-        ],
-
-        'inspected_result' => [
-            '通过',
-            '拒绝',
-            '重复',
-//            '重复•可分发',
-            '内部通过',
-            '二次待审',
-            '已审未提',
-            '回访重提'
-        ],
-
-        'delivered_status' => [
-            '待审核',
-            '已审核',
-            '已处理',
-            '已操作'
-        ],
-
-        'delivered_result' => [
-            '待交付',
-            '已交付',
-            '内部交付',
-            '隔日交付',
-            '重复',
-            '驳回',
-            '等待再审'
-        ],
 
 
         'team_district' => [
