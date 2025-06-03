@@ -16,12 +16,16 @@
 
 
             'phone_table_kv' => [
+                'a_current_test' => '测试',
+                'a_current_task' => '任务',
                 'a_pool_bj' => '北京',
                 'a_pool_tj' => '天津',
                 'a_pool_wh' => '武汉',
             ],
 
             'phone_table' => [
+                'a_current_test',
+                'a_current_task',
                 'a_pool_bj',
                 'a_pool_tj',
                 'a_pool_wh',
