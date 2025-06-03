@@ -7505,9 +7505,23 @@ class DKAdminRepository {
         if(!empty($post_data['client_name'])) $query->where('client_name', $post_data['client_name']);
         if(!empty($post_data['client_phone'])) $query->where('client_phone', $post_data['client_phone']);
 
-        if(!empty($post_data['assign'])) $query->whereDate(DB::Raw("from_unixtime(created_at)"), $post_data['assign']);
-        if(!empty($post_data['assign_start'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '>=', $post_data['assign_start']);
-        if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '<=', $post_data['assign_ended']);
+//        if(!empty($post_data['assign'])) $query->whereDate(DB::Raw("from_unixtime(created_at)"), $post_data['assign']);
+        if(!empty($post_data['assign'])) $query->where("delivered_date", $post_data['assign']);
+
+
+        if(!empty($post_data['assign_start']) && !empty($post_data['assign_ended']))
+        {
+            $query->whereDate("delivered_date", '>=', $post_data['assign_start']);
+            $query->whereDate("delivered_date", '<=', $post_data['assign_ended']);
+        }
+        else if(!empty($post_data['assign_start']))
+        {
+            $query->where("delivered_date", $post_data['assign_start']);
+        }
+        else if(!empty($post_data['assign_ended']))
+        {
+            $query->where("delivered_date", $post_data['assign_ended']);
+        }
 
 
 
