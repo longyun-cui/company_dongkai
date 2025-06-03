@@ -21,7 +21,13 @@ class DK_Pool_BJ extends Model
 
         'phone',
 
-        'call_cnt_8',
+        'last_extraction_date',
+        'last_call_date',
+
+        'call_cnt_1_6',
+        'call_cnt_7_',
+        'call_cnt_1_8',
+        'call_cnt_9_',
         'call_cnt_9_15',
         'call_cnt_16_25',
         'call_cnt_26_45',
