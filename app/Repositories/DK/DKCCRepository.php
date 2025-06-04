@@ -5920,10 +5920,10 @@ class DKCCRepository {
 
 //            $telephone = DK_Pool_BJ::select('phone')->withTrashed()
             $telephone = DK_Pool_BJ::select('phone')
-                ->where(function ($query) {
-                    $query->whereNull('last_extraction_date')
-                        ->orWhereDate('last_extraction_date', '<', now()->subDays(1)->format('Y-m-d'));
-                })
+//                ->where(function ($query) {
+//                    $query->whereNull('last_extraction_date')
+//                        ->orWhereDate('last_extraction_date', '<', now()->subDays(1)->format('Y-m-d'));
+//                })
                 ->where(function ($query) {
                     $query->whereNull('last_call_date')
                         ->orWhereDate('last_call_date', '<', now()->subDays(1)->format('Y-m-d'));
