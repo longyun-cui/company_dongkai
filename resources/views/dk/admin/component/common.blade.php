@@ -1,3 +1,84 @@
+{{--显示-信息--}}
+<div class="modal fade modal-main-body modal-wrapper" id="modal-for-phone-pool-info">
+    <div class="modal-content col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
+
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border margin-top-16px margin-bottom-16px">
+                <h3 class="box-title">
+                    【<span class="field-set-item-name">订单</span>】
+                    【<span class="field-set-item-id"></span>】
+                </h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+
+            <form action="" method="post" class="form-horizontal form-bordered" id="form-phone-pool-info-modal">
+                <div class="box-body  info-body">
+
+                    {{ csrf_field() }}
+                    <input type="hidden" name="operate" value="order-inspect" readonly>
+                    <input type="hidden" name="detail-inspected-order-id" value="0" readonly>
+
+                    {{--项目--}}
+                    <div class="form-group item-detail-quality">
+                        <label class="control-label col-md-2">评分</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate="quality"></div>
+                    </div>
+                    {{--通话次数--}}
+                    <div class="form-group item-detail-call_cnt">
+                        <label class="control-label col-md-2">通话次数</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <label class="col-md-2"></label>
+                    </div>
+                    {{--1-8秒--}}
+                    <div class="form-group item-detail-call_cnt_1_8">
+                        <label class="control-label col-md-2">1-8秒</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate=""></div>
+                    </div>
+                    {{--9秒以上--}}
+                    <div class="form-group item-detail-call_cnt_9_above">
+                        <label class="control-label col-md-2">9秒以上</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate=""></div>
+                    </div>
+                    {{--最近提取时间--}}
+                    <div class="form-group item-detail-last_extraction_date">
+                        <label class="control-label col-md-2">最近提取时间</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate=""></div>
+                    </div>
+
+                </div>
+            </form>
+
+
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <button type="button" class="btn btn-default" id="modal-cancel-for-field-info">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
 {{--修改-属性-信息--}}
 <div class="modal fade modal-main-body modal-wrapper" id="modal-for-field-set">
     <div class="modal-content col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">

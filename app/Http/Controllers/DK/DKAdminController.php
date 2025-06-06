@@ -455,6 +455,11 @@ class DKAdminController extends Controller
     {
         return $this->repo->v1_operate_for_order_item_get_api_call_record(request()->all());
     }
+    // 【工单-管理】获取
+    public function v1_operate_for_order_item_get_phone_pool_info()
+    {
+        return $this->repo->v1_operate_for_order_item_get_phone_pool_info(request()->all());
+    }
 
 
 

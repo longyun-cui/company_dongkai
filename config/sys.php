@@ -15,6 +15,18 @@
             ],
 
 
+            'city_pool_table_kv' => [
+                '北京市' => 'a_pool_bj',
+                '天津市' => 'a_pool_tj',
+                '武汉市' => 'a_pool_wh',
+            ],
+            'city_pool' => [
+                '北京市',
+                '天津市',
+                '武汉市',
+            ],
+
+
             'phone_table_kv' => [
                 'a_current_test' => '测试',
                 'a_current_task' => '任务',
@@ -22,7 +34,6 @@
                 'a_pool_tj' => '天津',
                 'a_pool_wh' => '武汉',
             ],
-
             'phone_table' => [
                 'a_current_test',
                 'a_current_task',

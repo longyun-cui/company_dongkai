@@ -7006,6 +7006,47 @@ class DKAdminRepository {
     }
 
 
+    // 【工单-管理】获取 GET
+    public function v1_operate_for_order_item_get_phone_pool_info($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'phone.required' => 'phone.required.',
+            'city.required' => 'city.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'phone' => 'required',
+            'city' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-get') return response_error([],"参数[operate]有误！");
+
+        $city = $post_data["city"];
+        if(!in_array($city,config('sys.data.city_pool'))) return response_error([],"城市不存在！");
+        $city_pool_table = config('sys.data.city_pool_table_kv.'.$city);
+
+        $phone = $post_data["phone"];
+
+        $item = DB::table($city_pool_table)->where('phone',$phone)->first();
+        if(!$item) return response_error([],"不存在警告，请刷新页面重试！");
+
+        return response_success($item,"");
+    }
+
+
 
 
 

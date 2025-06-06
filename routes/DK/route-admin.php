@@ -110,6 +110,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/v1/operate/order/item-inspect', $controller.'@v1_operate_for_order_item_inspect');
     Route::post('/v1/operate/order/item-deliver', $controller.'@v1_operate_for_order_item_deliver');
     Route::post('/v1/operate/order/item-get-api-call-record', $controller.'@v1_operate_for_order_item_get_api_call_record');
+    Route::post('/v1/operate/order/item-get-phone-pool-info', $controller.'@v1_operate_for_order_item_get_phone_pool_info');
 
 
     // 【交付-管理】

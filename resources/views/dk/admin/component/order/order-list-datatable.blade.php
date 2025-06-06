@@ -577,6 +577,21 @@
                     "width": "120px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if("{{ in_array($me->user_type,[0,1,11,19]) }}")
+                        {
+                            $(nTd).attr('data-row-index',iRow);
+
+                            $(nTd).addClass('modal-show-for-phone-pool-info');
+                            $(nTd).attr('data-id',row.id).attr('data-name','电话池');
+                            $(nTd).attr('data-key','pool').attr('data-value',row.id);
+                            $(nTd).attr('data-phone',row.client_phone);
+                            $(nTd).attr('data-city',row.location_city);
+
+                            $(nTd).attr('data-column-type','info');
+                            $(nTd).attr('data-column-name','电话池');
+                        }
+                    },
                     render: function(data, type, row, meta) {
 //                            return data;
                         if(!data) return '';
