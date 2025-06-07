@@ -29,6 +29,22 @@
                         </div>
                         <div class="col-md-2 item-detail-operate" data-operate="quality"></div>
                     </div>
+                    {{--成单数--}}
+                    <div class="form-group item-detail-order_cnt">
+                        <label class="control-label col-md-2">成单数</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <label class="col-md-2"></label>
+                    </div>
+                    {{--成单时间--}}
+                    <div class="form-group item-detail-order_date">
+                        <label class="control-label col-md-2">成单时间</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <label class="col-md-2"></label>
+                    </div>
                     {{--通话次数--}}
                     <div class="form-group item-detail-call_cnt">
                         <label class="control-label col-md-2">通话次数</label>

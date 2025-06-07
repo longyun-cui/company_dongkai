@@ -2011,6 +2011,8 @@
 
 
                         $modal.find('.item-detail-quality .item-detail-text').html($response.data.quality);
+                        $modal.find('.item-detail-order_cnt .item-detail-text').html($response.data.order_cnt);
+                        $modal.find('.item-detail-order_date .item-detail-text').html($response.data.order_date);
                         $modal.find('.item-detail-call_cnt .item-detail-text').html($response.data.call_cnt);
                         $modal.find('.item-detail-call_cnt_1_8 .item-detail-text').html($response.data.call_cnt_1_8);
                         $modal.find('.item-detail-call_cnt_9_above .item-detail-text').html($response.data.call_cnt_9_above);
