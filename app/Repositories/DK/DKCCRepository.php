@@ -5,8 +5,8 @@ use App\Models\DK_A\DK_A_Order;
 
 use App\Models\DK_A\DK_Pool_Task;
 use App\Models\DK_A\DK_Pool;
-use App\Models\DK_A\DK_Pool_BJ;
-use App\Models\DK_A\DK_Pool_WH;
+use App\Models\DK_A\DK_Pool_City_BJ;
+use App\Models\DK_A\DK_Pool_City_WH;
 
 use App\Models\DK_CC\DK_CC_Team;
 use App\Models\DK_CC\DK_CC_Telephone;
@@ -5919,20 +5919,20 @@ class DKCCRepository {
 //            dd(now()->subDays(7)->format('Y-m-d'));
 //            dd(now()->subDays(7)->startOfDay());
 
-//            $telephone = DK_Pool_BJ::select('phone')->withTrashed()
+//            $telephone = DK_Pool_City_BJ::select('phone')->withTrashed()
             if($pool_name == '北京')
             {
-                $telephone = DK_Pool_BJ::select('phone');
+                $telephone = DK_Pool_City_BJ::select('phone');
             }
             else if($pool_name == '武汉')
             {
-                $telephone = DK_Pool_WH::select('phone');
+                $telephone = DK_Pool_City_WH::select('phone');
             }
             else
             {
-                $telephone = DK_Pool_BJ::select('phone');
+                $telephone = DK_Pool_City_BJ::select('phone');
             }
-//            $telephone = DK_Pool_BJ::select('phone')
+//            $telephone = DK_Pool_City_BJ::select('phone')
 //                ->where(function ($query) {
 //                    $query->whereNull('last_extraction_date')
 //                        ->orWhereDate('last_extraction_date', '<', now()->subDays(1)->format('Y-m-d'));
@@ -5953,7 +5953,20 @@ class DKCCRepository {
             $telephone_update['task_id'] = $task_id;
             $telephone_update['last_extraction_date'] = $date;
             $telephone->update($telephone_update);
-            $telephone_list = DK_Pool_BJ::where('task_id',$task_id)->get();
+
+
+            if($pool_name == '北京')
+            {
+                $telephone_list = DK_Pool_City_BJ::select('task_id','phone','quality')->where('task_id',$task_id)->get();
+            }
+            else if($pool_name == '武汉')
+            {
+                $telephone_list = DK_Pool_City_WH::select('task_id','phone','quality')->where('task_id',$task_id)->get();
+            }
+            else
+            {
+                $telephone_list = DK_Pool_City_BJ::select('task_id','phone','quality')->where('task_id',$task_id)->get();
+            }
 
 
             $upload_path = <<<EOF
