@@ -5932,7 +5932,7 @@ class DKCCRepository {
 //                ->where(['item_status'=>1,'is_blacklisted'=>0])
 //                ->where(['quality'=>1])
 //                ->whereIn('quality',[1,2,3])
-                ->where('quality','>',80)
+                ->where('quality','>=',80)
                 ->orderby('task_id','asc')
                 ->limit($telephone_count);
 
