@@ -5855,6 +5855,10 @@ class DKCCRepository {
         $file_num = $post_data["file_num"];
         $file_size = $post_data["file_size"];
 
+        $telephone_count_1 = ceil($telephone_count * 0.5);
+        $telephone_count_2 = ceil($telephone_count * 0.3);
+        $telephone_count_3 = ceil($telephone_count * 0.2);
+
         $pool_id = $post_data["pool_id"];
         $pool = DK_Pool::find($pool_id);
         if($pool)
@@ -5912,9 +5916,15 @@ class DKCCRepository {
             $task_insert['extraction_file_num'] = $file_num;
             $task_insert['extraction_file_size'] = $file_size;
 
+
+
             $bool_t = $task->fill($task_insert)->save();
 
             $task_id = $task->id;
+
+
+            $telephone_update['task_id'] = $task_id;
+            $telephone_update['last_extraction_date'] = $date;
 
 //            dd(now()->subDays(7)->format('Y-m-d'));
 //            dd(now()->subDays(7)->startOfDay());
@@ -5940,19 +5950,33 @@ class DKCCRepository {
             $telephone->where(function ($query) {
                     $query->whereNull('last_call_date')
                         ->orWhereDate('last_call_date', '<', now()->subDays(1)->format('Y-m-d'));
-                })
+                });
 //                ->where($telephone_where)
 //                ->where(['item_status'=>1,'is_blacklisted'=>0])
 //                ->where(['quality'=>1])
 //                ->whereIn('quality',[1,2,3])
-                ->where('quality','>=',80)
+
+            $telephone_1 = (clone $telephone);
+            $telephone_2 = (clone $telephone);
+            $telephone_3 = (clone $telephone);
+
+
+            $telephone_1->where('quality','>=',85)
                 ->orderby('task_id','asc')
-                ->limit($telephone_count);
+                ->limit($telephone_count_1);
+
+            $telephone_2->where('quality','>=',80)->where('quality','<',85)
+                ->orderby('task_id','asc')
+                ->limit($telephone_count_2);
+
+            $telephone_3->where('quality',0)
+                ->orderby('task_id','asc')
+                ->limit($telephone_count_3);
 
 
-            $telephone_update['task_id'] = $task_id;
-            $telephone_update['last_extraction_date'] = $date;
-            $telephone->update($telephone_update);
+            $telephone_1->update($telephone_update);
+            $telephone_2->update($telephone_update);
+            $telephone_3->update($telephone_update);
 
 
             if($pool_name == '北京')
