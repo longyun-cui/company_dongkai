@@ -81,7 +81,7 @@
                 },
                 {
                     "title": "8秒内",
-                    "data": "sum_call_cnt_8",
+                    "data": "sum_call_cnt_1_8",
                     "className": "",
                     "width": "80px",
                     "orderable": false,
@@ -136,7 +136,7 @@
                 },
                 {
                     "title": "91秒以上",
-                    "data": "sum_call_cnt_91",
+                    "data": "sum_call_cnt_91_above",
                     "className": "",
                     "width": "80px",
                     "orderable": false,
@@ -158,7 +158,7 @@
                 },
                 {
                     "title": "8秒内/单",
-                    "data": "per_call_cnt_8",
+                    "data": "per_call_cnt_1_8",
                     "className": "",
                     "width": "80px",
                     "orderable": false,
@@ -213,7 +213,7 @@
                 },
                 {
                     "title": "91秒上/单",
-                    "data": "per_call_cnt_91",
+                    "data": "per_call_cnt_91_above",
                     "className": "",
                     "width": "80px",
                     "orderable": false,

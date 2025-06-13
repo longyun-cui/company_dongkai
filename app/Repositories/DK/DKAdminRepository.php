@@ -9619,12 +9619,12 @@ class DKAdminRepository {
                     DATE_FORMAT(order_date,'%Y-%m-%d') as date_day,
                     DATE_FORMAT(order_date,'%e') as day,
                     count(*) as count,
-                    sum(call_cnt_8) as sum_call_cnt_8,
+                    sum(call_cnt_1_8) as sum_call_cnt_1_8,
                     sum(call_cnt_9_15) as sum_call_cnt_9_15,
                     sum(call_cnt_16_25) as sum_call_cnt_16_25,
                     sum(call_cnt_26_45) as sum_call_cnt_26_45,
                     sum(call_cnt_46_90) as sum_call_cnt_46_90,
-                    sum(call_cnt_91) as sum_call_cnt_91
+                    sum(call_cnt_91_above) as sum_call_cnt_91_above
                 "))
             ->orderBy("order_date", "desc");
 
@@ -9647,12 +9647,12 @@ class DKAdminRepository {
         $total_data['date_day'] = '统计';
         $total_data['count'] = 0;
         $total_data['sum_all'] = 0;
-        $total_data['sum_call_cnt_8'] = 0;
+        $total_data['sum_call_cnt_1_8'] = 0;
         $total_data['sum_call_cnt_9_15'] = 0;
         $total_data['sum_call_cnt_16_25'] = 0;
         $total_data['sum_call_cnt_26_45'] = 0;
         $total_data['sum_call_cnt_46_90'] = 0;
-        $total_data['sum_call_cnt_91'] = 0;
+        $total_data['sum_call_cnt_91_above'] = 0;
 
         $total_data['cnt'] = 0;
         $total_data['cnt_8'] = 0;
@@ -9663,64 +9663,64 @@ class DKAdminRepository {
         foreach ($list as $k => $v)
         {
 
-            $v->sum_all = $v->sum_call_cnt_8
+            $v->sum_all = $v->sum_call_cnt_1_8
                         + $v->sum_call_cnt_9_15
                         + $v->sum_call_cnt_16_25
                         + $v->sum_call_cnt_26_45
                         + $v->sum_call_cnt_46_90
-                        + $v->sum_call_cnt_91;
+                        + $v->sum_call_cnt_91_above;
 //            $list[$v]->sum_all = $v->sum_all;
 
             // 单均通话次数
             if($v->count > 0)
             {
                 $v->per_call = round(($v->sum_all / $v->count),2);
-                $v->per_call_cnt_8 = round(($v->sum_call_cnt_8 / $v->count),2);
+                $v->per_call_cnt_1_8 = round(($v->sum_call_cnt_1_8 / $v->count),2);
                 $v->per_call_cnt_9_15 = round(($v->sum_call_cnt_9_15 / $v->count),2);
                 $v->per_call_cnt_16_25 = round(($v->sum_call_cnt_16_25 / $v->count),2);
                 $v->per_call_cnt_26_45 = round(($v->sum_call_cnt_26_45 / $v->count),2);
                 $v->per_call_cnt_46_90 = round(($v->sum_call_cnt_46_90 / $v->count),2);
-                $v->per_call_cnt_91 = round(($v->sum_call_cnt_91 / $v->count),2);
+                $v->per_call_cnt_91_above = round(($v->sum_call_cnt_91_above / $v->count),2);
             }
             else
             {
                 $v->per_call = 0;
-                $v->per_call_cnt_8 = 0;
+                $v->per_call_cnt_1_8 = 0;
                 $v->per_call_cnt_9_15 = 0;
                 $v->per_call_cnt_16_25 = 0;
                 $v->per_call_cnt_26_45 = 0;
                 $v->per_call_cnt_46_90 = 0;
-                $v->per_call_cnt_91 = 0;
+                $v->per_call_cnt_91_above = 0;
             }
 
             $total_data['count'] += $v->count;
             $total_data['sum_all'] += $v->sum_all;
-            $total_data['sum_call_cnt_8'] += $v->sum_call_cnt_8;
+            $total_data['sum_call_cnt_1_8'] += $v->sum_call_cnt_1_8;
             $total_data['sum_call_cnt_9_15'] += $v->sum_call_cnt_9_15;
             $total_data['sum_call_cnt_16_25'] += $v->sum_call_cnt_16_25;
             $total_data['sum_call_cnt_26_45'] += $v->sum_call_cnt_26_45;
             $total_data['sum_call_cnt_46_90'] += $v->sum_call_cnt_46_90;
-            $total_data['sum_call_cnt_91'] += $v->sum_call_cnt_91;
+            $total_data['sum_call_cnt_91_above'] += $v->sum_call_cnt_91_above;
 
             if($total_data['count'] > 0)
             {
                 $total_data['per_call'] = round(($total_data['sum_all'] / $total_data['count']),2);
-                $total_data['per_call_cnt_8'] = round(($total_data['sum_call_cnt_8'] / $total_data['count']),2);
+                $total_data['per_call_cnt_1_8'] = round(($total_data['sum_call_cnt_1_8'] / $total_data['count']),2);
                 $total_data['per_call_cnt_9_15'] = round(($total_data['sum_call_cnt_9_15'] / $total_data['count']),2);
                 $total_data['per_call_cnt_16_25'] = round(($total_data['sum_call_cnt_16_25'] / $total_data['count']),2);
                 $total_data['per_call_cnt_26_45'] = round(($total_data['sum_call_cnt_26_45'] / $total_data['count']),2);
                 $total_data['per_call_cnt_46_90'] = round(($total_data['sum_call_cnt_46_90'] / $total_data['count']),2);
-                $total_data['per_call_cnt_91'] = round(($total_data['sum_call_cnt_91'] / $total_data['count']),2);
+                $total_data['per_call_cnt_91_above'] = round(($total_data['sum_call_cnt_91_above'] / $total_data['count']),2);
             }
             else
             {
                 $total_data['per_call'] = 0;
-                $total_data['per_call_cnt_8'] = 0;
+                $total_data['per_call_cnt_1_8'] = 0;
                 $total_data['per_call_cnt_9_15'] = 0;
                 $total_data['per_call_cnt_16_25'] = 0;
                 $total_data['per_call_cnt_26_45'] = 0;
                 $total_data['per_call_cnt_46_90'] = 0;
-                $total_data['per_call_cnt_91'] = 0;
+                $total_data['per_call_cnt_91_above'] = 0;
             }
 
         }
@@ -9790,12 +9790,12 @@ class DKAdminRepository {
             ->groupBy('region_name')
             ->addSelect(DB::raw("
                     count(*) as count,
-                    sum(call_cnt_8) as sum_call_cnt_8,
+                    sum(call_cnt_1_8) as sum_call_cnt_1_8,
                     sum(call_cnt_9_15) as sum_call_cnt_9_15,
                     sum(call_cnt_16_25) as sum_call_cnt_16_25,
                     sum(call_cnt_26_45) as sum_call_cnt_26_45,
                     sum(call_cnt_46_90) as sum_call_cnt_46_90,
-                    sum(call_cnt_91) as sum_call_cnt_91
+                    sum(call_cnt_91_above) as sum_call_cnt_91_above
                 "))
             ->orderBy("count", "desc");
 
@@ -9814,12 +9814,12 @@ class DKAdminRepository {
         $total_data['region_name'] = '统计';
         $total_data['count'] = 0;
         $total_data['sum_all'] = 0;
-        $total_data['sum_call_cnt_8'] = 0;
+        $total_data['sum_call_cnt_1_8'] = 0;
         $total_data['sum_call_cnt_9_15'] = 0;
         $total_data['sum_call_cnt_16_25'] = 0;
         $total_data['sum_call_cnt_26_45'] = 0;
         $total_data['sum_call_cnt_46_90'] = 0;
-        $total_data['sum_call_cnt_91'] = 0;
+        $total_data['sum_call_cnt_91_above'] = 0;
 
         $total_data['cnt'] = 0;
         $total_data['cnt_8'] = 0;
@@ -9830,64 +9830,64 @@ class DKAdminRepository {
         foreach ($list as $k => $v)
         {
 
-            $v->sum_all = $v->sum_call_cnt_8
+            $v->sum_all = $v->sum_call_cnt_1_8
                 + $v->sum_call_cnt_9_15
                 + $v->sum_call_cnt_16_25
                 + $v->sum_call_cnt_26_45
                 + $v->sum_call_cnt_46_90
-                + $v->sum_call_cnt_91;
+                + $v->sum_call_cnt_91_above;
 //            $list[$v]->sum_all = $v->sum_all;
 
             // 单均通话次数
             if($v->count > 0)
             {
                 $v->per_call = round(($v->sum_all / $v->count),2);
-                $v->per_call_cnt_8 = round(($v->sum_call_cnt_8 / $v->count),2);
+                $v->per_call_cnt_1_8 = round(($v->sum_call_cnt_1_8 / $v->count),2);
                 $v->per_call_cnt_9_15 = round(($v->sum_call_cnt_9_15 / $v->count),2);
                 $v->per_call_cnt_16_25 = round(($v->sum_call_cnt_16_25 / $v->count),2);
                 $v->per_call_cnt_26_45 = round(($v->sum_call_cnt_26_45 / $v->count),2);
                 $v->per_call_cnt_46_90 = round(($v->sum_call_cnt_46_90 / $v->count),2);
-                $v->per_call_cnt_91 = round(($v->sum_call_cnt_91 / $v->count),2);
+                $v->per_call_cnt_91_above = round(($v->sum_call_cnt_91_above / $v->count),2);
             }
             else
             {
                 $v->per_call = 0;
-                $v->per_call_cnt_8 = 0;
+                $v->per_call_cnt_1_8 = 0;
                 $v->per_call_cnt_9_15 = 0;
                 $v->per_call_cnt_16_25 = 0;
                 $v->per_call_cnt_26_45 = 0;
                 $v->per_call_cnt_46_90 = 0;
-                $v->per_call_cnt_91 = 0;
+                $v->per_call_cnt_91_above = 0;
             }
 
             $total_data['count'] += $v->count;
             $total_data['sum_all'] += $v->sum_all;
-            $total_data['sum_call_cnt_8'] += $v->sum_call_cnt_8;
+            $total_data['sum_call_cnt_1_8'] += $v->sum_call_cnt_1_8;
             $total_data['sum_call_cnt_9_15'] += $v->sum_call_cnt_9_15;
             $total_data['sum_call_cnt_16_25'] += $v->sum_call_cnt_16_25;
             $total_data['sum_call_cnt_26_45'] += $v->sum_call_cnt_26_45;
             $total_data['sum_call_cnt_46_90'] += $v->sum_call_cnt_46_90;
-            $total_data['sum_call_cnt_91'] += $v->sum_call_cnt_91;
+            $total_data['sum_call_cnt_91_above'] += $v->sum_call_cnt_91_above;
 
             if($total_data['count'] > 0)
             {
                 $total_data['per_call'] = round(($total_data['sum_all'] / $total_data['count']),2);
-                $total_data['per_call_cnt_8'] = round(($total_data['sum_call_cnt_8'] / $total_data['count']),2);
+                $total_data['per_call_cnt_1_8'] = round(($total_data['sum_call_cnt_1_8'] / $total_data['count']),2);
                 $total_data['per_call_cnt_9_15'] = round(($total_data['sum_call_cnt_9_15'] / $total_data['count']),2);
                 $total_data['per_call_cnt_16_25'] = round(($total_data['sum_call_cnt_16_25'] / $total_data['count']),2);
                 $total_data['per_call_cnt_26_45'] = round(($total_data['sum_call_cnt_26_45'] / $total_data['count']),2);
                 $total_data['per_call_cnt_46_90'] = round(($total_data['sum_call_cnt_46_90'] / $total_data['count']),2);
-                $total_data['per_call_cnt_91'] = round(($total_data['sum_call_cnt_91'] / $total_data['count']),2);
+                $total_data['per_call_cnt_91_above'] = round(($total_data['sum_call_cnt_91_above'] / $total_data['count']),2);
             }
             else
             {
                 $total_data['per_call'] = 0;
-                $total_data['per_call_cnt_8'] = 0;
+                $total_data['per_call_cnt_1_8'] = 0;
                 $total_data['per_call_cnt_9_15'] = 0;
                 $total_data['per_call_cnt_16_25'] = 0;
                 $total_data['per_call_cnt_26_45'] = 0;
                 $total_data['per_call_cnt_46_90'] = 0;
-                $total_data['per_call_cnt_91'] = 0;
+                $total_data['per_call_cnt_91_above'] = 0;
             }
 
         }
