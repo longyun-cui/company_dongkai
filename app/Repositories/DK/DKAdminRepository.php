@@ -9303,11 +9303,11 @@ class DKAdminRepository {
         $query_order_s_data = (clone $query_order_published)
             ->addSelect(DB::raw("
                     client_phone,
-                    COUNT(vos_e_cdr.phone) AS call_count
+                    COUNT(a_vos_e_cdr.phone) AS call_count
                 "))
             ->whereIn('dk_admin_order.created_type',[1,99])
-            ->join('vos_e_cdr', 'vos_e_cdr.phone', '=', 'dk_admin_order.client_phone')
-            ->where('vos_e_cdr.call_date', '<', $the_date)
+            ->join('a_vos_e_cdr', 'a_vos_e_cdr.phone', '=', 'dk_admin_order.client_phone')
+            ->where('a_vos_e_cdr.call_date', '<', $the_date)
             ->groupBy('dk_admin_order.client_phone')
         ->get();
 //        dd($query_order_s_data->groupBy('call_count')->toArray());
@@ -9318,7 +9318,7 @@ class DKAdminRepository {
 //    do.client_phone,
 //    COUNT(vc.phone) AS call_count
 //FROM (SELECT DISTINCT client_phone FROM dk_admin_order) do
-//        LEFT JOIN vos_e_cdr vc ON do.client_phone = vc.phone
+//        LEFT JOIN a_vos_e_cdr vc ON do.client_phone = vc.phone
 //GROUP BY do.client_phone;
 
 
@@ -9332,7 +9332,7 @@ class DKAdminRepository {
         $call_data['call_for_all'] = $call_total->call_for_all;
 
         $call_dealt = (clone $query_call)
-            ->join('dk_admin_order', 'vos_e_cdr.phone', '=', 'dk_admin_order.client_phone')
+            ->join('dk_admin_order', 'a_vos_e_cdr.phone', '=', 'dk_admin_order.client_phone')
             ->where('dk_admin_order.published_date', '<', $the_date)
             ->select(DB::raw("
                     count(*) as call_for_dealt
