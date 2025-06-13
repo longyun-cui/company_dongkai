@@ -213,7 +213,7 @@
                 },
                 {
                     "title": "91秒上/单",
-                    "data": "per_call_cnt_91",
+                    "data": "per_call_cnt_91_above",
                     "className": "",
                     "width": "80px",
                     "orderable": false,
