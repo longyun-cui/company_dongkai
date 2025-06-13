@@ -30,6 +30,7 @@
             'phone_table_kv' => [
                 'a_current_test' => '测试',
                 'a_current_task' => '任务',
+                'a_pool_black' => '黑名单',
                 'a_pool_city_bj' => '北京',
                 'a_pool_city_tj' => '天津',
                 'a_pool_city_wh' => '武汉',
@@ -37,6 +38,7 @@
             'phone_table' => [
                 'a_current_test',
                 'a_current_task',
+                'a_pool_black',
                 'a_pool_city_bj',
                 'a_pool_city_tj',
                 'a_pool_city_wh',
