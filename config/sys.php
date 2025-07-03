@@ -19,11 +19,19 @@
                 '北京市' => 'a_pool_city_bj',
                 '天津市' => 'a_pool_city_tj',
                 '武汉市' => 'a_pool_city_wh',
+                '上海市' => 'a_pool_city_sh',
+                '成都市' => 'a_pool_city_cd',
+                '绍兴市' => 'a_pool_city_sx',
+                '汕头市' => 'a_pool_city_st',
             ],
             'city_pool' => [
                 '北京市',
                 '天津市',
                 '武汉市',
+                '上海市',
+                '成都市',
+                '绍兴市',
+                '汕头市',
             ],
 
 
@@ -34,6 +42,10 @@
                 'a_pool_city_bj' => '北京',
                 'a_pool_city_tj' => '天津',
                 'a_pool_city_wh' => '武汉',
+                'a_pool_city_sh' => '上海',
+                'a_pool_city_cd' => '成都',
+                'a_pool_city_sx' => '绍兴',
+                'a_pool_city_st' => '汕头',
             ],
             'phone_table' => [
                 'a_current_test',
@@ -42,6 +54,10 @@
                 'a_pool_city_bj',
                 'a_pool_city_tj',
                 'a_pool_city_wh',
+                'a_pool_city_sh',
+                'a_pool_city_cd',
+                'a_pool_city_sx',
+                'a_pool_city_st',
             ],
 
             'wb_address' => '',
@@ -82,6 +98,63 @@
         ],
 
 
+
+        'api' => [
+
+            'sys_1__call_01__C1' => [
+                'sys' => '1',
+                'call' => '01',
+                'server' => 'http://call01.zlyx.jjccyun.cn',
+                'account' => 'C1',
+                'password' => '032CCBC3C2D0D83E9B6DCEA27D3D795A',
+            ],
+//            'sys_1__call_01__C13' => [
+//                'server' => 'http://call01.zlyx.jjccyun.cn',
+//                'account' => 'C13',
+//                'password' => 'D60D4F0B58C03CB2A67D886451AFB2E1',
+//                'name' => 'FNJ三区',
+//                'team' => '三区',
+//            ],
+
+
+            'sys_1__call_02__C1' => [
+                'sys' => '1',
+                'call' => '02',
+                'server' => 'http://call02.zlyx.jjccyun.cn',
+                'account' => 'C1',
+                'password' => '2690964BADF2F3DA80582753D983FA0B',
+            ],
+//            'sys_1__call_02__C7' => [
+//                'server' => 'http://call02.zlyx.jjccyun.cn',
+//                'account' => 'C7',
+//                'password' => 'F74556C506E5A6045DC1CFAF8E55026F',
+//                'name' => 'FNJ五区',
+//                'team' => '五区',
+//            ],
+
+
+            'sys_1__call_03__C1' => [
+                'sys' => '1',
+                'call' => '03',
+                'server' => 'http://call03.zlyx.jjccyun.cn',
+                'account' => 'C1',
+                'password' => '201784A0FA1C3AB5353B6CE0D2C64BBD',
+            ],
+
+
+            'sys_2__C1' => [
+                'sys' => '2',
+                'call' => '01',
+                'server' => 'http://180.109.247.218:8089',
+                'account' => 'C1',
+                'password' => '40DD14D4C624B14AD1EC18E8986EBD2D1C6929E6',
+            ],
+//            'sys_2__C4' => [
+//                'server' => 'http://call01.zlyx.jjccyun.cn',
+//                'account' => 'C4',
+//                'password' => 'C467B4B664E2DCBE59FE81CDBC1934D59FE4CFC8',
+//            ]
+        ],
 
 
     ];

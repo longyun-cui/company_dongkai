@@ -113,6 +113,11 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/v1/operate/order/item-get-phone-pool-info', $controller.'@v1_operate_for_order_item_get_phone_pool_info');
 
 
+    Route::post('/v1/operate/call/call-record-list', $controller.'@v1_operate_for_call_record_datatable_list_query');
+
+
+
+
     // 【交付-管理】
     Route::post('/v1/operate/delivery/datatable-list-query', $controller.'@v1_operate_for_delivery_datatable_list_query');
 

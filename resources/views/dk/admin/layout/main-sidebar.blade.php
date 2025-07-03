@@ -438,6 +438,29 @@
             @endif
 
 
+            {{--通话清单列表--}}
+            @if(in_array($me->user_type,[0,1,9,11,61,66]))
+                <li class="treeview _none-">
+                    <a class="tab-control datatable-control"
+                       data-type="create"
+                       data-unique="y"
+                       data-id="call-record-list"
+                       data-title='<i class="fa fa-share text-red"></i> 通话记录'
+                       data-content=''
+
+                       data-datatable-type="create"
+                       data-datatable-unique="y"
+                       data-datatable-id="datatable-call-record-list"
+                       data-datatable-target="call-record-list"
+                       data-datatable-clone-object="call-record-list-clone"
+                    >
+                        <i class="fa fa-phone text-red"></i>
+                        <span>通话记录</span>
+                    </a>
+                </li>
+            @endif
+
+
             {{--工单列表--}}
             <li class="treeview _none-">
                 <a class="tab-control datatable-control"

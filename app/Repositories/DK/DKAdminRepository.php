@@ -6829,7 +6829,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【工单-管理】分发
+    // 【工单-管理】外呼系统呼叫记录
     public function v1_operate_for_order_item_get_api_call_record($post_data)
     {
 //        dd($post_data);
@@ -7051,6 +7051,114 @@ class DKAdminRepository {
 
 
 
+    // 【工单-管理】外呼系统呼叫
+    public function v1_operate_for_call_record_datatable_list_query($post_data)
+    {
+//        return response_success([]);
+        $messages = [
+            'phone_list.required' => 'phone_list.required.',
+            'date_start.required' => 'phone_list.required.',
+            'date_ended.required' => 'phone_list.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'phone_list' => 'required',
+            'date_start' => 'required',
+            'date_ended' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $rawNumbers = trim($post_data["phone_list"]);
+        $phoneArray = preg_split('/\r\n|\r|\n/', $rawNumbers);
+        $phoneArray = array_map('trim', $phoneArray); // 移除每个号码首尾空格
+        $phoneArray = array_filter($phoneArray);      // 过滤空行
+
+        $startTime = $post_data["date_start"];
+        $endedTime = $post_data["date_ended"];
+
+        $cdr = [];
+        $api = config('sys.api');
+
+        foreach($phoneArray as $phone)
+        {
+//            dd($phoneArray);
+            foreach ($api as $k => $v)
+            {
+                $API_Customer_Account = $v['account'];
+                $API_Customer_Password = $v['password'];
+                $server = $v['server'];
+                $url = $server."/openapi/V2.0.6/getCdrList";
+
+                $timestamp = time();
+                $seq = $timestamp;
+                $digest = md5($API_Customer_Account.'@'.$timestamp.'@'.$seq.'@'.$API_Customer_Password);
+
+                $request_data = [];
+                $request_data['authentication']['customer'] = $API_Customer_Account;
+                $request_data['authentication']['timestamp'] = $timestamp;
+                $request_data['authentication']['seq'] = $seq;
+                $request_data['authentication']['digest'] = $digest;
+
+                $request_data['request']['seq'] = '';
+                $request_data['request']['userData'] = '';
+//        $request_data['request']['agent'] = $agent;
+                $request_data['request']['callee'] = $phone;
+                $request_data['request']['startTime'] = $startTime.' 00:00:00';
+                $request_data['request']['endTime'] = $endedTime.' 23:59:59';
+
+//            dd($request_data);
+
+                $request_data = json_encode($request_data);
+
+
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Accept: application/json"));
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_POST, true); // post数据
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $request_data); // post的变量
+                $request_result = curl_exec($ch);
+
+                if(!curl_errno($ch))
+                {
+                    $result = json_decode($request_result);
+                    if($result->result->error == "0")
+                    {
+                        if($result->data)
+                        {
+                            $response = $result->data->response;
+                            if($response->total > 0)
+                            {
+                                foreach ($response->cdr as $key => $val)
+                                {
+                                    if(!empty($val->filename))
+                                    {
+                                        $val->sys = $v['sys'];
+                                        $val->call = $v['call'];
+                                        $val->recording = $server.$val->filename;
+                                        $cdr[] = $val;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                curl_close($ch);
+
+            }
+        }
+
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+
+        return datatable_response($cdr, $draw, count($cdr));
+
+    }
 
 
 

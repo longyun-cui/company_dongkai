@@ -462,6 +462,13 @@ class DKAdminController extends Controller
     }
 
 
+    // 【工单-管理】datatable
+    public function v1_operate_for_call_record_datatable_list_query()
+    {
+        return $this->repo->v1_operate_for_call_record_datatable_list_query(request()->all());
+    }
+
+
 
 
     // 【交付-管理】datatable

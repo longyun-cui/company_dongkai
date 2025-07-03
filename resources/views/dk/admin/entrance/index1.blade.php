@@ -68,6 +68,8 @@
 
 <div class="component-container _none">
 
+    @include(env('TEMPLATE_DK_ADMIN').'component.call.call-record-list')
+
     @include(env('TEMPLATE_DK_ADMIN').'component.department.department-list')
     @include(env('TEMPLATE_DK_ADMIN').'component.staff.staff-list')
     @include(env('TEMPLATE_DK_ADMIN').'component.company.company-list')
@@ -144,6 +146,7 @@
 @endsection
 @section('custom-script')
 
+    @include(env('TEMPLATE_DK_ADMIN').'component.call.call-record-list-datatable')
 
     @include(env('TEMPLATE_DK_ADMIN').'component.department.department-list-datatable')
     @include(env('TEMPLATE_DK_ADMIN').'component.department.department-edit-script')

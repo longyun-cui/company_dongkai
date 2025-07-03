@@ -508,6 +508,10 @@
                 {
                     Datatable_Statistic_Call_Order_City('#'+$config.id, $config.chart_id);
                 }
+                else if($id == "datatable-call-record-list")
+                {
+                    Datatable_Call_Record_List('#'+$config.id);
+                }
 
             }
 
