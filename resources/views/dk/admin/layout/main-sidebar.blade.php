@@ -445,7 +445,7 @@
                        data-type="create"
                        data-unique="y"
                        data-id="call-record-list"
-                       data-title='<i class="fa fa-share text-red"></i> 通话记录'
+                       data-title='<i class="fa fa-share text-red"></i> 通话详情'
                        data-content=''
 
                        data-datatable-type="create"
@@ -455,7 +455,7 @@
                        data-datatable-clone-object="call-record-list-clone"
                     >
                         <i class="fa fa-phone text-red"></i>
-                        <span>通话记录</span>
+                        <span>通话详情</span>
                     </a>
                 </li>
             @endif
