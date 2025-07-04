@@ -43,18 +43,14 @@
             "columns": [
                 {
                     "title": "团队",
-                    "data": "customer",
+                    "data": "agent",
                     "className": "text-center",
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.id == "统计")
-                        {
-                            $(nTd).addClass('_bold');
-                        }
                     },
                     render: function(data, type, row, meta) {
-                        if(data) return data;
+                        if(row.customer) return row.customer;
                         else return '--';
                     }
                 },
