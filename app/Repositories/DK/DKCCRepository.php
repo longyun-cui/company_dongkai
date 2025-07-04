@@ -5,6 +5,7 @@ use App\Models\DK_A\DK_A_Order;
 
 use App\Models\DK_A\DK_Pool_Task;
 use App\Models\DK_A\DK_Pool;
+use App\Models\DK_A\DK_Pool_City;
 use App\Models\DK_A\DK_Pool_City_BJ;
 use App\Models\DK_A\DK_Pool_City_WH;
 use App\Models\DK_A\DK_Pool_City_SH;
@@ -5960,7 +5961,7 @@ class DKCCRepository {
             }
             else
             {
-                $telephone = DK_Pool_City_BJ::select('phone');
+                $telephone = DK_Pool_City::select('phone');
             }
 //            $telephone = DK_Pool_City_BJ::select('phone')
 //                ->where(function ($query) {
