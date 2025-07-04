@@ -54,7 +54,8 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        return data;
+                        if(data) return data;
+                        else return '--';
                     }
                 },
                 {
