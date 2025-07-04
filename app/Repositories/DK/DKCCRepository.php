@@ -5860,9 +5860,9 @@ class DKCCRepository {
         $file_num = $post_data["file_num"];
         $file_size = $post_data["file_size"];
 
-        $telephone_count_1 = ceil($telephone_count * 0.5);
+        $telephone_count_1 = ceil($telephone_count * 0.4);
         $telephone_count_2 = ceil($telephone_count * 0.3);
-        $telephone_count_3 = ceil($telephone_count * 0.2);
+        $telephone_count_3 = ceil($telephone_count * 0.3);
 
         $pool_id = $post_data["pool_id"];
         $pool = DK_Pool::find($pool_id);
@@ -5953,6 +5953,7 @@ class DKCCRepository {
             }
             else if($pool_name == '绍兴')
             {
+                dd(1);
                 $telephone = DK_Pool_City_SX::select('phone');
             }
             else if($pool_name == '汕头')
@@ -6008,9 +6009,25 @@ class DKCCRepository {
             {
                 $telephone_list = DK_Pool_City_WH::select('task_id','phone','quality')->where('task_id',$task_id)->get();
             }
+            else if($pool_name == '上海')
+            {
+                $telephone_list = DK_Pool_City_SH::select('task_id','phone','quality')->where('task_id',$task_id)->get();
+            }
+            else if($pool_name == '成都')
+            {
+                $telephone_list = DK_Pool_City_CD::select('task_id','phone','quality')->where('task_id',$task_id)->get();
+            }
+            else if($pool_name == '绍兴')
+            {
+                $telephone_list = DK_Pool_City_SX::select('task_id','phone','quality')->where('task_id',$task_id)->get();
+            }
+            else if($pool_name == '汕头')
+            {
+                $telephone_list = DK_Pool_City_ST::select('task_id','phone','quality')->where('task_id',$task_id)->get();
+            }
             else
             {
-                $telephone_list = DK_Pool_City_BJ::select('task_id','phone','quality')->where('task_id',$task_id)->get();
+                $telephone_list = DK_Pool_City::select('task_id','phone','quality')->where('task_id',$task_id)->get();
             }
 
 
