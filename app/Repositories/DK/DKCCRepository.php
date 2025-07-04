@@ -7,6 +7,10 @@ use App\Models\DK_A\DK_Pool_Task;
 use App\Models\DK_A\DK_Pool;
 use App\Models\DK_A\DK_Pool_City_BJ;
 use App\Models\DK_A\DK_Pool_City_WH;
+use App\Models\DK_A\DK_Pool_City_SH;
+use App\Models\DK_A\DK_Pool_City_CD;
+use App\Models\DK_A\DK_Pool_City_SX;
+use App\Models\DK_A\DK_Pool_City_ST;
 
 use App\Models\DK_CC\DK_CC_Team;
 use App\Models\DK_CC\DK_CC_Telephone;
@@ -5937,6 +5941,22 @@ class DKCCRepository {
             else if($pool_name == '武汉')
             {
                 $telephone = DK_Pool_City_WH::select('phone');
+            }
+            else if($pool_name == '上海')
+            {
+                $telephone = DK_Pool_City_SH::select('phone');
+            }
+            else if($pool_name == '成都')
+            {
+                $telephone = DK_Pool_City_CD::select('phone');
+            }
+            else if($pool_name == '绍兴')
+            {
+                $telephone = DK_Pool_City_SX::select('phone');
+            }
+            else if($pool_name == '汕头')
+            {
+                $telephone = DK_Pool_City_ST::select('phone');
             }
             else
             {
