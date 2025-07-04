@@ -2514,6 +2514,11 @@ class DKAdminController extends Controller
     {
         return $this->repo->operate_download_item_recording_download(request()->all());
     }
+    //
+    public function operate_download_phone_recording_download()
+    {
+        return $this->repo->operate_download_phone_recording_download(request()->all());
+    }
 
 
 

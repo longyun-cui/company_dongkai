@@ -90,6 +90,13 @@
                     "className": "",
                     "width": "80px",
                     "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.is_completed != 1 && row.item_status != 97)
+                        {
+                            $(nTd).attr('data-id',row.id).attr('data-name','电话号码');
+                            $(nTd).attr('data-key','phone').attr('data-value',data);
+                        }
+                    },
                     render: function(data, type, row, meta) {
                         if(data) return data;
                         else return '';

@@ -754,6 +754,7 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     Route::get('/download/file-download', $controller.'@operate_download_file_download');
     Route::get('/download/call-recording-download', $controller.'@operate_download_call_recording_download');
     Route::get('/download/item-recording-download', $controller.'@operate_download_item_recording_download');
+    Route::get('/download/phone-recording-download', $controller.'@operate_download_phone_recording_download');
 
 
 });

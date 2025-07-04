@@ -39030,6 +39030,26 @@ EOF;
 
     }
 
+    public function operate_download_phone_recording_download($post_data)
+    {
+        $phone = $post_data['phone'];
+        $record_url = $post_data['url'];
+
+        $randomNumber = rand(100000, 999900);
+
+        $time = time();
+
+        $name = $phone.'-'.$randomNumber.'.mp3';
+        $extension = 'mp3';
+//        $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+
+        $file = file_get_contents($record_url);
+        return Response::make($file, 200)
+            ->header('Content-Type', 'application/'.$extension)
+            ->header('Content-Disposition', "attachment; filename=$name");
+
+    }
+
 
 
 }

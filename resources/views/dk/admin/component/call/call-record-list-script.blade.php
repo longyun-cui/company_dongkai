@@ -2,7 +2,28 @@
     $(function() {
 
 
+        // 【下载】
+        $(".main-content").on('click', ".item-call-down-submit", function() {
+            var $that = $(this);
+            var $row = $that.parents('tr');
 
+            var $obj = new Object();
+
+            var $randomNumber = Math.floor(Math.random() * 100) + 1;
+            $obj.randomNumber = $randomNumber;
+
+            $phone = $row.find('td[data-key=phone]').attr('data-value');
+            $obj.phone = $phone;
+
+            $recording = $row.find('td[data-key=recording]').attr('data-value');
+            $obj.url = $recording;
+
+            console.log($obj);
+
+            var $url = url_build('/download/phone-recording-download',$obj);
+            window.open($url);
+
+        });
 
 
 
@@ -11,8 +32,9 @@
         $(".main-content").on('click', '#check-review-all', function () {
             $('input[name="bulk-id"]').prop('checked',this.checked); // checked为true时为默认显示的状态
         });
+
         // 【批量操作】
-        $(".main-content").on('click', '#bulk-submit-for-delivery-export--', function() {
+        $(".main-content").on('click', '#bulk-submit-for-down', function() {
             // var $checked = [];
             // $('input[name="bulk-id"]:checked').each(function() {
             //     $checked.push($(this).val());

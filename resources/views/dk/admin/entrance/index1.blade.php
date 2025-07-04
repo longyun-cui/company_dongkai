@@ -147,6 +147,7 @@
 @section('custom-script')
 
     @include(env('TEMPLATE_DK_ADMIN').'component.call.call-record-list-datatable')
+    @include(env('TEMPLATE_DK_ADMIN').'component.call.call-record-list-script')
 
     @include(env('TEMPLATE_DK_ADMIN').'component.department.department-list-datatable')
     @include(env('TEMPLATE_DK_ADMIN').'component.department.department-edit-script')
