@@ -5953,7 +5953,6 @@ class DKCCRepository {
             }
             else if($pool_name == '绍兴')
             {
-                dd(1);
                 $telephone = DK_Pool_City_SX::select('phone');
             }
             else if($pool_name == '汕头')
