@@ -445,7 +445,7 @@
                        data-type="create"
                        data-unique="y"
                        data-id="call-record-list"
-                       data-title='<i class="fa fa-share text-red"></i> 通话详情'
+                       data-title='<i class="fa fa-phone text-red"></i> 通话详情'
                        data-content=''
 
                        data-datatable-type="create"
