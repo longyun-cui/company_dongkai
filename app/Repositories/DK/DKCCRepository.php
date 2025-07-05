@@ -5861,8 +5861,8 @@ class DKCCRepository {
         $file_size = $post_data["file_size"];
 
         $telephone_count_1 = ceil($telephone_count * 0.4);
-        $telephone_count_2 = ceil($telephone_count * 0.3);
-        $telephone_count_3 = ceil($telephone_count * 0.3);
+        $telephone_count_2 = ceil($telephone_count * 0.4);
+        $telephone_count_3 = ceil($telephone_count * 0.2);
 
         $pool_id = $post_data["pool_id"];
         $pool = DK_Pool::find($pool_id);
