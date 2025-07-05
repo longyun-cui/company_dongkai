@@ -142,18 +142,25 @@
             ],
 
 
-            'sys_2__C1' => [
-                'sys' => '2',
-                'call' => '01',
-                'server' => 'http://180.109.247.218:8089',
-                'account' => 'C1',
-                'password' => '40DD14D4C624B14AD1EC18E8986EBD2D1C6929E6',
-            ],
+//            'sys_2__C1' => [
+//                'sys' => '2',
+//                'call' => '01',
+//                'server' => 'http://180.109.247.218:8089',
+//                'account' => 'C1',
+//                'password' => '40DD14D4C624B14AD1EC18E8986EBD2D1C6929E6',
+//            ],
 //            'sys_2__C4' => [
 //                'server' => 'http://call01.zlyx.jjccyun.cn',
 //                'account' => 'C4',
 //                'password' => 'C467B4B664E2DCBE59FE81CDBC1934D59FE4CFC8',
 //            ]
+            'sys_2__C1' => [
+                'sys' => '2',
+                'call' => '01',
+                'server' => 'http://okcc8.zytchina.net',
+                'account' => 'C1',
+                'password' => '19024252118532F0D0EF0C98F0B122EC',
+            ],
         ],
 
 
