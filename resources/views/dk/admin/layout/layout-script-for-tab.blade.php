@@ -75,7 +75,8 @@
 
         // 关闭标签页处理（事件委托）
         $('.nav-tabs').on('click', '.close-tab', function(e) {
-            e.stopPropagation();
+            e.preventDefault();     // 阻止链接默认行为
+            e.stopPropagation();    // 阻止事件冒泡
             const $targetTab = $(this).closest('.nav-item');
             const $tabId = $targetTab.find('a').attr('href');
 
