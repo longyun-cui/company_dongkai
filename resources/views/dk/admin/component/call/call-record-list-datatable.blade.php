@@ -42,7 +42,20 @@
             // },
             "columns": [
                 {
-                    "title": "团队",
+                    "title": "系统",
+                    "data": "sys",
+                    "className": "text-center",
+                    "width": "80px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    },
+                    render: function(data, type, row, meta) {
+                        if(data) return data;
+                        else return '--';
+                    }
+                },
+                {
+                    "title": "账户",
                     "data": "agent",
                     "className": "text-center",
                     "width": "80px",
@@ -51,6 +64,19 @@
                     },
                     render: function(data, type, row, meta) {
                         if(row.customer) return row.customer;
+                        else return '--';
+                    }
+                },
+                {
+                    "title": "团队",
+                    "data": "team",
+                    "className": "text-center",
+                    "width": "80px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    },
+                    render: function(data, type, row, meta) {
+                        if(data) return data;
                         else return '--';
                     }
                 },

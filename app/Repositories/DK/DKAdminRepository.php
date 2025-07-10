@@ -7141,6 +7141,14 @@ class DKAdminRepository {
                                         $val->call = $v['call'];
                                         $val->recording = $server.$val->filename;
                                         $cdr[] = $val;
+                                        if(!empty($val->customer))
+                                        {
+                                            if(!empty(config('sys.api_sys_team.'.$v['sys'].'.'.$val->customer)))
+                                            {
+                                                $val->team = config('sys.api_sys_team.'.$v['sys'].'.'.$val->customer);
+                                            }
+                                            else $val->team = '--';
+                                        }
                                     }
                                 }
                             }

@@ -116,7 +116,6 @@
 //                'team' => '三区',
 //            ],
 
-
             'sys_1__call_02__C1' => [
                 'sys' => '1',
                 'call' => '02',
@@ -132,7 +131,6 @@
 //                'team' => '五区',
 //            ],
 
-
             'sys_1__call_03__C1' => [
                 'sys' => '1',
                 'call' => '03',
@@ -142,24 +140,43 @@
             ],
 
 
-//            'sys_2__C1' => [
-//                'sys' => '2',
-//                'call' => '01',
-//                'server' => 'http://180.109.247.218:8089',
-//                'account' => 'C1',
-//                'password' => '40DD14D4C624B14AD1EC18E8986EBD2D1C6929E6',
-//            ],
-//            'sys_2__C4' => [
-//                'server' => 'http://call01.zlyx.jjccyun.cn',
-//                'account' => 'C4',
-//                'password' => 'C467B4B664E2DCBE59FE81CDBC1934D59FE4CFC8',
-//            ]
             'sys_2__C1' => [
                 'sys' => '2',
                 'call' => '01',
                 'server' => 'http://okcc8.zytchina.net',
                 'account' => 'C1',
                 'password' => '19024252118532F0D0EF0C98F0B122EC',
+            ],
+
+
+//            'sys_3__C1' => [
+//                'sys' => '3',
+//                'call' => '01',
+//                'server' => 'http://180.109.247.218:8089',
+//                'account' => 'C1',
+//                'password' => '40DD14D4C624B14AD1EC18E8986EBD2D1C6929E6',
+//            ],
+        ],
+
+        'api_sys_team' => [
+
+            '1' => [
+                'C5' => 'FNJ大区',
+                'C13' => 'FNJ三区',
+                'C14' => 'FNJ四区',
+                'C7' => 'FNJ五区',
+                'C6' => 'FNJ六区',
+                'C4' => 'FNJ七区',
+                'C2' => 'FNJ八区',
+            ],
+
+            '2' => [
+                'C3' => '青年医美',
+                'C4' => '青年口腔',
+            ],
+
+            '3' => [
+                'C3' => '青年口腔',
             ],
         ],
 

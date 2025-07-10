@@ -439,7 +439,7 @@
 
 
             {{--通话清单列表--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66]))
+            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
                 <li class="treeview _none-">
                     <a class="tab-control datatable-control"
                        data-type="create"
