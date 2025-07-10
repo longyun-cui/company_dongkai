@@ -102,7 +102,7 @@
         'api' => [
 
             'sys_1__call_01__C1' => [
-                'sys' => '1',
+                'sys' => '01',
                 'call' => '01',
                 'server' => 'http://call01.zlyx.jjccyun.cn',
                 'account' => 'C1',
@@ -117,7 +117,7 @@
 //            ],
 
             'sys_1__call_02__C1' => [
-                'sys' => '1',
+                'sys' => '02',
                 'call' => '02',
                 'server' => 'http://call02.zlyx.jjccyun.cn',
                 'account' => 'C1',
@@ -132,7 +132,7 @@
 //            ],
 
             'sys_1__call_03__C1' => [
-                'sys' => '1',
+                'sys' => '03',
                 'call' => '03',
                 'server' => 'http://call03.zlyx.jjccyun.cn',
                 'account' => 'C1',
@@ -141,7 +141,7 @@
 
 
             'sys_2__C1' => [
-                'sys' => '2',
+                'sys' => '21',
                 'call' => '01',
                 'server' => 'http://okcc8.zytchina.net',
                 'account' => 'C1',
@@ -150,7 +150,7 @@
 
 
 //            'sys_3__C1' => [
-//                'sys' => '3',
+//                'sys' => '31',
 //                'call' => '01',
 //                'server' => 'http://180.109.247.218:8089',
 //                'account' => 'C1',
@@ -160,22 +160,40 @@
 
         'api_sys_team' => [
 
-            '1' => [
+            '01' => [
                 'C5' => 'FNJ大区',
                 'C13' => 'FNJ三区',
                 'C14' => 'FNJ四区',
+                'C15' => 'FNJ五区',
+                'C16' => 'FNJ六区',
+                'C10' => 'FNJ七区',
+                'C18' => 'FNJ八区',
+                'C19' => 'FNJ九区',
+            ],
+            '02' => [
                 'C7' => 'FNJ五区',
                 'C6' => 'FNJ六区',
+                'C9' => 'FNJ八区',
+                'C8' => 'FNJ十区',
+                'C11' => 'FNJ十三区',
+                'C10' => 'FNJTL',
+            ],
+            '03' => [
                 'C4' => 'FNJ七区',
                 'C2' => 'FNJ八区',
+                'C3' => 'FNJ九区',
+                'C12' => 'FNJ十一区',
+                'C8' => 'FNJJY',
+                'C10' => 'FNJYM',
+                'C20' => 'FNJZF',
             ],
 
-            '2' => [
+            '21' => [
                 'C3' => '青年医美',
                 'C4' => '青年口腔',
             ],
 
-            '3' => [
+            '31' => [
                 'C3' => '青年口腔',
             ],
         ],
