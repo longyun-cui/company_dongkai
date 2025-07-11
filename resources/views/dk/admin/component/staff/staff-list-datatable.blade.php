@@ -155,7 +155,7 @@
                         else if(data == 22) return '<small class="btn-xs bg-purple">人事</small>';
                         else if(data == 31) return '<small class="btn-xs bg-orange">财务经理</small>';
                         else if(data == 33) return '<small class="btn-xs bg-orange">财务</small>';
-                        else if(data == 41) return '<small class="btn-xs bg-purple">团队·总监</small>';
+                        else if(data == 41) return '<small class="btn-xs bg-red">团队·总监</small>';
                         else if(data == 71) return '<small class="btn-xs bg-purple">质检</small><small class="btn-xs btn-danger">经理</small>';
                         else if(data == 77) return '<small class="btn-xs bg-purple">质检员</small>';
                         else if(data == 81) return '<small class="btn-xs bg-olive">客服</small><small class="btn-xs btn-danger">经理</small>';
