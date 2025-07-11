@@ -6914,6 +6914,16 @@ class DKAdminRepository {
             $server = "http://call04.zlyx.jjccyun.cn";
             $url = "http://call04.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
         }
+        else if($serverFrom_name == "call-04")
+        {
+            $server = "http://call04.zlyx.jjccyun.cn";
+            $url = "http://call04.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
+        }
+        else if($serverFrom_name == "sys-21")
+        {
+            $server = "http://okcc8.zytchina.net";
+            $url = "http://okcc8.zytchina.net/openapi/V2.0.6/getCdrList";
+        }
         else
         {
             $server = "http://feiniji.cn";

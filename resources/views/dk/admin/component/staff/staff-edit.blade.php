@@ -40,7 +40,7 @@
                             <button type="button" class="btn radio-btn radio-user-type">
                                 <span class="radio">
                                     <label>
-                                        <input type="radio" name="user_type" value="41"> 团队·总经理
+                                        <input type="radio" name="user_type" value="41"> 团队·总监
                                     </label>
                                 </span>
                             </button>

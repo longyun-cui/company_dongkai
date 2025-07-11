@@ -33,7 +33,7 @@
             @if(in_array($me->user_type,[0,1,9,11]))
             <select class="search-filter form-filter filter-md select2-box-c" name="staff-user-type">
                 <option value="-1">全部人员</option>
-                <option value="41">团队·总经理</option>
+                <option value="41">团队·总监</option>
                 <option value="88">客服</option>
                 <option value="84">客服主管</option>
                 <option value="81">客服经理</option>

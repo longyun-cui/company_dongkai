@@ -67,7 +67,7 @@
                             <option value="-7">【质检】</option>
                             <option value="-6">【运营】</option>
                             <option value="11">总经理</option>
-                            <option value="41">团队·总经理</option>
+                            <option value="41">团队·总监</option>
                             <option value="88">客服</option>
                             <option value="84">客服主管</option>
                             <option value="81">客服经理</option>
@@ -287,7 +287,7 @@
                             else if(data == 22) return '<small class="btn-xs bg-purple">人事</small>';
                             else if(data == 31) return '<small class="btn-xs bg-orange">财务经理</small>';
                             else if(data == 33) return '<small class="btn-xs bg-orange">财务</small>';
-                            else if(data == 41) return '<small class="btn-xs bg-red">团队·总经理</small>';
+                            else if(data == 41) return '<small class="btn-xs bg-red">团队·总监</small>';
                             else if(data == 61) return '<small class="btn-xs bg-blue">运营</small><small class="btn-xs bg-red">经理</small>';
                             else if(data == 66) return '<small class="btn-xs bg-blue">运营人员</small>';
                             else if(data == 71) return '<small class="btn-xs bg-purple">质检</small><small class="btn-xs bg-red">经理</small>';
