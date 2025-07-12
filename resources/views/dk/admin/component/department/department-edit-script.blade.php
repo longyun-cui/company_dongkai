@@ -21,7 +21,7 @@
             var $value = $(this).val();
             if($value == 11)
             {
-                $('#select2-leader').prop('data-type','manager');
+                $('#select2-leader').prop('data-type','director');
                 $('.select2-superior-box').hide();
             }
             else if($value == 21)
@@ -31,7 +31,7 @@
             }
             else
             {
-                $('#select2-leader').prop('data-type','manager');
+                $('#select2-leader').prop('data-type','director');
                 $('.select2-superior-box').hide();
             }
 
