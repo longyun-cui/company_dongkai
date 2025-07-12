@@ -45,7 +45,7 @@
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11]))
-            <select class="search-filter form-filter filter-md select2-box-c" name="staff-department-district">
+            <select class="search-filter form-filter filter-xl select2-box-c" name="staff-department-district">
                 <option value="-1">选择大区</option>
                 @foreach($department_district_list as $v)
                     <option value="{{ $v->id }}">{{ $v->name }}</option>
