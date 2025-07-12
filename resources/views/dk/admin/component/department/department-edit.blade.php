@@ -77,7 +77,7 @@
                 <div class="form-group" style="height:70px;">
                     <label class="control-label col-md-2">选择负责人</label>
                     <div class="col-md-8 ">
-                        <select class="form-control select2-box" name="leader_id" id="select2-leader" data-type="manager" style="width:100%;">
+                        <select class="form-control select2-box" name="leader_id" id="select2-leader" data-type="director" style="width:100%;">
                             <option data-id="-1" value="-1">选择负责人</option>
                         </select>
                     </div>

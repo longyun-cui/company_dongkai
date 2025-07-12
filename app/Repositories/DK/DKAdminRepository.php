@@ -19989,12 +19989,17 @@ EOF;
         if(!empty($post_data['type']))
         {
             $type = $post_data['type'];
-            if($type == 'manager') $query->where(['user_type'=>81]);
+            if($type == 'director') $query->where(['user_type'=>41]);
+            else if($type == 'manager') $query->where(['user_type'=>81]);
             else if($type == 'supervisor') $query->where(['user_type'=>84]);
             else $query->where(['user_type'=>81]);
         }
         else $query->where(['user_type'=>81]);
 
+        if($me->user_type == 41)
+        {
+            $query->where('department_district_id',$me->department_district_id);
+        }
         if($me->user_type == 81)
         {
             $query->where('department_district_id',$me->department_district_id);
