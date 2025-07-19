@@ -109,6 +109,16 @@
                     "width": "40px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.is_completed != 1 && row.item_status != 97)
+                        {
+                            $(nTd).addClass('order_id');
+                            $(nTd).attr('data-id',row.id).attr('data-name','工单ID');
+                            $(nTd).attr('data-key','order_id').attr('data-value',row.id);
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        }
+                    },
                     render: function(data, type, row, meta) {
                         return row.id;
                     }

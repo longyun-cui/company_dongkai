@@ -1698,10 +1698,16 @@
                                 layer.closeAll('loading');
                                 // $('#datatable-for-order-list').DataTable().ajax.reload(null,false);
 
-                                $('input[name="bulk-id"]:checked').each(function() {
+                                if($response.msg != '') layer.msg($response.msg);
 
-                                    var $that = $(this);
-                                    var $row = $that.parents('tr');
+
+                                var $ids = $response.data.ids;
+                                // console.log($ids);
+
+                                $ids.forEach(function(value,index) {
+                                    console.log(value);
+                                    var $item = $('.order_id[data-value='+value+']');
+                                    var $row = $item.parents('tr');
 
                                     var $delivered_result = $('select[name="bulk-operate-delivered-result"]').val();
                                     var $client_id = $('select[name="bulk-operate-delivered-client"]').val();
@@ -1729,8 +1735,41 @@
                                     var $second = ('00'+$date.getSeconds()).slice(-2);
                                     var $time_html = $month+'-'+$day+'&nbsp;'+$hour+':'+$minute+':'+$second;
                                     $row.find('td[data-key=delivered_at]').html($time_html);
-
                                 });
+
+                                {{--$('input[name="bulk-id"]:checked').each(function() {--}}
+
+                                {{--    var $that = $(this);--}}
+                                {{--    var $row = $that.parents('tr');--}}
+
+                                {{--    var $delivered_result = $('select[name="bulk-operate-delivered-result"]').val();--}}
+                                {{--    var $client_id = $('select[name="bulk-operate-delivered-client"]').val();--}}
+                                {{--    var $client_name = $('select[name="bulk-operate-delivered-client"]').find('option:selected').html();--}}
+                                {{--    console.log($client_name);--}}
+
+                                {{--    $row.find('td[data-key=deliverer_name]').html('<a href="javascript:void(0);">{{ $me->true_name }}</a>');--}}
+                                {{--    $row.find('td[data-key=delivered_status]').html('<small class="btn-xs bg-blue">已交付</small>');--}}
+                                {{--    $row.find('td[data-key=delivered_result]').html('<small class="btn-xs bg-olive">'+$delivered_result+'</small>');--}}
+                                {{--    $row.find('td[data-key=client_id]').attr('data-value',$client_id);--}}
+                                {{--    if($client_id != "-1")--}}
+                                {{--    {--}}
+                                {{--        $row.find('td[data-key=client_id]').html('<a href="javascript:void(0);">'+$client_name+'</a>');--}}
+                                {{--    }--}}
+                                {{--    $row.find('td[data-key=order_status]').html('<small class="btn-xs bg-olive">已交付</small>');--}}
+                                {{--    // $row.find('.item-deliver-submit').replaceWith('<a class="btn btn-xs bg-green disabled">已交</a>');--}}
+
+
+                                {{--    var $date = new Date();--}}
+                                {{--    var $year = $date.getFullYear();--}}
+                                {{--    var $month = ('00'+($date.getMonth()+1)).slice(-2);--}}
+                                {{--    var $day = ('00'+($date.getDate())).slice(-2);--}}
+                                {{--    var $hour = ('00'+$date.getHours()).slice(-2);--}}
+                                {{--    var $minute = ('00'+$date.getMinutes()).slice(-2);--}}
+                                {{--    var $second = ('00'+$date.getSeconds()).slice(-2);--}}
+                                {{--    var $time_html = $month+'-'+$day+'&nbsp;'+$hour+':'+$minute+':'+$second;--}}
+                                {{--    $row.find('td[data-key=delivered_at]').html($time_html);--}}
+
+                                {{--});--}}
                             }
                         })
                         .fail(function(jqXHR, textStatus, errorThrown) {

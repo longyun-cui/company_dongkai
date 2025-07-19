@@ -6507,6 +6507,28 @@ class DKAdminRepository {
                     $delivered_project_id = $project_id;
                     $delivered_client_id = $client_id;
                 }
+dd(1);
+
+
+                // 订单重复
+                $order_repeated = DK_Order::withTrashed()->where('id','!=',$id)
+                    ->where('client_phone',$item->client_phone)
+                    ->where('client_id',$delivered_client_id)
+                    ->get();
+                if(count($order_repeated) > 0)
+                {
+                    continue;
+                }
+
+                // 交付重复
+                $delivery_repeated = DK_Pivot_Client_Delivery::where(['client_id'=>$delivered_client_id,'client_phone'=>$item->client_phone])
+                    ->get();
+                if(count($delivery_repeated) > 0)
+                {
+                    continue;
+                }
+
+
 
 
                 if(!in_array($delivered_client_id,['-1','0',-1,0]) && $delivered_result == "已交付")
@@ -29408,6 +29430,9 @@ EOF;
 
         $date = date("Y-m-d");
 
+
+        $sorted = collect($ids_array)->sort();
+
         // 启动数据库事务
         DB::beginTransaction();
         try
@@ -29425,9 +29450,11 @@ EOF;
 //            {
 //            }
 
-            foreach($ids_array as $key => $id)
+            $count = 0;
+            $msg = '';
+            $ids = [];
+            foreach($sorted as $key => $id)
             {
-
 
                 $item = DK_Order::withTrashed()->find($id);
                 if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
@@ -29450,6 +29477,27 @@ EOF;
                 {
                     $delivered_project_id = $project_id;
                     $delivered_client_id = $client_id;
+                }
+
+
+                // 订单重复
+                $order_repeated = DK_Order::withTrashed()->where('id','!=',$id)
+                    ->where('client_phone',$item->client_phone)
+                    ->where('client_id',$delivered_client_id)
+                    ->get();
+                if(count($order_repeated) > 0)
+                {
+                    $msg = '有部分重复交付';
+                    continue;
+                }
+
+                // 交付重复
+                $delivery_repeated = DK_Pivot_Client_Delivery::where(['client_id'=>$delivered_client_id,'client_phone'=>$item->client_phone])
+                    ->get();
+                if(count($delivery_repeated) > 0)
+                {
+                    $msg = '有部分重复交付';
+                    continue;
                 }
 
 
@@ -29534,11 +29582,14 @@ EOF;
                     if(!$bool_1) throw new Exception("insert--record--fail");
                 }
 
+                $count += 1;
+                $ids[] = $id;
+
             }
 
 
             DB::commit();
-            return response_success([]);
+            return response_success(['ids'=>$ids],$msg);
         }
         catch (Exception $e)
         {
