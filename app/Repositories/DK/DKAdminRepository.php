@@ -29127,7 +29127,9 @@ EOF;
 
 
         // 是否已经分发
-        $is_distributed_list = DK_Pivot_Client_Delivery::where(['client_id'=>$client_id,'client_phone'=>$client_phone])->get();
+        $is_distributed_list = DK_Pivot_Client_Delivery::where(['client_id'=>$client_id,'client_phone'=>$client_phone])
+            ->whereNotIn('delivered_result',['拒绝','驳回'])
+            ->get();
         if(count($is_distributed_list) > 0)
         {
             return response_error([],"该客户已经交付过该号码，不可以重复分发！");
@@ -29484,6 +29486,7 @@ EOF;
                 $order_repeated = DK_Order::withTrashed()->where('id','!=',$id)
                     ->where('client_phone',$item->client_phone)
                     ->where('client_id',$delivered_client_id)
+                    ->whereNotIn('delivered_result',['拒绝','驳回'])
                     ->get();
                 if(count($order_repeated) > 0)
                 {
