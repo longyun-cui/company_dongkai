@@ -654,7 +654,7 @@
                     "title": "项目",
                     "data": "project_id",
                     "className": "",
-                    "width": "120px",
+                    "width": "160px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
@@ -677,12 +677,34 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(row.project_er == null)
+                        if("{{ in_array($me->user_type,[0,1,11,61,66]) }}")
                         {
-                            return '未指定';
+                            if(row.project_er == null)
+                            {
+                                return '未指定';
+                            }
+                            else
+                            {
+                                if(row.project_er.alias_name)
+                                {
+                                    return '<a href="javascript:void(0);">'+row.project_er.name+' ('+row.project_er.alias_name+')'+'</a>';
+                                }
+                                else
+                                {
+                                    return '<a href="javascript:void(0);">'+row.project_er.name+'</a>';
+                                }
+                            }
                         }
-                        else {
-                            return '<a href="javascript:void(0);">'+row.project_er.name+'</a>';
+                        else
+                        {
+                            if(row.project_er == null)
+                            {
+                                return '未指定';
+                            }
+                            else
+                            {
+                                return '<a href="javascript:void(0);">'+row.project_er.name+'</a>';
+                            }
                         }
                     }
                 },

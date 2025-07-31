@@ -187,6 +187,33 @@
                     }
                 },
                 {
+                    "title": "别名",
+                    "data": "alias_name",
+                    "className": "text-center",
+                    "width": "100px",
+                    "orderable": true,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.is_completed != 1 && row.item_status != 97)
+                        {
+                            $(nTd).attr('data-row-index',iRow);
+
+                            $(nTd).addClass('modal-show-for-field-set');
+
+                            $(nTd).attr('data-id',row.id).attr('data-name','别名');
+                            $(nTd).attr('data-key','alias_name').attr('data-value',data);
+
+                            $(nTd).attr('data-column-type','text');
+                            $(nTd).attr('data-column-name','别名');
+
+                            if(row.client_id) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
                     "title": "客户",
                     "data": "client_id",
                     "className": "",
