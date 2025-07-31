@@ -64,6 +64,13 @@
                         <input type="text" class="form-control" name="name" placeholder="项目名称" value="">
                     </div>
                 </div>
+                {{--真实名称--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">真实名称</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="alias_name" placeholder="真实名称" value="">
+                    </div>
+                </div>
 
 
                 {{--客户--}}

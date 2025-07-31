@@ -187,7 +187,7 @@
                     }
                 },
                 {
-                    "title": "别名",
+                    "title": "真实名称",
                     "data": "alias_name",
                     "className": "text-center",
                     "width": "100px",
@@ -199,11 +199,11 @@
 
                             $(nTd).addClass('modal-show-for-field-set');
 
-                            $(nTd).attr('data-id',row.id).attr('data-name','别名');
+                            $(nTd).attr('data-id',row.id).attr('data-name','真实名称');
                             $(nTd).attr('data-key','alias_name').attr('data-value',data);
 
                             $(nTd).attr('data-column-type','text');
-                            $(nTd).attr('data-column-name','别名');
+                            $(nTd).attr('data-column-name','真实名称');
 
                             if(row.client_id) $(nTd).attr('data-operate-type','edit');
                             else $(nTd).attr('data-operate-type','add');
