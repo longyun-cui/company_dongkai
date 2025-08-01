@@ -715,6 +715,7 @@
 
 
                         $modal.find('input[name="name"]').val($response.data.name);
+                        $modal.find('input[name="alias_name"]').val($response.data.alias_name);
 
 
                         if($response.data.client_er)

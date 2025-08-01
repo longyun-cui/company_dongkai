@@ -7331,10 +7331,11 @@ dd(1);
             else
             {
 //            $item->timestamps = false;
-                $item->$column_key = $column_value;
-                $bool = $item->save();
-                if(!$bool) throw new Exception("DK_Project--update--fail");
             }
+
+            $item->$column_key = $column_value;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("DK_Project--update--fail");
 
             if(false) throw new Exception("DK_Project--update--fail");
             else
