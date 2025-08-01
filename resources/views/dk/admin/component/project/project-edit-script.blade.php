@@ -33,6 +33,7 @@
                 return data.text;
             },
             escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            dropdownParent: $('#modal-for-project-edit'), // 替换为你的模态框 ID
             minimumInputLength: 0,
             theme: 'classic'
         });
