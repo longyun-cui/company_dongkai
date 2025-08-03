@@ -38537,6 +38537,10 @@ EOF;
             $cellData[$k]['published_time'] = date('Y-m-d H:i:s', $v['published_at']);
 
             $cellData[$k]['project_er_name'] = $v['project_er']['name'];
+            if($me->department_district_id <= 0)
+            {
+                $cellData[$k]['project_er_alias_name'] = $v['project_er']['alias_name'];
+            }
 //            $cellData[$k]['channel_source'] = $v['channel_source'];
 
 
@@ -38625,30 +38629,61 @@ EOF;
         }
 
 
-        $title_row = [
-            'id'=>'ID',
-            'client_er_name'=>'客户',
-            'delivered_at'=>'交付时间',
-            'creator_name'=>'创建人',
-            'team'=>'团队',
-            'published_time'=>'提交时间',
-            'project_er_name'=>'项目',
+        if($me->department_district_id <= 0)
+        {
+            $title_row = [
+                'id'=>'ID',
+                'client_er_name'=>'客户',
+                'delivered_at'=>'交付时间',
+                'creator_name'=>'创建人',
+                'team'=>'团队',
+                'published_time'=>'提交时间',
+                'project_er_name'=>'项目',
+                'project_er_alias_name'=>'医院真实名称',
 //            'channel_source'=>'渠道来源',
-            'client_type'=>'患者类型',
-            'client_name'=>'客户姓名',
-            'client_phone'=>'客户电话',
-            'wx_id'=>'微信号',
-            'is_wx'=>'是否+V',
-            'location_city'=>'所在城市',
-            'location_district'=>'行政区',
-            'teeth_count'=>'牙齿数量',
-            'description'=>'通话小结',
-            'recording_address'=>'录音地址',
-            'is_repeat'=>'是否重复',
-            'inspector_name'=>'审核人',
-            'inspected_time'=>'审核时间',
-            'inspected_result'=>'审核结果',
-        ];
+                'client_type'=>'患者类型',
+                'client_name'=>'客户姓名',
+                'client_phone'=>'客户电话',
+                'wx_id'=>'微信号',
+                'is_wx'=>'是否+V',
+                'location_city'=>'所在城市',
+                'location_district'=>'行政区',
+                'teeth_count'=>'牙齿数量',
+                'description'=>'通话小结',
+                'recording_address'=>'录音地址',
+                'is_repeat'=>'是否重复',
+                'inspector_name'=>'审核人',
+                'inspected_time'=>'审核时间',
+                'inspected_result'=>'审核结果',
+            ];
+        }
+        else
+        {
+            $title_row = [
+                'id'=>'ID',
+                'client_er_name'=>'客户',
+                'delivered_at'=>'交付时间',
+                'creator_name'=>'创建人',
+                'team'=>'团队',
+                'published_time'=>'提交时间',
+                'project_er_name'=>'项目',
+//            'channel_source'=>'渠道来源',
+                'client_type'=>'患者类型',
+                'client_name'=>'客户姓名',
+                'client_phone'=>'客户电话',
+                'wx_id'=>'微信号',
+                'is_wx'=>'是否+V',
+                'location_city'=>'所在城市',
+                'location_district'=>'行政区',
+                'teeth_count'=>'牙齿数量',
+                'description'=>'通话小结',
+                'recording_address'=>'录音地址',
+                'is_repeat'=>'是否重复',
+                'inspector_name'=>'审核人',
+                'inspected_time'=>'审核时间',
+                'inspected_result'=>'审核结果',
+            ];
+        }
         array_unshift($cellData, $title_row);
 
 
@@ -38678,28 +38713,10 @@ EOF;
             $excel->sheet('全部工单', function($sheet) use($cellData) {
                 $sheet->rows($cellData);
                 $sheet->setWidth(array(
-                    'A'=>10,
-                    'B'=>10,
-                    'C'=>20,
-                    'D'=>10,
-                    'E'=>20,
-                    'F'=>20,
-                    'G'=>20,
-                    'H'=>10,
-                    'I'=>10,
-                    'J'=>16,
-                    'K'=>16,
-                    'L'=>10,
-                    'M'=>10,
-                    'N'=>10,
-                    'O'=>60,
-                    'P'=>60,
-                    'Q'=>10,
-                    'R'=>10,
-                    'S'=>10,
-                    'T'=>20,
-                    'U'=>20,
-                    'V'=>20
+                    'A'=>10, 'B'=>20, 'C'=>20, 'D'=>20, 'E'=>20, 'F'=>20, 'G'=>20,
+                    'H'=>20, 'I'=>20, 'J'=>20, 'K'=>20, 'L'=>20, 'M'=>20, 'N'=>20,
+                    'O'=>20, 'P'=>20, 'Q'=>60, 'R'=>60, 'S'=>60, 'T'=>20,
+                    'U'=>20, 'V'=>20, 'W'=>20, 'X'=>60, 'Y'=>60, 'Z'=>20
                 ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
