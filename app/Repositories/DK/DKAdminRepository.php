@@ -764,11 +764,9 @@ class DKAdminRepository {
             else
             {
                 $query->where(function($query) use($keyword) {
-
-                    $query->where('name','like',"%$keyword%")->orWhere('alias_name',"%$keyword%");
+                    $query->where('name','like',"%$keyword%")->orWhere('alias_name','like',"%$keyword%");
                 });
             }
-
         }
 
         if(!empty($post_data['item_category']))
