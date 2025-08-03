@@ -12380,6 +12380,12 @@ dd(1);
         foreach ($list as $k => $v)
         {
 
+            if(in_array($me->user_type,[0,1,11,61,66,71,77]) && $me->department_district_id <= 0)
+            {
+                if($v['alias_name']) $list[$k]['name'] .= ' ('.$v['alias_name'].')';
+            }
+
+
             if(isset($query_order[$v->id]))
             {
                 $list[$k]->order_count_for_all = $query_order[$v->id]['order_count_for_all'];

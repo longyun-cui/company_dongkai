@@ -79,7 +79,7 @@
                     "title": "项目<br>名称",
                     "data": "name",
                     "className": "text-center",
-                    "width": "100px",
+                    "width": "160px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
