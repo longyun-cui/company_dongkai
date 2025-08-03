@@ -5116,7 +5116,7 @@ class DKAdminRepository {
             ->with([
                 'owner'=>function($query) { $query->select('id','username'); },
                 'client_er'=>function($query) { $query->select('id','username'); },
-                'project_er'=>function($query) { $query->select('id','name'); },
+                'project_er'=>function($query) { $query->select('id','name','alias_name'); },
             ])
             ->find($id);
         if(!$item) return response_error([],"不存在警告，请刷新页面重试！");
@@ -6681,7 +6681,7 @@ dd(1);
             ->with([
                 'creator'=>function($query) { $query->select('id','username'); },
                 'client_er'=>function($query) { $query->select('id','username'); },
-                'project_er'=>function($query) { $query->select('id','name'); }
+                'project_er'=>function($query) { $query->select('id','name','alias_name'); }
             ])->where(['client_phone'=>$client_phone])
 //            ->where('id','<>',$id)
 //            ->where('delivered_status',1)
@@ -6697,7 +6697,7 @@ dd(1);
             ->with([
                 'creator'=>function($query) { $query->select('id','username'); },
                 'client_er'=>function($query) { $query->select('id','username'); },
-                'project_er'=>function($query) { $query->select('id','name'); }
+                'project_er'=>function($query) { $query->select('id','name','alias_name'); }
             ])->where(['client_phone'=>$client_phone])->get();
         $return['deliver_repeat'] = $deliver_repeat;
 
@@ -12931,7 +12931,7 @@ dd(1);
                 'client_er'=>function($query) { $query->select('id','username','true_name'); },
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
                 'inspector'=>function($query) { $query->select('id','name','true_name'); },
-                'project_er'=>function($query) { $query->select('id','name'); },
+                'project_er'=>function($query) { $query->select('id','name','alias_name'); },
                 'department_district_er'=>function($query) { $query->select('id','name'); },
                 'department_group_er'=>function($query) { $query->select('id','name'); }
             ])
@@ -13389,7 +13389,7 @@ dd(1);
                 'client_er'=>function($query) { $query->select('id','username','true_name'); },
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
                 'inspector'=>function($query) { $query->select('id','name','true_name'); },
-                'project_er'=>function($query) { $query->select('id','name'); },
+                'project_er'=>function($query) { $query->select('id','name','alias_name'); },
                 'department_district_er'=>function($query) { $query->select('id','name'); },
                 'department_group_er'=>function($query) { $query->select('id','name'); }
             ])
@@ -13849,7 +13849,7 @@ dd(1);
                 'client_er'=>function($query) { $query->select('id','username','true_name'); },
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
                 'inspector'=>function($query) { $query->select('id','name','true_name'); },
-                'project_er'=>function($query) { $query->select('id','name'); },
+                'project_er'=>function($query) { $query->select('id','name','alias_name'); },
                 'department_district_er'=>function($query) { $query->select('id','name'); },
                 'department_group_er'=>function($query) { $query->select('id','name'); }
             ])
@@ -14277,7 +14277,7 @@ dd(1);
                 'client_er'=>function($query) { $query->select('id','username','true_name'); },
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
                 'inspector'=>function($query) { $query->select('id','name','true_name'); },
-                'project_er'=>function($query) { $query->select('id','name'); },
+                'project_er'=>function($query) { $query->select('id','name','alias_name'); },
                 'department_district_er'=>function($query) { $query->select('id','name'); },
                 'department_group_er'=>function($query) { $query->select('id','name'); }
             ])
@@ -14580,7 +14580,7 @@ dd(1);
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
                 'client_er'=>function($query) { $query->select('id','username','true_name'); },
                 'inspector'=>function($query) { $query->select('id','name','true_name'); },
-                'project_er'=>function($query) { $query->select('id','name'); },
+                'project_er'=>function($query) { $query->select('id','name','alias_name'); },
                 'department_district_er'=>function($query) { $query->select('id','name'); },
                 'department_group_er'=>function($query) { $query->select('id','name'); }
             ])
@@ -14846,7 +14846,7 @@ dd(1);
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
                 'client_er'=>function($query) { $query->select('id','username','true_name'); },
                 'inspector'=>function($query) { $query->select('id','name','true_name'); },
-                'project_er'=>function($query) { $query->select('id','name'); },
+                'project_er'=>function($query) { $query->select('id','name','alias_name'); },
                 'department_district_er'=>function($query) { $query->select('id','name'); },
                 'department_group_er'=>function($query) { $query->select('id','name'); }
             ])
@@ -15112,7 +15112,7 @@ dd(1);
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
                 'client_er'=>function($query) { $query->select('id','username','true_name'); },
                 'inspector'=>function($query) { $query->select('id','name','true_name'); },
-                'project_er'=>function($query) { $query->select('id','name'); },
+                'project_er'=>function($query) { $query->select('id','name','alias_name'); },
                 'department_district_er'=>function($query) { $query->select('id','name'); },
                 'department_group_er'=>function($query) { $query->select('id','name'); }
             ])
@@ -15344,7 +15344,7 @@ dd(1);
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
                 'client_er'=>function($query) { $query->select('id','username','true_name'); },
                 'inspector'=>function($query) { $query->select('id','name','true_name'); },
-                'project_er'=>function($query) { $query->select('id','name'); },
+                'project_er'=>function($query) { $query->select('id','name','alias_name'); },
                 'department_district_er'=>function($query) { $query->select('id','name'); },
                 'department_group_er'=>function($query) { $query->select('id','name'); }
             ])
@@ -15691,7 +15691,7 @@ dd(1);
                 'client_er'=>function($query) { $query->select('id','username','true_name'); },
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
                 'inspector'=>function($query) { $query->select('id','name','true_name'); },
-                'project_er'=>function($query) { $query->select('id','name'); },
+                'project_er'=>function($query) { $query->select('id','name','alias_name','alias_name'); },
                 'department_district_er'=>function($query) { $query->select('id','name'); },
                 'department_group_er'=>function($query) { $query->select('id','name'); }
             ]);
@@ -16104,7 +16104,7 @@ dd(1);
                 'client_er'=>function($query) { $query->select('id','username','true_name'); },
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
                 'inspector'=>function($query) { $query->select('id','name','true_name'); },
-                'project_er'=>function($query) { $query->select('id','name'); },
+                'project_er'=>function($query) { $query->select('id','name','alias_name'); },
                 'department_district_er'=>function($query) { $query->select('id','name'); },
                 'department_group_er'=>function($query) { $query->select('id','name'); }
             ]);
@@ -16523,7 +16523,7 @@ dd(1);
                 'client_er'=>function($query) { $query->select('id','username','true_name'); },
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
                 'inspector'=>function($query) { $query->select('id','name','true_name'); },
-                'project_er'=>function($query) { $query->select('id','name'); },
+                'project_er'=>function($query) { $query->select('id','name','alias_name'); },
                 'department_district_er'=>function($query) { $query->select('id','name'); },
                 'department_group_er'=>function($query) { $query->select('id','name'); }
             ])
@@ -16937,7 +16937,7 @@ dd(1);
                 'client_er'=>function($query) { $query->select('id','username','true_name'); },
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
                 'inspector'=>function($query) { $query->select('id','name','true_name'); },
-                'project_er'=>function($query) { $query->select('id','name'); },
+                'project_er'=>function($query) { $query->select('id','name','alias_name'); },
                 'department_district_er'=>function($query) { $query->select('id','name'); },
                 'department_group_er'=>function($query) { $query->select('id','name'); }
             ])
@@ -29940,7 +29940,7 @@ EOF;
             ->with([
                 'creator'=>function($query) { $query->select('id','username'); },
                 'client_er'=>function($query) { $query->select('id','username'); },
-                'project_er'=>function($query) { $query->select('id','name'); }
+                'project_er'=>function($query) { $query->select('id','name','alias_name'); }
             ])->where(['client_phone'=>$client_phone])
 //            ->where('id','<>',$id)
 //            ->where('delivered_status',1)
@@ -29956,7 +29956,7 @@ EOF;
             ->with([
                 'creator'=>function($query) { $query->select('id','username'); },
                 'client_er'=>function($query) { $query->select('id','username'); },
-                'project_er'=>function($query) { $query->select('id','name'); }
+                'project_er'=>function($query) { $query->select('id','name','alias_name'); }
             ])->where(['client_phone'=>$client_phone])->get();
         $return['deliver_repeat'] = $deliver_repeat;
 
@@ -38190,7 +38190,7 @@ EOF;
                 'client_er'=>function($query) { $query->select('id','username','true_name'); },
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
                 'inspector'=>function($query) { $query->select('id','name','true_name'); },
-                'project_er'=>function($query) { $query->select('id','name'); },
+                'project_er'=>function($query) { $query->select('id','name','alias_name'); },
                 'department_district_er'=>function($query) { $query->select('id','name'); },
                 'department_group_er'=>function($query) { $query->select('id','name'); }
             ])
@@ -38490,7 +38490,7 @@ EOF;
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
                 'client_er'=>function($query) { $query->select('id','username','true_name'); },
                 'inspector'=>function($query) { $query->select('id','name','true_name'); },
-                'project_er'=>function($query) { $query->select('id','name'); },
+                'project_er'=>function($query) { $query->select('id','name','alias_name'); },
                 'department_district_er'=>function($query) { $query->select('id','name'); },
                 'department_group_er'=>function($query) { $query->select('id','name'); }
             ])
