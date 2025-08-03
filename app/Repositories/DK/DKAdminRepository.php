@@ -757,7 +757,18 @@ class DKAdminRepository {
         if(!empty($post_data['keyword']))
         {
             $keyword = "%{$post_data['keyword']}%";
-            $query->where('name','like',"%$keyword%");
+            if($me->department_district_id > 0)
+            {
+                $query->where('name','like',"%$keyword%");
+            }
+            else
+            {
+                $query->where(function($query) use($keyword) {
+
+                    $query->where('name','like',"%$keyword%")->orWhere('alias_name',"%$keyword%");
+                });
+            }
+
         }
 
         if(!empty($post_data['item_category']))
