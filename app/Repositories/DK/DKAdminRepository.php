@@ -26035,6 +26035,13 @@ EOF;
         }
 
         $list = $query->get()->toArray();
+        if(in_array($me->user_type,[0,1,11,61,66]))
+        {
+            foreach($list as $k => $v)
+            {
+                if($v['alias_name']) $list[$k]['text'] .= ' ('.$v['alias_name'].')';
+            }
+        }
         $unSpecified = ['id'=>0,'text'=>'[未指定]'];
         array_unshift($list,$unSpecified);
         return $list;
