@@ -26002,31 +26002,30 @@ EOF;
         $this->get_me();
         $me = $this->me;
 
-        if(empty($post_data['keyword']))
-        {
-            $query = DK_Project::select(['id','name as text']);
-        }
-        else
+        $query = DK_Project::select(['id','name as text','alias_name'])
+            ->where('item_status',1);
+
+        if(!empty($post_data['keyword']))
         {
             $keyword = "%{$post_data['keyword']}%";
-//            $query = DK_Project::select(['id','name as text'])->where('name','like',"%$keyword%");
             if($me->department_district_id > 0)
             {
-                $query = DK_Project::select(['id','name as text'])->where('name','like',"%$keyword%");
+                $query->where('name','like',"%$keyword%");
             }
             else
             {
-                $query = DK_Project::select(['id','name as text'])->where(function($query) use($keyword) {
+                $query->where(function($query) use($keyword) {
                     $query->where('name','like',"%$keyword%")->orWhere('alias_name','like',"%$keyword%");
                 });
             }
         }
 
-        $query->where('item_status',1);
-//        $query->where(['user_status'=>1,'user_category'=>11]);
-//        $query->whereIn('user_type',[41,61,88]);
+        if(!empty($post_data['item_category']))
+        {
+            $query->where('item_category',$post_data['item_category']);
+        }
 
-//        if(in_array($me->user_type,[81,84,88]))
+
         if(!in_array($me->department_district_id,[0]))
         {
             $department_district_id = $me->department_district_id;
@@ -26034,7 +26033,7 @@ EOF;
             $query->whereIn('id',$project_list);
         }
 
-        $list = $query->get()->toArray();
+        $list = $query->orderBy('id','desc')->get()->toArray();
         if(in_array($me->user_type,[0,1,11,61,66]))
         {
             foreach($list as $k => $v)
@@ -26042,7 +26041,10 @@ EOF;
                 if($v['alias_name']) $list[$k]['text'] .= ' ('.$v['alias_name'].')';
             }
         }
+
         $unSpecified = ['id'=>0,'text'=>'[未指定]'];
+        array_unshift($list,$unSpecified);
+        $unSpecified = ['id'=>-1,'text'=>'选择项目'];
         array_unshift($list,$unSpecified);
         return $list;
     }
