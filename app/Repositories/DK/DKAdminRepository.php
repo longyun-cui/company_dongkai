@@ -3712,7 +3712,21 @@ class DKAdminRepository {
             ]);
 
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
-        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+        if(!empty($post_data['name']))
+        {
+            $query->where('name', 'like', "%{$post_data['name']}%");
+            $name = "%{$post_data['name']}%";
+            if($me->department_district_id > 0)
+            {
+                $query->where('name','like',$name);
+            }
+            else
+            {
+                $query->where(function($query) use($name) {
+                    $query->where('name','like',$name)->orWhere('alias_name','like',$name);
+                });
+            }
+        }
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
         if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
         if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
@@ -25995,7 +26009,17 @@ EOF;
         else
         {
             $keyword = "%{$post_data['keyword']}%";
-            $query = DK_Project::select(['id','name as text'])->where('name','like',"%$keyword%");
+//            $query = DK_Project::select(['id','name as text'])->where('name','like',"%$keyword%");
+            if($me->department_district_id > 0)
+            {
+                $query = DK_Project::select(['id','name as text'])->where('name','like',"%$keyword%");
+            }
+            else
+            {
+                $query = DK_Project::select(['id','name as text'])->where(function($query) use($keyword) {
+                    $query->where('name','like',"%$keyword%")->orWhere('alias_name','like',"%$keyword%");
+                });
+            }
         }
 
         $query->where('item_status',1);
