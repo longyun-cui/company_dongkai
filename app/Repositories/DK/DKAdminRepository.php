@@ -27282,7 +27282,7 @@ EOF;
     {
         $this->get_me();
         $me = $this->me;
-//        if(!in_array($me->user_type,[0,1,9])) return view(env('TEMPLATE_ROOT_FRONT').'errors.404');
+        if(!in_array($me->user_type,[0,1,9,11])) return view($this->view_blade_404);
 
         $operate_category = 'item';
         $operate_type = 'item';

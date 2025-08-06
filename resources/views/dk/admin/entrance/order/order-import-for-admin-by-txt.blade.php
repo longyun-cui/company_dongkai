@@ -1,4 +1,4 @@
-@extends(env('TEMPLATE_DK_ADMIN').'layout.layout')
+@extends(env('TEMPLATE_DK_ADMIN').'layout.layout1')
 
 
 @section('head_title')
