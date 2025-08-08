@@ -99,12 +99,15 @@
                         <li class="order_of_today_for_inspected_all">
                             <a href="javascript:void(0);">审核量（质检处理） <span class="pull-right"><b class="badge bg-blue"></b> 单</span></a>
                         </li>
+                        @if($me->department_district_id <= 0)
                         <li class="order_of_today_for_delivered_all">
                             <a href="javascript:void(0);">交付量（运营处理）<span class="pull-right"><b class="badge bg-purple"></b> 单</span></a>
                         </li>
+                        @endif
                         <li class="order_of_today_for_delivered_effective">
                             <a href="javascript:void(0);">有效量（客服业绩量） <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
+                        @if($me->department_district_id <= 0)
                         <li class="order_of_today_for_delivered_completed">
                             <a href="javascript:void(0);">已交付（交付客户）<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
@@ -123,11 +126,13 @@
                         <li class="order_of_today_for_delivered_effective_rate">
                             <a href="javascript:void(0);">有效交付率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>
                         </li>
+                        @endif
                     </ul>
                 </div>
             </div>
 
             {{--甲方--}}
+            @if($me->department_district_id <= 0)
             <div class="box box-success box-solid">
                 <div class="box-header with-border">
                     <h3 class="box-title">甲方  （<span class="comprehensive-day-title">今日概览</span>）</h3>
@@ -155,8 +160,10 @@
                     </ul>
                 </div>
             </div>
+            @endif
 
             {{--运营--}}
+            @if($me->department_district_id <= 0)
             <div class="box box-success box-solid">
                 <div class="box-header with-border">
                     <h3 class="box-title">运营工作量  （<span class="comprehensive-day-title">今日概览</span>）</h3>
@@ -225,6 +232,7 @@
                     </ul>
                 </div>
             </div>
+            @endif
 
             {{--审核--}}
             <div class="box box-success box-solid">
@@ -279,12 +287,15 @@
                         <li class="order_of_month_for_inspected_all">
                             <a href="javascript:void(0);">审核量（质检） <span class="pull-right"><b class="badge bg-blue"></b> 单</span></a>
                         </li>
+                        @if($me->department_district_id <= 0)
                         <li class="order_of_month_for_delivered_all">
                             <a href="javascript:void(0);">交付量（运营）<span class="pull-right"><b class="badge bg-purple"></b> 单</span></a>
                         </li>
+                        @endif
                         <li class="order_of_month_for_delivered_effective">
                             <a href="javascript:void(0);">有效量（客服业绩量） <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
+                        @if($me->department_district_id <= 0)
                         <li class="order_of_month_for_delivered_completed">
                             <a href="javascript:void(0);">已交付<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
@@ -303,11 +314,13 @@
                         <li class="order_of_month_for_delivered_effective_rate">
                             <a href="javascript:void(0);">有效交付率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>
                         </li>
+                        @endif
                     </ul>
                 </div>
             </div>
 
             {{--甲方--}}
+            @if($me->department_district_id <= 0)
             <div class="box box-success box-solid">
                 <div class="box-header with-border">
                     <h3 class="box-title">甲方  （<span class="comprehensive-month-title">当月概览</span>）</h3>
@@ -335,8 +348,10 @@
                     </ul>
                 </div>
             </div>
+            @endif
 
             {{--运营--}}
+            @if($me->department_district_id <= 0)
             <div class="box box-success box-solid">
                 <div class="box-header with-border">
                     <h3 class="box-title">运营工作量  （<span class="comprehensive-month-title">当月概览</span>）</h3>
@@ -405,6 +420,7 @@
                     </ul>
                 </div>
             </div>
+            @endif
 
             {{--审核--}}
             <div class="box box-success box-solid">
@@ -445,7 +461,7 @@
             {{--坐席--}}
             <div class="box box-success box-solid">
                 <div class="box-header with-border">
-                    <h3 class="box-title">总量概览</h3>
+                    <h3 class="box-title">坐席（总量）</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                         </button>
@@ -459,12 +475,15 @@
                         <li class="order_of_all_for_inspected_all">
                             <a href="javascript:void(0);">审核量（质检） <span class="pull-right"><b class="badge bg-blue"></b> 单</span></a>
                         </li>
+                        @if($me->department_district_id <= 0)
                         <li class="order_of_all_for_delivered_all">
                             <a href="javascript:void(0);">交付量（运营）<span class="pull-right"><b class="badge bg-purple"></b> 单</span></a>
                         </li>
+                        @endif
                         <li class="order_of_all_for_delivered_effective">
                             <a href="javascript:void(0);">有效量（客服业绩量） <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
+                        @if($me->department_district_id <= 0)
                         <li class="order_of_all_for_delivered_completed">
                             <a href="javascript:void(0);">已交付<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
@@ -483,14 +502,16 @@
                         <li class="order_of_all_for_delivered_effective_rate">
                             <a href="javascript:void(0);">有效交付率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>
                         </li>
+                        @endif
                     </ul>
                 </div>
             </div>
 
             {{--甲方--}}
+            @if($me->department_district_id <= 0)
             <div class="box box-success box-solid">
                 <div class="box-header with-border">
-                    <h3 class="box-title">甲方  （总量概览）</h3>
+                    <h3 class="box-title">甲方  （总量）</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                         </button>
@@ -515,11 +536,13 @@
                     </ul>
                 </div>
             </div>
+            @endif
 
             {{--运营--}}
+            @if($me->department_district_id <= 0)
             <div class="box box-success box-solid">
                 <div class="box-header with-border">
-                    <h3 class="box-title">运营工作量  （总量概览）</h3>
+                    <h3 class="box-title">运营工作量  （总量）</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                         </button>
@@ -585,11 +608,12 @@
                     </ul>
                 </div>
             </div>
+            @endif
 
             {{--审核--}}
             <div class="box box-success box-solid">
                 <div class="box-header with-border">
-                    <h3 class="box-title">审核工作量  （总量概览）</h3>
+                    <h3 class="box-title">审核工作量  （总量）</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                         </button>
