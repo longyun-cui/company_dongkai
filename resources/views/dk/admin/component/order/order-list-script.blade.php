@@ -444,7 +444,8 @@
             $modal.find('select[name="detail-inspected-result"]').find("option[value='"+$inspected_result+"']").prop("selected",true);
 
             // $modal.find('input[name="recording-quality"]').val('0');
-            $modal.find('input[name="recording-quality"][value="0"]').prop('checked', true);
+            var $recording_quality = $row.find('td[data-key=recording_quality]').attr('data-value');
+            $modal.find('input[name="recording-quality"][value='+$recording_quality+']').prop('checked', true);
 
             var $inspected_description = $row.find('td[data-key=inspected_description]').attr('data-value');
             // console.log($inspected_description);
@@ -523,6 +524,23 @@
 
                         var $row = $table.find('tr.inspecting');
                         $row.find('td[data-key=order_status]').html('<small class="btn-xs bg-blue">已审核</small>');
+                        $row.find('td[data-key=recording_quality]').attr('data-value',$recording_quality);
+                        if($recording_quality == 0)
+                        {
+                            $row.find('td[data-key=recording_quality]').html('<small class="btn-xs bg-blue">合格</small>');
+                        }
+                        else if($recording_quality == 1)
+                        {
+                            $row.find('td[data-key=recording_quality]').html('<small class="btn-xs bg-green">优秀</small>');
+                        }
+                        else if($recording_quality == 9)
+                        {
+                            $row.find('td[data-key=recording_quality]').html('<small class="btn-xs bg-red">问题</small>');
+                        }
+                        else
+                        {
+                            $row.find('td[data-key=recording_quality]').html('<small class="btn-xs bg-black">有误</small>');
+                        }
                         $row.find('td[data-key=inspected_result]').attr('data-value',$inspected_result);
                         $row.find('td[data-key=inspected_result]').html($result_html);
                         $row.find('td[data-key=inspected_description]').attr('data-value',$inspected_description);

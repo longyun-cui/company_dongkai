@@ -1124,6 +1124,19 @@
                     "className": "",
                     "width": "60px",
                     "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.is_completed != 1 && row.item_status != 97)
+                        {
+                            $(nTd).addClass('modal-show-for-field-set-');
+                            $(nTd).attr('data-id',row.id).attr('data-name','录音质量');
+                            $(nTd).attr('data-key','recording_quality').attr('data-value',data);
+
+                            $(nTd).attr('data-column-name','录音质量');
+
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        }
+                    },
                     render: function(data, type, row, meta) {
                         if(!data) return '--';
                         var $result_html = '';
@@ -1132,11 +1145,11 @@
                         {
                             if(data == 0)
                             {
-                                $result_html = '<small class="btn-xs bg-green">合格</small>';
+                                $result_html = '<small class="btn-xs bg-blue">合格</small>';
                             }
                             else if(data == 1)
                             {
-                                $result_html = '<small class="btn-xs bg-yellow">优秀</small>';
+                                $result_html = '<small class="btn-xs bg-green">优秀</small>';
                             }
                             else if(data == 9)
                             {
