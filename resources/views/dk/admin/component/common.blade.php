@@ -270,6 +270,38 @@
                             </select>
                         </div>
                     </div>
+                    {{--审核结果--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2">录音质量</label>
+                        <div class="col-md-8 ">
+{{--                            <select class="form-control select-select2-" name="detail-inspected-result" id="" style="width:100%;">--}}
+{{--                                <option value="-1">选择录音质量</option>--}}
+{{--                                <option value ="0" selected="selected">合格</option>--}}
+{{--                                <option value ="1">优秀</option>--}}
+{{--                                <option value ="9">问题</option>--}}
+{{--                            </select>--}}
+
+                            <div class="btn-group">
+
+                                <button type="button" class="btn">
+                                    <span class="radio">
+                                        <label><input type="radio" name="recording-quality" value="0" checked="checked"> 合格</label>
+                                    </span>
+                                </button>
+                                <button type="button" class="btn">
+                                    <span class="radio">
+                                        <label><input type="radio" name="recording-quality" value="1"> 优秀</label>
+                                    </span>
+                                </button>
+                                <button type="button" class="btn">
+                                    <span class="radio">
+                                        <label><input type="radio" name="recording-quality" value="9"> 问题</label>
+                                    </span>
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
                     {{--审核说明--}}
                     <div class="form-group">
                         <label class="control-label col-md-2">审核说明</label>

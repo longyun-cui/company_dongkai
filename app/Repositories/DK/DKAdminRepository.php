@@ -5009,6 +5009,14 @@ class DKAdminRepository {
         }
 
 
+        // 录音质量 []
+        if(isset($post_data['recording_quality']))
+        {
+            if(!in_array($post_data['recording_quality'],[-1,'-1']))
+            {
+                $query->where('recording_quality', $post_data['recording_quality']);
+            }
+        }
 
 
 
@@ -6097,6 +6105,7 @@ class DKAdminRepository {
         $inspected_result = $post_data["inspected_result"];
         if(!in_array($inspected_result,config('info.inspected_result'))) return response_error([],"审核结果非法！");
         $inspected_description = $post_data["inspected_description"];
+        $recording_quality = $post_data["recording_quality"];
 
 
         $before = $item->inspected_result;
@@ -6111,6 +6120,7 @@ class DKAdminRepository {
             $item->inspected_status = 1;
             $item->inspected_result = $inspected_result;
             if($inspected_description) $item->inspected_description = $inspected_description;
+            $item->recording_quality = $recording_quality;
             $item->inspected_at = time();
             $item->inspected_date = $date;
             $bool = $item->save();

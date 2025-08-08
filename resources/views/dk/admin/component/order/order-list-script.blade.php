@@ -443,6 +443,9 @@
             $modal.find('select[name="detail-inspected-result"]').find("option").prop("selected",false);
             $modal.find('select[name="detail-inspected-result"]').find("option[value='"+$inspected_result+"']").prop("selected",true);
 
+            // $modal.find('input[name="recording-quality"]').val('0');
+            $modal.find('input[name="recording-quality"][value="0"]').prop('checked', true);
+
             var $inspected_description = $row.find('td[data-key=inspected_description]').attr('data-value');
             // console.log($inspected_description);
             $modal.find('textarea[name="detail-inspected-description"]').val('');
@@ -473,6 +476,8 @@
             var $id = $('input[name="detail-inspected-order-id"]').val();
             var $inspected_result = $('select[name="detail-inspected-result"]').val();
             var $inspected_description = $('textarea[name="detail-inspected-description"]').val();
+            var $recording_quality = $('input[name="recording-quality"]:checked').val();
+            // console.log($recording_quality);
 
             $.post(
                 "{{ url('/v1/operate/order/item-inspect') }}",
@@ -481,7 +486,8 @@
                     operate: "order-inspect",
                     item_id: $('input[name="detail-inspected-order-id"]').val(),
                     inspected_result: $('select[name="detail-inspected-result"]').val(),
-                    inspected_description: $('textarea[name="detail-inspected-description"]').val()
+                    inspected_description: $('textarea[name="detail-inspected-description"]').val(),
+                    recording_quality: $('input[name="recording-quality"]:checked').val()
                 },
                 function(data){
                     // layer.close(index);

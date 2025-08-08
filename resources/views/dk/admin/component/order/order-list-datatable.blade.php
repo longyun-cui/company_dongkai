@@ -56,6 +56,7 @@
                     d.is_wx = $tableSearch.find('select[name="order-is-wx"]').val();
                     d.is_repeat = $tableSearch.find('select[name="order-is-repeat"]').val();
                     d.created_type = $tableSearch.find('select[name="order-created-type"]').val();
+                    d.recording_quality = $tableSearch.find('select[name="order-recording-quality"]').val();
                     d.inspected_status = $tableSearch.find('select[name="order-inspected-status"]').val();
                     d.inspected_result = $tableSearch.find('select[name="order-inspected-result[]"]').val();
                     d.delivered_status = $tableSearch.find('select[name="order-delivered-status"]').val();
@@ -666,7 +667,14 @@
                             $(nTd).attr('data-key','project_id').attr('data-value',data);
                             if(row.project_er == null) $(nTd).attr('data-option-name','未指定');
                             else {
-                                $(nTd).attr('data-option-name',row.project_er.name);
+                                if(row.project_er.alias_name)
+                                {
+                                    $(nTd).attr('data-option-name',row.project_er.name+' ('+row.project_er.alias_name+')');
+                                }
+                                else
+                                {
+                                    $(nTd).attr('data-option-name',row.project_er.name);
+                                }
                             }
 
                             $(nTd).attr('data-column-type','select2');
@@ -1109,7 +1117,39 @@
                         else return '';
                     }
                 },
-                    @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
+                @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
+                {
+                    "title": "录音质量",
+                    "data": "recording_quality",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(!data) return '--';
+                        var $result_html = '';
+
+                        if(row.inspected_at)
+                        {
+                            if(data == 0)
+                            {
+                                $result_html = '<small class="btn-xs bg-green">合格</small>';
+                            }
+                            else if(data == 1)
+                            {
+                                $result_html = '<small class="btn-xs bg-yellow">优秀</small>';
+                            }
+                            else if(data == 9)
+                            {
+                                $result_html = '<small class="btn-xs bg-red">问题</small>';
+                            }
+                            else
+                            {
+                                $result_html = '<small class="btn-xs bg-black">有误</small>';
+                            }
+                        }
+                        return $result_html;
+                    }
+                },
                 {
                     "title": "录音地址",
                     "data": "recording_address",
