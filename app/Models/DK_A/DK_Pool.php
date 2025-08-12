@@ -38,10 +38,11 @@ class DK_Pool extends Model
         'call_cnt_46_90',
         'call_cnt_91',
 
-        'data_table',
 
         'region',
         'region_name',
+        'data_table',
+        'data_modal',
 
         'field_1',
         'field_2',

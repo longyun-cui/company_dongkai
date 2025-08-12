@@ -5,11 +5,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use DB;
 
-class DK_Pool_City_ST extends Model
+class DK_Pool_City_SC_CD extends Model
 {
 //    use SoftDeletes;
     //
-    protected $table = "a_pool_city_st";
+    protected $table = "a_pool_city_sc_cd";
     protected $fillable = [
         'active', 'status', 'category', 'type', 'form', 'sort',
         'item_active', 'item_status', 'item_result', 'item_category', 'item_type', 'item_form',

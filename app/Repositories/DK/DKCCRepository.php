@@ -6,12 +6,6 @@ use App\Models\DK_A\DK_A_Order;
 use App\Models\DK_A\DK_Pool_Task;
 use App\Models\DK_A\DK_Pool;
 use App\Models\DK_A\DK_Pool_City;
-use App\Models\DK_A\DK_Pool_City_BJ;
-use App\Models\DK_A\DK_Pool_City_WH;
-use App\Models\DK_A\DK_Pool_City_SH;
-use App\Models\DK_A\DK_Pool_City_CD;
-use App\Models\DK_A\DK_Pool_City_SX;
-use App\Models\DK_A\DK_Pool_City_ST;
 
 use App\Models\DK_CC\DK_CC_Team;
 use App\Models\DK_CC\DK_CC_Telephone;
@@ -5868,6 +5862,8 @@ class DKCCRepository {
         $pool = DK_Pool::find($pool_id);
         if($pool)
         {
+            $table = $pool->data_table;
+            $modal = $pool->data_modal;
             $region_name = $pool->region_name;
             $pool_name = $pool->region_name;
         }
@@ -5922,7 +5918,6 @@ class DKCCRepository {
             $task_insert['extraction_file_size'] = $file_size;
 
 
-
             $bool_t = $task->fill($task_insert)->save();
 
             $task_id = $task->id;
@@ -5934,44 +5929,16 @@ class DKCCRepository {
 //            dd(now()->subDays(7)->format('Y-m-d'));
 //            dd(now()->subDays(7)->startOfDay());
 
-//            $telephone = DK_Pool_City_BJ::select('phone')->withTrashed()
-            if($pool_name == '北京')
-            {
-                $telephone = DK_Pool_City_BJ::select('phone');
-            }
-            else if($pool_name == '武汉')
-            {
-                $telephone = DK_Pool_City_WH::select('phone');
-            }
-            else if($pool_name == '上海')
-            {
-                $telephone = DK_Pool_City_SH::select('phone');
-            }
-            else if($pool_name == '成都')
-            {
-                $telephone = DK_Pool_City_CD::select('phone');
-            }
-            else if($pool_name == '绍兴')
-            {
-                $telephone = DK_Pool_City_SX::select('phone');
-            }
-            else if($pool_name == '汕头')
-            {
-                $telephone = DK_Pool_City_ST::select('phone');
-            }
-            else
-            {
-                $telephone = DK_Pool_City::select('phone');
-            }
-//            $telephone = DK_Pool_City_BJ::select('phone')
-//                ->where(function ($query) {
-//                    $query->whereNull('last_extraction_date')
-//                        ->orWhereDate('last_extraction_date', '<', now()->subDays(1)->format('Y-m-d'));
-//                })
-            $telephone->where(function ($query) {
-                    $query->whereNull('last_call_date')
-                        ->orWhereDate('last_call_date', '<', now()->subDays(1)->format('Y-m-d'));
-                });
+//            $telephone = DB::table($table)->select('phone');
+            $telephone = ($modal ?? false)::select('phone')->where(function ($query) {
+                $query->whereNull('last_call_date')
+                    ->orWhereDate('last_call_date', '<', now()->subDays(1)->format('Y-m-d'));
+            }) ?: collect();
+
+//            $telephone->where(function ($query) {
+//                    $query->whereNull('last_call_date')
+//                        ->orWhereDate('last_call_date', '<', now()->subDays(1)->format('Y-m-d'));
+//                });
 //                ->where($telephone_where)
 //                ->where(['item_status'=>1,'is_blacklisted'=>0])
 //                ->where(['quality'=>1])
@@ -6000,34 +5967,7 @@ class DKCCRepository {
             $telephone_3->update($telephone_update);
 
 
-            if($pool_name == '北京')
-            {
-                $telephone_list = DK_Pool_City_BJ::select('task_id','phone','quality')->where('task_id',$task_id)->get();
-            }
-            else if($pool_name == '武汉')
-            {
-                $telephone_list = DK_Pool_City_WH::select('task_id','phone','quality')->where('task_id',$task_id)->get();
-            }
-            else if($pool_name == '上海')
-            {
-                $telephone_list = DK_Pool_City_SH::select('task_id','phone','quality')->where('task_id',$task_id)->get();
-            }
-            else if($pool_name == '成都')
-            {
-                $telephone_list = DK_Pool_City_CD::select('task_id','phone','quality')->where('task_id',$task_id)->get();
-            }
-            else if($pool_name == '绍兴')
-            {
-                $telephone_list = DK_Pool_City_SX::select('task_id','phone','quality')->where('task_id',$task_id)->get();
-            }
-            else if($pool_name == '汕头')
-            {
-                $telephone_list = DK_Pool_City_ST::select('task_id','phone','quality')->where('task_id',$task_id)->get();
-            }
-            else
-            {
-                $telephone_list = DK_Pool_City::select('task_id','phone','quality')->where('task_id',$task_id)->get();
-            }
+            $telephone_list = ($modal ?? false)::select('task_id','phone','quality')->where('task_id',$task_id)->get() ?: collect();
 
 
             $upload_path = <<<EOF
