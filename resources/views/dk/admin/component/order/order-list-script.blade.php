@@ -1,7 +1,55 @@
 <script>
     $(function() {
 
+        window.addEventListener('play', function(e) {
+            console.log('[全局监听] 播放事件触发:', e.target);
+            const audio = e.target;
 
+            // 1. 获取音频源地址
+            const audioSrc = audio.currentSrc || $(audio).find('source').attr('src');
+            // console.log('音频开始播放:', audioSrc);
+
+            // 2. 设置播放速度 (1.5倍速)
+            var $speed = $('input[name="recording-speed"]:checked').val();
+            audio.playbackRate = $speed; // 默认值1.0，范围0.5-4.0
+            console.log('播放速率已设置:', audio.playbackRate);
+
+            // 3. 可选: 防止多音频同时播放
+            // $('audio').not(this).each(function() {
+            //     this.pause();
+            //     this.currentTime = 0;
+            // });
+            // 暂停其他音频
+            $('audio').each(function() {
+                if (this !== audio && !this.paused) {
+                    this.pause();
+                    this.currentTime = 0;
+                    // updateAudioStatus(this, '已停止');
+                    // addLog(`暂停其他音频: ${this.dataset.audioId}`, 'warning');
+                }
+                else
+                {
+
+                }
+            });
+
+            // this.play();
+
+            // 4. 业务逻辑可在此处添加
+        }, true); // 使用捕获阶段确保能监听到
+
+
+        // 【编辑】
+        $(".main-content").on('click', 'input[name="recording-speed"]', function() {
+            var $speed = $('input[name="recording-speed"]:checked').val();
+
+            $('#modal-body-for-detail-inspected audio').each(function() {
+                if (this.played)
+                {
+                    this.playbackRate = $speed; // 默认值1.0，范围0.5-4.0
+                }
+            });
+        });
 
         // 【获取录音】
         $(".main-content").on('click', ".item-get-recording-list-submit", function() {

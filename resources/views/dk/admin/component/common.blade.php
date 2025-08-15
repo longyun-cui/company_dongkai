@@ -258,6 +258,39 @@
                             <a class="btn btn-xs item-inspected-get-recording-list-submit">获取录音</a>
                         </div>
                     </div>
+                    {{--播放速度--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2">播放速度</label>
+                        <div class="col-md-8 ">
+                            <div class="btn-group">
+                                <button type="button" class="btn">
+                                    <span class="radio">
+                                        <label><input type="radio" name="recording-speed" value="0.5"> x0.5</label>
+                                    </span>
+                                </button>
+                                <button type="button" class="btn">
+                                    <span class="radio">
+                                        <label><input type="radio" name="recording-speed" value="1" checked="checked"> x1</label>
+                                    </span>
+                                </button>
+                                <button type="button" class="btn">
+                                    <span class="radio">
+                                        <label><input type="radio" name="recording-speed" value="1.25"> x1.25</label>
+                                    </span>
+                                </button>
+                                <button type="button" class="btn">
+                                    <span class="radio">
+                                        <label><input type="radio" name="recording-speed" value="1.5"> x1.5</label>
+                                    </span>
+                                </button>
+                                <button type="button" class="btn">
+                                    <span class="radio">
+                                        <label><input type="radio" name="recording-speed" value="2"> x2</label>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                     {{--审核结果--}}
                     <div class="form-group">
                         <label class="control-label col-md-2">审核结果</label>
