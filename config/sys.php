@@ -185,9 +185,9 @@
                 'a_pool_city_js_wx' => '江苏-无锡市',
                 'a_pool_city_js_cz' => '江苏-常州市',
                 'a_pool_city_js_nt' => '江苏-南通市',
-                'a_pool_city_zj_yz' => '江苏-扬州市',
-                'a_pool_city_zj_tz' => '江苏-泰州市',
-                'a_pool_city_zj_yc' => '江苏-盐城市',
+                'a_pool_city_js_yz' => '江苏-扬州市',
+                'a_pool_city_js_tz' => '江苏-泰州市',
+                'a_pool_city_js_yc' => '江苏-盐城市',
 
                 'a_pool_city_zj_hz' => '浙江-杭州市',
                 'a_pool_city_zj_nb' => '浙江-宁波市',
