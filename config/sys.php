@@ -174,6 +174,7 @@
                 'a_pool_city_gd_gz' => '广东-广州市',
                 'a_pool_city_gd_fs' => '广东-佛山市',
                 'a_pool_city_gd_dg' => '广东-东莞市',
+                'a_pool_city_gd_zj' => '广东-湛江市',
                 'a_pool_city_gd_st' => '广东-汕头市',
                 'a_pool_city_gd_zq' => '广东-肇庆市',
 
