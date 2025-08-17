@@ -26,7 +26,9 @@
                 '广东-广州市' => 'a_pool_city_gd_gz',
                 '广东-佛山市' => 'a_pool_city_gd_fs',
                 '广东-东莞市' => 'a_pool_city_gd_dg',
+                '广东-湛江市' => 'a_pool_city_gd_zj',
                 '广东-汕头市' => 'a_pool_city_gd_st',
+                '广东-肇庆市' => 'a_pool_city_gd_zq',
 
                 '江苏-南京市' => 'a_pool_city_js_nj',
                 '江苏-苏州市' => 'a_pool_city_js_sz',
@@ -252,7 +254,10 @@
 
                 'a_pool_city_gd_gz', //
                 'a_pool_city_gd_fs', //
+                'a_pool_city_gd_dg', //
+                'a_pool_city_gd_zj', //
                 'a_pool_city_gd_st', //
+                'a_pool_city_gd_zq', //
 
                 'a_pool_city_js_nj', //
                 'a_pool_city_js_sz', //
