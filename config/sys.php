@@ -175,6 +175,7 @@
                 'a_pool_city_gd_fs' => '广东-佛山市',
                 'a_pool_city_gd_dg' => '广东-东莞市',
                 'a_pool_city_gd_st' => '广东-汕头市',
+                'a_pool_city_gd_zq' => '广东-肇庆市',
 
                 'a_pool_city_js_nj' => '江苏-南京市',
                 'a_pool_city_js_sz' => '江苏-苏州市',
