@@ -83,7 +83,7 @@
                     <option value="{{ $v }}">{{ $v }}</option>
                 @endforeach
             </select>
-            {{--创建方式--}}
+            {{--录音质量--}}
             @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
                 <select class="search-filter form-filter filter-md select2-box-c" name="order-recording-quality">
                     <option value="-1">录音质量</option>

@@ -19,25 +19,143 @@
                 '北京市' => 'a_pool_city_bj',
                 '上海市' => 'a_pool_city_sh',
                 '天津市' => 'a_pool_city_tj',
-                '重庆市-重庆' => 'a_pool_city_cq_cq',
-                '湖北-武汉市' => 'a_pool_city_hub_wh',
-                '四川-成都市' => 'a_pool_city_sc_cd',
-                '广东-汕头市' => 'a_pool_city_gd_st',
+
+                '重庆市-重庆市' => 'a_pool_city_cq_cq',
+                '重庆市-涪陵区' => 'a_pool_city_cq_pl',
+
                 '广东-广州市' => 'a_pool_city_gd_gz',
+                '广东-佛山市' => 'a_pool_city_gd_fs',
+                '广东-东莞市' => 'a_pool_city_gd_dg',
+                '广东-汕头市' => 'a_pool_city_gd_st',
+
+                '江苏-南京市' => 'a_pool_city_js_nj',
+                '江苏-苏州市' => 'a_pool_city_js_sz',
+                '江苏-无锡市' => 'a_pool_city_js_wx',
+                '江苏-常州市' => 'a_pool_city_js_cz',
+                '江苏-南通市' => 'a_pool_city_js_nt',
+                '江苏-扬州市' => 'a_pool_city_js_yz',
+                '江苏-泰州市' => 'a_pool_city_js_tz',
+                '江苏-盐城市' => 'a_pool_city_js_yc',
+
                 '浙江-杭州市' => 'a_pool_city_zj_hz',
+                '浙江-宁波市' => 'a_pool_city_zj_nb',
                 '浙江-绍兴市' => 'a_pool_city_zj_sx',
+                '浙江-嘉兴市' => 'a_pool_city_zj_jx',
+
+                '福建-福州市' => 'a_pool_city_fj_fz',
+                '福建-福州市-福清市' => 'a_pool_city_fj_fz_fq',
+                '福建-泉州市' => 'a_pool_city_fj_qz',
+                '福建-厦门市' => 'a_pool_city_fj_xm',
+                '福建-漳州市' => 'a_pool_city_fj_zz',
+
+                '山东-济南市' => 'a_pool_city_sd_jn',
+                '山东-青岛市' => 'a_pool_city_sd_qd',
+                '山东-淄博市' => 'a_pool_city_sd_zb',
+                '山东-聊城市' => 'a_pool_city_sd_lc',
+
+                '山西-太原市' => 'a_pool_city_sx_ty',
+                '山西-吕梁市' => 'a_pool_city_sx_ll',
+                '山西-大同市' => 'a_pool_city_sx_dt',
+
+                '四川-成都市' => 'a_pool_city_sc_cd',
+
+                '河南-郑州市' => 'a_pool_city_hen_zz',
+                '河南-洛阳市' => 'a_pool_city_hen_ly',
+
+                '河北-石家庄市' => 'a_pool_city_heb_sjz',
+                '河北-唐山市' => 'a_pool_city_heb_ts',
+
+                '湖北-武汉市' => 'a_pool_city_hub_wh',
+                '湖北-宜昌市' => 'a_pool_city_hub_yc',
+                '湖北-襄阳市' => 'a_pool_city_hub_xy',
+                '湖北-荆州市' => 'a_pool_city_hub_jz',
+
+                '湖南-长沙市' => 'a_pool_city_hun_cs',
+                '湖南-岳阳市' => 'a_pool_city_hun_yy',
+                '湖南-常德市' => 'a_pool_city_hun_cd',
+                '湖南-衡阳市' => 'a_pool_city_hun_hy',
+
+                '安徽-合肥市' => 'a_pool_city_ah_hf',
+
+                '江西-南昌市' => 'a_pool_city_jx_nc',
+
+                '陕西-西安市' => 'a_pool_city_shx_xa',
+                '陕西-榆林市' => 'a_pool_city_shx_yl',
+                '陕西-咸阳市' => 'a_pool_city_shx_xy',
+                '陕西-宝鸡市' => 'a_pool_city_shx_bj',
+
+                '贵州-贵阳市' => 'a_pool_city_gz_gy',
             ],
             'city_pool' => [
                 '北京市',
                 '上海市',
                 '天津市',
-                '重庆-重庆',
-                '湖北-武汉市',
-                '四川-成都市',
-                '广东-汕头市',
+
+                '重庆-重庆市',
+                '重庆-涪陵区',
+
                 '广东-广州市',
+                '广东-佛山市',
+                '广东-东莞市',
+                '广东-汕头市',
+
+                '江苏-南京市',
+                '江苏-苏州市',
+                '江苏-无锡市',
+                '江苏-常州市',
+                '江苏-南通市',
+                '江苏-扬州市',
+                '江苏-泰州市',
+                '江苏-盐城市',
+
                 '浙江-杭州市',
+                '浙江-宁波市',
                 '浙江-绍兴市',
+                '浙江-嘉兴市',
+
+                '福建-福州市',
+                '福建-福州市-福清市',
+                '福建-泉州市',
+                '福建-厦门市',
+                '福建-漳州市',
+
+                '山东-济南市',
+                '山东-青岛市',
+                '山东-淄博市',
+                '山东-聊城市',
+
+                '山西-太原市',
+                '山西-吕梁市',
+                '山西-大同市',
+
+                '四川-成都市',
+
+                '河南-郑州市',
+                '河南-洛阳市',
+
+                '河北-石家庄市',
+                '河北-唐山市',
+
+                '湖北-武汉市',
+                '湖北-宜昌市',
+                '湖北-襄阳市',
+                '湖北-荆州市',
+
+                '湖南-长沙市',
+                '湖南-岳阳市',
+                '湖南-常德市',
+                '湖南-衡阳市',
+
+                '安徽-合肥市',
+
+                '江西-南昌市',
+
+                '陕西-西安市',
+                '陕西-榆林市',
+                '陕西-咸阳市',
+                '陕西-宝鸡市',
+
+                '贵州-贵阳市',
             ],
 
 
@@ -45,34 +163,125 @@
                 'a_current_test' => '测试',
                 'a_current_task' => '任务',
                 'a_pool_black' => '黑名单',
+
                 'a_pool_city_bj' => '北京',
                 'a_pool_city_sh' => '上海',
                 'a_pool_city_tj' => '天津',
-                'a_pool_city_cq_cq' => '重庆-重庆',
-                'a_pool_city_hub_wh' => '湖北-武汉市',
-                'a_pool_city_sc_cd' => '四川-成都市',
+
+                'a_pool_city_cq_cq' => '重庆-重庆市',
+                'a_pool_city_cq_fl' => '重庆-涪陵区',
+
                 'a_pool_city_gd_gz' => '广东-广州市',
+                'a_pool_city_gd_fs' => '广东-佛山市',
+                'a_pool_city_gd_dg' => '广东-东莞市',
                 'a_pool_city_gd_st' => '广东-汕头市',
+
+                'a_pool_city_js_nj' => '江苏-南京市',
+                'a_pool_city_js_sz' => '江苏-苏州市',
+                'a_pool_city_js_wx' => '江苏-无锡市',
+                'a_pool_city_js_cz' => '江苏-常州市',
+                'a_pool_city_js_nt' => '江苏-南通市',
+                'a_pool_city_zj_yz' => '江苏-扬州市',
+                'a_pool_city_zj_tz' => '江苏-泰州市',
+                'a_pool_city_zj_yc' => '江苏-盐城市',
+
                 'a_pool_city_zj_hz' => '浙江-杭州市',
+                'a_pool_city_zj_nb' => '浙江-宁波市',
+                'a_pool_city_zj_nb_cx' => '浙江-宁波市-慈溪市',
                 'a_pool_city_zj_sx' => '浙江-绍兴市',
-            ],
-            'phone_table' => [
-                'a_current_test',
-                'a_current_task',
-                'a_pool_black',
-                'a_pool_city_bj',
-                'a_pool_city_sh',
-                'a_pool_city_tj',
-                'a_pool_city_cq_cq',
-                'a_pool_city_hub_wh',
-                'a_pool_city_sc_cd',
-                'a_pool_city_gd_gz',
-                'a_pool_city_gd_st',
-                'a_pool_city_zj_hz',
-                'a_pool_city_zj_sx',
+                'a_pool_city_zj_jx' => '浙江-嘉兴市',
+                'a_pool_city_zj_jx_cx' => '浙江-嘉兴市-桐乡',
+
+                'a_pool_city_fj_fz' => '福建-福州市',
+                'a_pool_city_fj_fz_fq' => '福建-福州市-福清市',
+                'a_pool_city_fj_qz' => '福建-泉州市',
+                'a_pool_city_fj_xm' => '福建-厦门市',
+                'a_pool_city_fj_zz' => '福建-漳州市',
+
+                'a_pool_city_sd_jn' => '山东-济南市',
+                'a_pool_city_sd_qd' => '山东-青岛市',
+                'a_pool_city_sd_zb' => '山东-淄博市',
+                'a_pool_city_sd_lc' => '山东-聊城市',
+
+                'a_pool_city_sx_ty' => '山西-太原市',
+                'a_pool_city_sx_ll' => '山西-吕梁市',
+                'a_pool_city_sx_dt' => '山西-大同市',
+
+                'a_pool_city_sc_cd' => '四川-成都市',
+
+                'a_pool_city_hen_zz' => '河南-郑州市',
+                'a_pool_city_hen_ly' => '河南-洛阳市',
+
+                'a_pool_city_heb_sjz' => '河北-石家庄市',
+
+                'a_pool_city_hub_wh' => '湖北-武汉市',
+                'a_pool_city_hub_yc' => '湖北-宜昌市',
+                'a_pool_city_hub_xy' => '湖北-襄阳市',
+                'a_pool_city_hub_jz' => '湖北-荆州市',
+
+                'a_pool_city_hun_cs' => '湖南-长沙市',
+                'a_pool_city_hun_yy' => '湖南-岳阳市',
+                'a_pool_city_hun_cd' => '湖南-常德市',
+                'a_pool_city_hun_hy' => '湖南-衡阳市',
+
+                'a_pool_city_ah_hf' => '安徽-合肥市',
+
+                'a_pool_city_jx_nc' => '江西-南昌市',
+
+                'a_pool_city_shx_xa' => '陕西-西安市',
+                'a_pool_city_shx_yl' => '陕西-榆林市',
+                'a_pool_city_shx_xy' => '陕西-咸阳市',
+                'a_pool_city_shx_bj' => '陕西-宝鸡市',
+
+                'a_pool_city_gz_gy' => '贵州-贵阳市',
             ],
 
-            'wb_address' => '',
+            'phone_table' => [
+                'a_current_test', //
+                'a_current_task', //
+                'a_pool_black', //
+
+                'a_pool_city_bj', // 北京
+                'a_pool_city_sh', // 上海
+                'a_pool_city_tj', // 天津
+
+                'a_pool_city_cq_cq', // 重庆
+                'a_pool_city_cq_fl', // 重庆-涪陵区
+
+                'a_pool_city_gd_gz', //
+                'a_pool_city_gd_fs', //
+                'a_pool_city_gd_st', //
+
+                'a_pool_city_js_nj', //
+                'a_pool_city_js_sz', //
+                'a_pool_city_js_wx', //
+                'a_pool_city_js_cz', //
+                'a_pool_city_js_nt', //
+                'a_pool_city_zj_yz', //
+                'a_pool_city_zj_tz', //
+                'a_pool_city_zj_yc', //
+
+                'a_pool_city_zj_hz', //
+                'a_pool_city_zj_nb', //
+                'a_pool_city_zj_sx', //
+                'a_pool_city_zj_jx', //
+
+                'a_pool_city_fj_fz', //
+                'a_pool_city_fj_fz_fq', //
+
+                'a_pool_city_sd_jn', //
+                'a_pool_city_sd_qd', //
+
+                'a_pool_city_sc_cd', //
+
+                'a_pool_city_hub_wh', //
+
+                'a_pool_city_ah_hf', //
+
+                'a_pool_city_jx_nc', // 南昌
+
+                'a_pool_city_gz_gy', //
+            ],
         ],
 
 
