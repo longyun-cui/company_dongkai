@@ -36,10 +36,9 @@
             // this.play();
 
             // 4. 业务逻辑可在此处添加
-        }, true); // 使用捕获阶段确保能监听到
+        }, true);
 
-
-        // 【编辑】
+        // 【录音】播放速度
         $(".main-content").on('click', 'input[name="recording-speed"]', function() {
             var $speed = $('input[name="recording-speed"]:checked').val();
 
