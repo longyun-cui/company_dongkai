@@ -296,6 +296,17 @@
                 'a_pool_city_gz_gy' => '贵州-贵阳市',
                 'a_pool_city_gz_zy' => '贵州-遵义市',
                 'a_pool_city_gz_bj' => '贵州-毕节市',
+
+                'a_pool_city_xj_wlmq' => '新疆-乌鲁木齐市',
+                'a_pool_city_xj_yl' => '新疆-伊犁州',
+                'a_pool_city_xj_cj' => '新疆-昌吉州',
+
+                'a_pool_city_nmg_hhht' => '内蒙古-呼和浩特市',
+                'a_pool_city_nmg_eeds' => '内蒙古-鄂尔多斯市',
+                'a_pool_city_nmg_bt' => '内蒙古-包头市',
+                'a_pool_city_nmg_cf' => '内蒙古-赤峰市',
+                'a_pool_city_nmg_hlbe' => '内蒙古-呼伦贝尔市',
+                'a_pool_city_nmg_tl' => '内蒙古-通辽市',
             ],
 
             'phone_table' => [
