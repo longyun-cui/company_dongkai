@@ -288,10 +288,14 @@
                 'a_pool_city_ln_dl' => '辽宁-大连市',
 
                 'a_pool_city_jl_cc' => '吉林-长春市',
+                'a_pool_city_jl_jl' => '吉林-吉林市',
 
                 'a_pool_city_hlj_heb' => '黑龙江-哈尔滨',
+                'a_pool_city_hlj_dq' => '黑龙江-大庆',
 
                 'a_pool_city_gz_gy' => '贵州-贵阳市',
+                'a_pool_city_gz_zy' => '贵州-遵义市',
+                'a_pool_city_gz_bj' => '贵州-毕节市',
             ],
 
             'phone_table' => [
