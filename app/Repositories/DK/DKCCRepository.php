@@ -5009,7 +5009,7 @@ class DKCCRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = DK_Pool::select('*');
+        $query = DK_Pool::select('*')->where('active',1);
 //            ->addSelect(DB::raw("
 //                    count('*') as count_for_all
 //                "));
