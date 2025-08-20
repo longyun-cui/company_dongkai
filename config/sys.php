@@ -192,10 +192,13 @@
                 'a_pool_city_js_wx' => '江苏-无锡市',
                 'a_pool_city_js_cz' => '江苏-常州市',
                 'a_pool_city_js_nt' => '江苏-南通市',
-                'a_pool_city_js_xz' => '江苏-徐州市',
                 'a_pool_city_js_yz' => '江苏-扬州市',
                 'a_pool_city_js_tz' => '江苏-泰州市',
+                'a_pool_city_js_xz' => '江苏-徐州市',
                 'a_pool_city_js_yc' => '江苏-盐城市',
+                'a_pool_city_js_ha' => '江苏-淮安市',
+                'a_pool_city_js_sq' => '江苏-宿迁市',
+                'a_pool_city_js_lyg' => '江苏-连云港市',
 
                 'a_pool_city_zj_hz' => '浙江-杭州市',
                 'a_pool_city_zj_nb' => '浙江-宁波市',
@@ -207,12 +210,20 @@
                 'a_pool_city_zj_jh' => '浙江-金华市',
                 'a_pool_city_zj_tz' => '浙江-台州市',
                 'a_pool_city_zj_huz' => '浙江-湖州市',
+                'a_pool_city_zj_qz' => '浙江-衢州市',
+                'a_pool_city_zj_zs' => '浙江-舟山市',
+                'a_pool_city_zj_ls' => '浙江-丽水市',
 
                 'a_pool_city_fj_fz' => '福建-福州市',
                 'a_pool_city_fj_fz_fq' => '福建-福州市-福清市',
                 'a_pool_city_fj_qz' => '福建-泉州市',
                 'a_pool_city_fj_xm' => '福建-厦门市',
                 'a_pool_city_fj_zz' => '福建-漳州市',
+                'a_pool_city_fj_nd' => '福建-宁德市',
+                'a_pool_city_fj_pt' => '福建-莆田市',
+                'a_pool_city_fj_ly' => '福建-龙岩市',
+                'a_pool_city_fj_sm' => '福建-三明市',
+                'a_pool_city_fj_np' => '福建-南平市',
 
                 'a_pool_city_sd_jn' => '山东-济南市',
                 'a_pool_city_sd_qd' => '山东-青岛市',
@@ -222,11 +233,22 @@
                 'a_pool_city_sd_jni' => '山东-济宁市',
                 'a_pool_city_sd_zb' => '山东-淄博市',
                 'a_pool_city_sd_hz' => '山东-菏泽市',
+                'a_pool_city_sd_dy' => '山东-东营市',
+                'a_pool_city_sd_dz' => '山东-德州市',
+                'a_pool_city_sd_wh' => '山东-威海市',
                 'a_pool_city_sd_ta' => '山东-泰安市',
+                'a_pool_city_sd_bz' => '山东-滨州市',
                 'a_pool_city_sd_lc' => '山东-聊城市',
+                'a_pool_city_sd_rz' => '山东-日照市',
+                'a_pool_city_sd_zz' => '山东-枣庄市',
 
                 'a_pool_city_sx_ty' => '山西-太原市',
                 'a_pool_city_sx_ll' => '山西-吕梁市',
+                'a_pool_city_sx_cz' => '山西-长治市',
+                'a_pool_city_sx_jz' => '山西-晋中市',
+                'a_pool_city_sx_lf' => '山西-临汾市',
+                'a_pool_city_sx_jc' => '山西-晋城市',
+                'a_pool_city_sx_yc' => '山西-运城市',
                 'a_pool_city_sx_dt' => '山西-大同市',
 
                 'a_pool_city_sc_cd' => '四川-成都市',
@@ -278,24 +300,21 @@
                 'a_pool_city_jx_jj' => '江西-九江市',
                 'a_pool_city_jx_sr' => '江西-上饶市',
                 'a_pool_city_jx_yc' => '江西-宜春市',
+                'a_pool_city_jx_jz' => '江西-吉安市',
 
                 'a_pool_city_shx_xa' => '陕西-西安市',
                 'a_pool_city_shx_yl' => '陕西-榆林市',
                 'a_pool_city_shx_xy' => '陕西-咸阳市',
                 'a_pool_city_shx_bj' => '陕西-宝鸡市',
-
-                'a_pool_city_ln_sy' => '辽宁-沈阳市',
-                'a_pool_city_ln_dl' => '辽宁-大连市',
-
-                'a_pool_city_jl_cc' => '吉林-长春市',
-                'a_pool_city_jl_jl' => '吉林-吉林市',
-
-                'a_pool_city_hlj_heb' => '黑龙江-哈尔滨',
-                'a_pool_city_hlj_dq' => '黑龙江-大庆',
+                'a_pool_city_shx_ya' => '陕西-延安市',
 
                 'a_pool_city_gz_gy' => '贵州-贵阳市',
                 'a_pool_city_gz_zy' => '贵州-遵义市',
                 'a_pool_city_gz_bj' => '贵州-毕节市',
+
+                'a_pool_city_yn_km' => '云南-昆明市',
+
+                'a_pool_city_gx_km' => '广西-南宁市',
 
                 'a_pool_city_nmg_hhht' => '内蒙古-呼和浩特市',
                 'a_pool_city_nmg_eeds' => '内蒙古-鄂尔多斯市',
@@ -307,6 +326,15 @@
                 'a_pool_city_xj_wlmq' => '新疆-乌鲁木齐市',
                 'a_pool_city_xj_yl' => '新疆-伊犁州',
                 'a_pool_city_xj_cj' => '新疆-昌吉州',
+
+                'a_pool_city_ln_sy' => '辽宁-沈阳市',
+                'a_pool_city_ln_dl' => '辽宁-大连市',
+
+                'a_pool_city_jl_cc' => '吉林-长春市',
+                'a_pool_city_jl_jl' => '吉林-吉林市',
+
+                'a_pool_city_hlj_heb' => '黑龙江-哈尔滨',
+                'a_pool_city_hlj_dq' => '黑龙江-大庆',
             ],
 
             'phone_table' => [
