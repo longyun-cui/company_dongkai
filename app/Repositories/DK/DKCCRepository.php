@@ -5024,7 +5024,7 @@ class DKCCRepository {
 
 
 
-        $list = $query->get();
+        $list = $query->orderBy("is_top", "desc")->orderBy("id", "asc")->get();
         $total = $list->count();
 //        dd($data);
 //
