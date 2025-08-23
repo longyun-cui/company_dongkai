@@ -5,17 +5,28 @@ Route::get('/', function () {
     dd('route-admin');
 });
 
-Route::get('/test', function () {
+//Route::get('/test', function () {
+//
+//    dd(0);
+//    $str = "Hello, World! 123";
+//
+//    $input = request('input','');
+//    $result = searchCityCode($input, config('location_city.city'));
+//    dd($result);
+//
+//});
 
-    $str = "Hello, World! 123";
 
-    $input = request('input','');
-    $result = searchCityCode($input, config('location_city.city'));
-    dd($result);
+Route::group(['prefix'=>'test'], function () {
 
+    $controller = "DKTestController";
 
+    Route::get('/job', $controller.'@test_job');
 
 });
+
+
+
 Route::get('/test-memcached', function () {
     $key = 'test_key_' . time(); // 确保唯一性
     Cache::put($key, 'test_value', 10);
