@@ -13,7 +13,7 @@ class DK_VOS_CDR extends Authenticatable
 //    protected $connection = 'mysql0';
 //    protected $connection = 'mysql_def';
 
-    protected $table = "a__cdr";
+    protected $table = "a__cdr__current";
 //    protected $table = "dk_vos";
 
     protected $fillable = [
