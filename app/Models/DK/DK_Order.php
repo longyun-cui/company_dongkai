@@ -11,8 +11,11 @@ class DK_Order extends Model
     //
     protected $table = "dk_admin_order";
     protected $fillable = [
-        'active', 'status', 'category', 'type', 'form', 'sort',
-        'item_active', 'item_status', 'item_result', 'item_category', 'item_type', 'item_form',
+        'active', 'status',
+        'category', 'type', 'form', 'sort',
+        'item_active', 'item_status', 'item_result',
+        'item_category', 'item_type', 'item_form',
+
         'owner_active', 'is_show', 'is_published', 'is_completed',
 
         'owner_id',

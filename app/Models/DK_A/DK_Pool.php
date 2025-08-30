@@ -11,15 +11,19 @@ class DK_Pool extends Model
     //
     protected $table = "a_pool";
     protected $fillable = [
-        'active', 'status', 'category', 'type', 'form', 'sort',
-        'item_active', 'item_status', 'item_result', 'item_category', 'item_type', 'item_form',
+        'active', 'status', 'result',
+        'category', 'type', 'group',
+        'item_active', 'item_status', 'item_result',
+        'item_category', 'item_type', 'item_group',
 
-        'order_id',
-        'order_phone',
-        'order_date',
-        'inspected_result',
+        'is_top',
 
-        'phone',
+        'province_code',
+        'region',
+        'region_name',
+
+        'data_table',
+        'data_modal',
 
         'phone_count',
         'order_count',
@@ -29,20 +33,31 @@ class DK_Pool extends Model
         'good_count',
         'poor_count',
 
-        'last_task_date',
-
-        'call_cnt_8',
+        'call_cnt_1_6',
+        'call_cnt_1_8',
         'call_cnt_9_15',
         'call_cnt_16_25',
         'call_cnt_26_45',
         'call_cnt_46_90',
-        'call_cnt_91',
+        'call_cnt_7_above',
+        'call_cnt_9_above',
+        'call_cnt_15_above',
+        'call_cnt_25_above',
+        'call_cnt_45_above',
+        'call_cnt_91_above',
 
+        'rate_95_cnt',
+        'rate_90_cnt',
+        'rate_80_cnt',
+        'rate_60_cnt',
+        'rate_0_cnt',
+        'rate_-20_cnt',
+        'rate_-60_cnt',
+        'rate_-80_cnt',
 
-        'region',
-        'region_name',
-        'data_table',
-        'data_modal',
+        'last_sync_date',
+        'last_task_date',
+        'last_task_datetime',
 
         'field_1',
         'field_2',
