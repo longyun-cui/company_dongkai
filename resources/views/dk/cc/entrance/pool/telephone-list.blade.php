@@ -256,7 +256,7 @@
                         "title": "95分",
                         "data": "rate_95_cnt",
                         "className": "",
-                        "width": "80px",
+                        "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
@@ -266,7 +266,7 @@
                         "title": "90分",
                         "data": "rate_90_cnt",
                         "className": "",
-                        "width": "80px",
+                        "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
@@ -276,7 +276,7 @@
                         "title": "80分",
                         "data": "rate_80_cnt",
                         "className": "",
-                        "width": "80px",
+                        "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
@@ -286,7 +286,7 @@
                         "title": "60分",
                         "data": "rate_60_cnt",
                         "className": "",
-                        "width": "80px",
+                        "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
@@ -296,7 +296,7 @@
                         "title": "0分",
                         "data": "rate_0_cnt",
                         "className": "",
-                        "width": "80px",
+                        "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
@@ -306,7 +306,7 @@
                         "title": "-20分",
                         "data": "rate_-20_cnt",
                         "className": "",
-                        "width": "80px",
+                        "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
@@ -316,7 +316,7 @@
                         "title": "-60分",
                         "data": "rate_-60_cnt",
                         "className": "",
-                        "width": "80px",
+                        "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
