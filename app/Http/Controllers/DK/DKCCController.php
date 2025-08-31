@@ -707,7 +707,7 @@ class DKCCController extends Controller
     // 【电话数据】下载
     public function operate_pool_telephone_download()
     {
-        return $this->repo->operate_pool_telephone_download_by_job(request()->all());
+        return $this->repo->operate_pool_telephone_download(request()->all());
     }
 
 
