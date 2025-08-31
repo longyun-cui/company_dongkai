@@ -135,7 +135,7 @@ EOF;
                 $storage_path = storage_path($upload_path);
                 if (!is_dir($storage_path))
                 {
-                    mkdir($storage_path, 0766, true);
+                    mkdir($storage_path, 0755, true);
                 }
 //            $filename = $name.'-'.$task_id;
                 $filename = $task_id.'-'.$name;
