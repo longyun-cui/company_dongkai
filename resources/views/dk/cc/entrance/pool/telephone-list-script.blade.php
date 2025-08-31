@@ -88,21 +88,21 @@
                     }
                     else
                     {
-                        layer.msg("请求成功！");
+                        layer.msg("请求成功，请稍后到任务列表下载！");
                         // console.log(JSON.parse($response.data));
-                        $.each(JSON.parse($response.data), function(index, value) {
-                            // console.log(value);
-                            // console.log(value.url);
-                            // console.log(value.path);
-                            // console.log(value.name);
-
-                            var $obj = new Object();
-                            $obj.path = value.path;
-
-                            var $url = url_build('/download/file-download',$obj);
-                            window.open($url);
-
-                        });
+                        // $.each(JSON.parse($response.data), function(index, value) {
+                        //     // console.log(value);
+                        //     // console.log(value.url);
+                        //     // console.log(value.path);
+                        //     // console.log(value.name);
+                        //
+                        //     var $obj = new Object();
+                        //     $obj.path = value.path;
+                        //
+                        //     var $url = url_build('/download/file-download',$obj);
+                        //     window.open($url);
+                        //
+                        // });
                     }
                 })
                 .fail(function(jqXHR, textStatus, errorThrown) {

@@ -194,8 +194,8 @@
 
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
-//                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[-1], ["全部"]],
+                "aLengthMenu": [[50, 200, 500], ["50", "200", "500"]],
+                // "aLengthMenu": [[-1], ["全部"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
@@ -418,6 +418,7 @@
                             var $html_record = '';
                             var $html_able = '';
                             var $html_delete = '';
+                            var $html_download = '';
 
                             if(row.item_status == 1)
                             {
@@ -439,8 +440,19 @@
 
                             $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
 
+
+
+                            if(row.is_completed == 1)
+                            {
+                                $html_download = '<a class="btn btn-xs btn-default item-download-submit" data-id="'+data+'">下载</a>';
+                            }
+                            else
+                            {
+                                $html_download = '<a class="btn btn-xs btn-default disabled">下载</a>';
+                            }
+
                             var html =
-                                '<a class="btn btn-xs btn-primary- item-download-submit" data-id="'+data+'">再次下载</a>'+
+                                $html_download+
                                 // '<a class="btn btn-xs btn-primary- item-edit-link" data-id="'+data+'">编辑</a>'+
                                 // $html_able+
                                 // $html_delete+

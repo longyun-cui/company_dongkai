@@ -39,6 +39,11 @@ Route::group(['middleware' => ['dk.cc.login','dk.cc.password_change']], function
 //    Route::get('/404', $controller.'@view_admin_404');
 
 
+
+    Route::get('/job/update_pools', $controller.'@operate_job_update_pools');
+
+
+
     /*
      * 个人信息管理
      */

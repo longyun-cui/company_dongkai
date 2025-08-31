@@ -5,7 +5,6 @@ use App\Models\DK_A\DK_A_Order;
 
 use App\Models\DK_A\DK_Pool_Task;
 use App\Models\DK_A\DK_Pool;
-use App\Models\DK_A\DK_Pool_City;
 
 use App\Models\DK_CC\DK_CC_Team;
 use App\Models\DK_CC\DK_CC_Telephone;
@@ -37,6 +36,9 @@ use App\Models\DK_Client\DK_Client_Finance_Daily;
 
 use App\Models\DK\YH_Attachment;
 use App\Models\DK\YH_Item;
+
+use App\Jobs\DK_CC\DownPhoneJob;
+use App\Jobs\DK_CC\UpdatePoolsJob;
 
 use App\Repositories\Common\CommonRepository;
 
@@ -86,6 +88,19 @@ class DKCCRepository {
         view()->share('is_mobile_equipment',$is_mobile_equipment);
 
         view()->share('system','cc');
+    }
+
+
+
+
+    // 返回（后台）主页视图
+    public function operate_job_update_pools()
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        UpdatePoolsJob::dispatch(4010);
+
     }
 
 
@@ -5935,14 +5950,6 @@ class DKCCRepository {
                     ->orWhereDate('last_call_date', '<', now()->subDays(1)->format('Y-m-d'));
             }) ?: collect();
 
-//            $telephone->where(function ($query) {
-//                    $query->whereNull('last_call_date')
-//                        ->orWhereDate('last_call_date', '<', now()->subDays(1)->format('Y-m-d'));
-//                });
-//                ->where($telephone_where)
-//                ->where(['item_status'=>1,'is_blacklisted'=>0])
-//                ->where(['quality'=>1])
-//                ->whereIn('quality',[1,2,3])
 
             $telephone_1 = (clone $telephone);
             $telephone_2 = (clone $telephone);
@@ -6052,6 +6059,129 @@ EOF;
 
 //            return response_success();
             return response_success(json_encode($file_list));
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【电话池】下载
+    public function operate_pool_telephone_download_by_job($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'telephone_count.required' => '请输入电话数量！',
+            'telephone_count.numeric' => '电话数量必须为大于等于0的整数！',
+            'telephone_count.min' => '电话数量必须为大于等于0的整数！',
+            'file_num.required' => '请输入文件数量！',
+            'file_num.numeric' => '文件数量必须为大于等于1的整数！',
+            'file_num.min' => '文件数量必须为大于等于1的整数！',
+            'file_size.required' => '请输入文件大小！',
+            'file_size.numeric' => '文件大小必须为大于等于0的整数！',
+            'file_size.min' => '文件大小必须为大于等于0的整数！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'telephone_count' => 'required|numeric|min:1',
+            'file_num' => 'required|numeric|min:1',
+            'file_size' => 'required|numeric|min:0',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'service-telephone-download') return response_error([],"参数[operate]有误！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,61])) return response_error([],"你没有操作权限！");
+
+        $date = date('Y-m-d');
+        $datetime = date('Y-m-d H:i:s');
+        $date_Ymd = date('Ymd');
+
+        $telephone_count = $post_data["telephone_count"];
+        $file_num = $post_data["file_num"];
+        $file_size = $post_data["file_size"];
+
+        $telephone_count_1 = ceil($telephone_count * 0.6);
+        $telephone_count_2 = ceil($telephone_count * 0.3);
+        $telephone_count_3 = ceil($telephone_count * 0.1);
+
+        $pool_id = $post_data["pool_id"];
+        $pool = DK_Pool::find($pool_id);
+        if($pool)
+        {
+            $table = $pool->data_table;
+            $modal = $pool->data_modal;
+            $region_name = $pool->region_name;
+            $pool_name = $pool->region_name;
+        }
+        else return response_error([],"电话池不存在！");
+
+
+
+//        $provinceCode = $post_data["provinceCode"];
+//        $cityCode = $post_data["cityCode"];
+//        $areaCode = $post_data["areaCode"];
+//        $tag = $post_data["tag"];
+//
+//
+//        $provinceName = config('location_city.province.'.$provinceCode);
+//        $cityName = config('location_city.city.'.$provinceCode.'.'.$cityCode);
+//        $areaName = config('location_city.district.'.$cityCode.'.'.$areaCode);
+
+
+        $extraction_name = $post_data["extraction_name"];
+        if($extraction_name)
+        {
+            $name = $extraction_name;
+        }
+        else
+        {
+            $name = $pool_name.'-'.$date_Ymd;
+        }
+
+//        $telephone_where['provinceCode'] = $provinceCode;
+//        $telephone_where['cityCode'] = $cityCode;
+//        $telephone_where['areaCode'] = $areaCode;
+//        $telephone_where['tag'] = $post_data["tag"];
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $task = new DK_Pool_Task;
+
+            $task_insert['creator_id'] = $me->id;
+            $task_insert['name'] = $name;
+            $task_insert['pool_id'] = $pool_id;
+            $task_insert['region_name'] = $region_name;
+//            $task_insert['provinceCode'] = $provinceCode;
+//            $task_insert['cityCode'] = $cityCode;
+//            $task_insert['areaCode'] = $areaCode;
+//            $task_insert['tag'] = $tag;
+            $task_insert['extraction_telephone_count'] = $telephone_count;
+            $task_insert['extraction_file_num'] = $file_num;
+            $task_insert['extraction_file_size'] = $file_size;
+            $task_insert['extraction_name'] = $extraction_name;
+
+            $bool_t = $task->fill($task_insert)->save();
+
+            DB::commit();
+
+            DownPhoneJob::dispatch($task->id);
+
+            return response_success();
         }
         catch (Exception $e)
         {

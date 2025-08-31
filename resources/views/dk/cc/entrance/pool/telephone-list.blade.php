@@ -22,18 +22,18 @@
 
 
                 <div class="row">
-                    <div class="col-md-12 datatable-search-row" id="search-row-for-telephone-list">
+                <div class="col-md-12 datatable-search-row" id="search-row-for-telephone-list">
 
                     <div class="input-group">
 
 {{--                        <input type="text" class="form-control form-filter item-search-keyup" name="telephone-title" placeholder="名称" />--}}
 
-                        <select class="form-control form-filter select2-box" name="telephone-city[]" id="telephone-city" multiple="multiple"  style="width:640px;">
-                            <option value="-1">选择城市</option>
-                            @foreach($city_list as $k => $v)
-                                <option value="{{ $k }}">{{ $v }}</option>
-                            @endforeach
-                        </select>
+{{--                        <select class="form-control form-filter select2-box" name="telephone-city[]" id="telephone-city" multiple="multiple"  style="width:640px;">--}}
+{{--                            <option value="-1">选择城市</option>--}}
+{{--                            @foreach($city_list as $k => $v)--}}
+{{--                                <option value="{{ $k }}">{{ $v }}</option>--}}
+{{--                            @endforeach--}}
+{{--                        </select>--}}
 
                     </div>
 
@@ -52,15 +52,15 @@
                         </button>
                     </div>
 
-                    @if(in_array($me->user_type,[0,1,9,11,19]))
-                    <div class="caption pull-right">
-                        <i class="icon-pin font-blue"></i>
-                        <span class="caption-subject font-blue sbold uppercase"></span>
-                        <a href="{{ url('/service/telephone-import') }}">
-                            <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 导入电话</button>
-                        </a>
-                    </div>
-                    @endif
+{{--                    @if(in_array($me->user_type,[0,1,9,11,19]))--}}
+{{--                    <div class="caption pull-right">--}}
+{{--                        <i class="icon-pin font-blue"></i>--}}
+{{--                        <span class="caption-subject font-blue sbold uppercase"></span>--}}
+{{--                        <a href="{{ url('/service/telephone-import') }}">--}}
+{{--                            <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 导入电话</button>--}}
+{{--                        </a>--}}
+{{--                    </div>--}}
+{{--                    @endif--}}
 
                 </div>
                 </div>

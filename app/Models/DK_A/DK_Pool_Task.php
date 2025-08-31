@@ -7,7 +7,7 @@ class DK_Pool_Task extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "a_pool_task";
+    protected $table = "a_pool_b_task";
     protected $fillable = [
         'active', 'status',
         'category', 'type', 'form', 'sort',

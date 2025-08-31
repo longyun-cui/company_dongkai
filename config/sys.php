@@ -327,8 +327,18 @@
                 'a_pool_city_gz_bj' => '贵州-毕节市',
 
                 'a_pool_city_yn_km' => '云南-昆明市',
+                'a_pool_city_yn_qj' => '云南-曲靖市',
+                'a_pool_city_yn_hh' => '云南-红河州',
+                'a_pool_city_yn_yx' => '云南-玉溪市',
+                'a_pool_city_yn_cx' => '云南-楚雄州',
+                'a_pool_city_yn_zt' => '云南-昭通市',
+                'a_pool_city_yn_dl' => '云南-大理州',
 
-                'a_pool_city_gx_km' => '广西-南宁市',
+                'a_pool_city_gx_nn' => '广西-南宁市',
+                'a_pool_city_gx_lz' => '广西-柳州市',
+                'a_pool_city_gx_gl' => '广西-桂林市',
+                'a_pool_city_gx_yl' => '广西-玉林市',
+                'a_pool_city_gx_bs' => '广西-百色市',
 
                 'a_pool_city_nmg_hhht' => '内蒙古-呼和浩特市',
                 'a_pool_city_nmg_eeds' => '内蒙古-鄂尔多斯市',
