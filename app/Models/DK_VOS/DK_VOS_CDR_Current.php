@@ -5,7 +5,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DK_VOS_CDR extends Authenticatable
+class DK_VOS_CDR_Current extends Authenticatable
 {
     use Notifiable;
 //    use SoftDeletes;
