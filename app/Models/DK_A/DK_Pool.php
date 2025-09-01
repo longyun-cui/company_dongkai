@@ -33,6 +33,7 @@ class DK_Pool extends Model
         'good_count',
         'poor_count',
 
+        'call_cnt',
         'call_cnt_1_6',
         'call_cnt_1_8',
         'call_cnt_9_15',
@@ -48,12 +49,16 @@ class DK_Pool extends Model
 
         'rate_95_cnt',
         'rate_90_cnt',
+        'rate_85_cnt',
         'rate_80_cnt',
         'rate_60_cnt',
+        'rate_40_cnt',
+        'rate_20_cnt',
         'rate_0_cnt',
-        'rate_-20_cnt',
-        'rate_-60_cnt',
-        'rate_-80_cnt',
+        'rate_minus_20_cnt',
+        'rate_minus_40_cnt',
+        'rate_minus_60_cnt',
+        'rate_minus_80_cnt',
 
         'last_sync_date',
         'last_task_date',

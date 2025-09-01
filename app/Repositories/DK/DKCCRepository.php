@@ -6,6 +6,9 @@ use App\Models\DK_A\DK_A_Order;
 use App\Models\DK_A\DK_Pool_Task;
 use App\Models\DK_A\DK_Pool;
 
+use App\Models\DK_VOS\DK_VOS_CDR;
+use App\Models\DK_VOS\DK_VOS_CDR_Current;
+
 use App\Models\DK_CC\DK_CC_Team;
 use App\Models\DK_CC\DK_CC_Telephone;
 use App\Models\DK_CC\DK_CC_Telephone_Blacklist;

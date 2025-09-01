@@ -264,16 +264,6 @@
                         }
                     },
                     {
-                        "title": "任务名称",
-                        "data": "name",
-                        "className": "",
-                        "width": "100px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return '<a href="javascript:void(0);">'+data+'</a>';
-                        }
-                    },
-                    {
                         "title": "电话池",
                         "data": "pool_id",
                         "className": "",
@@ -288,6 +278,16 @@
                         "data": "region_name",
                         "className": "",
                         "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return '<a href="javascript:void(0);">'+data+'</a>';
+                        }
+                    },
+                    {
+                        "title": "任务名称",
+                        "data": "name",
+                        "className": "",
+                        "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return '<a href="javascript:void(0);">'+data+'</a>';

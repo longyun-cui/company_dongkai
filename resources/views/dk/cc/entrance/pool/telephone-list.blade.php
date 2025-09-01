@@ -236,7 +236,7 @@
                         "title": "全部",
                         "data": "phone_count",
                         "className": "",
-                        "width": "80px",
+                        "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
@@ -246,7 +246,7 @@
                         "title": "成单",
                         "data": "order_count",
                         "className": "",
-                        "width": "80px",
+                        "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
@@ -293,6 +293,16 @@
                         }
                     },
                     {
+                        "title": "10分",
+                        "data": "rate_10_cnt",
+                        "className": "",
+                        "width": "60px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
                         "title": "0分",
                         "data": "rate_0_cnt",
                         "className": "",
@@ -304,7 +314,17 @@
                     },
                     {
                         "title": "-20分",
-                        "data": "rate_-20_cnt",
+                        "data": "rate_minus_20_cnt",
+                        "className": "",
+                        "width": "60px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "-40分",
+                        "data": "rate_minus_40_cnt",
                         "className": "",
                         "width": "60px",
                         "orderable": false,
@@ -314,7 +334,7 @@
                     },
                     {
                         "title": "-60分",
-                        "data": "rate_-60_cnt",
+                        "data": "rate_minus_60_cnt",
                         "className": "",
                         "width": "60px",
                         "orderable": false,
@@ -324,9 +344,9 @@
                     },
                     {
                         "title": "-80分",
-                        "data": "rate_-80_cnt",
+                        "data": "rate_minus_80_cnt",
                         "className": "",
-                        "width": "80px",
+                        "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
@@ -372,16 +392,16 @@
                     //         return data;
                     //     }
                     // },
-                    {
-                        "title": "最近提取",
-                        "data": "last_task_datetime",
-                        "className": "",
-                        "width": "120px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
+                    // {
+                    //     "title": "最近提取",
+                    //     "data": "last_task_datetime",
+                    //     "className": "",
+                    //     "width": "120px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return data;
+                    //     }
+                    // },
                     {
                         "title": "电话总数",
                         "data": "id",
@@ -396,7 +416,7 @@
                         "title": "文件数量",
                         "data": "id",
                         "className": "",
-                        "width": "40px",
+                        "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return '<input type="text" class="form-control file_num" placeholder="文件数量" value="1">';
@@ -406,7 +426,7 @@
                         "title": "文件大小",
                         "data": "id",
                         "className": "",
-                        "width": "40px",
+                        "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return '<input type="text" class="form-control file_size" placeholder="0为平均" value="0">';
@@ -416,7 +436,7 @@
                         "title": "文件名",
                         "data": "id",
                         "className": "",
-                        "width": "100px",
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return '<input type="text" class="form-control extraction_name" placeholder="文件名" value="">';
