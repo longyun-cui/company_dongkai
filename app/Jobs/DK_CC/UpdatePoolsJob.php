@@ -89,6 +89,7 @@ class UpdatePoolsJob implements ShouldQueue
                       GROUP BY phone
                     ) c
                     ON p.phone = c.phone
+                    
                     SET
                       p.call_cnt = p.call_cnt + c.cnt,
                       p.call_cnt_1_6 = p.call_cnt_1_6 + c.cnt_1_6,
@@ -100,7 +101,7 @@ class UpdatePoolsJob implements ShouldQueue
                       p.call_cnt_7_above = p.call_cnt_7_above + c.cnt_7_above,
                       p.call_cnt_9_above = p.call_cnt_9_above + c.cnt_9_above,
                       p.call_cnt_91_above = p.call_cnt_91_above + c.cnt_91_above
-                ";
+                    ";
                 DB::statement($sql_1);
 
 
@@ -216,6 +217,8 @@ class UpdatePoolsJob implements ShouldQueue
             {
                 DB::rollback();
                 $msg = $e->getMessage();
+
+                dd($msg);
                 return;
             }
 
