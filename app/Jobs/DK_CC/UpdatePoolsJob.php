@@ -50,10 +50,8 @@ class UpdatePoolsJob implements ShouldQueue
         $pool = DK_Pool::find($pool_id);
         if($pool)
         {
-
             $current = DK_VOS_CDR_Current::select('*')->orderBy('id','desc')->first();
             $current_date = $current->call_date;
-
 
             $table = $pool->data_table;
             $modal = $pool->data_modal;
@@ -106,6 +104,7 @@ class UpdatePoolsJob implements ShouldQueue
                 DB::statement($sql_1);
 
 
+                $pool->timestamps = false;
                 $pool->last_sync_date = $current_date;
                 $pool->save();
 
