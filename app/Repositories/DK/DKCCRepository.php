@@ -105,7 +105,7 @@ class DKCCRepository {
         $pool_list = DK_Pool::select('id')->get();
         foreach($pool_list as $pool)
         {
-            UpdatePoolsJob::dispatch($pool);
+            UpdatePoolsJob::dispatch($pool->id);
         }
     }
 
