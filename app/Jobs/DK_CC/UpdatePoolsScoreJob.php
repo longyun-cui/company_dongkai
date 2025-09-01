@@ -87,7 +87,7 @@ class UpdatePoolsScoreJob implements ShouldQueue
                         WHEN `order_cnt` = 0 AND (`call_cnt_1_8` = 2) AND ((`call_cnt_46_90` + `call_cnt_91_above`) >= 1) THEN 85
                         WHEN `order_cnt` = 0 AND (`call_cnt_1_8` > 2) AND ((`call_cnt_46_90` + `call_cnt_91_above`) >= 1) THEN -20
                         
-                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` < 2) AND (`call_cnt_9_above` = 0) THEN 40
+                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` = 1) AND (`call_cnt_9_above` = 0) THEN 40
                         WHEN `order_cnt` = 0 AND (`call_cnt_1_8` = 2) AND (`call_cnt_9_above` = 0) THEN 30
                         WHEN `order_cnt` = 0 AND (`call_cnt_1_8` > 2) AND (`call_cnt_9_above` = 0) THEN -80
                         WHEN `order_cnt` = 1 THEN 10
