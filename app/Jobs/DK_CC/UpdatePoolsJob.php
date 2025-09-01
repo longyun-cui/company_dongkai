@@ -131,14 +131,13 @@ class UpdatePoolsJob implements ShouldQueue
                     UPDATE {$poolTable}
                     SET `quality` =
                     CASE
-                        
                         WHEN `order_cnt` = 0 AND (`call_cnt_1_8` < 2) AND ((`call_cnt_9_15` + `call_cnt_16_25`) >= 1) THEN 60
                         WHEN `order_cnt` = 0 AND (`call_cnt_1_8` = 2) AND ((`call_cnt_9_15` + `call_cnt_16_25`) >= 1) THEN 50
                         WHEN `order_cnt` = 0 AND (`call_cnt_1_8` > 2) AND ((`call_cnt_9_15` + `call_cnt_16_25`) >= 1) THEN -60
                         
-                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` < 2) AND ((`call_cnt_26_45` + `call_cnt_46_90` + `call_cnt_91_above`) >= 1) THEN 90
-                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` = 2) AND ((`call_cnt_26_45` + `call_cnt_46_90` + `call_cnt_91_above`) >= 1) THEN 80
-                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` > 2) AND ((`call_cnt_26_45` + `call_cnt_46_90` + `call_cnt_91_above`) >= 1) THEN -40
+                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` < 2) AND ((`call_cnt_26_45`) >= 1) THEN 90
+                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` = 2) AND ((`call_cnt_26_45`) >= 1) THEN 80
+                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` > 2) AND ((`call_cnt_26_45`) >= 1) THEN -40
                         
                         WHEN `order_cnt` = 0 AND (`call_cnt_1_8` < 2) AND ((`call_cnt_46_90` + `call_cnt_91_above`) >= 1) THEN 95
                         WHEN `order_cnt` = 0 AND (`call_cnt_1_8` = 2) AND ((`call_cnt_46_90` + `call_cnt_91_above`) >= 1) THEN 85
