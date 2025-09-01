@@ -131,15 +131,20 @@ class UpdatePoolsJob implements ShouldQueue
                     UPDATE {$poolTable}
                     SET `quality` =
                     CASE
-                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` < 2) AND ((`call_cnt_26_45` + `call_cnt_46_90` + `call_cnt_91_above`) > 1) THEN 90
-                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` = 2) AND ((`call_cnt_26_45` + `call_cnt_46_90` + `call_cnt_91_above`) > 1) THEN 80
-                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` > 2) AND ((`call_cnt_26_45` + `call_cnt_46_90` + `call_cnt_91_above`) > 1) THEN -40
-                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` < 2) AND ((`call_cnt_46_90` + `call_cnt_91_above`) > 1) THEN 95
-                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` = 2) AND ((`call_cnt_46_90` + `call_cnt_91_above`) > 1) THEN 85
-                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` > 2) AND ((`call_cnt_46_90` + `call_cnt_91_above`) > 1) THEN -20
-                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` < 2) AND ((`call_cnt_9_15` + `call_cnt_16_25`) > 1) THEN 60
-                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` = 2) AND ((`call_cnt_9_15` + `call_cnt_16_25`) > 1) THEN 20
-                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` > 2) AND ((`call_cnt_9_15` + `call_cnt_16_25`) > 1) THEN -60
+                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` < 2) AND ((`call_cnt_26_45` + `call_cnt_46_90` + `call_cnt_91_above`) >= 1) THEN 90
+                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` = 2) AND ((`call_cnt_26_45` + `call_cnt_46_90` + `call_cnt_91_above`) >= 1) THEN 80
+                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` > 2) AND ((`call_cnt_26_45` + `call_cnt_46_90` + `call_cnt_91_above`) >= 1) THEN -40
+                        
+                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` < 2) AND ((`call_cnt_46_90` + `call_cnt_91_above`) >= 1) THEN 95
+                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` = 2) AND ((`call_cnt_46_90` + `call_cnt_91_above`) >= 1) THEN 85
+                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` > 2) AND ((`call_cnt_46_90` + `call_cnt_91_above`) >= 1) THEN -20
+                        
+                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` < 2) AND ((`call_cnt_9_15` + `call_cnt_16_25`) >= 1) THEN 60
+                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` = 2) AND ((`call_cnt_9_15` + `call_cnt_16_25`) >= 1) THEN 50
+                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` > 2) AND ((`call_cnt_9_15` + `call_cnt_16_25`) >= 1) THEN -60
+                        
+                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` < 2) AND (`call_cnt_9_above` = 0) THEN 40
+                        WHEN `order_cnt` = 0 AND (`call_cnt_1_8` = 2) AND (`call_cnt_9_above` = 0) THEN 30
                         WHEN `order_cnt` = 0 AND (`call_cnt_1_8` > 2) AND (`call_cnt_9_above` = 0) THEN -80
                         WHEN `order_cnt` = 1 THEN 10
                         ELSE 0
@@ -169,7 +174,9 @@ class UpdatePoolsJob implements ShouldQueue
                         COALESCE(COUNT(CASE WHEN quality = 85 THEN 1 END), 0) AS count_rate_85_cnt,
                         COALESCE(COUNT(CASE WHEN quality = 80 THEN 1 END), 0) AS count_rate_80_cnt,
                         COALESCE(COUNT(CASE WHEN quality = 60 THEN 1 END), 0) AS count_rate_60_cnt,
+                        COALESCE(COUNT(CASE WHEN quality = 50 THEN 1 END), 0) AS count_rate_50_cnt,
                         COALESCE(COUNT(CASE WHEN quality = 40 THEN 1 END), 0) AS count_rate_40_cnt,
+                        COALESCE(COUNT(CASE WHEN quality = 30 THEN 1 END), 0) AS count_rate_30_cnt,
                         COALESCE(COUNT(CASE WHEN quality = 20 THEN 1 END), 0) AS count_rate_20_cnt,
                         COALESCE(COUNT(CASE WHEN quality = 10 THEN 1 END), 0) AS count_rate_10_cnt,
                         COALESCE(COUNT(CASE WHEN quality = 0 THEN 1 END), 0) AS count_rate_0_cnt,
