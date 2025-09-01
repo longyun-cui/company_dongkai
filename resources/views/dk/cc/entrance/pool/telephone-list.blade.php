@@ -303,6 +303,36 @@
                         }
                     },
                     {
+                        "title": "50分",
+                        "data": "rate_50_cnt",
+                        "className": "",
+                        "width": "60px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "40分",
+                        "data": "rate_40_cnt",
+                        "className": "",
+                        "width": "60px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "30分",
+                        "data": "rate_30_cnt",
+                        "className": "",
+                        "width": "60px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
                         "title": "10分",
                         "data": "rate_10_cnt",
                         "className": "",
