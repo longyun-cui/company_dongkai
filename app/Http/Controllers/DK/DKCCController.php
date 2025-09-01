@@ -180,10 +180,14 @@ class DKCCController extends Controller
 
 
 
-    // 返回主页视图
+    // 任务
     public function operate_job_update_pools()
     {
         return $this->repo->operate_job_update_pools();
+    }
+    public function operate_job_update_pools_score()
+    {
+        return $this->repo->operate_job_update_pools_score();
     }
 
 

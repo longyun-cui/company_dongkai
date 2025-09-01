@@ -42,6 +42,7 @@ use App\Models\DK\YH_Item;
 
 use App\Jobs\DK_CC\DownPhoneJob;
 use App\Jobs\DK_CC\UpdatePoolsJob;
+use App\Jobs\DK_CC\UpdatePoolsScoreJob;
 
 use App\Repositories\Common\CommonRepository;
 
@@ -106,6 +107,18 @@ class DKCCRepository {
         foreach($pool_list as $pool)
         {
             UpdatePoolsJob::dispatch($pool->id);
+        }
+    }
+    // 返回（后台）主页视图
+    public function operate_job_update_pools_score()
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $pool_list = DK_Pool::select('id')->get();
+        foreach($pool_list as $pool)
+        {
+            UpdatePoolsScoreJob::dispatch($pool->id);
         }
     }
 

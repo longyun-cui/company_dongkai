@@ -41,6 +41,7 @@ Route::group(['middleware' => ['dk.cc.login','dk.cc.password_change']], function
 
 
     Route::get('/job/update_pools', $controller.'@operate_job_update_pools');
+    Route::get('/job/update_pools_score', $controller.'@operate_job_update_pools_score');
 
 
 
