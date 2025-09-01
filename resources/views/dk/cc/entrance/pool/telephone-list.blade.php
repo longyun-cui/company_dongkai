@@ -273,6 +273,16 @@
                         }
                     },
                     {
+                        "title": "85分",
+                        "data": "rate_85_cnt",
+                        "className": "",
+                        "width": "60px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
                         "title": "80分",
                         "data": "rate_80_cnt",
                         "className": "",
