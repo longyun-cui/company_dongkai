@@ -106,11 +106,11 @@ class DownPhoneJob implements ShouldQueue
                 $telephone_3 = (clone $telephone);
 
 
-                $telephone_1->where('quality','>=',90)
+                $telephone_1->where('quality','>=',80)
                     ->orderby('task_id','asc')
                     ->limit($telephone_count_1);
 
-                $telephone_2->where('quality','>=',80)->where('quality','<',90)
+                $telephone_2->where('quality','>=',60)->where('quality','<',80)
                     ->orderby('task_id','asc')
                     ->limit($telephone_count_2);
 
