@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\DK;
 
+use App\Jobs\DK_CC\DownPhoneJob;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -712,6 +713,11 @@ class DKCCController extends Controller
     public function operate_pool_telephone_download()
     {
         return $this->repo->operate_pool_telephone_download_by_job(request()->all());
+    }
+    // 【电话数据】下载
+    public function operate_pool_telephone_download_by_job_retry()
+    {
+        return $this->repo->operate_pool_telephone_download_by_job_retry(request()->all());
     }
 
 

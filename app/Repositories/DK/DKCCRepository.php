@@ -6212,6 +6212,16 @@ EOF;
         }
 
     }
+    public function operate_pool_telephone_download_by_job_retry($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1])) return response_error([],"你没有操作权限！");
+
+        $task_id = $post_data['task_id'];
+        DownPhoneJob::dispatch($task_id);
+
+    }
 
 
 
