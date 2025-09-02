@@ -449,24 +449,24 @@
                         "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return '<input type="text" class="form-control telephone_count" placeholder="电话总数" value="">';
+                            return '<input type="text" class="form-control telephone_count" placeholder="总数" value="">';
                         }
                     },
                     {
                         "title": "文件数量",
                         "data": "id",
                         "className": "",
-                        "width": "60px",
+                        "width": "40px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return '<input type="text" class="form-control file_num" placeholder="文件数量" value="1">';
+                            return '<input type="text" class="form-control file_num" placeholder="数量" value="1">';
                         }
                     },
                     {
                         "title": "文件大小",
                         "data": "id",
                         "className": "",
-                        "width": "60px",
+                        "width": "40px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return '<input type="text" class="form-control file_size" placeholder="0为平均" value="0">';
@@ -516,7 +516,7 @@
                             $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
 
                             var html =
-                                '<a class="btn btn-xs btn-primary- item-down-submit" data-id="'+data+'">下载数据</a>'+
+                                '<a class="btn btn-xs btn-primary- item-down-submit" data-id="'+data+'">下载</a>'+
                                 // $html_able+
                                 // $html_delete+
                                 // $html_record+
