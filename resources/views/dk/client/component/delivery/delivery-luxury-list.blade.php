@@ -36,6 +36,7 @@
                 <option value="有效">有效</option>
                 <option value="无效">无效</option>
                 <option value="重单">重单</option>
+                <option value="待联系">待联系</option>
                 <option value="无法联系">无法联系</option>
             </select>
 
