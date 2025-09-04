@@ -1,4 +1,4 @@
-<div class="row datatable-body datatable-wrapper delivery-aesthetic-list-clone" data-datatable-item-category="aesthetic" data-item-name="交付">
+<div class="row datatable-body datatable-wrapper delivery-aesthetic-list-clone" data-datatable-item-category="delivery" data-item-name="交付">
 
 
     <div class="col-md-12 datatable-search-row  datatable-search-box">
