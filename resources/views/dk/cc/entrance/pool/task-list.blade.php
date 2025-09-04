@@ -277,7 +277,7 @@
                         "title": "城市",
                         "data": "region_name",
                         "className": "",
-                        "width": "80px",
+                        "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return '<a href="javascript:void(0);">'+data+'</a>';
@@ -287,7 +287,7 @@
                         "title": "任务名称",
                         "data": "name",
                         "className": "",
-                        "width": "100px",
+                        "width": "160px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return '<a href="javascript:void(0);">'+data+'</a>';
@@ -353,7 +353,7 @@
                         "title": "文件数量",
                         "data": "extraction_file_num",
                         "className": "",
-                        "width": "100px",
+                        "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
@@ -364,11 +364,66 @@
                         "title": "文件大小",
                         "data": "extraction_file_size",
                         "className": "",
-                        "width": "100px",
+                        "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
                             // return '<a href="javascript:void(0);">'+data+'</a>';
+                        }
+                    },
+                    {
+                        "title": "90分比例",
+                        "data": "extraction_proportion_of_90_points",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data) return data+'%';
+                            else return '--';
+                        }
+                    },
+                    {
+                        "title": "80分比例",
+                        "data": "extraction_proportion_of_80_points",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data) return data+'%';
+                            else return '--';
+                        }
+                    },
+                    {
+                        "title": "60比例",
+                        "data": "extraction_proportion_of_60_points",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data) return data+'%';
+                            else return '--';
+                        }
+                    },
+                    {
+                        "title": "10分比例",
+                        "data": "extraction_proportion_of_10_points",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data) return data+'%';
+                            else return '--';
+                        }
+                    },
+                    {
+                        "title": "0分比例",
+                        "data": "extraction_proportion_of_0_points",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data) return data+'%';
+                            else return '--';
                         }
                     },
                     {
@@ -402,8 +457,8 @@
 //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
 
                             var $currentYear = new Date().getFullYear();
-                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-                            else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+                            else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
                         }
                     },
                     {
@@ -444,7 +499,7 @@
 
                             if(row.is_completed == 1)
                             {
-                                $html_download = '<a class="btn btn-xs btn-default item-download-submit" data-id="'+data+'">下载</a>';
+                                $html_download = '<a class="btn btn-xs btn-default- item-download-submit" data-id="'+data+'">下载</a>';
                             }
                             else
                             {

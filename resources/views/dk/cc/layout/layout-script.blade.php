@@ -375,4 +375,21 @@
     // copyToClipboard('135');
 
 
+    // 实现整数数字每4位添加逗号的功能
+    function formatNumberWithCommas(number)
+    {
+        // 处理负数和零
+        if (number === 0) return '0';
+        let numStr = Math.abs(number).toString();
+
+        // 反转字符串 -> 每4位分割 -> 反转恢复
+        const reversed = numStr.split('').reverse().join('');
+        const chunks = reversed.match(/\d{1,4}/g); // 分割成每1-4位的组
+        numStr = chunks.join(',').split('').reverse().join('');
+
+        // 添加负号
+        return number < 0 ? '-' + numStr : numStr;
+    }
+
+
 </script>

@@ -720,6 +720,12 @@ class DKCCController extends Controller
         return $this->repo->operate_pool_telephone_download_by_job_retry(request()->all());
     }
 
+    // 【电话数据】下载
+    public function operate_pool_telephone_download_of_score()
+    {
+        return $this->repo->operate_pool_telephone_download_of_score(request()->all());
+    }
+
 
 
 

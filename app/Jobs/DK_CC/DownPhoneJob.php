@@ -70,6 +70,11 @@ class DownPhoneJob implements ShouldQueue
             $telephone_count = $task->extraction_telephone_count;
             $file_num = $task->extraction_file_num;
             $file_size = $task->extraction_file_size;
+            $proportion_of_90 = $task->extraction_proportion_of_90_points;
+            $proportion_of_80 = $task->extraction_proportion_of_80_points;
+            $proportion_of_60 = $task->extraction_proportion_of_60_points;
+            $proportion_of_10 = $task->extraction_proportion_of_10_points;
+            $proportion_of_0 = $task->extraction_proportion_of_0_points;
 
             $extraction_name = $task->extraction_name;
             if($extraction_name)
@@ -82,9 +87,10 @@ class DownPhoneJob implements ShouldQueue
             }
 
 
-            $telephone_count_1 = ceil($telephone_count * 0.6);
-            $telephone_count_2 = ceil($telephone_count * 0.3);
-            $telephone_count_3 = ceil($telephone_count * 0.1);
+            $telephone_count_1 = ceil($telephone_count * $proportion_of_80 / 100);
+            $telephone_count_2 = ceil($telephone_count * $proportion_of_60 / 100);
+            $telephone_count_3 = ceil($telephone_count * $proportion_of_10 / 100);
+            $telephone_count_4 = ceil($telephone_count * $proportion_of_0 / 100);
 
             // 启动数据库事务
             DB::beginTransaction();
@@ -104,24 +110,30 @@ class DownPhoneJob implements ShouldQueue
                 $telephone_1 = (clone $telephone);
                 $telephone_2 = (clone $telephone);
                 $telephone_3 = (clone $telephone);
+                $telephone_4 = (clone $telephone);
 
 
                 $telephone_1->where('quality','>=',80)
                     ->orderby('task_id','asc')
                     ->limit($telephone_count_1);
 
-                $telephone_2->where('quality','>=',60)->where('quality','<',80)
+                $telephone_2->where('quality',60)
                     ->orderby('task_id','asc')
                     ->limit($telephone_count_2);
 
-                $telephone_3->where('quality',0)
+                $telephone_3->where('quality',10)
                     ->orderby('task_id','asc')
                     ->limit($telephone_count_3);
+
+                $telephone_4->where('quality',0)
+                    ->orderby('task_id','asc')
+                    ->limit($telephone_count_4);
 
 
                 $telephone_1->update($telephone_update);
                 $telephone_2->update($telephone_update);
                 $telephone_3->update($telephone_update);
+                $telephone_4->update($telephone_update);
 
 
                 $telephone_list = ($modal ?? false)::select('task_id','phone','quality')->where('task_id',$task_id)->get() ?: collect();

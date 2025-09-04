@@ -72,7 +72,7 @@
 
 
                 <div class="tableArea">
-                <table class='table table-striped table-bordered- table-hover main-table' id='datatable_ajax'>
+                <table class='table table-striped table-bordered table-hover main-table' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
                         </tr>
@@ -97,6 +97,183 @@
         </div>
     </div>
 </div>
+{{--显示-审核信息--}}
+<div class="modal fade modal-main-body modal-wrapper" id="modal-body-for-pool-detail">
+    <div class="col-md-6 col-md-offset-3" id="" style="margin-top:16px;margin-bottom:64px;background:#fff;">
+
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border" style="margin:16px 0 0;">
+                <h3 class="box-title">城市详情【<span class="info-detail-title"></span>】</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <form action="" method="post" class="form-horizontal form-bordered" id="form-pool-modal">
+                <div class="box-body  info-body">
+
+                    {{ csrf_field() }}
+                    <input type="hidden" name="operate" value="telephone-download-of-score" readonly>
+                    <input type="hidden" name="detail-pool-id" value="0" readonly>
+
+                    {{--项目--}}
+                    <div class="form-group item-detail-row item-detail-95">
+                        <label class="control-label col-md-3">95分</label>
+                        <div class="col-md-2 detail-text-row">
+                            <span class="detail-text"></span> 个
+                        </div>
+                        <div class="col-md-3 item-detail-operate" data-operate="">
+                            <a href="javascript:void(0);" class="item-down-by-score" data-score="95">下载</a>
+                        </div>
+                    </div>
+                    {{--客户--}}
+                    <div class="form-group item-detail-row item-detail-90">
+                        <label class="control-label col-md-3">90分</label>
+                        <div class="col-md-2 detail-text-row">
+                            <span class="detail-text"></span> 个
+                        </div>
+                        <div class="col-md-3 item-detail-operate" data-operate="">
+                            <a href="javascript:void(0);" class="item-down-by-score" data-score="90">下载</a>
+                        </div>
+                    </div>
+                    {{--85分--}}
+                    <div class="form-group item-detail-row item-detail-85">
+                        <label class="control-label col-md-3">85分</label>
+                        <div class="col-md-2 detail-text-row">
+                            <span class="detail-text"></span> 个
+                        </div>
+                        <div class="col-md-3 item-detail-operate" data-operate="">
+                            <a href="javascript:void(0);" class="item-down-by-score" data-score="85">下载</a>
+                        </div>
+                    </div>
+                    {{--80分--}}
+                    <div class="form-group item-detail-row item-detail-80">
+                        <label class="control-label col-md-3">80分</label>
+                        <div class="col-md-2 detail-text-row">
+                            <span class="detail-text"></span> 个
+                        </div>
+                        <div class="col-md-3 item-detail-operate" data-operate="">
+                            <a href="javascript:void(0);" class="item-down-by-score" data-score="80">下载</a>
+                        </div>
+                    </div>
+                    {{--60分--}}
+                    <div class="form-group item-detail-row item-detail-60">
+                        <label class="control-label col-md-3">60分</label>
+                        <div class="col-md-2 detail-text-row">
+                            <span class="detail-text"></span> 个
+                        </div>
+                        <div class="col-md-3 item-detail-operate" data-operate="">
+                            <a href="javascript:void(0);" class="item-down-by-score" data-score="60">下载</a>
+                        </div>
+                    </div>
+                    {{--（-20分）--}}
+                    <div class="form-group item-detail-row item-detail-minus-20">
+                        <label class="control-label col-md-3">-20分</label>
+                        <div class="col-md-2 detail-text-row">
+                            <span class="detail-text"></span> 个
+                        </div>
+                        <div class="col-md-3 item-detail-operate" data-operate="">
+                        </div>
+                    </div>
+                    {{--（-40分）--}}
+                    <div class="form-group item-detail-row item-detail-minus-40">
+                        <label class="control-label col-md-3">-40分</label>
+                        <div class="col-md-2 detail-text-row">
+                            <span class="detail-text"></span> 个
+                        </div>
+                        <div class="col-md-3 item-detail-operate" data-operate="">
+                        </div>
+                    </div>
+                    {{--（-60分）--}}
+                    <div class="form-group item-detail-row item-detail-minus-60">
+                        <label class="control-label col-md-3">-60分</label>
+                        <div class="col-md-2 detail-text-row">
+                            <span class="detail-text"></span> 个
+                        </div>
+                        <div class="col-md-3 item-detail-operate" data-operate="">
+                        </div>
+                    </div>
+                    {{--（-80分）--}}
+                    <div class="form-group item-detail-row item-detail-minus-80">
+                        <label class="control-label col-md-3">-80分</label>
+                        <div class="col-md-2 detail-text-row">
+                            <span class="detail-text"></span> 个
+                        </div>
+                        <div class="col-md-3 item-detail-operate" data-operate="">
+                        </div>
+                    </div>
+                    {{--1-8秒--}}
+                    <div class="form-group item-detail-row item-detail-cnt">
+                        <label class="control-label col-md-3">通话次数</label>
+                        <div class="col-md-2 detail-text-row">
+                            <span class="detail-text"></span> 通
+                        </div>
+                        <div class="col-md-3 item-detail-operate" data-operate=""></div>
+                    </div>
+                    {{--1-8秒--}}
+                    <div class="form-group item-detail-row item-detail-1-8">
+                        <label class="control-label col-md-3">1-8秒</label>
+                        <div class="col-md-2 detail-text-row">
+                            <span class="detail-text"></span> 通
+                        </div>
+                        <div class="col-md-3 item-detail-operate" data-operate=""></div>
+                    </div>
+                    {{--9-15秒--}}
+                    <div class="form-group item-detail-row item-detail-9-15">
+                        <label class="control-label col-md-3">9-15秒</label>
+                        <div class="col-md-2 detail-text-row">
+                            <span class="detail-text"></span> 通
+                        </div>
+                        <div class="col-md-3 item-detail-operate" data-operate=""></div>
+                    </div>
+                    {{--16-25秒--}}
+                    <div class="form-group item-detail-row item-detail-16-25">
+                        <label class="control-label col-md-3">16-25秒</label>
+                        <div class="col-md-2 detail-text-row">
+                            <span class="detail-text"></span> 通
+                        </div>
+                        <div class="col-md-3 item-detail-operate" data-operate=""></div>
+                    </div>
+                    {{--26-45秒--}}
+                    <div class="form-group item-detail-row item-detail-26-45">
+                        <label class="control-label col-md-3">26-45秒</label>
+                        <div class="col-md-2 detail-text-row">
+                            <span class="detail-text"></span> 通
+                        </div>
+                        <div class="col-md-3 item-detail-operate" data-operate=""></div>
+                    </div>
+                    {{--45-90秒--}}
+                    <div class="form-group item-detail-row item-detail-46-90">
+                        <label class="control-label col-md-3">46-90秒</label>
+                        <div class="col-md-2 detail-text-row">
+                            <span class="detail-text"></span> 通
+                        </div>
+                        <div class="col-md-3 item-detail-operate" data-operate=""></div>
+                    </div>
+                    {{--90秒+--}}
+                    <div class="form-group item-detail-row item-detail-91-above">
+                        <label class="control-label col-md-3">91秒+</label>
+                        <div class="col-md-2 detail-text-row">
+                            <span class="detail-text"></span> 通
+                        </div>
+                        <div class="col-md-3 item-detail-operate" data-operate=""></div>
+                    </div>
+
+                </div>
+            </form>
+
+            <div class="box-footer _none">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <button type="button" class="btn btn-success item-summit-for-detail-inspected" id=""><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-default item-cancel-for-detail-inspected" id="">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 @endsection
 
 
@@ -108,6 +285,8 @@
 <style>
     .tableArea table { width:100% !important; min-width:1200px; }
     .tableArea table tr th, .tableArea table tr td { white-space:nowrap; }
+    .modal-wrapper .item-detail-row .detail-text-row { text-align:right; }
+    .modal-wrapper .form-container .form-group { padding: 14px 0; }
 </style>
 @endsection
 
@@ -178,6 +357,26 @@
                         "className": "",
                         "width": "40px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            $(nTd).attr('data-id',row.id).attr('data-name','ID');
+                            $(nTd).attr('data-key','info').attr('data-value',data);
+                            $(nTd).data('score-95',row.rate_95_cnt);
+                            $(nTd).data('score-90',row.rate_90_cnt);
+                            $(nTd).data('score-85',row.rate_85_cnt);
+                            $(nTd).data('score-80',row.rate_80_cnt);
+                            $(nTd).data('score-60',row.rate_60_cnt);
+                            $(nTd).data('score-minus-20',row.rate_minus_20_cnt);
+                            $(nTd).data('score-minus-40',row.rate_minus_40_cnt);
+                            $(nTd).data('score-minus-60',row.rate_minus_60_cnt);
+                            $(nTd).data('score-minus-80',row.rate_minus_80_cnt);
+                            $(nTd).data('call-cnt',row.call_cnt);
+                            $(nTd).data('call-1-8',row.call_cnt_1_8);
+                            $(nTd).data('call-9-15',row.call_cnt_9_15);
+                            $(nTd).data('call-16-25',row.call_cnt_16_25);
+                            $(nTd).data('call-26-45',row.call_cnt_26_45);
+                            $(nTd).data('call-46-90',row.call_cnt_46_90);
+                            $(nTd).data('call-91-above',row.call_cnt_91_above);
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -222,16 +421,6 @@
                     //         return '<a href="javascript:void(0);">'+data+'</a>';
                     //     }
                     // },
-                    // {
-                    //     "title": "标3签",
-                    //     "data": "tag_3",
-                    //     "className": "",
-                    //     "width": "80px",
-                    //     "orderable": false,
-                    //     render: function(data, type, row, meta) {
-                    //         return '<a href="javascript:void(0);">'+data+'</a>';
-                    //     }
-                    // },
                     {
                         "title": "全部",
                         "data": "phone_count",
@@ -239,7 +428,7 @@
                         "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
+                            return formatNumberWithCommas(data);
                         }
                     },
                     {
@@ -249,7 +438,7 @@
                         "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
+                            return formatNumberWithCommas(data);
                         }
                     },
                     {
@@ -259,7 +448,7 @@
                         "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
+                            return formatNumberWithCommas(data);
                         }
                     },
                     {
@@ -269,7 +458,7 @@
                         "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
+                            return formatNumberWithCommas(data);
                         }
                     },
                     {
@@ -279,7 +468,7 @@
                         "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
+                            return formatNumberWithCommas(data);
                         }
                     },
                     {
@@ -289,7 +478,7 @@
                         "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
+                            return formatNumberWithCommas(data);
                         }
                     },
                     {
@@ -299,7 +488,7 @@
                         "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
+                            return formatNumberWithCommas(data);
                         }
                     },
                     {
@@ -309,7 +498,7 @@
                         "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
+                            return formatNumberWithCommas(data);
                         }
                     },
                     {
@@ -319,7 +508,7 @@
                         "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
+                            return formatNumberWithCommas(data);
                         }
                     },
                     {
@@ -329,7 +518,7 @@
                         "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
+                            return formatNumberWithCommas(data);
                         }
                     },
                     {
@@ -339,7 +528,7 @@
                         "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
+                            return formatNumberWithCommas(data);
                         }
                     },
                     {
@@ -349,49 +538,49 @@
                         "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
+                            return formatNumberWithCommas(data);
                         }
                     },
-                    {
-                        "title": "-20分",
-                        "data": "rate_minus_20_cnt",
-                        "className": "",
-                        "width": "60px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "-40分",
-                        "data": "rate_minus_40_cnt",
-                        "className": "",
-                        "width": "60px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "-60分",
-                        "data": "rate_minus_60_cnt",
-                        "className": "",
-                        "width": "60px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "-80分",
-                        "data": "rate_minus_80_cnt",
-                        "className": "",
-                        "width": "60px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
+                    // {
+                    //     "title": "-20分",
+                    //     "data": "rate_minus_20_cnt",
+                    //     "className": "",
+                    //     "width": "60px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return formatNumberWithCommas(data);
+                    //     }
+                    // },
+                    // {
+                    //     "title": "-40分",
+                    //     "data": "rate_minus_40_cnt",
+                    //     "className": "",
+                    //     "width": "60px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return formatNumberWithCommas(data);
+                    //     }
+                    // },
+                    // {
+                    //     "title": "-60分",
+                    //     "data": "rate_minus_60_cnt",
+                    //     "className": "",
+                    //     "width": "60px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return formatNumberWithCommas(data);
+                    //     }
+                    // },
+                    // {
+                    //     "title": "-80分",
+                    //     "data": "rate_minus_80_cnt",
+                    //     "className": "",
+                    //     "width": "60px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return formatNumberWithCommas(data);
+                    //     }
+                    // },
                     // {
                     //     "title": "黑名单",
                     //     "data": "blacklist_count",
@@ -452,24 +641,74 @@
                             return '<input type="text" class="form-control telephone_count" placeholder="总数" value="">';
                         }
                     },
+                    // {
+                    //     "title": "文件数量",
+                    //     "data": "id",
+                    //     "className": "",
+                    //     "width": "40px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return '<input type="text" class="form-control file_num" placeholder="数量" value="1">';
+                    //     }
+                    // },
+                    // {
+                    //     "title": "文件大小",
+                    //     "data": "id",
+                    //     "className": "",
+                    //     "width": "40px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return '<input type="text" class="form-control file_size" placeholder="0为平均" value="0">';
+                    //     }
+                    // },
+                    // {
+                    //     "title": "90分比例",
+                    //     "data": "id",
+                    //     "className": "",
+                    //     "width": "60px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return '<input type="text" class="form-control telephone_count" placeholder="90分比例" value="0">';
+                    //     }
+                    // },
                     {
-                        "title": "文件数量",
+                        "title": "80分比例",
                         "data": "id",
                         "className": "",
-                        "width": "40px",
+                        "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return '<input type="text" class="form-control file_num" placeholder="数量" value="1">';
+                            return '<input type="text" class="form-control proportion_of_80_points" placeholder="80分比例" value="0">';
                         }
                     },
                     {
-                        "title": "文件大小",
+                        "title": "60分比例",
                         "data": "id",
                         "className": "",
-                        "width": "40px",
+                        "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return '<input type="text" class="form-control file_size" placeholder="0为平均" value="0">';
+                            return '<input type="text" class="form-control proportion_of_60_points" placeholder="60分比例" value="0">';
+                        }
+                    },
+                    {
+                        "title": "10分比例",
+                        "data": "id",
+                        "className": "",
+                        "width": "60px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return '<input type="text" class="form-control proportion_of_10_points" placeholder="10分比例" value="0">';
+                        }
+                    },
+                    {
+                        "title": "0分比例",
+                        "data": "id",
+                        "className": "",
+                        "width": "60px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return '<input type="text" class="form-control proportion_of_0_points" placeholder="0分比例" value="0">';
                         }
                     },
                     {
@@ -490,7 +729,8 @@
                         render: function(data, type, row, meta) {
 
                             var $html_edit = '';
-                            var $html_detail = '';
+                            var $html_detail = '<a class="btn btn-xs btn-danger- item-detail-modal-show" data-id="'+data+'">详情</a>';
+                            var $html_down = '<a class="btn btn-xs btn-primary- item-down-submit" data-id="'+data+'">下载</a>';
                             var $html_record = '';
                             var $html_able = '';
                             var $html_delete = '';
@@ -516,7 +756,8 @@
                             $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
 
                             var html =
-                                '<a class="btn btn-xs btn-primary- item-down-submit" data-id="'+data+'">下载</a>'+
+                                $html_down+
+                                $html_detail+
                                 // $html_able+
                                 // $html_delete+
                                 // $html_record+

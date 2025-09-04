@@ -6097,18 +6097,38 @@ EOF;
             'telephone_count.required' => '请输入电话数量！',
             'telephone_count.numeric' => '电话数量必须为大于等于0的整数！',
             'telephone_count.min' => '电话数量必须为大于等于0的整数！',
-            'file_num.required' => '请输入文件数量！',
-            'file_num.numeric' => '文件数量必须为大于等于1的整数！',
-            'file_num.min' => '文件数量必须为大于等于1的整数！',
-            'file_size.required' => '请输入文件大小！',
-            'file_size.numeric' => '文件大小必须为大于等于0的整数！',
-            'file_size.min' => '文件大小必须为大于等于0的整数！',
+//            'file_num.required' => '请输入文件数量！',
+//            'file_num.numeric' => '文件数量必须为大于等于1的整数！',
+//            'file_num.min' => '文件数量必须为大于等于1的整数！',
+//            'file_size.required' => '请输入文件大小！',
+//            'file_size.numeric' => '文件大小必须为大于等于0的整数！',
+//            'file_size.min' => '文件大小必须为大于等于0的整数！',
+            'proportion_of_80_points.required' => '请输入80分比例！',
+            'proportion_of_80_points.numeric' => '80分比例必须为大于等于0的整数！',
+            'proportion_of_80_points.min' => '80分比例必须为大于等于0的整数！',
+            'proportion_of_80_points.max' => '80分比例必须为小于等于100的整数！',
+            'proportion_of_60_points.required' => '请输入60分比例！',
+            'proportion_of_60_points.numeric' => '60分比例必须为大于等于0的整数！',
+            'proportion_of_60_points.min' => '60分比例必须为大于等于0的整数！',
+            'proportion_of_60_points.max' => '60分比例必须为小于等于100的整数！',
+            'proportion_of_10_points.required' => '请输入10分比例！',
+            'proportion_of_10_points.numeric' => '10分比例必须为大于等于0的整数！',
+            'proportion_of_10_points.min' => '10分比例必须为大于等于0的整数！',
+            'proportion_of_10_points.max' => '10分比例必须为小于等于100的整数！',
+            'proportion_of_0_points.required' => '请输入0分比例！',
+            'proportion_of_0_points.numeric' => '0分比例必须为大于等于0的整数！',
+            'proportion_of_0_points.min' => '0分比例必须为大于等于0的整数！',
+            'proportion_of_0_points.max' => '0分比例必须为小于等于100的整数！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
             'telephone_count' => 'required|numeric|min:1',
-            'file_num' => 'required|numeric|min:1',
-            'file_size' => 'required|numeric|min:0',
+//            'file_num' => 'required|numeric|min:1',
+//            'file_size' => 'required|numeric|min:0',
+            'proportion_of_80_points' => 'required|numeric|min:0|max:100',
+            'proportion_of_60_points' => 'required|numeric|min:0|max:100',
+            'proportion_of_10_points' => 'required|numeric|min:0|max:100',
+            'proportion_of_0_points' => 'required|numeric|min:0|max:100',
         ], $messages);
         if ($v->fails())
         {
@@ -6128,12 +6148,16 @@ EOF;
         $date_Ymd = date('Ymd');
 
         $telephone_count = $post_data["telephone_count"];
-        $file_num = $post_data["file_num"];
-        $file_size = $post_data["file_size"];
+//        $file_num = $post_data["file_num"];
+//        $file_size = $post_data["file_size"];
+        $proportion_of_80_points = $post_data["proportion_of_80_points"];
+        $proportion_of_60_points = $post_data["proportion_of_60_points"];
+        $proportion_of_10_points = $post_data["proportion_of_10_points"];
+        $proportion_of_0_points = $post_data["proportion_of_0_points"];
 
-        $telephone_count_1 = ceil($telephone_count * 0.6);
-        $telephone_count_2 = ceil($telephone_count * 0.3);
-        $telephone_count_3 = ceil($telephone_count * 0.1);
+//        $telephone_count_1 = ceil($telephone_count * 0.6);
+//        $telephone_count_2 = ceil($telephone_count * 0.3);
+//        $telephone_count_3 = ceil($telephone_count * 0.1);
 
         $pool_id = $post_data["pool_id"];
         $pool = DK_Pool::find($pool_id);
@@ -6189,10 +6213,15 @@ EOF;
 //            $task_insert['cityCode'] = $cityCode;
 //            $task_insert['areaCode'] = $areaCode;
 //            $task_insert['tag'] = $tag;
-            $task_insert['extraction_telephone_count'] = $telephone_count;
-            $task_insert['extraction_file_num'] = $file_num;
-            $task_insert['extraction_file_size'] = $file_size;
             $task_insert['extraction_name'] = $extraction_name;
+            $task_insert['extraction_telephone_count'] = $telephone_count;
+//            $task_insert['extraction_file_num'] = $file_num;
+//            $task_insert['extraction_file_size'] = $file_size;
+//            $task_insert['extraction_proportion_of_90_points'] = $proportion_of_90_points;
+            $task_insert['extraction_proportion_of_80_points'] = $proportion_of_80_points;
+            $task_insert['extraction_proportion_of_60_points'] = $proportion_of_60_points;
+            $task_insert['extraction_proportion_of_10_points'] = $proportion_of_10_points;
+            $task_insert['extraction_proportion_of_0_points'] = $proportion_of_0_points;
 
             $bool_t = $task->fill($task_insert)->save();
 
@@ -6201,6 +6230,135 @@ EOF;
             DownPhoneJob::dispatch($task->id);
 
             return response_success();
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    public function operate_pool_telephone_download_of_score($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'pool_id.required' => '请选择城市！',
+            'score.required' => '请选择指定分数！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'pool_id' => 'required',
+            'score' => 'required|numeric|min:1|max:100',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'telephone-download-of-score') return response_error([],"参数[operate]有误！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,61])) return response_error([],"你没有操作权限！");
+
+        $date = date('Y-m-d');
+        $datetime = date('Y-m-d H:i:s');
+        $date_Ymd = date('Ymd');
+
+        $score = $post_data["score"];
+
+        $pool_id = $post_data["pool_id"];
+        $pool = DK_Pool::find($pool_id);
+        if($pool)
+        {
+            $table = $pool->data_table;
+            $modal = $pool->data_modal;
+            $region_name = $pool->region_name;
+            $pool_name = $pool->region_name;
+        }
+        else return response_error([],"电话池不存在！");
+
+
+
+        $name = $pool_name.'-'.$date_Ymd.'-'.$score.'分';
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $task = new DK_Pool_Task;
+
+            $task_insert['extraction_type'] = 9;
+            $task_insert['creator_id'] = $me->id;
+            $task_insert['name'] = $name;
+            $task_insert['pool_id'] = $pool_id;
+            $task_insert['region_name'] = $region_name;
+//            $task_insert['provinceCode'] = $provinceCode;
+//            $task_insert['cityCode'] = $cityCode;
+//            $task_insert['areaCode'] = $areaCode;
+//            $task_insert['tag'] = $tag;
+            $task_insert['extraction_name'] = $name;
+            $task_insert['extraction_telephone_count'] = 0;
+
+            $bool_t = $task->fill($task_insert)->save();
+            $task_id = $task->id;
+
+
+            $telephone_list = ($modal ?? false)::select('phone')->where('quality',$score)->get() ?: collect();
+//            dd($telephone_list->toArray());
+
+
+            $upload_path = <<<EOF
+resource/dk/cc/telephone/$date/
+EOF;
+            $url_path = env('DOMAIN_CDN').'/dk/cc/telephone/'.$date.'/';
+
+            $storage_path = storage_path($upload_path);
+            if (!is_dir($storage_path))
+            {
+                mkdir($storage_path, 0755, true);
+            }
+//            $filename = $name.'-'.$task_id;
+            $filename = $task_id.'-'.$name;
+            $extension = '.txt';
+
+            $file_list = [];
+
+            $file_name = $filename.$extension;
+            $file_url = $url_path.$filename.$extension;
+            $file_path = $storage_path.$filename.$extension;
+
+            // 打开文件准备写入
+            $file = fopen($file_path, 'w');
+
+            // 遍历电话号码数组，逐行写入文件
+            foreach ($telephone_list as $phoneNumber)
+            {
+                fwrite($file, $phoneNumber->phone . PHP_EOL);
+            }
+
+            // 关闭文件
+            fclose($file);
+
+            $i['name'] = $file_name;
+            $i['path'] = $file_path;
+            $i['url'] = $file_url;
+            $file_list[] = $i;
+
+            $task->extraction_telephone_count = $telephone_list->count();
+            $task->is_completed = 1;
+            $task->content = json_encode($file_list);
+            $task->save();
+
+            DB::commit();
+
+//            return response_success();
+            return response_success(json_encode($file_list));
         }
         catch (Exception $e)
         {

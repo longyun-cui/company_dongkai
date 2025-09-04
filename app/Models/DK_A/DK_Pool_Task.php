@@ -40,6 +40,11 @@ class DK_Pool_Task extends Model
         'extraction_telephone_count',
         'extraction_file_num',
         'extraction_file_size',
+        'extraction_proportion_of_90_points',
+        'extraction_proportion_of_80_points',
+        'extraction_proportion_of_60_points',
+        'extraction_proportion_of_10_points',
+        'extraction_proportion_of_0_points',
 
         'is_published', 'published_at',
         'is_completed', 'completed_at'

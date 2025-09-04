@@ -47,6 +47,10 @@
             var $file_num = $row.find('.file_num').val();
             var $file_size = $row.find('.file_size').val();
             var $extraction_name = $row.find('.extraction_name').val();
+            var $proportion_of_80_points = $row.find('.proportion_of_80_points').val();
+            var $proportion_of_60_points = $row.find('.proportion_of_60_points').val();
+            var $proportion_of_10_points = $row.find('.proportion_of_10_points').val();
+            var $proportion_of_0_points = $row.find('.proportion_of_0_points').val();
 
             var $id = $that.attr('data-id');
 
@@ -72,8 +76,12 @@
                     _token: $('meta[name="_token"]').attr('content'),
                     operate: "service-telephone-download",
                     telephone_count: $telephone_count,
-                    file_num: $file_num,
-                    file_size: $file_size,
+                    // file_num: $file_num,
+                    // file_size: $file_size,
+                    proportion_of_80_points: $proportion_of_80_points,
+                    proportion_of_60_points: $proportion_of_60_points,
+                    proportion_of_10_points: $proportion_of_10_points,
+                    proportion_of_0_points: $proportion_of_0_points,
                     pool_id: $id,
                     extraction_name: $extraction_name
                 },
@@ -121,51 +129,116 @@
                 });
 
         });
-
-
-
-
-
-        // 【编辑】
-        $(".main-content").on('click', ".item-edit-link", function() {
+        $(".main-content").on('click', ".item-down-by-score", function() {
             var $that = $(this);
-            window.location.href = "/company/team-edit?id="+$that.attr('data-id');
+            var $modal = $that.parents('.modal-wrapper');
+
+            var $pool_id = $modal.find('input[name="detail-pool-id"]').val();
+            var $score = $that.data('score');
+
+
+            var $index = layer.load(1, {
+                shade: [0.3, '#fff'],
+                content: '<span class="loadtip">耐心等待中</span>',
+                success: function (layer) {
+                    layer.find('.layui-layer-content').css({
+                        'padding-top': '40px',
+                        'width': '100px',
+                    });
+                    layer.find('.loadtip').css({
+                        'font-size':'20px',
+                        'margin-left':'-18px'
+                    });
+                }
+            });
+
+            $.post(
+                "{{ url('/pool/telephone-download-of-score') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: "telephone-download-of-score",
+                    pool_id: $pool_id,
+                    score: $score
+                },
+                'json'
+            )
+                .done(function($response) {
+                    console.log('done');
+                    $response = JSON.parse($response);
+                    if(!$response.success)
+                    {
+                        if($response.msg) layer.msg($response.msg);
+                    }
+                    else
+                    {
+                        // layer.msg("请求成功，请稍后到任务列表下载！");
+                        console.log(JSON.parse($response.data));
+                        $.each(JSON.parse($response.data), function(index, value) {
+                            // console.log(value);
+                            // console.log(value.url);
+                            // console.log(value.path);
+                            // console.log(value.name);
+
+                            var $obj = new Object();
+                            $obj.path = value.path;
+
+                            var $url = url_build('/download/file-download',$obj);
+                            window.open($url);
+
+                        });
+                    }
+                })
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                    console.log('fail');
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                    layer.msg('服务器错误！');
+
+                })
+                .always(function(jqXHR, textStatus) {
+                    console.log('always');
+                    // console.log(jqXHR);
+                    // console.log(textStatus);
+                    layer.closeAll('loading');
+                });
+
         });
 
 
+
         // 【获取详情】
-        $(".main-content").on('click', ".item-detail-show", function() {
+        $(".main-content").on('click', ".item-detail-modal-show", function() {
             var $that = $(this);
-            var $data = new Object();
-            $.ajax({
-                type:"post",
-                dataType:'json',
-                async:false,
-                url: "{{ url('/company/team-get-detail') }}",
-                data: {
-                    _token: $('meta[name="_token"]').attr('content'),
-                    operate:"item-get",
-                    id: $that.attr('data-id')
-                },
-                success:function(data){
-                    if(!data.success) layer.msg(data.msg);
-                    else
-                    {
-                        $data = data.data;
-                    }
-                }
-            });
-            $('input[name=id]').val($that.attr('data-id'));
-            $('.item-user-id').html($that.attr('data-user-id'));
-            $('.item-username').html($that.attr('data-username'));
-            $('.item-title').html($data.title);
-            $('.item-content').html($data.content);
-            if($data.attachment_name)
-            {
-                var $attachment_html = $data.attachment_name+'&nbsp&nbsp&nbsp&nbsp'+'<a href="/all/download-item-attachment?item-id='+$data.id+'">下载</a>';
-                $('.item-attachment').html($attachment_html);
-            }
-            $('#modal-body').modal('show');
+            var $td = $that.parents('td');
+            var $row = $that.parents('tr');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $item_category = $datatable_wrapper.data('datatable-item-category');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+            var $rowIndex = $td.attr('data-row-index');
+            var $info = $row.find('[data-key="info"]');
+            console.log($info.attr('data-id'));
+
+            var $modal = $('#modal-body-for-pool-detail');
+            $modal.find('.info-detail-title').html($row.find('[data-key="region_name"]').attr('data-value'));
+            $modal.find('input[name="detail-pool-id"]').val($info.attr('data-id'));
+            $modal.find('.item-detail-95 .detail-text').html(formatNumberWithCommas($info.data('score-95')));
+            $modal.find('.item-detail-90 .detail-text').html(formatNumberWithCommas($info.data('score-90')));
+            $modal.find('.item-detail-85 .detail-text').html(formatNumberWithCommas($info.data('score-85')));
+            $modal.find('.item-detail-80 .detail-text').html(formatNumberWithCommas($info.data('score-80')));
+            $modal.find('.item-detail-60 .detail-text').html(formatNumberWithCommas($info.data('score-60')));
+            $modal.find('.item-detail-minus-20 .detail-text').html(formatNumberWithCommas($info.data('score-minus-20')));
+            $modal.find('.item-detail-minus-40 .detail-text').html(formatNumberWithCommas($info.data('score-minus-40')));
+            $modal.find('.item-detail-minus-60 .detail-text').html(formatNumberWithCommas($info.data('score-minus-60')));
+            $modal.find('.item-detail-minus-80 .detail-text').html(formatNumberWithCommas($info.data('score-minus-80')));
+            $modal.find('.item-detail-cnt .detail-text').html(formatNumberWithCommas($info.data('call-cnt')));
+            $modal.find('.item-detail-1-8 .detail-text').html(formatNumberWithCommas($info.data('call-1-8')));
+            $modal.find('.item-detail-9-15 .detail-text').html(formatNumberWithCommas($info.data('call-9-15')));
+            $modal.find('.item-detail-16-25 .detail-text').html(formatNumberWithCommas($info.data('call-16-25')));
+            $modal.find('.item-detail-26-45 .detail-text').html(formatNumberWithCommas($info.data('call-26-45')));
+            $modal.find('.item-detail-46-90 .detail-text').html(formatNumberWithCommas($info.data('call-46-90')));
+            $modal.find('.item-detail-91-above .detail-text').html(formatNumberWithCommas($info.data('call-91-above')));
+            $modal.modal('show');
 
         });
 
