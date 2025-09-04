@@ -3567,7 +3567,10 @@ class DKAdminRepository {
         $mine = DK_Client::withTrashed()->find($id);
         if(!$mine) return response_error([],"该【客户】不存在，刷新页面重试！");
 
-        $mine_staff = DK_Client_User::withTrashed()->where('client_id',$mine->id)->where('user_type',11)->first();
+        $mine_staff_admin_id = $mine->client_admin_id;
+
+//        $mine_staff = DK_Client_User::withTrashed()->where('client_id',$mine->id)->where('user_type',11)->first();
+        $mine_staff = DK_Client_User::withTrashed()->find($mine_staff_admin_id);
         if(!$mine_staff) return response_error([],"该客户【管理员】不存在，刷新页面重试！");
 
         // 启动数据库事务
@@ -3575,7 +3578,7 @@ class DKAdminRepository {
         try
         {
             $mine_staff->password = password_encode('12345678');
-            $bool = $mine->save();
+            $bool = $mine_staff->save();
             if(!$bool) throw new Exception("DK_Client_User--update--fail");
 
             DB::commit();
