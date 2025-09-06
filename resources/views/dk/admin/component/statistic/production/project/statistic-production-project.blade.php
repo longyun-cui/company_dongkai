@@ -9,16 +9,22 @@
 
             <input type="hidden" name="statistic-production-project-time-type" class="time-type" value="" readonly>
 
+            <select class="search-filter form-filter filter-lg select2-box-c" name="production-project-item-category">
+                <option value="">选择工单类型</option>
+                <option value="1">口腔</option>
+                <option value="11">医美</option>
+                <option value="31">二奢</option>
+            </select>
 
             @if(in_array($me->user_type,[0,1,9,11]))
-                <select class="form-control form-filter select2-box-c" name="statistic-production-project-department-district" style="width:100px;">
-                    <option value="-1">选择大区</option>
-                    @if(!empty($department_district_list))
-                        @foreach($department_district_list as $v)
-                            <option value="{{ $v->id }}">{{ $v->name }}</option>
-                        @endforeach
-                    @endif
-                </select>
+            <select class="search-filter form-filter filter-lg select2-box-c" name="statistic-production-project-department-district">
+                <option value="-1">选择大区</option>
+                @if(!empty($department_district_list))
+                    @foreach($department_district_list as $v)
+                        <option value="{{ $v->id }}">{{ $v->name }}</option>
+                    @endforeach
+                @endif
+            </select>
             @endif
 
             {{--按天查看--}}

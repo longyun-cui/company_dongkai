@@ -12358,6 +12358,15 @@ dd(1);
 
 
         // 部门-大区
+        if(!empty($post_data['item_category']))
+        {
+            if(!in_array($post_data['item_category'],[-1,0,'-1','0']))
+            {
+                $query->where('item_category', $post_data['item_category']);
+            }
+        }
+
+        // 部门-大区
         if(!empty($post_data['department_district']))
         {
             if(!in_array($post_data['department_district'],[-1,0,'-1','0']))

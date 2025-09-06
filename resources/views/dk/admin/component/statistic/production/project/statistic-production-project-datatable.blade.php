@@ -27,6 +27,7 @@
                     d.title = $tableSearch.find('input[name="production-project-title"]').val();
                     d.keyword = $tableSearch.find('input[name="production-project-keyword"]').val();
                     d.status = $tableSearch.find('select[name="production-project-status"]').val();
+                    d.item_category = $tableSearch.find('select[name="production-project-item-category"]').val();
                     d.time_type = $tableSearch.find('input[name="statistic-production-project-time-type"]').val();
                     d.time_month = $tableSearch.find('input[name="statistic-production-project-month"]').val();
                     d.time_date = $tableSearch.find('input[name="statistic-production-project-date"]').val();
@@ -60,7 +61,7 @@
 //                        "orderable": false
 //                    },
                 {
-                    "title": "项目<br>ID",
+                    "title": "项目ID",
                     "data": "id",
                     "className": "text-center",
                     "width": "60px",
@@ -76,7 +77,31 @@
                     }
                 },
                 {
-                    "title": "项目<br>名称",
+                    "title": "项目类型",
+                    "data": "item_category",
+                    "width": "60px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(data == 1)
+                        {
+                            return '<small class="btn-xs bg-orange">口腔</small>';
+                        }
+                        if(data == 11)
+                        {
+                            return '<small class="btn-xs bg-red">医美</small>';
+                        }
+                        if(data == 31)
+                        {
+                            return '<small class="btn-xs bg-purple">奢侈品</small>';
+                        }
+                        else
+                        {
+                            return '未知类型';
+                        }
+                    }
+                },
+                {
+                    "title": "项目名称",
                     "data": "name",
                     "className": "text-center",
                     "width": "160px",
@@ -116,7 +141,7 @@
                 },
                     @endif
                 {
-                    "title": "每日<br>目标",
+                    "title": "每日目标",
                     "data": "daily_goal",
                     "className": "text-center text-green",
                     "width": "80px",
@@ -132,7 +157,7 @@
                     }
                 },
                 {
-                    "title": "客服<br>报单量",
+                    "title": "客服报单量",
                     "data": "order_count_for_all",
                     "className": "bg-service-customer",
                     "width": "80px",
@@ -170,7 +195,7 @@
 
 
                 {
-                    "title": "审核<br>有效量",
+                    "title": "审核有效量",
                     "data": "order_count_for_effective",
                     "className": "bg-inspected",
                     "width": "80px",
@@ -186,7 +211,7 @@
                     }
                 },
                 {
-                    "title": "审核<br>通过",
+                    "title": "审核通过",
                     "data": "order_count_for_accepted",
                     "className": "bg-inspected",
                     "width": "80px",
@@ -219,7 +244,7 @@
                 //     }
                 // },
                 {
-                    "title": "审核<br>拒绝",
+                    "title": "审核拒绝",
                     "data": "order_count_for_refused",
                     "className": "bg-inspected",
                     "width": "80px",
