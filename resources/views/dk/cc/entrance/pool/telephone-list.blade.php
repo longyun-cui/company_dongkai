@@ -79,6 +79,32 @@
                     </thead>
                     <tbody>
                     </tbody>
+                    <tfoot>
+                        <tr role='row' class='footing'>
+                            <td>选择</td>
+                            <td>ID</td>
+                            <td>城市</td>
+                            <td>全部</td>
+                            <td>成单</td>
+                            <td>95分</td>
+                            <td>90分</td>
+                            <td>85分</td>
+                            <td>80分</td>
+                            <td>60分</td>
+                            <td>50分</td>
+                            <td>40分</td>
+                            <td>30分</td>
+                            <td>10分</td>
+                            <td>0分</td>
+                            <td>电话总数</td>
+                            <td>80分比例</td>
+                            <td>60分比例</td>
+                            <td>10分比例</td>
+                            <td>0分比例</td>
+                            <td>文件名</td>
+                            <td>操作</td>
+                        </tr>
+                    </tfoot>
                 </table>
                 </div>
 
@@ -329,7 +355,7 @@
                 "orderCellsTop": true,
                 "scrollX": true,
                 // "scrollY": true,
-                "scrollY": ($(document).height() - 240)+"px",
+                "scrollY": ($(document).height() - 280)+"px",
                 "scrollCollapse": true,
                 "fixedColumns": {
                     {{--"leftColumns": "@if($is_mobile_equipment) 1 @else 1 @endif",--}}
