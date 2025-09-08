@@ -328,7 +328,8 @@
                 "order": [],
                 "orderCellsTop": true,
                 "scrollX": true,
-//                "scrollY": true,
+                // "scrollY": true,
+                "scrollY": ($(document).height() - 240)+"px",
                 "scrollCollapse": true,
                 "fixedColumns": {
                     {{--"leftColumns": "@if($is_mobile_equipment) 1 @else 1 @endif",--}}
