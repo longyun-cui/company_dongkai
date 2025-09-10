@@ -227,6 +227,7 @@
             $modal.find('.item-detail-85 .detail-text').html(formatNumberWithCommas($info.data('score-85')));
             $modal.find('.item-detail-80 .detail-text').html(formatNumberWithCommas($info.data('score-80')));
             $modal.find('.item-detail-60 .detail-text').html(formatNumberWithCommas($info.data('score-60')));
+            $modal.find('.item-detail-10 .detail-text').html(formatNumberWithCommas($info.data('score-10')));
             $modal.find('.item-detail-minus-20 .detail-text').html(formatNumberWithCommas($info.data('score-minus-20')));
             $modal.find('.item-detail-minus-40 .detail-text').html(formatNumberWithCommas($info.data('score-minus-40')));
             $modal.find('.item-detail-minus-60 .detail-text').html(formatNumberWithCommas($info.data('score-minus-60')));

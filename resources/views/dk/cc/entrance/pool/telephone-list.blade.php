@@ -192,6 +192,16 @@
                             <a href="javascript:void(0);" class="item-down-by-score" data-score="60">下载</a>
                         </div>
                     </div>
+                    {{--10分--}}
+                    <div class="form-group item-detail-row item-detail-10">
+                        <label class="control-label col-md-3">10分</label>
+                        <div class="col-md-2 detail-text-row">
+                            <span class="detail-text"></span> 个
+                        </div>
+                        <div class="col-md-3 item-detail-operate" data-operate="">
+                            <a href="javascript:void(0);" class="item-down-by-score" data-score="10">下载</a>
+                        </div>
+                    </div>
                     {{--（-20分）--}}
                     <div class="form-group item-detail-row item-detail-minus-20">
                         <label class="control-label col-md-3">-20分</label>
