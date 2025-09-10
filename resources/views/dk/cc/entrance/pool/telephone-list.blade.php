@@ -402,6 +402,7 @@
                             $(nTd).data('score-85',row.rate_85_cnt);
                             $(nTd).data('score-80',row.rate_80_cnt);
                             $(nTd).data('score-60',row.rate_60_cnt);
+                            $(nTd).data('score-10',row.rate_10_cnt);
                             $(nTd).data('score-minus-20',row.rate_minus_20_cnt);
                             $(nTd).data('score-minus-40',row.rate_minus_40_cnt);
                             $(nTd).data('score-minus-60',row.rate_minus_60_cnt);
