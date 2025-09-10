@@ -4774,6 +4774,7 @@ class DKAdminRepository {
 
             $query->where('department_district_id',$me->department_district_id);
             $query->where('department_group_id',$me->department_group_id);
+            $query->where('department_group_id','>',0);
         }
         // 客服
         if($me->user_type == 88)
