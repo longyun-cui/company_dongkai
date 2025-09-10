@@ -5,11 +5,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use DB;
 
-class DK_Pool_City extends Model
+class DK_Pool_A_TEMP extends Model
 {
 //    use SoftDeletes;
     //
-    protected $table = "a_pool_city";
+    protected $table = "a_pool_a_temp";
     protected $fillable = [
         'active', 'status', 'result',
         'category', 'type', 'group',
@@ -54,9 +54,6 @@ class DK_Pool_City extends Model
         'created_date'
     ];
 //    protected $dateFormat = 'U';
-
-//    public $timestamps = false; // 完全禁用时间戳
-    const UPDATED_AT = null; // 禁用 updated_at
 
     protected $hidden = ['content','custom'];
 

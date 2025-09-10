@@ -16,6 +16,8 @@
 
 
             'city_pool_table_kv' => [
+                '临时' => 'a_pool_a_bj',
+
                 '北京市' => 'a_pool_city_bj',
                 '上海市' => 'a_pool_city_sh',
                 '天津市' => 'a_pool_city_tj',
@@ -163,8 +165,9 @@
 
             'phone_table_kv' => [
 
-                'a_current_test' => '测试',
-                'a_current_task' => '任务',
+                'a_pool_a_test' => '测试',
+                'a_pool_a_temp' => '临时',
+
                 'a_pool_black' => '黑名单',
 
                 'a_pool_city_aa_bj' => '北京',
