@@ -4772,6 +4772,7 @@ class DKAdminRepository {
 //            $group_staff_list = DK_User::select('id')->where('department_group_id',$me->department_group_id)->get()->pluck('id')->toArray();
 //            $query->whereIn('creator_id',$group_staff_list);
 
+            $query->where('department_district_id',$me->department_district_id);
             $query->where('department_group_id',$me->department_group_id);
         }
         // 客服
