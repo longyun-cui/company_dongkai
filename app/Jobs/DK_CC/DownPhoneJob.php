@@ -147,19 +147,35 @@ class DownPhoneJob implements ShouldQueue
                 // 步骤2：使用获取的ID进行更新
                 if($ids_1->isNotEmpty())
                 {
-                    $modal::whereIn('id', $ids_1)->update($telephone_update);
+//                    $modal::whereIn('id', $ids_1)->update($telephone_update);
+                    collect($ids_1)->chunk(1000)->each(function ($chunkIds) use ($modal, $telephone_update) {
+                        $modal::whereIn('id', $chunkIds->toArray())
+                            ->update($telephone_update);
+                    });
                 }
                 if($ids_2->isNotEmpty())
                 {
-                    $modal::whereIn('id', $ids_2)->update($telephone_update);
+//                    $modal::whereIn('id', $ids_2)->update($telephone_update);
+                    collect($ids_2)->chunk(1000)->each(function ($chunkIds) use ($modal, $telephone_update) {
+                        $modal::whereIn('id', $chunkIds->toArray())
+                            ->update($telephone_update);
+                    });
                 }
                 if($ids_3->isNotEmpty())
                 {
-                    $modal::whereIn('id', $ids_3)->update($telephone_update);
+//                    $modal::whereIn('id', $ids_3)->update($telephone_update);
+                    collect($ids_3)->chunk(1000)->each(function ($chunkIds) use ($modal, $telephone_update) {
+                        $modal::whereIn('id', $chunkIds->toArray())
+                            ->update($telephone_update);
+                    });
                 }
                 if($ids_4->isNotEmpty())
                 {
-                    $modal::whereIn('id', $ids_4)->update($telephone_update);
+//                    $modal::whereIn('id', $ids_4)->update($telephone_update);
+                    collect($ids_4)->chunk(1000)->each(function ($chunkIds) use ($modal, $telephone_update) {
+                        $modal::whereIn('id', $chunkIds->toArray())
+                            ->update($telephone_update);
+                    });
                 }
 
 //                $telephone_1->update($telephone_update);
