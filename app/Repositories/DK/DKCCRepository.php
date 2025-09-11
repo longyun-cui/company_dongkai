@@ -3,8 +3,9 @@ namespace App\Repositories\DK;
 
 use App\Models\DK_A\DK_A_Order;
 
-use App\Models\DK_A\DK_Pool_Task;
 use App\Models\DK_A\DK_Pool;
+use App\Models\DK_A\DK_Pool_Black;
+use App\Models\DK_A\DK_Pool_Task;
 
 use App\Models\DK_VOS\DK_VOS_CDR;
 use App\Models\DK_VOS\DK_VOS_CDR_Current;
@@ -5855,18 +5856,38 @@ class DKCCRepository {
             'telephone_count.required' => '请输入电话数量！',
             'telephone_count.numeric' => '电话数量必须为大于等于0的整数！',
             'telephone_count.min' => '电话数量必须为大于等于0的整数！',
-            'file_num.required' => '请输入文件数量！',
-            'file_num.numeric' => '文件数量必须为大于等于1的整数！',
-            'file_num.min' => '文件数量必须为大于等于1的整数！',
-            'file_size.required' => '请输入文件大小！',
-            'file_size.numeric' => '文件大小必须为大于等于0的整数！',
-            'file_size.min' => '文件大小必须为大于等于0的整数！',
+//            'file_num.required' => '请输入文件数量！',
+//            'file_num.numeric' => '文件数量必须为大于等于1的整数！',
+//            'file_num.min' => '文件数量必须为大于等于1的整数！',
+//            'file_size.required' => '请输入文件大小！',
+//            'file_size.numeric' => '文件大小必须为大于等于0的整数！',
+//            'file_size.min' => '文件大小必须为大于等于0的整数！',
+            'proportion_of_80_points.required' => '请输入80分比例！',
+            'proportion_of_80_points.numeric' => '80分比例必须为大于等于0的整数！',
+            'proportion_of_80_points.min' => '80分比例必须为大于等于0的整数！',
+            'proportion_of_80_points.max' => '80分比例必须为小于等于100的整数！',
+            'proportion_of_60_points.required' => '请输入60分比例！',
+            'proportion_of_60_points.numeric' => '60分比例必须为大于等于0的整数！',
+            'proportion_of_60_points.min' => '60分比例必须为大于等于0的整数！',
+            'proportion_of_60_points.max' => '60分比例必须为小于等于100的整数！',
+            'proportion_of_10_points.required' => '请输入10分比例！',
+            'proportion_of_10_points.numeric' => '10分比例必须为大于等于0的整数！',
+            'proportion_of_10_points.min' => '10分比例必须为大于等于0的整数！',
+            'proportion_of_10_points.max' => '10分比例必须为小于等于100的整数！',
+            'proportion_of_0_points.required' => '请输入0分比例！',
+            'proportion_of_0_points.numeric' => '0分比例必须为大于等于0的整数！',
+            'proportion_of_0_points.min' => '0分比例必须为大于等于0的整数！',
+            'proportion_of_0_points.max' => '0分比例必须为小于等于100的整数！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
             'telephone_count' => 'required|numeric|min:1',
-            'file_num' => 'required|numeric|min:1',
-            'file_size' => 'required|numeric|min:0',
+//            'file_num' => 'required|numeric|min:1',
+//            'file_size' => 'required|numeric|min:0',
+            'proportion_of_80_points' => 'required|numeric|min:0|max:100',
+            'proportion_of_60_points' => 'required|numeric|min:0|max:100',
+            'proportion_of_10_points' => 'required|numeric|min:0|max:100',
+            'proportion_of_0_points' => 'required|numeric|min:0|max:100',
         ], $messages);
         if ($v->fails())
         {
@@ -5882,15 +5903,21 @@ class DKCCRepository {
         if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
 
         $date = date('Y-m-d');
+        $datetime = date('Y-m-d H:i:s');
         $date_Ymd = date('Ymd');
 
         $telephone_count = $post_data["telephone_count"];
-        $file_num = $post_data["file_num"];
-        $file_size = $post_data["file_size"];
+//        $file_num = $post_data["file_num"];
+//        $file_size = $post_data["file_size"];
+        $proportion_of_80_points = $post_data["proportion_of_80_points"];
+        $proportion_of_60_points = $post_data["proportion_of_60_points"];
+        $proportion_of_10_points = $post_data["proportion_of_10_points"];
+        $proportion_of_0_points = $post_data["proportion_of_0_points"];
 
-        $telephone_count_1 = ceil($telephone_count * 0.6);
-        $telephone_count_2 = ceil($telephone_count * 0.3);
-        $telephone_count_3 = ceil($telephone_count * 0.1);
+        $telephone_count_1 = ceil($telephone_count * $proportion_of_80_points / 100);
+        $telephone_count_2 = ceil($telephone_count * $proportion_of_60_points / 100);
+        $telephone_count_3 = ceil($telephone_count * $proportion_of_10_points / 100);
+        $telephone_count_4 = ceil($telephone_count * $proportion_of_0_points / 100);
 
         $pool_id = $post_data["pool_id"];
         $pool = DK_Pool::find($pool_id);
@@ -5937,6 +5964,9 @@ class DKCCRepository {
         try
         {
 
+            $modalTable = (new $modal)->getTable();
+            $blacklistTable = (new DK_Pool_Black)->getTable();
+
             $task = new DK_Pool_Task;
 
             $task_insert['creator_id'] = $me->id;
@@ -5964,33 +5994,70 @@ class DKCCRepository {
 //            dd(now()->subDays(7)->startOfDay());
 
 //            $telephone = DB::table($table)->select('phone');
-            $telephone = ($modal ?? false)::select('phone')->where(function ($query) {
-                $query->whereNull('last_call_date')
-                    ->orWhereDate('last_call_date', '<', now()->subDays(1)->format('Y-m-d'));
-            }) ?: collect();
+//            $telephone = ($modal ?? false)::select('phone')->where(function ($query) {
+//                $query->whereNull('last_call_date')
+//                    ->orWhereDate('last_call_date', '<', now()->subDays(1)->format('Y-m-d'));
+//            }) ?: collect();
+            $telephone = $modal::select("{$modalTable}.id")
+                ->leftJoin($blacklistTable, "{$modalTable}.phone", '=', "{$blacklistTable}.phone")
+                ->whereNull("{$blacklistTable}.phone")
+                ->where(function ($query) use ($modalTable) {
+                    $query->whereNull("{$modalTable}.last_call_date")
+                        ->orWhereDate("{$modalTable}.last_call_date", '<', now()->subDays(1));
+                });
 
 
             $telephone_1 = (clone $telephone);
             $telephone_2 = (clone $telephone);
             $telephone_3 = (clone $telephone);
+            $telephone_4 = (clone $telephone);
 
 
-            $telephone_1->where('quality','>=',85)
-                ->orderby('task_id','asc')
-                ->limit($telephone_count_1);
+            $ids_1 = $telephone_1->where("{$modalTable}.quality",'>=',80)
+                ->orderby("{$modalTable}.task_id",'asc')
+                ->limit($telephone_count_1)
+                ->pluck('id');
 
-            $telephone_2->where('quality','>=',80)->where('quality','<',85)
-                ->orderby('task_id','asc')
-                ->limit($telephone_count_2);
+            $ids_2 = $telephone_2->where("{$modalTable}.quality",60)
+                ->orderby("{$modalTable}.task_id",'asc')
+                ->limit($telephone_count_2)
+                ->pluck('id');
 
-            $telephone_3->where('quality',0)
-                ->orderby('task_id','asc')
-                ->limit($telephone_count_3);
+            $ids_3 = $telephone_3->where("{$modalTable}.quality",10)
+                ->orderby("{$modalTable}.task_id",'asc')
+                ->limit($telephone_count_3)
+                ->pluck('id');
+
+            $ids_4 = $telephone_4->where("{$modalTable}.quality",0)
+                ->orderby("{$modalTable}.task_id",'asc')
+                ->limit($telephone_count_4)
+                ->pluck('id');
+            dd($ids_4);
 
 
-            $telephone_1->update($telephone_update);
-            $telephone_2->update($telephone_update);
-            $telephone_3->update($telephone_update);
+            // 步骤2：使用获取的ID进行更新
+            if($ids_1->isNotEmpty())
+            {
+                $modal::whereIn('id', $ids_1)->update($telephone_update);
+            }
+            if($ids_2->isNotEmpty())
+            {
+                $modal::whereIn('id', $ids_2)->update($telephone_update);
+            }
+            if($ids_3->isNotEmpty())
+            {
+                $modal::whereIn('id', $ids_3)->update($telephone_update);
+            }
+            if($ids_4->isNotEmpty())
+            {
+                $modal::whereIn('id', $ids_4)->update($telephone_update);
+            }
+
+
+//            $telephone_1->update($telephone_update);
+//            $telephone_2->update($telephone_update);
+//            $telephone_3->update($telephone_update);
+//            $telephone_4->update($telephone_update);
 
 
             $telephone_list = ($modal ?? false)::select('task_id','phone','quality')->where('task_id',$task_id)->get() ?: collect();

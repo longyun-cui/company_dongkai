@@ -8,8 +8,9 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-use App\Models\DK_A\DK_Pool_Task;
 use App\Models\DK_A\DK_Pool;
+use App\Models\DK_A\DK_Pool_Task;
+use App\Models\DK_A\DK_Pool_Black;
 
 use Response, Auth, Validator, DB, Exception, Cache, Blade, Carbon, DateTime;
 use QrCode, Excel;
@@ -96,16 +97,25 @@ class DownPhoneJob implements ShouldQueue
             DB::beginTransaction();
             try
             {
+                $modalTable = (new $modal)->getTable();
+                $blacklistTable = (new DK_Pool_Black)->getTable();
+
                 $telephone_update['task_id'] = $task->id;
                 $telephone_update['last_extraction_date'] = $date;
 
 //            $telephone = DB::table($table)->select('phone');
-                $telephone = ($modal ?? false)::select('phone')
-                    ->where(function ($query) {
-                        $query->whereNull('last_call_date')
-                            ->orWhereDate('last_call_date', '<', now()->subDays(1)->format('Y-m-d'));
-                    }) ?: collect();
-
+//                $telephone = ($modal ?? false)::select('phone')
+//                    ->where(function ($query) {
+//                        $query->whereNull('last_call_date')
+//                            ->orWhereDate('last_call_date', '<', now()->subDays(1)->format('Y-m-d'));
+//                    }) ?: collect();
+                $telephone = $modal::select("{$modalTable}.id")
+                    ->leftJoin($blacklistTable, "{$modalTable}.phone", '=', "{$blacklistTable}.phone")
+                    ->whereNull("{$blacklistTable}.phone")
+                    ->where(function ($query) use ($modalTable) {
+                        $query->whereNull("{$modalTable}.last_call_date")
+                            ->orWhereDate("{$modalTable}.last_call_date", '<', now()->subDays(1));
+                    });
 
                 $telephone_1 = (clone $telephone);
                 $telephone_2 = (clone $telephone);
@@ -113,27 +123,49 @@ class DownPhoneJob implements ShouldQueue
                 $telephone_4 = (clone $telephone);
 
 
-                $telephone_1->where('quality','>=',80)
-                    ->orderby('task_id','asc')
-                    ->limit($telephone_count_1);
+                $ids_1 = $telephone_1->where("{$modalTable}.quality",'>=',80)
+                    ->orderby("{$modalTable}.task_id",'asc')
+                    ->limit($telephone_count_1)
+                    ->pluck('id');
 
-                $telephone_2->where('quality',60)
-                    ->orderby('task_id','asc')
-                    ->limit($telephone_count_2);
+                $ids_2 = $telephone_2->where("{$modalTable}.quality",60)
+                    ->orderby("{$modalTable}.task_id",'asc')
+                    ->limit($telephone_count_2)
+                    ->pluck('id');
 
-                $telephone_3->where('quality',10)
-                    ->orderby('task_id','asc')
-                    ->limit($telephone_count_3);
+                $ids_3 = $telephone_3->where("{$modalTable}.quality",10)
+                    ->orderby("{$modalTable}.task_id",'asc')
+                    ->limit($telephone_count_3)
+                    ->pluck('id');
 
-                $telephone_4->where('quality',0)
-                    ->orderby('task_id','asc')
-                    ->limit($telephone_count_4);
+                $ids_4 = $telephone_4->where("{$modalTable}.quality",0)
+                    ->orderby("{$modalTable}.task_id",'asc')
+                    ->limit($telephone_count_4)
+                    ->pluck('id');
 
 
-                $telephone_1->update($telephone_update);
-                $telephone_2->update($telephone_update);
-                $telephone_3->update($telephone_update);
-                $telephone_4->update($telephone_update);
+                // 步骤2：使用获取的ID进行更新
+                if($ids_1->isNotEmpty())
+                {
+                    $modal::whereIn('id', $ids_1)->update($telephone_update);
+                }
+                if($ids_2->isNotEmpty())
+                {
+                    $modal::whereIn('id', $ids_2)->update($telephone_update);
+                }
+                if($ids_3->isNotEmpty())
+                {
+                    $modal::whereIn('id', $ids_3)->update($telephone_update);
+                }
+                if($ids_4->isNotEmpty())
+                {
+                    $modal::whereIn('id', $ids_4)->update($telephone_update);
+                }
+
+//                $telephone_1->update($telephone_update);
+//                $telephone_2->update($telephone_update);
+//                $telephone_3->update($telephone_update);
+//                $telephone_4->update($telephone_update);
 
 
                 $telephone_list = ($modal ?? false)::select('task_id','phone','quality')->where('task_id',$task_id)->get() ?: collect();
