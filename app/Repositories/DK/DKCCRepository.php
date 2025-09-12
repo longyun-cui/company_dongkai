@@ -5907,8 +5907,8 @@ class DKCCRepository {
         $date_Ymd = date('Ymd');
 
         $telephone_count = $post_data["telephone_count"];
-//        $file_num = $post_data["file_num"];
-//        $file_size = $post_data["file_size"];
+        $file_num = $post_data["file_num"];
+        $file_size = $post_data["file_size"];
         $proportion_of_80_points = $post_data["proportion_of_80_points"];
         $proportion_of_60_points = $post_data["proportion_of_60_points"];
         $proportion_of_10_points = $post_data["proportion_of_10_points"];
@@ -6318,7 +6318,7 @@ EOF;
         $v = Validator::make($post_data, [
             'operate' => 'required',
             'pool_id' => 'required',
-            'score' => 'required|numeric|min:1|max:100',
+            'score' => 'required|numeric|min:-40|max:100',
         ], $messages);
         if ($v->fails())
         {

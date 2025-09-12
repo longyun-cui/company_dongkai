@@ -202,6 +202,16 @@
                             <a href="javascript:void(0);" class="item-down-by-score" data-score="10">下载</a>
                         </div>
                     </div>
+                    {{--10分--}}
+                    <div class="form-group item-detail-row item-detail-0">
+                        <label class="control-label col-md-3">0分</label>
+                        <div class="col-md-2 detail-text-row">
+                            <span class="detail-text"></span> 个
+                        </div>
+                        <div class="col-md-3 item-detail-operate" data-operate="">
+                            <a href="javascript:void(0);" class="item-down-by-score" data-score="0">下载</a>
+                        </div>
+                    </div>
                     {{--（-20分）--}}
                     <div class="form-group item-detail-row item-detail-minus-20">
                         <label class="control-label col-md-3">-20分</label>
@@ -209,6 +219,7 @@
                             <span class="detail-text"></span> 个
                         </div>
                         <div class="col-md-3 item-detail-operate" data-operate="">
+                            <a href="javascript:void(0);" class="item-down-by-score" data-score="-20">下载</a>
                         </div>
                     </div>
                     {{--（-40分）--}}
@@ -218,6 +229,7 @@
                             <span class="detail-text"></span> 个
                         </div>
                         <div class="col-md-3 item-detail-operate" data-operate="">
+                            <a href="javascript:void(0);" class="item-down-by-score" data-score="-40">下载</a>
                         </div>
                     </div>
                     {{--（-60分）--}}
@@ -403,6 +415,7 @@
                             $(nTd).data('score-80',row.rate_80_cnt);
                             $(nTd).data('score-60',row.rate_60_cnt);
                             $(nTd).data('score-10',row.rate_10_cnt);
+                            $(nTd).data('score-0',row.rate_0_cnt);
                             $(nTd).data('score-minus-20',row.rate_minus_20_cnt);
                             $(nTd).data('score-minus-40',row.rate_minus_40_cnt);
                             $(nTd).data('score-minus-60',row.rate_minus_60_cnt);
