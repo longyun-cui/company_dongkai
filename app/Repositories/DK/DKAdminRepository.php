@@ -11179,6 +11179,7 @@ dd(1);
 //            $query->whereHas('superior', function($query) use($me) { $query->where('id',$me->id); } );
 
             // 根据部门查看
+            $query->where('department_district_id', $me->department_district_id);
             $query->where('department_group_id', $me->department_group_id);
         }
 

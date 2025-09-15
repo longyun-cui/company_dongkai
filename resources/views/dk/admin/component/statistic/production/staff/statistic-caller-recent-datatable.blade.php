@@ -98,53 +98,8 @@
                     }
                 },
                 {
-                    "title": "6天前",
-                    "data": "order_6",
-                    "className": "bg-delivered",
-                    "width": "80px",
-                    "orderable": true,
-                    "orderSequence": ["desc", "asc"],
-                    render: function(data, type, row, meta) {
-                        return data;
-                    }
-                },
-                {
-                    "title": "5天前",
-                    "data": "order_5",
-                    "className": "bg-delivered",
-                    "width": "80px",
-                    "orderable": true,
-                    "orderSequence": ["desc", "asc"],
-                    render: function(data, type, row, meta) {
-                        return data;
-                    }
-                },
-                {
-                    "title": "4天前",
-                    "data": "order_4",
-                    "className": "bg-delivered",
-                    "width": "80px",
-                    "orderable": true,
-                    "orderSequence": ["desc", "asc"],
-                    render: function(data, type, row, meta) {
-                        return data;
-                    }
-                },
-                {
-                    "title": "3天前",
-                    "data": "order_3",
-                    "className": "bg-delivered",
-                    "width": "80px",
-                    "orderable": true,
-                    "orderSequence": ["desc", "asc"],
-                    render: function(data, type, row, meta) {
-
-                        return data;
-                    }
-                },
-                {
-                    "title": "前天",
-                    "data": "order_2",
+                    "title": "今天",
+                    "data": "order_0",
                     "className": "bg-delivered",
                     "width": "80px",
                     "orderable": true,
@@ -167,14 +122,59 @@
                     }
                 },
                 {
-                    "title": "今天",
-                    "data": "order_0",
+                    "title": "前天",
+                    "data": "order_2",
                     "className": "bg-delivered",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     render: function(data, type, row, meta) {
 
+                        return data;
+                    }
+                },
+                {
+                    "title": "3天前",
+                    "data": "order_3",
+                    "className": "bg-delivered",
+                    "width": "80px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    render: function(data, type, row, meta) {
+
+                        return data;
+                    }
+                },
+                {
+                    "title": "4天前",
+                    "data": "order_4",
+                    "className": "bg-delivered",
+                    "width": "80px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
+                    "title": "5天前",
+                    "data": "order_5",
+                    "className": "bg-delivered",
+                    "width": "80px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
+                    "title": "6天前",
+                    "data": "order_6",
+                    "className": "bg-delivered",
+                    "width": "80px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    render: function(data, type, row, meta) {
                         return data;
                     }
                 },
