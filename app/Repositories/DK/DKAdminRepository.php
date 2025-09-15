@@ -33311,7 +33311,7 @@ EOF;
                 'department_group_er' => function($query) { $query->select(['id','name']); }
             ])
             ->where('department_district_id','>',0)
-            ->where('department_group_id','>',0)
+//            ->where('department_group_id','>',0)
             ->whereIn('user_type',[84,88]);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
@@ -33355,6 +33355,7 @@ EOF;
 //            $query->whereHas('superior', function($query) use($me) { $query->where('id',$me->id); } );
 
             // 根据部门查看
+            $query->where('department_district_id', $me->department_district_id);
             $query->where('department_group_id', $me->department_group_id);
         }
 
@@ -33615,7 +33616,7 @@ EOF;
                 'department_group_er' => function($query) { $query->select(['id','name']); }
             ])
             ->where('department_district_id','>',0)
-            ->where('department_group_id','>',0)
+//            ->where('department_group_id','>',0)
             ->whereIn('user_type',[84,88]);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
@@ -33650,6 +33651,7 @@ EOF;
 //            $query->whereHas('superior', function($query) use($me) { $query->where('id',$me->id); } );
 
             // 根据部门查看
+            $query->where('department_district_id', $me->department_district_id);
             $query->where('department_group_id', $me->department_group_id);
         }
 
@@ -33739,7 +33741,7 @@ EOF;
                 'department_group_er' => function($query) { $query->select(['id','name']); }
             ])
             ->where('department_district_id','>',0)
-            ->where('department_group_id','>',0)
+//            ->where('department_group_id','>',0)
             ->whereIn('user_type',[84,88]);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
@@ -33773,6 +33775,7 @@ EOF;
 //            $query->whereHas('superior', function($query) use($me) { $query->where('id',$me->id); } );
 
             // 根据部门查看
+            $query->where('department_district_id', $me->department_district_id);
             $query->where('department_group_id', $me->department_group_id);
         }
 
@@ -34150,6 +34153,7 @@ EOF;
         else if($me->user_type == 84)
         {
             // 根据部门（小组）查看
+            $query->where('department_district_id', $me->department_district_id);
             $query->where('department_group_id', $me->department_group_id);
         }
 
@@ -34183,7 +34187,7 @@ EOF;
         else
         {
             $query->where('department_district_id','>',0)
-                ->where('department_group_id','>',0)
+//                ->where('department_group_id','>',0)
                 ->whereIn('user_type',[81,84,88]);
         }
 
