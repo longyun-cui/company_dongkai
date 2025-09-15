@@ -11144,7 +11144,7 @@ dd(1);
             ])
             ->where('user_status',1)
             ->where('department_district_id','>',0)
-            ->where('department_group_id','>',0)
+//            ->where('department_group_id','>',0)
             ->whereIn('user_type',[84,88]);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
@@ -11621,19 +11621,12 @@ dd(1);
                 "));
 
 
-
-
-
 //        count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
 //                    count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
 //                    count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
 //                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
 //                    count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
 //                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
-
-
-
-
 
         if($rank_staff_type == 41)
         {
@@ -11748,7 +11741,7 @@ dd(1);
         else
         {
             $query->where('department_district_id','>',0)
-                ->where('department_group_id','>',0)
+//                ->where('department_group_id','>',0)
                 ->whereIn('user_type',[81,84,88]);
         }
 
@@ -33157,6 +33150,7 @@ EOF;
         else if($me->user_type == 84)
         {
             // 根据部门（小组）查看
+            $query->where('department_district_id', $me->department_district_id);
             $query->where('department_group_id', $me->department_group_id);
         }
 
