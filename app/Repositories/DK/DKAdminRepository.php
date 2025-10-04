@@ -1636,7 +1636,14 @@ class DKAdminRepository {
 //                $mine_data['department_district_id'] = $me->department_district_id;
 //            }
 
-            if($post_data["user_type"] == 71 || $post_data["user_type"] == 77)
+            if($post_data["user_type"] == 61 || $post_data["user_type"] == 66)
+            {
+//                $mine_data['department_district_id'] = $me->department_district_id;
+//                unset($mine_data['department_district_id']);
+                unset($mine_data['department_district_id']);
+                unset($mine_data['department_group_id']);
+            }
+            else if($post_data["user_type"] == 71 || $post_data["user_type"] == 77)
             {
 //                $mine_data['department_district_id'] = $me->department_district_id;
 //                unset($mine_data['department_district_id']);

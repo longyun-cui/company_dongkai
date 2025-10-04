@@ -360,8 +360,10 @@
                 'a_pool_city_jl_cc' => '吉林-长春市',
                 'a_pool_city_jl_jl' => '吉林-吉林市',
 
-                'a_pool_city_hlj_heb' => '黑龙江-哈尔滨',
-                'a_pool_city_hlj_dq' => '黑龙江-大庆',
+                'a_pool_city_hlj_heb' => '黑龙江-哈尔滨市',
+                'a_pool_city_hlj_dq' => '黑龙江-大庆市',
+
+                'a_pool_city_gs_lz' => '甘肃-兰州市',
             ],
 
             'phone_table' => [
