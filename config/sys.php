@@ -165,6 +165,8 @@
 
             'phone_table_kv' => [
 
+                'a_pool_aa_temp_city' => '城市-临时表',
+
                 'a_pool_a_test' => '测试',
                 'a_pool_a_temp' => '临时',
 
