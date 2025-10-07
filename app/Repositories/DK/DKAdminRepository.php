@@ -28663,6 +28663,7 @@ EOF;
         {
             if($item->creator_id != $me->id) return response_error([],"你没有操作权限！");
         }
+        if($item->is_published != 0) return response_error([],"已发布，不能删除！");
 
         // 启动数据库事务
         DB::beginTransaction();
