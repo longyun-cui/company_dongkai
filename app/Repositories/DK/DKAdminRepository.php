@@ -28701,29 +28701,30 @@ EOF;
             }
             else
             {
-                $item->timestamps = false;
-                $bool = $item->delete();  // 普通删除
-//                $bool = $item->forceDelete();  // 永久删除
-                if(!$bool) throw new Exception("item--delete--fail");
-                else
-                {
-                    $record = new DK_Record;
-
-                    $record_data["ip"] = Get_IP();
-                    $record_data["record_object"] = 21;
-                    $record_data["record_category"] = 11;
-                    $record_data["record_type"] = 1;
-                    $record_data["creator_id"] = $me->id;
-                    $record_data["order_id"] = $item_id;
-                    $record_data["operate_object"] = 71;
-                    $record_data["operate_category"] = 101;
-                    $record_data["operate_type"] = 1;
-
-                    $bool_1 = $record->fill($record_data)->save();
-                    if(!$bool_1) throw new Exception("insert--record--fail");
-                }
-
-                DB::commit();
+                return response_error([],"删除错误，请刷新页面重试！！");
+//                $item->timestamps = false;
+//                $bool = $item->delete();  // 普通删除
+////                $bool = $item->forceDelete();  // 永久删除
+//                if(!$bool) throw new Exception("item--delete--fail");
+//                else
+//                {
+//                    $record = new DK_Record;
+//
+//                    $record_data["ip"] = Get_IP();
+//                    $record_data["record_object"] = 21;
+//                    $record_data["record_category"] = 11;
+//                    $record_data["record_type"] = 1;
+//                    $record_data["creator_id"] = $me->id;
+//                    $record_data["order_id"] = $item_id;
+//                    $record_data["operate_object"] = 71;
+//                    $record_data["operate_category"] = 101;
+//                    $record_data["operate_type"] = 1;
+//
+//                    $bool_1 = $record->fill($record_data)->save();
+//                    if(!$bool_1) throw new Exception("insert--record--fail");
+//                }
+//
+//                DB::commit();
             }
 
             return response_success([]);
