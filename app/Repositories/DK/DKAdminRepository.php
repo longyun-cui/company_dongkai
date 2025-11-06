@@ -5092,7 +5092,7 @@ class DKAdminRepository {
 
 
         $total = $query->count();
-        dd($total);
+//        dd($total);
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
@@ -5160,7 +5160,7 @@ class DKAdminRepository {
             }
 
         }
-        dd($list->toArray());
+//        dd($list->toArray());
 
 
         if($me->id > 10000)
