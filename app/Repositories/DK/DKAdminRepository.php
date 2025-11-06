@@ -4712,7 +4712,7 @@ class DKAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = DK_Order::select('dk_admin_order.*');
+        $query = DK_Order::select('dk_admin_order.id');
 //            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
 //            ->with([
 //                'creator'=>function($query) { $query->select('id','username','true_name'); },
@@ -5090,9 +5090,8 @@ class DKAdminRepository {
         }
 
 
-
         $total = $query->count();
-        dd($total);
+//        dd($total);
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
@@ -5111,9 +5110,26 @@ class DKAdminRepository {
         }
         else $query->orderBy("dk_admin_order.id", "desc");
 
-//        dd($limit);
-        if($limit == -1) $list = $query->skip($skip)->take(100)->get();
-        else $list = $query->skip($skip)->take($limit)->get();
+//        if($limit == -1) $list = $query->skip($skip)->take(100)->get();
+//        else $list = $query->skip($skip)->take($limit)->get();
+
+        $list = DK_Order::whereIn('id', $query)
+            ->with([
+                'creator'=>function($query) { $query->select('id','username','true_name'); },
+                'owner'=>function($query) { $query->select('id','username'); },
+                'client_er'=>function($query) { $query->select('id','username'); },
+                'inspector'=>function($query) { $query->select('id','username','true_name'); },
+                'deliverer'=>function($query) { $query->select('id','username','true_name'); },
+                'project_er'=>function($query) { $query->select('id','name','alias_name'); },
+                'department_district_er',
+                'department_group_er',
+                'department_manager_er',
+                'department_supervisor_er'
+            ])
+            ->orderBy("id", "desc")
+            ->skip($skip)
+            ->take($limit)
+            ->get();
 
         foreach ($list as $k => $v)
         {
