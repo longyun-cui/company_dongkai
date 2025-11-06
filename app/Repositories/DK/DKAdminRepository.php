@@ -4712,20 +4712,20 @@ class DKAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = DK_Order::select('dk_admin_order.*')
+        $query = DK_Order::select('dk_admin_order.*');
 //            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
-            ->with([
-                'creator'=>function($query) { $query->select('id','username','true_name'); },
-                'owner'=>function($query) { $query->select('id','username'); },
-                'client_er'=>function($query) { $query->select('id','username'); },
-                'inspector'=>function($query) { $query->select('id','username','true_name'); },
-                'deliverer'=>function($query) { $query->select('id','username','true_name'); },
-                'project_er'=>function($query) { $query->select('id','name','alias_name'); },
-                'department_district_er',
-                'department_group_er',
-                'department_manager_er',
-                'department_supervisor_er'
-            ]);
+//            ->with([
+//                'creator'=>function($query) { $query->select('id','username','true_name'); },
+//                'owner'=>function($query) { $query->select('id','username'); },
+//                'client_er'=>function($query) { $query->select('id','username'); },
+//                'inspector'=>function($query) { $query->select('id','username','true_name'); },
+//                'deliverer'=>function($query) { $query->select('id','username','true_name'); },
+//                'project_er'=>function($query) { $query->select('id','name','alias_name'); },
+//                'department_district_er',
+//                'department_group_er',
+//                'department_manager_er',
+//                'department_supervisor_er'
+//            ]);
 //            ->whereIn('user_category',[11])
 //            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
 //            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
@@ -5092,7 +5092,7 @@ class DKAdminRepository {
 
 
         $total = $query->count();
-//        dd($total);
+        dd($total);
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
