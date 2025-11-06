@@ -6,7 +6,7 @@
 
 
             <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改记录</h3>
+                <h3 class="box-title">工单记录</h3>
                 <div class="box-tools pull-right caption _none">
                     <a href="javascript:void(0);">
                         <button type="button" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加记录</button>
@@ -38,6 +38,7 @@
                 <table class='table table-striped table-bordered' id='datatable-order-operation-record'>
                     <thead>
                     <tr role='row' class='heading'>
+                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>

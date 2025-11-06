@@ -91,10 +91,11 @@
                                     return '<small class="btn-xs bg-purple">附件</small><small class="btn-xs bg-red">删除</small>';
                                 }
                                 else return '';
-
                             }
                             else if(data == 91) return '<small class="btn-xs bg-yellow">验证</small>';
                             else if(data == 92) return '<small class="btn-xs bg-yellow">审核</small>';
+                            else if(data == 93) return '<small class="btn-xs bg-red">申诉</small>';
+                            else if(data == 94) return '<small class="btn-xs bg-red">申诉•处理</small>';
                             else if(data == 95) return '<small class="btn-xs bg-green">交付</small>';
                             else if(data == 96) return '<small class="btn-xs bg-red">分发</small>';
                             else if(data == 97) return '<small class="btn-xs bg-navy">弃用</small>';
@@ -106,10 +107,10 @@
                         }
                     },
                     {
-                        "className": "font-12px",
-                        "width": "80px",
                         "title": "属性",
                         "data": "column_name",
+                        "className": "font-12px",
+                        "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(row.operate_category == 1)
@@ -154,10 +155,10 @@
                         }
                     },
                     {
-                        "className": "font-12px",
-                        "width": "240px",
                         "title": "修改前",
                         "data": "before",
+                        "className": "",
+                        "width": "160px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(row.column_name == 'client_id')
@@ -217,12 +218,13 @@
                         }
                     },
                     {
-                        "className": "font-12px",
-                        "width": "240px",
                         "title": "修改后",
                         "data": "after",
+                        "className": "",
+                        "width": "160px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
+
                             if(row.column_name == 'client_id')
                             {
                                 if(row.after_client_er == null) return '';
@@ -275,10 +277,40 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "60px",
+                        "title": "详情",
+                        "data": "content",
+                        "className": "text-left",
+                        "width": "320px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+
+                            if($.trim(data))
+                            {
+                                try
+                                {
+                                    var $customer_list = JSON.parse(data);
+
+                                    var $return_html = '';
+                                    $.each($customer_list, function($index, $value) {
+                                        if($value.before == '') $return_html += '【'+ $value.title +'】' + $value.after + ' <br>';
+                                        else $return_html  += '【'+ $value.title +'】' + $value.before + ' → ' + $value.after + ' <br>';
+                                    });
+                                    return $return_html;
+                                }
+                                catch(e)
+                                {
+                                    return '';
+                                }
+                            }
+                            else return '';
+
+                        }
+                    },
+                    {
                         "title": "操作人",
                         "data": "creator_id",
+                        "className": "",
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             @if(in_array($me->user_type,[81,84,88]))
@@ -289,10 +321,10 @@
                         }
                     },
                     {
-                        "className": "",
-                        "width": "108px",
                         "title": "操作时间",
                         "data": "created_at",
+                        "className": "",
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 //                            return data;

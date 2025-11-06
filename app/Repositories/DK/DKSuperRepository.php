@@ -759,7 +759,7 @@ class DKSuperRepository {
         $query = DK_User::select('*')
 //            ->with(['district'])
             ->whereIn('user_category',[11])
-            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,71,77,81,84,88]);
+            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,71,77,81,84,88,91]);
 //            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
 //            ->with('ep','parent','fund')
 //            ->withCount([
@@ -821,7 +821,7 @@ class DKSuperRepository {
         $query = DK_User::select('*')
             ->with(['creator','superior','department_district_er','department_group_er'])
             ->whereIn('user_category',[11])
-            ->whereIn('user_type',[0,1,9,11,19,21,22,31,33,41,61,66,71,77,81,84,88]);
+            ->whereIn('user_type',[0,1,9,11,19,21,22,31,33,41,61,66,71,77,81,84,88,91]);
 //            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
 //            ->with('ep','parent','fund')
 //            ->withCount([

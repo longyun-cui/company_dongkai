@@ -47,6 +47,7 @@
                     d.keyword = $tableSearch.find('input[name="order-keyword"]').val();
                     d.department_district = $tableSearch.find('select[name="order-department-district[]"]').val();
                     d.staff = $tableSearch.find('select[name="order-staff"]').val();
+                    d.distribute_type = $tableSearch.find('select[name="order-distribute-type"]').val();
                     d.project = $tableSearch.find('select[name="order-project"]').val();
                     d.client = $tableSearch.find('select[name="order-client"]').val();
                     d.status = $tableSearch.find('select[name="order-status"]').val();
@@ -59,6 +60,7 @@
                     d.recording_quality = $tableSearch.find('select[name="order-recording-quality"]').val();
                     d.inspected_status = $tableSearch.find('select[name="order-inspected-status"]').val();
                     d.inspected_result = $tableSearch.find('select[name="order-inspected-result[]"]').val();
+                    d.appealed_status = $tableSearch.find('select[name="order-appealed-status"]').val();
                     d.delivered_status = $tableSearch.find('select[name="order-delivered-status"]').val();
                     d.delivered_result = $tableSearch.find('select[name="order-delivered-result[]"]').val();
                     d.district_city = $tableSearch.find('select[name="order-city"]').val();
@@ -88,7 +90,7 @@
             "columns": [
                 {
                     "title": '<input type="checkbox" class="check-review-all">',
-                    "width": "id",
+                    // "data": "id",
                     "data": null,
                     "width": "60px",
                     "orderable": false,
@@ -204,7 +206,22 @@
 
                             if(row.inspected_status == 1)
                             {
-                                return '<small class="btn-xs bg-blue">已审核</small>';
+                                if(row.appealed_status == 0)
+                                {
+                                    return '<small class="btn-xs bg-blue">已审核</small>';
+                                }
+                                else if(row.appealed_status == 1)
+                                {
+                                    return '<small class="btn-xs bg-red">申诉中</small>';
+                                }
+                                else if(row.appealed_status == 9)
+                                {
+                                    return '<small class="btn-xs bg-green">申诉·结束</small>';
+                                }
+                                else
+                                {
+                                    return '<small class="btn-xs bg-blue">已审核</small>';
+                                }
                             }
                             else if(row.inspected_status == 9)
                             {
@@ -1432,7 +1449,7 @@
                         {
                             $(nTd).addClass('modal-show-for-field-set');
                             $(nTd).attr('data-id',row.id).attr('data-name','审核说明');
-                            $(nTd).attr('data-key','inspected_description').attr('data-value',data);
+                            $(nTd).attr('data-key','inspected_description').attr('data-value',data).attr('data-appealed-value',row.appealed_description);
 
                             $(nTd).attr('data-column-type','textarea');
                             $(nTd).attr('data-column-name','审核说明');
@@ -1505,6 +1522,8 @@
                         var $html_push = '';
                         var $html_deliver = '';
                         var $html_distribute = '';
+                        var $html_appeal = '';
+                        var $html_appeal_handle = '';
 
 
                         if(row.item_status == 1)
@@ -1621,6 +1640,25 @@
                                 $html_publish = '';
                             }
 
+
+                            // 申诉
+                            if("{{ in_array($me->user_type,[0,1,81,84,88]) }}")
+                            {
+                                if(row.appealed_status == 0 && row.inspected_result == '拒绝')
+                                {
+                                    $html_appeal = '<a class="btn btn-xs bg-red modal-show-for-detail-appealed" data-id="'+data+'">申诉</a>';
+                                }
+                            }
+
+                            // 申诉处理
+                            if("{{ in_array($me->user_type,[0,1,91]) }}")
+                            {
+                                if(row.appealed_status == 1)
+                                {
+                                    $html_appeal_handle = '<a class="btn btn-xs bg-red modal-show-for-detail-appealed-handled" data-id="'+data+'">处理</a>';
+                                }
+                            }
+
                         }
 
 
@@ -1649,6 +1687,8 @@
                             // $html_inspected+
                             $html_delete+
                             $html_push+
+                            $html_appeal+
+                            $html_appeal_handle+
                             $html_deliver+
                             $html_distribute+
                             $html_record+

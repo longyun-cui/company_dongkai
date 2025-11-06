@@ -168,7 +168,7 @@
 </div>
 
 
-{{--显示-审核信息--}}
+{{--审核--}}
 <div class="modal fade modal-main-body modal-wrapper" id="modal-body-for-detail-inspected">
     <div class="col-md-8 col-md-offset-2" id="" style="margin-top:32px;margin-bottom:32px;background:#fff;">
 
@@ -352,6 +352,239 @@
                     <div class="col-md-8 col-md-offset-2">
                         <button type="button" class="btn btn-success item-summit-for-detail-inspected" id=""><i class="fa fa-check"></i> 提交</button>
                         <button type="button" class="btn btn-default item-cancel-for-detail-inspected" id="">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+{{--申诉--}}
+<div class="modal fade modal-main-body modal-wrapper" id="modal-body-for-detail-appealed">
+    <div class="col-md-8 col-md-offset-2" id="" style="margin-top:32px;margin-bottom:32px;background:#fff;">
+
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border" style="margin:16px 0;">
+                <h3 class="box-title">申诉-订单【<span class="info-detail-title"></span>】</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <form action="" method="post" class="form-horizontal form-bordered" id="form-appealed-modal">
+                <div class="box-body  info-body">
+
+                    {{ csrf_field() }}
+                    <input type="hidden" name="operate" value="order-appeal" readonly>
+                    <input type="hidden" name="detail-appealed-order-id" value="0" readonly>
+
+                    {{--项目--}}
+                    <div class="form-group item-detail-project">
+                        <label class="control-label col-md-2">项目</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate="project"></div>
+                    </div>
+                    {{--客户--}}
+                    <div class="form-group item-detail-client">
+                        <label class="control-label col-md-2">客户</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <label class="col-md-2"></label>
+                    </div>
+                    {{--电话--}}
+                    <div class="form-group item-detail-phone">
+                        <label class="control-label col-md-2">电话</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate=""></div>
+                    </div>
+                    {{--所在城市--}}
+                    <div class="form-group item-detail-city-district">
+                        <label class="control-label col-md-2">所在城市</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate=""></div>
+                    </div>
+                    {{--牙齿数量--}}
+                    <div class="form-group item-detail-teeth-count">
+                        <label class="control-label col-md-2">牙齿数量</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate=""></div>
+                    </div>
+                    {{--通话小结--}}
+                    <div class="form-group item-detail-description">
+                        <label class="control-label col-md-2">通话小结</label>
+                        <div class="col-md-8 control-label" style="text-align:left;">
+                            <span class="item-detail-text"></span>
+                        </div>
+                    </div>
+                    {{--录音--}}
+                    <div class="form-group item-detail-recording">
+                        <label class="control-label col-md-2">通话录音</label>
+                        <div class="col-md-8 control-label" style="text-align:left;">
+                            <span class="item-detail-text"></span>
+                            <a class="btn btn-xs item-inspected-get-recording-list-submit">获取录音</a>
+                        </div>
+                    </div>
+                    {{--审核说明--}}
+                    <div class="form-group item-inspected-description">
+                        <label class="control-label col-md-2">审核说明</label>
+                        <div class="col-md-8 control-label" style="text-align:left;">
+                            <span class="item-detail-text"></span>
+                        </div>
+                    </div>
+                    {{--申诉说明--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2">申诉说明</label>
+                        <div class="col-md-8 ">
+                            {{--<input type="text" class="form-control" name="description" placeholder="描述" value="{{$data->description or ''}}">--}}
+                            <textarea class="form-control" name="detail-appealed-description" rows="3" cols="100%"></textarea>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <button type="button" class="btn btn-success modal-summit-for-detail-appealed" id=""><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-default modal-cancel-for-detail-appealed" id="">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+{{--申诉处理--}}
+<div class="modal fade modal-main-body modal-wrapper" id="modal-body-for-detail-appealed-handled">
+    <div class="col-md-8 col-md-offset-2" id="" style="margin-top:32px;margin-bottom:32px;background:#fff;">
+
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border" style="margin:16px 0;">
+                <h3 class="box-title">申诉-订单【<span class="info-detail-title"></span>】</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <form action="" method="post" class="form-horizontal form-bordered" id="form-appealed-handled-modal">
+                <div class="box-body  info-body">
+
+                    {{ csrf_field() }}
+                    <input type="hidden" name="operate" value="order-appeal-handle" readonly>
+                    <input type="hidden" name="detail-appealed-handled-order-id" value="0" readonly>
+
+                    {{--项目--}}
+                    <div class="form-group item-detail-project">
+                        <label class="control-label col-md-2">项目</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate="project"></div>
+                    </div>
+                    {{--客户--}}
+                    <div class="form-group item-detail-client">
+                        <label class="control-label col-md-2">客户</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <label class="col-md-2"></label>
+                    </div>
+                    {{--电话--}}
+                    <div class="form-group item-detail-phone">
+                        <label class="control-label col-md-2">电话</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate=""></div>
+                    </div>
+                    {{--所在城市--}}
+                    <div class="form-group item-detail-city-district">
+                        <label class="control-label col-md-2">所在城市</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate=""></div>
+                    </div>
+                    {{--牙齿数量--}}
+                    <div class="form-group item-detail-teeth-count">
+                        <label class="control-label col-md-2">牙齿数量</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate=""></div>
+                    </div>
+                    {{--通话小结--}}
+                    <div class="form-group item-detail-description">
+                        <label class="control-label col-md-2">通话小结</label>
+                        <div class="col-md-8 control-label" style="text-align:left;">
+                            <span class="item-detail-text"></span>
+                        </div>
+                    </div>
+                    {{--录音--}}
+                    <div class="form-group item-detail-recording">
+                        <label class="control-label col-md-2">通话录音</label>
+                        <div class="col-md-8 control-label" style="text-align:left;">
+                            <span class="item-detail-text"></span>
+                            <a class="btn btn-xs item-inspected-get-recording-list-submit">获取录音</a>
+                        </div>
+                    </div>
+                    {{--审核说明--}}
+                    <div class="form-group item-inspected-description">
+                        <label class="control-label col-md-2">审核说明</label>
+                        <div class="col-md-8 control-label" style="text-align:left;">
+                            <span class="item-detail-text"></span>
+                        </div>
+                    </div>
+                    {{--申诉说明--}}
+                    <div class="form-group item-appealed-description">
+                        <label class="control-label col-md-2">申诉说明</label>
+                        <div class="col-md-8 control-label" style="text-align:left;">
+                            <span class="item-detail-text"></span>
+                        </div>
+                    </div>
+                    {{--处理结果--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2">处理结果</label>
+                        <div class="col-md-8 ">
+                            <select class="form-control select-select2-" name="detail-appealed-handled-result" id="" style="width:100%;">
+                                <option value="-1">选择处理结果</option>
+                                @foreach(config('info.appealed_handled_result') as $k => $v)
+                                    <option value ="{{ $k }}">{{ $v }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    {{--申诉说明--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2">处理说明</label>
+                        <div class="col-md-8 ">
+                            {{--<input type="text" class="form-control" name="description" placeholder="描述" value="{{$data->description or ''}}">--}}
+                            <textarea class="form-control" name="detail-appealed-handled-description" rows="3" cols="100%"></textarea>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <button type="button" class="btn btn-success modal-summit-for-detail-appealed-handled" id=""><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-default modal-cancel-for-detail-appealed-handled" id="">取消</button>
                     </div>
                 </div>
             </div>

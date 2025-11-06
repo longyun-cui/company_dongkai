@@ -51,6 +51,18 @@
             '回访重提'
         ],
 
+
+        'appealed_status' => [
+            '已申诉',
+            '申诉中',
+            '申诉结束'
+        ],
+
+        'appealed_handled_result' => [
+            1 => '申诉·成功',
+            9 => '申诉·失败'
+        ],
+
         'delivered_status' => [
             '待审核',
             '已审核',

@@ -116,6 +116,16 @@
                             </button>
                             @endif
 
+                            @if(in_array($me->user_type, [0,1,11]))
+                            <button type="button" class="btn radio-btn radio-user-type">
+                                <span class="radio">
+                                    <label>
+                                        <input type="radio" name="user_type" value="91"> 三方审核
+                                    </label>
+                                </span>
+                            </button>
+                            @endif
+
                         </div>
                     </div>
                 </div>

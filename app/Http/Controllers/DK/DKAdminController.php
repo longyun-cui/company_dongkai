@@ -431,6 +431,16 @@ class DKAdminController extends Controller
         return $this->repo->v1_operate_for_order_item_inspect(request()->all());
     }
     // 【工单-管理】
+    public function v1_operate_for_order_item_appeal()
+    {
+        return $this->repo->v1_operate_for_order_item_appeal(request()->all());
+    }
+    // 【工单-管理】
+    public function v1_operate_for_order_item_appeal_handle()
+    {
+        return $this->repo->v1_operate_for_order_item_appeal_handle(request()->all());
+    }
+    // 【工单-管理】
     public function v1_operate_for_order_item_deliver()
     {
         return $this->repo->v1_operate_for_order_item_deliver(request()->all());

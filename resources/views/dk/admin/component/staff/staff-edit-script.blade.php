@@ -79,6 +79,10 @@
             {
                 $('.department-box').hide();
             }
+            else if($value == 91)
+            {
+                $('.department-box').hide();
+            }
 
             $('.superior-box').hide();
 

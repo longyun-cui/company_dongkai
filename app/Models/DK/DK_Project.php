@@ -17,6 +17,7 @@ class DK_Project extends Model
         'name', 'alias_name',
         'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
         'is_distributive',
+        'location_city', 'location_district',
         'client_id',
         'inspector_id',
         'contact', 'contact_name', 'contact_phone', 'contact_email', 'contact_wx_id', 'contact_wx_qr_code_img', 'contact_address',

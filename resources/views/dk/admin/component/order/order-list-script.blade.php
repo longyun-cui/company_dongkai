@@ -603,6 +603,249 @@
 
 
 
+        // 【获取】内容详情-申诉
+        $(".main-content").on('click', ".modal-show-for-detail-appealed", function() {
+            var $that = $(this);
+            var $row = $that.parents('tr');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $item_category = $datatable_wrapper.data('datatable-item-category');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+            var $table = $('#'+$table_id);
+
+            var $row = $that.parents('tr');
+            $table.find('tr').removeClass('appealing');
+            $row.addClass('appealing');
+
+            $('.datatable-wrapper').removeClass('operating');
+            $datatable_wrapper.addClass('operating');
+            $datatable_wrapper.find('tr').removeClass('operating');
+            $row.addClass('operating');
+
+            $('input[name="detail-appealed-order-id"]').val($that.attr('data-id'));
+            $('.info-detail-title').html($that.attr('data-id'));
+            $('.info-set-title').html($that.attr('data-id'));
+
+            var $modal = $('#modal-body-for-detail-appealed');
+            $modal.attr('data-datatable-id',$table_id);
+
+            $modal.find('.item-detail-project .item-detail-text').html($row.find('td[data-key=project_id]').attr('data-option-name'));
+            $modal.find('.item-detail-client .item-detail-text').html($row.find('td[data-key=client_name]').attr('data-value'));
+            $modal.find('.item-detail-phone .item-detail-text').html($row.find('td[data-key=client_phone]').attr('data-value'));
+            $modal.find('.item-detail-is-wx .item-detail-text').html($row.find('td[data-key=is_wx]').html());
+            $modal.find('.item-detail-wx-id .item-detail-text').html($row.find('td[data-key=wx_id]').attr('data-value'));
+            $modal.find('.item-detail-city-district .item-detail-text').html($row.find('td[data-key=location_city]').html());
+            $modal.find('.item-detail-teeth-count .item-detail-text').html($row.find('td[data-key=teeth_count]').html());
+            $modal.find('.item-detail-description .item-detail-text').html($row.find('td[data-key=description]').attr('data-value'));
+            $modal.find('.item-detail-recording .item-detail-text').html('');
+            $modal.find('.item-detail-recording .item-detail-text').html($row.find('[data-key="description"]').attr('data-recording-address'));
+            $modal.find('.item-inspected-description .item-detail-text').html($row.find('td[data-key=inspected_description]').attr('data-value'));
+
+
+            var $inspected_result = $row.find('td[data-key=appealed_result]').attr('data-value');
+            // console.log($inspected_result);
+            $modal.find('select[name="detail-appealed-result"]').find("option").prop("selected",false);
+            $modal.find('select[name="detail-appealed-result"]').find("option[value='"+$inspected_result+"']").prop("selected",true);
+
+            // $modal.find('input[name="recording-quality"]').val('0');
+            var $recording_quality = $row.find('td[data-key=recording_quality]').attr('data-value');
+            $modal.find('input[name="recording-quality"][value='+$recording_quality+']').prop('checked', true);
+
+            // var $appealed_description = $row.find('td[data-key=inspected_description]').attr('data-value');
+            // console.log($inspected_description);
+            $modal.find('textarea[name="detail-appealed-description"]').val('');
+            // $modal.find('textarea[name="detail-appealed-description"]').val($appealed_description);
+
+            $modal.modal('show');
+
+        });
+        // 【取消】内容详情-申诉
+        $(".main-content").on('click', ".modal-cancel-for-detail-appealed", function() {
+            var that = $(this);
+            var $modal = $('#modal-body-for-detail-appealed');
+            $modal.find('select[name="detail-appealed-result"]').prop("checked", false);
+            $modal.find('select[name="detail-appealed-result"]').find('option').attr("selected",false);
+            $modal.find('select[name="detail-appealed-result"]').find('option[value="-1"]').attr("selected",true);
+            $modal.find('textarea[name="detail-appealed-description"]').val('');
+            $modal.modal('hide').on("hidden.bs.modal", function () {
+                $("body").addClass("modal-open");
+            });
+        });
+        // 【提交】内容详情-申诉
+        $(".main-content").on('click', ".modal-summit-for-detail-appealed", function() {
+            var $that = $(this);
+            var $modal = $('#modal-body-for-detail-appealed');
+            var $table_id = $modal.attr('data-datatable-id');
+            var $table = $('#'+$table_id);
+
+            var $id = $('input[name="detail-appealed-order-id"]').val();
+            var $appealed_description = $('textarea[name="detail-appealed-description"]').val();
+            // console.log($recording_quality);
+
+            $.post(
+                "{{ url('/v1/operate/order/item-appeal') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: "order-appeal",
+                    item_id: $('input[name="detail-appealed-order-id"]').val(),
+                    appealed_description: $('textarea[name="detail-appealed-description"]').val()
+                },
+                function(data){
+                    // layer.close(index);
+                    // layer.form.render();
+                    if(!data.success)
+                    {
+                        layer.msg(data.msg);
+                    }
+                    else
+                    {
+                        layer.msg(data.msg);
+
+                        $(".modal-cancel-for-detail-appealed").click();
+                        // $('#datatable-for-order-list').DataTable().ajax.reload(null,false);
+
+                        var $row = $table.find('tr.appealing');
+                        $row.find('td[data-key=order_status]').html('<small class="btn-xs bg-red">申诉中</small>');
+                        $row.find('td[data-key=appealed_description]').attr('data-value',$appealed_description);
+                        $row.find('.modal-show-for-detail-appealed').removeClass('bg-red').addClass('bg-default').addClass('disabled');
+                        // $row.find('.modal-show-for-detail-appealed').removeClass('bg-red').addClass('bg-default').addClass('disabled').remove();
+
+                    }
+                },
+                'json'
+            );
+        });
+
+
+        // 【获取】内容详情-申诉-处理
+        $(".main-content").on('click', ".modal-show-for-detail-appealed-handled", function() {
+            var $that = $(this);
+            var $row = $that.parents('tr');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $item_category = $datatable_wrapper.data('datatable-item-category');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+            var $table = $('#'+$table_id);
+
+            var $row = $that.parents('tr');
+            $table.find('tr').removeClass('handling');
+            $row.addClass('handling');
+
+            $('.datatable-wrapper').removeClass('operating');
+            $datatable_wrapper.addClass('operating');
+            $datatable_wrapper.find('tr').removeClass('operating');
+            $row.addClass('operating');
+
+            $('input[name="detail-appealed-handled-order-id"]').val($that.attr('data-id'));
+            $('.info-detail-title').html($that.attr('data-id'));
+            $('.info-set-title').html($that.attr('data-id'));
+
+            var $modal = $('#modal-body-for-detail-appealed-handled');
+            $modal.attr('data-datatable-id',$table_id);
+
+            $modal.find('.item-detail-project .item-detail-text').html($row.find('td[data-key=project_id]').attr('data-option-name'));
+            $modal.find('.item-detail-client .item-detail-text').html($row.find('td[data-key=client_name]').attr('data-value'));
+            $modal.find('.item-detail-phone .item-detail-text').html($row.find('td[data-key=client_phone]').attr('data-value'));
+            $modal.find('.item-detail-is-wx .item-detail-text').html($row.find('td[data-key=is_wx]').html());
+            $modal.find('.item-detail-wx-id .item-detail-text').html($row.find('td[data-key=wx_id]').attr('data-value'));
+            $modal.find('.item-detail-city-district .item-detail-text').html($row.find('td[data-key=location_city]').html());
+            $modal.find('.item-detail-teeth-count .item-detail-text').html($row.find('td[data-key=teeth_count]').html());
+            $modal.find('.item-detail-description .item-detail-text').html($row.find('td[data-key=description]').attr('data-value'));
+            $modal.find('.item-detail-recording .item-detail-text').html('');
+            $modal.find('.item-detail-recording .item-detail-text').html($row.find('[data-key="description"]').attr('data-recording-address'));
+            $modal.find('.item-inspected-description .item-detail-text').html($row.find('td[data-key=inspected_description]').attr('data-value'));
+            $modal.find('.item-appealed-description .item-detail-text').html($row.find('td[data-key=inspected_description]').attr('data-appealed-value'));
+
+
+            var $inspected_result = $row.find('td[data-key=appealed_result]').attr('data-value');
+            // console.log($inspected_result);
+            $modal.find('select[name="detail-appealed-handled-result"]').find("option").prop("selected",false);
+            $modal.find('select[name="detail-appealed-handled-result"]').find("option[value='"+$inspected_result+"']").prop("selected",true);
+
+
+            // var $appealed_description = $row.find('td[data-key=inspected_description]').attr('data-value');
+            // console.log($inspected_description);
+            $modal.find('textarea[name="detail-appealed-description"]').val('');
+            // $modal.find('textarea[name="detail-appealed-description"]').val($appealed_description);
+
+            $modal.modal('show');
+
+        });
+        // 【取消】内容详情-申诉-处理
+        $(".main-content").on('click', ".modal-cancel-for-detail-appealed-handled", function() {
+            var that = $(this);
+            var $modal = $('#modal-body-for-detail-appealed-handled');
+            $modal.find('select[name="detail-appealed-handled-result"]').prop("checked", false);
+            $modal.find('select[name="detail-appealed-handled-result"]').find('option').attr("selected",false);
+            $modal.find('select[name="detail-appealed-handled-result"]').find('option[value="-1"]').attr("selected",true);
+            $modal.find('textarea[name="detail-appealed-handled-description"]').val('');
+            $modal.modal('hide').on("hidden.bs.modal", function () {
+                $("body").addClass("modal-open");
+            });
+        });
+        // 【提交】内容详情-申诉-处理
+        $(".main-content").on('click', ".modal-summit-for-detail-appealed-handled", function() {
+            var $that = $(this);
+            var $modal = $('#modal-body-for-detail-appealed-handled');
+            var $table_id = $modal.attr('data-datatable-id');
+            var $table = $('#'+$table_id);
+
+            var $id = $('input[name="detail-appealed-handled-order-id"]').val();
+            var $appealed_handled_result = $('select[name="detail-appealed-handled-result"]').val();
+            var $appealed_handled_description = $('textarea[name="detail-appealed-handled-description"]').val();
+            // console.log($recording_quality);
+
+            $.post(
+                "{{ url('/v1/operate/order/item-appeal-handle') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: "order-appeal-handle",
+                    item_id: $('input[name="detail-appealed-handled-order-id"]').val(),
+                    appealed_handled_result: $('select[name="detail-appealed-handled-result"]').val(),
+                    appealed_handled_description: $('textarea[name="detail-appealed-handled-description"]').val()
+                },
+                function(data){
+                    // layer.close(index);
+                    // layer.form.render();
+                    if(!data.success)
+                    {
+                        layer.msg(data.msg);
+                    }
+                    else
+                    {
+                        layer.msg(data.msg);
+
+                        $(".modal-cancel-for-detail-appealed-handled").click();
+                        // $('#datatable-for-order-list').DataTable().ajax.reload(null,false);
+
+
+                        var $row = $table.find('tr.handling');
+                        console.log($row);
+                        $row.find('td[data-key=order_status]').html('<small class="btn-xs bg-green">申诉·结束</small>');
+
+                        var $inspected_result = '';
+                        var $inspected_result_html = '';
+                        if($appealed_handled_result == 1)
+                        {
+                            $inspected_result = '通过';
+                            $inspected_result_html = '<small class="btn-xs bg-green">通过</small>';
+                        }
+                        else if($appealed_handled_result == 9)
+                        {
+                            $inspected_result = '拒绝';
+                            $inspected_result_html = '<small class="btn-xs bg-red">拒绝</small>';
+                        }
+                        $row.find('td[data-key=inspected_result]').attr('data-value',$inspected_result);
+                        $row.find('td[data-key=inspected_result]').html($inspected_result_html);
+                        $row.find('td[data-key=inspected_description]').attr('data-appealed-value',$appealed_handled_description);
+
+                        $row.find('.modal-show-for-detail-appealed-handled').removeClass('bg-red').addClass('bg-default').addClass('disabled').remove();
+                    }
+                },
+                'json'
+            );
+        });
+
+
+
 
         // 【推送】【显示】
         $(".main-content").on('click', ".item-modal-show-for-push", function() {

@@ -4712,14 +4712,14 @@ class DKAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = DK_Order::select('*')
+        $query = DK_Order::select('dk_admin_order.*')
 //            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
             ->with([
-                'creator',
+                'creator'=>function($query) { $query->select('id','username','true_name'); },
                 'owner'=>function($query) { $query->select('id','username'); },
                 'client_er'=>function($query) { $query->select('id','username'); },
-                'inspector',
-                'deliverer',
+                'inspector'=>function($query) { $query->select('id','username','true_name'); },
+                'deliverer'=>function($query) { $query->select('id','username','true_name'); },
                 'project_er',
                 'department_district_er',
                 'department_group_er',
@@ -4830,6 +4830,12 @@ class DKAdminRepository {
         {
             $query->where('is_published','<>',0);
         }
+        // 三方审核
+        if($me->user_type == 91)
+        {
+            $query->where('is_published','<>',0);
+            $query->whereIn('appealed_status',[1,9]);
+        }
 
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
         if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
@@ -4842,8 +4848,21 @@ class DKAdminRepository {
 //        if(!empty($post_data['client_phone'])) $query->where('client_phone', 'like', "%{$post_data['client_phone']}");
 
         if(!empty($post_data['assign'])) $query->where('published_date', $post_data['assign']);
-        if(!empty($post_data['assign_start'])) $query->where('published_date', '>=', $post_data['assign_start']);
-        if(!empty($post_data['assign_ended'])) $query->where('published_date', '<=', $post_data['assign_ended']);
+//        if(!empty($post_data['assign_start'])) $query->where('published_date', '>=', $post_data['assign_start']);
+//        if(!empty($post_data['assign_ended'])) $query->where('published_date', '<=', $post_data['assign_ended']);
+        if(!empty($post_data['assign_start']) && !empty($post_data['assign_ended']))
+        {
+            $query->whereDate("published_date", '>=', $post_data['assign_start']);
+            $query->whereDate("published_date", '<=', $post_data['assign_ended']);
+        }
+        else if(!empty($post_data['assign_start']))
+        {
+            $query->where("published_date", $post_data['assign_start']);
+        }
+        else if(!empty($post_data['assign_ended']))
+        {
+            $query->where("published_date", $post_data['assign_ended']);
+        }
 
 
         if(!empty($post_data['delivered_date'])) $query->where('delivered_date', $post_data['delivered_date']);
@@ -4904,12 +4923,29 @@ class DKAdminRepository {
             }
         }
 
+
         // 项目
         if(isset($post_data['project']))
         {
             if(!in_array($post_data['project'],[-1,0,'-1','0']))
             {
-                $query->where('project_id', $post_data['project']);
+                if(isset($post_data['distribute_type']) && $post_data['distribute_type'] == 1)
+                {
+                    $project = DK_Project::find($post_data['project']);
+                    $project_ids = DK_Project::select('id')->where('item_status',1)->where('location_city',$project->location_city)->pluck('id');
+
+                    $query->leftJoin('dk_pivot_client_delivery as d', function($join) use ($post_data,$project_ids) {
+                    $join->on('d.order_id', '=', 'dk_admin_order.id')
+                        ->where('d.project_id', '=', $post_data['project']);
+                    })
+                    ->whereIn('dk_admin_order.project_id', $project_ids)
+                    ->where('dk_admin_order.project_id', '!=', $post_data['project'])
+                    ->whereNull('d.order_id');
+                }
+                else
+                {
+                    $query->where('project_id', $post_data['project']);
+                }
             }
         }
 
@@ -4943,7 +4979,6 @@ class DKAdminRepository {
         }
 
 
-
         // 是否+V
         if(!empty($post_data['is_wx']))
         {
@@ -4952,6 +4987,7 @@ class DKAdminRepository {
                 $query->where('is_wx', $post_data['is_wx']);
             }
         }
+
 
         // 审核状态
         if(!empty($post_data['inspected_status']))
@@ -4986,6 +5022,29 @@ class DKAdminRepository {
                 $query->whereIn('inspected_result', $post_data['inspected_result']);
             }
         }
+
+
+        // 申诉状态
+        if(!empty($post_data['appealed_status']))
+        {
+            $appealed_status = $post_data['appealed_status'];
+            if(in_array($appealed_status,config('info.appealed_status')))
+            {
+                if($appealed_status == '已申诉')
+                {
+                    $query->whereIn('appealed_status', [1,9]);
+                }
+                else if($appealed_status == '申诉中')
+                {
+                    $query->where('appealed_status', 1);
+                }
+                else if($appealed_status == '申诉结束')
+                {
+                    $query->where('appealed_status', 9);
+                }
+            }
+        }
+
 
         // 交付状态
         if(!empty($post_data['delivered_status']))
@@ -5049,7 +5108,7 @@ class DKAdminRepository {
             $field = $columns[$order_column]["data"];
             $query->orderBy($field, $order_dir);
         }
-        else $query->orderBy("id", "desc");
+        else $query->orderBy("dk_admin_order.id", "desc");
 
         if($limit == -1) $list = $query->skip($skip)->take(100)->get();
         else $list = $query->skip($skip)->take($limit)->get();
@@ -6025,6 +6084,7 @@ class DKAdminRepository {
                 $record_data["operate_object"] = 71;
                 $record_data["operate_category"] = 11;
                 $record_data["operate_type"] = 1;
+                $record_data["process_category"] = 1;
 
                 $bool_1 = $record->fill($record_data)->save();
                 if(!$bool_1) throw new Exception("insert--record--fail");
@@ -6033,39 +6093,43 @@ class DKAdminRepository {
             DB::commit();
 
 
-            if($item->api_is_pushed == 0)
+
+            if(env('APP_ENV') == "production" && $item->item_category == 1)
             {
-                $push_data["item"] = "补牙";
-                $push_data["name"] = $item->client_name;
-                $push_data["phone"] = $item->client_phone;
-                $push_data["intention"] = $item->client_intention;
-                $push_data["city"] = $item->location_city;
-                $push_data["area"] = $item->location_district;
-                $push_data["toothcount"] = $item->teeth_count;
-                $push_data["addvx"] = (($item->is_wx) ? '是' : '否');
-                $push_data["vxaccount"] = (($item->wx_id) ? $item->wx_id : '');
-                $push_data["source"] = $item->channel_source;
-                $push_data["description"] = $item->description;
-
-                $request_result = $this->operate_api_push_order($push_data);
-
-                if($request_result['success'])
+                if($item->api_is_pushed == 0)
                 {
-                    $result = json_decode($request_result['result']);
-                    if($result->code == 0)
+                    $push_data["item"] = "补牙";
+                    $push_data["name"] = $item->client_name;
+                    $push_data["phone"] = $item->client_phone;
+                    $push_data["intention"] = $item->client_intention;
+                    $push_data["city"] = $item->location_city;
+                    $push_data["area"] = $item->location_district;
+                    $push_data["toothcount"] = $item->teeth_count;
+                    $push_data["addvx"] = (($item->is_wx) ? '是' : '否');
+                    $push_data["vxaccount"] = (($item->wx_id) ? $item->wx_id : '');
+                    $push_data["source"] = $item->channel_source;
+                    $push_data["description"] = $item->description;
+
+                    $request_result = $this->operate_api_push_order($push_data);
+
+                    if($request_result['success'])
                     {
-                        $item->api_is_pushed = 1;
-                        $item->save();
-                        return response_success([],"发布成功，推送成功!");
+                        $result = json_decode($request_result['result']);
+                        if($result->code == 0)
+                        {
+                            $item->api_is_pushed = 1;
+                            $item->save();
+                            return response_success([],"发布成功，推送成功!");
+                        }
+                        else
+                        {
+                            return response_error([],"发布成功，推送返回失败!");
+                        }
                     }
                     else
                     {
-                        return response_error([],"发布成功，推送返回失败!");
+                        return response_error([],"发布成功，接口推送失败!");
                     }
-                }
-                else
-                {
-                    return response_error([],"发布成功，接口推送失败!");
                 }
             }
 
@@ -6121,6 +6185,7 @@ class DKAdminRepository {
 
 
         $before = $item->inspected_result;
+        $datetime = date('Y-m-d H:i:s');
 
         $date = date("Y-m-d");
 
@@ -6150,7 +6215,31 @@ class DKAdminRepository {
                 $record_data["operate_object"] = 71;
                 $record_data["operate_category"] = 92;
                 $record_data["operate_type"] = 1;
+                $record_data["process_category"] = 1;
                 $record_data["description"] = $inspected_description;
+
+                $record_content = [];
+
+                $record_row['title'] = '结果';
+                $record_row['field'] = 'inspected_result';
+//                $record_row['code'] = $inspected_result;
+                $record_row['before'] = $before;
+                $record_row['after'] = $inspected_result;
+                $record_content[] = $record_row;
+
+                $record_row['field'] = 'inspected_description';
+                $record_row['title'] = '说明';
+                $record_row['before'] = '';
+                $record_row['after'] = $inspected_description;
+                $record_content[] = $record_row;
+
+                $record_row['field'] = 'appeal_handle_time';
+                $record_row['title'] = '时间';
+                $record_row['before'] = '';
+                $record_row['after'] = $datetime;
+                $record_content[] = $record_row;
+
+                $record_data["content"] = json_encode($record_content);
 
                 $record_data["before"] = $before;
                 $record_data["after"] = $inspected_result;
@@ -6236,6 +6325,229 @@ class DKAdminRepository {
 
 
             return response_success([],"审核完成!");
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【工单-管理】申诉
+    public function v1_operate_for_order_item_appeal($post_data)
+    {
+//        dd($post_data);
+//        return response_success([]);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order-appeal') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
+        if(in_array($me->user_type,[88]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+//        $inspected_result = $post_data["inspected_result"];
+//        if(!in_array($inspected_result,config('info.inspected_result'))) return response_error([],"审核结果非法！");
+        $appealed_description = $post_data["appealed_description"];
+
+
+        $before = $item->inspected_result;
+
+        $date = date("Y-m-d");
+        $datetime = date('Y-m-d H:i:s');
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->appellant_id = $me->id;
+            $item->appealed_status = 1;
+            if($appealed_description) $item->appealed_description = $appealed_description;
+//            $item->appealed_at = time();
+            $item->appealed_date = $date;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("DK_Order--update--fail");
+            else
+            {
+                $record = new DK_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $id;
+                $record_data["operate_object"] = 71;
+                $record_data["operate_category"] = 93;
+                $record_data["operate_type"] = 1;
+                $record_data["process_category"] = 1;
+                $record_data["description"] = $appealed_description;
+
+                $record_content = [];
+
+                $record_row['field'] = 'appeal_description';
+                $record_row['title'] = '说明';
+                $record_row['before'] = '';
+                $record_row['after'] = $appealed_description;
+                $record_content[] = $record_row;
+
+                $record_row['field'] = 'appeal_time';
+                $record_row['title'] = '时间';
+                $record_row['before'] = '';
+                $record_row['after'] = $datetime;
+                $record_content[] = $record_row;
+
+                $record_data["content"] = json_encode($record_content);
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("DK_Record--insert--fail");
+            }
+
+
+            DB::commit();
+
+            return response_success([],"申诉提交完成!");
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【工单-管理】申诉-处理
+    public function v1_operate_for_order_item_appeal_handle($post_data)
+    {
+//        dd($post_data);
+//        return response_success([]);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order-appeal-handle') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,91])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $appealed_handled_result = $post_data["appealed_handled_result"];
+        if(!array_key_exists($appealed_handled_result,config('info.appealed_handled_result'))) return response_error([],"申诉结果非法！");
+        $appealed_handled_description = $post_data["appealed_handled_description"];
+
+
+        $before = $item->appealed_handled_result;
+
+        $date = date("Y-m-d");
+        $datetime = date('Y-m-d H:i:s');
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if($appealed_handled_result == 1)
+            {
+                $item->inspected_result = '通过';
+            }
+            $item->appealed_handler_id = $me->id;
+            $item->appealed_status = 9;
+            $item->appealed_result = $appealed_handled_result;
+            if($appealed_handled_description) $item->appealed_handled_description = $appealed_handled_description;
+//            $item->appealed_at = time();
+            $item->appealed_handled_date = $date;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("DK_Order--update--fail");
+            else
+            {
+                $record = new DK_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $id;
+                $record_data["operate_object"] = 71;
+                $record_data["operate_category"] = 94;
+                $record_data["operate_type"] = 1;
+                $record_data["process_category"] = 1;
+                $record_data["description"] = $appealed_handled_description;
+
+                $record_content = [];
+
+                if($appealed_handled_result == 1) $result_txt = config('info.appealed_handled_result')[$appealed_handled_result];
+                else if($appealed_handled_result == 9) $result_txt = config('info.appealed_handled_result')[$appealed_handled_result];
+                else $result_txt = '结果有误';
+                $record_row['title'] = '结果';
+                $record_row['field'] = 'appealed_handled_result';
+                $record_row['code'] = $appealed_handled_result;
+                $record_row['before'] = '';
+                $record_row['after'] = $result_txt;
+                $record_content[] = $record_row;
+
+                $record_row['field'] = 'appealed_handled_description';
+                $record_row['title'] = '说明';
+                $record_row['before'] = '';
+                $record_row['after'] = $appealed_handled_description;
+                $record_content[] = $record_row;
+
+                $record_row['field'] = 'appeal_handle_time';
+                $record_row['title'] = '时间';
+                $record_row['before'] = '';
+                $record_row['after'] = $datetime;
+                $record_content[] = $record_row;
+
+                $record_data["content"] = json_encode($record_content);
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("DK_Record--insert--fail");
+            }
+
+
+            DB::commit();
+
+            return response_success([],"申诉处理完成!");
         }
         catch (Exception $e)
         {
@@ -7646,6 +7958,7 @@ dd(1);
                     $record_data["order_id"] = $id;
                     $record_data["operate_object"] = 71;
                     $record_data["operate_category"] = 1;
+                    $record_data["process_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
                     else if($operate_type == "edit") $record_data["operate_type"] = 11;

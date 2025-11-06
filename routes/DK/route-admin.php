@@ -119,6 +119,8 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/v1/operate/order/aesthetic/item-save', $controller.'@v1_operate_for_order_aesthetic_item_save');
     Route::post('/v1/operate/order/item-publish', $controller.'@v1_operate_for_order_item_publish');
     Route::post('/v1/operate/order/item-inspect', $controller.'@v1_operate_for_order_item_inspect');
+    Route::post('/v1/operate/order/item-appeal', $controller.'@v1_operate_for_order_item_appeal');
+    Route::post('/v1/operate/order/item-appeal-handle', $controller.'@v1_operate_for_order_item_appeal_handle');
     Route::post('/v1/operate/order/item-deliver', $controller.'@v1_operate_for_order_item_deliver');
     Route::post('/v1/operate/order/item-get-api-call-record', $controller.'@v1_operate_for_order_item_get_api_call_record');
     Route::post('/v1/operate/order/item-get-phone-pool-info', $controller.'@v1_operate_for_order_item_get_phone_pool_info');
@@ -507,6 +509,7 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     Route::post('/item/order-verify', $controller.'@operate_item_order_verify');
     Route::post('/item/order-publish', $controller.'@operate_item_order_publish');
     Route::post('/item/order-inspect', $controller.'@operate_item_order_inspect');
+    Route::post('/item/order-appeal', $controller.'@operate_item_order_appeal');
     Route::post('/item/order-complete', $controller.'@operate_item_order_complete');
     Route::post('/item/order-abandon', $controller.'@operate_item_order_abandon');
     Route::post('/item/order-reuse', $controller.'@operate_item_order_reuse');

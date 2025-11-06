@@ -163,6 +163,7 @@
                         else if(data == 88) return '<small class="btn-xs bg-olive">客服</small>';
                         else if(data == 61) return '<small class="btn-xs bg-blue">运营</small><small class="btn-xs btn-danger">经理</small>';
                         else if(data == 66) return '<small class="btn-xs bg-blue">运营人员</small>';
+                        else if(data == 91) return '<small class="btn-xs bg-orange">三方审核</small>';
                         else return "有误";
                     }
                 },

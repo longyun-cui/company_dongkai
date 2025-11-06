@@ -13,10 +13,9 @@
             <input type="text" class="search-filter form-filter filter-md filter-keyup" name="order-client-phone" placeholder="电话号码" value="" />
 
             {{--发布日期--}}
-            <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="order-assign" placeholder="发布日期" value="" readonly="readonly" />
-
-            {{--交付日期--}}
-            <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="order-delivered_date" placeholder="交付日期" value="" readonly="readonly" />
+{{--            <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="order-assign" placeholder="发布日期" value="" readonly="readonly" />--}}
+            <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="order-start" placeholder="开始日期" value="" readonly="readonly" />
+            <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="order-ended" placeholder="结束日期" value="" readonly="readonly" />
 
             {{--创建方式--}}
             @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
@@ -65,6 +64,14 @@
                     <option value="{{ $v->id }}">{{ $v->name }}</option>
                 @endforeach
             </select>
+            {{--录音质量--}}
+            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
+                <select class="search-filter form-filter filter-md select2-box-c" name="order-distribute-type">
+                    <option value="">常规筛选</option>
+                    <option value="1">可分发</option>
+                </select>
+            @endif
+
 
             {{--审核状态--}}
             <select class="search-filter form-filter filter-lg select2-box-c" name="order-inspected-status">
@@ -92,22 +99,42 @@
                     <option value="9">问题</option>
                 </select>
             @endif
+            {{--录音质量--}}
+            @if(in_array($me->user_type,[0,1,9,11,91]))
+                <select class="search-filter form-filter filter-md select2-box-c" name="order-appealed-status">
+                    <option value="">申诉状态</option>
+                    @foreach(config('info.appealed_status') as $v)
+                        <option value="{{ $v }}">{{ $v }}</option>
+                    @endforeach
+                </select>
+            @endif
+
+
+            {{--交付日期--}}
+            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
+            <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="order-delivered_date" placeholder="交付日期" value="" readonly="readonly" />
+            @endif
 
             {{--交付状态--}}
+            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
             <select class="search-filter form-filter filter-lg select2-box-c" name="order-delivered-status">
                 <option value="-1">交付状态</option>
                 <option value="待交付">待交付</option>
                 {{--<option value="已交付" @if("已交付" == $delivered_status) selected="selected" @endif>已交付</option>--}}
                 <option value="已操作">已操作</option>
             </select>
+            @endif
 
             {{--交付结果--}}
+            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
             <select class="search-filter form-filter filter-xl select2-box-c" name="order-delivered-result[]" multiple="multiple">
                 <option value="-1">交付结果</option>
                 @foreach(config('info.delivered_result') as $v)
                     <option value="{{ $v }}">{{ $v }}</option>
                 @endforeach
             </select>
+            @endif
+
 
             {{--城市--}}
             <select class="search-filter form-filter filter-lg select2-box-c select2-district-city" name="order-city" id="order-city" data-target="#order-district">

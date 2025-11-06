@@ -73,6 +73,15 @@
                 </div>
 
 
+                {{--城市--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">城市</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="location_city" placeholder="城市" value="">
+                    </div>
+                </div>
+
+
                 {{--客户--}}
                 <div class="form-group">
                     <label class="control-label col-md-2">客户</label>

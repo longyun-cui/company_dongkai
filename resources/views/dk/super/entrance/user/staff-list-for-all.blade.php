@@ -75,6 +75,7 @@
                             <option value="77">质检员</option>
                             <option value="61">运营经理</option>
                             <option value="66">运营人员</option>
+                            <option value="91">三方审核</option>
                         </select>
 
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
@@ -295,6 +296,7 @@
                             else if(data == 81) return '<small class="btn-xs bg-olive">客服</small><small class="btn-xs bg-red">经理</small>';
                             else if(data == 84) return '<small class="btn-xs bg-olive">客服</small><small class="btn-xs bg-orange">主管</small>';
                             else if(data == 88) return '<small class="btn-xs bg-olive">客服</small>';
+                            else if(data == 91) return '<small class="btn-xs bg-red">三方审核</small>';
                             else return "有误";
                         }
                     },

@@ -12,18 +12,21 @@ class DK_Record extends Model
         'active', 'status', 'category', 'type', 'sort',
         'record_active', 'record_status', 'record_object', 'record_category', 'record_type', 'record_module',
         'operate_object', 'operate_category', 'operate_type',
+        'process_category', 'process_type',
+
         'owner_active',
         'owner_id', 'creator_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
         'org_id', 'admin_id',
         'item_id', 'order_id',
         'column', 'column_type', 'column_name',
         'before', 'after',
-        'before_id', 'after_id',
-        'before_client_id', 'after_client_id',
-        'before_project_id', 'after_project_id',
-        'before_empty_route_id', 'after_empty_route_id',
-        'before_car_id', 'after_car_id',
-        'before_driver_id', 'after_driver_id',
+        'before_id',
+        'after_id',
+        'before_client_id',
+        'after_client_id',
+        'before_project_id',
+        'after_project_id',
+
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
         'link_url', 'cover_pic', 'attachment_name', 'attachment_src', 'tag',
         'time_point', 'time_type', 'start_time', 'end_time', 'address',
@@ -33,7 +36,7 @@ class DK_Record extends Model
     ];
     protected $dateFormat = 'U';
 
-    protected $hidden = ['content','custom'];
+//    protected $hidden = ['content','custom'];
 
     protected $dates = ['created_at','updated_at','deleted_at'];
 //    public function getDates()
