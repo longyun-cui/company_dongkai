@@ -5092,7 +5092,6 @@ class DKAdminRepository {
 
 
         $total = $query->count();
-        dd($total);
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
@@ -5111,6 +5110,7 @@ class DKAdminRepository {
         }
         else $query->orderBy("dk_admin_order.id", "desc");
 
+        dd($limit);
         if($limit == -1) $list = $query->skip($skip)->take(100)->get();
         else $list = $query->skip($skip)->take($limit)->get();
 
