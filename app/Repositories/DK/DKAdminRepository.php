@@ -5110,7 +5110,7 @@ class DKAdminRepository {
         }
         else $query->orderBy("dk_admin_order.id", "desc");
 
-        dd($limit);
+//        dd($limit);
         if($limit == -1) $list = $query->skip($skip)->take(100)->get();
         else $list = $query->skip($skip)->take($limit)->get();
 
@@ -5159,7 +5159,7 @@ class DKAdminRepository {
             }
 
         }
-//        dd($list->toArray());
+        dd($list->toArray());
 
 
         if($me->id > 10000)
