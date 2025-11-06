@@ -5159,7 +5159,7 @@ class DKAdminRepository {
             }
 
         }
-        dd($list->toArray());
+//        dd($list->toArray());
 
 
         if($me->id > 10000)
