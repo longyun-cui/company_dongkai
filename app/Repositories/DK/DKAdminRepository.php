@@ -5092,6 +5092,7 @@ class DKAdminRepository {
 
 
         $total = $query->count();
+        dd($total);
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
