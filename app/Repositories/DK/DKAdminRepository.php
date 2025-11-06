@@ -4837,14 +4837,14 @@ class DKAdminRepository {
             $query->whereIn('appealed_status',[1,9]);
         }
 
-        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
-        if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
-        if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
-        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['id'])) $query->where('dk_admin_order.id', $post_data['id']);
+        if(!empty($post_data['remark'])) $query->where('dk_admin_order.remark', 'like', "%{$post_data['remark']}%");
+        if(!empty($post_data['description'])) $query->where('dk_admin_order.description', 'like', "%{$post_data['description']}%");
+        if(!empty($post_data['keyword'])) $query->where('dk_admin_order.content', 'like', "%{$post_data['keyword']}%");
+        if(!empty($post_data['username'])) $query->where('dk_admin_order.username', 'like', "%{$post_data['username']}%");
 
-        if(!empty($post_data['client_name'])) $query->where('client_name', $post_data['client_name']);
-        if(!empty($post_data['client_phone'])) $query->where('client_phone', $post_data['client_phone']);
+        if(!empty($post_data['client_name'])) $query->where('dk_admin_order.client_name', $post_data['client_name']);
+        if(!empty($post_data['client_phone'])) $query->where('dk_admin_order.client_phone', $post_data['client_phone']);
 //        if(!empty($post_data['client_phone'])) $query->where('client_phone', 'like', "%{$post_data['client_phone']}");
 
         if(!empty($post_data['assign'])) $query->where('published_date', $post_data['assign']);
@@ -4865,7 +4865,7 @@ class DKAdminRepository {
         }
 
 
-        if(!empty($post_data['delivered_date'])) $query->where('delivered_date', $post_data['delivered_date']);
+        if(!empty($post_data['delivered_date'])) $query->where('dk_admin_order.delivered_date', $post_data['delivered_date']);
 
 
 //        if(!empty($post_data['district_city'])) $query->where('location_city', $post_data['district_city']);
@@ -4874,15 +4874,15 @@ class DKAdminRepository {
         {
             if(!in_array($post_data['district_city'],[-1]))
             {
-                $query->where('location_city', $post_data['district_city']);
+                $query->where('dk_admin_order.location_city', $post_data['district_city']);
             }
         }
         if(!empty($post_data['district_district']))
         {
             if(!in_array($post_data['district_district'],[-1]))
             {
-//                $query->where('location_district', $post_data['district_district']);
-                $query->whereIn('location_district', $post_data['district_district']);
+//                $query->where('dk_admin_order.location_district', $post_data['district_district']);
+                $query->whereIn('dk_admin_order.location_district', $post_data['district_district']);
             }
         }
 
@@ -4955,7 +4955,7 @@ class DKAdminRepository {
         {
             if(!in_array($post_data['item_category'],[-1,0,'-1','0']))
             {
-                $query->where('item_category', $post_data['item_category']);
+                $query->where('dk_admin_order.item_category', $post_data['item_category']);
             }
         }
 
@@ -4964,7 +4964,7 @@ class DKAdminRepository {
         {
             if(!in_array($post_data['item_type'],[-1,'-1']))
             {
-                $query->where('item_type', $post_data['item_type']);
+                $query->where('dk_admin_order.item_type', $post_data['item_type']);
             }
         }
 
@@ -4974,7 +4974,7 @@ class DKAdminRepository {
         {
             if(!in_array($post_data['created_type'],[-1,'-1']))
             {
-                $query->where('created_type', $post_data['created_type']);
+                $query->where('dk_admin_order.created_type', $post_data['created_type']);
             }
         }
 
@@ -4984,7 +4984,7 @@ class DKAdminRepository {
         {
             if(!in_array($post_data['is_wx'],[-1]))
             {
-                $query->where('is_wx', $post_data['is_wx']);
+                $query->where('dk_admin_order.is_wx', $post_data['is_wx']);
             }
         }
 
