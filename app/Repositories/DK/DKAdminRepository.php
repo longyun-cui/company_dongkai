@@ -5119,7 +5119,7 @@ class DKAdminRepository {
             'client_er'=>function($query) { $query->select('id','username'); },
             'inspector'=>function($query) { $query->select('id','username','true_name'); },
             'deliverer'=>function($query) { $query->select('id','username','true_name'); },
-            'project_er'=>function($query) { $query->select('id','name','alias_name'); },
+            'project_er'=>function($query) { $query->select('id','name','alias_name','is_distributive'); },
             'department_district_er',
             'department_group_er',
             'department_manager_er',
