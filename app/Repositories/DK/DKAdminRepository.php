@@ -9191,6 +9191,10 @@ dd(1);
                     count(IF(item_category = 1 and inspected_result = '重复', TRUE, NULL)) as order_dental_for_inspected_repeated,
                     count(IF(item_category = 1 and inspected_result = '拒绝', TRUE, NULL)) as order_dental_for_inspected_refused,
                     
+                    count(IF(item_category = 1 and appealed_status > 0, TRUE, NULL)) as order_dental_for_appealed,
+                    count(IF(item_category = 1 and appealed_result = 1, TRUE, NULL)) as order_dental_for_appealed_success,
+                    count(IF(item_category = 1 and appealed_result = 9, TRUE, NULL)) as order_dental_for_appealed_fail,
+                    
                     count(IF(item_category = 1 and delivered_status = 1, TRUE, NULL)) as order_dental_for_delivered_all,
                     count(IF(item_category = 1 and delivered_result = '已交付', TRUE, NULL)) as order_dental_for_delivered_completed,
                     count(IF(item_category = 1 and delivered_result = '内部交付', TRUE, NULL)) as order_dental_for_delivered_inside,

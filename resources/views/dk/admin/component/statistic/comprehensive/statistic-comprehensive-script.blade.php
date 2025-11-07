@@ -530,6 +530,10 @@
                     $target.find(".order_published_dental_for_inspected_effective").find('b').html($data.order_published_data.order_dental_for_inspected_effective);
                     $target.find(".order_published_dental_for_inspected_effective_rate").find('b').html($data.order_published_data.order_dental_for_inspected_effective_rate);
 
+                    $target.find(".order_published_dental_for_appealed").find('b').html($data.order_published_data.order_dental_for_appealed);
+                    $target.find(".order_published_dental_for_appealed_success").find('b').html($data.order_published_data.order_dental_for_appealed_success);
+                    $target.find(".order_published_dental_for_appealed_fail").find('b').html($data.order_published_data.order_dental_for_appealed_fail);
+
 
                     // 质检审核
                     $target.find(".order_inspected_dental_for_inspected_all").find('b').html($data.order_inspected_data.order_dental_for_inspected_all);

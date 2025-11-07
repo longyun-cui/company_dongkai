@@ -1,3 +1,4 @@
+{{--综合概览2--}}
 <div class="row module-wrapper comprehensive-wrapper statistic-comprehensive-clone" data-item-category="statistic-comprehensive"  data-function="statistic_get_data_for_comprehensive">
 
 
@@ -120,6 +121,15 @@
                         </li>
                         <li class="order_published_dental_for_inspected_refused">
                             <a href="javascript:void(0);">拒绝<span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
+                        </li>
+                        <li class="order_published_dental_for_appealed">
+                            <a href="javascript:void(0);">申诉<span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
+                        </li>
+                        <li class="order_published_dental_for_appealed_success">
+                            <a href="javascript:void(0);">申诉·成功<span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
+                        </li>
+                        <li class="order_published_dental_for_appealed_fail">
+                            <a href="javascript:void(0);">申诉·失败<span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
                         </li>
                         <li class="order_published_dental_for_inspected_effective">
                             <a href="javascript:void(0);">有效量（客服业绩量） <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
