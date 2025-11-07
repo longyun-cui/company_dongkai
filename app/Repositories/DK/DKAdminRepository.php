@@ -4940,7 +4940,8 @@ class DKAdminRepository {
                     })
                     ->whereIn('dk_admin_order.project_id', $project_ids)
                     ->where('dk_admin_order.project_id', '!=', $post_data['project'])
-                    ->whereNull('d.order_id');
+                    ->whereNull('d.order_id')
+                    ->where('inspected_result','通过');
                 }
                 else
                 {
