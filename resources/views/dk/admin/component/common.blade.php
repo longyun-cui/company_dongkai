@@ -442,6 +442,13 @@
                             <span class="item-detail-text"></span>
                         </div>
                     </div>
+                    {{--录音地址--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2">录音地址</label>
+                        <div class="col-md-8 ">
+                            <input type="text" class="form-control" name="detail-appealed-url" placeholder="录音地址 带http">
+                        </div>
+                    </div>
                     {{--申诉说明--}}
                     <div class="form-group">
                         <label class="control-label col-md-2">申诉说明</label>
@@ -545,6 +552,13 @@
                     {{--审核说明--}}
                     <div class="form-group item-inspected-description">
                         <label class="control-label col-md-2">审核说明</label>
+                        <div class="col-md-8 control-label" style="text-align:left;">
+                            <span class="item-detail-text"></span>
+                        </div>
+                    </div>
+                    {{--申诉录音--}}
+                    <div class="form-group item-appealed-url">
+                        <label class="control-label col-md-2">申诉录音</label>
                         <div class="col-md-8 control-label" style="text-align:left;">
                             <span class="item-detail-text"></span>
                         </div>

@@ -81,7 +81,7 @@ class DK_Order extends Model
         'api_is_pushed',
 
         'inspector_id', 'inspected_status', 'inspected_result', 'inspected_result_code', 'inspected_description', 'inspected_at', 'inspected_date',
-        'appellant_id', 'appealed_status', 'appealed_result', 'appealed_result_code', 'appealed_description', 'appealed_at', 'appealed_date',
+        'appellant_id', 'appealed_status', 'appealed_result', 'appealed_result_code', 'appealed_url', 'appealed_description', 'appealed_at', 'appealed_date',
         'appealed_handler_id', 'appealed_handled_description', 'appealed_handled_at', 'appealed_handled_date',
         'deliverer_id', 'delivered_status', 'delivered_result', 'delivered_result_code', 'delivered_description', 'delivered_at', 'delivered_date',
 

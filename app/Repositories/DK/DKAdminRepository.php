@@ -4834,7 +4834,7 @@ class DKAdminRepository {
         if($me->user_type == 91)
         {
             $query->where('is_published','<>',0);
-            $query->whereIn('appealed_status',[1,9]);
+            $query->where('appealed_status','>',0);
         }
 
         if(!empty($post_data['id'])) $query->where('dk_admin_order.id', $post_data['id']);
@@ -6401,6 +6401,7 @@ class DKAdminRepository {
 
 //        $inspected_result = $post_data["inspected_result"];
 //        if(!in_array($inspected_result,config('info.inspected_result'))) return response_error([],"审核结果非法！");
+        $appealed_url = $post_data["appealed_url"];
         $appealed_description = $post_data["appealed_description"];
 
 
@@ -6415,6 +6416,7 @@ class DKAdminRepository {
         {
             $item->appellant_id = $me->id;
             $item->appealed_status = 1;
+            if($appealed_url) $item->appealed_url = $appealed_url;
             if($appealed_description) $item->appealed_description = $appealed_description;
 //            $item->appealed_at = time();
             $item->appealed_date = $date;
@@ -6443,6 +6445,15 @@ class DKAdminRepository {
                 $record_row['before'] = '';
                 $record_row['after'] = $appealed_description;
                 $record_content[] = $record_row;
+
+                if($appealed_url)
+                {
+                    $record_row['field'] = 'appealed_url';
+                    $record_row['title'] = '录音';
+                    $record_row['before'] = '';
+                    $record_row['after'] = $appealed_url;
+                    $record_content[] = $record_row;
+                }
 
                 $record_row['field'] = 'appeal_time';
                 $record_row['title'] = '时间';

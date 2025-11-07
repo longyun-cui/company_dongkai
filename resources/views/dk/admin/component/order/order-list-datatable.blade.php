@@ -1449,7 +1449,7 @@
                         {
                             $(nTd).addClass('modal-show-for-field-set');
                             $(nTd).attr('data-id',row.id).attr('data-name','审核说明');
-                            $(nTd).attr('data-key','inspected_description').attr('data-value',data).attr('data-appealed-value',row.appealed_description);
+                            $(nTd).attr('data-key','inspected_description').attr('data-value',data).attr('data-appealed-url',row.appealed_url).attr('data-appealed-description',row.appealed_description);
 
                             $(nTd).attr('data-column-type','textarea');
                             $(nTd).attr('data-column-name','审核说明');

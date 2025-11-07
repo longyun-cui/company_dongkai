@@ -687,6 +687,7 @@
                     _token: $('meta[name="_token"]').attr('content'),
                     operate: "order-appeal",
                     item_id: $('input[name="detail-appealed-order-id"]').val(),
+                    appealed_url: $('input[name="detail-appealed-url"]').val(),
                     appealed_description: $('textarea[name="detail-appealed-description"]').val()
                 },
                 function(data){
@@ -752,7 +753,11 @@
             $modal.find('.item-detail-recording .item-detail-text').html('');
             $modal.find('.item-detail-recording .item-detail-text').html($row.find('[data-key="description"]').attr('data-recording-address'));
             $modal.find('.item-inspected-description .item-detail-text').html($row.find('td[data-key=inspected_description]').attr('data-value'));
-            $modal.find('.item-appealed-description .item-detail-text').html($row.find('td[data-key=inspected_description]').attr('data-appealed-value'));
+
+            var $url = $row.find('td[data-key=inspected_description]').attr('data-appealed-url');
+            var $url_html = '<a target="_blank" href="' + $url + '">' + $url + '</a>';
+            $modal.find('.item-appealed-url .item-detail-text').html($url_html);
+            $modal.find('.item-appealed-description .item-detail-text').html($row.find('td[data-key=inspected_description]').attr('data-appealed-description'));
 
 
             var $inspected_result = $row.find('td[data-key=appealed_result]').attr('data-value');
