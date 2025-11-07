@@ -192,6 +192,7 @@
                 'a_pool_city_gd_st' => '广东-汕头市',
                 'a_pool_city_gd_zq' => '广东-肇庆市',
                 'a_pool_city_gd_zq_dz' => '广东-肇庆市-端州区',
+                'a_pool_city_gd_cz' => '广东-潮州市',
 
                 'a_pool_city_js_nj' => '江苏-南京市',
                 'a_pool_city_js_sz' => '江苏-苏州市',
