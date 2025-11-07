@@ -12666,6 +12666,12 @@ dd(1);
         }
         else $department_district_id = 0;
 
+        if(in_array($me->user_type,[84]))
+        {
+            $department_group_id = $me->department_group_id;
+        }
+        else $department_group_id = 0;
+
 
         // 团队统计
         $query_order = DK_Order::select('project_id','published_date')
@@ -12681,6 +12687,9 @@ dd(1);
             ->where("published_date",$the_date)
             ->when($department_district_id, function ($query) use ($department_district_id) {
                 return $query->where('department_district_id', $department_district_id);
+            })
+            ->when($department_group_id, function ($query) use ($department_group_id) {
+                return $query->where('department_group_id', $department_group_id);
             })
             ->groupBy('project_id')
             ->get()
@@ -36939,8 +36948,14 @@ EOF;
         }
         else $department_district_id = 0;
 
+        if(in_array($me->user_type,[84]))
+        {
+            $department_group_id = $me->department_group_id;
+        }
+        else $department_group_id = 0;
 
-        // 团队统计
+
+        // 工单统计
         $query_order = DK_Order::select('project_id')
             ->addSelect(DB::raw("
                     count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
@@ -36960,6 +36975,9 @@ EOF;
             ->where('published_date',$the_day)
             ->when($department_district_id, function ($query) use ($department_district_id) {
                 return $query->where('department_district_id', $department_district_id);
+            })
+            ->when($department_group_id, function ($query) use ($department_group_id) {
+                return $query->where('department_group_id', $department_group_id);
             })
             ->groupBy('project_id')
             ->get()
