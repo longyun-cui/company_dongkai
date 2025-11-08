@@ -4940,14 +4940,14 @@ class DKAdminRepository {
                             $join->on('d.client_phone', '=', 'dk_admin_order.client_phone')
                                 ->where('d.project_id', '=', $post_data['project']);
                         })
-//                        ->leftJoin('dk_admin_order as o2', function($join) use ($projectId) {
-//                            $join->on('o2.client_phone', '=', 'dk_admin_order.client_phone')
-//                                ->where('o2.project_id', '=', $projectId);
-//                        })
+                        ->leftJoin('dk_admin_order as o2', function($join) use ($projectId) {
+                            $join->on('o2.client_phone', '=', 'dk_admin_order.client_phone')
+                                ->where('o2.project_id', '=', $projectId);
+                        })
                         ->whereIn('dk_admin_order.project_id', $project_ids)
                         ->where('dk_admin_order.project_id', '!=', $post_data['project'])
                         ->whereNull('d.client_phone')
-//                        ->whereNull('o2.id')
+                        ->whereNull('o2.id')
                         ->where('dk_admin_order.inspected_result','通过');
                 }
                 else
