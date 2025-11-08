@@ -4847,21 +4847,21 @@ class DKAdminRepository {
         if(!empty($post_data['client_phone'])) $query->where('dk_admin_order.client_phone', $post_data['client_phone']);
 //        if(!empty($post_data['client_phone'])) $query->where('client_phone', 'like', "%{$post_data['client_phone']}");
 
-        if(!empty($post_data['assign'])) $query->where('published_date', $post_data['assign']);
+        if(!empty($post_data['assign'])) $query->where('dk_admin_order.published_date', $post_data['assign']);
 //        if(!empty($post_data['assign_start'])) $query->where('published_date', '>=', $post_data['assign_start']);
 //        if(!empty($post_data['assign_ended'])) $query->where('published_date', '<=', $post_data['assign_ended']);
         if(!empty($post_data['assign_start']) && !empty($post_data['assign_ended']))
         {
-            $query->whereDate("published_date", '>=', $post_data['assign_start']);
-            $query->whereDate("published_date", '<=', $post_data['assign_ended']);
+            $query->whereDate("dk_admin_order.published_date", '>=', $post_data['assign_start']);
+            $query->whereDate("dk_admin_order.published_date", '<=', $post_data['assign_ended']);
         }
         else if(!empty($post_data['assign_start']))
         {
-            $query->where("published_date", $post_data['assign_start']);
+            $query->where("dk_admin_order.published_date", $post_data['assign_start']);
         }
         else if(!empty($post_data['assign_ended']))
         {
-            $query->where("published_date", $post_data['assign_ended']);
+            $query->where("dk_admin_order.published_date", $post_data['assign_ended']);
         }
 
 
@@ -4892,7 +4892,7 @@ class DKAdminRepository {
         {
             if(!in_array($post_data['staff'],[-1,0,'-1','0']))
             {
-                $query->where('creator_id', $post_data['staff']);
+                $query->where('dk_admin_order.creator_id', $post_data['staff']);
             }
         }
 
@@ -4909,7 +4909,7 @@ class DKAdminRepository {
         {
             if(count($post_data['department_district']))
             {
-                $query->whereIn('department_district_id', $post_data['department_district']);
+                $query->whereIn('dk_admin_order.department_district_id', $post_data['department_district']);
             }
         }
 
@@ -4919,7 +4919,7 @@ class DKAdminRepository {
         {
             if(!in_array($post_data['client'],[-1,0,'-1','0']))
             {
-                $query->where('client_id', $post_data['client']);
+                $query->where('dk_admin_order.client_id', $post_data['client']);
             }
         }
 
@@ -5005,15 +5005,15 @@ class DKAdminRepository {
             {
                 if($inspected_status == '待发布')
                 {
-                    $query->where('is_published', 0);
+                    $query->where('dk_admin_order.is_published', 0);
                 }
                 else if($inspected_status == '待审核')
                 {
-                    $query->where('is_published', 1)->whereIn('inspected_status', [0,9]);
+                    $query->where('dk_admin_order.is_published', 1)->whereIn('inspected_status', [0,9]);
                 }
                 else if($inspected_status == '已审核')
                 {
-                    $query->where('inspected_status', 1);
+                    $query->where('dk_admin_order.inspected_status', 1);
                 }
             }
         }
@@ -5027,7 +5027,7 @@ class DKAdminRepository {
 //            }
             if(count($post_data['inspected_result']))
             {
-                $query->whereIn('inspected_result', $post_data['inspected_result']);
+                $query->whereIn('dk_admin_order.inspected_result', $post_data['inspected_result']);
             }
         }
 
