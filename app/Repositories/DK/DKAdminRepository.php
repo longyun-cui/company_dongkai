@@ -4935,12 +4935,12 @@ class DKAdminRepository {
                     $project_ids = DK_Project::select('id')->where('item_status',1)->where('location_city',$project->location_city)->pluck('id');
 
                     $query->leftJoin('dk_pivot_client_delivery as d', function($join) use ($post_data,$project_ids) {
-                    $join->on('d.order_id', '=', 'dk_admin_order.id')
+                    $join->on('d.phone', '=', 'dk_admin_order.phone')
                         ->where('d.project_id', '=', $post_data['project']);
                     })
                     ->whereIn('dk_admin_order.project_id', $project_ids)
                     ->where('dk_admin_order.project_id', '!=', $post_data['project'])
-                    ->whereNull('d.order_id')
+                    ->whereNull('d.phone')
                     ->where('inspected_result','通过');
                 }
                 else
