@@ -120,18 +120,18 @@ class DKAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        if($me->id > 10000)
-        {
-            $record["creator_id"] = $me->id;
-            $record["record_category"] = 1; // record_category=1 browse/share
-            $record["record_type"] = 1; // record_type=1 browse
-            $record["page_type"] = 1; // page_type=1 default platform
-            $record["page_module"] = 1; // page_module=1 index
-            $record["page_num"] = 0;
-            $record["open"] = "root";
-            $record["from"] = request('from',NULL);
-            $this->record_for_user_visit($record);
-        }
+//        if($me->id > 10000)
+//        {
+//            $record["creator_id"] = $me->id;
+//            $record["record_category"] = 1; // record_category=1 browse/share
+//            $record["record_type"] = 1; // record_type=1 browse
+//            $record["page_type"] = 1; // page_type=1 default platform
+//            $record["page_module"] = 1; // page_module=1 index
+//            $record["page_num"] = 0;
+//            $record["open"] = "root";
+//            $record["from"] = request('from',NULL);
+//            $this->record_for_user_visit($record);
+//        }
 
 //        $condition = request()->all();
 //        $return['condition'] = $condition;
@@ -27093,18 +27093,18 @@ EOF;
 //        dd($list->toArray());
 
 
-        if($me->id > 10000)
-        {
-            $record["creator_id"] = $me->id;
-            $record["record_category"] = 1; // record_category=1 browse/share
-            $record["record_type"] = 1; // record_type=1 browse
-            $record["page_type"] = 1; // page_type=1 default platform
-            $record["page_module"] = 2; // page_module=2 other
-            $record["page_num"] = ($skip / $limit) + 1;
-            $record["open"] = "order-list";
-            $record["from"] = request('from',NULL);
-            $this->record_for_user_visit($record);
-        }
+//        if($me->id > 10000)
+//        {
+//            $record["creator_id"] = $me->id;
+//            $record["record_category"] = 1; // record_category=1 browse/share
+//            $record["record_type"] = 1; // record_type=1 browse
+//            $record["page_type"] = 1; // page_type=1 default platform
+//            $record["page_module"] = 2; // page_module=2 other
+//            $record["page_num"] = ($skip / $limit) + 1;
+//            $record["open"] = "order-list";
+//            $record["from"] = request('from',NULL);
+//            $this->record_for_user_visit($record);
+//        }
 
 
         return datatable_response($list, $draw, $total);
@@ -31047,18 +31047,18 @@ EOF;
 //        dd($list->toArray());
 
 
-        if($me->id > 10000)
-        {
-            $record["creator_id"] = $me->id;
-            $record["record_category"] = 1; // record_category=1 browse/share
-            $record["record_type"] = 1; // record_type=1 browse
-            $record["page_type"] = 1; // page_type=1 default platform
-            $record["page_module"] = 2; // page_module=2 other
-            $record["page_num"] = ($skip / $limit) + 1;
-            $record["open"] = "delivery-list";
-            $record["from"] = request('from',NULL);
-            $this->record_for_user_visit($record);
-        }
+//        if($me->id > 10000)
+//        {
+//            $record["creator_id"] = $me->id;
+//            $record["record_category"] = 1; // record_category=1 browse/share
+//            $record["record_type"] = 1; // record_type=1 browse
+//            $record["page_type"] = 1; // page_type=1 default platform
+//            $record["page_module"] = 2; // page_module=2 other
+//            $record["page_num"] = ($skip / $limit) + 1;
+//            $record["open"] = "delivery-list";
+//            $record["from"] = request('from',NULL);
+//            $this->record_for_user_visit($record);
+//        }
 
 
         return datatable_response($list, $draw, $total);
