@@ -4931,6 +4931,7 @@ class DKAdminRepository {
             {
                 if(isset($post_data['distribute_type']) && $post_data['distribute_type'] == 1)
                 {
+                    $projectId = $post_data['project'];
                     $project = DK_Project::find($post_data['project']);
                     $project_ids = DK_Project::select('id')->where('item_status',1)->where('location_city',$project->location_city)->pluck('id');
 
@@ -4938,10 +4939,15 @@ class DKAdminRepository {
                     $join->on('d.client_phone', '=', 'dk_admin_order.client_phone')
                         ->where('d.project_id', '=', $post_data['project']);
                     })
+                        ->leftJoin('dk_admin_order as o2', function($join) use ($projectId) {
+                        $join->on('o2.client_phone', '=', 'dk_admin_order.client_phone')
+                            ->where('o2.project_id', '=', $projectId);
+                    })
                     ->whereIn('dk_admin_order.project_id', $project_ids)
                     ->where('dk_admin_order.project_id', '!=', $post_data['project'])
                     ->whereNull('d.client_phone')
-                    ->where('inspected_result','通过');
+                    ->whereNull('o2.id')
+                    ->where('dk_admin_order.inspected_result','通过');
                 }
                 else
                 {
