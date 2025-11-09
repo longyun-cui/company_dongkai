@@ -4799,10 +4799,10 @@ class DKAdminRepository {
             // 多对对
             $subordinates = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
             $project_list = DK_Pivot_User_Project::select('project_id')->whereIn('user_id',$subordinates)->get()->pluck('project_id')->toArray();
-            $query->where('is_published','<>',0)->whereIn('project_id', $project_list);
+            $query->where('is_published','<>',0)->whereIn('dk_admin_order.project_id', $project_list);
             if($me->department_district_id != 0)
             {
-                $query->where('department_district_id',$me->department_district_id);
+                $query->where('dk_admin_order.department_district_id',$me->department_district_id);
             }
         }
         // 质检员
@@ -4814,27 +4814,27 @@ class DKAdminRepository {
 //            });
             // 多对多
             $project_list = DK_Pivot_User_Project::select('project_id')->where('user_id',$me->id)->get()->pluck('project_id')->toArray();
-            $query->where('is_published','<>',0)->whereIn('project_id', $project_list);
+            $query->where('dk_admin_order.is_published','<>',0)->whereIn('dk_admin_order.project_id', $project_list);
             if($me->department_district_id != 0)
             {
-                $query->where('department_district_id',$me->department_district_id);
+                $query->where('dk_admin_order.department_district_id',$me->department_district_id);
             }
         }
         // 运营经理
         if($me->user_type == 61)
         {
-            $query->where('is_published','<>',0);
+            $query->where('dk_admin_order.is_published','<>',0);
         }
         // 运营人员
         if($me->user_type == 66)
         {
-            $query->where('is_published','<>',0);
+            $query->where('dk_admin_order.is_published','<>',0);
         }
         // 三方审核
         if($me->user_type == 91)
         {
-            $query->where('is_published','<>',0);
-            $query->where('appealed_status','>',0);
+            $query->where('dk_admin_order.is_published','<>',0);
+            $query->where('dk_admin_order.appealed_status','>',0);
         }
 
         if(!empty($post_data['id'])) $query->where('dk_admin_order.id', $post_data['id']);
