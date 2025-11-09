@@ -4952,7 +4952,7 @@ class DKAdminRepository {
                 }
                 else
                 {
-                    $query->where('project_id', $post_data['project']);
+                    $query->where('dk_admin_order.project_id', $post_data['project']);
                 }
             }
         }
@@ -5040,15 +5040,15 @@ class DKAdminRepository {
             {
                 if($appealed_status == '已申诉')
                 {
-                    $query->whereIn('appealed_status', [1,9]);
+                    $query->whereIn('dk_admin_order.appealed_status', [1,9]);
                 }
                 else if($appealed_status == '申诉中')
                 {
-                    $query->where('appealed_status', 1);
+                    $query->where('dk_admin_order.appealed_status', 1);
                 }
                 else if($appealed_status == '申诉结束')
                 {
-                    $query->where('appealed_status', 9);
+                    $query->where('dk_admin_order.appealed_status', 9);
                 }
             }
         }
@@ -5062,19 +5062,19 @@ class DKAdminRepository {
             {
                 if($delivered_status == '待交付')
                 {
-                    $query->where('delivered_status', 0);
+                    $query->where('dk_admin_order.delivered_status', 0);
                 }
                 else if($delivered_status == '已交付')
                 {
-                    $query->where('delivered_status', 1);
+                    $query->where('dk_admin_order.delivered_status', 1);
                 }
                 else if($delivered_status == '已操作')
                 {
-                    $query->where('delivered_status', 1);
+                    $query->where('dk_admin_order.delivered_status', 1);
                 }
                 else if($delivered_status == '已处理')
                 {
-                    $query->where('delivered_status', 1);
+                    $query->where('dk_admin_order.delivered_status', 1);
                 }
             }
         }
@@ -5083,7 +5083,7 @@ class DKAdminRepository {
         {
             if(count($post_data['delivered_result']))
             {
-                $query->whereIn('delivered_result', $post_data['delivered_result']);
+                $query->whereIn('dk_admin_order.delivered_result', $post_data['delivered_result']);
             }
         }
 
@@ -5093,7 +5093,7 @@ class DKAdminRepository {
         {
             if(!in_array($post_data['recording_quality'],[-1,'-1']))
             {
-                $query->where('recording_quality', $post_data['recording_quality']);
+                $query->where('dk_admin_order.recording_quality', $post_data['recording_quality']);
             }
         }
 
