@@ -39813,7 +39813,7 @@ EOF;
 
     public function operate_api_by_receiving_call_instance_result($post_data)
     {
-        return 'success';
+        return response('success');
     }
 
 
