@@ -31,6 +31,8 @@ use App\Models\DK_VOS\DK_VOS_CDR;
 
 use App\Models\DK_A\DK_A_Order;
 
+use App\Models\DK\DK_API_BY_Received;
+
 use App\Repositories\Common\CommonRepository;
 
 use Response, Auth, Validator, DB, Exception, Cache, Blade, Carbon, DateTime;
@@ -39811,9 +39813,81 @@ EOF;
 
 
 
+    // 【API】接收 api 回调
     public function operate_api_by_receiving_call_instance_result($post_data)
     {
-        return response('success');
+        header("Content-Type:application/json;charset=UTF-8");
+
+//        $call = new DK_Choice_Call_Record;
+//        $call_data['call_result_msg'] = 1;
+//        $bool_c = $call->fill($call_data)->save();
+//
+//        $return['result']['error'] = 0;
+//        $return['result']['msg'] = '';
+//        return json_decode(json_encode($return));
+
+//        $messages = [
+//            'authentication.required' => 'authentication.required.',
+//            'notify.required' => 'notify.required.',
+//        ];
+//        $v = Validator::make($post_data, [
+//            'authentication' => 'required',
+//            'notify' => 'required',
+//        ], $messages);
+//        if ($v->fails())
+//        {
+//            $messages = $v->errors();
+//            return response_error([],$messages->first());
+//        }
+
+        $time = time();
+
+
+//        if($userData == 'calling')
+        if(true)
+        {
+            $insert_data['content'] = json_encode($post_data);
+
+
+            // 启动数据库事务
+            DB::beginTransaction();
+            try
+            {
+                $mine = new DK_API_BY_Received;
+
+                $bool_c = $mine->fill($insert_data)->save();
+                if(!$bool_c) throw new Exception("DK_API_BY_Received--insert--fail");
+
+
+                DB::commit();
+
+//                $return['result']['error'] = 0;
+//                $return['result']['msg'] = '';
+
+//                return response()->json($return);
+//                return response_success(json_encode($return));
+
+                return response('success');
+
+            }
+            catch (Exception $e)
+            {
+                DB::rollback();
+//            $msg = '操作失败，请重试！';
+                $msg = $e->getMessage();
+//            exit($e->getMessage());
+//            return response_fail([],$msg);
+
+//                $return['result']['error'] = 1;
+//                $return['result']['msg'] = $msg;
+//                return json_encode($return);
+
+                return response('fail');
+            }
+        }
+
+
+
     }
 
 
