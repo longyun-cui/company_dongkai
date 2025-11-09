@@ -716,6 +716,7 @@
 
                         $modal.find('input[name="name"]').val($response.data.name);
                         $modal.find('input[name="alias_name"]').val($response.data.alias_name);
+                        $modal.find('input[name="location_city"]').val($response.data.location_city);
 
 
                         if($response.data.client_er)

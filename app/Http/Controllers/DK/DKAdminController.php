@@ -2532,4 +2532,16 @@ class DKAdminController extends Controller
 
 
 
+
+
+    // 【API】百应
+    public function operate_api_by_receiving_call_instance_result()
+    {
+        $post_data = request()->all();
+        return $this->repo->operate_api_by_receiving_call_instance_result(request()->all());
+    }
+
+
+
+
 }

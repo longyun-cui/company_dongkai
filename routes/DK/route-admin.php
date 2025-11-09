@@ -44,6 +44,8 @@ Route::match(['get','post'], 'logout_without_token', $controller.'@logout_withou
 Route::match(['get','post'], 'test-', $controller.'@logout_without_token');
 
 
+Route::match(['get','post'], '/api/by/receiving/call_instance_result', $controller.'@operate_api_by_receiving_call_instance_result');
+
 /*
  * 超级管理员系统（后台）
  * 需要登录
