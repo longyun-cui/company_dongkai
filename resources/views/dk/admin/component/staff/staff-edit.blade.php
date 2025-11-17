@@ -66,7 +66,7 @@
                             </button>
                             @endif
 
-                            @if(in_array($me->user_type, [0,1,11,41,81]))
+                            @if(in_array($me->user_type, [0,1,11,41,81,84]))
                             <button type="button" class="btn radio-btn radio-user-type">
                                 <span class="radio">
                                     <label>

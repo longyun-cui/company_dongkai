@@ -6,7 +6,7 @@
 
         <div class=" pull-left">
 
-            @if(in_array($me->user_type,[0,1,9,11,19,41,81,61]))
+            @if(in_array($me->user_type,[0,1,9,11,19,41,81,84,61]))
             <button type="button" onclick="" class="btn btn-filter btn-success- item-create-modal-show"
                     data-form-id="form-for-staff-edit"
                     data-modal-id="modal-for-staff-edit"

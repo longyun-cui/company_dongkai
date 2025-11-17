@@ -1425,6 +1425,12 @@ class DKAdminRepository {
             $query->where('department_district_id',$me->department_district_id)
                 ->whereIn('user_type',[84,88]);
         }
+        else if($me->user_type == 84)
+        {
+            $query->where('department_district_id',$me->department_district_id)
+                ->where('department_group_id',$me->department_group_id)
+                ->whereIn('user_type',[88]);
+        }
 //            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
 //            ->with('ep','parent','fund')
 //            ->withCount([
@@ -1578,7 +1584,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         // 判断用户操作权限
-        if(!in_array($me->user_type,[0,1,11,21,31,41,61,71,81])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,11,21,31,41,61,71,81,84])) return response_error([],"你没有操作权限！");
 
 
         if($post_data['api_staffNo'] > 0)
@@ -1629,9 +1635,13 @@ class DKAdminRepository {
             unset($mine_data['category']);
             unset($mine_data['type']);
 
-            if(in_array($me->user_type,[41,61,71,81]))
+            if(in_array($me->user_type,[61,71,41,81,84]))
             {
                 $mine_data['department_district_id'] = $me->department_district_id;
+            }
+            if(in_array($me->user_type,[84]))
+            {
+                $mine_data['department_group_id'] = $me->department_group_id;
             }
 //            if($me->user_type == 81)
 //            {
@@ -1918,7 +1928,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         // 判断用户操作权限
-        if(!in_array($me->user_type,[0,1,9,11,41,61,81])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,9,11,41,61,81,84])) return response_error([],"你没有操作权限！");
 
         // 判断对象是否合法
         $mine = DK_User::find($id);
@@ -1975,7 +1985,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         // 判断用户操作权限
-        if(!in_array($me->user_type,[0,1,9,11,41,61,81])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,9,11,41,61,81,84])) return response_error([],"你没有操作权限！");
 
         // 判断对象是否合法
         $mine = DK_User::find($id);
