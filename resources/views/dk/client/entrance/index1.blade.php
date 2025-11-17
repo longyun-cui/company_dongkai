@@ -38,7 +38,11 @@
                 </div>
 
                 @if($me->client_er->user_category == 1)
-                    @include(env('TEMPLATE_DK_CLIENT').'component.home.home-for-dental')
+                    @if(in_array($me->user_type,[0,1,9,11]))
+                        @include(env('TEMPLATE_DK_CLIENT').'component.home.home-for-dental')
+                    @elseif(in_array($me->user_type,[81,84,88]))
+                        @include(env('TEMPLATE_DK_CLIENT').'component.home.home-for-dental-staff')
+                    @endif
                 @elseif($me->client_er->user_category == 31)
                     @if(in_array($me->user_type,[0,1,9,11]))
                         @include(env('TEMPLATE_DK_CLIENT').'component.home.home-for-luxury-admin')
@@ -167,7 +171,7 @@
 <script>
     $(function() {
 
-        // 【开关】
+        // 【开关】接单
         $(".main-content").on('click', "#toggle-button-for-take-order", function() {
             var $that = $(this);
             var $toggle_box = $(this).parents('.toggle-box');
@@ -257,7 +261,7 @@
             }
         });
 
-        // 【开关】
+        // 【开关】自动派单
         $(".main-content").on('click', "#toggle-button-for-automatic-dispatching", function() {
             var $that = $(this);
             var $toggle_box = $(this).parents('.toggle-box');

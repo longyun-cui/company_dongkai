@@ -27,6 +27,9 @@ use App\Models\DK\DK_District;
 use App\Models\DK_CC\DK_CC_Call_Record;
 use App\Models\DK_CC\DK_CC_Call_Record_Current;
 
+
+use App\Jobs\DK_Client\AutomaticDispatchingJob;
+
 use App\Repositories\Common\CommonRepository;
 
 use Response, Auth, Validator, DB, Exception, Cache, Blade, Carbon;
@@ -3189,6 +3192,12 @@ class DKClientRepository {
             }
 
             DB::commit();
+
+            if($column_key == 'is_automatic_dispatching' && $column_value == 1)
+            {
+                AutomaticDispatchingJob::dispatch($me->client_id);
+            }
+
             return response_success([]);
         }
         catch (Exception $e)

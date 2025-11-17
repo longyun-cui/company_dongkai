@@ -1,6 +1,5 @@
 <?php
 namespace App\Repositories\DK;
-
 use App\Models\DK\DK_Company;
 use App\Models\DK\DK_Department;
 use App\Models\DK\DK_District;
@@ -32,6 +31,9 @@ use App\Models\DK_VOS\DK_VOS_CDR;
 use App\Models\DK_A\DK_A_Order;
 
 use App\Models\DK\DK_API_BY_Received;
+
+
+use App\Jobs\DK_Client\AutomaticDispatchingJob;
 
 use App\Repositories\Common\CommonRepository;
 
@@ -6816,6 +6818,13 @@ class DKAdminRepository {
             }
 
             DB::commit();
+
+            $client = DK_Client::find($delivered_client_id);
+            if($client->is_automatic_dispatching == 1)
+            {
+                dd($delivered_client_id);
+                AutomaticDispatchingJob::dispatch($client->id);
+            }
             return response_success([]);
         }
         catch (Exception $e)
@@ -6937,7 +6946,6 @@ class DKAdminRepository {
                     $delivered_project_id = $project_id;
                     $delivered_client_id = $client_id;
                 }
-dd(1);
 
 
                 // 订单重复
@@ -7046,6 +7054,14 @@ dd(1);
 
 
             DB::commit();
+
+
+            $client = DK_Client::find($delivered_client_id);
+            if($client->is_automatic_dispatching == 1)
+            {
+                AutomaticDispatchingJob::dispatch($client->id);
+            }
+
             return response_success([]);
         }
         catch (Exception $e)
@@ -29908,7 +29924,15 @@ EOF;
             }
 
             DB::commit();
-//            return response_success([]);
+
+
+            $client = DK_Client::find($delivered_client_id);
+            if($client->is_automatic_dispatching == 1)
+            {
+                AutomaticDispatchingJob::dispatch($client->id);
+            }
+
+            return response_success([]);
         }
         catch (Exception $e)
         {
@@ -30246,6 +30270,14 @@ EOF;
 
 
             DB::commit();
+
+
+            $client = DK_Client::find($delivered_client_id);
+            if($client->is_automatic_dispatching == 1)
+            {
+                AutomaticDispatchingJob::dispatch($client->id);
+            }
+
             return response_success(['ids'=>$ids],$msg);
         }
         catch (Exception $e)
