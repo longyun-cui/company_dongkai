@@ -182,6 +182,8 @@ Route::group(['middleware' => ['dk.cc.login','dk.cc.password_change']], function
     Route::match(['get','post'], '/pool/telephone-create', $controller.'@operate_service_telephone_create');
     Route::match(['get','post'], '/pool/telephone-edit', $controller.'@operate_service_telephone_edit');
     Route::match(['get','post'], '/pool/telephone-blacklist-import', $controller.'@operate_service_telephone_blacklist_import');
+    // 更新
+    Route::post('/pool/telephone-update', $controller.'@operate_pool_telephone_update');
     // 下载
     Route::post('/pool/telephone-download', $controller.'@operate_pool_telephone_download');
     Route::post('/pool/telephone-download-of-score', $controller.'@operate_pool_telephone_download_of_score');

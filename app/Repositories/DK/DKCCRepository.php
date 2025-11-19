@@ -42,6 +42,7 @@ use App\Models\DK\YH_Attachment;
 use App\Models\DK\YH_Item;
 
 use App\Jobs\DK_CC\DownPhoneJob;
+use App\Jobs\DK_CC\UpdatePoolsInitJob;
 use App\Jobs\DK_CC\UpdatePoolsJob;
 use App\Jobs\DK_CC\UpdatePoolsScoreJob;
 
@@ -5848,6 +5849,50 @@ class DKCCRepository {
         }
 
     }
+
+    // 【电话池】更新
+    public function operate_pool_telephone_update_by_job($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'pool_id.required' => 'pool_id.required.',
+            'pool_id.numeric' => 'pool_id.error.',
+            'pool_id.min' => 'pool_id.error.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'pool_id' => 'required|numeric|min:1',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'telephone-update') return response_error([],"参数[operate]有误！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9])) return response_error([],"你没有操作权限！");
+
+        $date = date('Y-m-d');
+        $datetime = date('Y-m-d H:i:s');
+        $date_Ymd = date('Ymd');
+
+
+        $pool_id = $post_data["pool_id"];
+        $pool = DK_Pool::find($pool_id);
+        if($pool)
+        {
+            UpdatePoolsInitJob::dispatch($pool_id);
+            return response_success();
+        }
+        else return response_error([],"电话池不存在！");
+
+    }
+
+
     // 【电话池】下载
     public function operate_pool_telephone_download($post_data)
     {

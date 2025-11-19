@@ -709,6 +709,14 @@ class DKCCController extends Controller
         else if (request()->isMethod('post')) return $this->repo->operate_pool_telephone_blacklist_import_save(request()->all());
     }
 
+
+    // 【电话数据】更新
+    public function operate_pool_telephone_update()
+    {
+        return $this->repo->operate_pool_telephone_update_by_job(request()->all());
+    }
+
+
     // 【电话数据】下载
     public function operate_pool_telephone_download()
     {

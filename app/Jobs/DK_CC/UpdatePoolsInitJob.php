@@ -50,21 +50,16 @@ class UpdatePoolsInitJob implements ShouldQueue
         $pool = DK_Pool::find($pool_id);
         if($pool)
         {
-            $current = DK_VOS_CDR_Current::select('*')->orderBy('id','desc')->first();
-            $current_date = $current->call_date;
 
             $table = $pool->data_table;
             $modal = $pool->data_modal;
-            $last_sync_date = $pool->last_sync_date;
 
             // 获取表名
             $orderTable = (new DK_A_Order)->getTable();
             $cdrTable = 'a_cdr';
-            $cdrCurrentTable = (new DK_VOS_CDR_Current)->getTable();
+//            $cdrCurrentTable = (new DK_VOS_CDR_Current)->getTable();
             $poolTable = $table;
 
-            // 设置日期条件（示例：2023-01-01）
-            $startDate = $last_sync_date; // 替换为实际需要的日期
 
             // 启动数据库事务
             DB::beginTransaction();

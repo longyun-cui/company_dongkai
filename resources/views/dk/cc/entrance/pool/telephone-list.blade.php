@@ -780,11 +780,18 @@
                         render: function(data, type, row, meta) {
 
                             var $html_edit = '';
-                            var $html_detail = '<a class="btn btn-xs btn-danger- item-detail-modal-show" data-id="'+data+'">详情</a>';
-                            var $html_down = '<a class="btn btn-xs btn-primary- item-down-submit" data-id="'+data+'">下载</a>';
+                            var $html_detail = '<a class="btn btn-xs item-detail-modal-show" data-id="'+data+'">详情</a>';
+                            var $html_down = '<a class="btn btn-xs item-down-submit" data-id="'+data+'">下载</a>';
                             var $html_record = '';
                             var $html_able = '';
                             var $html_delete = '';
+                            var $html_update = '';
+
+                            if("{{ in_array($me->user_type,[0,1]) }}")
+                            {
+                                var $html_update = '<a class="btn btn-xs item-update-submit" data-id="'+data+'">更新</a>';
+                            }
+
 
                             if(row.item_status == 1)
                             {
@@ -807,6 +814,7 @@
                             $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
 
                             var html =
+                                $html_update+
                                 $html_down+
                                 $html_detail+
                                 // $html_able+
