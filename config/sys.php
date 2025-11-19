@@ -347,6 +347,7 @@
                 'a_pool_city_gx_gl' => '广西-桂林市',
                 'a_pool_city_gx_yl' => '广西-玉林市',
                 'a_pool_city_gx_bs' => '广西-百色市',
+                'a_pool_city_gx_bh' => '广西-北海市',
 
                 'a_pool_city_nmg_hhht' => '内蒙古-呼和浩特市',
                 'a_pool_city_nmg_eeds' => '内蒙古-鄂尔多斯市',
