@@ -193,6 +193,7 @@
                 'a_pool_city_gd_zq' => '广东-肇庆市',
                 'a_pool_city_gd_zq_dz' => '广东-肇庆市-端州区',
                 'a_pool_city_gd_cz' => '广东-潮州市',
+                'a_pool_city_gd_jy' => '广东-揭阳市',
 
                 'a_pool_city_js_nj' => '江苏-南京市',
                 'a_pool_city_js_sz' => '江苏-苏州市',
@@ -307,6 +308,7 @@
                 'a_pool_city_hun_zz' => '湖南-株洲市',
                 'a_pool_city_hun_cz' => '湖南-郴州市',
                 'a_pool_city_hun_xt' => '湖南-湘潭市',
+                'a_pool_city_hun_yz' => '湖南-永州市',
 
                 'a_pool_city_ah_hf' => '安徽-合肥市',
                 'a_pool_city_ah_wh' => '安徽-芜湖市',
