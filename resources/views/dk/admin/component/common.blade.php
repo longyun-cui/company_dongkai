@@ -265,7 +265,7 @@
                             <div class="btn-group">
                                 <button type="button" class="btn">
                                     <span class="radio">
-                                        <label><input type="radio" name="recording-speed" value="0.5"> x0.5</label>
+                                        <label><input type="radio" name="recording-speed" value="0.75"> x0.75</label>
                                     </span>
                                 </button>
                                 <button type="button" class="btn">

@@ -34,6 +34,7 @@ use App\Models\DK\DK_API_BY_Received;
 
 
 use App\Jobs\DK_Client\AutomaticDispatchingJob;
+use App\Jobs\DK\BYApReceivedJob;
 
 use App\Repositories\Common\CommonRepository;
 
@@ -39908,6 +39909,8 @@ EOF;
 
 //                return response()->json($return);
 //                return response_success(json_encode($return));
+
+                BYApReceivedJob::dispatch($mine->id);
 
                 return response('success');
 

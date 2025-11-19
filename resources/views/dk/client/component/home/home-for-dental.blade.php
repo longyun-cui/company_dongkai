@@ -1,6 +1,6 @@
 <div class="row tab-pane active" id="tab-home">
 
-    <div class="col-xs-12 col-sm-6 col-md-3">
+    <div class="col-xs-12 col-sm-6 col-md-3 _none">
         <div class="box box-primary box-solid">
             <div class="box-header with-border">
                 <h3 class="box-title comprehensive-month-title">财务统计</h3>
@@ -23,8 +23,8 @@
                         <a href="javascript:void(0);">
                             累计消费
                             <span class="pull-right">
-                                                <text class="text-blue font-20px">{{ $funds_consumption_total or '0' }}</text> 元
-                                            </span>
+                                <text class="text-blue font-20px">{{ $funds_consumption_total or '0' }}</text> 元
+                            </span>
                         </a>
                     </li>
                     <li class="">
@@ -40,7 +40,7 @@
         </div>
     </div>
 
-    <div class="col-xs-12 col-sm-6 col-md-3">
+    <div class="col-xs-12 col-sm-6 col-md-3 _none">
         <div class="box box-success box-solid">
             <div class="box-header with-border">
                 <h3 class="box-title comprehensive-month-title">工单统计</h3>
