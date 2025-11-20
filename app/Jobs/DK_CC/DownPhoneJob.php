@@ -21,7 +21,7 @@ class DownPhoneJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $tries = 3;
-    public $timeout = 600;
+    public $timeout = 1800;
 
     protected $task_id;
 
