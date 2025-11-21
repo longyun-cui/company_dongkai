@@ -1,10 +1,10 @@
-<div class="row datatable-body datatable-wrapper by-list-clone" data-datatable-item-category="ai" data-item-name="工单">
+<div class="row datatable-body datatable-wrapper by-list-clone" data-datatable-item-category="ai" data-item-name="百应">
 
 
     <div class="col-md-12 datatable-search-row datatable-search-box">
 
 
-        <div class="pull-left">
+        <div class="pull-right">
 
             {{--ID--}}
             <input type="text" class="search-filter form-filter filter-sm filter-keyup" name="by-id" placeholder="ID" value="" />
@@ -17,45 +17,6 @@
             <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="by-start" placeholder="开始日期" value="" readonly="readonly" />
             <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="by-ended" placeholder="结束日期" value="" readonly="readonly" />
 
-            {{--创建方式--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
-                <select class="search-filter form-filter filter-md select2-box-c" name="by-created-type">
-                    <option value="-1">创建方式</option>
-                    <option value="99">API</option>
-                    <option value="1">人工</option>
-                    <option value="9">导入</option>
-                </select>
-            @endif
-
-            {{--选择团队--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
-                <select class="search-filter form-filter filter-xl select2-box-c" name="by-department-district[]" id="by-department-district" multiple="multiple">
-                    <option value="-1">选择团队</option>
-                    @foreach($department_district_list as $v)
-                        <option value="{{ $v->id }}">{{ $v->name }}</option>
-                    @endforeach
-                </select>
-            @endif
-
-            {{--选择员工--}}
-            @if(in_array($me->user_type,[0,1,9,11,41,81,84]))
-                <select class="search-filter form-filter filter-lg select2-box-c select2-staff-c" name="by-staff">
-                    <option value="-1">选择员工</option>
-                    @foreach($staff_list as $v)
-                        <option value="{{ $v->id }}">{{ $v->username }}</option>
-                    @endforeach
-                </select>
-            @endif
-
-            {{--选择客户--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66]))
-                <select class="search-filter form-filter filter-lg select2-box-c- select2-client-c" data-user-category="1" name="by-client">
-                    <option value="-1">选择客户</option>
-                    @foreach($client_list as $v)
-                        <option value="{{ $v->id }}">{{ $v->username }}</option>
-                    @endforeach
-                </select>
-            @endif
 
             {{--选择项目--}}
             <select class="search-filter form-filter filter-lg select2-box-c- select2-project-c" data-item-category="1" name="by-project">
@@ -64,13 +25,6 @@
                     <option value="{{ $v->id }}">{{ $v->name }}</option>
                 @endforeach
             </select>
-            {{--录音质量--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
-                <select class="search-filter form-filter filter-md select2-box-c" name="by-distribute-type">
-                    <option value="">常规筛选</option>
-                    <option value="1">可分发</option>
-                </select>
-            @endif
 
 
             {{--审核状态--}}
@@ -98,41 +52,6 @@
                     <option value="1">优秀</option>
                     <option value="9">问题</option>
                 </select>
-            @endif
-            {{--录音质量--}}
-            @if(in_array($me->user_type,[0,1,9,11,91]))
-                <select class="search-filter form-filter filter-md select2-box-c" name="by-appealed-status">
-                    <option value="">申诉状态</option>
-                    @foreach(config('info.appealed_status') as $v)
-                        <option value="{{ $v }}">{{ $v }}</option>
-                    @endforeach
-                </select>
-            @endif
-
-
-            {{--交付日期--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
-            <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="by-delivered_date" placeholder="交付日期" value="" readonly="readonly" />
-            @endif
-
-            {{--交付状态--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
-            <select class="search-filter form-filter filter-lg select2-box-c" name="by-delivered-status">
-                <option value="-1">交付状态</option>
-                <option value="待交付">待交付</option>
-                {{--<option value="已交付" @if("已交付" == $delivered_status) selected="selected" @endif>已交付</option>--}}
-                <option value="已操作">已操作</option>
-            </select>
-            @endif
-
-            {{--交付结果--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
-            <select class="search-filter form-filter filter-xl select2-box-c" name="by-delivered-result[]" multiple="multiple">
-                <option value="-1">交付结果</option>
-                @foreach(config('info.delivered_result') as $v)
-                    <option value="{{ $v }}">{{ $v }}</option>
-                @endforeach
-            </select>
             @endif
 
 
@@ -175,15 +94,6 @@
                 <i class="fa fa-undo"></i> 重置
             </button>
 
-
-            <button type="button" onclick="" class="btn btn-filter btn-success  pull-right item-create-modal-show"
-                    data-form-id="form-for-by-edit"
-                    data-modal-id="modal-for-by-edit"
-                    data-title="添加工单"
-            >
-                <i class="fa fa-plus"></i> 添加
-            </button>
-
         </div>
 
 
@@ -220,9 +130,6 @@
             </button>
 
 
-            <button type="button" onclick="" class="btn btn-default btn-filter bulk-submit-for-by-export" id="" data-item-category="1">
-                <i class="fa fa-download"></i> 批量导出
-            </button>
             {{--<button type="button" onclick="" class="btn btn-default btn-filter"><i class="fa fa-trash-o"></i> 批量删除</button>--}}
 
 
@@ -231,34 +138,27 @@
 
                     {{--交付项目--}}
                     <select class="search-filter form-filter filter-lg select2-box-c- select2-project-c" data-item-category="1" name="bulk-operate-delivered-project">
-                        <option value="-1">选择交付项目</option>
+                        <option value="-1">选择指派项目</option>
                         {{--@foreach($project_list as $v)--}}
                         {{--<option value="{{ $v->id }}">{{ $v->name }}</option>--}}
                         {{--@endforeach--}}
                     </select>
 
-                    {{--交付客户--}}
-                    <select class="search-filter form-filter filter-lg select2-box-c- select2-client-c" data-user-category="1" name="bulk-operate-delivered-client">
-                        <option value="-1">交付客户</option>
-                        @foreach($client_list as $v)
-                            <option value="{{ $v->id }}">{{ $v->username }}</option>
-                        @endforeach
-                    </select>
 
                     {{--交付结果--}}
-                    <select class="search-filter form-filter filter-lg select2-box-c" name="bulk-operate-delivered-result">
-                        <option value="-1">选择交付结果</option>
-                        @foreach(config('info.delivered_result') as $v)
+                    <select class="search-filter form-filter filter-lg select2-box-c" name="bulk-operate-inspected-result">
+                        <option value="-1">选择审核结果</option>
+                        @foreach(config('info.inspected_result') as $v)
                             <option value="{{ $v }}">{{ $v }}</option>
                         @endforeach
                     </select>
 
                     {{--交付说明--}}
-                    <input type="text" class="search-filter filter-lg form-filter" name="bulk-operate-delivered-description" placeholder="交付说明">
+                    <input type="text" class="search-filter filter-lg form-filter" name="bulk-operate-inspected-description" placeholder="审核说明">
 
 
-                    <button type="button" class="btn btn-default btn-filter" id="bulk-submit-for-delivered">
-                        <i class="fa fa-share"></i> 批量交付
+                    <button type="button" class="btn btn-default btn-filter" id="bulk-submit-for-inspected">
+                        <i class="fa fa-share"></i> 批量审核
                     </button>
 
                 @endif

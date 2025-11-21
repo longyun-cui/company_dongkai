@@ -773,5 +773,19 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     Route::get('/download/phone-recording-download', $controller.'@operate_download_phone_recording_download');
 
 
+
+
+
+
+    // 【API】【百应】
+    Route::post('/v1/operate/by/datatable-list-query', $controller.'@v1_operate_for_by_datatable_list_query');
+    Route::post('/v1/operate/by/item-operation-record-datatable-query', $controller.'@v1_operate_for_by_item_operation_record_datatable_query');
+    Route::post('/v1/operate/by/item-get', $controller.'@v1_operate_for_by_item_get');
+    Route::post('/v1/operate/by/item-save', $controller.'@v1_operate_for_by_item_save');
+    Route::post('/v1/operate/by/item-publish', $controller.'@v1_operate_for_by_item_publish');
+    Route::post('/v1/operate/by/item-inspect', $controller.'@v1_operate_for_by_item_inspect');
+    Route::post('/v1/operate/by/item-deliver', $controller.'@v1_operate_for_by_item_deliver');
+
+
 });
 

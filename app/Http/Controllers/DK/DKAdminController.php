@@ -2534,11 +2534,51 @@ class DKAdminController extends Controller
 
 
 
-    // 【API】百应
+    // 【API】【百应】接收
     public function operate_api_by_receiving_call_instance_result()
     {
         $post_data = request()->all();
         return $this->repo->operate_api_by_receiving_call_instance_result(request()->all());
+    }
+    // 【API】【百应】datatable
+    public function v1_operate_for_by_datatable_list_query()
+    {
+        return $this->repo->v1_operate_for_by_datatable_list_query(request()->all());
+    }
+    // 【API】【百应】操作记录
+    public function v1_operate_for_by_item_operation_record_datatable_query()
+    {
+        return $this->repo->v1_operate_for_order_item_operation_record_datatable_query(request()->all());
+    }
+    // 【API】【百应】获取
+    public function v1_operate_for_by_item_get()
+    {
+        return $this->repo->v1_operate_for_order_item_get(request()->all());
+    }
+    // 【API】【百应】编辑-保存
+    public function v1_operate_for_by_item_save()
+    {
+        return $this->repo->v1_operate_for_order_item_save(request()->all());
+    }
+    // 【API】【百应】
+    public function v1_operate_for_by_item_publish()
+    {
+        return $this->repo->v1_operate_for_order_item_publish(request()->all());
+    }
+    // 【API】【百应】
+    public function v1_operate_for_by_item_inspect()
+    {
+        return $this->repo->v1_operate_for_order_item_inspect(request()->all());
+    }
+    // 【API】【百应】
+    public function v1_operate_for_by_item_deliver()
+    {
+        return $this->repo->v1_operate_for_order_item_deliver(request()->all());
+    }
+    // 【API】【百应】批量-交付
+    public function v1_operate_for_by_bulk_deliver()
+    {
+        return $this->repo->v1_operate_for_order_bulk_deliver(request()->all());
     }
 
 

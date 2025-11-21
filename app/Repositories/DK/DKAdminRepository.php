@@ -39856,85 +39856,288 @@ EOF;
 
 
 
+
+
+
+
+
     // 【API】接收 api 回调
     public function operate_api_by_receiving_call_instance_result($post_data)
     {
         header("Content-Type:application/json;charset=UTF-8");
 
-//        $call = new DK_Choice_Call_Record;
-//        $call_data['call_result_msg'] = 1;
-//        $bool_c = $call->fill($call_data)->save();
-//
-//        $return['result']['error'] = 0;
-//        $return['result']['msg'] = '';
-//        return json_decode(json_encode($return));
-
-//        $messages = [
-//            'authentication.required' => 'authentication.required.',
-//            'notify.required' => 'notify.required.',
-//        ];
-//        $v = Validator::make($post_data, [
-//            'authentication' => 'required',
-//            'notify' => 'required',
-//        ], $messages);
-//        if ($v->fails())
-//        {
-//            $messages = $v->errors();
-//            return response_error([],$messages->first());
-//        }
-
         $time = time();
+        $date = date('Y-m-d');
 
 
-//        if($userData == 'calling')
-        if(true)
+        $insert_data['received_date'] = $date;
+        $insert_data['content'] = json_encode($post_data);
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
         {
-            $insert_data['content'] = json_encode($post_data);
+            $mine = new DK_API_BY_Received;
 
+            $bool_c = $mine->fill($insert_data)->save();
+            if(!$bool_c) throw new Exception("DK_API_BY_Received--insert--fail");
 
-            // 启动数据库事务
-            DB::beginTransaction();
-            try
-            {
-                $mine = new DK_API_BY_Received;
+            DB::commit();
 
-                $bool_c = $mine->fill($insert_data)->save();
-                if(!$bool_c) throw new Exception("DK_API_BY_Received--insert--fail");
+//            BYApReceivedJob::dispatch($mine->id);
 
-
-                DB::commit();
-
-//                $return['result']['error'] = 0;
-//                $return['result']['msg'] = '';
-
-//                return response()->json($return);
-//                return response_success(json_encode($return));
-
-                BYApReceivedJob::dispatch($mine->id);
-
-                return response('success');
-
-            }
-            catch (Exception $e)
-            {
-                DB::rollback();
+            return response('success');
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = $e->getMessage();
+//                exit($e->getMessage());
 //            $msg = '操作失败，请重试！';
-                $msg = $e->getMessage();
-//            exit($e->getMessage());
 //            return response_fail([],$msg);
 
-//                $return['result']['error'] = 1;
-//                $return['result']['msg'] = $msg;
-//                return json_encode($return);
-
-                return response('fail');
-            }
+            return response('fail');
         }
-
-
 
     }
 
+
+    /*
+     * 项目-管理 Project
+     */
+    // 【项目-管理】返回-列表-数据
+    public function v1_operate_for_by_datatable_list_query($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        $query = DK_API_BY_Received::select('*')
+            ->withTrashed()
+            ->with([
+                'inspector'=>function($query) { $query->select(['id','username']); }
+            ]);
+
+        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
+        if(!empty($post_data['name']))
+        {
+            $query->where('name', 'like', "%{$post_data['name']}%");
+            $name = "%{$post_data['name']}%";
+            if($me->department_district_id > 0)
+            {
+                $query->where('name','like',$name);
+            }
+            else
+            {
+                $query->where(function($query) use($name) {
+                    $query->where('name','like',$name)->orWhere('alias_name','like',$name);
+                });
+            }
+        }
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+        if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
+        if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
+        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['mobile'])) $query->where('mobile', $post_data['mobile']);
+
+        // 状态 [|]
+        if(!empty($post_data['api_status']))
+        {
+            if(!in_array($post_data['api_status'],[-1,0]))
+            {
+                $query->where('api_status', $post_data['item_status']);
+            }
+        }
+        else
+        {
+            $query->where('api_status', 1);
+        }
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 100;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+//        else $query->orderBy("name", "asc");
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+//        dd($list->toArray());
+
+        return datatable_response($list, $draw, $total);
+    }
+    // 【项目-管理】获取 GET
+    public function v1_operate_for_by_item_get($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11,61])) return response_error([],"你没有操作权限！");
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-get') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Project::withTrashed()
+            ->with([
+                'client_er'=>function($query) { $query->select(['id','username']); },
+                'inspector_er'=>function($query) { $query->select(['id','username']); },
+                'pivot_project_user',
+                'pivot_project_team'
+            ])
+            ->find($id);
+        if(!$item) return response_error([],"不存在警告，请刷新页面重试！");
+
+        return response_success($item,"");
+    }
+    // 【项目-管理】保存 SAVE
+    public function v1_operate_for_by_item_save($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_category.required' => '请选择项目种类！',
+            'name.required' => '请输入项目名称！',
+//            'name.unique' => '该项目已存在！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_category' => 'required',
+            'name' => 'required',
+//            'name' => 'required|unique:dk_project,name',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+
+        $operate = $post_data["operate"];
+        $operate_type = $operate["type"];
+        $operate_id = $operate['id'];
+
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,11,19,61])) return response_error([],"你没有操作权限！");
+
+        if($operate_type == 'create')
+        {
+            // 添加 ( $id==0，添加一个项目 )
+            $is_exist = DK_Project::select('id')->where('name',$post_data["name"])->count();
+            if($is_exist) return response_error([],"该【项目】已存在，请勿重复添加！");
+
+            $mine = new DK_Project;
+            $post_data["active"] = 1;
+            $post_data["creator_id"] = $me->id;
+        }
+        else if($operate_type == 'edit')
+        {
+            // 编辑
+            $mine = DK_Project::find($operate_id);
+            if(!$mine) return response_error([],"该【项目】不存在，刷新页面重试！");
+        }
+        else return response_error([],"参数有误！");
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if(!empty($post_data['custom']))
+            {
+                $post_data['custom'] = json_encode($post_data['custom']);
+            }
+
+            $mine_data = $post_data;
+            unset($mine_data['operate']);
+
+
+            $bool = $mine->fill($mine_data)->save();
+            if($bool)
+            {
+                if(!empty($post_data["peoples"]))
+                {
+//                    $product->peoples()->attach($post_data["peoples"]);
+                    $current_time = time();
+                    $peoples = $post_data["peoples"];
+                    foreach($peoples as $p)
+                    {
+                        $people_insert[$p] = ['creator_id'=>$me->id,'department_id'=>$me->department_district_id,'relation_type'=>1,'created_at'=>$current_time,'updated_at'=>$current_time];
+                    }
+                    $mine->pivot_project_user()->sync($people_insert);
+//                    $mine->pivot_project_user()->syncWithoutDetaching($people_insert);
+                }
+                else
+                {
+                    $mine->pivot_project_user()->detach();
+                }
+
+                if(!empty($post_data["teams"]))
+                {
+//                    $product->peoples()->attach($post_data["peoples"]);
+                    $current_time = time();
+                    $teams = $post_data["teams"];
+                    foreach($teams as $t)
+                    {
+                        $team_insert[$t] = ['relation_type'=>1,'created_at'=>$current_time,'updated_at'=>$current_time];
+                    }
+                    $mine->pivot_project_team()->sync($team_insert);
+//                    $mine->pivot_product_people()->syncWithoutDetaching($people_insert);
+                }
+                else
+                {
+                    $mine->pivot_project_team()->detach();
+                }
+            }
+            else throw new Exception("insert--project--fail");
+
+            DB::commit();
+            return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
 
 
 }

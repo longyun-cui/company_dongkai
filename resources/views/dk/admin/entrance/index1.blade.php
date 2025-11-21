@@ -92,6 +92,9 @@
     @include(env('TEMPLATE_DK_ADMIN').'component.delivery.delivery-luxury.delivery-luxury-list')
 
 
+    @include(env('TEMPLATE_DK_ADMIN').'component.by.by-list')
+
+
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.comprehensive.statistic-index')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.comprehensive.statistic-comprehensive')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.comprehensive.statistic-comprehensive-daily')
@@ -178,6 +181,10 @@
     @include(env('TEMPLATE_DK_ADMIN').'component.order.order-list-script')
 
     @include(env('TEMPLATE_DK_ADMIN').'component.order.order-operation-record-datatable')
+
+
+    @include(env('TEMPLATE_DK_ADMIN').'component.by.by-list-datatable')
+    @include(env('TEMPLATE_DK_ADMIN').'component.by.by-list-script')
 
 
     @include(env('TEMPLATE_DK_ADMIN').'component.delivery.delivery-list-datatable')

@@ -10,9 +10,12 @@ class DK_API_BY_Received extends Model
     protected $table = "dk_admin_api_by_received";
     protected $fillable = [
         'active', 'status',
-        'category', 'type', 'form', 'sort',
-        'item_active', 'item_status', 'item_category', 'item_type',
-        'api_active', 'api_status', 'api_category', 'api_type',
+        'category', 'type', 'form',
+        'item_active', 'item_status', 'item_result',
+        'item_category', 'item_type', 'item_form',
+        'api_active', 'api_status', 'api_result',
+        'api_category', 'api_type', 'api_form',
+        'api_module', 'api_group',
 
         'owner_id',
         'creator_id',
@@ -21,8 +24,21 @@ class DK_API_BY_Received extends Model
         'username', 'nickname', 'true_name', 'short_name',
         'name', 'title', 'subtitle', 'content', 'description', 'tag', 'remark', 'label', 'custom',
 
-        'telephone_number',
+        'client_type',
+        'client_name',
+        'client_phone',
+        'client_intention',
+        'is_wx',
 
+        'dialog_content',
+        'recording_address',
+
+        'location_city',
+        'location_district',
+
+        'received_date',
+
+        'inspector_id', 'inspected_status', 'inspected_result', 'inspected_result_code', 'inspected_description', 'inspected_at', 'inspected_date',
 
         'portrait_img_src',
         'cover_pic_src',
@@ -49,20 +65,25 @@ class DK_API_BY_Received extends Model
     {
         return $this->belongsTo('App\Models\DK\DK_User','owner_id','id');
     }
-    // 创作者
+    // 创建者
     function creator()
     {
         return $this->belongsTo('App\Models\DK\DK_User','creator_id','id');
     }
-    // 创作者
+    // 更新者
     function updater()
     {
         return $this->belongsTo('App\Models\DK\DK_User','updater_id','id');
     }
-    // 创作者
+    // 完成者
     function completer()
     {
         return $this->belongsTo('App\Models\DK\DK_User','completer_id','id');
+    }
+    // 审核者
+    function inspector()
+    {
+        return $this->belongsTo('App\Models\DK\DK_User','inspector_id','id');
     }
     // 用户
     function user()
@@ -72,13 +93,6 @@ class DK_API_BY_Received extends Model
 
 
 
-
-
-    // 附件
-    function attachment_list()
-    {
-        return $this->hasMany('App\Models\DK\YH_Attachment','item_id','id');
-    }
 
 
 }

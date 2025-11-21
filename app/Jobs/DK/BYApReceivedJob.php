@@ -54,17 +54,17 @@ class BYApReceivedJob implements ShouldQueue
         if($by)
         {
             // 启动数据库事务
-            DB::beginTransaction();
-            try
-            {
-                DB::commit();
-            }
-            catch (Exception $e)
-            {
-                DB::rollback();
-                $msg = $e->getMessage();
-                return;
-            }
+//            DB::beginTransaction();
+//            try
+//            {
+////                DB::commit();
+//            }
+//            catch (Exception $e)
+//            {
+//                DB::rollback();
+//                $msg = $e->getMessage();
+//                return;
+//            }
 
         }
         else return;

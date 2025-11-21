@@ -513,6 +513,10 @@
                 {
                     Datatable_Call_Record_List('#'+$config.id);
                 }
+                else if($id == "datatable-by-list")
+                {
+                    Datatable_for_BY_List('#'+$config.id);
+                }
 
             }
 
