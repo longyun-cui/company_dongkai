@@ -113,23 +113,22 @@
                     }
                 },
                 {
-                    "title": "工单状态",
+                    "title": "状态1",
+                    "data": "api_status",
                     "className": "",
-                    "width": "72px",
-                    "data": "id",
+                    "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
                         {
-                            $(nTd).addClass('order_status');
-                            $(nTd).attr('data-id',row.id).attr('data-name','工单状态');
-                            $(nTd).attr('data-key','order_status').attr('data-value',row.id);
+                            $(nTd).addClass('api_status');
+                            $(nTd).attr('data-id',row.id).attr('data-name','状态');
+                            $(nTd).attr('data-key','api_status').attr('data-value',row.id);
                             if(data) $(nTd).attr('data-operate-type','edit');
                             else $(nTd).attr('data-operate-type','add');
                         }
                     },
                     render: function(data, type, row, meta) {
-//                            return data;
 
                         if(row.deleted_at != null)
                         {
@@ -137,45 +136,19 @@
                         }
 
 
-
-                        // if(row.client_id > 0)
-                        // {
-                        //     return '<small class="btn-xs bg-olive">已交付</small>';
-                        // }
-
-                        if(row.inspected_at)
+                        if(data == 0)
                         {
 
-                            if(row.inspected_status == 1)
-                            {
-                                if(row.appealed_status == 0)
-                                {
-                                    return '<small class="btn-xs bg-blue">已审核</small>';
-                                }
-                                else if(row.appealed_status == 1)
-                                {
-                                    return '<small class="btn-xs bg-red">申诉中</small>';
-                                }
-                                else if(row.appealed_status == 9)
-                                {
-                                    return '<small class="btn-xs bg-green">申诉·结束</small>';
-                                }
-                                else
-                                {
-                                    return '<small class="btn-xs bg-blue">已审核</small>';
-                                }
-                            }
-                            else if(row.inspected_status == 9)
-                            {
-                                return '<small class="btn-xs bg-aqua">等待再审</small>';
-                            }
-                            else return '--';
+                            return '<small class="btn-xs bg-blue">待处理</small>';
+                        }
+                        else if(data == 1)
+                        {
+                            return '<small class="btn-xs bg-aqua">已处理</small>';
                         }
                         else
                         {
                             return '<small class="btn-xs bg-aqua">待审核</small>';
                         }
-
                     }
                 },
                 {
@@ -198,7 +171,7 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(!row.inspected_at) return '--';
+                        // if(!row.inspected_at) return '--';
                         var $result_html = '';
                         if(data == "通过" || data == "内部通过")
                         {
@@ -239,7 +212,7 @@
                     "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(true)
                         {
                             // $(nTd).addClass('modal-show-for-info-radio-set-');
                             // $(nTd).attr('data-id',row.id).attr('data-name','是否重复');
@@ -261,7 +234,7 @@
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(true)
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -468,21 +441,6 @@
                             if(data) $(nTd).attr('data-operate-type','edit');
                             else $(nTd).attr('data-operate-type','add');
 
-                            if(row.recording_address_list)
-                            {
-                                var $recording_address = row.recording_address_list;
-                                if($recording_address)
-                                {
-                                    var $recording_list = JSON.parse($recording_address);
-                                    var $recording_list_html = '';
-                                    $.each($recording_list, function(index, value)
-                                    {
-                                        var $audio_html = '<audio controls controlsList="nodownload" style="width:480px;height:40px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
-                                        $recording_list_html += $audio_html;
-                                    });
-                                    $(nTd).attr('data-recording-address',$recording_list_html);
-                                }
-                            }
                         }
                     },
                     render: function(data, type, row, meta) {
@@ -507,75 +465,11 @@
                     },
                     render: function(data, type, row, meta) {
                         // return data;
-                        if($.trim(data))
+                        if(row.recording_address)
                         {
-                            if(row.recording_address)
-                            {
-                                return '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+row.recording_address+'" type="audio/mpeg"></audio>';
-                            }
-                            else return '';
+                            return '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+row.recording_address+'" type="audio/mpeg"></audio>';
                         }
-                    }
-                },
-                {
-                    "title": "录音下载",
-                    "data": "recording_address_list",
-                    "className": "",
-                    "width": "80px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
-                        {
-                            console.log(iRow);
-                            console.log(iCol);
-                            $(nTd).attr('data-row-index',iRow);
-
-                            $(nTd).attr('data-id',row.id).attr('data-name','录音下载');
-                            $(nTd).attr('data-key','recording_address_download').attr('data-value',data);
-                            $(nTd).attr('data-address-list',data);
-                            $(nTd).attr('data-address',row.recording_address);
-                            $(nTd).attr('data-call-record-id',row.call_record_id);
-                        }
-                    },
-                    render: function(data, type, row, meta) {
-                        // return data;
-
-                        if($.trim(data))
-                        {
-                            try
-                            {
-                                var $recording_list = JSON.parse(data);
-                                // return '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+row.id+'">下载录音</a>';
-                                var $recording_download = '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+row.id+'">下载</a>';
-                                var $recording_get = '<a class="btn btn-xs item-get-recording-list-submit" data-id="'+row.id+'">获取</a>';
-                                return $recording_get + $recording_download;
-                            }
-                            catch(e)
-                            {
-                                // console.log(e);
-                                return '';
-                            }
-                        }
-                        else
-                        {
-                            if(row.recording_address)
-                            {
-                                return '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+row.id+'">下载录音</a>';
-                            }
-                            else
-                            {
-                                return '<a class="btn btn-xs item-get-recording-list-submit" data-id="'+row.id+'">获取录音</a>';
-                            }
-                        }
-
-                        if($.trim(data) || row.recording_address)
-                        {
-                            return '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+row.id+'">下载录音</a>';
-                        }
-                        else
-                        {
-                            return '<a class="btn btn-xs item-get-recording-list-submit" data-id="'+row.id+'">获取录音1</a>';
-                        }
+                        else return '';
                     }
                 },
                 @endif
@@ -621,32 +515,6 @@
                     }
                 },
                 {
-                    "title": "审核说明",
-                    "data": "inspected_description",
-                    "className": "",
-                    "width": "80px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
-                        {
-                            $(nTd).addClass('modal-show-for-field-set');
-                            $(nTd).attr('data-id',row.id).attr('data-name','审核说明');
-                            $(nTd).attr('data-key','inspected_description').attr('data-value',data).attr('data-appealed-url',row.appealed_url).attr('data-appealed-description',row.appealed_description);
-
-                            $(nTd).attr('data-column-type','textarea');
-                            $(nTd).attr('data-column-name','审核说明');
-
-                            if(data) $(nTd).attr('data-operate-type','edit');
-                            else $(nTd).attr('data-operate-type','add');
-                        }
-                    },
-                    render: function(data, type, row, meta) {
-                        // return data;
-                        if(data) return '<small class="btn-xs bg-yellow">双击查看</small>';
-                        else return '';
-                    }
-                },
-                {
                     "title": "创建时间",
                     "data": 'created_at',
                     "className": "",
@@ -676,45 +544,22 @@
                     "title": "操作",
                     "data": 'id',
                     "className": "",
-                    "width": "180px",
+                    "width": "120px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
 
                         var $html_edit = '';
                         var $html_detail = '';
                         var $html_record = '';
-                        var $html_delete = '';
                         var $html_publish = '';
-                        var $html_abandon = '';
-                        var $html_completed = '';
-                        var $html_verified = '';
                         var $html_inspected = '';
                         var $html_detail_inspected = '';
-                        var $html_push = '';
-                        var $html_deliver = '';
-                        var $html_distribute = '';
-                        var $html_appeal = '';
-                        var $html_appeal_handle = '';
 
-
-                        if(row.item_status == 1)
-                        {
-                            $html_able = '<a class="btn btn-xs btn-danger item-admin-disable-submit" data-id="'+data+'">禁用</a>';
-                        }
-                        else
-                        {
-                            $html_able = '<a class="btn btn-xs btn-success item-admin-enable-submit" data-id="'+data+'">启用</a>';
-                        }
 
 //                            if(row.is_me == 1 && row.item_active == 0)
                         if(row.is_published == 0)
                         {
-                            $html_publish = '<a class="btn btn-xs bg-olive item-publish-submit" data-id="'+data+'">发布</a>';
-                            // $html_edit = '<a class="btn btn-xs btn-primary item-edit-link" data-id="'+data+'">编辑</a>';
-                            $html_edit = '<a class="btn btn-xs btn-primary- by-edit-show" data-id="'+data+'">编辑</a>';
                             $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-operation-record" data-id="'+data+'">记录</a>';
-                            $html_verified = '<a class="btn btn-xs btn-default disabled">验证</a>';
-                            $html_delete = '<a class="btn btn-xs bg-black item-delete-submit" data-id="'+data+'">删除</a>';
                         }
                         else
                         {
@@ -724,34 +569,10 @@
                                 $html_publish = '<a class="btn btn-xs bg-olive item-publish-submit" data-id="'+data+'">发布</a>';
                             }
                             $html_detail = '<a class="btn btn-xs bg-primary item-modal-show-for-detail" data-id="'+data+'">详情</a>';
-//                                $html_travel = '<a class="btn btn-xs bg-olive item-modal-show-for-travel" data-id="'+data+'">行程</a>';
                             $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-operation-record" data-id="'+data+'">记录</a>';
 
 
-                            if(row.is_completed == 1)
-                            {
-                                $html_completed = '<a class="btn btn-xs btn-default disabled">完成</a>';
-                                $html_abandon = '<a class="btn btn-xs btn-default disabled">弃用</a>';
-                            }
-                            else
-                            {
-                                if(row.item_status == 97)
-                                {
-                                    // $html_abandon = '<a class="btn btn-xs btn-default disabled">弃用</a>';
-                                    $html_abandon = '<a class="btn btn-xs bg-teal item-reuse-submit" data-id="'+data+'">复用</a>';
-                                }
-                                else $html_abandon = '<a class="btn btn-xs bg-gray item-abandon-submit" data-id="'+data+'">弃用</a>';
-                            }
 
-                            // 验证
-                            if(row.verifier_id == 0)
-                            {
-                                $html_verified = '<a class="btn btn-xs bg-teal item-verify-submit" data-id="'+data+'">验证</a>';
-                            }
-                            else
-                            {
-                                $html_verified = '<a class="btn btn-xs bg-aqua-gradient disabled">已验</a>';
-                            }
 
                             // 审核
                             if("{{ in_array($me->user_type,[0,1,11,61,66,71,77]) }}")
@@ -775,75 +596,15 @@
                                         $html_detail_inspected = '<a class="btn btn-xs bg-blue item-modal-show-for-detail-inspected" data-id="'+data+'">再审</a>';
                                     }
                                 }
-
-                                @if($me->department_district_id == 0)
-                                if(row.delivered_status == 0)
-                                {
-                                    // $html_push = '<a class="btn btn-xs bg-teal item-modal-show-for-deliver" data-id="'+data+'" data-key="client_id">交付</a>';
-                                    // $html_deliver = '<a class="btn btn-xs bg-yellow item-deliver-submit" data-id="'+data+'">交付</a>';
-                                    $html_deliver = '<a class="btn btn-xs bg-yellow item-deliver-show" data-id="'+data+'">交付</a>';
-                                }
-                                else
-                                {
-                                    // $html_deliver = '<a class="btn btn-xs bg-green disabled- item-deliver-submit" data-id="'+data+'">再交4</a>';
-                                    $html_deliver = '<a class="btn btn-xs bg-yellow item-deliver-show" data-id="'+data+'">重交</a>';
-                                }
-
-                                if(row.project_er == null)
-                                {
-                                    $html_distribute = '<a class="btn btn-xs bg-default disabled" data-id="'+data+'">分发</a>';
-                                }
-                                else
-                                {
-                                    if(row.project_er.is_distributive == 1)
-                                    {
-
-                                        // $html_distribute = '<a class="btn btn-xs bg-green item-distribute-submit" data-id="'+data+'">分发</a>';
-                                        $html_distribute = '<a class="btn btn-xs bg-green item-distribute-show" data-id="'+data+'">分发</a>';
-                                    }
-                                    else
-                                    {
-                                        $html_distribute = '<a class="btn btn-xs bg-default disabled" data-id="'+data+'">分发</a>';
-                                    }
-                                }
-                                @endif
-                                    $html_edit = '';
+                                $html_edit = '';
                                 $html_publish = '';
                             }
 
 
-                            // 申诉
-                            if("{{ in_array($me->user_type,[0,1,81,84,88]) }}")
-                            {
-                                if(row.appealed_status == 0 && row.inspected_result == '拒绝')
-                                {
-                                    $html_appeal = '<a class="btn btn-xs bg-red modal-show-for-detail-appealed" data-id="'+data+'">申诉</a>';
-                                }
-                            }
-
-                            // 申诉处理
-                            if("{{ in_array($me->user_type,[0,1,91]) }}")
-                            {
-                                if(row.appealed_status == 1)
-                                {
-                                    $html_appeal_handle = '<a class="btn btn-xs bg-red modal-show-for-detail-appealed-handled" data-id="'+data+'">处理</a>';
-                                }
-                            }
 
                         }
 
 
-
-
-
-//                            if(row.deleted_at == null)
-//                            {
-//                                $html_delete = '<a class="btn btn-xs bg-black item-admin-delete-submit" data-id="'+data+'">删除</a>';
-//                            }
-//                            else
-//                            {
-//                                $html_delete = '<a class="btn btn-xs bg-grey item-admin-restore-submit" data-id="'+data+'">恢复</a>';
-//                            }
 
 
                         var $html =
@@ -852,16 +613,7 @@
 //                                 $html_completed+
                             $html_edit+
                             $html_publish+
-                            // $html_detail+
-                            // $html_verified+
                             $html_detail_inspected+
-                            // $html_inspected+
-                            $html_delete+
-                            $html_push+
-                            $html_appeal+
-                            $html_appeal_handle+
-                            $html_deliver+
-                            $html_distribute+
                             $html_record+
                             // $html_abandon+
                             // '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+

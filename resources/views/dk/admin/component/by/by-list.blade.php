@@ -30,11 +30,8 @@
             {{--审核状态--}}
             <select class="search-filter form-filter filter-lg select2-box-c" name="by-inspected-status">
                 <option value="-1">审核状态</option>
-                @if(in_array($me->user_type,[0,1,9,11,81,84,88]))
-                    <option value="待发布">待发布</option>
-                @endif
-                <option value="待审核">待审核</option>
-                <option value="已审核">已审核</option>
+                <option value="0">待审核</option>
+                <option value="1">已审核</option>
             </select>
 
             {{--审核结果--}}
@@ -44,15 +41,6 @@
                     <option value="{{ $v }}">{{ $v }}</option>
                 @endforeach
             </select>
-            {{--录音质量--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
-                <select class="search-filter form-filter filter-md select2-box-c" name="by-recording-quality">
-                    <option value="-1">录音质量</option>
-                    <option value="0">合格</option>
-                    <option value="1">优秀</option>
-                    <option value="9">问题</option>
-                </select>
-            @endif
 
 
             {{--城市--}}
@@ -101,7 +89,7 @@
 
 
     <div class="col-md-12 datatable-body">
-        <div class="tableArea table-order">
+        <div class="tableArea table-by">
             <table class='table table-striped table-bordered table-hover by-column'>
                 <thead>
                 </thead>
