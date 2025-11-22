@@ -312,95 +312,95 @@
                     //         return data;
                     //     }
                     // },
-                    {
-                        "title": "交付<br>有效量",
-                        "data": "order_count_for_delivered_effective",
-                        "className": "bg-delivered",
-                        "width": "80px",
-                        "orderable": true,
-                        "orderSequence": ["desc", "asc"],
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "交付<br>实际产量",
-                        "data": "order_count_for_delivered_actual",
-                        "className": "bg-delivered",
-                        "width": "80px",
-                        "orderable": true,
-                        "orderSequence": ["desc", "asc"],
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "交付<br>已交付",
-                        "data": "order_count_for_delivered_completed",
-                        "className": "bg-delivered",
-                        "width": "80px",
-                        "orderable": true,
-                        "orderSequence": ["desc", "asc"],
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "交付<br>隔日交付",
-                        "data": "order_count_for_delivered_tomorrow",
-                        "className": "bg-delivered",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "交付<br>内部交付",
-                        "data": "order_count_for_delivered_inside",
-                        "className": "bg-delivered",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "交付<br>重复",
-                        "data": "order_count_for_delivered_repeated",
-                        "className": "bg-delivered",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "交付<br>驳回",
-                        "data": "order_count_for_delivered_rejected",
-                        "className": "bg-delivered",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "交付<br>有效率",
-                        "data": "order_rate_for_delivered_effective",
-                        "className": "bg-delivered",
-                        "width": "100px",
-                        "orderable": true,
-                        "orderSequence": ["desc", "asc"],
-                        render: function(data, type, row, meta) {
-                            if(data) return data + " %";
-                            return data
-                        }
-                    },
+                    // {
+                    //     "title": "交付<br>有效量",
+                    //     "data": "order_count_for_delivered_effective",
+                    //     "className": "bg-delivered",
+                    //     "width": "80px",
+                    //     "orderable": true,
+                    //     "orderSequence": ["desc", "asc"],
+                    //     render: function(data, type, row, meta) {
+                    //         return data;
+                    //     }
+                    // },
+                    // {
+                    //     "title": "交付<br>实际产量",
+                    //     "data": "order_count_for_delivered_actual",
+                    //     "className": "bg-delivered",
+                    //     "width": "80px",
+                    //     "orderable": true,
+                    //     "orderSequence": ["desc", "asc"],
+                    //     render: function(data, type, row, meta) {
+                    //         return data;
+                    //     }
+                    // },
+                    // {
+                    //     "title": "交付<br>已交付",
+                    //     "data": "order_count_for_delivered_completed",
+                    //     "className": "bg-delivered",
+                    //     "width": "80px",
+                    //     "orderable": true,
+                    //     "orderSequence": ["desc", "asc"],
+                    //     render: function(data, type, row, meta) {
+                    //         return data;
+                    //     }
+                    // },
+                    // {
+                    //     "title": "交付<br>隔日交付",
+                    //     "data": "order_count_for_delivered_tomorrow",
+                    //     "className": "bg-delivered",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //
+                    //         return data;
+                    //     }
+                    // },
+                    // {
+                    //     "title": "交付<br>内部交付",
+                    //     "data": "order_count_for_delivered_inside",
+                    //     "className": "bg-delivered",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //
+                    //         return data;
+                    //     }
+                    // },
+                    // {
+                    //     "title": "交付<br>重复",
+                    //     "data": "order_count_for_delivered_repeated",
+                    //     "className": "bg-delivered",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //
+                    //         return data;
+                    //     }
+                    // },
+                    // {
+                    //     "title": "交付<br>驳回",
+                    //     "data": "order_count_for_delivered_rejected",
+                    //     "className": "bg-delivered",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //
+                    //         return data;
+                    //     }
+                    // },
+                    // {
+                    //     "title": "交付<br>有效率",
+                    //     "data": "order_rate_for_delivered_effective",
+                    //     "className": "bg-delivered",
+                    //     "width": "100px",
+                    //     "orderable": true,
+                    //     "orderSequence": ["desc", "asc"],
+                    //     render: function(data, type, row, meta) {
+                    //         if(data) return data + " %";
+                    //         return data
+                    //     }
+                    // },
 
 
                     // {
@@ -502,23 +502,19 @@
                 "columnDefs": [
                     {
                         "targets": [2],
-                        "orderData": [2,8,7]
+                        "orderData": [2,5,4]
                     },
                     {
                         "targets": [3],
-                        "orderData": [3,8,7]
+                        "orderData": [3,5,4]
                     },
                     {
                         "targets": [4],
-                        "orderData": [4,8,7]
+                        "orderData": [4,5,2]
                     },
                     {
-                        "targets": [7],
-                        "orderData": [7,8,2]
-                    },
-                    {
-                        "targets": [8],
-                        "orderData": [8,7,2]
+                        "targets": [5],
+                        "orderData": [5,4,2]
                     }
                 ],
                 "language": { url: '/common/dataTableI18n' },

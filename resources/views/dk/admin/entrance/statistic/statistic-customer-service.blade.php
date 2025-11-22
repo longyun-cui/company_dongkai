@@ -268,87 +268,87 @@
                     //         return data
                     //     }
                     // },
-                    {
-                        "title": "交付<br>有效量",
-                        "data": "order_count_for_delivered_effective",
-                        "className": "bg-delivered",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "交付<br>实际产量",
-                        "data": "order_count_for_delivered_actual",
-                        "className": "bg-delivered",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "交付<br>已交付",
-                        "data": "order_count_for_delivered_completed",
-                        "className": "bg-delivered",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data
-                        }
-                    },
-                    {
-                        "title": "交付<br>隔日交付",
-                        "data": "order_count_for_delivered_tomorrow",
-                        "className": "bg-delivered",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data
-                        }
-                    },
-                    {
-                        "title": "交付<br>内部交付",
-                        "data": "order_count_for_delivered_inside",
-                        "className": "bg-delivered",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data
-                        }
-                    },
-                    {
-                        "title": "交付<br>重复",
-                        "data": "order_count_for_delivered_repeated",
-                        "className": "bg-delivered",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data
-                        }
-                    },
-                    {
-                        "title": "交付<br>驳回",
-                        "data": "order_count_for_delivered_rejected",
-                        "className": "bg-delivered",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data
-                        }
-                    },
-                    {
-                        "title": "交付<br>有效率",
-                        "data": "order_rate_for_delivered_effective",
-                        "className": "bg-delivered",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(data) return data + " %";
-                            return data
-                        }
-                    },
+                    // {
+                    //     "title": "交付<br>有效量",
+                    //     "data": "order_count_for_delivered_effective",
+                    //     "className": "bg-delivered",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return data;
+                    //     }
+                    // },
+                    // {
+                    //     "title": "交付<br>实际产量",
+                    //     "data": "order_count_for_delivered_actual",
+                    //     "className": "bg-delivered",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return data;
+                    //     }
+                    // },
+                    // {
+                    //     "title": "交付<br>已交付",
+                    //     "data": "order_count_for_delivered_completed",
+                    //     "className": "bg-delivered",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return data
+                    //     }
+                    // },
+                    // {
+                    //     "title": "交付<br>隔日交付",
+                    //     "data": "order_count_for_delivered_tomorrow",
+                    //     "className": "bg-delivered",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return data
+                    //     }
+                    // },
+                    // {
+                    //     "title": "交付<br>内部交付",
+                    //     "data": "order_count_for_delivered_inside",
+                    //     "className": "bg-delivered",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return data
+                    //     }
+                    // },
+                    // {
+                    //     "title": "交付<br>重复",
+                    //     "data": "order_count_for_delivered_repeated",
+                    //     "className": "bg-delivered",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return data
+                    //     }
+                    // },
+                    // {
+                    //     "title": "交付<br>驳回",
+                    //     "data": "order_count_for_delivered_rejected",
+                    //     "className": "bg-delivered",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return data
+                    //     }
+                    // },
+                    // {
+                    //     "title": "交付<br>有效率",
+                    //     "data": "order_rate_for_delivered_effective",
+                    //     "className": "bg-delivered",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         if(data) return data + " %";
+                    //         return data
+                    //     }
+                    // },
 
 
                     // {
@@ -436,37 +436,37 @@
                     //         return data
                     //     }
                     // },
-                    {
-                        "title": "主管<br>交付<br>有效量",
-                        "data": "group_count_for_delivered_effective",
-                        "className": "text-center vertical-middle bg-group",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data
-                        }
-                    },
-                    {
-                        "title": "主管<br>交付<br>实际产量",
-                        "data": "group_count_for_delivered_actual",
-                        "className": "text-center vertical-middle bg-group",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data
-                        }
-                    },
-                    {
-                        "title": "主管<br>交付<br>有效率",
-                        "data": "group_rate_for_delivered_effective",
-                        "className": "text-center vertical-middle bg-group",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(data) return data + " %";
-                            return data
-                        }
-                    },
+                    // {
+                    //     "title": "主管<br>交付<br>有效量",
+                    //     "data": "group_count_for_delivered_effective",
+                    //     "className": "text-center vertical-middle bg-group",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return data
+                    //     }
+                    // },
+                    // {
+                    //     "title": "主管<br>交付<br>实际产量",
+                    //     "data": "group_count_for_delivered_actual",
+                    //     "className": "text-center vertical-middle bg-group",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return data
+                    //     }
+                    // },
+                    // {
+                    //     "title": "主管<br>交付<br>有效率",
+                    //     "data": "group_rate_for_delivered_effective",
+                    //     "className": "text-center vertical-middle bg-group",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         if(data) return data + " %";
+                    //         return data
+                    //     }
+                    // },
                     // {
                     //     "title": "主管<br>审核<br>有效量",
                     //     "data": "group_count_for_effective",
@@ -520,37 +520,37 @@
                     //         return data
                     //     }
                     // },
-                    {
-                        "title": "经理<br>交付<br>有效量",
-                        "data": "district_count_for_delivered_effective",
-                        "className": "text-center vertical-middle bg-district",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data
-                        }
-                    },
-                    {
-                        "title": "经理<br>交付<br>实际产量",
-                        "data": "district_count_for_delivered_actual",
-                        "className": "text-center vertical-middle bg-district",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data
-                        }
-                    },
-                    {
-                        "title": "经理<br>交付<br>有效率",
-                        "data": "district_rate_for_delivered_effective",
-                        "className": "text-center vertical-middle bg-district",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(data) return data + " %";
-                            return data
-                        }
-                    },
+                    // {
+                    //     "title": "经理<br>交付<br>有效量",
+                    //     "data": "district_count_for_delivered_effective",
+                    //     "className": "text-center vertical-middle bg-district",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return data
+                    //     }
+                    // },
+                    // {
+                    //     "title": "经理<br>交付<br>实际产量",
+                    //     "data": "district_count_for_delivered_actual",
+                    //     "className": "text-center vertical-middle bg-district",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return data
+                    //     }
+                    // },
+                    // {
+                    //     "title": "经理<br>交付<br>有效率",
+                    //     "data": "district_rate_for_delivered_effective",
+                    //     "className": "text-center vertical-middle bg-district",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         if(data) return data + " %";
+                    //         return data
+                    //     }
+                    // },
                     // {
                     //     "title": "经理<br>审核<br>有效量",
                     //     "data": "district_count_for_effective",
@@ -633,7 +633,7 @@
                         }
                     },
                     {
-                        targets: [15,16,17,18,19,20],
+                        targets: [7,8,9],
                         createdCell: function (td, cellData, rowData, row, col) {
                             var rowspan = rowData.group_merge;
                             if (rowspan > 1) {
@@ -645,7 +645,7 @@
                         }
                     },
                     {
-                        targets: [21,22,23,24,25,26],
+                        targets: [10,11,12],
                         createdCell: function (td, cellData, rowData, row, col) {
                             var rowspan = rowData.district_merge;
                             if (rowspan > 1) {

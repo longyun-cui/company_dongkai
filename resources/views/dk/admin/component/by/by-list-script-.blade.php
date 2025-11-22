@@ -5,13 +5,13 @@
 
 
         // 【编辑】
-        $(".main-content").on('click', ".item-create-show", function() {
+        $(".main-content").on('click', ".by-item-create-show", function() {
             var $that = $(this);
             $('#modal-body-for-by-create').modal('show');
         });
 
         // 【编辑】
-        $(".main-content").on('click', ".item-create-link", function() {
+        $(".main-content").on('click', ".by-item-create-link", function() {
             var $that = $(this);
             var $url = "/item/by-create?&referrer="+encodeURIComponent(window.location.href);
             // window.location.href = $url;
@@ -19,7 +19,7 @@
         });
 
         // 【编辑】
-        $(".main-content").on('click', ".item-edit-link", function() {
+        $(".main-content").on('click', ".by-item-edit-link", function() {
             var $that = $(this);
             var $url = "/item/by-edit?id="+$that.attr('data-id')+"&referrer="+encodeURIComponent(window.location.href);
             window.location.href = $url;
@@ -84,7 +84,7 @@
 
 
         // 【获取】内容详情-审核
-        $(".main-content").on('click', ".item-modal-show-for-detail-inspected", function() {
+        $(".main-content").on('click', ".item-modal-show-for-by-detail-inspected", function() {
             var $that = $(this);
             var $row = $that.parents('tr');
             var $datatable_wrapper = $that.closest('.datatable-wrapper');
@@ -138,7 +138,7 @@
 
         });
         // 【取消】内容详情-审核
-        $(".main-content").on('click', ".item-cancel-for-detail-inspected", function() {
+        $(".main-content").on('click', ".item-cancel-for-by-detail-inspected", function() {
             var that = $(this);
             var $modal = $('#modal-body-for-detail-inspected');
             $modal.find('select[name="detail-inspected-result"]').prop("checked", false);
@@ -150,7 +150,7 @@
             });
         });
         // 【提交】内容详情-审核
-        $(".main-content").on('click', ".item-summit-for-detail-inspected", function() {
+        $(".main-content").on('click', ".item-summit-for-by-detail-inspected", function() {
             var $that = $(this);
             var $modal = $('#modal-body-for-detail-inspected');
             var $table_id = $modal.attr('data-datatable-id');
@@ -239,7 +239,7 @@
 
 
         // 【获取】内容详情-申诉
-        $(".main-content").on('click', ".modal-show-for-detail-appealed", function() {
+        $(".main-content").on('click', ".modal-show-for-by-detail-appealed", function() {
             var $that = $(this);
             var $row = $that.parents('tr');
             var $datatable_wrapper = $that.closest('.datatable-wrapper');
@@ -294,7 +294,7 @@
 
         });
         // 【取消】内容详情-申诉
-        $(".main-content").on('click', ".modal-cancel-for-detail-appealed", function() {
+        $(".main-content").on('click', ".modal-cancel-for-by-detail-appealed", function() {
             var that = $(this);
             var $modal = $('#modal-body-for-detail-appealed');
             $modal.find('select[name="detail-appealed-result"]').prop("checked", false);
@@ -306,7 +306,7 @@
             });
         });
         // 【提交】内容详情-申诉
-        $(".main-content").on('click', ".modal-summit-for-detail-appealed", function() {
+        $(".main-content").on('click', ".modal-summit-for-by-detail-appealed", function() {
             var $that = $(this);
             var $modal = $('#modal-body-for-detail-appealed');
             var $table_id = $modal.attr('data-datatable-id');
@@ -353,7 +353,7 @@
 
 
         // 【获取】内容详情-申诉-处理
-        $(".main-content").on('click', ".modal-show-for-detail-appealed-handled", function() {
+        $(".main-content").on('click', ".modal-show-for-by-detail-appealed-handled", function() {
             var $that = $(this);
             var $row = $that.parents('tr');
             var $datatable_wrapper = $that.closest('.datatable-wrapper');
@@ -410,7 +410,7 @@
 
         });
         // 【取消】内容详情-申诉-处理
-        $(".main-content").on('click', ".modal-cancel-for-detail-appealed-handled", function() {
+        $(".main-content").on('click', ".modal-cancel-for-by-detail-appealed-handled", function() {
             var that = $(this);
             var $modal = $('#modal-body-for-detail-appealed-handled');
             $modal.find('select[name="detail-appealed-handled-result"]').prop("checked", false);
@@ -422,7 +422,7 @@
             });
         });
         // 【提交】内容详情-申诉-处理
-        $(".main-content").on('click', ".modal-summit-for-detail-appealed-handled", function() {
+        $(".main-content").on('click', ".modal-summit-for-by-detail-appealed-handled", function() {
             var $that = $(this);
             var $modal = $('#modal-body-for-detail-appealed-handled');
             var $table_id = $modal.attr('data-datatable-id');
@@ -489,7 +489,7 @@
 
 
         // 【交付】
-        $(".main-content").on('click', ".item-deliver-submit", function() {
+        $(".main-content").on('click', ".by-item-deliver-submit", function() {
 
             var $that = $(this);
             var $row = $that.parents('tr');
@@ -677,7 +677,7 @@
 
         });
         // 【交付】显示
-        $(".main-content").on('click', ".item-deliver-show", function() {
+        $(".main-content").on('click', ".by-item-deliver-show", function() {
 
 
             var $that = $(this);
@@ -801,14 +801,14 @@
 
         });
         // 【交付】【取消】
-        $(".main-content").on('click', "#item-cancel-for-deliver-set", function() {
+        $(".main-content").on('click', "#item-cancel-for-by-deliver-set", function() {
             var that = $(this);
             $('#modal-body-for-deliver-set').modal('hide').on("hidden.bs.modal", function () {
                 $("body").addClass("modal-open");
             });
         });
         // 【交付】确认
-        $(".main-content").on('click', "#item-submit-for-deliver-set", function() {
+        $(".main-content").on('click', "#item-submit-for-by-deliver-set", function() {
             var $that = $(this);
             var $modal = $('#modal-body-for-deliver-set');
             var $table_id = $modal.attr('data-datatable-id');
@@ -890,7 +890,7 @@
 
 
         // 【分发】
-        $(".main-content").on('click', ".item-distribute-submit", function() {
+        $(".main-content").on('click', ".by-item-distribute-submit", function() {
 
             var $that = $(this);
             var $row = $that.parents('tr');
@@ -1038,7 +1038,7 @@
 
         });
         // 【分发】显示
-        $(".main-content").on('click', ".item-distribute-show", function() {
+        $(".main-content").on('click', ".by-item-distribute-show", function() {
 
 
             var $that = $(this);
@@ -1154,14 +1154,14 @@
 
         });
         // 【分发】【取消】
-        $(".main-content").on('click', "#item-cancel-for-distribute-set", function() {
+        $(".main-content").on('click', "#item-cancel-for-by-distribute-set", function() {
             var that = $(this);
             $('#modal-body-for-distribute-set').modal('hide').on("hidden.bs.modal", function () {
                 $("body").addClass("modal-open");
             });
         });
         // 【分发】确认
-        $(".main-content").on('click', "#item-submit-for-distribute-set", function() {
+        $(".main-content").on('click', "#item-submit-for-by-distribute-set", function() {
             var $that = $(this);
             layer.msg('确定"分发"么？', {
                 time: 0
@@ -1236,7 +1236,7 @@
 
 
         // 【修改记录】【显示】
-        $(".main-content").on('click', ".item-modal-show-for-modify", function() {
+        $(".main-content").on('click', ".item-modal-show-for-by-modify", function() {
             var that = $(this);
             var $id = that.attr("data-id");
 
@@ -1248,24 +1248,8 @@
 
 
 
-
-
-        // 【批量操作】全选or反选
-        $(".main-content").on('click', '#check-review-all', function () {
-            console.log('#check-review-all.click');
-            var $that = $(this);
-            var $datatable_wrapper = $that.closest('.datatable-wrapper');
-            $('input[name="bulk-id"]').prop('checked',this.checked); // checked为true时为默认显示的状态
-        });
-        // 【批量操作】全选or反选
-        $(".main-content").on('click', '.check-review-all', function () {
-            console.log('.check-review-all.click');
-            var $that = $(this);
-            var $datatable_wrapper = $that.closest('.datatable-wrapper');
-            $datatable_wrapper.find('input[name="bulk-id"]').prop('checked',this.checked); // checked为true时为默认显示的状态
-        });
         // 【批量操作】批量-导出
-        $(".main-content").on('click', '#bulk-submit-for-export', function() {
+        $(".main-content").on('click', '#bulk-submit-for-by-export', function() {
             // var $checked = [];
             // $('input[name="bulk-id"]:checked').each(function() {
             //     $checked.push($(this).val());
@@ -1289,7 +1273,7 @@
 
         });
         // 【批量操作】批量-交付
-        $(".main-content").on('click', '#bulk-submit-for-delivered', function() {
+        $(".main-content").on('click', '#bulk-submit-for-by-delivered', function() {
             // var $checked = [];
             // $('input[name="bulk-id"]:checked').each(function() {
             //     $checked.push($(this).val());
@@ -1598,7 +1582,7 @@
 
 
         // 【交付列表】【批量操作】批量-导出
-        $(".main-content").on('click', '#bulk-submit-for-delivery-export', function() {
+        $(".main-content").on('click', '#bulk-submit-for-by-delivery-export', function() {
             // var $checked = [];
             // $('input[name="bulk-id"]:checked').each(function() {
             //     $checked.push($(this).val());
@@ -1621,7 +1605,7 @@
 
         });
         // 【交付列表】【批量操作】批量-更改导出状态
-        $(".main-content").on('click', '#bulk-submit-for-exported', function() {
+        $(".main-content").on('click', '#bulk-submit-for-by-exported', function() {
             // var $checked = [];
             // $('input[name="bulk-id"]:checked').each(function() {
             //     $checked.push($(this).val());
@@ -1690,7 +1674,7 @@
 
         });
         // 【交付列表】【批量操作】批量-导出
-        $(".main-content").off('click', '.bulk-submit-for-delivery-export').on('click', '.bulk-submit-for-delivery-export', function() {
+        $(".main-content").off('click', '.bulk-submit-for-by-delivery-export').on('click', '.bulk-submit-for-by-delivery-export', function() {
             // var $checked = [];
             // $('input[name="bulk-id"]:checked').each(function() {
             //     $checked.push($(this).val());
@@ -1713,7 +1697,7 @@
 
         });
         // 【交付列表】【批量操作】批量-更改导出状态
-        $(".main-content").off('click', '.bulk-submit-for-delivery-exported').on('click', '.bulk-submit-for-delivery-exported', function() {
+        $(".main-content").off('click', '.bulk-submit-for-by-delivery-exported').on('click', '.bulk-submit-for-by-delivery-exported', function() {
             // var $checked = [];
             // $('input[name="bulk-id"]:checked').each(function() {
             //     $checked.push($(this).val());

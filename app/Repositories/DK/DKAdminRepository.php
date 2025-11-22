@@ -35315,15 +35315,16 @@ EOF;
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
                     count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
-                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
-                    
-                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
-                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
-                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
-                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
-                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
-                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
                 "))
+//            ->addSelect(DB::raw("
+//                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
+//                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
+//                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
+//                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
+//                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
+//                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
+//                "))
             ->groupBy('creator_id');
 
 
@@ -35336,15 +35337,16 @@ EOF;
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
                     count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
-                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
-                    
-                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
-                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
-                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
-                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
-                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
-                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
                 "))
+//            ->addSelect(DB::raw("
+//                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
+//                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
+//                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
+//                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
+//                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
+//                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
+//                "))
             ->groupBy('department_manager_id');
 
 
@@ -35356,15 +35358,16 @@ EOF;
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
                     count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
-                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
-                    
-                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
-                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
-                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
-                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
-                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
-                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
                 "))
+//            ->addSelect(DB::raw("
+//                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
+//                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
+//                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
+//                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
+//                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
+//                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
+//                "))
             ->groupBy('department_supervisor_id');
 
 
@@ -35502,12 +35505,12 @@ EOF;
                 $list[$k]->order_count_for_repeated = $query_order[$v->id]['order_count_for_repeated'];
                 $list[$k]->order_count_for_accepted_inside = $query_order[$v->id]['order_count_for_accepted_inside'];
 
-                $list[$k]->order_count_for_delivered = $query_order[$v->id]['order_count_for_delivered'];
-                $list[$k]->order_count_for_delivered_completed = $query_order[$v->id]['order_count_for_delivered_completed'];
-                $list[$k]->order_count_for_delivered_inside = $query_order[$v->id]['order_count_for_delivered_inside'];
-                $list[$k]->order_count_for_delivered_tomorrow = $query_order[$v->id]['order_count_for_delivered_tomorrow'];
-                $list[$k]->order_count_for_delivered_repeated = $query_order[$v->id]['order_count_for_delivered_repeated'];
-                $list[$k]->order_count_for_delivered_rejected = $query_order[$v->id]['order_count_for_delivered_rejected'];
+//                $list[$k]->order_count_for_delivered = $query_order[$v->id]['order_count_for_delivered'];
+//                $list[$k]->order_count_for_delivered_completed = $query_order[$v->id]['order_count_for_delivered_completed'];
+//                $list[$k]->order_count_for_delivered_inside = $query_order[$v->id]['order_count_for_delivered_inside'];
+//                $list[$k]->order_count_for_delivered_tomorrow = $query_order[$v->id]['order_count_for_delivered_tomorrow'];
+//                $list[$k]->order_count_for_delivered_repeated = $query_order[$v->id]['order_count_for_delivered_repeated'];
+//                $list[$k]->order_count_for_delivered_rejected = $query_order[$v->id]['order_count_for_delivered_rejected'];
             }
             else
             {
@@ -35518,12 +35521,12 @@ EOF;
                 $list[$k]->order_count_for_repeated = 0;
                 $list[$k]->order_count_for_accepted_inside = 0;
 
-                $list[$k]->order_count_for_delivered = 0;
-                $list[$k]->order_count_for_delivered_completed = 0;
-                $list[$k]->order_count_for_delivered_inside = 0;
-                $list[$k]->order_count_for_delivered_tomorrow = 0;
-                $list[$k]->order_count_for_delivered_repeated = 0;
-                $list[$k]->order_count_for_delivered_rejected = 0;
+//                $list[$k]->order_count_for_delivered = 0;
+//                $list[$k]->order_count_for_delivered_completed = 0;
+//                $list[$k]->order_count_for_delivered_inside = 0;
+//                $list[$k]->order_count_for_delivered_tomorrow = 0;
+//                $list[$k]->order_count_for_delivered_repeated = 0;
+//                $list[$k]->order_count_for_delivered_rejected = 0;
             }
 
             // 审核
@@ -35537,25 +35540,25 @@ EOF;
             }
             else $list[$k]->order_rate_for_accepted = 0;
 
-            // 交付
-            // 有效交付量
-            $v->order_count_for_delivered_effective = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_tomorrow + $v->order_count_for_delivered_inside;
-
-            // 有效交付率
-            if($v->order_count_for_delivered > 0)
-            {
-                $v->order_rate_for_delivered_effective = round(($v->order_count_for_delivered_effective * 100 / $v->order_count_for_delivered),2);
-            }
-            else $v->order_rate_for_delivered_effective = 0;
-
-            // 实际产量
-            $v->order_count_for_delivered_actual = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_tomorrow;
-            // 实际产率
-            if($v->order_count_for_delivered > 0)
-            {
-                $v->order_rate_for_delivered_actual = round(($v->order_count_for_delivered_actual * 100 / $v->order_count_for_delivered),2);
-            }
-            else $v->order_rate_for_delivered_actual = 0;
+//            // 交付
+//            // 有效交付量
+//            $v->order_count_for_delivered_effective = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_tomorrow + $v->order_count_for_delivered_inside;
+//
+//            // 有效交付率
+//            if($v->order_count_for_delivered > 0)
+//            {
+//                $v->order_rate_for_delivered_effective = round(($v->order_count_for_delivered_effective * 100 / $v->order_count_for_delivered),2);
+//            }
+//            else $v->order_rate_for_delivered_effective = 0;
+//
+//            // 实际产量
+//            $v->order_count_for_delivered_actual = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_tomorrow;
+//            // 实际产率
+//            if($v->order_count_for_delivered > 0)
+//            {
+//                $v->order_rate_for_delivered_actual = round(($v->order_count_for_delivered_actual * 100 / $v->order_count_for_delivered),2);
+//            }
+//            else $v->order_rate_for_delivered_actual = 0;
 
 
 
@@ -35571,12 +35574,12 @@ EOF;
                 $list[$k]->group_count_for_refused = $query_order_for_supervisor[$supervisor_id]['order_count_for_refused'];
                 $list[$k]->group_count_for_repeated = $query_order_for_supervisor[$supervisor_id]['order_count_for_repeated'];
 
-                $list[$k]->group_count_for_delivered = $query_order_for_supervisor[$supervisor_id]['order_count_for_delivered'];
-                $list[$k]->group_count_for_delivered_completed = $query_order_for_supervisor[$supervisor_id]['order_count_for_delivered_completed'];
-                $list[$k]->group_count_for_delivered_inside = $query_order_for_supervisor[$supervisor_id]['order_count_for_delivered_inside'];
-                $list[$k]->group_count_for_delivered_tomorrow = $query_order_for_supervisor[$supervisor_id]['order_count_for_delivered_tomorrow'];
-                $list[$k]->group_count_for_delivered_repeated = $query_order_for_supervisor[$supervisor_id]['order_count_for_delivered_repeated'];
-                $list[$k]->group_count_for_delivered_rejected = $query_order_for_supervisor[$supervisor_id]['order_count_for_delivered_rejected'];
+//                $list[$k]->group_count_for_delivered = $query_order_for_supervisor[$supervisor_id]['order_count_for_delivered'];
+//                $list[$k]->group_count_for_delivered_completed = $query_order_for_supervisor[$supervisor_id]['order_count_for_delivered_completed'];
+//                $list[$k]->group_count_for_delivered_inside = $query_order_for_supervisor[$supervisor_id]['order_count_for_delivered_inside'];
+//                $list[$k]->group_count_for_delivered_tomorrow = $query_order_for_supervisor[$supervisor_id]['order_count_for_delivered_tomorrow'];
+//                $list[$k]->group_count_for_delivered_repeated = $query_order_for_supervisor[$supervisor_id]['order_count_for_delivered_repeated'];
+//                $list[$k]->group_count_for_delivered_rejected = $query_order_for_supervisor[$supervisor_id]['order_count_for_delivered_rejected'];
             }
             else
             {
@@ -35586,12 +35589,12 @@ EOF;
                 $list[$k]->group_count_for_refused = 0;
                 $list[$k]->group_count_for_repeated = 0;
 
-                $list[$k]->group_count_for_delivered = 0;
-                $list[$k]->group_count_for_delivered_completed = 0;
-                $list[$k]->group_count_for_delivered_inside = 0;
-                $list[$k]->group_count_for_delivered_tomorrow = 0;
-                $list[$k]->group_count_for_delivered_repeated = 0;
-                $list[$k]->group_count_for_delivered_rejected = 0;
+//                $list[$k]->group_count_for_delivered = 0;
+//                $list[$k]->group_count_for_delivered_completed = 0;
+//                $list[$k]->group_count_for_delivered_inside = 0;
+//                $list[$k]->group_count_for_delivered_tomorrow = 0;
+//                $list[$k]->group_count_for_delivered_repeated = 0;
+//                $list[$k]->group_count_for_delivered_rejected = 0;
             }
 
             // 审核
@@ -35606,24 +35609,24 @@ EOF;
             else $v->group_rate_for_accepted = 0;
 
 
-            // 交付
-            // 有效交付量
-            $v->group_count_for_delivered_effective = $v->group_count_for_delivered_completed + $v->group_count_for_delivered_tomorrow + $v->group_count_for_delivered_inside;
-            // 有效交付率
-            if($v->group_count_for_delivered > 0)
-            {
-                $v->group_rate_for_delivered_effective = round(($v->group_count_for_delivered_effective * 100 / $v->group_count_for_delivered),2);
-            }
-            else $v->group_rate_for_delivered_effective = 0;
-
-            // 实际产量
-            $v->group_count_for_delivered_actual = $v->group_count_for_delivered_completed + $v->group_count_for_delivered_tomorrow;
-            // 实际产率
-            if($v->group_count_for_delivered > 0)
-            {
-                $v->group_rate_for_delivered_actual = round(($v->group_count_for_delivered_actual * 100 / $v->group_count_for_delivered),2);
-            }
-            else $v->group_rate_for_delivered_actual = 0;
+//            // 交付
+//            // 有效交付量
+//            $v->group_count_for_delivered_effective = $v->group_count_for_delivered_completed + $v->group_count_for_delivered_tomorrow + $v->group_count_for_delivered_inside;
+//            // 有效交付率
+//            if($v->group_count_for_delivered > 0)
+//            {
+//                $v->group_rate_for_delivered_effective = round(($v->group_count_for_delivered_effective * 100 / $v->group_count_for_delivered),2);
+//            }
+//            else $v->group_rate_for_delivered_effective = 0;
+//
+//            // 实际产量
+//            $v->group_count_for_delivered_actual = $v->group_count_for_delivered_completed + $v->group_count_for_delivered_tomorrow;
+//            // 实际产率
+//            if($v->group_count_for_delivered > 0)
+//            {
+//                $v->group_rate_for_delivered_actual = round(($v->group_count_for_delivered_actual * 100 / $v->group_count_for_delivered),2);
+//            }
+//            else $v->group_rate_for_delivered_actual = 0;
 
 
 
@@ -35639,12 +35642,12 @@ EOF;
                 $list[$k]->district_count_for_refused = $query_order_for_manager[$manager_id]['order_count_for_refused'];
                 $list[$k]->district_count_for_repeated = $query_order_for_manager[$manager_id]['order_count_for_repeated'];
 
-                $list[$k]->district_count_for_delivered = $query_order_for_manager[$manager_id]['order_count_for_delivered'];
-                $list[$k]->district_count_for_delivered_completed = $query_order_for_manager[$manager_id]['order_count_for_delivered_completed'];
-                $list[$k]->district_count_for_delivered_inside = $query_order_for_manager[$manager_id]['order_count_for_delivered_inside'];
-                $list[$k]->district_count_for_delivered_tomorrow = $query_order_for_manager[$manager_id]['order_count_for_delivered_tomorrow'];
-                $list[$k]->district_count_for_delivered_repeated = $query_order_for_manager[$manager_id]['order_count_for_delivered_repeated'];
-                $list[$k]->district_count_for_delivered_rejected = $query_order_for_manager[$manager_id]['order_count_for_delivered_rejected'];
+//                $list[$k]->district_count_for_delivered = $query_order_for_manager[$manager_id]['order_count_for_delivered'];
+//                $list[$k]->district_count_for_delivered_completed = $query_order_for_manager[$manager_id]['order_count_for_delivered_completed'];
+//                $list[$k]->district_count_for_delivered_inside = $query_order_for_manager[$manager_id]['order_count_for_delivered_inside'];
+//                $list[$k]->district_count_for_delivered_tomorrow = $query_order_for_manager[$manager_id]['order_count_for_delivered_tomorrow'];
+//                $list[$k]->district_count_for_delivered_repeated = $query_order_for_manager[$manager_id]['order_count_for_delivered_repeated'];
+//                $list[$k]->district_count_for_delivered_rejected = $query_order_for_manager[$manager_id]['order_count_for_delivered_rejected'];
             }
             else
             {
@@ -35654,12 +35657,12 @@ EOF;
                 $list[$k]->district_count_for_refused = 0;
                 $list[$k]->district_count_for_repeated = 0;
 
-                $list[$k]->district_count_for_delivered = 0;
-                $list[$k]->district_count_for_delivered_completed = 0;
-                $list[$k]->district_count_for_delivered_inside = 0;
-                $list[$k]->district_count_for_delivered_tomorrow = 0;
-                $list[$k]->district_count_for_delivered_repeated = 0;
-                $list[$k]->district_count_for_delivered_rejected = 0;
+//                $list[$k]->district_count_for_delivered = 0;
+//                $list[$k]->district_count_for_delivered_completed = 0;
+//                $list[$k]->district_count_for_delivered_inside = 0;
+//                $list[$k]->district_count_for_delivered_tomorrow = 0;
+//                $list[$k]->district_count_for_delivered_repeated = 0;
+//                $list[$k]->district_count_for_delivered_rejected = 0;
             }
 
             // 审核
@@ -35674,24 +35677,24 @@ EOF;
             else $v->district_rate_for_accepted = 0;
 
 
-            // 交付
-            // 有效交付量
-            $v->district_count_for_delivered_effective = $v->district_count_for_delivered_completed + $v->district_count_for_delivered_tomorrow + $v->district_count_for_delivered_inside;
-            // 有效交付率
-            if($v->district_count_for_delivered > 0)
-            {
-                $v->district_rate_for_delivered_effective = round(($v->district_count_for_delivered_effective * 100 / $v->district_count_for_delivered),2);
-            }
-            else $v->district_rate_for_delivered_effective = 0;
-
-            // 实际产量
-            $v->district_count_for_delivered_actual = $v->district_count_for_delivered_completed + $v->district_count_for_delivered_tomorrow;
-            // 实际产率
-            if($v->district_count_for_delivered > 0)
-            {
-                $v->district_rate_for_delivered_actual = round(($v->district_count_for_delivered_actual * 100 / $v->district_count_for_delivered),2);
-            }
-            else $v->district_rate_for_delivere_actual = 0;
+//            // 交付
+//            // 有效交付量
+//            $v->district_count_for_delivered_effective = $v->district_count_for_delivered_completed + $v->district_count_for_delivered_tomorrow + $v->district_count_for_delivered_inside;
+//            // 有效交付率
+//            if($v->district_count_for_delivered > 0)
+//            {
+//                $v->district_rate_for_delivered_effective = round(($v->district_count_for_delivered_effective * 100 / $v->district_count_for_delivered),2);
+//            }
+//            else $v->district_rate_for_delivered_effective = 0;
+//
+//            // 实际产量
+//            $v->district_count_for_delivered_actual = $v->district_count_for_delivered_completed + $v->district_count_for_delivered_tomorrow;
+//            // 实际产率
+//            if($v->district_count_for_delivered > 0)
+//            {
+//                $v->district_rate_for_delivered_actual = round(($v->district_count_for_delivered_actual * 100 / $v->district_count_for_delivered),2);
+//            }
+//            else $v->district_rate_for_delivere_actual = 0;
 
 
             $v->district_merge = 0;
@@ -37015,15 +37018,16 @@ EOF;
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
                     count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
-                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
-                    
-                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
-                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
-                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
-                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
-                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
-                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
                 "))
+//            ->addSelect(DB::raw("
+//                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
+//                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
+//                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
+//                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
+//                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
+//                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
+//                "))
             ->where('published_date',$the_day)
             ->when($department_district_id, function ($query) use ($department_district_id) {
                 return $query->where('department_district_id', $department_district_id);
@@ -37639,16 +37643,18 @@ EOF;
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
                     count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
-                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
-                    
-                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
-                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
-                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
-                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
-                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
-                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
                     
                 "));
+//            ->addSelect(DB::raw("
+//                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
+//                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
+//                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
+//                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
+//                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
+//                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
+//
+//                "));
 
         $total = $query_this_month->count();
 
