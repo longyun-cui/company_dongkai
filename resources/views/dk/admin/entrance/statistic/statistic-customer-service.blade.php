@@ -362,7 +362,7 @@
                     //     }
                     // },
                     {
-                        "title": "审核<br>通过量",
+                        "title": "客服<br>通过量",
                         "data": "order_count_for_accepted",
                         "className": "bg-inspected",
                         "width": "80px",
@@ -382,7 +382,7 @@
                     //     }
                     // },
                     {
-                        "title": "审核<br>拒绝量",
+                        "title": "客服<br>拒绝量",
                         "data": "order_count_for_refused",
                         "className": "bg-inspected",
                         "width": "80px",
@@ -404,7 +404,7 @@
                     //     }
                     // },
                     {
-                        "title": "审核<br>通过率",
+                        "title": "客服<br>通过率",
                         "data": "order_rate_for_accepted",
                         "className": "bg-inspected",
                         "width": "100px",
@@ -417,13 +417,34 @@
 
 
                     {
-                        "title": "主管<br>客服<br>报单量",
+                        "title": "小组<br>报单量",
                         "data": "group_count_for_all",
                         "className": "text-center vertical-middle bg-group",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
+                        }
+                    },
+                    {
+                        "title": "小组<br>通过量",
+                        "data": "group_count_for_accepted",
+                        "className": "text-center vertical-middle bg-group",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "小组<br>通过率",
+                        "data": "group_rate_for_accepted",
+                        "className": "text-center vertical-middle bg-group",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data) return data + " %";
+                            return data
                         }
                     },
                     // {
@@ -477,37 +498,37 @@
                     //         return data;
                     //     }
                     // },
-                    {
-                        "title": "主管<br>审核<br>通过量",
-                        "data": "group_count_for_accepted",
-                        "className": "text-center vertical-middle bg-group",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "主管<br>审核<br>通过率",
-                        "data": "group_rate_for_accepted",
-                        "className": "text-center vertical-middle bg-group",
-                        "width": "100px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(data) return data + " %";
-                            return data
-                        }
-                    },
 
 
                     {
-                        "title": "经理<br>客服<br>报单量",
+                        "title": "大区<br>报单量",
                         "data": "district_count_for_all",
                         "className": "text-center vertical-middle bg-district",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
+                        }
+                    },
+                    {
+                        "title": "大区<br>通过量",
+                        "data": "district_count_for_accepted",
+                        "className": "text-center vertical-middle bg-district",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "大区<br>通过率",
+                        "data": "district_rate_for_accepted",
+                        "className": "text-center vertical-middle bg-district",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data) return data + " %";
+                            return data
                         }
                     },
                     // {
@@ -561,27 +582,6 @@
                     //         return data;
                     //     }
                     // },
-                    {
-                        "title": "经理<br>审核<br>通过量",
-                        "data": "district_count_for_accepted",
-                        "className": "text-center vertical-middle bg-district",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "经理<br>审核<br>通过率",
-                        "data": "district_rate_for_accepted",
-                        "className": "text-center vertical-middle bg-district",
-                        "width": "100px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(data) return data + " %";
-                            return data
-                        }
-                    },
                 ],
                 "drawCallback": function (settings) {
 
