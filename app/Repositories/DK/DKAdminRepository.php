@@ -37020,14 +37020,14 @@ EOF;
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
                 "))
-//            ->addSelect(DB::raw("
-//                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
-//                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
-//                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
-//                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
-//                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
-//                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
-//                "))
+            ->addSelect(DB::raw("
+                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
+                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
+                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
+                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
+                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
+                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
+                "))
             ->where('published_date',$the_day)
             ->when($department_district_id, function ($query) use ($department_district_id) {
                 return $query->where('department_district_id', $department_district_id);
