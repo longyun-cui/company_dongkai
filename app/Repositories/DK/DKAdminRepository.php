@@ -40213,21 +40213,6 @@ EOF;
         if(isset($item_para->dialog_content)) $update["dialog_content"] = json_encode($item_para->dialog_content);
 
 
-
-//        $client_name = isset($item_para->client_name) ? $item_para->client_name : '';
-//        $client_phone = isset($item_para->client_phone) ? $item_para->client_phone : '';
-//        $client_intention = isset($item_para->client_intention) ? $item_para->client_intention : '';
-//        $teeth_count = isset($item_para->lable_info->teeth_count) ? $item_para->lable_info->teeth_count : '';
-//        $location_city = isset($item_para->lable_info->location_city) ? $item_para->lable_info->location_city : '';
-//        $location_district = isset($item_para->lable_info->location_district) ? $item_para->lable_info->location_district : '';
-//        $recording_address = isset($item_para->lable_info->recording_address) ? $item_para->lable_info->recording_address : '';
-//        $recording_address = isset($item_para->lable_info->recording_address) ? $item_para->lable_info->recording_address : '';
-//        $teeth_count = $item_para->lable_info->teeth_count;
-//        $location_city = $item_para->lable_info->location_city;
-//        $location_district = $item_para->lable_info->location_district;
-//        $recording_address = $item_para->recording_address;
-//        $dialog_content = json_encode($item_para->dialog_content);
-
         $is_repeat = DK_API_BY_Received::where(['client_phone'=>(int)$client_phone])
             ->where('id','<',$id)
             ->count("*");
@@ -40278,11 +40263,7 @@ EOF;
 
             DB::commit();
 
-
-
-
-
-            return response_success([],"发布成功!");
+            return response_success([],"预处理完成!");
         }
         catch (Exception $e)
         {
