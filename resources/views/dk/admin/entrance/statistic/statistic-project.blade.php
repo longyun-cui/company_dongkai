@@ -305,6 +305,23 @@
                         //     }
                         // },
                         {
+                            "title": "重复量",
+                            "data": "order_count_for_repeated",
+                            "className": "bg-inspected",
+                            "width": "80px",
+                            "orderable": false,
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
+                            render: function(data, type, row, meta) {
+
+                                return data;
+                            }
+                        },
+                        {
                             "title": "拒绝量",
                             "data": "order_count_for_refused",
                             "className": "bg-inspected",
@@ -321,23 +338,6 @@
                                 return data;
                             }
                         },
-                        // {
-                        //     "title": "审核<br>重复量",
-                        //     "data": "order_count_for_repeated",
-                        //     "className": "bg-inspected",
-                        //     "width": "80px",
-                        //     "orderable": false,
-                        //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        //         if(row.id == "统计")
-                        //         {
-                        //             $(nTd).addClass('_bold');
-                        //         }
-                        //     },
-                        //     render: function(data, type, row, meta) {
-                        //
-                        //         return data;
-                        //     }
-                        // },
                         // {
                         //     "title": "审核<br>内部通过",
                         //     "data": "order_count_for_accepted_inside",
@@ -357,7 +357,7 @@
                         {
                             "title": "通过率",
                             "data": "order_rate_for_accepted",
-                            "className": "bg-inspected",
+                            "className": "bg-service-customer",
                             "width": "100px",
                             "orderable": false,
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
