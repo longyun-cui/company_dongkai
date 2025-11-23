@@ -21,7 +21,7 @@
             "serverSide": true,
             "searching": true,
             "pagingType": "simple_numbers",
-            "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t> <"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p>',
+            "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t>',
             "order": [],
             "orderCellsTop": true,
             "scrollX": true,
