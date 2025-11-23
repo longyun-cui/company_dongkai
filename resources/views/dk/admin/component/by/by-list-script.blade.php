@@ -28,9 +28,71 @@
 
 
 
+        // 【预处理】提交
+        $(".main-content").on('click', ".by-item-preprocess-submit", function() {
+            var $that = $(this);
+            var $row = $that.parents('tr');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $item_category = $datatable_wrapper.data('datatable-item-category');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+            var $table = $('#'+$table_id);
+
+            var $data = new Object();
+
+            //
+            var $index = layer.load(1, {
+                shade: [0.3, '#fff'],
+                content: '<span class="loadtip">正在提交</span>',
+                success: function (layer) {
+                    layer.find('.layui-layer-content').css({
+                        'padding-top': '40px',
+                        'width': '100px',
+                    });
+                    layer.find('.loadtip').css({
+                        'font-size':'20px',
+                        'margin-left':'-18px'
+                    });
+                }
+            });
+
+            //
+            $.post(
+                "{{ url('/v1/operate/by/item-preprocess') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: "item-preprocess",
+                    item_type: "by",
+                    item_id: $that.data('id')
+                },
+                'json'
+            )
+                .done(function($response, status, jqXHR) {
+                    console.log('done');
+                    $response = JSON.parse($response);
+                    if(!$response.success)
+                    {
+                        if($response.msg) layer.msg($response.msg);
+                    }
+                    else
+                    {
+                        $($table).DataTable().ajax.reload(null,false);
+                    }
+                })
+                .fail(function(jqXHR, status, error) {
+                    console.log('fail');
+                    layer.msg('服务器错误！');
+
+                })
+                .always(function(jqXHR, status) {
+                    console.log('always');
+                    layer.closeAll('loading');
+                });
+
+        });
+
 
         // 【获取】内容详情
-        $(".main-content").on('click', ".item-modal-show-for-detail", function() {
+        $(".main-content").on('click', ".by-modal-show-for-item-detail", function() {
             var $that = $(this);
             var $row = $that.parents('tr');
             console.log();
@@ -75,7 +137,7 @@
 
         });
         // 【取消】内容详情
-        $(".main-content").on('click', ".item-cancel-for-detail", function() {
+        $(".main-content").on('click', ".by-modal-cancel-for-item-detail", function() {
             var that = $(this);
             $('#modal-body-for-info-detail').modal('hide').on("hidden.bs.modal", function () {
                 $("body").addClass("modal-open");
@@ -84,7 +146,7 @@
 
 
         // 【获取】内容详情-审核
-        $(".main-content").on('click', ".item-modal-show-for-by-detail-inspected", function() {
+        $(".main-content").on('click', ".by-modal-show-for-item-detail-inspected", function() {
             var $that = $(this);
             var $row = $that.parents('tr');
             var $datatable_wrapper = $that.closest('.datatable-wrapper');
@@ -138,7 +200,7 @@
 
         });
         // 【取消】内容详情-审核
-        $(".main-content").on('click', ".item-cancel-for-by-detail-inspected", function() {
+        $(".main-content").on('click', ".by-modal-cancel-for-item-detail-inspected", function() {
             var that = $(this);
             var $modal = $('#modal-body-for-detail-inspected');
             $modal.find('select[name="detail-inspected-result"]').prop("checked", false);
@@ -150,7 +212,7 @@
             });
         });
         // 【提交】内容详情-审核
-        $(".main-content").on('click', ".item-summit-for-by-detail-inspected", function() {
+        $(".main-content").on('click', ".by-modal-summit-for-item-detail-inspected", function() {
             var $that = $(this);
             var $modal = $('#modal-body-for-detail-inspected');
             var $table_id = $modal.attr('data-datatable-id');
@@ -239,7 +301,7 @@
 
 
         // 【获取】内容详情-申诉
-        $(".main-content").on('click', ".modal-show-for-by-detail-appealed", function() {
+        $(".main-content").on('click', ".by-modal-show-for-by-detail-appealed", function() {
             var $that = $(this);
             var $row = $that.parents('tr');
             var $datatable_wrapper = $that.closest('.datatable-wrapper');
@@ -294,7 +356,7 @@
 
         });
         // 【取消】内容详情-申诉
-        $(".main-content").on('click', ".modal-cancel-for-by-detail-appealed", function() {
+        $(".main-content").on('click', ".by-modal-cancel-for-by-detail-appealed", function() {
             var that = $(this);
             var $modal = $('#modal-body-for-detail-appealed');
             $modal.find('select[name="detail-appealed-result"]').prop("checked", false);
@@ -306,7 +368,7 @@
             });
         });
         // 【提交】内容详情-申诉
-        $(".main-content").on('click', ".modal-summit-for-by-detail-appealed", function() {
+        $(".main-content").on('click', ".by-modal-summit-for-by-detail-appealed", function() {
             var $that = $(this);
             var $modal = $('#modal-body-for-detail-appealed');
             var $table_id = $modal.attr('data-datatable-id');
@@ -353,7 +415,7 @@
 
 
         // 【获取】内容详情-申诉-处理
-        $(".main-content").on('click', ".modal-show-for-by-detail-appealed-handled", function() {
+        $(".main-content").on('click', ".by-modal-show-for-by-detail-appealed-handled", function() {
             var $that = $(this);
             var $row = $that.parents('tr');
             var $datatable_wrapper = $that.closest('.datatable-wrapper');
@@ -410,7 +472,7 @@
 
         });
         // 【取消】内容详情-申诉-处理
-        $(".main-content").on('click', ".modal-cancel-for-by-detail-appealed-handled", function() {
+        $(".main-content").on('click', ".by-modal-cancel-for-by-detail-appealed-handled", function() {
             var that = $(this);
             var $modal = $('#modal-body-for-detail-appealed-handled');
             $modal.find('select[name="detail-appealed-handled-result"]').prop("checked", false);
@@ -422,7 +484,7 @@
             });
         });
         // 【提交】内容详情-申诉-处理
-        $(".main-content").on('click', ".modal-summit-for-by-detail-appealed-handled", function() {
+        $(".main-content").on('click', ".by-modal-summit-for-by-detail-appealed-handled", function() {
             var $that = $(this);
             var $modal = $('#modal-body-for-detail-appealed-handled');
             var $table_id = $modal.attr('data-datatable-id');
@@ -1235,8 +1297,8 @@
 
 
 
-        // 【修改记录】【显示】
-        $(".main-content").on('click', ".item-modal-show-for-by-modify", function() {
+        // 【操作记录】【显示】
+        $(".main-content").on('click', ".by-modal-show-for-item-operation", function() {
             var that = $(this);
             var $id = that.attr("data-id");
 
@@ -1797,7 +1859,7 @@
         {{--    theme: 'classic'--}}
         {{--});--}}
 
-        $('.select2-project').each(function() {
+        $('.select2-project-').each(function() {
             // 获取当前 Select2 元素的 jQuery 对象
             const $select = $(this);
 

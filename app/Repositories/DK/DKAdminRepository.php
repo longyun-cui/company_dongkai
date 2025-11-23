@@ -952,7 +952,7 @@ class DKAdminRepository {
 
         $total = $query->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $draw  = isset($post_data['draw']) ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : 10;
 
@@ -39918,6 +39918,7 @@ EOF;
         $this->get_me();
         $me = $this->me;
 
+        if(!in_array($me->user_type,[0,1,9,11,61,66,71,77])) return response_error([],"你没有操作权限！");
 
         $query = DK_API_BY_Received::select('*')
             ->withTrashed()
@@ -39951,14 +39952,14 @@ EOF;
         // 状态 [|]
         if(!empty($post_data['api_status']))
         {
-            if(!in_array($post_data['api_status'],[-1,0]))
+            if(!in_array($post_data['api_status'],[-1,0,'-1','0']))
             {
                 $query->where('api_status', $post_data['item_status']);
             }
         }
         else
         {
-            $query->where('api_status', 1);
+            if(in_array($me->user_type,[11,61,66,71,77])) $query->where('api_status', '>=', 1);
         }
 
 
@@ -40145,5 +40146,153 @@ EOF;
 
     }
 
+    // 【工单-管理】发布
+    public function v1_operate_for_by_item_preprocess($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $time = time();
+        $date = date("Y-m-d");
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-preprocess') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_API_BY_Received::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        if($item->api_status > 0)
+        {
+            return response_error([],"该【工单】已经处理过了！");
+        }
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,61,66,71,77])) return response_error([],"你没有操作权限！");
+
+
+        $item_content = $item->content;
+        $item_para = json_decode($item_content);
+
+
+        if(isset($item_para->client_name)) $update["client_name"] = $item_para->client_name;
+        if(isset($item_para->client_phone))
+        {
+            $client_phone = $item_para->client_phone;
+            $update["client_phone"] = $item_para->client_phone;
+        }
+        else
+        {
+            $client_phone = '';
+            return response_error([],"电话为空！");
+        }
+        if(isset($item_para->client_intention)) $update["client_intention"] = $item_para->client_intention;
+        if(isset($item_para->lable_info))
+        {
+            if(isset($item_para->lable_info->is_wx))
+            {
+                if(in_array($item_para->lable_info->is_wx,['是','对'])) $update["is_wx"] = 1;
+            }
+            if(isset($item_para->lable_info->location_city)) $update["location_city"] = $item_para->lable_info->location_city;
+            if(isset($item_para->lable_info->location_district)) $update["location_district"] = $item_para->lable_info->location_district;
+            if(isset($item_para->lable_info->recording_address)) $update["recording_address"] = $item_para->lable_info->recording_address;
+        }
+        if(isset($item_para->dialog_content)) $update["dialog_content"] = json_encode($item_para->dialog_content);
+
+
+
+//        $client_name = isset($item_para->client_name) ? $item_para->client_name : '';
+//        $client_phone = isset($item_para->client_phone) ? $item_para->client_phone : '';
+//        $client_intention = isset($item_para->client_intention) ? $item_para->client_intention : '';
+//        $teeth_count = isset($item_para->lable_info->teeth_count) ? $item_para->lable_info->teeth_count : '';
+//        $location_city = isset($item_para->lable_info->location_city) ? $item_para->lable_info->location_city : '';
+//        $location_district = isset($item_para->lable_info->location_district) ? $item_para->lable_info->location_district : '';
+//        $recording_address = isset($item_para->lable_info->recording_address) ? $item_para->lable_info->recording_address : '';
+//        $recording_address = isset($item_para->lable_info->recording_address) ? $item_para->lable_info->recording_address : '';
+//        $teeth_count = $item_para->lable_info->teeth_count;
+//        $location_city = $item_para->lable_info->location_city;
+//        $location_district = $item_para->lable_info->location_district;
+//        $recording_address = $item_para->recording_address;
+//        $dialog_content = json_encode($item_para->dialog_content);
+
+        $is_repeat = DK_API_BY_Received::where(['client_phone'=>(int)$client_phone])
+            ->where('id','<',$id)
+            ->count("*");
+//        dd($is_repeat);
+        $update["is_repeat"] = $is_repeat;
+
+
+            // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+//            $item->is_repeat = $is_repeat;
+//            $item->client_name = $client_name;
+//            $item->client_phone = $client_phone;
+//            $item->client_intention = $client_intention;
+//            $item->is_wx = $is_wx;
+//            $item->teeth_count = $teeth_count;
+//            $item->location_city = $location_city;
+//            $item->location_district = $location_district;
+//            $item->recording_address = $recording_address;
+//            $item->dialog_content = $dialog_content;
+////            $item->inspected_at = $time;
+////            $item->inspected_date = $date;
+//
+//            $bool = $item->save();
+
+            $update["api_status"] = 1;
+            $bool = $item->fill($update)->save();
+            if(!$bool) throw new Exception("DK_API_BY_Received--update--fail");
+            else
+            {
+//                $record = new DK_Record;
+//
+//                $record_data["ip"] = Get_IP();
+//                $record_data["record_object"] = 21;
+//                $record_data["record_category"] = 11;
+//                $record_data["record_type"] = 1;
+//                $record_data["creator_id"] = $me->id;
+//                $record_data["order_id"] = $id;
+//                $record_data["operate_object"] = 101;
+//                $record_data["operate_category"] = 11;
+//                $record_data["operate_type"] = 1;
+//                $record_data["process_category"] = 1;
+//
+//                $bool_1 = $record->fill($record_data)->save();
+//                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+
+            DB::commit();
+
+
+
+
+
+            return response_success([],"发布成功!");
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
 
 }

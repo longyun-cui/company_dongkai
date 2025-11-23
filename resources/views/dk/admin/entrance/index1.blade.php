@@ -184,7 +184,7 @@
 
 
     @include(env('TEMPLATE_DK_ADMIN').'component.by.by-list-datatable')
-{{--    @include(env('TEMPLATE_DK_ADMIN').'component.by.by-list-script')--}}
+    @include(env('TEMPLATE_DK_ADMIN').'component.by.by-list-script')
 
 
     @include(env('TEMPLATE_DK_ADMIN').'component.delivery.delivery-list-datatable')

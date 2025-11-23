@@ -24,6 +24,8 @@ class DK_API_BY_Received extends Model
         'username', 'nickname', 'true_name', 'short_name',
         'name', 'title', 'subtitle', 'content', 'description', 'tag', 'remark', 'label', 'custom',
 
+        'is_repeat',
+
         'client_type',
         'client_name',
         'client_phone',

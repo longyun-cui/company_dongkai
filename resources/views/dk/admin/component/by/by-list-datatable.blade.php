@@ -13,7 +13,7 @@
             "serverSide": true,
             "searching": true,
             "pagingType": "simple_numbers",
-            "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t> <"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p>',
+            "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t>',
             "order": [],
             "orderCellsTop": true,
             "scrollX": true,
@@ -99,13 +99,11 @@
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(true)
                         {
-                            $(nTd).addClass('order_id');
-                            $(nTd).attr('data-id',row.id).attr('data-name','工单ID');
-                            $(nTd).attr('data-key','order_id').attr('data-value',row.id);
-                            if(data) $(nTd).attr('data-operate-type','edit');
-                            else $(nTd).attr('data-operate-type','add');
+                            $(nTd).addClass('by_id');
+                            $(nTd).attr('data-id',row.id).attr('data-name','ID');
+                            $(nTd).attr('data-key','by_id').attr('data-value',data);
                         }
                     },
                     render: function(data, type, row, meta) {
@@ -113,17 +111,23 @@
                     }
                 },
                 {
-                    "title": "状态1",
+                    "title": "状态",
                     "data": "api_status",
                     "className": "",
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(true)
                         {
+                            $(nTd).attr('data-row-index',iRow);
+
                             $(nTd).addClass('api_status');
                             $(nTd).attr('data-id',row.id).attr('data-name','状态');
-                            $(nTd).attr('data-key','api_status').attr('data-value',row.id);
+                            $(nTd).attr('data-key','api_status').attr('data-value',data);
+
+                            $(nTd).attr('data-column-type','select');
+                            $(nTd).attr('data-column-name','状态');
+
                             if(data) $(nTd).attr('data-operate-type','edit');
                             else $(nTd).attr('data-operate-type','add');
                         }
@@ -139,15 +143,19 @@
                         if(data == 0)
                         {
 
-                            return '<small class="btn-xs bg-blue">待处理</small>';
+                            return '<small class="btn-xs bg-aqua">待处理</small>';
                         }
                         else if(data == 1)
                         {
-                            return '<small class="btn-xs bg-aqua">已处理</small>';
+                            return '<small class="btn-xs bg-teal">待审核</small>';
+                        }
+                        else if(data == 9)
+                        {
+                            return '<small class="btn-xs bg-blue">已审核</small>';
                         }
                         else
                         {
-                            return '<small class="btn-xs bg-aqua">待审核</small>';
+                            return '<small class="btn-xs bg-black">未知状态</small>';
                         }
                     }
                 },
@@ -155,15 +163,18 @@
                     "title": "审核结果",
                     "data": "inspected_result",
                     "className": "text-center",
-                    "width": "72px",
+                    "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(true)
                         {
+                            $(nTd).attr('data-row-index',iRow);
+
                             $(nTd).addClass('modal-show-for-field-set-');
                             $(nTd).attr('data-id',row.id).attr('data-name','审核结果');
                             $(nTd).attr('data-key','inspected_result').attr('data-value',data);
 
+                            $(nTd).attr('data-column-type','select');
                             $(nTd).attr('data-column-name','审核结果');
 
                             if(data) $(nTd).attr('data-operate-type','edit');
@@ -173,34 +184,25 @@
                     render: function(data, type, row, meta) {
                         // if(!row.inspected_at) return '--';
                         var $result_html = '';
-                        if(data == "通过" || data == "内部通过")
+                        if(data == 0)
                         {
-                            $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
+                            $result_html = '--';
                         }
-                        else if(data == "拒绝")
+                        else if(data == 1)
                         {
-                            $result_html = '<small class="btn-xs bg-red">拒绝</small>';
+                            $result_html = '<small class="btn-xs bg-green">通过</small>';
                         }
-                        else if(data == "重复")
+                        else if(data == 9)
                         {
-                            $result_html = '<small class="btn-xs bg-yellow">重复</small>';
+                            $result_html = '<small class="btn-xs bg-red">驳回</small>';
                         }
-                        else if(data == "重复•可分发")
+                        else if(data == 7)
                         {
-                            console.log('x1');
-                            if("{{ in_array($me->user_type,[0,1,9,11,61,66]) }}" == "1")
-                            {
-                                console.log('x');
-                                $result_html = '<small class="btn-xs bg-yellow">重复•可分发</small>';
-                            }
-                            else
-                            {
-                                $result_html = '<small class="btn-xs bg-yellow">重复</small>';
-                            }
+                            $result_html = '<small class="btn-xs bg-yellow">异议</small>';
                         }
                         else
                         {
-                            $result_html = '<small class="btn-xs bg-purple">'+data+'</small>';
+                            $result_html = '--';
                         }
                         return $result_html;
                     }
@@ -214,12 +216,17 @@
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(true)
                         {
-                            // $(nTd).addClass('modal-show-for-info-radio-set-');
-                            // $(nTd).attr('data-id',row.id).attr('data-name','是否重复');
+                            $(nTd).attr('data-row-index',iRow);
+
+                            $(nTd).addClass('modal-show-for-field-set-');
+                            $(nTd).attr('data-id',row.id).attr('data-name','是否重复');
                             $(nTd).attr('data-key','is_repeat').attr('data-value',data);
-                            // $(nTd).attr('data-column-name','是否重复');
-                            // if(data) $(nTd).attr('data-operate-type','edit');
-                            // else $(nTd).attr('data-operate-type','add');
+
+                            $(nTd).attr('data-column-type','radio');
+                            $(nTd).attr('data-column-name','是否重复');
+
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
                         }
                     },
                     render: function(data, type, row, meta) {
@@ -238,7 +245,7 @@
                         {
                             $(nTd).attr('data-row-index',iRow);
 
-                            $(nTd).addClass('modal-show-for-field-set');
+                            $(nTd).addClass('modal-show-for-field-set-');
                             $(nTd).attr('data-id',row.id).attr('data-name','客户姓名');
                             $(nTd).attr('data-key','client_name').attr('data-value',data);
 
@@ -260,7 +267,7 @@
                     "width": "100px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(true)
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -286,7 +293,7 @@
                     "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(true)
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -347,11 +354,11 @@
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(true)
                         {
                             $(nTd).attr('data-row-index',iRow);
 
-                            $(nTd).addClass('modal-show-for-field-set');
+                            $(nTd).addClass('modal-show-for-field-set-');
                             $(nTd).attr('data-id',row.id).attr('data-name','牙齿数量');
                             $(nTd).attr('data-key','teeth_count').attr('data-value',data);
 
@@ -373,11 +380,11 @@
                     "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(true)
                         {
                             $(nTd).attr('data-row-index',iRow);
 
-                            $(nTd).addClass('modal-show-for-field-set');
+                            $(nTd).addClass('modal-show-for-field-set-');
                             $(nTd).attr('data-id',row.id).attr('data-name','是否+V');
                             $(nTd).attr('data-key','is_wx').attr('data-value',data);
 
@@ -400,9 +407,11 @@
                     "width": "120px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(true)
                         {
-                            $(nTd).addClass('modal-show-for-field-set');
+                            $(nTd).attr('data-row-index',iRow);
+
+                            $(nTd).addClass('modal-show-for-field-set-');
                             $(nTd).attr('data-id',row.id).attr('data-name','所在城市');
                             $(nTd).attr('data-key','location_city').attr('data-value',data);
                             $(nTd).attr('data-key2','location_district').attr('data-value2',row.location_district);
@@ -422,39 +431,12 @@
                         }
                     }
                 },
-                {
-                    "title": "通话小结",
-                    "data": "description",
-                    "className": "",
-                    "width": "80px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
-                        {
-                            $(nTd).addClass('modal-show-for-field-set');
-                            $(nTd).attr('data-id',row.id).attr('data-name','通话小结');
-                            $(nTd).attr('data-key','description').attr('data-value',data);
-
-                            $(nTd).attr('data-column-type','textarea');
-                            $(nTd).attr('data-column-name','通话小结');
-
-                            if(data) $(nTd).attr('data-operate-type','edit');
-                            else $(nTd).attr('data-operate-type','add');
-
-                        }
-                    },
-                    render: function(data, type, row, meta) {
-                        // return data;
-                        if(data) return '<small class="btn-xs bg-yellow">双击查看</small>';
-                        else return '';
-                    }
-                },
                 @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
                 {
                     "title": "录音播放",
                     "data": "recording_address",
                     "className": "",
-                    "width": "400px",
+                    "width": "320px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
@@ -554,7 +536,12 @@
                         var $html_publish = '';
                         var $html_inspected = '';
                         var $html_detail_inspected = '';
+                        var $html_preprocess = '';
 
+                        if(row.api_status == 0)
+                        {
+                            $html_preprocess = '<a class="btn btn-xs bg-aqua by-item-preprocess-submit" data-id="'+data+'">预处理</a>';
+                        }
 
 //                            if(row.is_me == 1 && row.item_active == 0)
                         if(row.is_published == 0)
@@ -563,11 +550,6 @@
                         }
                         else
                         {
-                            if(row.inspected_status == 1 && row.inspected_result == '二次待审')
-                            {
-                                $html_edit = '<a class="btn btn-xs btn-primary item-edit-link" data-id="'+data+'">编辑</a>';
-                                $html_publish = '<a class="btn btn-xs bg-olive item-publish-submit" data-id="'+data+'">发布</a>';
-                            }
                             $html_detail = '<a class="btn btn-xs bg-primary item-modal-show-for-detail" data-id="'+data+'">详情</a>';
                             $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-operation-record" data-id="'+data+'">记录</a>';
 
@@ -605,20 +587,12 @@
                         }
 
 
-
-
                         var $html =
-//                                    $html_able+
-//                                    '<a class="btn btn-xs" href="/item/edit?id='+data+'">编辑</a>'+
-//                                 $html_completed+
                             $html_edit+
                             $html_publish+
+                            $html_preprocess+
                             $html_detail_inspected+
                             $html_record+
-                            // $html_abandon+
-                            // '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
-                            // '<a class="btn btn-xs bg-olive item-download-qr-code-submit" data-id="'+data+'">下载二维码</a>'+
-                            // $more_html+
                             '';
                         return $html;
 
