@@ -240,7 +240,7 @@
                             "title": "报单量",
                             "data": "order_count_for_all",
                             "className": "bg-service-customer",
-                            "width": "80px",
+                            "width": "60px",
                             "orderable": true,
                             "orderSequence": ["desc", "asc"],
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -275,7 +275,7 @@
                             "title": "通过量",
                             "data": "order_count_for_accepted",
                             "className": "bg-inspected",
-                            "width": "80px",
+                            "width": "60px",
                             "orderable": false,
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                                 if(row.id == "统计")
@@ -308,7 +308,7 @@
                             "title": "重复量",
                             "data": "order_count_for_repeated",
                             "className": "bg-inspected",
-                            "width": "80px",
+                            "width": "60px",
                             "orderable": false,
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                                 if(row.id == "统计")
@@ -325,7 +325,7 @@
                             "title": "拒绝量",
                             "data": "order_count_for_refused",
                             "className": "bg-inspected",
-                            "width": "80px",
+                            "width": "60px",
                             "orderable": false,
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                                 if(row.id == "统计")
@@ -354,11 +354,34 @@
                         //         return data;
                         //     }
                         // },
+
+
+                        @if(in_array($me->user_type,[0,1,9,11,61,66]))
+                        {
+                            "title": "交付量",
+                            "data": "order_count_for_delivered",
+                            "className": "bg-delivered",
+                            "width": "60px",
+                            "orderable": true,
+                            "orderSequence": ["desc", "asc"],
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
+                            render: function(data, type, row, meta) {
+                                return data;
+                            }
+                        },
+                        @endif
+
+
                         {
                             "title": "通过率",
                             "data": "order_rate_for_accepted",
                             "className": "bg-service-customer",
-                            "width": "100px",
+                            "width": "60px",
                             "orderable": false,
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                                 if(row.id == "统计")
@@ -373,23 +396,6 @@
                         },
 
 
-                        // {
-                        //     "title": "交付<br>总量",
-                        //     "data": "order_count_for_delivered",
-                        //     "className": "bg-delivered",
-                        //     "width": "60px",
-                        //     "orderable": true,
-                        //     "orderSequence": ["desc", "asc"],
-                        //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        //         if(row.id == "统计")
-                        //         {
-                        //             $(nTd).addClass('_bold');
-                        //         }
-                        //     },
-                        //     render: function(data, type, row, meta) {
-                        //         return data;
-                        //     }
-                        // },
                         // {
                         //     "title": "交付<br>有效量",
                         //     "data": "order_count_for_delivered_effective",
