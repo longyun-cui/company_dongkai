@@ -127,7 +127,7 @@
 @section('custom-style')
     <style>
         .myChart { width:100%;height:240px; }
-        .tableArea table { min-width:1200px; }
+        .tableArea table { min-width:1120px; }
         .datatable-search-row .input-group .time-picker-btn { width:30px; }
         .datatable-search-row .input-group .month_picker, .datatable-search-row .input-group .date_picker { width:100px; text-align:center; }
         .datatable-search-row .input-group select { width:100px; text-align:center; }
@@ -223,7 +223,7 @@
                             "title": "项目名称",
                             "data": "name",
                             "className": "text-center",
-                            "width": "160px",
+                            "width": "200px",
                             "orderable": false,
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                                 if(row.id == "统计")
@@ -234,45 +234,6 @@
                             render: function(data, type, row, meta) {
                                 return data;
 
-                            }
-                        },
-                        @if($me->department_district_id == 0)
-                        {
-                            "title": "团队",
-                            "data": "pivot_project_team",
-                            "className": "text-center",
-                            "width": "160px",
-                            "orderable": false,
-                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                                if(row.id == "统计")
-                                {
-                                    $(nTd).addClass('_bold');
-                                }
-                            },
-                            render: function(data, type, row, meta) {
-                                var html = '';
-                                $.each(data,function( key, val ) {
-//                                console.log( key, val, this );
-                                    html += '<a href="javascript:void(0);">'+this.name+'</a> &nbsp;';
-                                });
-                                return html;
-                            }
-                        },
-                        @endif
-                        {
-                            "title": "每日目标",
-                            "data": "daily_goal",
-                            "className": "text-center text-green",
-                            "width": "80px",
-                            "orderable": false,
-                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                                if(row.id == "统计")
-                                {
-                                    $(nTd).addClass('_bold');
-                                }
-                            },
-                            render: function(data, type, row, meta) {
-                                return data;
                             }
                         },
                         {
@@ -393,23 +354,23 @@
                         //         return data;
                         //     }
                         // },
-                        // {
-                        //     "title": "审核<br>通过率",
-                        //     "data": "order_rate_for_accepted",
-                        //     "className": "bg-inspected",
-                        //     "width": "100px",
-                        //     "orderable": false,
-                        //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        //         if(row.id == "统计")
-                        //         {
-                        //             $(nTd).addClass('_bold');
-                        //         }
-                        //     },
-                        //     render: function(data, type, row, meta) {
-                        //         if(data) return data + " %";
-                        //         return data
-                        //     }
-                        // },
+                        {
+                            "title": "通过率",
+                            "data": "order_rate_for_accepted",
+                            "className": "bg-inspected",
+                            "width": "100px",
+                            "orderable": false,
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
+                            render: function(data, type, row, meta) {
+                                if(data) return data + " %";
+                                return data
+                            }
+                        },
 
 
                         // {
@@ -575,6 +536,45 @@
                         //         // else return '';
                         //     }
                         // }
+                        @if($me->department_district_id == 0)
+                        {
+                            "title": "团队",
+                            "data": "pivot_project_team",
+                            "className": "text-center",
+                            "width": "360px",
+                            "orderable": false,
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
+                            render: function(data, type, row, meta) {
+                                var html = '';
+                                $.each(data,function( key, val ) {
+//                                console.log( key, val, this );
+                                    html += '<a href="javascript:void(0);">'+this.name+'</a> &nbsp;';
+                                });
+                                return html;
+                            }
+                        },
+                        @endif
+                        {
+                            "title": "每日目标",
+                            "data": "daily_goal",
+                            "className": "text-center text-green",
+                            "width": "80px",
+                            "orderable": false,
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
+                            render: function(data, type, row, meta) {
+                                return data;
+                            }
+                        },
                     ],
                     "drawCallback": function (settings) {
 
