@@ -580,7 +580,7 @@
                         var $html =
                             // $html_detail+
                             $html_preprocess+
-                            // $html_detail_inspected+
+                            $html_detail_inspected+
                             // $html_record+
                             '';
                         return $html;
