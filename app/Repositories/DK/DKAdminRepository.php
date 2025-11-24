@@ -40211,8 +40211,8 @@ EOF;
             }
             if(isset($item_para->lable_info->location_city)) $update["location_city"] = $item_para->lable_info->location_city;
             if(isset($item_para->lable_info->location_district)) $update["location_district"] = $item_para->lable_info->location_district;
-            if(isset($item_para->lable_info->recording_address)) $update["recording_address"] = $item_para->lable_info->recording_address;
         }
+        if(isset($item_para->recording_address)) $update["recording_address"] = $item_para->recording_address;
         if(isset($item_para->dialog_content)) $update["dialog_content"] = json_encode($item_para->dialog_content);
 
 
