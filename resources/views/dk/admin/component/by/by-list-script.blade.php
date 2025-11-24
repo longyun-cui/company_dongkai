@@ -28,6 +28,7 @@
 
 
 
+
         // 【预处理】提交
         $(".main-content").on('click', ".by-item-preprocess-submit", function() {
             var $that = $(this);
@@ -91,6 +92,8 @@
         });
 
 
+
+
         // 【获取】内容详情
         $(".main-content").on('click', ".by-modal-show-for-item-detail", function() {
             var $that = $(this);
@@ -146,7 +149,7 @@
 
 
         // 【获取】内容详情-审核
-        $(".main-content").on('click', ".by-modal-show-for-item-detail-inspected", function() {
+        $(".main-content").on('click', ".by-modal-show-for-item-inspected", function() {
             var $that = $(this);
             var $row = $that.parents('tr');
             var $datatable_wrapper = $that.closest('.datatable-wrapper');
@@ -167,19 +170,22 @@
             $('.info-detail-title').html($that.attr('data-id'));
             $('.info-set-title').html($that.attr('data-id'));
 
-            var $modal = $('#modal-body-for-detail-inspected');
+            var $modal = $('#by-modal-body-for-item-inspected');
             $modal.attr('data-datatable-id',$table_id);
 
-            $modal.find('.item-detail-project .item-detail-text').html($row.find('td[data-key=project_id]').attr('data-option-name'));
-            $modal.find('.item-detail-client .item-detail-text').html($row.find('td[data-key=client_name]').attr('data-value'));
-            $modal.find('.item-detail-phone .item-detail-text').html($row.find('td[data-key=client_phone]').attr('data-value'));
-            $modal.find('.item-detail-is-wx .item-detail-text').html($row.find('td[data-key=is_wx]').html());
-            $modal.find('.item-detail-wx-id .item-detail-text').html($row.find('td[data-key=wx_id]').attr('data-value'));
-            $modal.find('.item-detail-city-district .item-detail-text').html($row.find('td[data-key=location_city]').html());
-            $modal.find('.item-detail-teeth-count .item-detail-text').html($row.find('td[data-key=teeth_count]').html());
-            $modal.find('.item-detail-description .item-detail-text').html($row.find('td[data-key=description]').attr('data-value'));
-            $modal.find('.item-detail-recording .item-detail-text').html('');
-            $modal.find('.item-detail-recording .item-detail-text').html($row.find('[data-key="description"]').attr('data-recording-address'));
+            var $item_info = $row.find('td[data-key=item_info]');
+            var $client_name = $item_info.data('client-name');
+            var $client_phone = $item_info.data('client-phone');
+            var $is_wx = $item_info.data('is-wx');
+
+            $modal.find('.item-inspected-client .item-detail-text').html($client_name + " - " + $client_phone);
+            // $modal.find('.item-inspected-client-name .item-detail-text').html($row.find('td[data-key=client_name]').attr('data-value'));
+            // $modal.find('.item-inspected-client-phone .item-detail-text').html($row.find('td[data-key=client_phone]').attr('data-value'));
+            $modal.find('.item-inspected-is-wx .item-detail-text').html($row.find('td[data-key=is_wx]').html());
+            $modal.find('.item-inspected-city-district .item-detail-text').html($row.find('td[data-key=location_city]').html());
+            $modal.find('.item-inspected-teeth-count .item-detail-text').html($row.find('td[data-key=teeth_count]').html());
+            $modal.find('.item-inspected-recording .item-detail-text').html('');
+            $modal.find('.item-inspected-recording .item-detail-text').html($row.find('[data-key="item_info"]').attr('data-recording-address'));
 
 
             var $inspected_result = $row.find('td[data-key=inspected_result]').attr('data-value');
@@ -200,39 +206,70 @@
 
         });
         // 【取消】内容详情-审核
-        $(".main-content").on('click', ".by-modal-cancel-for-item-detail-inspected", function() {
+        $(".main-content").on('click', ".by-modal-cancel-for-item-inspected", function() {
             var that = $(this);
-            var $modal = $('#modal-body-for-detail-inspected');
-            $modal.find('select[name="detail-inspected-result"]').prop("checked", false);
-            $modal.find('select[name="detail-inspected-result"]').find('option').attr("selected",false);
-            $modal.find('select[name="detail-inspected-result"]').find('option[value="-1"]').attr("selected",true);
-            $modal.find('textarea[name="detail-inspected-description"]').val('');
+            var $modal = $('#by-modal-body-for-item-inspected');
+            $modal.find('select[name="item-inspected-result"]').prop("checked", false);
+            $modal.find('select[name="item-inspected-result"]').find('option').attr("selected",false);
+            $modal.find('select[name="item-inspected-result"]').find('option[value="-1"]').attr("selected",true);
+            $modal.find('textarea[name="item-inspected-description"]').val('');
             $modal.modal('hide').on("hidden.bs.modal", function () {
                 $("body").addClass("modal-open");
             });
         });
         // 【提交】内容详情-审核
-        $(".main-content").on('click', ".by-modal-summit-for-item-detail-inspected", function() {
+        $(".main-content").on('click', ".by-modal-summit-for-item-inspected", function() {
             var $that = $(this);
-            var $modal = $('#modal-body-for-detail-inspected');
+            var $modal = $('#by-modal-body-for-item-inspected');
             var $table_id = $modal.attr('data-datatable-id');
             var $table = $('#'+$table_id);
 
-            var $id = $('input[name="detail-inspected-by-id"]').val();
-            var $inspected_result = $('select[name="detail-inspected-result"]').val();
-            var $inspected_description = $('textarea[name="detail-inspected-description"]').val();
-            var $recording_quality = $('input[name="recording-quality"]:checked').val();
+            var $id = $('input[name="item-inspected-by-id"]').val();
+            var $inspected_result = $('select[name="item-inspected-result"]').val();
+            var $inspected_description = $('textarea[name="item-inspected-description"]').val();
+            var $recording_quality = $('input[name="item-inspected-recording-quality"]:checked').val();
             // console.log($recording_quality);
 
+            //
             $.post(
-                "{{ url('/v1/operate/order/item-inspect') }}",
+                "{{ url('/v1/operate/by/item-inspect') }}",
                 {
                     _token: $('meta[name="_token"]').attr('content'),
                     operate: "by-inspect",
-                    item_id: $('input[name="detail-inspected-by-id"]').val(),
-                    inspected_result: $('select[name="detail-inspected-result"]').val(),
-                    inspected_description: $('textarea[name="detail-inspected-description"]').val(),
+                    item_id: $('input[name="item-inspected-by-id"]').val(),
+                    inspected_result: $('select[name="item-inspected-result"]').val(),
+                    inspected_description: $('textarea[name="item-inspected-description"]').val(),
                     recording_quality: $('input[name="recording-quality"]:checked').val()
+                },
+                'json'
+            )
+                .done(function($response, status, jqXHR) {
+                    console.log('done');
+                    $response = JSON.parse($response);
+                    if(!$response.success)
+                    {
+                        if($response.msg) layer.msg($response.msg);
+                    }
+                    else
+                    {
+                        $($table).DataTable().ajax.reload(null,false);
+                    }
+                })
+                .fail(function(jqXHR, status, error) {
+                    console.log('fail');
+                    layer.msg('服务器错误！');
+
+                })
+                .always(function(jqXHR, status) {
+                    console.log('always');
+                    layer.closeAll('loading');
+                });
+
+
+
+            $.post(
+                "{{ url('/v1/operate/by/item-inspect') }}",
+                {
                 },
                 function(data){
                     // layer.close(index);

@@ -461,29 +461,6 @@
             @endif
 
 
-            {{--百应AI--}}
-            @if(in_array($me->user_type,[0,1]))
-            <li class="treeview _none-">
-                <a class="tab-control datatable-control"
-                   data-type="create"
-                   data-unique="y"
-                   data-id="by-list"
-                   data-title='<i class="fa fa-link text-red"></i> 百应AI'
-                   data-content=''
-
-                   data-datatable-type="create"
-                   data-datatable-unique="y"
-                   data-datatable-id="datatable-by-list"
-                   data-datatable-target="by-list"
-                   data-datatable-clone-object="by-list-clone"
-                >
-                    <i class="fa fa-link text-red"></i>
-                    <span>百应AI</span>
-                </a>
-            </li>
-            @endif
-
-
             {{--工单列表--}}
             <li class="treeview _none-">
                 <a class="tab-control datatable-control"
@@ -607,6 +584,29 @@
                     <span>奢侈品•交付</span>
                 </a>
             </li>
+            @endif
+
+
+            {{--百应AI--}}
+            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
+                <li class="treeview _none-">
+                    <a class="tab-control datatable-control"
+                       data-type="create"
+                       data-unique="y"
+                       data-id="by-list"
+                       data-title='<i class="fa fa-link text-red"></i> 百应AI'
+                       data-content=''
+
+                       data-datatable-type="create"
+                       data-datatable-unique="y"
+                       data-datatable-id="datatable-by-list"
+                       data-datatable-target="by-list"
+                       data-datatable-clone-object="by-list-clone"
+                    >
+                        <i class="fa fa-link text-red"></i>
+                        <span>百应AI</span>
+                    </a>
+                </li>
             @endif
 
 

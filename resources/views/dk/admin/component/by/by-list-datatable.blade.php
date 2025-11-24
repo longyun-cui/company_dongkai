@@ -80,6 +80,23 @@
                     "data": null,
                     "width": "60px",
                     "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(true)
+                        {
+                            $(nTd).addClass('item_info');
+                            $(nTd).attr('data-id',row.id);
+                            $(nTd).attr('data-name','item_info');
+                            $(nTd).attr('data-key','item_info');
+                            $(nTd).attr('data-value',row.id);
+                            $(nTd).data('client-name',row.client_name);
+                            $(nTd).data('client-phone',row.client_phone);
+                            $(nTd).data('client-intention',row.client_intention);
+                            $(nTd).data('recording-address',row.recording_address);
+                            $(nTd).data('location-city',row.location_city);
+                            $(nTd).data('location-district',row.location_district);
+                            $(nTd).data('is-wx',row.location_district);
+                        }
+                    },
                     render: function(data, type, row, meta) {
                         return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+row.id+'"></label>';
                     }
@@ -530,11 +547,8 @@
                     "orderable": false,
                     render: function(data, type, row, meta) {
 
-                        var $html_edit = '';
                         var $html_detail = '';
                         var $html_record = '';
-                        var $html_publish = '';
-                        var $html_inspected = '';
                         var $html_detail_inspected = '';
                         var $html_preprocess = '';
 
@@ -543,56 +557,31 @@
                             $html_preprocess = '<a class="btn btn-xs bg-aqua by-item-preprocess-submit" data-id="'+data+'">预处理</a>';
                         }
 
-//                            if(row.is_me == 1 && row.item_active == 0)
-                        if(row.is_published == 0)
+                        $html_detail = '<a class="btn btn-xs item-modal-show-for-detail" data-id="'+data+'">详情</a>';
+                        $html_record = '<a class="btn btn-xs item-modal-show-for-operation-record" data-id="'+data+'">记录</a>';
+
+                        $html_detail_inspected = '<a class="btn btn-xs bg-default disabled">审核</a>';
+
+                        // 审核
+                        if("{{ in_array($me->user_type,[0,1,11,61,66,71,77]) }}")
                         {
-                            $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-operation-record" data-id="'+data+'">记录</a>';
-                        }
-                        else
-                        {
-                            $html_detail = '<a class="btn btn-xs bg-primary item-modal-show-for-detail" data-id="'+data+'">详情</a>';
-                            $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-operation-record" data-id="'+data+'">记录</a>';
-
-
-
-
-                            // 审核
-                            if("{{ in_array($me->user_type,[0,1,11,61,66,71,77]) }}")
+                            if(row.inspector_id == 0)
                             {
-                                if(row.created_type == 9)
-                                {
-                                    $html_inspected = '<a class="btn btn-xs bg-default disabled">审核</a>';
-                                    $html_detail_inspected = '<a class="btn btn-xs bg-default disabled">审核</a>';
-                                }
-                                else
-                                {
-                                    if(row.inspector_id == 0)
-                                    {
-                                        $html_inspected = '<a class="btn btn-xs bg-teal item-inspect-submit" data-id="'+data+'">审核</a>';
-                                        $html_detail_inspected = '<a class="btn btn-xs bg-teal item-modal-show-for-detail-inspected" data-id="'+data+'">审核</a>';
-                                    }
-                                    else
-                                    {
-                                        // $html_inspected = '<a class="btn btn-xs bg-aqua-gradient disabled">已审</a>';
-                                        $html_inspected = '<a class="btn btn-xs bg-blue item-inspect-submit" data-id="'+data+'">再审</a>';
-                                        $html_detail_inspected = '<a class="btn btn-xs bg-blue item-modal-show-for-detail-inspected" data-id="'+data+'">再审</a>';
-                                    }
-                                }
-                                $html_edit = '';
-                                $html_publish = '';
+                                $html_detail_inspected = '<a class="btn btn-xs bg-teal by-modal-show-for-item-inspected" data-id="'+data+'">审核</a>';
                             }
-
-
-
+                            else
+                            {
+                                $html_detail_inspected = '<a class="btn btn-xs bg-blue by-modal-show-for-item-inspected" data-id="'+data+'">再审</a>';
+                            }
                         }
+
 
 
                         var $html =
-                            $html_edit+
-                            $html_publish+
+                            // $html_detail+
                             $html_preprocess+
-                            $html_detail_inspected+
-                            $html_record+
+                            // $html_detail_inspected+
+                            // $html_record+
                             '';
                         return $html;
 
