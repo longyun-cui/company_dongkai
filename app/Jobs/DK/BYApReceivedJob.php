@@ -39,7 +39,7 @@ class BYApReceivedJob implements ShouldQueue
     public function __construct($by_id)
     {
         //
-        $this->$by_id = $by_id;
+        $this->by_id = $by_id;
     }
 
     /**
@@ -53,10 +53,10 @@ class BYApReceivedJob implements ShouldQueue
         $item = DK_API_BY_Received::find($by_id);
         if($item)
         {
-            if($item->api_status > 0)
-            {
-                return ;
-            }
+//            if($item->api_status > 0)
+//            {
+//                return ;
+//            }
 
             $item_content = $item->content;
             $item_para = json_decode($item_content);
@@ -70,7 +70,7 @@ class BYApReceivedJob implements ShouldQueue
             else
             {
                 $client_phone = '';
-                return response_error([],"电话为空！");
+                return ;
             }
             if(isset($item_para->client_intention)) $update["client_intention"] = $item_para->client_intention;
             if(isset($item_para->lable_info))

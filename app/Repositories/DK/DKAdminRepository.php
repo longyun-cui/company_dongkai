@@ -39891,7 +39891,7 @@ EOF;
 
             DB::commit();
 
-//            BYApReceivedJob::dispatch($mine->id);
+            BYApReceivedJob::dispatch($mine->id);
 
             return response('success');
         }
@@ -40146,7 +40146,7 @@ EOF;
 
     }
 
-    // 【工单-管理】发布
+    // 【工单-管理】预处理
     public function v1_operate_for_by_item_preprocess($post_data)
     {
         $messages = [
@@ -40178,6 +40178,9 @@ EOF;
         {
             return response_error([],"该【工单】已经处理过了！");
         }
+
+//        BYApReceivedJob::dispatch($id);
+//        return response_success([],"预处理完成!");
 
         $this->get_me();
         $me = $this->me;
