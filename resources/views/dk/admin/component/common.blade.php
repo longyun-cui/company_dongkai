@@ -912,7 +912,7 @@
                     <div class="form-group item-detail-project">
                         <label class="control-label col-md-2">项目</label>
                         <div class="col-md-8 ">
-                            <select class="form-control select2-box-c select2-project" name="project_id" id="by-item-inspected-select2-project" data-item-category="1" style="width:100%;">
+                            <select class="form-control select2-box-c select2-project" name="by_project_id" id="by-item-inspected-select2-project" data-item-category="1" style="width:100%;">
                                 <option data-id="-1" value="-1">选择项目</option>
                             </select>
                         </div>
@@ -923,7 +923,7 @@
                         <label class="control-label col-md-2"><sup class="text-red">*</sup> 所在城市</label>
                         <div class="col-md-8 ">
                             <div class="col-sm-6 col-md-6 padding-0">
-                                <select class="form-control modal-select2 select2-reset select2-district-city" name="location_city" id="select-city-5" data-target="#select-district-5" style="width:100%;">
+                                <select class="form-control modal-select2 select2-district-city" name="by_location_city" id="select-city-5" data-target="#select-district-5" style="width:100%;">
                                     <option value="">选择城市</option>
                                     @if(!empty($district_city_list) && count($district_city_list) > 0)
                                         @foreach($district_city_list as $v)
@@ -933,7 +933,7 @@
                                 </select>
                             </div>
                             <div class="col-sm-6 col-md-6 padding-0">
-                                <select class="form-control modal-select2 select2-reset select2-district-district" name="location_district" id="select-district-5" data-target="#select-city-5" style="width:100%;">
+                                <select class="form-control modal-select2 select2-district-district" name="by_location_district" id="select-district-5" data-target="#select-city-5" style="width:100%;">
                                     <option value="">选择区域</option>
                                 </select>
                             </div>
@@ -943,7 +943,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-2">审核结果</label>
                         <div class="col-md-8 ">
-                            <select class="form-control select-select2-" name="by-item-inspected-result" id="" style="width:100%;">
+                            <select class="form-control modal-select2" name="by-item-inspected-result" id="" style="width:100%;">
                                 <option value="-1">选择审核结果</option>
                                 @foreach(config('info.by_inspected_result') as $v)
                                     <option value ="{{ $v }}">{{ $v }}</option>

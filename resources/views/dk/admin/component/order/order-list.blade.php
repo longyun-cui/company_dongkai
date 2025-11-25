@@ -91,7 +91,7 @@
                 @endforeach
             </select>
             {{--录音质量--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
+            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77,81,84,88]))
                 <select class="search-filter form-filter filter-md select2-box-c" name="order-recording-quality">
                     <option value="-1">录音质量</option>
                     <option value="0">合格</option>

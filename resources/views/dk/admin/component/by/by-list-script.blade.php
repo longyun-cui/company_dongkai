@@ -148,7 +148,7 @@
         });
 
 
-        // 【获取】内容详情-审核
+        // 【获取】审核
         $(".main-content").on('click', ".by-modal-show-for-item-inspected", function() {
             var $that = $(this);
             var $row = $that.parents('tr');
@@ -201,6 +201,15 @@
             // console.log($inspected_description);
             $modal.find('textarea[name="detail-inspected-description"]').val('');
             $modal.find('textarea[name="detail-inspected-description"]').val($inspected_description);
+
+
+
+            $modal.find('.modal-select2').select2({
+                dropdownParent: $('#by-modal-body-for-item-inspected'), // 替换为你的模态框 ID
+                minimumInputLength: 0,
+                width: '100%',
+                theme: 'classic'
+            });
 
             $modal.modal('show');
 
