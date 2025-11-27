@@ -26,8 +26,8 @@
             $modal.find('.radio-btn').show();
             $modal.modal('show');
 
-            $('.modal-select2').select2({
-                dropdownParent: $('#'+$modal_id), // 替换为你的模态框 ID
+            $('#'+$modal_id).find('.modal-select2').select2({
+                dropdownParent: $('#'+$modal_id).find('.modal-content'), // 替换为你的模态框 ID
                 minimumInputLength: 0,
                 width: '100%',
                 theme: 'classic'

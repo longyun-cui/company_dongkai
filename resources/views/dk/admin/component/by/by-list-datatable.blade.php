@@ -7,7 +7,7 @@
         let $datatable_wrapper = $that.parents('.datatable-wrapper');
         let $tableSearch = $datatable_wrapper.find('.datatable-search-box');
 
-        var table = $($tableId).DataTable({
+        $($tableId).DataTable({
             "aLengthMenu": [[10, 50, 100, 200], ["10", "50", "100", "200"]],
             "processing": true,
             "serverSide": true,
@@ -600,9 +600,5 @@
             },
             "language": { url: '/common/dataTableI18n' },
         });
-
-        window.dataTableInstances[table_Id] = table;
-
-        return table;
     }
 </script>

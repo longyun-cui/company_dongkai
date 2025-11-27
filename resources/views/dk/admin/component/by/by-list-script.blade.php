@@ -148,6 +148,91 @@
         });
 
 
+
+
+
+
+        $(".main-content").on('click', ".by-modal-show-for-item-inspected1", function() {
+            var $modal = $('#by-modal-body-for-item-inspected');
+            var $modalContent = $modal.find('.modal-content');
+
+            // 先显示模态框
+            $modal.modal('show');
+
+            // 确保模态框完全显示后再初始化
+            $modal.one('shown.bs.modal', function() {
+                // 1. 解决多个select2只初始化第一个的问题：遍历所有元素
+                $modal.find('.modal-select2').each(function() {
+                    var $select = $(this);
+
+                    // 避免重复初始化
+                    if ($select.hasClass('select2-hidden-accessible')) {
+                        $select.select2('destroy');
+                    }
+
+                    // 初始化每个select2
+                    $select.select2({
+                        dropdownParent: $modalContent, // 解决失焦问题
+                        minimumInputLength: 0,
+                        width: '100%',
+                        theme: 'classic',
+                        dropdownCssClass: 'modal-select2-dropdown' // 用于自定义样式
+                    });
+                });
+
+                // 2. 解决滚动问题：添加下拉框打开时的处理
+                $modal.find('.modal-select2').on('select2:open', function() {
+                    var $dropdown = $('.select2-container--open');
+                    if ($dropdown.length) {
+                        // 设置z-index确保下拉框在模态框上方
+                        $dropdown.css('z-index', '9999');
+
+                        // 限制下拉框最大高度避免滚动问题
+                        var $results = $dropdown.find('.select2-results');
+                        $results.css('max-height', '200px');
+                        $results.css('overflow-y', 'auto');
+                    }
+                });
+            });
+
+            // 模态框关闭时清理
+            $modal.on('hidden.bs.modal', function() {
+                $modal.find('.modal-select2').each(function() {
+                    if ($(this).hasClass('select2-hidden-accessible')) {
+                        $(this).select2('destroy');
+                    }
+                });
+                // 移除事件绑定
+                $modal.find('.modal-select2').off('select2:open');
+            });
+        });
+        $(".main-content").on('click', ".by-modal-show-for-item-inspected2", function() {
+            var $modal = $('#by-modal-body-for-item-inspected');
+
+            // 先显示模态框
+            $modal.modal('show');
+
+            // 确保在模态框完全显示后初始化select2
+            $modal.off('shown.bs.modal').on('shown.bs.modal', function() {
+                // 给浏览器一点时间完成渲染
+                setTimeout(function() {
+                    initializeSelect2InModal($modal);
+                }, 100);
+            });
+        });
+        // 模态框关闭时清理
+        $('#by-modal-body-for-item-inspected1').on('hidden.bs.modal', function() {
+            $(this).find('.modal-select2').each(function() {
+                var $select = $(this);
+                if ($select.data('select2')) {
+                    $select.select2('destroy');
+                }
+            });
+        });
+
+
+
+
         // 【获取】审核
         $(".main-content").on('click', ".by-modal-show-for-item-inspected", function() {
             var $that = $(this);
@@ -171,6 +256,7 @@
             $('.info-set-title').html($that.attr('data-id'));
 
             var $modal = $('#by-modal-body-for-item-inspected');
+            var $modalContent = $modal.find('.modal-content');
             $modal.attr('data-datatable-id',$table_id);
 
             var $item_info = $row.find('td[data-key=item_info]');
@@ -204,195 +290,20 @@
             $modal.find('textarea[name="detail-inspected-description"]').val($inspected_description);
 
 
-            // 先显示模态框
-            $modal.modal('show');
-
-            $modal.off('shown.bs.modal.select2-init').on('shown.bs.modal.select2-init', function() {
-                console.log('模态框显示完成，开始初始化 Select2');
-
-                // 确保模态框完全渲染
-                setTimeout(function() {
-                    // 分别初始化每个 Select2 元素
-                    $modal.find('.modal-select2').each(function(index) {
-                        var $select = $(this);
-                        console.log('初始化 Select2 #' + index, $select.attr('id') || $select.attr('name'));
-
-                        // 如果已经初始化过，先销毁并清理
-                        if ($select.hasClass('select2-hidden-accessible')) {
-                            $select.select2('destroy');
-                            // 清理 Select2 生成的 DOM 元素
-                            $select.next('.select2-container').remove();
-                            $select.removeClass('select2-hidden-accessible');
-                            $select.show();
-                            console.log('已销毁旧的 Select2 实例 #' + index);
-                        }
-
-                        // 确保 dropdownParent 元素存在且可见
-                        var $dropdownParent = $modal.find('.modal-content');
-                        if ($dropdownParent.length === 0) {
-                            console.warn('未找到 .modal-content，使用模态框作为 dropdownParent');
-                            $dropdownParent = $modal;
-                        }
-
-                        // 检查元素是否可见
-                        if (!$dropdownParent.is(':visible')) {
-                            console.warn('dropdownParent 不可见，延迟初始化');
-                            setTimeout(function() {
-                                initializeSingleSelect2($select, $dropdownParent);
-                            }, 100);
-                            return;
-                        }
-
-                        initializeSingleSelect2($select, $dropdownParent);
-                    });
-                }, 50);
-            }).trigger('shown.bs.modal.select2-init');
-
-
-
-            // // 使用 on 而不是 one，但添加命名空间避免重复绑定
-            // $modal.off('shown.bs.modal.select2-init').on('shown.bs.modal.select2-init', function() {
-            //     console.log('模态框显示完成，开始初始化 Select2');
-            //
-            //     // 分别初始化每个 Select2 元素
-            //     $modal.find('.modal-select2').each(function(index) {
-            //         var $select = $(this);
-            //         console.log('初始化 Select2 #' + index, $select.attr('id') || $select.attr('name'));
-            //
-            //         // 如果已经初始化过，先销毁
-            //         if ($select.hasClass('select2-hidden-accessible')) {
-            //             $select.select2('destroy');
-            //             console.log('已销毁旧的 Select2 实例 #' + index);
-            //         }
-            //
-            //         // 初始化 Select2
-            //         $select.select2({
-            //             dropdownParent: $modal.find('.modal-content'),
-            //             minimumInputLength: 0,
-            //             width: '100%',
-            //             theme: 'classic'
-            //         });
-            //
-            //         console.log('Select2 初始化完成 #' + index);
-            //     });
-            // }).trigger('shown.bs.modal.select2-init'); // 手动触发事件
-
-
-            // // 使用 on 而不是 one，但添加命名空间避免重复绑定
-            // $modal.off('shown.bs.modal.select2-init').on('shown.bs.modal.select2-init', function() {
-            //     console.log('模态框显示完成，开始初始化 Select2');
-            //
-            //     // 分别初始化每个 Select2 元素
-            //     $modal.find('.modal-select2').each(function(index) {
-            //         var $select = $(this);
-            //         console.log('初始化 Select2 #' + index, $select.attr('id') || $select.attr('name'));
-            //
-            //         // 如果已经初始化过，先销毁
-            //         if ($select.hasClass('select2-hidden-accessible')) {
-            //             $select.select2('destroy');
-            //             console.log('已销毁旧的 Select2 实例 #' + index);
-            //         }
-            //
-            //         // 初始化 Select2
-            //         $select.select2({
-            //             dropdownParent: $modal.find('.modal-content'),
-            //             minimumInputLength: 0,
-            //             width: '100%',
-            //             theme: 'classic'
-            //         });
-            //
-            //         console.log('Select2 初始化完成 #' + index);
-            //     });
-            //
-            //     // 添加滚动监听来更新 Select2 位置
-            //     enableSelect2ScrollFollow($modal);
-            // }).trigger('shown.bs.modal.select2-init'); // 手动触发事件
-            //
-            // // 模态框关闭时清理
-            // $modal.on('hidden.bs.modal', function() {
-            //     var $modalContent = $(this).find('.modal-content');
-            //     $modalContent.off('scroll.select2-follow');
-            //     $(window).off('resize.select2-follow');
-            // });
-
-
-            // // 先显示模态框，然后在模态框完全显示后初始化 Select2
-            // $modal.modal('show');
-            //
-            // // 使用 one() 确保只绑定一次
-            // $modal.one('shown.bs.modal', function() {
-            //     // 先销毁已存在的 Select2 实例
-            //     $modal.find('.modal-select2').select2('destroy');
-            //
-            //     // 重新初始化 Select2
-            //     $modal.find('.modal-select2').select2({
-            //         dropdownParent: $modal,
-            //         minimumInputLength: 0,
-            //         width: '100%',
-            //         theme: 'classic'
-            //     });
-            // });
-
-            // $modal.find('.modal-select2').select2({
-            //     dropdownParent: $modal.find('.modal-content'), // 替换为你的模态框 ID
-            //     minimumInputLength: 0,
-            //     width: '100%',
-            //     theme: 'classic'
-            // });
-            // $modal.find('.modal-select2').each(function() {
-            //     var $select = $(this);
-            //     // 初始化 Select2
-            //     $select.select2({
-            //         dropdownParent: $modal,
-            //         minimumInputLength: 0,
-            //         width: '100%',
-            //         theme: 'classic'
-            //     });
-            // });
-
-            // $modal.modal('show');
-
-            // // 确保模态框事件只绑定一次
-            // $modal.off('shown.bs.modal.initSelect2').on('shown.bs.modal.initSelect2', function() {
-            //     // 延迟初始化以确保 DOM 完全渲染
-            //     setTimeout(function() {
-            //         $modal.find('.modal-select2').each(function() {
-            //             var $select = $(this);
-            //
-            //             // 如果已经初始化过，先销毁
-            //             if ($select.hasClass('select2-hidden-accessible')) {
-            //                 $select.select2('destroy');
-            //             }
-            //
-            //             // 初始化 Select2
-            //             $select.select2({
-            //                 dropdownParent: $modal,
-            //                 minimumInputLength: 0,
-            //                 width: '100%',
-            //                 theme: 'classic'
-            //             });
-            //         });
-            //     }, 100);
-            // });
-            //
-            // // 显示模态框
-            // $modal.modal('show');
-
-        });
-        // 模态框关闭时清理
-        $('.main-content').on('hidden.bs.modal', ".by-modal-cancel-for-item-inspected", function() {
-            var $modal = $(this);
-            console.log('模态框关闭，清理 Select2');
-
             $modal.find('.modal-select2').each(function() {
                 var $select = $(this);
-                if ($select.hasClass('select2-hidden-accessible')) {
-                    $select.select2('destroy');
-                }
+                // 初始化 Select2
+                $select.select2({
+                    dropdownParent: $modal.find('.modal-content'),
+                    minimumInputLength: 0,
+                    width: '100%',
+                    theme: 'classic'
+                });
             });
 
-            // 移除事件绑定
-            $modal.off('shown.bs.modal.select2-init');
+            $modal.modal('show');
+
+
         });
         // 【取消】内容详情-审核
         $(".main-content").on('click', ".by-modal-cancel-for-item-inspected", function() {
@@ -638,6 +549,45 @@
                 });
             }, 100);
         }
+    }
+
+    function initializeSelect2InModal($modal) {
+        var $modalContent = $modal.find('.modal-content');
+
+        // 销毁已存在的select2实例
+        $modal.find('.modal-select2').each(function() {
+            var $select = $(this);
+            if ($select.data('select2')) {
+                $select.select2('destroy');
+            }
+        });
+
+        // 初始化所有select2元素
+        $modal.find('.modal-select2').each(function() {
+            var $select = $(this);
+
+            $select.select2({
+                dropdownParent: $modalContent,
+                minimumInputLength: 0,
+                width: '100%',
+                theme: 'classic',
+                dropdownCssClass: 'modal-select2-dropdown'
+            });
+        });
+
+        // 处理下拉框打开事件
+        $modal.find('.modal-select2').on('select2:open', function(e) {
+            // 延迟处理，确保下拉框已创建
+            setTimeout(function() {
+                var $dropdown = $('.select2-container--open .select2-dropdown');
+                if ($dropdown.length) {
+                    $dropdown.css({
+                        'z-index': 9999,
+                        'position': 'fixed'
+                    });
+                }
+            }, 10);
+        });
     }
 
 

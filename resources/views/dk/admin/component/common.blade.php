@@ -170,7 +170,7 @@
 
 {{--审核--}}
 <div class="modal fade modal-main-body modal-wrapper" id="modal-body-for-detail-inspected">
-    <div class="col-md-8 col-md-offset-2 margin-top-16px margin-bottom-64px bg-white" id="">
+    <div class="modal-content col-md-8 col-md-offset-2 margin-top-16px margin-bottom-64px bg-white" id="">
 
         <div class="box- box-info- form-container">
 
@@ -363,7 +363,7 @@
 
 {{--申诉--}}
 <div class="modal fade modal-main-body modal-wrapper" id="modal-body-for-detail-appealed">
-    <div class="col-md-8 col-md-offset-2 margin-top-16px margin-bottom-64px bg-white" id="">
+    <div class="modal-content col-md-8 col-md-offset-2 margin-top-16px margin-bottom-64px bg-white" id="">
 
         <div class="box- box-info- form-container">
 
@@ -477,7 +477,7 @@
 
 {{--申诉处理--}}
 <div class="modal fade modal-main-body modal-wrapper" id="modal-body-for-detail-appealed-handled">
-    <div class="col-md-8 col-md-offset-2 margin-top-16px margin-bottom-64px bg-white" id="">
+    <div class="modal-content col-md-8 col-md-offset-2 margin-top-16px margin-bottom-64px bg-white" id="">
 
         <div class="box- box-info- form-container">
 
@@ -610,7 +610,7 @@
 
 {{--交付-deliver--}}
 <div class="modal fade modal-main-body modal-wrapper" id="modal-body-for-deliver-set">
-    <div class="col-md-6 col-md-offset-3 margin-top-16px margin-bottom-64px bg-white">
+    <div class="modal-content col-md-6 col-md-offset-3 margin-top-16px margin-bottom-64px bg-white">
 
         <div class="box- box-info- form-container">
 
@@ -732,7 +732,7 @@
 
 {{--分发-distribute--}}
 <div class="modal fade modal-main-body modal-wrapper" id="modal-body-for-distribute-set">
-    <div class="col-md-6 col-md-offset-3 margin-top-16px margin-bottom-64px bg-white">
+    <div class="modal-content col-md-6 col-md-offset-3 margin-top-16px margin-bottom-64px bg-white">
 
         <div class="box- box-info- form-container">
 
@@ -820,7 +820,7 @@
 
 {{--【百应】审核--}}
 <div class="modal fade modal-main-body modal-wrapper" id="by-modal-body-for-item-inspected">
-    <div class="col-md-8 col-md-offset-2 margin-top-16px margin-bottom-64px bg-white" id="">
+    <div class="modal-content col-md-8 col-md-offset-2 margin-top-16px margin-bottom-64px bg-white" id="">
 
         <div class="box- box-info- form-container">
 

@@ -2509,7 +2509,7 @@
                     cache: true
                 },
                 escapeMarkup: function(markup) { return markup; },
-                dropdownParent: $modalWrapper, // 直接使用找到的模态框元素
+                dropdownParent: $modalWrapper.find('.modal-content'), // 直接使用找到的模态框元素
                 minimumInputLength: 0,
                 theme: 'classic'
             });

@@ -83,7 +83,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{ asset('/resource/component/css/lightcase-2.5.0.min.css') }}">
 
     {{--<link rel="stylesheet" href="https://cdn.bootcss.com/select2/4.0.5/css/select2.min.css">--}}
-    <link rel="stylesheet" href="{{ asset('/lib/css/select2-4.0.5.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/resource/component/css/select2-4.0.5.min.css') }}">
+    {{--<link rel="stylesheet" href="{{ asset('/resource/component/css/select2-4.0.13.min.css') }}">--}}
 
 
     <link rel="stylesheet" href="{{ asset('/resource/common/css/common.css') }}" media="all" />
@@ -206,6 +207,7 @@ desired effect
 
 {{--<script src="https://cdn.bootcss.com/select2/4.0.5/js/select2.min.js"></script>--}}
 <script src="{{ asset('/resource/component/js/select2-4.0.5.min.js') }}"></script>
+{{--<script src="{{ asset('/resource/component/js/select2-4.0.13.full.min.js') }}"></script>--}}
 
 {{--<script src="{{ asset('/resource/component/js/echarts-3.7.2.min.js') }}"></script>--}}
 <script src="{{ asset('/resource/component/js/echarts-5.4.1.min.js') }}"></script>

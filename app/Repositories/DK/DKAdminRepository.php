@@ -40653,6 +40653,7 @@ EOF;
                 $item->order_id = $order->id;
             }
 
+            $item->api_status = 9;
             $item->inspector_id = $me->id;
             $item->inspected_status = 9;
             $item->inspected_result = $inspected_result;
