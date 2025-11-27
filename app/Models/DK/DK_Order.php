@@ -31,6 +31,8 @@ class DK_Order extends Model
         'client_id',
         'item_id', 'menu_id',
 
+        'api_id',
+
         'api_staffNo',
         'call_record_id',
 

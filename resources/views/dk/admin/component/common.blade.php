@@ -1,6 +1,6 @@
 {{--显示-信息--}}
 <div class="modal fade modal-main-body modal-wrapper" id="modal-for-phone-pool-info">
-    <div class="modal-content col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
+    <div class="modal-content col-md-6 col-md-offset-3 margin-top-32 margin-bottom-64px bg-white">
 
         <div class="box- box-info- form-container">
 
@@ -97,7 +97,7 @@
 
 {{--修改-属性-信息--}}
 <div class="modal fade modal-main-body modal-wrapper" id="modal-for-field-set">
-    <div class="modal-content col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
+    <div class="modal-content col-md-6 col-md-offset-3 margin-top-64 margin-bottom-64px bg-white">
 
         <div class="box- box-info- form-container">
 
@@ -170,7 +170,7 @@
 
 {{--审核--}}
 <div class="modal fade modal-main-body modal-wrapper" id="modal-body-for-detail-inspected">
-    <div class="col-md-8 col-md-offset-2" id="" style="margin-top:32px;margin-bottom:32px;background:#fff;">
+    <div class="col-md-8 col-md-offset-2 margin-top-16px margin-bottom-64px bg-white" id="">
 
         <div class="box- box-info- form-container">
 
@@ -363,7 +363,7 @@
 
 {{--申诉--}}
 <div class="modal fade modal-main-body modal-wrapper" id="modal-body-for-detail-appealed">
-    <div class="col-md-8 col-md-offset-2" id="" style="margin-top:32px;margin-bottom:32px;background:#fff;">
+    <div class="col-md-8 col-md-offset-2 margin-top-16px margin-bottom-64px bg-white" id="">
 
         <div class="box- box-info- form-container">
 
@@ -477,7 +477,7 @@
 
 {{--申诉处理--}}
 <div class="modal fade modal-main-body modal-wrapper" id="modal-body-for-detail-appealed-handled">
-    <div class="col-md-8 col-md-offset-2" id="" style="margin-top:32px;margin-bottom:32px;background:#fff;">
+    <div class="col-md-8 col-md-offset-2 margin-top-16px margin-bottom-64px bg-white" id="">
 
         <div class="box- box-info- form-container">
 
@@ -610,7 +610,7 @@
 
 {{--交付-deliver--}}
 <div class="modal fade modal-main-body modal-wrapper" id="modal-body-for-deliver-set">
-    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
+    <div class="col-md-6 col-md-offset-3 margin-top-16px margin-bottom-64px bg-white">
 
         <div class="box- box-info- form-container">
 
@@ -732,7 +732,7 @@
 
 {{--分发-distribute--}}
 <div class="modal fade modal-main-body modal-wrapper" id="modal-body-for-distribute-set">
-    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
+    <div class="col-md-6 col-md-offset-3 margin-top-16px margin-bottom-64px bg-white">
 
         <div class="box- box-info- form-container">
 
@@ -820,7 +820,7 @@
 
 {{--【百应】审核--}}
 <div class="modal fade modal-main-body modal-wrapper" id="by-modal-body-for-item-inspected">
-    <div class="col-md-8 col-md-offset-2" id="" style="margin-top:32px;margin-bottom:32px;background:#fff;">
+    <div class="col-md-8 col-md-offset-2 margin-top-16px margin-bottom-64px bg-white" id="">
 
         <div class="box- box-info- form-container">
 
@@ -835,50 +835,50 @@
 
                     {{ csrf_field() }}
                     <input type="hidden" name="operate" value="by-item-inspect" readonly>
-                    <input type="hidden" name="by-item-inspected-by-id" value="0" readonly>
+                    <input type="hidden" name="by-inspected-item-id" value="0" readonly>
 
                     {{--客户--}}
                     <div class="form-group item-inspected-client">
                         <label class="control-label col-md-2">客户</label>
-                        <div class="col-md-8">
+                        <div class="col-md-9">
                             <span class="item-detail-text"></span>
                         </div>
                         <label class="col-md-2"></label>
                     </div>
                     {{--所在城市--}}
-                    <div class="form-group item-inspected-city-district">
-                        <label class="control-label col-md-2">所在城市</label>
-                        <div class="col-md-8 ">
-                            <span class="item-detail-text"></span>
-                        </div>
-                        <div class="col-md-2 item-detail-operate" data-operate=""></div>
-                    </div>
+{{--                    <div class="form-group item-inspected-city-district">--}}
+{{--                        <label class="control-label col-md-2">所在城市</label>--}}
+{{--                        <div class="col-md-8 ">--}}
+{{--                            <span class="item-detail-text"></span>--}}
+{{--                        </div>--}}
+{{--                        <div class="col-md-2 item-detail-operate" data-operate=""></div>--}}
+{{--                    </div>--}}
                     {{--牙齿数量--}}
                     <div class="form-group item-inspected-teeth-count">
                         <label class="control-label col-md-2">牙齿数量</label>
-                        <div class="col-md-8 ">
+                        <div class="col-md-9 ">
                             <span class="item-detail-text"></span>
                         </div>
                         <div class="col-md-2 item-detail-operate" data-operate=""></div>
                     </div>
                     {{--通话小结--}}
                     <div class="form-group item-inspected-description">
-                        <label class="control-label col-md-2">通话小结</label>
-                        <div class="col-md-8 control-label" style="text-align:left;">
+                        <label class="control-label col-md-2">对话</label>
+                        <div class="col-md-9 control-label" style="text-align:left;">
                             <span class="item-detail-text"></span>
                         </div>
                     </div>
                     {{--录音--}}
                     <div class="form-group item-inspected-recording">
                         <label class="control-label col-md-2">通话录音</label>
-                        <div class="col-md-8 control-label" style="text-align:left;">
+                        <div class="col-md-9 control-label" style="text-align:left;">
                             <span class="item-detail-text"></span>
                         </div>
                     </div>
                     {{--播放速度--}}
                     <div class="form-group">
                         <label class="control-label col-md-2">播放速度</label>
-                        <div class="col-md-8 ">
+                        <div class="col-md-9 ">
                             <div class="btn-group">
                                 <button type="button" class="btn">
                                     <span class="radio">
@@ -908,10 +908,17 @@
                             </div>
                         </div>
                     </div>
+                    {{--客户信息--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户信息</label>
+                        <div class="col-md-9 ">
+                            <input type="text" class="form-control" name="by_client_name" placeholder="客户姓名" value="" data-default="">
+                        </div>
+                    </div>
                     {{--项目--}}
                     <div class="form-group item-detail-project">
-                        <label class="control-label col-md-2">项目</label>
-                        <div class="col-md-8 ">
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 项目</label>
+                        <div class="col-md-9 ">
                             <select class="form-control select2-box-c select2-project" name="by_project_id" id="by-item-inspected-select2-project" data-item-category="1" style="width:100%;">
                                 <option data-id="-1" value="-1">选择项目</option>
                             </select>
@@ -921,9 +928,9 @@
                     {{--所在城市--}}
                     <div class="form-group">
                         <label class="control-label col-md-2"><sup class="text-red">*</sup> 所在城市</label>
-                        <div class="col-md-8 ">
+                        <div class="col-md-9 ">
                             <div class="col-sm-6 col-md-6 padding-0">
-                                <select class="form-control modal-select2 select2-district-city" name="by_location_city" id="select-city-5" data-target="#select-district-5" style="width:100%;">
+                                <select class="form-control modal-select2 select2-district-city" name="by_location_city" id="by-select-city-5" data-target="#by-select-district-5" style="width:100%;">
                                     <option value="">选择城市</option>
                                     @if(!empty($district_city_list) && count($district_city_list) > 0)
                                         @foreach($district_city_list as $v)
@@ -933,28 +940,76 @@
                                 </select>
                             </div>
                             <div class="col-sm-6 col-md-6 padding-0">
-                                <select class="form-control modal-select2 select2-district-district" name="by_location_district" id="select-district-5" data-target="#select-city-5" style="width:100%;">
+                                <select class="form-control modal-select2 select2-district-district" name="by_location_district" id="by-select-district-5" data-target="#by-select-city-5" style="width:100%;">
                                     <option value="">选择区域</option>
                                 </select>
                             </div>
                         </div>
                     </div>
+                    {{--患者类型--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 患者类型&牙齿数量</label>
+                        <div class="col-md-9 ">
+                            <div class="col-sm-6 col-md-6 padding-0">
+                                <select class="form-control modal-select2" name="by_client_type" id="" style="width:100%;">
+                                    <option value="">选择患者类型</option>
+                                    @foreach(config('info.client_type') as $k => $v)
+                                        <option value ="{{ $k }}">{{ $v }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-sm-6 col-md-6 padding-0">
+                                <select class="form-control modal-select2" name="by_teeth_count" id="" style="width:100%;">
+                                    <option value="">选择牙齿数量</option>
+                                    @foreach(config('info.teeth_count') as $v)
+                                        <option value ="{{ $v }}">{{ $v }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    {{--牙齿数量--}}
+{{--                    <div class="form-group">--}}
+{{--                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 牙齿数量</label>--}}
+{{--                        <div class="col-md-9 ">--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+                    {{--客户意向--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户意向</label>
+                        <div class="col-md-9 ">
+                            <select class="form-control modal-select2" name="by_client_intention" id="" style="width:100%;">
+                                <option value="">选择客户意向</option>
+                                @foreach(config('info.client_intention') as $k => $v)
+                                    <option value ="{{ $k }}">{{ $v }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    {{--通话小结--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 通话小结</label>
+                        <div class="col-md-9 ">
+                            {{--<input type="text" class="form-control" name="description" placeholder="描述" value="{{$data->description or ''}}">--}}
+                            <textarea class="form-control" name="by_description" rows="3" cols="100%"></textarea>
+                        </div>
+                    </div>
                     {{--审核结果--}}
                     <div class="form-group">
-                        <label class="control-label col-md-2">审核结果</label>
-                        <div class="col-md-8 ">
-                            <select class="form-control modal-select2" name="by-item-inspected-result" id="" style="width:100%;">
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 审核结果</label>
+                        <div class="col-md-9 ">
+                            <select class="form-control modal-select2" name="by-inspected-result" id="" style="width:100%;">
                                 <option value="-1">选择审核结果</option>
-                                @foreach(config('info.by_inspected_result') as $v)
-                                    <option value ="{{ $v }}">{{ $v }}</option>
+                                @foreach(config('info.by_inspected_result') as $k => $v)
+                                    <option value ="{{ $k }}">{{ $v }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
                     {{--审核结果--}}
                     <div class="form-group">
-                        <label class="control-label col-md-2">录音质量</label>
-                        <div class="col-md-8 ">
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 录音质量</label>
+                        <div class="col-md-9 ">
                             {{--<select class="form-control select-select2-" name="detail-inspected-result" id="" style="width:100%;">--}}
                             {{--<option value="-1">选择录音质量</option>--}}
                             {{--<option value ="0" selected="selected">合格</option>--}}
@@ -966,17 +1021,17 @@
 
                                 <button type="button" class="btn">
                                     <span class="radio">
-                                        <label><input type="radio" name="recording-quality" value="0" checked="checked"> 合格</label>
+                                        <label><input type="radio" name="by-recording-quality" value="0" checked="checked"> 合格</label>
                                     </span>
                                 </button>
                                 <button type="button" class="btn">
                                     <span class="radio">
-                                        <label><input type="radio" name="recording-quality" value="1"> 优秀</label>
+                                        <label><input type="radio" name="by-recording-quality" value="1"> 优秀</label>
                                     </span>
                                 </button>
                                 <button type="button" class="btn">
                                     <span class="radio">
-                                        <label><input type="radio" name="recording-quality" value="9"> 问题</label>
+                                        <label><input type="radio" name="by-recording-quality" value="9"> 问题</label>
                                     </span>
                                 </button>
 
@@ -986,9 +1041,9 @@
                     {{--审核说明--}}
                     <div class="form-group">
                         <label class="control-label col-md-2">审核说明</label>
-                        <div class="col-md-8 ">
+                        <div class="col-md-9 ">
                             {{--<input type="text" class="form-control" name="description" placeholder="描述" value="{{$data->description or ''}}">--}}
-                            <textarea class="form-control" name="by-item-inspected-description" rows="3" cols="100%"></textarea>
+                            <textarea class="form-control" name="by-inspected-description" rows="3" cols="100%"></textarea>
                         </div>
                     </div>
 
@@ -997,7 +1052,7 @@
 
             <div class="box-footer">
                 <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
+                    <div class="col-md-9 col-md-offset-2">
                         <button type="button" class="btn btn-success by-modal-summit-for-item-inspected" id=""><i class="fa fa-check"></i> 提交</button>
                         <button type="button" class="btn btn-default by-modal-cancel-for-item-inspected" id="">取消</button>
                     </div>
@@ -1007,6 +1062,8 @@
 
     </div>
 </div>
+
+
 
 
 {{--option--}}

@@ -39913,7 +39913,7 @@ EOF;
     /*
      * 项目-管理 Project
      */
-    // 【项目-管理】返回-列表-数据
+    // 【API】返回-列表-数据
     public function v1_operate_for_by_datatable_list_query($post_data)
     {
         $this->get_me();
@@ -39989,7 +39989,7 @@ EOF;
 
         return datatable_response($list, $draw, $total);
     }
-    // 【项目-管理】获取 GET
+    // 【API】获取 GET
     public function v1_operate_for_by_item_get($post_data)
     {
         $messages = [
@@ -40029,7 +40029,7 @@ EOF;
 
         return response_success($item,"");
     }
-    // 【项目-管理】保存 SAVE
+    // 【API】保存 SAVE
     public function v1_operate_for_by_item_save($post_data)
     {
         $messages = [
@@ -40147,7 +40147,7 @@ EOF;
 
     }
 
-    // 【工单-管理】预处理
+    // 【API】预处理
     public function v1_operate_for_by_item_preprocess($post_data)
     {
         $messages = [
@@ -40268,6 +40268,452 @@ EOF;
             DB::commit();
 
             return response_success([],"预处理完成!");
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    public function v1_operate_for_order_item_publish1($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $time = time();
+        $date = date("Y-m-d");
+
+        $operate = $post_data["operate"];
+        if($operate != 'order-publish') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        if($item->is_published != 0)
+        {
+            return response_error([],"该【工单】已经发布过了，不要重复发布，刷新页面看下！");
+        }
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
+        if(in_array($me->user_type,[88]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+
+        $project_id = $item->project_id;
+        $client_phone = $item->client_phone;
+
+        $is_today_repeat = DK_Order::where(['client_phone'=>(int)$client_phone])
+            ->where('id','<>',$id)
+            ->where('is_published','>',0)
+            ->where('published_date',$date)
+            ->where('item_category',$item->item_category)
+            ->count("*");
+        if($is_today_repeat > 0)
+        {
+            return response_error([],"该号码今日已经提交过，不能重复提交！");
+        }
+
+        $is_repeat = DK_Order::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])
+            ->where('id','<>',$id)
+            ->where('is_published','>',0)
+            ->where('item_category',$item->item_category)
+            ->count("*");
+        if($is_repeat == 0)
+        {
+            $is_repeat = DK_Pivot_Client_Delivery::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])->count("*");
+        }
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if($item->inspected_status == 1)
+            {
+                $item->inspected_status = 9;
+            }
+
+
+            // 二奢直接交付
+            if($item->item_category == 99 && false)
+            {
+                $inspected_result = '通过';
+                $delivered_result = '已交付';
+
+                // 审核
+                $item->inspector_id = 0;
+                $item->inspected_status = 1;
+                $item->inspected_result = $inspected_result;
+                $item->inspected_at = $time;
+                $item->inspected_date = $date;
+
+
+                $project = DK_Project::find($item->project_id);
+                if($project->client_id != 0)
+                {
+                    $delivered_client_id = $project->client_id;
+                    $client = DK_Client::find($delivered_client_id);
+                    if(!$client) return response_error([],"客户不存在！");
+                }
+                else $delivered_client_id = 0;
+
+                $delivered_project_id = $item->project_id;
+
+
+                // 交付
+                $item->is_distributive_condition = 0;
+                $item->client_id = $delivered_client_id;
+                $item->deliverer_id = 0;
+                $item->delivered_status = 1;
+                $item->delivered_result = $delivered_result;
+                $item->delivered_at = $time;
+                $item->delivered_date = $date;
+
+
+                $pivot_delivery = new DK_Pivot_Client_Delivery;
+                if($client)
+                {
+                    $pivot_delivery_data["company_id"] = $client->company_id;
+                    $pivot_delivery_data["channel_id"] = $client->channel_id;
+                    $pivot_delivery_data["business_id"] = $client->business_id;
+                }
+                $pivot_delivery_data["order_category"] = $item->item_category;
+                $pivot_delivery_data["pivot_type"] = 95;
+                $pivot_delivery_data["project_id"] = $delivered_project_id;
+                $pivot_delivery_data["client_id"] = $delivered_client_id;
+                $pivot_delivery_data["original_project_id"] = $item->project_id;
+                $pivot_delivery_data["order_id"] = $item->id;
+                $pivot_delivery_data["client_type"] = $item->client_type;
+                $pivot_delivery_data["client_phone"] = $item->client_phone;
+                $pivot_delivery_data["delivered_result"] = '已交付';
+                $pivot_delivery_data["delivered_date"] = $date;
+                $pivot_delivery_data["creator_id"] = $me->id;
+
+                $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
+                if(!$bool_0) throw new Exception("DK_Pivot_Client_Delivery--insert--fail");
+
+            }
+
+
+            $item->is_repeat = $is_repeat;
+            $item->is_published = 1;
+            $item->published_at = time();
+            $item->published_date = $date;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                $record = new DK_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $id;
+                $record_data["operate_object"] = 71;
+                $record_data["operate_category"] = 11;
+                $record_data["operate_type"] = 1;
+                $record_data["process_category"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+
+            DB::commit();
+
+
+
+            if(env('APP_ENV') == "production" && $item->item_category == 1)
+            {
+                if($item->api_is_pushed == 0)
+                {
+                    $push_data["item"] = "补牙";
+                    $push_data["name"] = $item->client_name;
+                    $push_data["phone"] = $item->client_phone;
+                    $push_data["intention"] = $item->client_intention;
+                    $push_data["city"] = $item->location_city;
+                    $push_data["area"] = $item->location_district;
+                    $push_data["toothcount"] = $item->teeth_count;
+                    $push_data["addvx"] = (($item->is_wx) ? '是' : '否');
+                    $push_data["vxaccount"] = (($item->wx_id) ? $item->wx_id : '');
+                    $push_data["source"] = $item->channel_source;
+                    $push_data["description"] = $item->description;
+
+                    $request_result = $this->operate_api_push_order($push_data);
+
+                    if($request_result['success'])
+                    {
+                        $result = json_decode($request_result['result']);
+                        if($result->code == 0)
+                        {
+                            $item->api_is_pushed = 1;
+                            $item->save();
+                            return response_success([],"发布成功，推送成功!");
+                        }
+                        else
+                        {
+                            return response_error([],"发布成功，推送返回失败!");
+                        }
+                    }
+                    else
+                    {
+                        return response_error([],"发布成功，接口推送失败!");
+                    }
+                }
+            }
+
+
+            return response_success([],"发布成功!");
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【API】审核
+    public function v1_operate_for_by_item_inspect($post_data)
+    {
+//        dd($post_data);
+//        return response_success([]);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'by-inspect') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_API_BY_Received::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,61,66,71,77])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $inspected_result = $post_data["inspected_result"];
+//        if(!in_array($inspected_result,config('info.by_inspected_result'))) return response_error([],"审核结果非法！");
+        if(!array_key_exists($inspected_result, config('info.by_inspected_result'))) return response_error([],"审核结果非法，请正确选择审核结果！");
+        $inspected_description = $post_data["inspected_description"];
+        $recording_quality = $post_data["recording_quality"];
+
+
+        $before = $item->inspected_result;
+        $datetime = date('Y-m-d H:i:s');
+
+        $date = date("Y-m-d");
+
+
+        $project_id = $post_data["project_id"];
+        $client_type = $post_data["client_type"];
+        $client_name = $post_data["client_name"];
+        $client_intention = $post_data["client_intention"];
+        $teeth_count = $post_data["teeth_count"];
+        $description = $post_data["description"];
+        $location_city = $post_data["location_city"];
+        $location_district = $post_data["location_district"];
+        $recording_quality = $post_data["recording_quality"];
+
+        $client_phone = $item->client_phone;
+
+        if($inspected_result == 1)
+        {
+
+
+            if(!($project_id > 0)) return response_error([],"请选择项目！");
+            $is_repeat = DK_Order::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])
+                ->when($item->order_id, function ($query) use ($item) {
+                    return $query->where('id','<>',$item->order_id);
+                })
+//                ->where('id','<>',$id)
+//                ->where('is_published','>',0)
+//                ->where('item_category',1)
+                ->count("*");
+            if($is_repeat > 0)
+            {
+                return response_error([],"该电话已存在于该项目，请更换项目！");
+            }
+            else
+            {
+                $is_repeat = DK_Pivot_Client_Delivery::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])->count("*");
+                if($is_repeat > 0) return response_error([],"该电话已存在于该项目，请更换项目！");
+            }
+//            dd($is_repeat);
+
+            if(!empty($location_city) && !empty($location_district))
+            {
+            }
+            else
+            {
+                return response_error([],"请选择城市和区域！");
+            }
+        }
+//        dd($inspected_result);
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if($inspected_result == 1)
+            {
+                if($item->order_id > 0)
+                {
+                    $order = DK_Order::find($item->order_id);
+                    if(!$order)
+                    {
+                        $order = new DK_Order;
+
+                        $order->item_category = 1;
+                        $order->created_type = 91;
+                        $order->creator_id = $me->id;
+                        $order->inspector_id = $me->id;
+                        $order->inspected_status = 1;
+                        $order->inspected_result = '通过';
+                        $order->inspected_at = time();
+                        $order->inspected_date = $date;
+                        $order->published_at = time();
+                        $order->published_date = $date;
+
+                        $recording_file[0] = $item->recording_address;
+                        $order->recording_address = $item->recording_address;
+                        $order->recording_address_list = json_encode($recording_file);
+
+                    }
+                }
+                else
+                {
+                    $order = new DK_Order;
+
+                    $order->item_category = 1;
+                    $order->created_type = 91;
+                    $order->creator_id = $me->id;
+                    $order->inspector_id = $me->id;
+                    $order->inspected_status = 1;
+                    $order->inspected_result = '通过';
+                    $order->inspected_at = time();
+                    $order->inspected_date = $date;
+                    $order->published_at = time();
+                    $order->published_date = $date;
+
+                    $recording_file[0] = $item->recording_address;
+                    $order->recording_address = $item->recording_address;
+                    $order->recording_address_list = json_encode($recording_file);
+                }
+
+
+                $order->project_id = $project_id;
+                $order->client_type = $client_type;
+                $order->client_name = $client_name;
+                $order->client_phone = $client_phone;
+                $order->client_intention = $client_intention;
+                $order->teeth_count = $teeth_count;
+                $order->description = $description;
+                $order->recording_quality = $recording_quality;
+                $order->is_published = 1;
+                $order->field_2 = 11;
+
+
+
+                $bool_o = $order->save();
+
+                $item->order_id = $order->id;
+            }
+
+            $item->inspector_id = $me->id;
+            $item->inspected_status = 9;
+            $item->inspected_result = $inspected_result;
+            if($inspected_description) $item->inspected_description = $inspected_description;
+            $item->recording_quality = $recording_quality;
+            $item->inspected_at = time();
+            $item->inspected_date = $date;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                $record = new DK_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $id;
+                $record_data["operate_object"] = 101;
+                $record_data["operate_category"] = 92;
+                $record_data["operate_type"] = 1;
+                $record_data["process_category"] = 1;
+                $record_data["description"] = $inspected_description;
+
+                $record_content = [];
+
+                $record_row['title'] = '结果';
+                $record_row['field'] = 'inspected_result';
+//                $record_row['code'] = $inspected_result;
+                $record_row['before'] = $before;
+                $record_row['after'] = $inspected_result;
+                $record_content[] = $record_row;
+
+                $record_row['field'] = 'inspected_description';
+                $record_row['title'] = '说明';
+                $record_row['before'] = '';
+                $record_row['after'] = $inspected_description;
+                $record_content[] = $record_row;
+
+                $record_row['field'] = 'appeal_handle_time';
+                $record_row['title'] = '时间';
+                $record_row['before'] = '';
+                $record_row['after'] = $datetime;
+                $record_content[] = $record_row;
+
+                $record_data["content"] = json_encode($record_content);
+
+                $record_data["before"] = $before;
+                $record_data["after"] = $inspected_result;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+
+
+
+            DB::commit();
+
+
+            return response_success([],"审核完成!");
         }
         catch (Exception $e)
         {

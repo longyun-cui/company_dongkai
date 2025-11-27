@@ -139,6 +139,10 @@
                         {
                             $result_html = '<small class="btn-xs bg-green">人工</small>';
                         }
+                        else if(data == 91)
+                        {
+                            $result_html = '<small class="btn-xs bg-red">api-by</small>';
+                        }
                         else if(data == 99)
                         {
                             $result_html = '<small class="btn-xs bg-red">API</small>';
@@ -1155,7 +1159,7 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
+                        // if(!data) return '--';
                         var $result_html = '';
 
                         if(row.inspected_at)
