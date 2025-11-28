@@ -41,6 +41,30 @@ class DKTestController extends Controller
         else return;
 	}
 
+    public function test_array()
+    {
+        $key = request('key','key');
+        $value = request('value','value');
+
+        if(array_key_exists($key,config('info.by_inspected_result')))
+        {
+            echo 'array_key_exists'.' - yes.'.'<br>';
+        }
+        else
+        {
+            echo 'array_key_exists'.' - no.'.'<br>';
+        }
+
+        if(in_array($value,config('info.by_inspected_result')))
+        {
+            echo 'in_array'.' - yes.'.'<br>';
+        }
+        else
+        {
+            echo 'in_array'.' - no.'.'<br>';
+        }
+    }
+
 
 }
 

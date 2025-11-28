@@ -21,7 +21,8 @@ Route::group(['prefix'=>'test'], function () {
 
     $controller = "DKTestController";
 
-    Route::get('/job', $controller.'@test_job');
+//    Route::get('/job', $controller.'@test_job');
+    Route::get('/array', $controller.'@test_array');
 
 });
 

@@ -252,6 +252,17 @@
                     }
                 },
                 {
+                    "title": "工单ID",
+                    "data": "order_id",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(data) return '<a href="javascript:void(0);">'+data+'</a>';
+                        return "--";
+                    }
+                },
+                {
                     "title": "客户姓名",
                     "data": "client_name",
                     "className": "",

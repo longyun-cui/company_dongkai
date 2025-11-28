@@ -21,9 +21,10 @@
             @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
                 <select class="search-filter form-filter filter-md select2-box-c" name="order-created-type">
                     <option value="-1">创建方式</option>
-                    <option value="99">API</option>
                     <option value="1">人工</option>
                     <option value="9">导入</option>
+                    <option value="91">百应AI</option>
+                    <option value="99">API</option>
                 </select>
             @endif
 
