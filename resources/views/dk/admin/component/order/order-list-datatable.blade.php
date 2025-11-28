@@ -141,7 +141,7 @@
                         }
                         else if(data == 91)
                         {
-                            $result_html = '<small class="btn-xs bg-red">api-by</small>';
+                            $result_html = '<small class="btn-xs bg-red">百应AI</small>';
                         }
                         else if(data == 99)
                         {
