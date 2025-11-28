@@ -9288,7 +9288,7 @@ class DKAdminRepository {
 
         // 质检审核-数据统计
         $query_order_inspected_data = $query_order_inspected
-            ->whereIn('created_type',[1,99])
+            ->whereIn('created_type',[1,91,99])
 //            ->select('item_category')
             ->addSelect(DB::raw("
                     count(*) as order_count_for_published,
@@ -9318,7 +9318,7 @@ class DKAdminRepository {
 
         // 运营交付-数据统计
         $query_order_delivered_data = $query_order_delivered
-            ->whereIn('created_type',[1,99])
+            ->whereIn('created_type',[1,91,99])
 //            ->select('item_category')
             ->addSelect(DB::raw("
                     
