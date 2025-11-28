@@ -209,13 +209,21 @@
                         {
                             $result_html = '<small class="btn-xs bg-green">通过</small>';
                         }
-                        else if(data == 9)
-                        {
-                            $result_html = '<small class="btn-xs bg-red">驳回</small>';
-                        }
                         else if(data == 7)
                         {
                             $result_html = '<small class="btn-xs bg-yellow">异议</small>';
+                        }
+                        else if(data == 8)
+                        {
+                            $result_html = '<small class="btn-xs bg-orange">重复</small>';
+                        }
+                        else if(data == 9)
+                        {
+                            $result_html = '<small class="btn-xs bg-red-gradient">驳回</small>';
+                        }
+                        else if(data == 19)
+                        {
+                            $result_html = '<small class="btn-xs bg-maroon">问题</small>';
                         }
                         else
                         {
