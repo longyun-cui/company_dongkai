@@ -338,6 +338,30 @@
                                 return data;
                             }
                         },
+                        {
+                            "title": "待审核量",
+                            "data": "order_count_for_inspected",
+                            "className": "bg-inspected",
+                            "width": "60px",
+                            "orderable": true,
+                            "orderSequence": ["desc", "asc"],
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                                var $waiting_count = row.order_count_for_all - data;
+                                if($waiting_count > 0)
+                                {
+                                    $(nTd).addClass('_bold').addClass('text-red');
+                                }
+                            },
+                            render: function(data, type, row, meta) {
+                                var $waiting_count = row.order_count_for_all - data;
+                                if($waiting_count > 0) return $waiting_count;
+                                else return '--';
+                            }
+                        },
                         // {
                         //     "title": "审核<br>内部通过",
                         //     "data": "order_count_for_accepted_inside",
@@ -372,6 +396,30 @@
                             },
                             render: function(data, type, row, meta) {
                                 return data;
+                            }
+                        },
+                        {
+                            "title": "待交付量",
+                            "data": "order_count_for_delivered",
+                            "className": "bg-delivered",
+                            "width": "60px",
+                            "orderable": true,
+                            "orderSequence": ["desc", "asc"],
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                                var $waiting_count = row.order_count_for_inspected - data;
+                                if($waiting_count > 0)
+                                {
+                                    $(nTd).addClass('_bold').addClass('text-red');
+                                }
+                            },
+                            render: function(data, type, row, meta) {
+                                var $waiting_count = row.order_count_for_inspected - data;
+                                if($waiting_count > 0) return $waiting_count;
+                                else return '--';
                             }
                         },
                         @endif
