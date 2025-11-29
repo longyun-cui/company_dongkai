@@ -357,6 +357,42 @@
 
     });
 
+
+
+
+
+    //
+    function form_reset_init($form)
+    {
+        console.log('form_reset_init');
+
+        $form.find('.textarea-reset, .input-reset').each(function () {
+            $(this).val("");
+            $(this).val($(this).data('default'));
+        });
+
+        $form.find('.radio-reset').first().prop('checked', true);
+        // $form.find('.radio-reset').first().attr('checked', 'checked');
+
+        $form.find('.select-reset option').prop('selected',false);
+        $form.find('.select-reset').find('option:eq(0)').prop('selected', true);
+        // $form.find('select-reset option').attr('selected','');
+        // $form.find('select-reset').find('option:eq(0)').attr('selected', 'selected');
+
+        $.each( $form.find(".select2-reset"), function(index, element) {
+            select2FirstOptionSelected(element);
+        });
+
+        $form.find(".select2-multi-reset").val([]).trigger('change');
+        $form.find(".select2-multi-reset").val(null).trigger('change');
+        $form.find(".select2-multi-reset").empty().trigger('change');
+    }
+
+
+
+
+
+
     function filter(str)
     {
         // 特殊字符转义

@@ -259,6 +259,9 @@
             var $modalContent = $modal.find('.modal-content');
             $modal.attr('data-datatable-id',$table_id);
 
+            form_reset_init($modal);
+
+
             var $item_info = $row.find('td[data-key=item_info]');
             var $client_name = $item_info.data('client-name');
             var $client_phone = $item_info.data('client-phone');
@@ -289,6 +292,8 @@
             $modal.find('textarea[name="detail-inspected-description"]').val('');
             $modal.find('textarea[name="detail-inspected-description"]').val($inspected_description);
 
+            select2FirstOptionSelected($modal.find('select[name=by-inspected-result]'));
+            $modal.find('.by-inspected-accepted-box').hide();
 
             $modal.find('.modal-select2').each(function() {
                 var $select = $(this);
@@ -304,6 +309,22 @@
             $modal.modal('show');
 
 
+        });
+
+        // 【选择用户类型】
+        $(".main-content").on('change', "#by-modal-body-for-item-inspected select[name=by-inspected-result]", function() {
+
+            var $modal = $('#by-modal-body-for-item-inspected');
+            // radio
+            var $value = $(this).val();
+            if($value == 1)
+            {
+                $modal.find('.by-inspected-accepted-box').show();
+            }
+            else
+            {
+                $modal.find('.by-inspected-accepted-box').hide();
+            }
         });
         // 【取消】内容详情-审核
         $(".main-content").on('click', ".by-modal-cancel-for-item-inspected", function() {

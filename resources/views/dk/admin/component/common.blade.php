@@ -908,92 +908,6 @@
                             </div>
                         </div>
                     </div>
-                    {{--客户信息--}}
-                    <div class="form-group">
-                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户信息</label>
-                        <div class="col-md-9 ">
-                            <input type="text" class="form-control" name="by_client_name" placeholder="客户姓名" value="" data-default="">
-                        </div>
-                    </div>
-                    {{--项目--}}
-                    <div class="form-group item-detail-project">
-                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 项目</label>
-                        <div class="col-md-9 ">
-                            <select class="form-control select2-box-c select2-project" name="by_project_id" id="by-item-inspected-select2-project" data-item-category="1" style="width:100%;">
-                                <option data-id="-1" value="-1">选择项目</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2 item-detail-operate" data-operate="project"></div>
-                    </div>
-                    {{--所在城市--}}
-                    <div class="form-group">
-                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 所在城市</label>
-                        <div class="col-md-9 ">
-                            <div class="col-sm-6 col-md-6 padding-0">
-                                <select class="form-control modal-select2 select2-district-city" name="by_location_city" id="by-select-city-5" data-target="#by-select-district-5" style="width:100%;">
-                                    <option value="">选择城市</option>
-                                    @if(!empty($district_city_list) && count($district_city_list) > 0)
-                                        @foreach($district_city_list as $v)
-                                            <option value="{{ $v->district_city }}">{{ $v->district_city }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                            </div>
-                            <div class="col-sm-6 col-md-6 padding-0">
-                                <select class="form-control modal-select2 select2-district-district" name="by_location_district" id="by-select-district-5" data-target="#by-select-city-5" style="width:100%;">
-                                    <option value="">选择区域</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    {{--患者类型--}}
-                    <div class="form-group">
-                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 患者类型&牙齿数量</label>
-                        <div class="col-md-9 ">
-                            <div class="col-sm-6 col-md-6 padding-0">
-                                <select class="form-control modal-select2" name="by_client_type" id="" style="width:100%;">
-                                    <option value="">选择患者类型</option>
-                                    @foreach(config('info.client_type') as $k => $v)
-                                        <option value ="{{ $k }}">{{ $v }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-sm-6 col-md-6 padding-0">
-                                <select class="form-control modal-select2" name="by_teeth_count" id="" style="width:100%;">
-                                    <option value="">选择牙齿数量</option>
-                                    @foreach(config('info.teeth_count') as $v)
-                                        <option value ="{{ $v }}">{{ $v }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    {{--牙齿数量--}}
-{{--                    <div class="form-group">--}}
-{{--                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 牙齿数量</label>--}}
-{{--                        <div class="col-md-9 ">--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-                    {{--客户意向--}}
-                    <div class="form-group">
-                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户意向</label>
-                        <div class="col-md-9 ">
-                            <select class="form-control modal-select2" name="by_client_intention" id="" style="width:100%;">
-                                <option value="">选择客户意向</option>
-                                @foreach(config('info.client_intention') as $k => $v)
-                                    <option value ="{{ $k }}">{{ $v }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    {{--通话小结--}}
-                    <div class="form-group">
-                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 通话小结</label>
-                        <div class="col-md-9 ">
-                            {{--<input type="text" class="form-control" name="description" placeholder="描述" value="{{$data->description or ''}}">--}}
-                            <textarea class="form-control" name="by_description" rows="3" cols="100%"></textarea>
-                        </div>
-                    </div>
                     {{--审核结果--}}
                     <div class="form-group">
                         <label class="control-label col-md-2"><sup class="text-red">*</sup> 审核结果</label>
@@ -1021,17 +935,17 @@
 
                                 <button type="button" class="btn">
                                     <span class="radio">
-                                        <label><input type="radio" name="by-recording-quality" value="0" checked="checked"> 合格</label>
+                                        <label><input type="radio" class="radio-reset" name="by-recording-quality" value="0" checked="checked"> 合格</label>
                                     </span>
                                 </button>
                                 <button type="button" class="btn">
                                     <span class="radio">
-                                        <label><input type="radio" name="by-recording-quality" value="1"> 优秀</label>
+                                        <label><input type="radio" class="radio-reset" name="by-recording-quality" value="1"> 优秀</label>
                                     </span>
                                 </button>
                                 <button type="button" class="btn">
                                     <span class="radio">
-                                        <label><input type="radio" name="by-recording-quality" value="9"> 问题</label>
+                                        <label><input type="radio" class="radio-reset" name="by-recording-quality" value="9"> 问题</label>
                                     </span>
                                 </button>
 
@@ -1043,7 +957,89 @@
                         <label class="control-label col-md-2">审核说明</label>
                         <div class="col-md-9 ">
                             {{--<input type="text" class="form-control" name="description" placeholder="描述" value="{{$data->description or ''}}">--}}
-                            <textarea class="form-control" name="by-inspected-description" rows="3" cols="100%"></textarea>
+                            <textarea class="form-control textarea-reset" name="by-inspected-description" rows="3" cols="100%"></textarea>
+                        </div>
+                    </div>
+                    {{--客户信息--}}
+                    <div class="form-group by-inspected-accepted-box">
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户信息</label>
+                        <div class="col-md-9 ">
+                            <input type="text" class="form-control input-reset" name="by_client_name" placeholder="客户姓名" value="" data-default="">
+                        </div>
+                    </div>
+                    {{--项目--}}
+                    <div class="form-group by-inspected-accepted-box">
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 项目</label>
+                        <div class="col-md-9 ">
+                            <select class="form-control select2-reset select2-project" name="by_project_id" id="by-item-inspected-select2-project" data-item-category="1" style="width:100%;">
+                                <option data-id="-1" value="-1">选择项目</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate="project"></div>
+                    </div>
+                    {{--所在城市--}}
+                    <div class="form-group by-inspected-accepted-box">
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 所在城市</label>
+                        <div class="col-md-9 ">
+                            <div class="col-sm-6 col-md-6 padding-0">
+                                <select class="form-control modal-select2 select2-reset select2-district-city" name="by_location_city" id="by-select-city-5" data-target="#by-select-district-5" style="width:100%;">
+                                    <option value="">选择城市</option>
+                                    @if(!empty($district_city_list) && count($district_city_list) > 0)
+                                        @foreach($district_city_list as $v)
+                                            <option value="{{ $v->district_city }}">{{ $v->district_city }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                            <div class="col-sm-6 col-md-6 padding-0">
+                                <select class="form-control modal-select2 select2-reset select2-district-district" name="by_location_district" id="by-select-district-5" data-target="#by-select-city-5" style="width:100%;">
+                                    <option value="">选择区域</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    {{--患者类型--}}
+                    <div class="form-group by-inspected-accepted-box">
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 患者类型&牙齿数量</label>
+                        <div class="col-md-9 ">
+                            <select class="form-control modal-select2 select2-reset" name="by_client_type" id="" style="width:100%;">
+                                <option value="">选择患者类型</option>
+                                @foreach(config('info.client_type') as $k => $v)
+                                    <option value ="{{ $k }}">{{ $v }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    {{--牙齿数量--}}
+                    <div class="form-group by-inspected-accepted-box">
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 牙齿数量</label>
+                        <div class="col-md-9 ">
+                            <select class="form-control modal-select2 select2-reset" name="by_teeth_count" id="" style="width:100%;">
+                                <option value="">选择牙齿数量</option>
+                                @foreach(config('info.teeth_count') as $v)
+                                    <option value ="{{ $v }}">{{ $v }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    {{--客户意向--}}
+                    <div class="form-group by-inspected-accepted-box">
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户意向</label>
+                        <div class="col-md-9 ">
+                            <select class="form-control modal-select2 select2-reset" name="by_client_intention" id="" style="width:100%;">
+                                <option value="">选择客户意向</option>
+                                @foreach(config('info.client_intention') as $k => $v)
+                                    <option value ="{{ $k }}">{{ $v }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    {{--通话小结--}}
+                    <div class="form-group by-inspected-accepted-box">
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 通话小结</label>
+                        <div class="col-md-9 ">
+                            {{--<input type="text" class="form-control" name="description" placeholder="描述" value="{{$data->description or ''}}">--}}
+                            <textarea class="form-control textarea-reset" name="by_description" rows="3" cols="100%"></textarea>
                         </div>
                     </div>
 
