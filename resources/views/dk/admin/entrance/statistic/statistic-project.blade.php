@@ -272,6 +272,22 @@
                         //     }
                         // },
                         {
+                            "title": "审核量",
+                            "data": "order_count_for_inspected",
+                            "className": "bg-inspected",
+                            "width": "60px",
+                            "orderable": false,
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
+                            render: function(data, type, row, meta) {
+                                return data;
+                            }
+                        },
+                        {
                             "title": "通过量",
                             "data": "order_count_for_accepted",
                             "className": "bg-inspected",
