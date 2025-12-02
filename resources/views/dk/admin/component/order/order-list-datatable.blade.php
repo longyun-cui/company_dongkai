@@ -90,6 +90,7 @@
             "columns": [
                 {
                     "title": '<input type="checkbox" class="check-review-all">',
+                    "name": "checkbox",
                     // "data": "id",
                     "data": null,
                     "width": "60px",
@@ -107,6 +108,7 @@
 //                    },
                 {
                     "title": "ID",
+                    "name": "id",
                     "data": "id",
                     "className": "",
                     "width": "40px",
@@ -128,6 +130,7 @@
                 },
                 {
                     "title": "来源",
+                    "name": "created_type",
                     "data": "created_type",
                     "className": "",
                     "width": "60px",
@@ -160,9 +163,10 @@
                 },
                 {
                     "title": "工单状态",
+                    "name": "order_status",
+                    "data": "id",
                     "className": "",
                     "width": "72px",
-                    "data": "id",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
@@ -249,6 +253,7 @@
                 },
                 {
                     "title": "审核结果",
+                    "name": "inspected_result",
                     "data": "inspected_result",
                     "className": "text-center",
                     "width": "72px",
@@ -303,6 +308,7 @@
                 },
                 {
                     "title": "是否分发",
+                    "name": "is_distributive_condition",
                     "data": "is_distributive_condition",
                     "className": "",
                     "width": "72px",
@@ -347,6 +353,7 @@
                 },
                 {
                     "title": "交付状态",
+                    "name": "delivered_status",
                     "data": "delivered_status",
                     "className": "text-center",
                     "width": "72px",
@@ -385,6 +392,7 @@
                 },
                 {
                     "title": "交付结果",
+                    "name": "delivered_result",
                     "data": "delivered_result",
                     "className": "text-center",
                     "width": "72px",
@@ -431,6 +439,7 @@
                 },
                 {
                     "title": "交付说明",
+                    "name": "delivered_description",
                     "data": "delivered_description",
                     "className": "",
                     "width": "80px",
@@ -457,6 +466,7 @@
                 },
                 {
                     "title": "交付人",
+                    "name": "deliverer_id",
                     "data": "deliverer_id",
                     "className": "",
                     "width": "80px",
@@ -481,6 +491,7 @@
                 },
                 {
                     "title": "交付时间",
+                    "name": 'delivered_at',
                     "data": 'delivered_at',
                     "className": "",
                     "width": "120px",
@@ -523,6 +534,7 @@
                 },
                 {
                     "title": "交付客户",
+                    "name": "client_id",
                     "data": "client_id",
                     "className": "",
                     "width": "120px",
@@ -594,6 +606,7 @@
 //                     },
                 {
                     "title": "创建人",
+                    "name": "creator_id",
                     "data": "creator_id",
                     "className": "",
                     "width": "80px",
@@ -604,6 +617,7 @@
                 },
                 {
                     "title": "发布时间",
+                    "name": 'published_at',
                     "data": 'published_at',
                     "className": "",
                     "width": "120px",
@@ -646,6 +660,7 @@
                 },
                 {
                     "title": "班次",
+                    "name": "field_2",
                     "data": "field_2",
                     "className": "",
                     "width": "60px",
@@ -674,6 +689,7 @@
                 },
                 {
                     "title": "项目",
+                    "name": "project_id",
                     "data": "project_id",
                     "className": "",
                     "width": "160px",
@@ -739,6 +755,7 @@
                 },
                 // {
                 //     "title": "提交日期",
+                //     "name": 'assign_time',
                 //     "data": 'assign_time',
                 //     "className": "text-center",
                 //     "width": "72px",
@@ -784,6 +801,7 @@
                 // },
                 {
                     "title": "是否重复",
+                    "name": "is_repeat",
                     "data": "is_repeat",
                     "className": "",
                     "width": "60px",
@@ -806,6 +824,7 @@
                 },
                 {
                     "title": "客户姓名",
+                    "name": "client_name",
                     "data": "client_name",
                     "className": "",
                     "width": "80px",
@@ -832,6 +851,7 @@
                 },
                 {
                     "title": "客户电话",
+                    "name": "client_phone",
                     "data": "client_phone",
                     "className": "",
                     "width": "100px",
@@ -858,6 +878,7 @@
                 },
                 {
                     "title": "患者类型",
+                    "name": "client_type",
                     "data": "client_type",
                     "className": "",
                     "width": "60px",
@@ -907,6 +928,7 @@
                 },
                 {
                     "title": "客户意向",
+                    "name": "client_intention",
                     "data": "client_intention",
                     "className": "",
                     "width": "60px",
@@ -968,6 +990,7 @@
                 },
                 {
                     "title": "牙齿数量",
+                    "name": "teeth_count",
                     "data": "teeth_count",
                     "className": "",
                     "width": "80px",
@@ -994,6 +1017,7 @@
                 },
                 {
                     "title": "是否+V",
+                    "name": "is_wx",
                     "data": "is_wx",
                     "className": "",
                     "width": "60px",
@@ -1021,6 +1045,7 @@
                 },
                 {
                     "title": "微信号",
+                    "name": "wx_id",
                     "data": "wx_id",
                     "className": "",
                     "width": "100px",
@@ -1047,6 +1072,7 @@
                 },
                 {
                     "title": "所在城市",
+                    "name": "location_city_district",
                     "data": "location_city",
                     "className": "",
                     "width": "120px",
@@ -1098,6 +1124,7 @@
                     {{--},--}}
                 {
                     "title": "通话小结",
+                    "name": "description",
                     "data": "description",
                     "className": "",
                     "width": "80px",
@@ -1141,6 +1168,7 @@
                 @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
                 {
                     "title": "录音质量",
+                    "name": "recording_quality",
                     "data": "recording_quality",
                     "className": "",
                     "width": "60px",
@@ -1186,6 +1214,7 @@
                 },
                 {
                     "title": "录音地址",
+                    "name": "recording_address",
                     "data": "recording_address",
                     "className": "",
                     "width": "80px",
@@ -1215,6 +1244,7 @@
                 },
                 {
                     "title": "录音播放",
+                    "name": "recording_address_list",
                     "data": "recording_address_list",
                     "className": "",
                     "width": "400px",
@@ -1261,6 +1291,7 @@
                 },
                 {
                     "title": "录音下载",
+                    "name": "recording_address_get_download",
                     "data": "recording_address_list",
                     "className": "",
                     "width": "80px",
@@ -1323,6 +1354,7 @@
                 @endif
                 {
                     "title": "部门",
+                    "name": "department_district_id",
                     "data": "department_district_id",
                     "className": "",
                     "width": "120px",
@@ -1361,6 +1393,7 @@
                 },
                 {
                     "title": "部门经理",
+                    "name": "department_manager_id",
                     "data": "department_manager_id",
                     "className": "",
                     "width": "80px",
@@ -1382,6 +1415,7 @@
                 },
                 {
                     "title": "部门主管",
+                    "name": "department_supervisor_id",
                     "data": "department_supervisor_id",
                     "className": "",
                     "width": "100px",
@@ -1403,6 +1437,7 @@
                 },
                 {
                     "title": "审核人",
+                    "name": "inspector_id",
                     "data": "inspector_id",
                     "className": "",
                     "width": "80px",
@@ -1417,6 +1452,7 @@
                 },
                 {
                     "title": "审核时间",
+                    "name": 'inspected_at',
                     "data": 'inspected_at',
                     "className": "",
                     "width": "120px",
@@ -1444,6 +1480,7 @@
                 },
                 {
                     "title": "审核说明",
+                    "name": "inspected_description",
                     "data": "inspected_description",
                     "className": "",
                     "width": "80px",
@@ -1470,6 +1507,7 @@
                 },
                 {
                     "title": "是否推送",
+                    "name": "api_is_pushed",
                     "data": "api_is_pushed",
                     "className": "",
                     "width": "60px",
@@ -1481,6 +1519,7 @@
                 },
                 {
                     "title": "创建时间",
+                    "name": 'created_at',
                     "data": 'created_at',
                     "className": "",
                     "width": "120px",
@@ -1507,6 +1546,7 @@
                 },
                 {
                     "title": "操作",
+                    "name": 'operation',
                     "data": 'id',
                     "className": "",
                     "width": "180px",
@@ -1714,6 +1754,20 @@
 //                    this.api().column(1).nodes().each(function(cell, i) {
 //                        cell.innerHTML =  startIndex + i + 1;
 //                    });
+
+
+
+                // var api = this.api();
+                //
+                // // 使用列名隐藏指定列
+                // try {
+                //     // 方法1：直接使用列名选择器
+                //     api.column('id:name').visible(false);
+                //     api.column('is_repeat:name').visible(false);
+                //
+                // } catch (e) {
+                //     console.log('列名选择器错误，尝试备用方法:', e);
+                // }
 
             },
             "language": { url: '/common/dataTableI18n' },
