@@ -26,12 +26,12 @@
                     d.name = $tableSearch.find('input[name="client-name"]').val();
                     d.title = $tableSearch.find('input[name="client-title"]').val();
                     d.keyword = $tableSearch.find('input[name="client-keyword"]').val();
-                    d.status = $tableSearch.find('select[name="client-status"]').val();
+                    d.user_status = $tableSearch.find('select[name="statistic-client-user-status"]').val();
                     d.time_type = $tableSearch.find('input[name="statistic-client-time-type"]').val();
-                    d.time_month = $tableSearch.find('input[name="statistic-client-month"]').val();
-                    d.time_date = $tableSearch.find('input[name="statistic-client-date"]').val();
-                    d.date_start = $tableSearch.find('input[name="statistic-client-start"]').val();
-                    d.date_ended = $tableSearch.find('input[name="statistic-client-ended"]').val();
+                    d.assign_month = $tableSearch.find('input[name="statistic-client-month"]').val();
+                    d.assign_date = $tableSearch.find('input[name="statistic-client-date"]').val();
+                    d.assign_start = $tableSearch.find('input[name="statistic-client-start"]').val();
+                    d.assign_ended = $tableSearch.find('input[name="statistic-client-ended"]').val();
 
                 },
             },

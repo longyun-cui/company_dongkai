@@ -217,6 +217,23 @@
                     }
                 },
                 {
+                    "title": "郊区交付",
+                    "data": "order_count_for_delivered_suburb",
+                    "className": "bg-delivered",
+                    "width": "80px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.id == "统计")
+                        {
+                            $(nTd).addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+
+                        return data;
+                    }
+                },
+                {
                     "title": "内部交付",
                     "data": "order_count_for_delivered_inside",
                     "className": "bg-delivered",

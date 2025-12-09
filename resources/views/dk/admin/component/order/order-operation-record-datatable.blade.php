@@ -8,11 +8,15 @@
                 "retrieve": true,
                 "destroy": true,
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[10, 50], ["20", "50"]],
+                "aLengthMenu": [[20, 50], ["20", "50"]],
                 "bAutoWidth": false,
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
+                "pagingType": "simple_numbers",
+                "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t> <"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p>',
+                "order": [],
+                "orderCellsTop": true,
                 "ajax": {
                     'url': "/v1/operate/order/item-operation-record-datatable-query?id="+$id,
                     "type": 'POST',
@@ -31,9 +35,6 @@
 
                     },
                 },
-                "pagingType": "simple_numbers",
-                "order": [],
-                "orderCellsTop": true,
                 "columns": [
 //                    {
 //                        "className": "font-12px",

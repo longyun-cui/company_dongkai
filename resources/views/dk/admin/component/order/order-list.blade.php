@@ -65,7 +65,15 @@
                     <option value="{{ $v->id }}">{{ $v->name }}</option>
                 @endforeach
             </select>
-            {{--录音质量--}}
+
+            {{--客户类型--}}
+            <select class="search-filter form-filter filter-md select2-box-c" name="order-client-type">
+                <option value="-1">客户类型</option>
+                @foreach(config('info.client_type') as $k => $v)
+                    <option value="{{ $k }}">{{ $v }}</option>
+                @endforeach
+            </select>
+            {{--可分发--}}
             @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
                 <select class="search-filter form-filter filter-md select2-box-c" name="order-distribute-type">
                     <option value="">常规筛选</option>

@@ -34,7 +34,7 @@
                 <i class="fa fa-search"></i> 按月查询
             </button>
 
-            {{--按时间段导出--}}
+            {{--按时间段查看--}}
             <input type="text" class="search-filter filter-keyup date_picker" name="statistic-project-start" placeholder="起始时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" style="margin-right:-3px;" />
             <input type="text" class="search-filter filter-keyup date_picker" name="statistic-project-ended" placeholder="终止时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
 

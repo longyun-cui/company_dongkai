@@ -54,6 +54,7 @@
                     d.order_type = $tableSearch.find('select[name="order-type"]').val();
                     d.client_name = $tableSearch.find('input[name="order-client-name"]').val();
                     d.client_phone = $tableSearch.find('input[name="order-client-phone"]').val();
+                    d.client_type = $tableSearch.find('select[name="order-client-type"]').val();
                     d.is_wx = $tableSearch.find('select[name="order-is-wx"]').val();
                     d.is_repeat = $tableSearch.find('select[name="order-is-repeat"]').val();
                     d.created_type = $tableSearch.find('select[name="order-created-type"]').val();
@@ -1566,6 +1567,7 @@
                         var $html_push = '';
                         var $html_deliver = '';
                         var $html_distribute = '';
+                        var $html_history = '';
                         var $html_appeal = '';
                         var $html_appeal_handle = '';
 
@@ -1629,6 +1631,9 @@
                             // 审核
                             if("{{ in_array($me->user_type,[0,1,11,61,66,71,77]) }}")
                             {
+                                // $html_history = '<a class="btn btn-xs bg-teal modal-show-for-order-delivery-record" data-id="'+data+'">历史</a>';
+                                $html_history = '<a class="btn btn-xs bg-teal modal-show-for-order-inspecting" data-id="'+data+'">审核2</a>';
+
                                 if(row.created_type == 9)
                                 {
                                     $html_inspected = '<a class="btn btn-xs bg-default disabled">审核</a>';
@@ -1735,6 +1740,7 @@
                             $html_appeal_handle+
                             $html_deliver+
                             $html_distribute+
+                            // $html_history+
                             $html_record+
                             // $html_abandon+
                             // '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+

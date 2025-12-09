@@ -448,6 +448,65 @@
         });
 
 
+
+        // 【获取】内容详情-审核
+        $(".main-content").on('click', ".modal-show-for-order-inspecting", function() {
+            var $that = $(this);
+            var $id = $that.attr('data-id');
+            var $row = $that.parents('tr');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $item_category = $datatable_wrapper.data('datatable-item-category');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+            var $table = $('#'+$table_id);
+
+            var $row = $that.parents('tr');
+            $table.find('tr').removeClass('inspecting');
+            $row.addClass('inspecting');
+
+            $('.datatable-wrapper').removeClass('operating');
+            $datatable_wrapper.addClass('operating');
+            $datatable_wrapper.find('tr').removeClass('operating');
+            $row.addClass('operating');
+
+            $('input[name="detail-inspected-order-id"]').val($that.attr('data-id'));
+            $('.info-detail-title').html($that.attr('data-id'));
+            $('.info-set-title').html($that.attr('data-id'));
+
+            var $modal = $('#modal-for-order-inspecting');
+            $modal.attr('data-datatable-id',$table_id);
+
+            $modal.find('.item-detail-project .item-detail-text').html($row.find('td[data-key=project_id]').attr('data-option-name'));
+            $modal.find('.item-detail-client .item-detail-text').html($row.find('td[data-key=client_name]').attr('data-value'));
+            $modal.find('.item-detail-phone .item-detail-text').html($row.find('td[data-key=client_phone]').attr('data-value'));
+            $modal.find('.item-detail-is-wx .item-detail-text').html($row.find('td[data-key=is_wx]').html());
+            $modal.find('.item-detail-wx-id .item-detail-text').html($row.find('td[data-key=wx_id]').attr('data-value'));
+            $modal.find('.item-detail-city-district .item-detail-text').html($row.find('td[data-key=location_city]').html());
+            $modal.find('.item-detail-teeth-count .item-detail-text').html($row.find('td[data-key=teeth_count]').html());
+            $modal.find('.item-detail-description .item-detail-text').html($row.find('td[data-key=description]').attr('data-value'));
+            $modal.find('.item-detail-recording .item-detail-text').html('');
+            $modal.find('.item-detail-recording .item-detail-text').html($row.find('[data-key="description"]').attr('data-recording-address'));
+
+
+            var $inspected_result = $row.find('td[data-key=inspected_result]').attr('data-value');
+            // console.log($inspected_result);
+            $modal.find('select[name="detail-inspecting-result"]').find("option").prop("selected",false);
+            $modal.find('select[name="detail-inspecting-result"]').find("option[value='"+$inspected_result+"']").prop("selected",true);
+
+            // $modal.find('input[name="recording-quality"]').val('0');
+            var $recording_quality = $row.find('td[data-key=recording_quality]').attr('data-value');
+            $modal.find('input[name="recording-quality"][value='+$recording_quality+']').prop('checked', true);
+
+            var $inspected_description = $row.find('td[data-key=inspected_description]').attr('data-value');
+            // console.log($inspected_description);
+            $modal.find('textarea[name="detail-inspected-description"]').val('');
+            $modal.find('textarea[name="detail-inspected-description"]').val($inspected_description);
+
+            Datatable_Order_Item_Phone_Delivered_Record.init($id,'datatable-for-order-inspected-item-deliverer-record');
+
+            $modal.modal('show');
+
+        });
+
         // 【获取】内容详情-审核
         $(".main-content").on('click', ".item-modal-show-for-detail-inspected", function() {
             var $that = $(this);
@@ -498,6 +557,7 @@
             // console.log($inspected_description);
             $modal.find('textarea[name="detail-inspected-description"]').val('');
             $modal.find('textarea[name="detail-inspected-description"]').val($inspected_description);
+
 
             $modal.modal('show');
 
@@ -600,6 +660,161 @@
         });
 
 
+
+
+        // 【工单】审核-显示
+        $(".main-content").on('click', ".modal-show-for-order-inspecting", function() {
+            var $that = $(this);
+            var $id = $that.attr('data-id');
+            var $row = $that.parents('tr');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $item_category = $datatable_wrapper.data('datatable-item-category');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+            var $table = $('#'+$table_id);
+
+            var $row = $that.parents('tr');
+            $table.find('tr').removeClass('inspecting');
+            $row.addClass('inspecting');
+
+            $('.datatable-wrapper').removeClass('operating');
+            $datatable_wrapper.addClass('operating');
+            $datatable_wrapper.find('tr').removeClass('operating');
+            $row.addClass('operating');
+
+            $('input[name="detail-inspected-order-id"]').val($that.attr('data-id'));
+            $('.info-detail-title').html($that.attr('data-id'));
+            $('.info-set-title').html($that.attr('data-id'));
+
+            var $modal = $('#modal-for-order-inspecting');
+            $modal.attr('data-datatable-id',$table_id);
+
+            $modal.find('.item-project-box').find('.item-detail-text').html($row.find('td[data-key=project_id]').attr('data-option-name'));
+            $modal.find('.item-name-box').find('.item-detail-text').html($row.find('td[data-key=client_name]').attr('data-value'));
+            $modal.find('.item-phone-box').find('.item-detail-text').html($row.find('td[data-key=client_phone]').attr('data-value'));
+            $modal.find('.item-is-wx-box').find('.item-detail-text').html($row.find('td[data-key=is_wx]').html());
+            $modal.find('.item-wx-id-box').find('.item-detail-text').html($row.find('td[data-key=wx_id]').attr('data-value'));
+            $modal.find('.item-city-district-box').find('.item-detail-text').html($row.find('td[data-key=location_city]').html());
+            $modal.find('.item-teeth-count-box').find('.item-detail-text').html($row.find('td[data-key=teeth_count]').html());
+            $modal.find('.item-description-box').find('.item-detail-text').html($row.find('td[data-key=description]').attr('data-value'));
+            $modal.find('.item-recording-box').find('.item-detail-text').html('');
+            $modal.find('.item-recording-box').find('.item-detail-text').html($row.find('[data-key="description"]').attr('data-recording-address'));
+
+
+            var $inspected_result = $row.find('td[data-key=inspected_result]').attr('data-value');
+            // console.log($inspected_result);
+            $modal.find('select[name="order-inspecting-result"]').find("option").prop("selected",false);
+            $modal.find('select[name="order-inspecting-result"]').find("option[value='"+$inspected_result+"']").prop("selected",true);
+
+            // $modal.find('input[name="recording-quality"]').val('0');
+            var $recording_quality = $row.find('td[data-key=recording_quality]').attr('data-value');
+            $modal.find('input[name="order-inspecting-recording-quality"][value='+$recording_quality+']').prop('checked', true);
+
+            var $inspected_description = $row.find('td[data-key=inspected_description]').attr('data-value');
+            // console.log($inspected_description);
+            $modal.find('textarea[name="order-inspecting--description"]').val('');
+            $modal.find('textarea[name="order-inspecting--description"]').val($inspected_description);
+
+            Datatable_Order_Item_Phone_Delivered_Record.init($id,'datatable-for-order-inspecting-phone-delivered-record');
+
+            $modal.modal('show');
+
+        });
+        // 【工单】审核-取消
+        $(".main-content").on('click', ".item-cancel-for-order-inspecting", function() {
+            var that = $(this);
+            var $modal = $('#modal-for-detail-inspecting');
+            $modal.find('select[name="detail-inspected-result"]').prop("checked", false);
+            $modal.find('select[name="detail-inspected-result"]').find('option').attr("selected",false);
+            $modal.find('select[name="detail-inspected-result"]').find('option[value="-1"]').attr("selected",true);
+            $modal.find('textarea[name="detail-inspected-description"]').val('');
+            $modal.modal('hide').on("hidden.bs.modal", function () {
+                $("body").addClass("modal-open");
+            });
+        });
+        // 【工单】审核-提交
+        $(".main-content").on('click', ".item-summit-for-order-inspecting", function() {
+            var $that = $(this);
+            var $modal = $('#modal-body-for-detail-inspected');
+            var $table_id = $modal.attr('data-datatable-id');
+            var $table = $('#'+$table_id);
+
+            var $id = $('input[name="order-inspecting-order-id"]').val();
+            var $inspected_result = $('select[name="order-inspecting-result"]').val();
+            var $inspected_description = $('textarea[name="order-inspecting-description"]').val();
+            var $recording_quality = $('input[name="order-inspectingrecording-quality"]:checked').val();
+            // console.log($recording_quality);
+
+            $.post(
+                "{{ url('/v1/operate/order/item-inspect') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: "order-inspect",
+                    item_id: $('input[name="detail-inspected-order-id"]').val(),
+                    inspected_result: $('select[name="detail-inspected-result"]').val(),
+                    inspected_description: $('textarea[name="detail-inspected-description"]').val(),
+                    recording_quality: $('input[name="recording-quality"]:checked').val()
+                },
+                function(data){
+                    // layer.close(index);
+                    // layer.form.render();
+                    if(!data.success)
+                    {
+                        layer.msg(data.msg);
+                    }
+                    else
+                    {
+                        layer.msg(data.msg);
+
+                        $(".item-cancel-for-detail-inspected").click();
+                        // $('#datatable-for-order-list').DataTable().ajax.reload(null,false);
+
+                        var $result_html = '--';
+                        if($inspected_result == "通过" || $inspected_result == "内部通过")
+                        {
+                            $result_html = '<small class="btn-xs bg-green">'+$inspected_result+'</small>';
+                        }
+                        else if($inspected_result == "拒绝")
+                        {
+                            $result_html = '<small class="btn-xs bg-red">拒绝</small>';
+                        }
+                        else if($inspected_result == "重复")
+                        {
+                            $result_html = '<small class="btn-xs bg-yellow">重复</small>';
+                        }
+                        else
+                        {
+                            $result_html = '<small class="btn-xs bg-purple">'+$inspected_result+'</small>';
+                        }
+
+                        var $row = $table.find('tr.inspecting');
+                        $row.find('td[data-key=order_status]').html('<small class="btn-xs bg-blue">已审核</small>');
+                        $row.find('td[data-key=recording_quality]').attr('data-value',$recording_quality);
+                        if($recording_quality == 0)
+                        {
+                            $row.find('td[data-key=recording_quality]').html('<small class="btn-xs bg-blue">合格</small>');
+                        }
+                        else if($recording_quality == 1)
+                        {
+                            $row.find('td[data-key=recording_quality]').html('<small class="btn-xs bg-green">优秀</small>');
+                        }
+                        else if($recording_quality == 9)
+                        {
+                            $row.find('td[data-key=recording_quality]').html('<small class="btn-xs bg-red">问题</small>');
+                        }
+                        else
+                        {
+                            $row.find('td[data-key=recording_quality]').html('<small class="btn-xs bg-black">有误</small>');
+                        }
+                        $row.find('td[data-key=inspected_result]').attr('data-value',$inspected_result);
+                        $row.find('td[data-key=inspected_result]').html($result_html);
+                        $row.find('td[data-key=inspected_description]').attr('data-value',$inspected_description);
+                        $row.find('.item-modal-show-for-detail-inspected').removeClass('bg-teal').addClass('bg-blue').html('再审');
+
+                    }
+                },
+                'json'
+            );
+        });
 
 
 
@@ -2439,6 +2654,24 @@
             });
 
         });
+
+
+
+
+        // 【通用】修改记录
+        $(".main-content").on('click', ".modal-show-for-order-delivery-record", function() {
+            var $that = $(this);
+            var $id = $(this).data('id');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $item_category = $datatable_wrapper.data('datatable-item-category');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+
+
+            Datatable_Order_Operation_Record.init($id);
+
+            $('#modal-for-order-delivery-record-datatable').modal('show');
+        });
+
 
 
 

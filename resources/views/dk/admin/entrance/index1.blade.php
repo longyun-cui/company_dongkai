@@ -63,6 +63,7 @@
 @include(env('TEMPLATE_DK_ADMIN').'component.order.order-edit')
 @include(env('TEMPLATE_DK_ADMIN').'component.order.order-aesthetic.order-aesthetic-edit')
 @include(env('TEMPLATE_DK_ADMIN').'component.order.order-luxury.order-luxury-edit')
+@include(env('TEMPLATE_DK_ADMIN').'component.order.order-item-inspecting')
 @include(env('TEMPLATE_DK_ADMIN').'component.order.order-operation-record')
 
 
@@ -181,6 +182,7 @@
     @include(env('TEMPLATE_DK_ADMIN').'component.order.order-list-script')
 
     @include(env('TEMPLATE_DK_ADMIN').'component.order.order-operation-record-datatable')
+    @include(env('TEMPLATE_DK_ADMIN').'component.order.order-item-phone-delivered-record-datatable')
 
 
     @include(env('TEMPLATE_DK_ADMIN').'component.by.by-list-datatable')

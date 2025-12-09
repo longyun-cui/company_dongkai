@@ -125,6 +125,8 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/v1/operate/order/item-appeal', $controller.'@v1_operate_for_order_item_appeal');
     Route::post('/v1/operate/order/item-appeal-handle', $controller.'@v1_operate_for_order_item_appeal_handle');
     Route::post('/v1/operate/order/item-deliver', $controller.'@v1_operate_for_order_item_deliver');
+    Route::post('/v1/operate/order/item-get-phone-delivery-record', $controller.'@v1_operate_for_order_item_get_phone_delivery_record');
+    Route::post('/v1/operate/order/item-phone-delivery-record/datatable-list-query', $controller.'@v1_operate_for_order_item_phone_delivery_record_datatable_query');
     Route::post('/v1/operate/order/item-get-api-call-record', $controller.'@v1_operate_for_order_item_get_api_call_record');
     Route::post('/v1/operate/order/item-get-phone-pool-info', $controller.'@v1_operate_for_order_item_get_phone_pool_info');
 
