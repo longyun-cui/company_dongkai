@@ -303,6 +303,22 @@
                                 return data;
                             }
                         },
+                        {
+                            "title": "郊区通过",
+                            "data": "order_count_for_accepted_suburb",
+                            "className": "bg-inspected",
+                            "width": "60px",
+                            "orderable": false,
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
+                            render: function(data, type, row, meta) {
+                                return data;
+                            }
+                        },
                         // {
                         //     "title": "审核<br>完成率",
                         //     "data": "order_rate_for_achieved",

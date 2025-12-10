@@ -161,6 +161,9 @@
                         <li class="order_inspected_dental_for_inspected_accepted">
                             <a href="javascript:void(0);">通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
+                        <li class="order_inspected_dental_for_inspected_accepted_suburb">
+                            <a href="javascript:void(0);">郊区通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                        </li>
                         <li class="order_inspected_dental_for_inspected_accepted_inside">
                             <a href="javascript:void(0);">内部通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>

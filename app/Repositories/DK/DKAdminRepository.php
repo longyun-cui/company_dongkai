@@ -9298,6 +9298,7 @@ class DKAdminRepository {
                     
                     count(IF(item_category = 1 and inspected_status <> 0, TRUE, NULL)) as order_dental_for_inspected_all,
                     count(IF(item_category = 1 and inspected_result = '通过', TRUE, NULL)) as order_dental_for_inspected_accepted,
+                    count(IF(item_category = 1 and inspected_result = '郊区通过', TRUE, NULL)) as order_dental_for_inspected_accepted_suburb,
                     count(IF(item_category = 1 and inspected_result = '内部通过', TRUE, NULL)) as order_dental_for_inspected_accepted_inside,
                     count(IF(item_category = 1 and inspected_result = '重复', TRUE, NULL)) as order_dental_for_inspected_repeated,
                     count(IF(item_category = 1 and inspected_result = '拒绝', TRUE, NULL)) as order_dental_for_inspected_refused,
@@ -9359,6 +9360,7 @@ class DKAdminRepository {
                     
                     count(IF(item_category = 1 and inspected_status <> 0, TRUE, NULL)) as order_dental_for_inspected_all,
                     count(IF(item_category = 1 and inspected_result = '通过', TRUE, NULL)) as order_dental_for_inspected_accepted,
+                    count(IF(item_category = 1 and inspected_result = '郊区通过', TRUE, NULL)) as order_dental_for_inspected_accepted_suburb,
                     count(IF(item_category = 1 and inspected_result = '内部通过', TRUE, NULL)) as order_dental_for_inspected_accepted_inside,
                     count(IF(item_category = 1 and inspected_result = '重复', TRUE, NULL)) as order_dental_for_inspected_repeated,
                     count(IF(item_category = 1 and inspected_result = '拒绝', TRUE, NULL)) as order_dental_for_inspected_refused,
@@ -37393,6 +37395,7 @@ EOF;
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
                     count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
+                    count(IF(inspected_result = '郊区通过', TRUE, NULL)) as order_count_for_accepted_suburb,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
                 "))
             ->addSelect(DB::raw("
@@ -37495,6 +37498,7 @@ EOF;
         $total_data['order_count_for_accepted'] = 0;
         $total_data['order_count_for_refused'] = 0;
         $total_data['order_count_for_repeated'] = 0;
+        $total_data['order_count_for_accepted_suburb'] = 0;
         $total_data['order_count_for_accepted_inside'] = 0;
 
         $total_data['order_count_for_delivered'] = 0;
@@ -37527,6 +37531,7 @@ EOF;
                 $list[$k]->order_count_for_accepted = $query_order[$v->id]['order_count_for_accepted'];
                 $list[$k]->order_count_for_refused = $query_order[$v->id]['order_count_for_refused'];
                 $list[$k]->order_count_for_repeated = $query_order[$v->id]['order_count_for_repeated'];
+                $list[$k]->order_count_for_accepted_suburb = $query_order[$v->id]['order_count_for_accepted_suburb'];
                 $list[$k]->order_count_for_accepted_inside = $query_order[$v->id]['order_count_for_accepted_inside'];
 
                 $list[$k]->order_count_for_delivered = $query_order[$v->id]['order_count_for_delivered'];
@@ -37543,6 +37548,7 @@ EOF;
                 $list[$k]->order_count_for_accepted = 0;
                 $list[$k]->order_count_for_refused = 0;
                 $list[$k]->order_count_for_repeated = 0;
+                $list[$k]->order_count_for_accepted_suburb = 0;
                 $list[$k]->order_count_for_accepted_inside = 0;
 
                 $list[$k]->order_count_for_delivered = 0;
@@ -37598,6 +37604,7 @@ EOF;
             $total_data['order_count_for_accepted'] += $v->order_count_for_accepted;
             $total_data['order_count_for_refused'] += $v->order_count_for_refused;
             $total_data['order_count_for_repeated'] += $v->order_count_for_repeated;
+            $total_data['order_count_for_accepted_suburb'] += $v->order_count_for_accepted_suburb;
             $total_data['order_count_for_accepted_inside'] += $v->order_count_for_accepted_inside;
 
             $total_data['order_count_for_delivered'] += $v->order_count_for_delivered;

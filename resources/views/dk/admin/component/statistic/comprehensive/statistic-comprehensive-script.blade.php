@@ -524,6 +524,7 @@
                     $target.find(".order_published_dental_for_published").find('b').html($data.order_published_data.order_dental_for_published);
                     $target.find(".order_published_dental_for_inspected_all").find('b').html($data.order_published_data.order_dental_for_inspected_all);
                     $target.find(".order_published_dental_for_inspected_accepted").find('b').html($data.order_published_data.order_dental_for_inspected_accepted);
+                    $target.find(".order_published_dental_for_inspected_accepted_suburb").find('b').html($data.order_published_data.order_dental_for_inspected_accepted_suburb);
                     $target.find(".order_published_dental_for_inspected_accepted_inside").find('b').html($data.order_published_data.order_dental_for_inspected_accepted_inside);
                     $target.find(".order_published_dental_for_inspected_repeated").find('b').html($data.order_published_data.order_dental_for_inspected_repeated);
                     $target.find(".order_published_dental_for_inspected_refused").find('b').html($data.order_published_data.order_dental_for_inspected_refused);
@@ -538,6 +539,7 @@
                     // 质检审核
                     $target.find(".order_inspected_dental_for_inspected_all").find('b').html($data.order_inspected_data.order_dental_for_inspected_all);
                     $target.find(".order_inspected_dental_for_inspected_accepted").find('b').html($data.order_inspected_data.order_dental_for_inspected_accepted);
+                    $target.find(".order_inspected_dental_for_inspected_accepted_suburb").find('b').html($data.order_inspected_data.order_dental_for_inspected_accepted_suburb);
                     $target.find(".order_inspected_dental_for_inspected_accepted_inside").find('b').html($data.order_inspected_data.order_dental_for_inspected_accepted_inside);
                     $target.find(".order_inspected_dental_for_inspected_repeated").find('b').html($data.order_inspected_data.order_dental_for_inspected_repeated);
                     $target.find(".order_inspected_dental_for_inspected_refused").find('b').html($data.order_inspected_data.order_dental_for_inspected_refused);
