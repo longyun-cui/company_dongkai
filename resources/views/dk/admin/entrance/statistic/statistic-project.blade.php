@@ -276,7 +276,8 @@
                             "data": "order_count_for_inspected",
                             "className": "bg-inspected",
                             "width": "60px",
-                            "orderable": false,
+                            "orderable": true,
+                            "orderSequence": ["desc", "asc"],
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                                 if(row.id == "统计")
                                 {
@@ -308,7 +309,8 @@
                             "data": "order_count_for_accepted_suburb",
                             "className": "bg-inspected",
                             "width": "60px",
-                            "orderable": false,
+                            "orderable": true,
+                            "orderSequence": ["desc", "asc"],
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                                 if(row.id == "统计")
                                 {
@@ -341,7 +343,8 @@
                             "data": "order_count_for_repeated",
                             "className": "bg-inspected",
                             "width": "60px",
-                            "orderable": false,
+                            "orderable": true,
+                            "orderSequence": ["desc", "asc"],
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                                 if(row.id == "统计")
                                 {
@@ -358,7 +361,8 @@
                             "data": "order_count_for_refused",
                             "className": "bg-inspected",
                             "width": "60px",
-                            "orderable": false,
+                            "orderable": true,
+                            "orderSequence": ["desc", "asc"],
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                                 if(row.id == "统计")
                                 {
@@ -462,7 +466,8 @@
                             "data": "order_rate_for_accepted",
                             "className": "bg-service-customer",
                             "width": "60px",
-                            "orderable": false,
+                            "orderable": true,
+                            "orderSequence": ["desc", "asc"],
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                                 if(row.id == "统计")
                                 {
