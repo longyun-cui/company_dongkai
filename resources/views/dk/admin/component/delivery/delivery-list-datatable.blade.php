@@ -408,6 +408,10 @@
                             {
                                 $result_html = '<small class="btn-xs bg-red">正畸</small>';
                             }
+                            else if($client_type == 99)
+                            {
+                                $result_html = '<small class="btn-xs bg-black">其他</small>';
+                            }
                             else
                             {
                                 $result_html = '未知类型';
