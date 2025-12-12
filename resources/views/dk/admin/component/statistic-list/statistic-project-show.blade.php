@@ -10,7 +10,7 @@
             <input type="hidden" name="statistic-list-project-show-time-type" class="time-type" value="" readonly>
 
             {{--选择项目--}}
-            <select class="search-filter form-filter filter-xl select2-box-c- select2-project-c" data-item-category="1" name="statistic-list-project-show-project" multiple="multiple">
+            <select class="search-filter form-filter filter-xl select2-box-c- select2-project-c" data-item-category="1" name="statistic-list-project-show-project" multiple="multiple" style="width:240px;">
                 <option value="-1">选择项目</option>
                 @foreach($project_list as $v)
                     <option value="{{ $v->id }}">{{ $v->name }}</option>

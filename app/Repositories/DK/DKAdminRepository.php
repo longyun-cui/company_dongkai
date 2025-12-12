@@ -13772,6 +13772,15 @@ class DKAdminRepository {
         if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
         if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
 
+        // 项目
+        if(!empty($post_data['assign_project']))
+        {
+            if(count($post_data['assign_project']))
+            {
+                $query->whereIn('project_id', $post_data['assign_project']);
+            }
+        }
+
 
         $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';
         if($time_type == 'all')
@@ -14148,6 +14157,15 @@ class DKAdminRepository {
         if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
         if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
         if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
+
+        // 客户
+        if(!empty($post_data['assign_client']))
+        {
+            if(count($post_data['assign_client']))
+            {
+                $query->whereIn('client_id', $post_data['assign_client']);
+            }
+        }
 
 
         $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';

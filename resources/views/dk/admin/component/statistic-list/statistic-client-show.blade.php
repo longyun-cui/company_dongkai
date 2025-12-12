@@ -10,7 +10,7 @@
             <input type="hidden" name="statistic-list-client-show-time-type" class="time-type" value="" readonly>
 
             {{--选择客户--}}
-            <select class="search-filter form-filter filter-xl select2-box-c- select2-client-c" data-user-category="1" name="statistic-list-client-show-client" multiple="multiple">
+            <select class="search-filter form-filter filter-xl select2-box-c- select2-client-c" data-user-category="1" name="statistic-list-client-show-client" multiple="multiple" style="width:240px;">
                 <option value="-1">选择客户</option>
                 @foreach($client_list as $v)
                     <option value="{{ $v->id }}">{{ $v->username }}</option>
