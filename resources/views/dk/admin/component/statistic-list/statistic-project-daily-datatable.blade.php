@@ -63,7 +63,8 @@
                     "data": "id",
                     "className": "text-center",
                     "width": "80px",
-                    "orderable": false,
+                    "orderable": true,
+                    "orderSequence": ["asc", "desc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
                         {
@@ -95,7 +96,8 @@
                     "data": "project_id",
                     "className": "text-center",
                     "width": "120px",
-                    "orderable": false,
+                    "orderable": true,
+                    "orderSequence": ["asc", "desc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
                         {
