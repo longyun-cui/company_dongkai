@@ -938,29 +938,34 @@ class DKAdminController extends Controller
 
 
 
-    // 【统计】项目统计日报列表
+    // 【统计】【项目】统计日报列表
     public function v1_operate_for_statistic_project_daily_datatable_list_query()
     {
         return $this->repo->v1_operate_for_statistic_project_daily_datatable_list_query(request()->all());
     }
-    // 【统计】生成项目统计日报
+    // 【统计】【项目】项目统计日报-生成
     public function v1_operate_for_statistic_project_daily_create()
     {
         return $this->repo->v1_operate_for_statistic_project_daily_create(request()->all());
     }
-    // 【统计】客户统计
+    // 【统计】项目统计
     public function v1_operate_for_statistic_project_show()
     {
         return $this->repo->v1_operate_for_statistic_project_show(request()->all());
     }
+    // 【统计】项目统计
+    public function v1_operate_for_statistic_project_detail()
+    {
+        return $this->repo->v1_operate_for_statistic_project_detail(request()->all());
+    }
 
 
-    // 【统计】项目客户列表
+    // 【统计】【客户】统计日报列表
     public function v1_operate_for_statistic_client_daily_datatable_list_query()
     {
         return $this->repo->v1_operate_for_statistic_client_daily_datatable_list_query(request()->all());
     }
-    // 【统计】生成客户日报
+    // 【统计】【客户】统计日报列表-生成
     public function v1_operate_for_statistic_client_daily_create()
     {
         return $this->repo->v1_operate_for_statistic_client_daily_create(request()->all());
@@ -969,6 +974,11 @@ class DKAdminController extends Controller
     public function v1_operate_for_statistic_client_show()
     {
         return $this->repo->v1_operate_for_statistic_client_show(request()->all());
+    }
+    // 【统计】客户统计
+    public function v1_operate_for_statistic_client_detail()
+    {
+        return $this->repo->v1_operate_for_statistic_client_detail(request()->all());
     }
 
 

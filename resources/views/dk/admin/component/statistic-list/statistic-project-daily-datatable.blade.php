@@ -77,7 +77,7 @@
                     "title": "日期",
                     "data": "statistic_date",
                     "className": "",
-                    "width": "80px",
+                    "width": "100px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
@@ -111,11 +111,13 @@
                         {
                             if(row.project_er.alias_name)
                             {
-                                return '<a href="javascript:void(0);">'+row.project_er.name+' ('+row.project_er.alias_name+')'+'</a>';
+                                var $project_name = row.project_er.name+' ('+row.project_er.alias_name+')';
+                                return '<a class="statistic-project-detail-control" data-id="'+data+'" data-title="'+$project_name+'">'+$project_name+'</a>';
                             }
                             else
                             {
-                                return '<a href="javascript:void(0);">'+row.project_er.name+'</a>';
+                                var $project_name = row.project_er.name;
+                                return '<a class="statistic-project-detail-control" data-id="'+data+'" data-title="'+$project_name+'">'+$project_name+'</a>';
                             }
                         }
                     }
@@ -124,7 +126,7 @@
                     "title": "当日出单",
                     "data": "production_published_num",
                     "className": "bg-published",
-                    "width": "80px",
+                    "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -158,7 +160,7 @@
                     "title": "有效单量",
                     "data": "production_accepted_num",
                     "className": "bg-published _bold",
-                    "width": "80px",
+                    "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -175,7 +177,7 @@
                     "title": "郊区通过",
                     "data": "production_accepted_suburb_num",
                     "className": "bg-published",
-                    "width": "80px",
+                    "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -192,7 +194,7 @@
                     "title": "内部通过",
                     "data": "production_accepted_inside_num",
                     "className": "bg-published",
-                    "width": "80px",
+                    "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -209,7 +211,7 @@
                     "title": "交付总量",
                     "data": "marketing_delivered_num",
                     "className": "bg-delivered _bold",
-                    "width": "80px",
+                    "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -226,7 +228,7 @@
                     "title": "前日存单",
                     "data": "marketing_yesterday_num",
                     "className": "bg-delivered",
-                    "width": "80px",
+                    "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -243,7 +245,7 @@
                     "title": "当日产出",
                     "data": "marketing_today_num",
                     "className": "bg-delivered",
-                    "width": "80px",
+                    "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -294,7 +296,7 @@
                     "title": "特殊交付",
                     "data": "marketing_special_num",
                     "className": "bg-delivered",
-                    "width": "80px",
+                    "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -310,7 +312,7 @@
                 {
                     "title": "备注",
                     "data": "description",
-                    "className": "text-left",
+                    "className": "text-center",
                     "width": "",
                     "orderable": false,
                     render: function(data, type, row, meta) {

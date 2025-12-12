@@ -956,6 +956,186 @@
         });
 
 
+
+        // 通用标签控制逻辑
+        $(".wrapper").on('click', ".statistic-project-detail-control", function() {
+
+            const $that = $(this);
+            const $id = $that.data('id');
+            const $title = $that.data('title');
+            const $project_detail_id = 'project-detail-' + $id;
+            const $datatable_id = 'datatable-project-detail-' + $id;
+            const $datatable_clone_object = 'statistic-list-project-detail-clone';
+            const $datatable_target = $project_detail_id;
+            const $chart_id = "eChart-project-detail-" + $id;
+
+            // $(".nav-header-title").html($btn.data('title'));
+
+            var $icon = '<i class="fa fa-cube text-orange"></i> ';
+            const $config = {
+                type: $that.data('type'),
+                unique: 'y',
+                id: $project_detail_id,
+                title: $icon + $that.data('title'),
+                content: $that.data('content') || '默认内容'
+            };
+
+            const $tabLink = $('a[href="#'+ $project_detail_id +'"]');
+            const $tabPane = $('#' + $project_detail_id);
+
+            if($tabPane.length)
+            {
+                // 存在则激活
+                console.log('已存在！');
+                $tabLink.tab('show');
+            }
+            else
+            {
+                // 创建新标签页
+                console.log('不存在！');
+                createTab($config);
+                // 激活新标签页
+                $('a[href="#' + $project_detail_id + '"]').tab('show');
+            }
+
+
+            // data-datatable-id="datatable-location-list"
+            // data-datatable-target="location-list"
+            // data-datatable-clone-object="location-list-clone"
+            // data-chart-id="eChart-statistic-company-daily"
+
+
+            if($.fn.DataTable.isDataTable('#'+$config.id))
+            {
+                console.log($config.id);
+                console.log('DataTable 已存在！');
+            }
+            else
+            {
+                console.log('DataTable 未初始化！');
+
+                let $clone = $('.'+$datatable_clone_object).clone(true);
+                $clone.removeClass($datatable_clone_object);
+                $clone.addClass('datatable-wrapper');
+                $clone.find('table').attr('id',$datatable_id);
+                $clone.find('input[name="statistic-list-project-detail-project-id"]').val($id);
+                $clone.find('.eChart').attr('id',$chart_id);
+
+                $('#'+$project_detail_id).prepend($clone);
+                $('#'+$project_detail_id).find('.select2-box-c').select2({
+                    theme: 'classic'
+                });
+                $('#'+$project_detail_id).find('.time_picker-c').datetimepicker({
+                    locale: moment.locale('zh-cn'),
+                    format: "YYYY-MM-DD HH:mm",
+                    ignoreReadonly: true
+                });
+                $('#'+$project_detail_id).find('.date_picker-c').datetimepicker({
+                    locale: moment.locale('zh-cn'),
+                    format: "YYYY-MM-DD",
+                    ignoreReadonly: true
+                });
+                $('#'+$project_detail_id).find('.month_picker-c').datetimepicker({
+                    locale: moment.locale('zh-cn'),
+                    format: "YYYY-MM",
+                    ignoreReadonly: true
+                });
+
+                Datatable_Statistic_Project_Detail('#'+$datatable_id,$chart_id);
+            }
+
+        });
+
+        // 通用标签控制逻辑
+        $(".wrapper").on('click', ".statistic-client-detail-control", function() {
+
+            const $that = $(this);
+            const $id = $that.data('id');
+            const $title = $that.data('title');
+            const $client_detail_id = 'client-detail-' + $id;
+            const $datatable_id = 'datatable-client-detail-' + $id;
+            const $datatable_clone_object = 'statistic-list-client-detail-clone';
+            const $datatable_target = $client_detail_id;
+            const $chart_id = "eChart-client-detail-" + $id;
+
+            // $(".nav-header-title").html($btn.data('title'));
+
+            var $icon = '<i class="fa fa-user-secret text-orange"></i> ';
+            const $config = {
+                type: $that.data('type'),
+                unique: 'y',
+                id: $client_detail_id,
+                title: $icon + $that.data('title'),
+                content: $that.data('content') || '默认内容'
+            };
+
+            const $tabLink = $('a[href="#'+ $client_detail_id +'"]');
+            const $tabPane = $('#' + $client_detail_id);
+
+            if($tabPane.length)
+            {
+                // 存在则激活
+                console.log('已存在！');
+                $tabLink.tab('show');
+            }
+            else
+            {
+                // 创建新标签页
+                console.log('不存在！');
+                createTab($config);
+                // 激活新标签页
+                $('a[href="#' + $client_detail_id + '"]').tab('show');
+            }
+
+
+            // data-datatable-id="datatable-location-list"
+            // data-datatable-target="location-list"
+            // data-datatable-clone-object="location-list-clone"
+            // data-chart-id="eChart-statistic-company-daily"
+
+
+            if($.fn.DataTable.isDataTable('#'+$config.id))
+            {
+                console.log($config.id);
+                console.log('DataTable 已存在！');
+            }
+            else
+            {
+                console.log('DataTable 未初始化！');
+
+                let $clone = $('.'+$datatable_clone_object).clone(true);
+                $clone.removeClass($datatable_clone_object);
+                $clone.addClass('datatable-wrapper');
+                $clone.find('table').attr('id',$datatable_id);
+                $clone.find('input[name="statistic-list-client-detail-client-id"]').val($id);
+                $clone.find('.eChart').attr('id',$chart_id);
+
+                $('#'+$client_detail_id).prepend($clone);
+                $('#'+$client_detail_id).find('.select2-box-c').select2({
+                    theme: 'classic'
+                });
+                $('#'+$client_detail_id).find('.time_picker-c').datetimepicker({
+                    locale: moment.locale('zh-cn'),
+                    format: "YYYY-MM-DD HH:mm",
+                    ignoreReadonly: true
+                });
+                $('#'+$client_detail_id).find('.date_picker-c').datetimepicker({
+                    locale: moment.locale('zh-cn'),
+                    format: "YYYY-MM-DD",
+                    ignoreReadonly: true
+                });
+                $('#'+$client_detail_id).find('.month_picker-c').datetimepicker({
+                    locale: moment.locale('zh-cn'),
+                    format: "YYYY-MM",
+                    ignoreReadonly: true
+                });
+
+                Datatable_Statistic_Client_Detail('#'+$datatable_id,$chart_id);
+            }
+
+        });
+
+
     });
 
 

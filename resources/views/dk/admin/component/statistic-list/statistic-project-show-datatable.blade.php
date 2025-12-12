@@ -77,7 +77,7 @@
                     "title": "日期",
                     "data": "statistic_date",
                     "className": "",
-                    "width": "80px",
+                    "width": "100px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.project_id == "统计")
@@ -124,7 +124,7 @@
                     "title": "天数",
                     "data": "statistic_day_num",
                     "className": "",
-                    "width": "80px",
+                    "width": "100px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.project_id == "统计")
@@ -174,7 +174,7 @@
                     "title": "当日出单",
                     "data": "production_accepted_total",
                     "className": "bg-published _bold",
-                    "width": "80px",
+                    "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -191,7 +191,7 @@
                     "title": "郊区通过",
                     "data": "production_accepted_suburb_total",
                     "className": "bg-published",
-                    "width": "80px",
+                    "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -208,7 +208,7 @@
                     "title": "内部通过",
                     "data": "production_accepted_inside_total",
                     "className": "bg-published",
-                    "width": "80px",
+                    "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -225,7 +225,7 @@
                     "title": "交付总量",
                     "data": "marketing_delivered_total",
                     "className": "bg-delivered _bold",
-                    "width": "80px",
+                    "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -242,7 +242,7 @@
                     "title": "前日存单",
                     "data": "marketing_yesterday_total",
                     "className": "bg-delivered",
-                    "width": "80px",
+                    "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -259,7 +259,7 @@
                     "title": "当日产出",
                     "data": "marketing_today_total",
                     "className": "bg-delivered",
-                    "width": "80px",
+                    "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -310,7 +310,7 @@
                     "title": "特殊交付",
                     "data": "marketing_special_total",
                     "className": "bg-delivered",
-                    "width": "80px",
+                    "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {

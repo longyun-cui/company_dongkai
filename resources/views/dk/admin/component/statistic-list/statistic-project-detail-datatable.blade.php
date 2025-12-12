@@ -1,5 +1,6 @@
 <script>
-    function Table_Datatable_Statistic_List_Client_Show($tableId)
+
+    function Datatable_Statistic_Project_Detail($tableId, $eChartId)
     {
         let $that = $($tableId);
         let $datatable_wrapper = $that.parents('.datatable-wrapper');
@@ -13,26 +14,26 @@
             "serverSide": true,
             "searching": false,
             "pagingType": "simple_numbers",
-            "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t>',
+            "sDom": '<t>',
             "order": [],
             "orderCellsTop": true,
             "ajax": {
-                'url': "{{ url('/v1/operate/statistic-list/statistic-client-show') }}",
+                'url': "{{ url('/v1/operate/statistic-list/statistic-project-detail') }}",
                 "type": 'POST',
                 "dataType" : 'json',
                 "data": function (d) {
                     d._token = $('meta[name="_token"]').attr('content');
-                    d.id = $tableSearch.find('input[name="rank-id"]').val();
-                    d.name = $tableSearch.find('input[name="rank-name"]').val();
-                    d.title = $tableSearch.find('input[name="rank-title"]').val();
-                    d.keyword = $tableSearch.find('input[name="rank-keyword"]').val();
-                    d.status = $tableSearch.find('select[name="rank-status"]').val();
-                    d.time_type = $tableSearch.find('input[name="statistic-list-client-show-time-type"]').val();
-                    d.assign_month = $tableSearch.find('input[name="statistic-list-client-show-month"]').val();
-                    d.assign_date = $tableSearch.find('input[name="statistic-list-client-show-date"]').val();
-                    d.assign_start = $tableSearch.find('input[name="statistic-list-client-show-start"]').val();
-                    d.assign_ended = $tableSearch.find('input[name="statistic-list-client-show-ended"]').val();
-                    d.assign_client = $tableSearch.find('select[name="statistic-list-client-show-client"]').val();
+                    d.project_id = $tableSearch.find('input[name="statistic-list-project-detail-project-id"]').val();
+                    d.id = $tableSearch.find('input[name="statistic-list-project-detail-id"]').val();
+                    d.name = $tableSearch.find('input[name="statistic-list-project-detail-name"]').val();
+                    d.title = $tableSearch.find('input[name="statistic-list-project-detail-title"]').val();
+                    d.keyword = $tableSearch.find('input[name="statistic-list-project-detail-keyword"]').val();
+                    d.status = $tableSearch.find('select[name="statistic-list-project-detail-status"]').val();
+                    d.time_type = $tableSearch.find('input[name="statistic-list-project-detail-time-type"]').val();
+                    d.assign_month = $tableSearch.find('input[name="statistic-list-project-detail-month"]').val();
+                    d.assign_date = $tableSearch.find('input[name="statistic-list-project-detail-date"]').val();
+                    d.assign_start = $tableSearch.find('input[name="statistic-list-project-detail-start"]').val();
+                    d.assign_ended = $tableSearch.find('input[name="statistic-list-project-detail-ended"]').val();
                 },
             },
             // "fixedColumns": {
@@ -80,9 +81,9 @@
                     "width": "100px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.client_id == "统计")
+                        if(row.id == "统计")
                         {
-                            $(nTd).addClass('_bold').addClass('text-green');
+                            $(nTd).addClass('_bold');
                         }
                     },
                     render: function(data, type, row, meta) {
@@ -90,62 +91,55 @@
                     }
                 },
                 {
-                    "title": "客户名称",
-                    "data": "client_id",
+                    "title": "项目名称",
+                    "data": "project_id",
                     "className": "text-center",
                     "width": "120px",
                     "orderable": true,
                     "orderSequence": ["asc", "desc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.client_id == "统计")
+                        if(row.id == "统计")
                         {
-                            $(nTd).addClass('_bold').addClass('text-green');
+                            $(nTd).addClass('_bold');
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(row.client_er == null)
+                        if(row.project_er == null)
                         {
                             return data;
                         }
                         else
                         {
-                            return '<a href="javascript:void(0);">'+row.client_er.username+'</a>';
+                            if(row.project_er.alias_name)
+                            {
+                                var $project_name = row.project_er.name+' ('+row.project_er.alias_name+')';
+                                return '<a class="statistic-project-detail-control" data-id="'+data+'" data-title="'+$project_name+'">'+$project_name+'</a>';
+                            }
+                            else
+                            {
+                                var $project_name = row.project_er.name;
+                                return '<a class="statistic-project-detail-control" data-id="'+data+'" data-title="'+$project_name+'">'+$project_name+'</a>';
+                            }
                         }
                     }
                 },
                 {
-                    "title": "天数",
-                    "data": "statistic_day_num",
-                    "className": "",
+                    "title": "当日出单",
+                    "data": "production_published_num",
+                    "className": "bg-published",
                     "width": "100px",
-                    "orderable": false,
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.client_id == "统计")
+                        if(row.id == "统计")
                         {
-                            $(nTd).addClass('_bold').addClass('text-green');
+                            $(nTd).addClass('_bold');
                         }
                     },
                     render: function(data, type, row, meta) {
                         return data;
                     }
                 },
-                // {
-                //     "title": "当日出单",
-                //     "data": "production_published_num",
-                //     "className": "bg-published",
-                //     "width": "100px",
-                //     "orderable": true,
-                //     "orderSequence": ["desc", "asc"],
-                //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                //         if(row.id == "统计")
-                //         {
-                //             $(nTd).addClass('_bold');
-                //         }
-                //     },
-                //     render: function(data, type, row, meta) {
-                //         return data;
-                //     }
-                // },
                 // {
                 //     "title": "审核量",
                 //     "data": "production_inspected_num",
@@ -164,16 +158,16 @@
                 //     }
                 // },
                 {
-                    "title": "当日出单",
-                    "data": "production_accepted_total",
+                    "title": "有效出单",
+                    "data": "production_accepted_num",
                     "className": "bg-published _bold",
                     "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.client_id == "统计")
+                        if(row.id == "统计")
                         {
-                            $(nTd).addClass('_bold').addClass('text-green');
+                            $(nTd).addClass('_bold');
                         }
                     },
                     render: function(data, type, row, meta) {
@@ -182,15 +176,15 @@
                 },
                 {
                     "title": "郊区通过",
-                    "data": "production_accepted_suburb_total",
+                    "data": "production_accepted_suburb_num",
                     "className": "bg-published",
                     "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.client_id == "统计")
+                        if(row.id == "统计")
                         {
-                            $(nTd).addClass('_bold').addClass('text-green');
+                            $(nTd).addClass('_bold');
                         }
                     },
                     render: function(data, type, row, meta) {
@@ -199,15 +193,15 @@
                 },
                 {
                     "title": "内部通过",
-                    "data": "production_accepted_inside_total",
+                    "data": "production_accepted_inside_num",
                     "className": "bg-published",
                     "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.client_id == "统计")
+                        if(row.id == "统计")
                         {
-                            $(nTd).addClass('_bold').addClass('text-green');
+                            $(nTd).addClass('_bold');
                         }
                     },
                     render: function(data, type, row, meta) {
@@ -216,15 +210,15 @@
                 },
                 {
                     "title": "交付总量",
-                    "data": "marketing_delivered_total",
+                    "data": "marketing_delivered_num",
                     "className": "bg-delivered _bold",
                     "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.client_id == "统计")
+                        if(row.id == "统计")
                         {
-                            $(nTd).addClass('_bold').addClass('text-green');
+                            $(nTd).addClass('_bold');
                         }
                     },
                     render: function(data, type, row, meta) {
@@ -233,15 +227,15 @@
                 },
                 {
                     "title": "前日存单",
-                    "data": "marketing_yesterday_total",
+                    "data": "marketing_yesterday_num",
                     "className": "bg-delivered",
                     "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.client_id == "统计")
+                        if(row.id == "统计")
                         {
-                            $(nTd).addClass('_bold').addClass('text-green');
+                            $(nTd).addClass('_bold');
                         }
                     },
                     render: function(data, type, row, meta) {
@@ -250,15 +244,15 @@
                 },
                 {
                     "title": "当日产出",
-                    "data": "marketing_today_total",
+                    "data": "marketing_today_num",
                     "className": "bg-delivered",
                     "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.client_id == "统计")
+                        if(row.id == "统计")
                         {
-                            $(nTd).addClass('_bold').addClass('text-green');
+                            $(nTd).addClass('_bold');
                         }
                     },
                     render: function(data, type, row, meta) {
@@ -267,15 +261,15 @@
                 },
                 {
                     "title": "分发量",
-                    "data": "marketing_distribute_total",
+                    "data": "marketing_distribute_num",
                     "className": "bg-delivered",
                     "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.client_id == "统计")
+                        if(row.id == "统计")
                         {
-                            $(nTd).addClass('_bold').addClass('text-green');
+                            $(nTd).addClass('_bold');
                         }
                     },
                     render: function(data, type, row, meta) {
@@ -284,15 +278,15 @@
                 },
                 {
                     "title": "隔日交付<br>(当日存单)",
-                    "data": "marketing_tomorrow_total",
+                    "data": "marketing_tomorrow_num",
                     "className": "bg-delivered",
                     "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.client_id == "统计")
+                        if(row.id == "统计")
                         {
-                            $(nTd).addClass('_bold').addClass('text-green');
+                            $(nTd).addClass('_bold');
                         }
                     },
                     render: function(data, type, row, meta) {
@@ -301,19 +295,31 @@
                 },
                 {
                     "title": "特殊交付",
-                    "data": "marketing_special_total",
+                    "data": "marketing_special_num",
                     "className": "bg-delivered",
                     "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.client_id == "统计")
+                        if(row.id == "统计")
                         {
-                            $(nTd).addClass('_bold').addClass('text-green');
+                            $(nTd).addClass('_bold');
                         }
                     },
                     render: function(data, type, row, meta) {
                         return data;
+                    }
+                },
+                {
+                    "title": "备注",
+                    "data": "description",
+                    "className": "text-center",
+                    "width": "",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return data;
+                        // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
+                        // else return '';
                     }
                 }
             ],
@@ -329,6 +335,6 @@
             ],
             "language": { url: '/common/dataTableI18n' },
         });
-
     }
+
 </script>
