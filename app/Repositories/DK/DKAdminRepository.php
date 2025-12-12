@@ -13860,7 +13860,7 @@ class DKAdminRepository {
             ->where('delivered_date',$assign_date)
             ->groupBy('client_id')
             ->get()
-            ->keyBy('client_ids')
+            ->keyBy('client_id')
             ->toArray();
 
 
@@ -13964,7 +13964,7 @@ class DKAdminRepository {
                 $daily->marketing_distribute_num = $v->marketing_distribute_num;
 
                 $bool = $daily->save();
-                if(!$bool) throw new Exception("DK_Statistic_Project_daily--save--fail");
+                if(!$bool) throw new Exception("DK_Statistic_Client_daily--save--fail");
 
             }
 

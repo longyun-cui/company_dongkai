@@ -116,23 +116,23 @@
 
                     }
                 },
-                {
-                    "title": "当日出单",
-                    "data": "production_published_num",
-                    "className": "bg-published _bold",
-                    "width": "80px",
-                    "orderable": true,
-                    "orderSequence": ["desc", "asc"],
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.id == "统计")
-                        {
-                            $(nTd).addClass('_bold');
-                        }
-                    },
-                    render: function(data, type, row, meta) {
-                        return data;
-                    }
-                },
+                // {
+                //     "title": "当日出单",
+                //     "data": "production_published_num",
+                //     "className": "bg-published",
+                //     "width": "80px",
+                //     "orderable": true,
+                //     "orderSequence": ["desc", "asc"],
+                //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                //         if(row.id == "统计")
+                //         {
+                //             $(nTd).addClass('_bold');
+                //         }
+                //     },
+                //     render: function(data, type, row, meta) {
+                //         return data;
+                //     }
+                // },
                 // {
                 //     "title": "审核量",
                 //     "data": "production_inspected_num",
@@ -151,7 +151,7 @@
                 //     }
                 // },
                 {
-                    "title": "通过量",
+                    "title": "当日出单",
                     "data": "production_accepted_num",
                     "className": "bg-published _bold",
                     "width": "80px",

@@ -126,7 +126,7 @@
                 {
                     "title": "当日出单",
                     "data": "production_published_num",
-                    "className": "bg-published _bold",
+                    "className": "bg-published",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -158,7 +158,7 @@
                 //     }
                 // },
                 {
-                    "title": "通过量",
+                    "title": "有效单量",
                     "data": "production_accepted_num",
                     "className": "bg-published _bold",
                     "width": "80px",
