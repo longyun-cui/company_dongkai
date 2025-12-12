@@ -77,7 +77,7 @@
                 {
                     "title": "日期",
                     "data": "statistic_date",
-                    "className": "bg-delivered _bold",
+                    "className": "bg-delivered",
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -124,7 +124,7 @@
                 {
                     "title": "当日出单",
                     "data": "production_published_num",
-                    "className": "bg-delivered _bold",
+                    "className": "bg-published _bold",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -141,7 +141,7 @@
                 {
                     "title": "审核量",
                     "data": "production_inspected_num",
-                    "className": "bg-delivered _bold",
+                    "className": "bg-published",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -158,7 +158,7 @@
                 {
                     "title": "通过量",
                     "data": "production_accepted_num",
-                    "className": "bg-delivered",
+                    "className": "bg-published _bold",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -175,7 +175,7 @@
                 {
                     "title": "郊区通过",
                     "data": "production_accepted_suburb_num",
-                    "className": "bg-delivered",
+                    "className": "bg-published",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -192,7 +192,7 @@
                 {
                     "title": "内部通过",
                     "data": "production_accepted_inside_num",
-                    "className": "bg-delivered",
+                    "className": "bg-published",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -209,7 +209,7 @@
                 {
                     "title": "交付总量",
                     "data": "marketing_delivered_num",
-                    "className": "bg-delivered",
+                    "className": "bg-delivered _bold",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -224,24 +224,7 @@
                     }
                 },
                 {
-                    "title": "当日交付",
-                    "data": "marketing_today_num",
-                    "className": "bg-delivered",
-                    "width": "80px",
-                    "orderable": true,
-                    "orderSequence": ["desc", "asc"],
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.id == "统计")
-                        {
-                            $(nTd).addClass('_bold');
-                        }
-                    },
-                    render: function(data, type, row, meta) {
-                        return data;
-                    }
-                },
-                {
-                    "title": "隔日交付<br>昨转今",
+                    "title": "前日存单",
                     "data": "marketing_yesterday_num",
                     "className": "bg-delivered",
                     "width": "80px",
@@ -258,9 +241,26 @@
                     }
                 },
                 {
-                    "title": "隔日交付<br>今转明",
-                    "data": "marketing_tomorrow_num",
-                    "className": "bg-inspected",
+                    "title": "当日产出",
+                    "data": "marketing_today_num",
+                    "className": "bg-delivered",
+                    "width": "80px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.id == "统计")
+                        {
+                            $(nTd).addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
+                    "title": "分发量",
+                    "data": "marketing_distribute_num",
+                    "className": "bg-delivered",
                     "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -275,9 +275,9 @@
                     }
                 },
                 {
-                    "title": "分发量",
-                    "data": "marketing_distribute_num",
-                    "className": "bg-inspected",
+                    "title": "隔日交付<br>(当日存单)",
+                    "data": "marketing_tomorrow_num",
+                    "className": "bg-delivered",
                     "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -294,7 +294,7 @@
                 {
                     "title": "特殊交付",
                     "data": "marketing_special_num",
-                    "className": "bg-inspected",
+                    "className": "bg-delivered",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -333,13 +333,13 @@
                         var $html_delete = '';
                         var $html_complete = '';
 
-                        if(row.item_status != 1)
+                        if(row.is_confirmed != 1)
                         {
-                            $html_complete = '<a class="btn btn-xs item-complete-submit-of-statistic-project-daily" data-id="'+data+'">完成</a>';
+                            $html_complete = '<a class="btn btn-xs item-complete-submit-of-statistic-project-daily" data-id="'+data+'">确认</a>';
                         }
                         else
                         {
-                            $html_complete = '<a class="btn btn-xs disabled">完成</a>';
+                            $html_complete = '<a class="btn btn-xs disabled">确认</a>';
                         }
 
                         if(row.deleted_at == null)
