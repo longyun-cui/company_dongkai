@@ -80,9 +80,9 @@
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.id == "统计")
+                        if(row.client_id == "统计")
                         {
-                            $(nTd).addClass('_bold');
+                            $(nTd).addClass('_bold').addClass('text-green');
                         }
                     },
                     render: function(data, type, row, meta) {
@@ -111,7 +111,22 @@
                         {
                             return '<a href="javascript:void(0);">'+row.client_er.username+'</a>';
                         }
-
+                    }
+                },
+                {
+                    "title": "天数",
+                    "data": "statistic_day_num",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.client_id == "统计")
+                        {
+                            $(nTd).addClass('_bold').addClass('text-green');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        return data;
                     }
                 },
                 // {

@@ -128,6 +128,8 @@
 
 
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-project-daily')
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-project-show')
+
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-client-daily')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-client-show')
 
@@ -235,11 +237,11 @@
 
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-project-daily-datatable')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-project-daily-script')
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-project-show-datatable')
 
 
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-client-daily-datatable')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-client-daily-script')
-
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-client-show-datatable')
 
 

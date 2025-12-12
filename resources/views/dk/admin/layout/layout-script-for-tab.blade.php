@@ -513,6 +513,10 @@
                 {
                     Table_Datatable_Statistic_List_Project_Daily('#'+$config.id);
                 }
+                else if($id == "datatable-statistic-list-project-show")
+                {
+                    Table_Datatable_Statistic_List_Project_Show('#'+$config.id);
+                }
                 else if($id == "datatable-statistic-list-client-daily")
                 {
                     Table_Datatable_Statistic_List_Client_Daily('#'+$config.id);

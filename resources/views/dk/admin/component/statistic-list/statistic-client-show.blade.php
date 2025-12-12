@@ -4,35 +4,19 @@
     <div class="col-md-12 datatable-search-row datatable-search-box search-wrapper">
 
 
-        <div class=" pull-left">
-
-            <button type="button" onclick="" class="btn btn-filter btn-success- statistic-list-client-show-create">
-                <i class="fa fa-plus"></i> 生成日报
-            </button>
-
-        </div>
-
-
         <div class="pull-right">
 
 
             <input type="hidden" name="statistic-list-client-show-time-type" class="time-type" value="" readonly>
 
             {{--选择客户--}}
-            <select class="search-filter form-filter filter-lg select2-box-c- select2-client-c" data-user-category="1" name="statistic-list-client-show-client">
+            <select class="search-filter form-filter filter-xl select2-box-c- select2-client-c" data-user-category="1" name="statistic-list-client-show-client" multiple="multiple">
                 <option value="-1">选择客户</option>
                 @foreach($client_list as $v)
                     <option value="{{ $v->id }}">{{ $v->username }}</option>
                 @endforeach
             </select>
 
-            {{--选择项目--}}
-            <select class="search-filter form-filter filter-lg select2-box-c- select2-project-c" data-item-category="1" name="statistic-list-client-show-project">
-                <option value="-1">选择项目</option>
-                @foreach($project_list as $v)
-                    <option value="{{ $v->id }}">{{ $v->name }}</option>
-                @endforeach
-            </select>
 
             {{--按天查看--}}
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre date-pre" data-target="statistic-list-client-show-date">

@@ -938,16 +938,22 @@ class DKAdminController extends Controller
 
 
 
-    // 【统计】项目日报列表
+    // 【统计】项目统计日报列表
     public function v1_operate_for_statistic_project_daily_datatable_list_query()
     {
         return $this->repo->v1_operate_for_statistic_project_daily_datatable_list_query(request()->all());
     }
-    // 【统计】生成项目日报
+    // 【统计】生成项目统计日报
     public function v1_operate_for_statistic_project_daily_create()
     {
         return $this->repo->v1_operate_for_statistic_project_daily_create(request()->all());
     }
+    // 【统计】客户统计
+    public function v1_operate_for_statistic_project_show()
+    {
+        return $this->repo->v1_operate_for_statistic_project_show(request()->all());
+    }
+
 
     // 【统计】项目客户列表
     public function v1_operate_for_statistic_client_daily_datatable_list_query()
@@ -959,7 +965,7 @@ class DKAdminController extends Controller
     {
         return $this->repo->v1_operate_for_statistic_client_daily_create(request()->all());
     }
-    // 【统计】项目客户列表
+    // 【统计】客户统计
     public function v1_operate_for_statistic_client_show()
     {
         return $this->repo->v1_operate_for_statistic_client_show(request()->all());

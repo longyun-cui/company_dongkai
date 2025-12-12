@@ -13504,6 +13504,7 @@ class DKAdminRepository {
 
 
 
+
     // 【统计列表】【项目】返回-列表-数据
     public function v1_operate_for_statistic_project_daily_datatable_list_query($post_data)
     {
@@ -13739,6 +13740,145 @@ class DKAdminRepository {
             return response_fail([],$msg);
         }
 
+    }
+    // 【统计列表】【项目】返回-列表-数据
+    public function v1_operate_for_statistic_project_show($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        if(!in_array($me->user_type,[0,1,9,11,61])) return response_error([],"你没有操作权限！");
+
+        $query = DK_Statistic_Project_daily::select('project_id')
+            ->addSelect(DB::raw("
+                    count(*) as statistic_day_num,
+                    sum(production_accepted_num) as production_accepted_total,
+                    sum(production_accepted_suburb_num) as production_accepted_suburb_total,
+                    sum(production_accepted_inside_num) as production_accepted_inside_total,
+                    count(marketing_delivered_num) as marketing_delivered_total,
+                    count(marketing_today_num) as marketing_today_total,
+                    count(marketing_yesterday_num) as marketing_yesterday_total,
+                    count(marketing_tomorrow_num) as marketing_tomorrow_total,
+                    count(marketing_distribute_num) as marketing_distribute_total,
+                    count(marketing_special_num) as marketing_special_total
+                "))
+            ->with([
+                'project_er'=>function ($query) { $query->select('id','name','alias_name'); }
+            ])
+            ->groupBy('project_id');
+
+        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
+        if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
+        if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
+        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
+
+
+        $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';
+        if($time_type == 'all')
+        {
+            $title = '全部统计';
+        }
+        if($time_type == 'date')
+        {
+            $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date']  : date('Y-m-d');
+            $query->where("statistic_date",$assign_date);
+            $title  = $assign_date;
+        }
+        else if($time_type == 'month')
+        {
+            $assign_month  = isset($post_data['assign_month']) ? $post_data['assign_month']  : date('Y-m');
+            $assign_month_timestamp = strtotime($assign_month);
+
+            $assign_month_start_date = date('Y-m-01',$assign_month_timestamp); // 指定月份-开始日期
+            $assign_month_ended_date = date('Y-m-t',$assign_month_timestamp); // 指定月份-结束日期
+
+            $query->whereBetween('statistic_date',[$assign_month_start_date,$assign_month_ended_date]);
+            $title  = $assign_month.'月';
+        }
+        else if($time_type == 'period')
+        {
+            if(!empty($post_data['assign_start']) && !empty($post_data['assign_ended']))
+            {
+                $query->whereDate("statistic_date", '>=', $post_data['assign_start']);
+                $query->whereDate("statistic_date", '<=', $post_data['assign_ended']);
+                $title  = $post_data['assign_start'].'<br> - <br>'.$post_data['assign_ended'];
+            }
+            else if(!empty($post_data['assign_start']))
+            {
+                $query->where("statistic_date", $post_data['assign_start']);
+                $title  = $post_data['assign_start'];
+            }
+            else if(!empty($post_data['assign_ended']))
+            {
+                $query->where("statistic_date", $post_data['assign_ended']);
+                $title  = $post_data['assign_ended'];
+            }
+        }
+        else
+        {
+            $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date']  : date('Y-m-d');
+            $query->where("statistic_date",$assign_date);
+            $title  = $assign_date;
+        }
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 10;
+//        if($limit > 100) $limit = 100;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "asc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+//        dd($list->toArray());
+
+
+        $total_data = [];
+        $total_data['project_id'] = '统计';
+        $total_data['statistic_date'] = '统计';
+        $total_data['statistic_day_num'] = '统计';
+        $total_data['production_accepted_total'] = 0;
+        $total_data['production_accepted_suburb_total'] = 0;
+        $total_data['production_accepted_inside_total'] = 0;
+        $total_data['marketing_delivered_total'] = 0;
+        $total_data['marketing_today_total'] = 0;
+        $total_data['marketing_yesterday_total'] = 0;
+        $total_data['marketing_tomorrow_total'] = 0;
+        $total_data['marketing_distribute_total'] = 0;
+        $total_data['marketing_special_total'] = 0;
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->statistic_date = $title;
+//            $list[$k]->content_decode = json_decode($v->content);
+
+            $total_data['production_accepted_total'] += $v->production_accepted_total;
+            $total_data['production_accepted_suburb_total'] += $v->production_accepted_suburb_total;
+            $total_data['production_accepted_inside_total'] += $v->production_accepted_inside_total;
+            $total_data['marketing_delivered_total'] += $v->marketing_delivered_total;
+            $total_data['marketing_today_total'] += $v->marketing_today_total;
+            $total_data['marketing_yesterday_total'] += $v->marketing_yesterday_total;
+            $total_data['marketing_tomorrow_total'] += $v->marketing_tomorrow_total;
+            $total_data['marketing_distribute_total'] += $v->marketing_distribute_total;
+            $total_data['marketing_special_total'] += $v->marketing_special_total;
+        }
+//        dd($list->toArray());
+
+        $list[] = $total_data;
+
+        return datatable_response($list, $draw, $total);
     }
 
 
@@ -13978,7 +14118,6 @@ class DKAdminRepository {
         }
 
     }
-
     // 【统计列表】【客户】返回-列表-数据
     public function v1_operate_for_statistic_client_show($post_data)
     {
@@ -14001,9 +14140,7 @@ class DKAdminRepository {
                     count(marketing_special_num) as marketing_special_total
                 "))
             ->with([
-                'client_er'=>function ($query) { $query->select('id','username'); },
-                'creator'=>function ($query) { $query->select('id','username','true_name'); },
-                'completer'=>function ($query) { $query->select('id','username','true_name'); }
+                'client_er'=>function ($query) { $query->select('id','username'); }
             ])
             ->groupBy('client_id');
 
@@ -14016,6 +14153,7 @@ class DKAdminRepository {
         $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';
         if($time_type == 'all')
         {
+            $title = '全部统计';
         }
         if($time_type == 'date')
         {
@@ -14057,7 +14195,7 @@ class DKAdminRepository {
         {
             $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date']  : date('Y-m-d');
             $query->where("statistic_date",$assign_date);
-            $title  = '全部统计';
+            $title  = $assign_date;
         }
 
         $total = $query->count();
@@ -14087,6 +14225,7 @@ class DKAdminRepository {
         $total_data = [];
         $total_data['client_id'] = '统计';
         $total_data['statistic_date'] = '统计';
+        $total_data['statistic_day_num'] = '统计';
         $total_data['production_accepted_total'] = 0;
         $total_data['production_accepted_suburb_total'] = 0;
         $total_data['production_accepted_inside_total'] = 0;
@@ -14118,6 +14257,8 @@ class DKAdminRepository {
 
         return datatable_response($list, $draw, $total);
     }
+
+
 
 
 
