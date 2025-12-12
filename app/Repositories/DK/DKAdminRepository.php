@@ -13514,12 +13514,10 @@ class DKAdminRepository {
 
         $query = DK_Statistic_Project_daily::select('*')
             ->with([
-                'project_er'=>function ($query) { $query->where('id','name','alias_name'); },
-                'creator'=>function ($query) { $query->where('id','username'); },
-                'completer'=>function ($query) { $query->where('id','username'); },
+                'project_er'=>function ($query) { $query->select('id','name','alias_name'); },
+                'creator'=>function ($query) { $query->select('id','username','true_name'); },
+                'completer'=>function ($query) { $query->select('id','username','true_name'); }
             ]);
-
-
 
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
         if(!empty($post_data['order_id'])) $query->where('order_id', $post_data['order_id']);
@@ -13528,9 +13526,7 @@ class DKAdminRepository {
         if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
 
-//        if(!empty($post_data['assign'])) $query->whereDate(DB::Raw("from_unixtime(created_at)"), $post_data['assign']);
         if(!empty($post_data['assign_date'])) $query->where("statistic_date", $post_data['assign_date']);
-
 
 
         $total = $query->count();
@@ -13538,7 +13534,7 @@ class DKAdminRepository {
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : 10;
-        if($limit > 100) $limit = 100;
+//        if($limit > 100) $limit = 100;
 
         if(isset($post_data['order']))
         {
@@ -13552,519 +13548,17 @@ class DKAdminRepository {
         }
         else $query->orderBy("id", "desc");
 
-        if($limit == -1) $list = $query->skip($skip)->take(100)->get();
+        if($limit == -1) $list = $query->get();
         else $list = $query->skip($skip)->take($limit)->get();
 
         foreach ($list as $k => $v)
         {
 //            $list[$k]->encode_id = encode($v->id);
-
-            $list[$k]->content_decode = json_decode($v->content);
+//            $list[$k]->content_decode = json_decode($v->content);
         }
 //        dd($list->toArray());
 
         return datatable_response($list, $draw, $total);
-    }
-
-    public function get_statistic_data_for_project11($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $the_day  = isset($post_data['time_date']) ? $post_data['time_date'] : date('Y-m-d');
-
-
-        if(in_array($me->user_type,[41,71,77,81,84,88]))
-        {
-            $department_district_id = $me->department_district_id;
-        }
-        else $department_district_id = 0;
-
-        if(in_array($me->user_type,[84]))
-        {
-            $department_group_id = $me->department_group_id;
-        }
-        else $department_group_id = 0;
-
-
-        // 工单统计
-        $query_order = DK_Order::select('project_id')
-            ->addSelect(DB::raw("
-                    count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
-                    count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
-                    count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
-                    count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
-                    count(IF(inspected_result = '郊区通过', TRUE, NULL)) as order_count_for_accepted_suburb,
-                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
-                "))
-            ->addSelect(DB::raw("
-                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
-                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
-                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
-                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
-                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
-                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
-                "))
-            ->where('published_date',$the_day)
-            ->when($department_district_id, function ($query) use ($department_district_id) {
-                return $query->where('department_district_id', $department_district_id);
-            })
-            ->when($department_group_id, function ($query) use ($department_group_id) {
-                return $query->where('department_group_id', $department_group_id);
-            })
-            ->groupBy('project_id')
-            ->get()
-            ->keyBy('project_id')
-            ->toArray();
-
-
-        $query = DK_Project::select('*')
-            ->where('item_status', 1)
-            ->withTrashed()
-            ->with(['creator','inspector_er','pivot_project_user','pivot_project_team']);
-
-        if(in_array($me->user_type,[41,81,84]))
-        {
-            $department_district_id = $me->department_district_id;
-            $project_list = DK_Pivot_Team_Project::select('project_id')->where('team_id',$department_district_id)->get();
-            $query->whereIn('id',$project_list);
-        }
-
-        if(in_array($me->user_type,[71,77]))
-        {
-            $department_district_id = $me->department_district_id;
-            if($me->department_district_id > 0)
-            {
-                $project_list = DK_Pivot_Team_Project::select('project_id')->where('team_id',$department_district_id)->get();
-                $query->whereIn('id',$project_list);
-            }
-        }
-
-        if($me->user_type == 77)
-        {
-            $project_list = DK_Pivot_User_Project::select('project_id')->where('user_id',$me->id)->get();
-            $query->whereIn('id',$project_list);
-        }
-
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
-        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
-        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
-
-
-
-        // 部门-大区
-        if(!empty($post_data['department_district']))
-        {
-            if(!in_array($post_data['department_district'],[-1,0]))
-            {
-                $query->whereHas('pivot_project_team',  function ($query) use($post_data) {
-                    $query->where('team_id', $post_data['department_district']);
-                });
-            }
-        }
-
-
-        $total = $query->count();
-
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : -1;
-
-        if(isset($post_data['order']))
-        {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
-
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
-        }
-        else $query->orderBy("name", "asc");
-
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->get();
-//        dd($list->toArray());
-
-
-        $total_data = [];
-        $total_data['id'] = '统计';
-        $total_data['name'] = '所有项目';
-        $total_data['pivot_project_team'] = [];
-        $total_data['daily_goal'] = 0;
-        $total_data['order_count_for_all'] = 0;
-        $total_data['order_count_for_inspected'] = 0;
-        $total_data['order_count_for_accepted'] = 0;
-        $total_data['order_count_for_refused'] = 0;
-        $total_data['order_count_for_repeated'] = 0;
-        $total_data['order_count_for_accepted_suburb'] = 0;
-        $total_data['order_count_for_accepted_inside'] = 0;
-
-        $total_data['order_count_for_delivered'] = 0;
-        $total_data['order_count_for_delivered_completed'] = 0;
-        $total_data['order_count_for_delivered_inside'] = 0;
-        $total_data['order_count_for_delivered_tomorrow'] = 0;
-        $total_data['order_count_for_delivered_repeated'] = 0;
-        $total_data['order_count_for_delivered_rejected'] = 0;
-
-        $total_data['order_count_for_delivered_per'] = 0;
-        $total_data['order_count_for_delivered_effective'] = 0;
-        $total_data['order_count_for_delivered_effective_per'] = 0;
-        $total_data['order_count_for_delivered_actual'] = 0;
-
-        $total_data['remark'] = '';
-
-        foreach ($list as $k => $v)
-        {
-
-            if(in_array($me->user_type,[0,1,11,61,66,71,77]) && $me->department_district_id <= 0)
-            {
-                if($v['alias_name']) $list[$k]['name'] .= ' ('.$v['alias_name'].')';
-            }
-
-
-            if(isset($query_order[$v->id]))
-            {
-                $list[$k]->order_count_for_all = $query_order[$v->id]['order_count_for_all'];
-                $list[$k]->order_count_for_inspected = $query_order[$v->id]['order_count_for_inspected'];
-                $list[$k]->order_count_for_accepted = $query_order[$v->id]['order_count_for_accepted'];
-                $list[$k]->order_count_for_refused = $query_order[$v->id]['order_count_for_refused'];
-                $list[$k]->order_count_for_repeated = $query_order[$v->id]['order_count_for_repeated'];
-                $list[$k]->order_count_for_accepted_suburb = $query_order[$v->id]['order_count_for_accepted_suburb'];
-                $list[$k]->order_count_for_accepted_inside = $query_order[$v->id]['order_count_for_accepted_inside'];
-
-                $list[$k]->order_count_for_delivered = $query_order[$v->id]['order_count_for_delivered'];
-                $list[$k]->order_count_for_delivered_completed = $query_order[$v->id]['order_count_for_delivered_completed'];
-                $list[$k]->order_count_for_delivered_tomorrow = $query_order[$v->id]['order_count_for_delivered_tomorrow'];
-                $list[$k]->order_count_for_delivered_inside = $query_order[$v->id]['order_count_for_delivered_inside'];
-                $list[$k]->order_count_for_delivered_repeated = $query_order[$v->id]['order_count_for_delivered_repeated'];
-                $list[$k]->order_count_for_delivered_rejected = $query_order[$v->id]['order_count_for_delivered_rejected'];
-            }
-            else
-            {
-                $list[$k]->order_count_for_all = 0;
-                $list[$k]->order_count_for_inspected = 0;
-                $list[$k]->order_count_for_accepted = 0;
-                $list[$k]->order_count_for_refused = 0;
-                $list[$k]->order_count_for_repeated = 0;
-                $list[$k]->order_count_for_accepted_suburb = 0;
-                $list[$k]->order_count_for_accepted_inside = 0;
-
-                $list[$k]->order_count_for_delivered = 0;
-                $list[$k]->order_count_for_delivered_completed = 0;
-                $list[$k]->order_count_for_delivered_tomorrow = 0;
-                $list[$k]->order_count_for_delivered_inside = 0;
-                $list[$k]->order_count_for_delivered_repeated = 0;
-                $list[$k]->order_count_for_delivered_rejected = 0;
-            }
-
-            // 审核
-            // 有效单量
-            $v->order_count_for_effective = $v->order_count_for_inspected - $v->order_count_for_refused - $v->order_count_for_repeated;
-            // 通过率
-            if($v->order_count_for_all > 0)
-            {
-                $list[$k]->order_rate_for_accepted = round(($v->order_count_for_accepted * 100 / $v->order_count_for_all),2);
-            }
-            else $list[$k]->order_rate_for_accepted = 0;
-            // 完成率
-            if($v->daily_goal > 0)
-            {
-                $list[$k]->order_rate_for_achieved = round(($v->order_count_for_accepted * 100 / $v->daily_goal),2);
-            }
-            else
-            {
-                if($v->order_count_for_accepted > 0) $list[$k]->order_rate_for_achieved = 100;
-                else $list[$k]->order_rate_for_achieved = 0;
-            }
-
-
-            // 交付
-            // 有效交付量
-            $list[$k]->order_count_for_delivered_effective = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_tomorrow + $v->order_count_for_delivered_inside;
-            // 实际交付量
-            $list[$k]->order_count_for_delivered_actual = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_tomorrow;
-
-
-            // 有效交付率
-            if($v->order_count_for_delivered > 0)
-            {
-                $list[$k]->order_rate_for_delivered_effective = round(($v->order_count_for_delivered_effective * 100 / $v->order_count_for_delivered),2);
-            }
-            else $list[$k]->order_rate_for_delivered_effective = 0;
-
-
-
-            $total_data['daily_goal'] += $v->daily_goal;
-
-            $total_data['order_count_for_all'] += $v->order_count_for_all;
-
-            $total_data['order_count_for_inspected'] += $v->order_count_for_inspected;
-            $total_data['order_count_for_accepted'] += $v->order_count_for_accepted;
-            $total_data['order_count_for_refused'] += $v->order_count_for_refused;
-            $total_data['order_count_for_repeated'] += $v->order_count_for_repeated;
-            $total_data['order_count_for_accepted_suburb'] += $v->order_count_for_accepted_suburb;
-            $total_data['order_count_for_accepted_inside'] += $v->order_count_for_accepted_inside;
-
-            $total_data['order_count_for_delivered'] += $v->order_count_for_delivered;
-            $total_data['order_count_for_delivered_completed'] += $v->order_count_for_delivered_completed;
-            $total_data['order_count_for_delivered_inside'] += $v->order_count_for_delivered_inside;
-            $total_data['order_count_for_delivered_tomorrow'] += $v->order_count_for_delivered_tomorrow;
-            $total_data['order_count_for_delivered_repeated'] += $v->order_count_for_delivered_repeated;
-            $total_data['order_count_for_delivered_rejected'] += $v->order_count_for_delivered_rejected;
-
-            $total_data['order_count_for_delivered_effective'] += $v->order_count_for_delivered_effective;
-            $total_data['order_count_for_delivered_actual'] += $v->order_count_for_delivered_actual;
-
-
-        }
-
-
-        // 审核
-        // 有效单量
-        $total_data['order_count_for_effective'] = $total_data['order_count_for_inspected'] - $total_data['order_count_for_refused'] - $total_data['order_count_for_repeated'];
-        // 通过率
-        if($total_data['order_count_for_all'] > 0)
-        {
-            $total_data['order_rate_for_accepted'] = round(($total_data['order_count_for_accepted'] * 100 / $total_data['order_count_for_all']),2);
-        }
-        else $total_data['order_rate_for_accepted'] = 0;
-        // 完成率
-        if($total_data['daily_goal'] > 0)
-        {
-            $total_data['order_rate_for_achieved'] = round(($total_data['order_count_for_accepted'] * 100 / $total_data['daily_goal']),2);
-        }
-        else
-        {
-            if($total_data['order_count_for_accepted'] > 0) $total_data['order_rate_for_achieved'] = 100;
-            else $total_data['order_rate_for_achieved'] = 0;
-        }
-
-        // 审核
-
-        // 有效交付率
-        if($total_data['order_count_for_delivered'] > 0)
-        {
-            $total_data['order_rate_for_delivered_effective'] = round(($total_data['order_count_for_delivered_effective'] * 100 / $total_data['order_count_for_delivered']),2);
-        }
-        else $total_data['order_rate_for_delivered_effective'] = 0;
-
-
-        $total_data = $total_data;
-
-
-
-        return datatable_response($list, $draw, $total);
-
-    }
-    public function get_statistic_data_for_delivery11($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
-
-
-        if(in_array($me->user_type,[41,81,84]))
-        {
-            $department_district_id = $me->department_district_id;
-        }
-        else $department_district_id = 0;
-
-
-        // 工单统计
-        $query_order = DK_Order::select('project_id')
-            ->addSelect(DB::raw("
-                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
-                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
-                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
-                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
-                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
-                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
-                "))
-            ->where('delivered_date',$the_day)
-            ->when($department_district_id, function ($query) use ($department_district_id) {
-                return $query->where('department_district_id', $department_district_id);
-            })
-            ->groupBy('project_id')
-            ->get()
-            ->keyBy('project_id')
-            ->toArray();
-
-
-        $query = DK_Project::select('*')
-            ->where('item_status', 1)
-            ->withTrashed()
-            ->with(['creator','inspector_er','pivot_project_user','pivot_project_team']);
-
-        if(in_array($me->user_type,[41,81,84]))
-        {
-            $department_district_id = $me->department_district_id;
-            $project_list = DK_Pivot_Team_Project::select('project_id')->where('team_id',$department_district_id)->get();
-            $query->whereIn('id',$project_list);
-        }
-
-        if(in_array($me->user_type,[71,77]))
-        {
-            $department_district_id = $me->department_district_id;
-            if($me->department_district_id > 0)
-            {
-                $project_list = DK_Pivot_Team_Project::select('project_id')->where('team_id',$department_district_id)->get();
-                $query->whereIn('id',$project_list);
-            }
-        }
-
-        if($me->user_type == 77)
-        {
-            $project_list = DK_Pivot_User_Project::select('project_id')->where('user_id',$me->id)->get();
-            $query->whereIn('id',$project_list);
-        }
-
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
-        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
-        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
-
-
-
-        // 部门-大区
-        if(!empty($post_data['department_district']))
-        {
-            if(!in_array($post_data['department_district'],[-1,0]))
-            {
-                $query->whereHas('pivot_project_team',  function ($query) use($post_data) {
-                    $query->where('team_id', $post_data['department_district']);
-                });
-            }
-        }
-
-
-        $total = $query->count();
-
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : -1;
-
-        if(isset($post_data['order']))
-        {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
-
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
-        }
-        else $query->orderBy("name", "asc");
-
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->get();
-//        dd($list->toArray());
-
-
-        $total_data = [];
-        $total_data['id'] = '统计';
-        $total_data['name'] = '所有项目';
-        $total_data['pivot_project_team'] = [];
-        $total_data['daily_goal'] = 0;
-
-        $total_data['order_count_for_delivered'] = 0;
-        $total_data['order_count_for_delivered_completed'] = 0;
-        $total_data['order_count_for_delivered_suburb'] = 0;
-        $total_data['order_count_for_delivered_inside'] = 0;
-        $total_data['order_count_for_delivered_tomorrow'] = 0;
-        $total_data['order_count_for_delivered_repeated'] = 0;
-        $total_data['order_count_for_delivered_rejected'] = 0;
-
-        $total_data['order_count_for_delivered_per'] = 0;
-        $total_data['order_count_for_delivered_effective'] = 0;
-        $total_data['order_count_for_delivered_effective_per'] = 0;
-        $total_data['order_count_for_delivered_actual'] = 0;
-        $total_data['order_count_for_delivered_today'] = 0;
-
-        $total_data['remark'] = '';
-
-        foreach ($list as $k => $v)
-        {
-
-            if(isset($query_order[$v->id]))
-            {
-                $list[$k]->order_count_for_delivered = $query_order[$v->id]['order_count_for_delivered'];
-                $list[$k]->order_count_for_delivered_completed = $query_order[$v->id]['order_count_for_delivered_completed'];
-                $list[$k]->order_count_for_delivered_tomorrow = $query_order[$v->id]['order_count_for_delivered_tomorrow'];
-                $list[$k]->order_count_for_delivered_inside = $query_order[$v->id]['order_count_for_delivered_inside'];
-                $list[$k]->order_count_for_delivered_repeated = $query_order[$v->id]['order_count_for_delivered_repeated'];
-                $list[$k]->order_count_for_delivered_rejected = $query_order[$v->id]['order_count_for_delivered_rejected'];
-            }
-            else
-            {
-                $list[$k]->order_count_for_delivered = 0;
-                $list[$k]->order_count_for_delivered_completed = 0;
-                $list[$k]->order_count_for_delivered_tomorrow = 0;
-                $list[$k]->order_count_for_delivered_inside = 0;
-                $list[$k]->order_count_for_delivered_repeated = 0;
-                $list[$k]->order_count_for_delivered_rejected = 0;
-            }
-
-
-
-            // 交付
-            // 今日交付 = 已交付 + 内部交付
-            $list[$k]->order_count_for_delivered_today = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_inside + $v->order_count_for_delivered_repeated + $v->order_count_for_delivered_rejected;
-            // 有效交付 = 已交付 + 内部交付
-            $list[$k]->order_count_for_delivered_effective = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_inside;
-            // 实际产出 = 已交付 + 内部交付
-            $list[$k]->order_count_for_delivered_actual = $v->order_count_for_delivered_completed;
-
-
-            // 有效交付率
-            if($v->order_count_for_delivered_today > 0)
-            {
-                $list[$k]->order_rate_for_delivered_effective = round(($v->order_count_for_delivered_effective * 100 / $v->order_count_for_delivered_today),2);
-            }
-            else $list[$k]->order_rate_for_delivered_effective = 0;
-
-            // 实际交付率
-            if($v->order_count_for_delivered_today > 0)
-            {
-                $list[$k]->order_rate_for_delivered_actual = round(($v->order_count_for_delivered_actual * 100 / $v->order_count_for_delivered_today),2);
-            }
-            else $list[$k]->order_rate_for_delivered_actual = 0;
-
-
-            $total_data['daily_goal'] += $v->daily_goal;
-
-            $total_data['order_count_for_delivered'] += $v->order_count_for_delivered;
-            $total_data['order_count_for_delivered_completed'] += $v->order_count_for_delivered_completed;
-            $total_data['order_count_for_delivered_inside'] += $v->order_count_for_delivered_inside;
-            $total_data['order_count_for_delivered_tomorrow'] += $v->order_count_for_delivered_tomorrow;
-            $total_data['order_count_for_delivered_repeated'] += $v->order_count_for_delivered_repeated;
-            $total_data['order_count_for_delivered_rejected'] += $v->order_count_for_delivered_rejected;
-
-            $total_data['order_count_for_delivered_today'] += $v->order_count_for_delivered_today;
-            $total_data['order_count_for_delivered_effective'] += $v->order_count_for_delivered_effective;
-            $total_data['order_count_for_delivered_actual'] += $v->order_count_for_delivered_actual;
-
-        }
-
-
-        // 交付
-        // 有效交付率
-        if($total_data['order_count_for_delivered_today'] > 0)
-        {
-            $total_data['order_rate_for_delivered_effective'] = round(($total_data['order_count_for_delivered_effective'] * 100 / $total_data['order_count_for_delivered_today']),2);
-        }
-        else $total_data['order_rate_for_delivered_effective'] = 0;
-        // 实际交付率
-        if($total_data['order_count_for_delivered_today'] > 0)
-        {
-            $total_data['order_rate_for_delivered_actual'] = round(($total_data['order_count_for_delivered_actual'] * 100 / $total_data['order_count_for_delivered_today']),2);
-        }
-        else $total_data['order_rate_for_delivered_actual'] = 0;
-
-
-        return datatable_response($list, $draw, $total);
-
     }
     // 【统计列表】生成-日报
     public function v1_operate_for_statistic_project_daily_create($post_data)
@@ -14072,7 +13566,7 @@ class DKAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $assign_date  = isset($post_data['assign_date']) ? $post_data['time_date'] : date('Y-m-d');
+        $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date'] : date('Y-m-d');
 
         // 工单统计（当日）
         $query_order_production = DK_Order::select('project_id')
@@ -14131,57 +13625,57 @@ class DKAdminRepository {
             ->toArray();
 
 
-        $list = DK_Project::select('id','name','alias_name')
+        $project_list = DK_Project::select('id','name','alias_name')
 //            ->where('item_status', 1)
             ->withTrashed()
             ->get();
 
-        foreach ($list as $k => $v)
+        foreach ($project_list as $k => $v)
         {
-            $list[$k]->production_published_num = 0;
-            $list[$k]->production_inspected_num = 0;
-            $list[$k]->production_accepted_num = 0;
-            $list[$k]->production_repeated_num = 0;
-            $list[$k]->production_refused_num = 0;
-            $list[$k]->production_accepted_suburb_num = 0;
-            $list[$k]->production_accepted_inside_num = 0;
+            $project_list[$k]->production_published_num = 0;
+            $project_list[$k]->production_inspected_num = 0;
+            $project_list[$k]->production_accepted_num = 0;
+            $project_list[$k]->production_repeated_num = 0;
+            $project_list[$k]->production_refused_num = 0;
+            $project_list[$k]->production_accepted_suburb_num = 0;
+            $project_list[$k]->production_accepted_inside_num = 0;
 
-            $list[$k]->marketing_today_num = 0;
-            $list[$k]->marketing_tomorrow_num = 0;
-            $list[$k]->marketing_yesterday_num = 0;
-            $list[$k]->marketing_delivered_num = 0;
-            $list[$k]->marketing_distribute_num = 0;
+            $project_list[$k]->marketing_today_num = 0;
+            $project_list[$k]->marketing_tomorrow_num = 0;
+            $project_list[$k]->marketing_yesterday_num = 0;
+            $project_list[$k]->marketing_delivered_num = 0;
+            $project_list[$k]->marketing_distribute_num = 0;
 
             // 当日生产
             if(isset($query_order_production[$v->id]))
             {
-                $list[$k]->production_published_num = $query_order_production[$v->id]['production_published_num'];
-                $list[$k]->production_inspected_num = $query_order_production[$v->id]['production_inspected_num'];
-                $list[$k]->production_accepted_num = $query_order_production[$v->id]['production_accepted_num'];
-                $list[$k]->production_repeated_num = $query_order_production[$v->id]['production_repeated_num'];
-                $list[$k]->production_refused_num = $query_order_production[$v->id]['production_refused_num'];
-                $list[$k]->production_accepted_suburb_num = $query_order_production[$v->id]['production_accepted_suburb_num'];
-                $list[$k]->production_accepted_inside_num = $query_order_production[$v->id]['production_accepted_inside_num'];
+                $project_list[$k]->production_published_num = $query_order_production[$v->id]['production_published_num'];
+                $project_list[$k]->production_inspected_num = $query_order_production[$v->id]['production_inspected_num'];
+                $project_list[$k]->production_accepted_num = $query_order_production[$v->id]['production_accepted_num'];
+                $project_list[$k]->production_repeated_num = $query_order_production[$v->id]['production_repeated_num'];
+                $project_list[$k]->production_refused_num = $query_order_production[$v->id]['production_refused_num'];
+                $project_list[$k]->production_accepted_suburb_num = $query_order_production[$v->id]['production_accepted_suburb_num'];
+                $project_list[$k]->production_accepted_inside_num = $query_order_production[$v->id]['production_accepted_inside_num'];
 
-                $list[$k]->marketing_today_num = $query_order_production[$v->id]['marketing_today_num'];
-                $list[$k]->marketing_tomorrow_num = $query_order_production[$v->id]['marketing_tomorrow_num'];
+                $project_list[$k]->marketing_today_num = $query_order_production[$v->id]['marketing_today_num'];
+                $project_list[$k]->marketing_tomorrow_num = $query_order_production[$v->id]['marketing_tomorrow_num'];
             }
 
             // 隔日交付
             if(isset($query_order_other_day[$v->id]))
             {
-                $list[$k]->marketing_yesterday_num = $query_order_other_day[$v->id]['marketing_yesterday_num'];
+                $project_list[$k]->marketing_yesterday_num = $query_order_other_day[$v->id]['marketing_yesterday_num'];
             }
 
             // 交付统计
             if(isset($query_delivery[$v->id]))
             {
-                $list[$k]->marketing_delivered_num = $query_delivery[$v->id]['marketing_delivered_num'];
-                $list[$k]->marketing_distribute_num = $query_delivery[$v->id]['marketing_distribute_num'];
+                $project_list[$k]->marketing_delivered_num = $query_delivery[$v->id]['marketing_delivered_num'];
+                $project_list[$k]->marketing_distribute_num = $query_delivery[$v->id]['marketing_distribute_num'];
             }
         }
 
-        $list_filtered = $list->filter(function ($item) {
+        $project_list_filtered = $project_list->filter(function ($item) {
             return ($item->production_published_num > 0 || $item->quantity > 0);
         });
 //        dd($list_filtered);
@@ -14192,7 +13686,7 @@ class DKAdminRepository {
         try
         {
 
-            foreach ($list_filtered as $k => $v)
+            foreach ($project_list_filtered as $k => $v)
             {
 
                 $daily = DK_Statistic_Project_daily::select('*')
@@ -14210,9 +13704,11 @@ class DKAdminRepository {
                 else
                 {
                     $daily = new DK_Statistic_Project_daily;
+                    $daily->creator_id = $me->id;
                 }
 
                 $daily->statistic_date = $assign_date;
+                $daily->project_id = $v->id;
 
                 $daily->production_published_num = $v->production_published_num;
                 $daily->production_inspected_num = $v->production_inspected_num;
@@ -14244,7 +13740,6 @@ class DKAdminRepository {
 //            exit($e->getMessage());
             return response_fail([],$msg);
         }
-
 
     }
 

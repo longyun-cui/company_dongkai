@@ -75,6 +75,22 @@
                     }
                 },
                 {
+                    "title": "日期",
+                    "data": "statistic_date",
+                    "className": "bg-delivered _bold",
+                    "width": "80px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.id == "统计")
+                        {
+                            $(nTd).addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
                     "title": "项目名称",
                     "data": "project_id",
                     "className": "text-center",
@@ -89,7 +105,7 @@
                     render: function(data, type, row, meta) {
                         if(row.project_er == null)
                         {
-                            return '未指定';
+                            return data;
                         }
                         else
                         {
@@ -206,7 +222,7 @@
                 },
                 {
                     "title": "当日交付",
-                    "data": "marketing_delivered_today_num",
+                    "data": "marketing_today_num",
                     "className": "bg-delivered",
                     "width": "80px",
                     "orderable": false,
@@ -223,7 +239,7 @@
                 },
                 {
                     "title": "隔日交付<br>昨转今",
-                    "data": "marketing_delivered_yesterday_num",
+                    "data": "marketing_yesterday_num",
                     "className": "bg-delivered",
                     "width": "80px",
                     "orderable": false,
@@ -239,7 +255,7 @@
                 },
                 {
                     "title": "隔日交付<br>今转明",
-                    "data": "marketing_delivered_tomorrow_num",
+                    "data": "marketing_tomorrow_num",
                     "className": "bg-inspected",
                     "width": "100px",
                     "orderable": false,

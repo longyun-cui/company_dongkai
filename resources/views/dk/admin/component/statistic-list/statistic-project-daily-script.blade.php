@@ -6,14 +6,14 @@
         $(".main-content").on('click', ".statistic-list-project-daily-create", function() {
             var $that = $(this);
             var $search_wrapper = $that.closest('.search-wrapper');
-            var $assign_date = $search_wrapper.find('.statistic-list-project-daily-date').val();
+            var $assign_date = $search_wrapper.find('input[name="statistic-list-project-daily-date"]').val();
 
             //
             $.post(
                 "{{ url('/v1/operate/statistic-list/statistic-project-daily/daily-create') }}",
                 {
                     _token: $('meta[name="_token"]').attr('content'),
-                    operate: "item-get",
+                    operate: "statistic-project-daily-create",
                     assign_date: $assign_date
                 },
                 'json'
@@ -21,14 +21,12 @@
                 .done(function($response, status, jqXHR) {
                     console.log('done');
                     $response = JSON.parse($response);
-                    console.$response;
                     if(!$response.success)
                     {
                         if($response.msg) layer.msg($response.msg);
                     }
                     else
                     {
-
                     }
                 })
                 .fail(function(jqXHR, status, error) {
