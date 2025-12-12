@@ -128,6 +128,7 @@
 
 
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-project-daily')
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-client-daily')
 
 </div>
 @endsection
@@ -229,8 +230,13 @@
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.department.statistic-production-department-datatable')
 
 
+
+
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-project-daily-datatable')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-project-daily-script')
+
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-client-daily-datatable')
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-client-daily-script')
 
 
 

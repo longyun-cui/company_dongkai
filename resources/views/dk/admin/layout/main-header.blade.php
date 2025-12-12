@@ -569,7 +569,7 @@
                                    data-datatable-target="statistic-list-project-daily"
                                    data-datatable-clone-object="statistic-list-project-daily-clone"
                                 >
-                                    <i class="fa fa-pie-chart text-green"></i> <span>项目日报</span>
+                                    <i class="fa fa-pie-chart text-orange"></i> <span>项目日报</span>
                                 </a>
                             </li>
                             <li class="divider"></li>
@@ -579,7 +579,7 @@
                                 <a href="javascript:void(0);" class="tab-control datatable-control"
                                    data-type="create"
                                    data-unique="y"
-                                   data-id="datatable-statistic-list-client-daily"
+                                   data-id="statistic-list-client-daily"
                                    data-title='<i class="fa fa-pie-chart text-orange"></i> 客户日报'
                                    data-content=''
 
@@ -589,7 +589,7 @@
                                    data-datatable-target="statistic-list-client-daily"
                                    data-datatable-clone-object="statistic-list-client-daily-clone"
                                 >
-                                    <i class="fa fa-pie-chart text-green"></i> <span>客户日报</span>
+                                    <i class="fa fa-pie-chart text-orange"></i> <span>客户日报</span>
                                 </a>
                             </li>
                             <li class="divider"></li>

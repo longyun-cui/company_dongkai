@@ -13504,7 +13504,7 @@ class DKAdminRepository {
 
 
 
-    // 【统计列表】返回-列表-数据
+    // 【统计列表】【项目】返回-列表-数据
     public function v1_operate_for_statistic_project_daily_datatable_list_query($post_data)
     {
         $this->get_me();
@@ -13560,7 +13560,7 @@ class DKAdminRepository {
 
         return datatable_response($list, $draw, $total);
     }
-    // 【统计列表】生成-日报
+    // 【统计列表】【项目】生成-日报
     public function v1_operate_for_statistic_project_daily_create($post_data)
     {
         $this->get_me();
@@ -13676,7 +13676,7 @@ class DKAdminRepository {
         }
 
         $project_list_filtered = $project_list->filter(function ($item) {
-            return ($item->production_published_num > 0 || $item->quantity > 0);
+            return ($item->production_published_num > 0 || $item->marketing_yesterday_num > 0 || $item->marketing_delivered_num > 0);
         });
 //        dd($list_filtered);
 
@@ -13709,6 +13709,245 @@ class DKAdminRepository {
 
                 $daily->statistic_date = $assign_date;
                 $daily->project_id = $v->id;
+
+                $daily->production_published_num = $v->production_published_num;
+                $daily->production_inspected_num = $v->production_inspected_num;
+                $daily->production_accepted_num = $v->production_accepted_num;
+                $daily->production_accepted_suburb_num = $v->production_accepted_suburb_num;
+                $daily->production_accepted_inside_num = $v->production_accepted_inside_num;
+                $daily->production_repeated_num = $v->production_repeated_num;
+                $daily->production_refused_num = $v->production_refused_num;
+
+                $daily->marketing_delivered_num = $v->marketing_delivered_num;
+                $daily->marketing_today_num = $v->marketing_today_num;
+                $daily->marketing_yesterday_num = $v->marketing_yesterday_num;
+                $daily->marketing_tomorrow_num = $v->marketing_tomorrow_num;
+                $daily->marketing_distribute_num = $v->marketing_distribute_num;
+
+                $bool = $daily->save();
+                if(!$bool) throw new Exception("DK_Statistic_Project_daily--save--fail");
+
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+    // 【统计列表】【项目】返回-列表-数据
+    public function v1_operate_for_statistic_client_daily_datatable_list_query($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        if(!in_array($me->user_type,[0,1,9,11,61])) return response_error([],"你没有操作权限！");
+
+        $query = DK_Statistic_Client_daily::select('*')
+            ->with([
+                'client_er'=>function ($query) { $query->select('id','username'); },
+                'creator'=>function ($query) { $query->select('id','username','true_name'); },
+                'completer'=>function ($query) { $query->select('id','username','true_name'); }
+            ]);
+
+        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
+        if(!empty($post_data['order_id'])) $query->where('order_id', $post_data['order_id']);
+        if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
+        if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
+        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        if(!empty($post_data['assign_date'])) $query->where("statistic_date", $post_data['assign_date']);
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 10;
+//        if($limit > 100) $limit = 100;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+
+        foreach ($list as $k => $v)
+        {
+//            $list[$k]->encode_id = encode($v->id);
+//            $list[$k]->content_decode = json_decode($v->content);
+        }
+//        dd($list->toArray());
+
+        return datatable_response($list, $draw, $total);
+    }
+    // 【统计列表】【项目】生成-日报
+    public function v1_operate_for_statistic_client_daily_create($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date'] : date('Y-m-d');
+
+        // 工单统计（当日）
+        $query_order_production = DK_Order::select('client_id')
+            ->addSelect(DB::raw("
+                    count(IF(is_published = 1, TRUE, NULL)) as production_published_num,
+                    count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as production_inspected_num,
+                    count(IF(inspected_result = '通过', TRUE, NULL)) as production_accepted_num,
+                    count(IF(inspected_result = '重复', TRUE, NULL)) as production_repeated_num,
+                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as production_refused_num,
+                    count(IF(inspected_result = '郊区通过', TRUE, NULL)) as production_accepted_suburb_num,
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as production_accepted_inside_num
+                "))
+            ->addSelect(DB::raw("
+                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_delivered_num,
+                    count(IF(delivered_result = '已交付', TRUE, NULL)) as marketing_today_num,
+                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as marketing_tomorrow_num,
+                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_delivered_inside_num,
+                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_delivered_repeated_num,
+                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_delivered_rejected_num
+                "))
+            ->where('published_date',$assign_date)
+            ->groupBy('client_id')
+            ->get()
+            ->keyBy('client_id')
+            ->toArray();
+
+
+        // 工单统计（隔日）
+        $query_order_other_day = DK_Order::select('client_id')
+            ->addSelect(DB::raw("
+                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as other_day_delivered_num,
+                    count(IF(delivered_result = '已交付', TRUE, NULL)) as marketing_yesterday_num,
+                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as other_day_delivered_tomorrow,
+                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as other_day_delivered_inside,
+                    count(IF(delivered_result = '重复', TRUE, NULL)) as other_day_delivered_repeated,
+                    count(IF(delivered_result = '驳回', TRUE, NULL)) as other_day_delivered_rejected
+                "))
+            ->where('published_date','<>',$assign_date)
+            ->where('delivered_date',$assign_date)
+            ->groupBy('client_id')
+            ->get()
+            ->keyBy('client_id')
+            ->toArray();
+
+
+        $query_delivery = DK_Pivot_Client_Delivery::select('client_id')
+            ->addSelect(DB::raw("
+                    count(IF(order_category = 1, TRUE, NULL)) as marketing_delivered_num,
+                    count(IF(order_category = 1 AND pivot_type = 95, TRUE, NULL)) as marketing_normal_num,
+                    count(IF(order_category = 1 AND pivot_type = 96, TRUE, NULL)) as marketing_distribute_num
+                "))
+            ->where('delivered_date',$assign_date)
+            ->groupBy('client_id')
+            ->get()
+            ->keyBy('client_ids')
+            ->toArray();
+
+
+        $client_list = DK_Client::select('id','username')
+//            ->where('item_status', 1)
+            ->withTrashed()
+            ->get();
+
+        foreach ($client_list as $k => $v)
+        {
+            $client_list[$k]->production_published_num = 0;
+            $client_list[$k]->production_inspected_num = 0;
+            $client_list[$k]->production_accepted_num = 0;
+            $client_list[$k]->production_repeated_num = 0;
+            $client_list[$k]->production_refused_num = 0;
+            $client_list[$k]->production_accepted_suburb_num = 0;
+            $client_list[$k]->production_accepted_inside_num = 0;
+
+            $client_list[$k]->marketing_delivered_num = 0;
+            $client_list[$k]->marketing_today_num = 0;
+            $client_list[$k]->marketing_tomorrow_num = 0;
+            $client_list[$k]->marketing_yesterday_num = 0;
+            $client_list[$k]->marketing_distribute_num = 0;
+
+            // 当日生产
+            if(isset($query_order_production[$v->id]))
+            {
+                $client_list[$k]->production_published_num = $query_order_production[$v->id]['production_published_num'];
+                $client_list[$k]->production_inspected_num = $query_order_production[$v->id]['production_inspected_num'];
+                $client_list[$k]->production_accepted_num = $query_order_production[$v->id]['production_accepted_num'];
+                $client_list[$k]->production_repeated_num = $query_order_production[$v->id]['production_repeated_num'];
+                $client_list[$k]->production_refused_num = $query_order_production[$v->id]['production_refused_num'];
+                $client_list[$k]->production_accepted_suburb_num = $query_order_production[$v->id]['production_accepted_suburb_num'];
+                $client_list[$k]->production_accepted_inside_num = $query_order_production[$v->id]['production_accepted_inside_num'];
+
+                $client_list[$k]->marketing_today_num = $query_order_production[$v->id]['marketing_today_num'];
+                $client_list[$k]->marketing_tomorrow_num = $query_order_production[$v->id]['marketing_tomorrow_num'];
+            }
+
+            // 隔日交付
+            if(isset($query_order_other_day[$v->id]))
+            {
+                $client_list[$k]->marketing_yesterday_num = $query_order_other_day[$v->id]['marketing_yesterday_num'];
+            }
+
+            // 交付统计
+            if(isset($query_delivery[$v->id]))
+            {
+                $client_list[$k]->marketing_delivered_num = $query_delivery[$v->id]['marketing_delivered_num'];
+                $client_list[$k]->marketing_distribute_num = $query_delivery[$v->id]['marketing_distribute_num'];
+            }
+        }
+
+        $client_list_filtered = $client_list->filter(function ($item) {
+            return ($item->production_published_num > 0 || $item->marketing_yesterday_num > 0 || $item->marketing_delivered_num > 0);
+        });
+//        dd($list_filtered);
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+
+            foreach ($client_list_filtered as $k => $v)
+            {
+
+                $daily = DK_Statistic_Client_daily::select('*')
+                    ->where('client_id',$v->id)
+                    ->where('statistic_date',$assign_date)
+                    ->first();
+
+                if($daily)
+                {
+                    if($daily->is_confirmed = 1)
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    $daily = new DK_Statistic_Client_daily;
+                    $daily->creator_id = $me->id;
+                }
+
+                $daily->statistic_date = $assign_date;
+                $daily->client_id = $v->id;
 
                 $daily->production_published_num = $v->production_published_num;
                 $daily->production_inspected_num = $v->production_inspected_num;

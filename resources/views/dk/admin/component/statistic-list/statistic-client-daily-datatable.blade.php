@@ -1,5 +1,5 @@
 <script>
-    function Table_Datatable_Statistic_List_Project_Daily($tableId)
+    function Table_Datatable_Statistic_List_Client_Daily($tableId)
     {
         let $that = $($tableId);
         let $datatable_wrapper = $that.parents('.datatable-wrapper');
@@ -17,7 +17,7 @@
             "order": [],
             "orderCellsTop": true,
             "ajax": {
-                'url': "{{ url('/v1/operate/statistic-list/statistic-project-daily/datatable-list-query') }}",
+                'url': "{{ url('/v1/operate/statistic-list/statistic-client-daily/datatable-list-query') }}",
                 "type": 'POST',
                 "dataType" : 'json',
                 "data": function (d) {
@@ -27,11 +27,11 @@
                     d.title = $tableSearch.find('input[name="rank-title"]').val();
                     d.keyword = $tableSearch.find('input[name="rank-keyword"]').val();
                     d.status = $tableSearch.find('select[name="rank-status"]').val();
-                    d.time_type = $tableSearch.find('input[name="statistic-list-project-daily-time-type"]').val();
-                    d.assign_month = $tableSearch.find('input[name="statistic-list-project-daily-month"]').val();
-                    d.assign_date = $tableSearch.find('input[name="statistic-list-project-daily-date"]').val();
-                    d.assign_start = $tableSearch.find('input[name="statistic-list-project-daily-start"]').val();
-                    d.assign_ended = $tableSearch.find('input[name="statistic-list-project-daily-ended"]').val();
+                    d.time_type = $tableSearch.find('input[name="statistic-list-client-daily-time-type"]').val();
+                    d.assign_month = $tableSearch.find('input[name="statistic-list-client-daily-month"]').val();
+                    d.assign_date = $tableSearch.find('input[name="statistic-list-client-daily-date"]').val();
+                    d.assign_start = $tableSearch.find('input[name="statistic-list-client-daily-start"]').val();
+                    d.assign_ended = $tableSearch.find('input[name="statistic-list-client-daily-ended"]').val();
                     d.department_district = $tableSearch.find('select[name="rank-department-district"]').val();
                     d.department_group = $tableSearch.find('select[name="rank-department-group"]').val();
 
@@ -91,8 +91,8 @@
                     }
                 },
                 {
-                    "title": "项目名称",
-                    "data": "project_id",
+                    "title": "客户名称",
+                    "data": "client_id",
                     "className": "text-center",
                     "width": "120px",
                     "orderable": false,
@@ -103,20 +103,13 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(row.project_er == null)
+                        if(row.client_er == null)
                         {
                             return data;
                         }
                         else
                         {
-                            if(row.project_er.alias_name)
-                            {
-                                return '<a href="javascript:void(0);">'+row.project_er.name+' ('+row.project_er.alias_name+')'+'</a>';
-                            }
-                            else
-                            {
-                                return '<a href="javascript:void(0);">'+row.project_er.name+'</a>';
-                            }
+                            return '<a href="javascript:void(0);">'+row.client_er.username+'</a>';
                         }
 
                     }
@@ -335,7 +328,7 @@
 
                         if(row.is_confirmed != 1)
                         {
-                            $html_complete = '<a class="btn btn-xs item-complete-submit-of-statistic-project-daily" data-id="'+data+'">确认</a>';
+                            $html_complete = '<a class="btn btn-xs item-complete-submit-of-statistic-client-daily" data-id="'+data+'">确认</a>';
                         }
                         else
                         {
@@ -344,18 +337,18 @@
 
                         if(row.deleted_at == null)
                         {
-                            $html_delete = '<a class="btn btn-xs item-delete-submit-of-statistic-project-daily" data-id="'+data+'">删除</a>';
+                            $html_delete = '<a class="btn btn-xs item-delete-submit-of-statistic-client-daily" data-id="'+data+'">删除</a>';
                         }
                         else
                         {
-                            $html_delete = '<a class="btn btn-xs item-restore-submit-of-statistic-project-daily" data-id="'+data+'">恢复</a>';
+                            $html_delete = '<a class="btn btn-xs item-restore-submit-of-statistic-client-daily" data-id="'+data+'">恢复</a>';
                         }
 
-                        $html_record = '<a class="btn btn-xs modal-show-for-record-of-statistic-project-daily" data-id="'+data+'">记录</a>';
+                        $html_record = '<a class="btn btn-xs modal-show-for-record-of-statistic-client-daily" data-id="'+data+'">记录</a>';
 
                         var html =
                             // '<a class="btn btn-xs btn-primary item-edit-link" data-id="'+data+'">编辑</a>'+
-                            '<a class="btn btn-xs modal-show-for-edit-of-statistic-project-daily" data-id="'+data+'">编辑</a>'+
+                            '<a class="btn btn-xs modal-show-for-edit-of-statistic-client-daily" data-id="'+data+'">编辑</a>'+
                             $html_able+
                             $html_complete+
                             $html_delete+

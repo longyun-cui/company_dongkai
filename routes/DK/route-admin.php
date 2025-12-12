@@ -214,10 +214,14 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
 
 
 
+    // 统计日报-项目统计
     Route::post('/v1/operate/statistic-list/statistic-project-daily/datatable-list-query', $controller.'@v1_operate_for_statistic_project_daily_datatable_list_query');
     Route::post('/v1/operate/statistic-list/statistic-project-daily/daily-create', $controller.'@v1_operate_for_statistic_project_daily_create');
 
 
+    // 统计日报-客户统计
+    Route::post('/v1/operate/statistic-list/statistic-client-daily/datatable-list-query', $controller.'@v1_operate_for_statistic_client_daily_datatable_list_query');
+    Route::post('/v1/operate/statistic-list/statistic-client-daily/daily-create', $controller.'@v1_operate_for_statistic_client_daily_create');
 
 
 

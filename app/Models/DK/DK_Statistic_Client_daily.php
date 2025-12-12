@@ -9,15 +9,15 @@ class DK_Statistic_Client_daily extends Model
     //
     protected $table = "dk_admin_statistic_for_client_daily";
     protected $fillable = [
-        'active', 'status', 'item_active', 'item_status', 'item_category', 'item_type', 'category', 'type', 'sort',
-        'owner_active',
+        'active', 'status',
+        'category', 'type',
+        'item_active', 'item_status',
+        'item_category', 'item_type',
+
         'owner_id', 'creator_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
 
-        'client_id',
-
         'statistic_date',
-
-        'delivered_all_num',
+        'client_id',
 
         'is_confirmed',
         'completer_id',
@@ -33,17 +33,18 @@ class DK_Statistic_Client_daily extends Model
         'production_refused_num',
 
         'marketing_delivered_num',
-        'marketing_delivered_today_num',
-        'marketing_delivered_yesterday_num',
-        'marketing_delivered_tomorrow_num',
+        'marketing_today_num',
+        'marketing_yesterday_num',
+        'marketing_tomorrow_num',
         'marketing_distribute_num',
         'marketing_special_num',
 
         'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
+
     ];
     protected $dateFormat = 'U';
 
-    protected $hidden = ['content','custom'];
+//    protected $hidden = ['content','custom'];
 
     protected $dates = ['created_at','updated_at','deleted_at'];
 //    public function getDates()
@@ -91,35 +92,10 @@ class DK_Statistic_Client_daily extends Model
 
 
 
-    // 【一对一】审核员
-    function inspector_er()
-    {
-        return $this->belongsTo('App\Models\DK\DK_User','inspector_id','id');
-    }
-
-    // 【多对多】审核人关联的项目
-    function pivot_project_user()
-    {
-        return $this->belongsToMany('App\Models\DK\DK_User','dk_pivot_user_project','project_id','user_id');
-//            ->wherePivot('relation_type', 1);
-//            ->withTimestamps();
-    }
-
-    // 【多对多】审核人关联的项目
-    function pivot_project_team()
-    {
-        return $this->belongsToMany('App\Models\DK\DK_Department','dk_pivot_team_project','project_id','team_id');
-//            ->wherePivot('relation_type', 1);
-//            ->withTimestamps();
-    }
-
-
-
-
-
     // 附件
     function attachment_list()
     {
         return $this->hasMany('App\Models\DK\YH_Attachment','item_id','id');
     }
+
 }
