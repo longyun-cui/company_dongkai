@@ -13755,12 +13755,12 @@ class DKAdminRepository {
                     sum(production_accepted_num) as production_accepted_total,
                     sum(production_accepted_suburb_num) as production_accepted_suburb_total,
                     sum(production_accepted_inside_num) as production_accepted_inside_total,
-                    count(marketing_delivered_num) as marketing_delivered_total,
-                    count(marketing_today_num) as marketing_today_total,
-                    count(marketing_yesterday_num) as marketing_yesterday_total,
-                    count(marketing_tomorrow_num) as marketing_tomorrow_total,
-                    count(marketing_distribute_num) as marketing_distribute_total,
-                    count(marketing_special_num) as marketing_special_total
+                    sum(marketing_delivered_num) as marketing_delivered_total,
+                    sum(marketing_today_num) as marketing_today_total,
+                    sum(marketing_yesterday_num) as marketing_yesterday_total,
+                    sum(marketing_tomorrow_num) as marketing_tomorrow_total,
+                    sum(marketing_distribute_num) as marketing_distribute_total,
+                    sum(marketing_special_num) as marketing_special_total
                 "))
             ->with([
                 'project_er'=>function ($query) { $query->select('id','name','alias_name'); }
@@ -14141,12 +14141,12 @@ class DKAdminRepository {
                     sum(production_accepted_num) as production_accepted_total,
                     sum(production_accepted_suburb_num) as production_accepted_suburb_total,
                     sum(production_accepted_inside_num) as production_accepted_inside_total,
-                    count(marketing_delivered_num) as marketing_delivered_total,
-                    count(marketing_today_num) as marketing_today_total,
-                    count(marketing_yesterday_num) as marketing_yesterday_total,
-                    count(marketing_tomorrow_num) as marketing_tomorrow_total,
-                    count(marketing_distribute_num) as marketing_distribute_total,
-                    count(marketing_special_num) as marketing_special_total
+                    sum(marketing_delivered_num) as marketing_delivered_total,
+                    sum(marketing_today_num) as marketing_today_total,
+                    sum(marketing_yesterday_num) as marketing_yesterday_total,
+                    sum(marketing_tomorrow_num) as marketing_tomorrow_total,
+                    sum(marketing_distribute_num) as marketing_distribute_total,
+                    sum(marketing_special_num) as marketing_special_total
                 "))
             ->with([
                 'client_er'=>function ($query) { $query->select('id','username'); }
