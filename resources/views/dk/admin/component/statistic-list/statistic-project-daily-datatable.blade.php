@@ -126,7 +126,8 @@
                     "data": "production_published_num",
                     "className": "bg-delivered _bold",
                     "width": "80px",
-                    "orderable": false,
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
                         {
@@ -142,7 +143,8 @@
                     "data": "production_inspected_num",
                     "className": "bg-delivered _bold",
                     "width": "80px",
-                    "orderable": false,
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
                         {
@@ -158,7 +160,8 @@
                     "data": "production_accepted_num",
                     "className": "bg-delivered",
                     "width": "80px",
-                    "orderable": false,
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
                         {
@@ -174,7 +177,8 @@
                     "data": "production_accepted_suburb_num",
                     "className": "bg-delivered",
                     "width": "80px",
-                    "orderable": false,
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
                         {
@@ -191,7 +195,8 @@
                     "data": "production_accepted_inside_num",
                     "className": "bg-delivered",
                     "width": "80px",
-                    "orderable": false,
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
                         {
@@ -208,7 +213,8 @@
                     "data": "marketing_delivered_num",
                     "className": "bg-delivered",
                     "width": "80px",
-                    "orderable": false,
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
                         {
@@ -225,7 +231,8 @@
                     "data": "marketing_today_num",
                     "className": "bg-delivered",
                     "width": "80px",
-                    "orderable": false,
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
                         {
@@ -242,7 +249,8 @@
                     "data": "marketing_yesterday_num",
                     "className": "bg-delivered",
                     "width": "80px",
-                    "orderable": false,
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
                         {
@@ -258,7 +266,8 @@
                     "data": "marketing_tomorrow_num",
                     "className": "bg-inspected",
                     "width": "100px",
-                    "orderable": false,
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
                         {
@@ -275,7 +284,8 @@
                     "data": "marketing_distribute_num",
                     "className": "bg-inspected",
                     "width": "100px",
-                    "orderable": false,
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
                         {
@@ -292,7 +302,8 @@
                     "data": "marketing_special_num",
                     "className": "bg-inspected",
                     "width": "80px",
-                    "orderable": false,
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
                         {
