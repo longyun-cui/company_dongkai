@@ -13621,7 +13621,7 @@ class DKAdminRepository {
             ->where('delivered_date',$assign_date)
             ->groupBy('project_id')
             ->get()
-//            ->keyBy('project_id')
+            ->keyBy('project_id')
             ->toArray();
 
 
