@@ -126,6 +126,9 @@
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.project.statistic-production-project')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.department.statistic-production-department')
 
+
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-project-daily')
+
 </div>
 @endsection
 
@@ -224,6 +227,10 @@
 
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.project.statistic-production-project-datatable')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.department.statistic-production-department-datatable')
+
+
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-project-daily-datatable')
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-project-daily-script')
 
 
 

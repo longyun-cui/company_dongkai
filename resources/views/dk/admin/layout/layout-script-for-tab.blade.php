@@ -509,6 +509,14 @@
                 {
                     Datatable_Statistic_Call_Order_City('#'+$config.id, $config.chart_id);
                 }
+                else if($id == "datatable-statistic-list-project-daily")
+                {
+                    Table_Datatable_Statistic_List_Project_Daily('#'+$config.id);
+                }
+                else if($id == "datatable-statistic-list-client-daily")
+                {
+                    Table_Datatable_Statistic_List_Client_Daily('#'+$config.id);
+                }
                 else if($id == "datatable-call-record-list")
                 {
                     Datatable_Call_Record_List('#'+$config.id);

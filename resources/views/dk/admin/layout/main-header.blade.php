@@ -544,6 +544,64 @@
 
 
 
+                {{--销售统计--}}
+                @if(in_array($me->user_type,[0,1,9]))
+                <li class="dropdown tasks-menu add-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        统计列表 <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu right" role="menu">
+
+
+                        <li class="divider"></li>
+                        @if(in_array($me->user_type,[0,1,9,11,61]))
+                            <li>
+                                <a href="javascript:void(0);" class="tab-control datatable-control"
+                                   data-type="create"
+                                   data-unique="y"
+                                   data-id="statistic-list-project-daily"
+                                   data-title='<i class="fa fa-pie-chart text-orange"></i> 项目日报'
+                                   data-content=''
+
+                                   data-datatable-type="create"
+                                   data-datatable-unique="y"
+                                   data-datatable-id="datatable-statistic-list-project-daily"
+                                   data-datatable-target="statistic-list-project-daily"
+                                   data-datatable-clone-object="statistic-list-project-daily-clone"
+                                >
+                                    <i class="fa fa-pie-chart text-green"></i> <span>项目日报</span>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                        @endif
+                        @if(in_array($me->user_type,[0,1,9,11,61]))
+                            <li>
+                                <a href="javascript:void(0);" class="tab-control datatable-control"
+                                   data-type="create"
+                                   data-unique="y"
+                                   data-id="datatable-statistic-list-client-daily"
+                                   data-title='<i class="fa fa-pie-chart text-orange"></i> 客户日报'
+                                   data-content=''
+
+                                   data-datatable-type="create"
+                                   data-datatable-unique="y"
+                                   data-datatable-id="datatable-statistic-list-client-daily"
+                                   data-datatable-target="statistic-list-client-daily"
+                                   data-datatable-clone-object="statistic-list-client-daily-clone"
+                                >
+                                    <i class="fa fa-pie-chart text-green"></i> <span>客户日报</span>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                        @endif
+
+
+                    </ul>
+                </li>
+                @endif
+
+
+
 
                 <!-- Messages: style can be found in dropdown.less-->
                 <li class="dropdown messages-menu _none">
