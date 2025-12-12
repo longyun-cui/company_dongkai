@@ -13612,8 +13612,8 @@ class DKAdminRepository {
             ->toArray();
 
 
-        $query_delivery = DK_Pivot_Client_Delivery::select('order_category','project_id')
-            ->select(DB::raw("
+        $query_delivery = DK_Pivot_Client_Delivery::select('project_id')
+            ->addSelect(DB::raw("
                     count(IF(order_category = 1, TRUE, NULL)) as marketing_delivered_num,
                     count(IF(order_category = 1 AND pivot_type = 95, TRUE, NULL)) as marketing_normal_num,
                     count(IF(order_category = 1 AND pivot_type = 96, TRUE, NULL)) as marketing_distribute_num
@@ -13621,7 +13621,7 @@ class DKAdminRepository {
             ->where('delivered_date',$assign_date)
             ->groupBy('project_id')
             ->get()
-            ->keyBy('project_id')
+//            ->keyBy('project_id')
             ->toArray();
 
 
