@@ -26,7 +26,7 @@
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next date-next" data-target="statistic-list-project-daily-date">
                 <i class="fa fa-chevron-right"></i>
             </button>
-            <button type="button" class="btn btn-default btn-filter filter-submit" data-time-type="date">
+            <button type="button" class="btn btn-default btn-filter filter-submit filter-submit-by-date" data-time-type="date">
                 <i class="fa fa-search"></i> 查询
             </button>
 

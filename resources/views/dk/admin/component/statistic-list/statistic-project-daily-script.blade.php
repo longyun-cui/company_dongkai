@@ -9,6 +9,22 @@
             var $assign_date = $search_wrapper.find('input[name="statistic-list-project-daily-date"]').val();
 
             //
+            var $index = layer.load(1, {
+                shade: [0.3, '#fff'],
+                content: '<span class="loadtip">正在提交</span>',
+                success: function (layer) {
+                    layer.find('.layui-layer-content').css({
+                        'padding-top': '40px',
+                        'width': '100px',
+                    });
+                    layer.find('.loadtip').css({
+                        'font-size':'20px',
+                        'margin-left':'-18px'
+                    });
+                }
+            });
+
+            //
             $.post(
                 "{{ url('/v1/operate/statistic-list/statistic-project-daily/daily-create') }}",
                 {
@@ -27,6 +43,7 @@
                     }
                     else
                     {
+                        $search_wrapper.find('.filter-refresh').click();
                     }
                 })
                 .fail(function(jqXHR, status, error) {
