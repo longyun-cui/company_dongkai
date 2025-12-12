@@ -13897,10 +13897,13 @@ class DKAdminRepository {
 
         if(!in_array($me->user_type,[0,1,9,11,61])) return response_error([],"你没有操作权限！");
 
+        $project_id = $post_data['project_id'];
+
         $query = DK_Statistic_Project_daily::select('*')
             ->with([
                 'project_er'=>function ($query) { $query->select('id','name','alias_name'); }
-            ]);
+            ])
+            ->where('project_id',$project_id);
 
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
         if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
@@ -13978,7 +13981,7 @@ class DKAdminRepository {
             $field = $columns[$order_column]["data"];
             $query->orderBy($field, $order_dir);
         }
-        else $query->orderBy("id", "asc");
+        else $query->orderBy("statistic_date", "desc");
 
         if($limit == -1) $list = $query->get();
         else $list = $query->skip($skip)->take($limit)->get();
@@ -14417,10 +14420,13 @@ class DKAdminRepository {
 
         if(!in_array($me->user_type,[0,1,9,11,61])) return response_error([],"你没有操作权限！");
 
+        $client_id = $post_data['client_id'];
+
         $query = DK_Statistic_Client_daily::select('*')
             ->with([
                 'client_er'=>function ($query) { $query->select('id','username'); }
-            ]);
+            ])
+            ->where('client_id',$client_id);
 
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
         if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
@@ -14498,7 +14504,7 @@ class DKAdminRepository {
             $field = $columns[$order_column]["data"];
             $query->orderBy($field, $order_dir);
         }
-        else $query->orderBy("id", "asc");
+        else $query->orderBy("statistic_date", "desc");
 
         if($limit == -1) $list = $query->get();
         else $list = $query->skip($skip)->take($limit)->get();
