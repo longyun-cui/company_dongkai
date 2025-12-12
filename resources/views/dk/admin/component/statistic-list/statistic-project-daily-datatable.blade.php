@@ -32,9 +32,7 @@
                     d.assign_date = $tableSearch.find('input[name="statistic-list-project-daily-date"]').val();
                     d.assign_start = $tableSearch.find('input[name="statistic-list-project-daily-start"]').val();
                     d.assign_ended = $tableSearch.find('input[name="statistic-list-project-daily-ended"]').val();
-                    d.department_district = $tableSearch.find('select[name="rank-department-district"]').val();
-                    d.department_group = $tableSearch.find('select[name="rank-department-group"]').val();
-
+                    d.assign_project = $tableSearch.find('select[name="statistic-list-client-daily-project"]').val();
                 },
             },
             // "fixedColumns": {

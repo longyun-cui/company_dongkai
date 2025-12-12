@@ -517,6 +517,10 @@
                 {
                     Table_Datatable_Statistic_List_Client_Daily('#'+$config.id);
                 }
+                else if($id == "datatable-statistic-list-client-show")
+                {
+                    Table_Datatable_Statistic_List_Client_Show('#'+$config.id);
+                }
                 else if($id == "datatable-call-record-list")
                 {
                     Datatable_Call_Record_List('#'+$config.id);

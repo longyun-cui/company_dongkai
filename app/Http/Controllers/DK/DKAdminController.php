@@ -959,6 +959,11 @@ class DKAdminController extends Controller
     {
         return $this->repo->v1_operate_for_statistic_client_daily_create(request()->all());
     }
+    // 【统计】项目客户列表
+    public function v1_operate_for_statistic_client_show()
+    {
+        return $this->repo->v1_operate_for_statistic_client_show(request()->all());
+    }
 
 
 

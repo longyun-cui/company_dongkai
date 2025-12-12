@@ -554,46 +554,82 @@
 
 
                         <li class="divider"></li>
-                        @if(in_array($me->user_type,[0,1,9,11,61]))
-                            <li>
-                                <a href="javascript:void(0);" class="tab-control datatable-control"
-                                   data-type="create"
-                                   data-unique="y"
-                                   data-id="statistic-list-project-daily"
-                                   data-title='<i class="fa fa-pie-chart text-orange"></i> 项目日报'
-                                   data-content=''
 
-                                   data-datatable-type="create"
-                                   data-datatable-unique="y"
-                                   data-datatable-id="datatable-statistic-list-project-daily"
-                                   data-datatable-target="statistic-list-project-daily"
-                                   data-datatable-clone-object="statistic-list-project-daily-clone"
-                                >
-                                    <i class="fa fa-pie-chart text-orange"></i> <span>项目日报</span>
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                        @endif
-                        @if(in_array($me->user_type,[0,1,9,11,61]))
-                            <li>
-                                <a href="javascript:void(0);" class="tab-control datatable-control"
-                                   data-type="create"
-                                   data-unique="y"
-                                   data-id="statistic-list-client-daily"
-                                   data-title='<i class="fa fa-pie-chart text-orange"></i> 客户日报'
-                                   data-content=''
+                        <li>
+                            <a href="javascript:void(0);" class="tab-control datatable-control"
+                               data-type="create"
+                               data-unique="y"
+                               data-id="statistic-list-project-daily"
+                               data-title='<i class="fa fa-list text-orange"></i> 项目日报'
+                               data-content=''
 
-                                   data-datatable-type="create"
-                                   data-datatable-unique="y"
-                                   data-datatable-id="datatable-statistic-list-client-daily"
-                                   data-datatable-target="statistic-list-client-daily"
-                                   data-datatable-clone-object="statistic-list-client-daily-clone"
-                                >
-                                    <i class="fa fa-pie-chart text-orange"></i> <span>客户日报</span>
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                        @endif
+                               data-datatable-type="create"
+                               data-datatable-unique="y"
+                               data-datatable-id="datatable-statistic-list-project-daily"
+                               data-datatable-target="statistic-list-project-daily"
+                               data-datatable-clone-object="statistic-list-project-daily-clone"
+                            >
+                                <i class="fa fa-list text-orange"></i> <span>项目日报</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+
+                        <li>
+                            <a href="javascript:void(0);" class="tab-control datatable-control"
+                               data-type="create"
+                               data-unique="y"
+                               data-id="statistic-list-client-daily"
+                               data-title='<i class="fa fa-list text-orange"></i> 客户日报'
+                               data-content=''
+
+                               data-datatable-type="create"
+                               data-datatable-unique="y"
+                               data-datatable-id="datatable-statistic-list-client-daily"
+                               data-datatable-target="statistic-list-client-daily"
+                               data-datatable-clone-object="statistic-list-client-daily-clone"
+                            >
+                                <i class="fa fa-list text-orange"></i> <span>客户日报</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+
+                        <li>
+                            <a href="javascript:void(0);" class="tab-control datatable-control"
+                               data-type="create"
+                               data-unique="y"
+                               data-id="statistic-list-project-show"
+                               data-title='<i class="fa fa-bar-chart-o text-orange"></i> 项目统计'
+                               data-content=''
+
+                               data-datatable-type="create"
+                               data-datatable-unique="y"
+                               data-datatable-id="datatable-statistic-list-project-show"
+                               data-datatable-target="statistic-list-project-show"
+                               data-datatable-clone-object="statistic-list-project-show-clone"
+                            >
+                                <i class="fa fa-bar-chart-o text-orange"></i> <span>项目统计</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+
+                        <li>
+                            <a href="javascript:void(0);" class="tab-control datatable-control"
+                               data-type="create"
+                               data-unique="y"
+                               data-id="statistic-list-client-show"
+                               data-title='<i class="fa fa-bar-chart-o text-orange"></i> 客户统计'
+                               data-content=''
+
+                               data-datatable-type="create"
+                               data-datatable-unique="y"
+                               data-datatable-id="datatable-statistic-list-client-show"
+                               data-datatable-target="statistic-list-client-show"
+                               data-datatable-clone-object="statistic-list-client-show-clone"
+                            >
+                                <i class="fa fa-bar-chart-o text-orange"></i> <span>客户统计</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
 
 
                     </ul>
