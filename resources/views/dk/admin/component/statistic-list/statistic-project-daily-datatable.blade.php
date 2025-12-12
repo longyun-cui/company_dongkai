@@ -186,7 +186,6 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-
                         return data;
                     }
                 },
@@ -204,7 +203,6 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-
                         return data;
                     }
                 },
@@ -222,7 +220,6 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-
                         return data;
                     }
                 },
@@ -240,7 +237,6 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-
                         return data;
                     }
                 },
@@ -275,7 +271,6 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(data) return data + " %";
                         return data
                     }
                 },
@@ -293,7 +288,6 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(data) return data + " %";
                         return data
                     }
                 },

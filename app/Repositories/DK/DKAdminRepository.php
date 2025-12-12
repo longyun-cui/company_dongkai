@@ -13640,10 +13640,10 @@ class DKAdminRepository {
             $project_list[$k]->production_accepted_suburb_num = 0;
             $project_list[$k]->production_accepted_inside_num = 0;
 
+            $project_list[$k]->marketing_delivered_num = 0;
             $project_list[$k]->marketing_today_num = 0;
             $project_list[$k]->marketing_tomorrow_num = 0;
             $project_list[$k]->marketing_yesterday_num = 0;
-            $project_list[$k]->marketing_delivered_num = 0;
             $project_list[$k]->marketing_distribute_num = 0;
 
             // 当日生产
