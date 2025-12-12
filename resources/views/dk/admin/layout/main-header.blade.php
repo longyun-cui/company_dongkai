@@ -545,7 +545,7 @@
 
 
                 {{--销售统计--}}
-                @if(in_array($me->user_type,[0,1,9]))
+                @if(in_array($me->user_type,[0,1,9,11,61]))
                 <li class="dropdown tasks-menu add-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                         统计列表 <span class="caret"></span>
