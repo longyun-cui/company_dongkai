@@ -29,7 +29,7 @@
 
 
                     <div class="form-group">
-                        <label class="control-label col-md-2 field-set-column-name"></label>
+                        <label class="control-label col-md-2 item-field-set-column-name"></label>
                         <div class="col-md-8 ">
 
                             {{--// text--}}

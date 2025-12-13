@@ -13790,12 +13790,12 @@ class DKAdminRepository {
 
         $column_key = $post_data["column-key"];
 
-        $column_text_value = $post_data["field-set-text-value"];
-        $column_textarea_value = $post_data["field-set-textarea-value"];
-        $column_datetime_value = $post_data["field-set-datetime-value"];
-        $column_date_value = $post_data["field-set-date-value"];
-        $column_select_value = isset($post_data['field-set-select-value']) ? $post_data['field-set-select-value'] : '';
-        $column_radio_value  = isset($post_data['field-set-radio-value']) ? $post_data['field-set-radio-value'] : '';
+        $column_text_value = $post_data["item-field-set-text-value"];
+        $column_textarea_value = $post_data["item-field-set-textarea-value"];
+        $column_datetime_value = $post_data["item-field-set-datetime-value"];
+        $column_date_value = $post_data["item-field-set-date-value"];
+        $column_select_value = isset($post_data['item-field-set-select-value']) ? $post_data['item-field-set-select-value'] : '';
+        $column_radio_value  = isset($post_data['item-field-set-radio-value']) ? $post_data['item-field-set-radio-value'] : '';
 
         if($column_type == 'text') $column_value = $column_text_value;
         else if($column_type == 'textarea') $column_value = $column_textarea_value;

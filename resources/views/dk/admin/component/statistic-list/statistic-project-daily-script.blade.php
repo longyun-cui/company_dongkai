@@ -73,6 +73,23 @@
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
+
+                    //
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">正在提交</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
+                    });
+
                     //
                     $.post(
                         "{{ url('/v1/operate/statistic-list/statistic-project-daily/item-delete') }}",
@@ -102,6 +119,7 @@
                         })
                         .always(function(jqXHR, status) {
                             console.log('always');
+                            layer.close(index);
                             layer.closeAll('loading');
                         });
                 }
@@ -120,6 +138,23 @@
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
+
+                    //
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">正在提交</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
+                    });
+
                     //
                     $.post(
                         "{{ url('/v1/operate/statistic-list/statistic-project-daily/item-confirm') }}",
@@ -149,6 +184,7 @@
                         })
                         .always(function(jqXHR, status) {
                             console.log('always');
+                            layer.close(index);
                             layer.closeAll('loading');
                         });
                 }
@@ -293,7 +329,7 @@
 
 
             };
-            $("#form-for-field-set").ajaxSubmit(options);
+            $("#form-for-item-field-set-of-statistic-project-daily").ajaxSubmit(options);
 
         });
 
