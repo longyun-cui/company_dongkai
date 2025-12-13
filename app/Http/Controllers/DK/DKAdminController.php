@@ -948,8 +948,7 @@ class DKAdminController extends Controller
     {
         return $this->repo->v1_operate_for_statistic_project_daily_create(request()->all());
     }
-
-    // 【通用】【项目】字段修改
+    // 【统计】【项目】字段修改
     public function v1_operate_for_statistic_project_daily_item_field_set()
     {
         return $this->repo->v1_operate_for_statistic_project_daily_item_field_set(request()->all());
@@ -985,6 +984,21 @@ class DKAdminController extends Controller
     public function v1_operate_for_statistic_client_daily_create()
     {
         return $this->repo->v1_operate_for_statistic_client_daily_create(request()->all());
+    }
+    // 【统计】【客户】字段修改
+    public function v1_operate_for_statistic_client_daily_item_field_set()
+    {
+        return $this->repo->v1_operate_for_statistic_client_daily_item_field_set(request()->all());
+    }
+    // 【统计】【客户】确认
+    public function v1_operate_for_statistic_client_daily_item_confirm()
+    {
+        return $this->repo->v1_operate_for_statistic_client_daily_item_confirm(request()->all());
+    }
+    // 【统计】【客户】删除
+    public function v1_operate_for_statistic_client_daily_item_delete()
+    {
+        return $this->repo->v1_operate_for_statistic_client_daily_item_delete(request()->all());
     }
     // 【统计】客户统计
     public function v1_operate_for_statistic_client_show()

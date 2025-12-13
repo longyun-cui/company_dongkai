@@ -214,21 +214,30 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
 
 
 
-    // 统计日报-项目统计
+    // 【项目日报】日报列表
     Route::post('/v1/operate/statistic-list/statistic-project-daily/datatable-list-query', $controller.'@v1_operate_for_statistic_project_daily_datatable_list_query');
+    // 【项目日报】生成日报
     Route::post('/v1/operate/statistic-list/statistic-project-daily/daily-create', $controller.'@v1_operate_for_statistic_project_daily_create');
+    // 【项目日报】字段修改
     Route::post('/v1/operate/statistic-list/statistic-project-daily/item-field-set', $controller.'@v1_operate_for_statistic_project_daily_item_field_set');
+    // 【项目日报】确认 & 删除
     Route::post('/v1/operate/statistic-list/statistic-project-daily/item-confirm', $controller.'@v1_operate_for_statistic_project_daily_item_confirm');
     Route::post('/v1/operate/statistic-list/statistic-project-daily/item-delete', $controller.'@v1_operate_for_statistic_project_daily_item_delete');
-    // 【通用】字段修改
-    Route::post('/v1/operate/statistic-list/statistic-project-daily/field-set', $controller.'@v1_operate_for_statistic_project_daily_field_set');
+    // 【项目日报】统计看板
     Route::post('/v1/operate/statistic-list/statistic-project-show', $controller.'@v1_operate_for_statistic_project_show');
     Route::post('/v1/operate/statistic-list/statistic-project-detail', $controller.'@v1_operate_for_statistic_project_detail');
 
 
-    // 统计日报-客户统计
+    // 【客户日报】日报列表
     Route::post('/v1/operate/statistic-list/statistic-client-daily/datatable-list-query', $controller.'@v1_operate_for_statistic_client_daily_datatable_list_query');
+    // 【客户日报】生成日报
     Route::post('/v1/operate/statistic-list/statistic-client-daily/daily-create', $controller.'@v1_operate_for_statistic_client_daily_create');
+    // 【客户日报】字段修改
+    Route::post('/v1/operate/statistic-list/statistic-client-daily/item-field-set', $controller.'@v1_operate_for_statistic_client_daily_item_field_set');
+    // 【客户日报】确认 & 删除
+    Route::post('/v1/operate/statistic-list/statistic-client-daily/item-confirm', $controller.'@v1_operate_for_statistic_client_daily_item_confirm');
+    Route::post('/v1/operate/statistic-list/statistic-client-daily/item-delete', $controller.'@v1_operate_for_statistic_client_daily_item_delete');
+    // 【客户日报】统计看板
     Route::post('/v1/operate/statistic-list/statistic-client-show', $controller.'@v1_operate_for_statistic_client_show');
     Route::post('/v1/operate/statistic-list/statistic-client-detail', $controller.'@v1_operate_for_statistic_client_detail');
 

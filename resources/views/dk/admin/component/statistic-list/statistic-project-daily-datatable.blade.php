@@ -126,7 +126,7 @@
                     "title": "当日出单",
                     "data": "production_published_num",
                     "className": "bg-published",
-                    "width": "100px",
+                    "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -160,7 +160,7 @@
                     "title": "有效单量",
                     "data": "production_accepted_num",
                     "className": "bg-published _bold",
-                    "width": "100px",
+                    "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -177,7 +177,7 @@
                     "title": "郊区通过",
                     "data": "production_accepted_suburb_num",
                     "className": "bg-published",
-                    "width": "100px",
+                    "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -194,7 +194,7 @@
                     "title": "内部通过",
                     "data": "production_accepted_inside_num",
                     "className": "bg-published",
-                    "width": "100px",
+                    "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -211,7 +211,7 @@
                     "title": "交付总量",
                     "data": "marketing_delivered_num",
                     "className": "bg-delivered _bold",
-                    "width": "100px",
+                    "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -228,7 +228,7 @@
                     "title": "前日存单",
                     "data": "marketing_yesterday_num",
                     "className": "bg-delivered",
-                    "width": "100px",
+                    "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -245,7 +245,7 @@
                     "title": "当日产出",
                     "data": "marketing_today_num",
                     "className": "bg-delivered",
-                    "width": "100px",
+                    "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -262,7 +262,7 @@
                     "title": "分发量",
                     "data": "marketing_distribute_num",
                     "className": "bg-delivered",
-                    "width": "100px",
+                    "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -279,7 +279,7 @@
                     "title": "隔日交付<br>(当日存单)",
                     "data": "marketing_tomorrow_num",
                     "className": "bg-delivered",
-                    "width": "100px",
+                    "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -296,7 +296,7 @@
                     "title": "特殊交付",
                     "data": "marketing_special_num",
                     "className": "bg-delivered",
-                    "width": "100px",
+                    "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -353,6 +353,24 @@
                         return data;
                         // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
                         // else return '';
+                    }
+                },
+                {
+                    "title": "确认",
+                    "data": "is_confirmed",
+                    "className": "",
+                    "width": "100px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.id == "统计")
+                        {
+                            $(nTd).addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        if(data == 1) return '<small class="btn-xs bg-green">已确认</small>';
+                        else return '<small class="btn-xs bg-orange">待确认</small>';
                     }
                 },
                 {
