@@ -32,7 +32,7 @@
                     d.assign_date = $tableSearch.find('input[name="statistic-list-project-show-date"]').val();
                     d.assign_start = $tableSearch.find('input[name="statistic-list-project-show-start"]').val();
                     d.assign_ended = $tableSearch.find('input[name="statistic-list-project-show-ended"]').val();
-                    d.assign_client = $tableSearch.find('select[name="statistic-list-project-show-client"]').val();
+                    d.assign_project = $tableSearch.find('select[name="statistic-list-project-show-project"]').val();
                 },
             },
             // "fixedColumns": {
