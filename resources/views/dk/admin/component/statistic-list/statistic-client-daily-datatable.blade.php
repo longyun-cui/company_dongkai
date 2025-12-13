@@ -296,6 +296,23 @@
                         {
                             $(nTd).addClass('_bold');
                         }
+                        if(row.is_confirmed != 1)
+                        {
+                            $(nTd).attr('data-row-index',iRow);
+
+                            $(nTd).addClass('modal-show-for-item-field-set-of-statistic-client-daily');
+
+                            $(nTd).attr('data-id',row.id);
+                            $(nTd).attr('data-name','特殊交付');
+                            $(nTd).attr('data-key','marketing_special_num');
+                            $(nTd).attr('data-value',data);
+
+                            $(nTd).attr('data-column-type','text');
+                            $(nTd).attr('data-column-name','特殊交付');
+
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        }
                     },
                     render: function(data, type, row, meta) {
                         return data;
@@ -307,6 +324,23 @@
                     "className": "text-center",
                     "width": "",
                     "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.is_confirmed != 1)
+                        {
+                            $(nTd).addClass('modal-show-for-item-field-set-of-statistic-client-daily');
+
+                            $(nTd).attr('data-id',row.id);
+                            $(nTd).attr('data-name','备注');
+                            $(nTd).attr('data-key','description');
+                            $(nTd).attr('data-value',data);
+
+                            $(nTd).attr('data-column-type','textarea');
+                            $(nTd).attr('data-column-name','备注');
+
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        }
+                    },
                     render: function(data, type, row, meta) {
                         return data;
                         // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
