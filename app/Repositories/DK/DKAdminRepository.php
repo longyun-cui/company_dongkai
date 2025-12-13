@@ -15,6 +15,7 @@ use App\Models\DK\DK_Record_Visit;
 
 use App\Models\DK\DK_Statistic_Project_daily;
 use App\Models\DK\DK_Statistic_Client_daily;
+use App\Models\DK\DK_Statistic_Record;
 
 use App\Models\DK\DK_Client;
 use App\Models\DK\DK_Client_Funds_Recharge;
@@ -13565,6 +13566,8 @@ class DKAdminRepository {
         $this->get_me();
         $me = $this->me;
 
+        if(!in_array($me->user_type,[0,1,9,11,61])) return response_error([],"你没有操作权限！");
+
         $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date'] : date('Y-m-d');
 
         // 工单统计（当日）
@@ -13726,6 +13729,288 @@ class DKAdminRepository {
                 $bool = $daily->save();
                 if(!$bool) throw new Exception("DK_Statistic_Project_daily--save--fail");
 
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+    // 【统计列表】【项目】返回-列表-数据
+    public function v1_operate_for_statistic_project_daily_item_field_set($post_data)
+    {
+        $messages = [
+            'operate-category.required' => 'operate-category.required.',
+            'operate-type.required' => 'operate-type.required.',
+            'item-id.required' => 'item-id.required.',
+            'column-type.required' => 'column-type.required.',
+            'column-key.required' => 'column-key.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate-category' => 'required',
+            'operate-type' => 'required',
+            'item-id' => 'required',
+            'column-type' => 'required',
+            'column-key' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate_category = $post_data["operate-category"];
+        if($operate_category != 'field-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item-id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+
+        $mine = DK_Statistic_Project_daily::withTrashed()->find($id);
+        if(!$mine) return response_error([],"该【项目】不存在，刷新页面重试！");
+
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11,61])) return response_error([],"你没有操作权限！");
+
+        $operate_type = $post_data["operate-type"];
+
+        $column_type = $post_data["column-type"];
+
+        $column_key = $post_data["column-key"];
+
+        $column_text_value = $post_data["field-set-text-value"];
+        $column_textarea_value = $post_data["field-set-textarea-value"];
+        $column_datetime_value = $post_data["field-set-datetime-value"];
+        $column_date_value = $post_data["field-set-date-value"];
+        $column_select_value = isset($post_data['field-set-select-value']) ? $post_data['field-set-select-value'] : '';
+        $column_radio_value  = isset($post_data['field-set-radio-value']) ? $post_data['field-set-radio-value'] : '';
+
+        if($column_type == 'text') $column_value = $column_text_value;
+        else if($column_type == 'textarea') $column_value = $column_textarea_value;
+        else if($column_type == 'radio') $column_value = $column_radio_value;
+        else if($column_type == 'select') $column_value = $column_select_value;
+        else if($column_type == 'select2') $column_value = $column_select_value;
+        else if($column_type == 'datetime') $column_value = $column_datetime_value;
+        else if($column_type == 'datetime_timestamp') $column_value = strtotime($column_datetime_value);
+        else if($column_type == 'date') $column_value = $column_date_value;
+        else if($column_type == 'date_timestamp') $column_value = strtotime($column_date_value);
+        else $column_value = '';
+
+        $before = $mine->$column_key;
+        $after = $column_value;
+
+
+        $return['value'] = $column_value;
+        $return['text'] = $column_value;
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+
+            $mine->$column_key = $column_value;
+            $bool = $mine->save();
+            if(!$bool) throw new Exception("DK_Statistic_Project_daily--update--fail");
+
+            if(false) throw new Exception("DK_Statistic_Project_daily--update--fail");
+            else
+            {
+                // 需要记录(本人修改已发布 || 他人修改)
+//                if($me->id == $item->creator_id && $item->is_published == 0 && false)
+                if(true)
+                {
+                }
+                else
+                {
+                    $record = new DK_Statistic_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["item_id"] = $id;
+                    $record_data["project_id"] = $id;
+                    $record_data["operate_object"] = 61;
+                    $record_data["operate_category"] = 1;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column_type"] = $column_type;
+                    $record_data["column_name"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $after;
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("DK_Statistic_Record--insert--fail");
+                }
+            }
+
+            DB::commit();
+            return response_success(['data'=>$return]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【统计列表】【项目】确认
+    public function v1_operate_for_statistic_project_daily_item_confirm($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'daily-item-confirm') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $mine = DK_Statistic_Project_daily::withTrashed()->find($id);
+        if(!$mine) return response_error([],"该内容不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 权限
+        if(!in_array($me->user_type,[0,1,9,11,19,61])) return response_error([],"用户类型错误！");
+//        if(me->user_type ==88 && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $time = time();
+        $date = date('Y-m-d');
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $mine->is_confirmed = 1;
+            $mine->confirmer_id = $me->id;
+            $mine->confirmed_at = $time;
+            $mine->confirmed_date = $date;
+            $mine->timestamps = false;
+            $bool = $mine->save();
+            if(!$bool) throw new Exception("DK_Statistic_Project_daily--update--fail");
+            else
+            {
+                $record = new DK_Statistic_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["project_id"] = $id;
+                $record_data["operate_object"] = 61;
+                $record_data["operate_category"] = 100;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("DK_Statistic_Record--update--fail");
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【统计列表】【项目】删除
+    public function v1_operate_for_statistic_project_daily_item_delete($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'daily-item-delete') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $mine = DK_Statistic_Project_daily::withTrashed()->find($id);
+        if(!$mine) return response_error([],"该内容不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 权限
+        if(!in_array($me->user_type,[0,1,9,11,19,61])) return response_error([],"用户类型错误！");
+//        if(me->user_type ==88 && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $time = time();
+        $date = date('Y-m-d');
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $mine->timestamps = false;
+            $bool = $mine->delete();  // 普通删除
+            if(!$bool) throw new Exception("DK_Statistic_Project_daily--delete--fail");
+            else
+            {
+                $record = new DK_Statistic_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["project_id"] = $id;
+                $record_data["operate_object"] = 61;
+                $record_data["operate_category"] = 101;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("DK_Statistic_Record--update--fail");
             }
 
             DB::commit();
@@ -14264,6 +14549,7 @@ class DKAdminRepository {
         }
 
     }
+
     // 【统计列表】【客户】返回-列表-数据
     public function v1_operate_for_statistic_client_show($post_data)
     {

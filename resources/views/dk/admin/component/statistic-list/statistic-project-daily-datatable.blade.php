@@ -304,6 +304,23 @@
                         {
                             $(nTd).addClass('_bold');
                         }
+                        if(row.is_confirmed != 1)
+                        {
+                            $(nTd).attr('data-row-index',iRow);
+
+                            $(nTd).addClass('modal-show-for-item-field-set-of-statistic-project-daily');
+
+                            $(nTd).attr('data-id',row.id);
+                            $(nTd).attr('data-name','特殊交付');
+                            $(nTd).attr('data-key','marketing_special_num');
+                            $(nTd).attr('data-value',data);
+
+                            $(nTd).attr('data-column-type','text');
+                            $(nTd).attr('data-column-name','特殊交付');
+
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        }
                     },
                     render: function(data, type, row, meta) {
                         return data;
@@ -315,6 +332,23 @@
                     "className": "text-center",
                     "width": "",
                     "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.is_confirmed != 1)
+                        {
+                            $(nTd).addClass('modal-show-for-item-field-set-of-statistic-project-daily');
+
+                            $(nTd).attr('data-id',row.id);
+                            $(nTd).attr('data-name','备注');
+                            $(nTd).attr('data-key','description');
+                            $(nTd).attr('data-value',data);
+
+                            $(nTd).attr('data-column-type','textarea');
+                            $(nTd).attr('data-column-name','备注');
+
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        }
+                    },
                     render: function(data, type, row, meta) {
                         return data;
                         // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
@@ -330,17 +364,16 @@
 
                         var $html_edit = '';
                         var $html_record = '';
-                        var $html_able = '';
                         var $html_delete = '';
                         var $html_complete = '';
 
                         if(row.is_confirmed != 1)
                         {
-                            $html_complete = '<a class="btn btn-xs item-complete-submit-of-statistic-project-daily" data-id="'+data+'">确认</a>';
+                            $html_complete = '<a class="btn btn-xs item-confirm-submit-of-statistic-project-daily" data-id="'+data+'">确认</a>';
                         }
                         else
                         {
-                            $html_complete = '<a class="btn btn-xs disabled">确认</a>';
+                            // $html_complete = '<a class="btn btn-xs disabled">确认</a>';
                         }
 
                         if(row.deleted_at == null)
@@ -355,9 +388,7 @@
                         $html_record = '<a class="btn btn-xs modal-show-for-record-of-statistic-project-daily" data-id="'+data+'">记录</a>';
 
                         var html =
-                            // '<a class="btn btn-xs btn-primary item-edit-link" data-id="'+data+'">编辑</a>'+
-                            '<a class="btn btn-xs modal-show-for-edit-of-statistic-project-daily" data-id="'+data+'">编辑</a>'+
-                            $html_able+
+                            // '<a class="btn btn-xs modal-show-for-edit-of-statistic-project-daily" data-id="'+data+'">编辑</a>'+
                             $html_complete+
                             $html_delete+
                             $html_record+

@@ -66,6 +66,9 @@
 @include(env('TEMPLATE_DK_ADMIN').'component.order.order-item-inspecting')
 @include(env('TEMPLATE_DK_ADMIN').'component.order.order-operation-record')
 
+@include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-project-common')
+{{--@include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-client-common')--}}
+
 
 <div class="component-container _none">
 

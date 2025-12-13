@@ -217,6 +217,11 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     // 统计日报-项目统计
     Route::post('/v1/operate/statistic-list/statistic-project-daily/datatable-list-query', $controller.'@v1_operate_for_statistic_project_daily_datatable_list_query');
     Route::post('/v1/operate/statistic-list/statistic-project-daily/daily-create', $controller.'@v1_operate_for_statistic_project_daily_create');
+    Route::post('/v1/operate/statistic-list/statistic-project-daily/item-field-set', $controller.'@v1_operate_for_statistic_project_daily_item_field_set');
+    Route::post('/v1/operate/statistic-list/statistic-project-daily/item-confirm', $controller.'@v1_operate_for_statistic_project_daily_item_confirm');
+    Route::post('/v1/operate/statistic-list/statistic-project-daily/item-delete', $controller.'@v1_operate_for_statistic_project_daily_item_delete');
+    // 【通用】字段修改
+    Route::post('/v1/operate/statistic-list/statistic-project-daily/field-set', $controller.'@v1_operate_for_statistic_project_daily_field_set');
     Route::post('/v1/operate/statistic-list/statistic-project-show', $controller.'@v1_operate_for_statistic_project_show');
     Route::post('/v1/operate/statistic-list/statistic-project-detail', $controller.'@v1_operate_for_statistic_project_detail');
 
