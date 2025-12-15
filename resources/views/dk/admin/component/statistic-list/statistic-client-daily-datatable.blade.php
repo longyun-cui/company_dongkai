@@ -366,7 +366,7 @@
                 {
                     "title": "实际产出",
                     "data": "id",
-                    "className": "bg-delivered",
+                    "className": "bg-delivered _bold",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
