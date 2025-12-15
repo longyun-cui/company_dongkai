@@ -277,7 +277,7 @@
                 {
                     "title": "郊区交付",
                     "data": "marketing_delivered_suburb_num",
-                    "className": "bg-delivered _bold",
+                    "className": "bg-delivered",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -295,7 +295,7 @@
                 {
                     "title": "内部交付",
                     "data": "marketing_delivered_inside_num",
-                    "className": "bg-delivered _bold",
+                    "className": "bg-delivered",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
