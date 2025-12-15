@@ -6752,7 +6752,8 @@ class DKAdminRepository {
         DB::beginTransaction();
         try
         {
-            if($delivered_client_id != "-1" && $delivered_result == "已交付")
+//            if($delivered_client_id != "-1" && $delivered_result == "已交付")
+                if($delivered_client_id != "-1" && in_array($delivered_result,["已交付","郊区交付"]))
             {
                 $pivot_delivery = DK_Pivot_Client_Delivery::where(['pivot_type'=>95,'order_id'=>$item->id])->first();
                 if($pivot_delivery)
@@ -6984,7 +6985,8 @@ class DKAdminRepository {
 
 
 
-                if(!in_array($delivered_client_id,['-1','0',-1,0]) && $delivered_result == "已交付")
+//                if(!in_array($delivered_client_id,['-1','0',-1,0]) && $delivered_result == "已交付")
+                if(!in_array($delivered_client_id,['-1','0',-1,0]) && in_array($delivered_result,["已交付","郊区交付"]))
                 {
                     $pivot_delivery = DK_Pivot_Client_Delivery::where(['pivot_type'=>95,'order_id'=>$id])->first();
                     if($pivot_delivery)
@@ -31840,7 +31842,8 @@ EOF;
         DB::beginTransaction();
         try
         {
-            if($delivered_client_id != "-1" && $delivered_result == "已交付")
+//            if($delivered_client_id != "-1" && $delivered_result == "已交付")
+            if($delivered_client_id != "-1" && in_array($delivered_result,["已交付","郊区交付"]))
             {
                 $pivot_delivery = DK_Pivot_Client_Delivery::where(['pivot_type'=>95,'order_id'=>$item->id])->first();
                 if($pivot_delivery)
@@ -32182,7 +32185,8 @@ EOF;
                 }
 
 
-                if(!in_array($delivered_client_id,['-1','0',-1,0]) && $delivered_result == "已交付")
+//                if(!in_array($delivered_client_id,['-1','0',-1,0]) && $delivered_result == "已交付")
+                if(!in_array($delivered_client_id,['-1','0',-1,0]) && in_array($delivered_result,["已交付","郊区交付"]))
                 {
                     $pivot_delivery = DK_Pivot_Client_Delivery::where(['pivot_type'=>95,'order_id'=>$id])->first();
                     if($pivot_delivery)
