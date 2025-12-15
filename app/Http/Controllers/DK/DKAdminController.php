@@ -938,6 +938,8 @@ class DKAdminController extends Controller
 
 
 
+
+
     // 【统计】【项目】统计日报列表
     public function v1_operate_for_statistic_project_daily_datatable_list_query()
     {
@@ -1010,6 +1012,7 @@ class DKAdminController extends Controller
     {
         return $this->repo->v1_operate_for_statistic_client_detail(request()->all());
     }
+
 
 
 

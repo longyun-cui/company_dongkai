@@ -33,6 +33,8 @@ class DK_Statistic_Client_daily extends Model
         'production_refused_num',
 
         'marketing_delivered_num',
+        'marketing_delivered_suburb_num',
+        'marketing_delivered_inside_num',
         'marketing_today_num',
         'marketing_yesterday_num',
         'marketing_tomorrow_num',

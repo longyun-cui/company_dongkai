@@ -14361,12 +14361,53 @@ class DKAdminRepository {
         if($limit == -1) $list = $query->get();
         else $list = $query->skip($skip)->take($limit)->get();
 
+
+        $total_data = [];
+        $total_data['id'] = '统计';
+        $total_data['client_id'] = '统计';
+        $total_data['statistic_date'] = '统计';
+        $total_data['statistic_day_num'] = '统计';
+        $total_data['production_published_num'] = 0;
+        $total_data['production_inspected_num'] = 0;
+        $total_data['production_accepted_num'] = 0;
+        $total_data['production_accepted_suburb_num'] = 0;
+        $total_data['production_accepted_inside_num'] = 0;
+        $total_data['production_repeated_num'] = 0;
+        $total_data['production_refused_num'] = 0;
+        $total_data['marketing_delivered_num'] = 0;
+        $total_data['marketing_delivered_suburb_num'] = 0;
+        $total_data['marketing_delivered_inside_num'] = 0;
+        $total_data['marketing_today_num'] = 0;
+        $total_data['marketing_yesterday_num'] = 0;
+        $total_data['marketing_tomorrow_num'] = 0;
+        $total_data['marketing_distribute_num'] = 0;
+        $total_data['marketing_special_num'] = 0;
+        $total_data['description'] = '--';
+        $total_data['is_confirmed'] = '--';
+
         foreach ($list as $k => $v)
         {
 //            $list[$k]->encode_id = encode($v->id);
 //            $list[$k]->content_decode = json_decode($v->content);
+            $total_data['production_published_num'] += $v->production_published_num;
+            $total_data['production_inspected_num'] += $v->production_inspected_num;
+            $total_data['production_accepted_num'] += $v->production_accepted_num;
+            $total_data['production_accepted_suburb_num'] += $v->production_accepted_suburb_num;
+            $total_data['production_accepted_inside_num'] += $v->production_accepted_inside_num;
+            $total_data['production_repeated_num'] += $v->production_repeated_num;
+            $total_data['production_refused_num'] += $v->production_refused_num;
+            $total_data['marketing_delivered_num'] += $v->marketing_delivered_num;
+            $total_data['marketing_delivered_suburb_num'] += $v->marketing_delivered_suburb_num;
+            $total_data['marketing_delivered_inside_num'] += $v->marketing_delivered_inside_num;
+            $total_data['marketing_today_num'] += $v->marketing_today_num;
+            $total_data['marketing_yesterday_num'] += $v->marketing_yesterday_num;
+            $total_data['marketing_tomorrow_num'] += $v->marketing_tomorrow_num;
+            $total_data['marketing_distribute_num'] += $v->marketing_distribute_num;
+            $total_data['marketing_special_num'] += $v->marketing_special_num;
         }
 //        dd($list->toArray());
+
+        $list[] = $total_data;
 
         return datatable_response($list, $draw, $total);
     }
@@ -14393,6 +14434,7 @@ class DKAdminRepository {
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_delivered_num,
                     count(IF(delivered_result = '已交付', TRUE, NULL)) as marketing_today_num,
                     count(IF(delivered_result = '隔日交付', TRUE, NULL)) as marketing_tomorrow_num,
+                    count(IF(delivered_result = '郊区交付', TRUE, NULL)) as order_delivered_suburb_num,
                     count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_delivered_inside_num,
                     count(IF(delivered_result = '重复', TRUE, NULL)) as order_delivered_repeated_num,
                     count(IF(delivered_result = '驳回', TRUE, NULL)) as order_delivered_rejected_num
@@ -14410,6 +14452,7 @@ class DKAdminRepository {
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as other_day_delivered_num,
                     count(IF(delivered_result = '已交付', TRUE, NULL)) as marketing_yesterday_num,
                     count(IF(delivered_result = '隔日交付', TRUE, NULL)) as other_day_delivered_tomorrow,
+                    count(IF(delivered_result = '郊区交付', TRUE, NULL)) as other_day_delivered_suburb,
                     count(IF(delivered_result = '内部交付', TRUE, NULL)) as other_day_delivered_inside,
                     count(IF(delivered_result = '重复', TRUE, NULL)) as other_day_delivered_repeated,
                     count(IF(delivered_result = '驳回', TRUE, NULL)) as other_day_delivered_rejected
@@ -14425,6 +14468,8 @@ class DKAdminRepository {
         $query_delivery = DK_Pivot_Client_Delivery::select('client_id')
             ->addSelect(DB::raw("
                     count(IF(order_category = 1, TRUE, NULL)) as marketing_delivered_num,
+                    count(IF(order_category = 1 AND delivered_result = '郊区交付', TRUE, NULL)) as marketing_delivered_suburb_num,
+                    count(IF(order_category = 1 AND delivered_result = '内部交付', TRUE, NULL)) as marketing_delivered_inside_num,
                     count(IF(order_category = 1 AND pivot_type = 95, TRUE, NULL)) as marketing_normal_num,
                     count(IF(order_category = 1 AND pivot_type = 96, TRUE, NULL)) as marketing_distribute_num
                 "))
@@ -14451,6 +14496,8 @@ class DKAdminRepository {
             $client_list[$k]->production_accepted_inside_num = 0;
 
             $client_list[$k]->marketing_delivered_num = 0;
+            $client_list[$k]->marketing_delivered_suburb_num = 0;
+            $client_list[$k]->marketing_delivered_inside_num = 0;
             $client_list[$k]->marketing_today_num = 0;
             $client_list[$k]->marketing_tomorrow_num = 0;
             $client_list[$k]->marketing_yesterday_num = 0;
@@ -14481,6 +14528,8 @@ class DKAdminRepository {
             if(isset($query_delivery[$v->id]))
             {
                 $client_list[$k]->marketing_delivered_num = $query_delivery[$v->id]['marketing_delivered_num'];
+                $client_list[$k]->marketing_delivered_suburb_num = $query_delivery[$v->id]['marketing_delivered_suburb_num'];
+                $client_list[$k]->marketing_delivered_inside_num = $query_delivery[$v->id]['marketing_delivered_inside_num'];
                 $client_list[$k]->marketing_distribute_num = $query_delivery[$v->id]['marketing_distribute_num'];
             }
         }
@@ -14529,6 +14578,8 @@ class DKAdminRepository {
                 $daily->production_refused_num = $v->production_refused_num;
 
                 $daily->marketing_delivered_num = $v->marketing_delivered_num;
+                $daily->marketing_delivered_suburb_num = $v->marketing_delivered_suburb_num;
+                $daily->marketing_delivered_inside_num = $v->marketing_delivered_inside_num;
                 $daily->marketing_today_num = $v->marketing_today_num;
                 $daily->marketing_yesterday_num = $v->marketing_yesterday_num;
                 $daily->marketing_tomorrow_num = $v->marketing_tomorrow_num;
@@ -14850,6 +14901,8 @@ class DKAdminRepository {
                     sum(production_accepted_suburb_num) as production_accepted_suburb_total,
                     sum(production_accepted_inside_num) as production_accepted_inside_total,
                     sum(marketing_delivered_num) as marketing_delivered_total,
+                    sum(marketing_delivered_suburb_num) as marketing_delivered_suburb_total,
+                    sum(marketing_delivered_inside_num) as marketing_delivered_inside_total,
                     sum(marketing_today_num) as marketing_today_total,
                     sum(marketing_yesterday_num) as marketing_yesterday_total,
                     sum(marketing_tomorrow_num) as marketing_tomorrow_total,
@@ -14955,7 +15008,8 @@ class DKAdminRepository {
         $total_data['production_accepted_total'] = 0;
         $total_data['production_accepted_suburb_total'] = 0;
         $total_data['production_accepted_inside_total'] = 0;
-        $total_data['marketing_delivered_total'] = 0;
+        $total_data['marketing_delivered_suburb_total'] = 0;
+        $total_data['marketing_delivered_inside_total'] = 0;
         $total_data['marketing_today_total'] = 0;
         $total_data['marketing_yesterday_total'] = 0;
         $total_data['marketing_tomorrow_total'] = 0;
@@ -14971,6 +15025,8 @@ class DKAdminRepository {
             $total_data['production_accepted_suburb_total'] += $v->production_accepted_suburb_total;
             $total_data['production_accepted_inside_total'] += $v->production_accepted_inside_total;
             $total_data['marketing_delivered_total'] += $v->marketing_delivered_total;
+            $total_data['marketing_delivered_suburb_total'] += $v->marketing_delivered_suburb_total;
+            $total_data['marketing_delivered_inside_total'] += $v->marketing_delivered_inside_total;
             $total_data['marketing_today_total'] += $v->marketing_today_total;
             $total_data['marketing_yesterday_total'] += $v->marketing_yesterday_total;
             $total_data['marketing_tomorrow_total'] += $v->marketing_tomorrow_total;

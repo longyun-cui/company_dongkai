@@ -217,6 +217,40 @@
                     }
                 },
                 {
+                    "title": "郊区交付",
+                    "data": "marketing_delivered_suburb_num",
+                    "className": "bg-delivered _bold",
+                    "width": "80px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.id == "统计")
+                        {
+                            $(nTd).addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
+                    "title": "内部交付",
+                    "data": "marketing_delivered_inside_num",
+                    "className": "bg-delivered _bold",
+                    "width": "80px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.id == "统计")
+                        {
+                            $(nTd).addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
                     "title": "前日存单",
                     "data": "marketing_yesterday_num",
                     "className": "bg-delivered",
@@ -296,7 +330,7 @@
                         {
                             $(nTd).addClass('_bold');
                         }
-                        if(row.is_confirmed != 1)
+                        if(row.id != "统计" && row.is_confirmed != 1)
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -319,13 +353,31 @@
                     }
                 },
                 {
+                    "title": "实际产出",
+                    "data": "id",
+                    "className": "bg-delivered",
+                    "width": "80px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.id == "统计")
+                        {
+                            $(nTd).addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        var $actual = row.marketing_delivered_num + row.marketing_special_num;
+                        return $actual;
+                    }
+                },
+                {
                     "title": "备注",
                     "data": "description",
                     "className": "text-center",
                     "width": "",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_confirmed != 1)
+                        if(row.id != "统计" && row.is_confirmed != 1)
                         {
                             $(nTd).addClass('modal-show-for-item-field-set-of-statistic-client-daily');
 
@@ -361,6 +413,7 @@
                         }
                     },
                     render: function(data, type, row, meta) {
+                        if(row.id == "统计") return '--';
                         if(data == 1) return '<small class="btn-xs bg-green">已确认</small>';
                         else return '<small class="btn-xs bg-orange">待确认</small>';
                     }
