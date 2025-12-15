@@ -14555,7 +14555,7 @@ class DKAdminRepository {
 
                 if($daily)
                 {
-                    if($daily->is_confirmed = 1)
+                    if($daily->is_confirmed == 1)
                     {
                         continue;
                     }
