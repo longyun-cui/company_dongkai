@@ -16,6 +16,9 @@
             "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t>',
             "order": [],
             "orderCellsTop": true,
+            "scrollX": true,
+            "scrollY": ($(document).height() - 400)+"px",
+            "scrollCollapse": true,
             "ajax": {
                 'url': "{{ url('/v1/operate/statistic-list/statistic-client-daily/datatable-list-query') }}",
                 "type": 'POST',
