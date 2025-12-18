@@ -152,9 +152,9 @@
                 //     }
                 // },
                 {
-                    "title": "当日出单",
+                    "title": "当日产出<br>(客服出单)",
                     "data": "production_accepted_num",
-                    "className": "bg-published _bold",
+                    "className": "bg-published",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -170,7 +170,7 @@
                     }
                 },
                 {
-                    "title": "郊区通过",
+                    "title": "郊区通过<br>(质检审核)",
                     "data": "production_accepted_suburb_num",
                     "className": "bg-published",
                     "width": "80px",
@@ -188,7 +188,7 @@
                     }
                 },
                 {
-                    "title": "内部通过",
+                    "title": "内部通过<br>(质检审核)",
                     "data": "production_accepted_inside_num",
                     "className": "bg-published",
                     "width": "80px",
@@ -206,7 +206,7 @@
                     }
                 },
                 {
-                    "title": "前日存单",
+                    "title": "前日存单<br>(甲方交付)",
                     "data": "marketing_yesterday_num",
                     "className": "bg-delivered",
                     "width": "80px",
@@ -224,7 +224,7 @@
                     }
                 },
                 {
-                    "title": "当日产出",
+                    "title": "当日出单<br>(甲方交付)",
                     "data": "marketing_today_num",
                     "className": "bg-delivered",
                     "width": "80px",
@@ -242,7 +242,7 @@
                     }
                 },
                 {
-                    "title": "分发量",
+                    "title": "分发交付<br>(甲方交付)",
                     "data": "marketing_distribute_num",
                     "className": "bg-delivered",
                     "width": "80px",
@@ -260,7 +260,7 @@
                     }
                 },
                 {
-                    "title": "交付总量",
+                    "title": "交付总量<br>(甲方交付)",
                     "data": "marketing_delivered_num",
                     "className": "bg-delivered _bold",
                     "width": "80px",

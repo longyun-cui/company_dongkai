@@ -7091,6 +7091,214 @@ class DKAdminRepository {
         }
 
     }
+    // 【工单-管理】交付（一键交付-傻瓜式交付）
+    public function v1_operate_for_order_item_deliver_by_one_check($post_data)
+    {
+//        dd($post_data);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+            'project_id.required' => '请选择项目',
+            'client_id.required' => '请选择客户',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+            'project_id' => 'required',
+            'client_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order-deliver') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+        $client_phone = $item->client_phone;
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,61,66])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        if($item->inspected_status == 1)
+        {
+
+        }
+        else return response_error([],"工单待审核！");
+
+        $delivered_result = '';
+        if($item->inspected_result == "通过") $delivered_result = '已交付';
+        else if($item->inspected_result == "郊区通过") $delivered_result = '内部通过';
+        else if($item->inspected_result == "内部通过") $delivered_result = '内部通过';
+
+
+        $delivered_result = $post_data["delivered_result"];
+        if(!in_array($delivered_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
+
+
+        $project_id = $item->project_id;
+        $project = DK_Project::find($project_id);
+        if(!$project) return response_error([],"项目不存在！");
+
+        $client_id = $project->client_id;
+        $client = DK_Client::find($client_id);
+        if(!$client) return response_error([],"客户不存在！");
+
+
+
+        // 是否已经分发
+        $is_distributed_list = DK_Pivot_Client_Delivery::where(['client_id'=>$client_id,'client_phone'=>$client_phone])->get();
+        if(count($is_distributed_list) > 0)
+        {
+            return response_error([],"该客户已经交付过该号码，不可以重复分发！");
+        }
+
+        // 是否已经交付
+        $is_order_list = DK_Order::with('project_er')
+            ->where(['client_phone'=>$client_phone])
+            ->whereIn('delivered_result',["已交付","郊区交付","内部交付"])
+            ->get();
+//        dd($is_order_list->toArray());
+
+        if(count($is_order_list) > 0)
+        {
+            foreach($is_order_list as $o)
+            {
+                if($o->client_id == $client_id)
+                {
+                    return response_error([],"该号码已交付过该客户，不要重复交付！");
+                }
+
+//                if($o->project_er->client_id == $delivered_client_id)
+//                {
+//                    return dd($o->project_er->client_id.'-'.$delivered_client_id);
+//                    return response_error([],"该号码已交付过【默认】客户，不要重复交付！");
+//                }
+            }
+        }
+
+        $before = $item->delivered_result;
+
+        $delivered_description = $post_data["delivered_description"];
+        $recording_address = $post_data["recording_address"];
+
+        $is_distributive_condition = $post_data["is_distributive_condition"];
+
+        $date = date("Y-m-d");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+//            if($delivered_client_id != "-1" && $delivered_result == "已交付")
+            if($client_id != "-1" && in_array($delivered_result,["已交付","郊区交付","内部交付"]))
+            {
+                $pivot_delivery = DK_Pivot_Client_Delivery::where(['pivot_type'=>95,'order_id'=>$item->id])->first();
+                if($pivot_delivery)
+                {
+                    if($client)
+                    {
+                        $pivot_delivery->company_id = $client->company_id;
+                        $pivot_delivery->channel_id = $client->channel_id;
+                        $pivot_delivery->business_id = $client->business_id;
+                    }
+                    $pivot_delivery->project_id = $project_id;
+                    $pivot_delivery->client_id = $client_id;
+                    $pivot_delivery->delivered_result = $delivered_result;
+                    $pivot_delivery->delivered_date = $date;
+                    $bool_0 = $pivot_delivery->save();
+                    if(!$bool_0) throw new Exception("pivot_client_delivery--update--fail");
+                }
+                else
+                {
+                    $pivot_delivery = new DK_Pivot_Client_Delivery;
+                    if($client)
+                    {
+                        $pivot_delivery_data["company_id"] = $client->company_id;
+                        $pivot_delivery_data["channel_id"] = $client->channel_id;
+                        $pivot_delivery_data["business_id"] = $client->business_id;
+                    }
+                    $pivot_delivery_data["order_category"] = $item->item_category;
+                    $pivot_delivery_data["pivot_type"] = 95;
+                    $pivot_delivery_data["project_id"] = $project_id;
+                    $pivot_delivery_data["client_id"] = $client_id;
+                    $pivot_delivery_data["original_project_id"] = $item->project_id;
+                    $pivot_delivery_data["order_id"] = $item->id;
+                    $pivot_delivery_data["client_type"] = $item->client_type;
+                    $pivot_delivery_data["client_phone"] = $item->client_phone;
+                    $pivot_delivery_data["delivered_result"] = $delivered_result;
+                    $pivot_delivery_data["delivered_date"] = $date;
+                    $pivot_delivery_data["creator_id"] = $me->id;
+
+                    $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
+                    if(!$bool_0) throw new Exception("insert--pivot_client_delivery--fail");
+                }
+            }
+
+            $item->is_distributive_condition = $is_distributive_condition;
+            $item->client_id = $client_id;
+            $item->deliverer_id = $me->id;
+            $item->delivered_status = 1;
+            $item->delivered_result = $delivered_result;
+            $item->delivered_description = $delivered_description;
+            $item->recording_address = $recording_address;
+            $item->delivered_at = time();
+            $item->delivered_date = $date;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                $record = new DK_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $id;
+                $record_data["operate_object"] = 71;
+                $record_data["operate_category"] = 95;
+                $record_data["operate_type"] = 1;
+                $record_data["column_name"] = "delivered_result";
+
+                $record_data["before"] = $before;
+                $record_data["after"] = $delivered_result;
+
+//                $record_data["before_client_id"] = $before;
+//                $record_data["after_client_id"] = $client_id;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+
+            DB::commit();
+
+            // 自动分发
+            $client = DK_Client::find($client_id);
+            if($client->is_automatic_dispatching == 1)
+            {
+                dd($client_id);
+                AutomaticDispatchingJob::dispatch($client->id);
+            }
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
     // 【工单-管理】【获取】已交付记录
     public function v1_operate_for_order_deliver_get_delivered($post_data)
     {
@@ -8732,7 +8940,7 @@ class DKAdminRepository {
         // 工单统计
         // 总量统计
         $query_order_of_all = (clone $query)
-            ->whereIn('created_type',[1,99])
+            ->whereIn('created_type',[1,91,99])
             ->where('item_category',1)
             ->select(DB::raw("
                     count(*) as order_count_for_all,
@@ -8802,7 +9010,7 @@ class DKAdminRepository {
 
 
         $query_delivered_of_all = (clone $query)
-            ->whereIn('created_type',[1,99])
+            ->whereIn('created_type',[1,91,99])
             ->select(DB::raw("
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as delivered_count_for_all,
                     count(IF(delivered_result = '已交付', TRUE, NULL)) as delivered_count_for_completed,
@@ -8849,7 +9057,7 @@ class DKAdminRepository {
 
         // 客服报单-当天统计
         $query_order_of_today = (clone $query)->where('published_date',$the_date)
-            ->whereIn('created_type',[1,99])
+            ->whereIn('created_type',[1,91,99])
             ->select(DB::raw("
                     count(*) as order_count_for_all,
                     count(IF(is_published = 0, TRUE, NULL)) as order_count_for_unpublished,
@@ -8917,7 +9125,7 @@ class DKAdminRepository {
 
         // 交付人员-工作统计
         $query_delivered_of_today = (clone $query)->where('delivered_date',$the_date)
-            ->whereIn('created_type',[1,99])
+            ->whereIn('created_type',[1,91,99])
             ->select(DB::raw("
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as delivered_count_for_all,
                     count(IF(delivered_status = 1 AND published_date = '{$the_date}', TRUE, NULL)) as delivered_count_for_all_by_same_day,
@@ -9013,7 +9221,7 @@ class DKAdminRepository {
 
         // 当月统计
         $query_order_of_month = (clone $query)->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date])
-            ->whereIn('created_type',[1,99])
+            ->whereIn('created_type',[1,91,99])
             ->where('item_category',1)
             ->select(DB::raw("
                     count(*) as order_count_for_all,
@@ -9085,7 +9293,7 @@ class DKAdminRepository {
 
         $query_delivered_of_month = (clone $query)
             ->whereBetween('delivered_date',[$the_month_start_date,$the_month_ended_date])
-            ->whereIn('created_type',[1,99])
+            ->whereIn('created_type',[1,91,99])
             ->select(DB::raw("
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as delivered_count_for_all,
                     count(IF(delivered_status = 1 AND published_date > '{$the_month_start_date}' AND published_date < '{$the_month_ended_date}', TRUE, NULL)) as delivered_count_for_all_by_same_day,
@@ -9295,7 +9503,7 @@ class DKAdminRepository {
 
         // 坐席发布-数据统计
         $query_order_published_data = $query_order_published
-            ->whereIn('created_type',[1,99])
+            ->whereIn('created_type',[1,91,99])
 //            ->select('item_category')
             ->addSelect(DB::raw("
                     count(*) as order_count_for_published,
@@ -9491,7 +9699,7 @@ class DKAdminRepository {
         $query_order = DK_Order::select('creator_id','published_at','published_date')
 //            ->whereBetween('published_at',[$this_month_start_timestamp,$this_month_ended_timestamp])  // 当月
 //            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
-            ->whereIn('created_type',[1,99])
+            ->whereIn('created_type',[1,91,99])
             ->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date])
             ->groupBy('published_date')
             ->addSelect(DB::raw("
@@ -9955,7 +10163,7 @@ class DKAdminRepository {
 
         // 坐席发布-数据统计
         $query_order_published_data = (clone $query_order_published)
-            ->whereIn('created_type',[1,99])
+            ->whereIn('created_type',[1,91,99])
 //            ->select('item_category')
             ->addSelect(DB::raw("
                     count(*) as order_for_all,
@@ -10061,7 +10269,7 @@ class DKAdminRepository {
         $query_order = DK_Order::select('creator_id','published_at','published_date')
 //            ->whereBetween('published_at',[$this_month_start_timestamp,$this_month_ended_timestamp])  // 当月
 //            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
-            ->whereIn('created_type',[1,99])
+            ->whereIn('created_type',[1,91,99])
             ->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date])
             ->groupBy('published_date')
             ->addSelect(DB::raw("
@@ -34950,7 +35158,7 @@ EOF;
 
         // 工单统计
         // 总量统计
-        $query_order_of_all = (clone $query)->whereIn('created_type',[1,99])
+        $query_order_of_all = (clone $query)->whereIn('created_type',[1,91,99])
             ->select(DB::raw("
                     count(*) as order_count_for_all,
                     count(IF(is_published = 0, TRUE, NULL)) as order_count_for_unpublished,
@@ -35019,7 +35227,7 @@ EOF;
 
 
         $query_delivered_of_all = (clone $query)
-            ->whereIn('created_type',[1,99])
+            ->whereIn('created_type',[1,91,99])
             ->select(DB::raw("
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as delivered_count_for_all,
                     count(IF(delivered_result = '已交付', TRUE, NULL)) as delivered_count_for_completed,
@@ -35065,7 +35273,7 @@ EOF;
 
         // 客服报单-当天统计
         $query_order_of_today = (clone $query)->where('published_date',$the_date)
-            ->whereIn('created_type',[1,99])
+            ->whereIn('created_type',[1,91,99])
             ->select(DB::raw("
                     count(*) as order_count_for_all,
                     count(IF(is_published = 0, TRUE, NULL)) as order_count_for_unpublished,
@@ -35133,7 +35341,7 @@ EOF;
 
         // 交付人员-工作统计
         $query_delivered_of_today = (clone $query)->where('delivered_date',$the_date)
-            ->whereIn('created_type',[1,99])
+            ->whereIn('created_type',[1,91,99])
             ->select(DB::raw("
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as delivered_count_for_all,
                     count(IF(delivered_status = 1 AND published_date = '{$the_date}', TRUE, NULL)) as delivered_count_for_all_by_same_day,
@@ -35228,7 +35436,7 @@ EOF;
 
         // 当月统计
         $query_order_of_month = (clone $query)->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
-            ->whereIn('created_type',[1,99])
+            ->whereIn('created_type',[1,91,99])
             ->select(DB::raw("
                     count(*) as order_count_for_all,
                     count(IF(is_published = 0, TRUE, NULL)) as order_count_for_unpublished,
@@ -35298,7 +35506,7 @@ EOF;
 
 
         $query_delivered_of_month = (clone $query)->whereBetween('delivered_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
-            ->whereIn('created_type',[1,99])
+            ->whereIn('created_type',[1,91,99])
             ->select(DB::raw("
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as delivered_count_for_all,
                     count(IF(delivered_status = 1 AND published_at > '{$the_month_start_timestamp}' AND published_at < '{$the_month_ended_timestamp}', TRUE, NULL)) as delivered_count_for_all_by_same_day,
