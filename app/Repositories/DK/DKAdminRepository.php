@@ -15008,6 +15008,7 @@ class DKAdminRepository {
         $total_data['production_accepted_total'] = 0;
         $total_data['production_accepted_suburb_total'] = 0;
         $total_data['production_accepted_inside_total'] = 0;
+        $total_data['marketing_delivered_total'] = 0;
         $total_data['marketing_delivered_suburb_total'] = 0;
         $total_data['marketing_delivered_inside_total'] = 0;
         $total_data['marketing_today_total'] = 0;
