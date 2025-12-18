@@ -6753,7 +6753,7 @@ class DKAdminRepository {
         try
         {
 //            if($delivered_client_id != "-1" && $delivered_result == "已交付")
-                if($delivered_client_id != "-1" && in_array($delivered_result,["已交付","郊区交付"]))
+                if($delivered_client_id != "-1" && in_array($delivered_result,["已交付","郊区交付","内部交付"]))
             {
                 $pivot_delivery = DK_Pivot_Client_Delivery::where(['pivot_type'=>95,'order_id'=>$item->id])->first();
                 if($pivot_delivery)
@@ -6986,7 +6986,7 @@ class DKAdminRepository {
 
 
 //                if(!in_array($delivered_client_id,['-1','0',-1,0]) && $delivered_result == "已交付")
-                if(!in_array($delivered_client_id,['-1','0',-1,0]) && in_array($delivered_result,["已交付","郊区交付"]))
+                if(!in_array($delivered_client_id,['-1','0',-1,0]) && in_array($delivered_result,["已交付","郊区交付","内部交付"]))
                 {
                     $pivot_delivery = DK_Pivot_Client_Delivery::where(['pivot_type'=>95,'order_id'=>$id])->first();
                     if($pivot_delivery)
@@ -31864,7 +31864,10 @@ EOF;
         }
 
         // 是否已经交付
-        $is_order_list = DK_Order::with('project_er')->where(['client_phone'=>$client_phone,'delivered_result'=>'已交付'])->get();
+        $is_order_list = DK_Order::with('project_er')
+            ->where(['client_phone'=>$client_phone])
+            ->whereIn('delivered_result',["已交付","郊区交付","内部交付"])
+            ->get();
 //        dd($is_order_list->toArray());
 
         if(count($is_order_list) > 0)
@@ -31899,7 +31902,7 @@ EOF;
         try
         {
 //            if($delivered_client_id != "-1" && $delivered_result == "已交付")
-            if($delivered_client_id != "-1" && in_array($delivered_result,["已交付","郊区交付"]))
+            if($delivered_client_id != "-1" && in_array($delivered_result,["已交付","郊区交付","内部交付"]))
             {
                 $pivot_delivery = DK_Pivot_Client_Delivery::where(['pivot_type'=>95,'order_id'=>$item->id])->first();
                 if($pivot_delivery)
@@ -32242,7 +32245,7 @@ EOF;
 
 
 //                if(!in_array($delivered_client_id,['-1','0',-1,0]) && $delivered_result == "已交付")
-                if(!in_array($delivered_client_id,['-1','0',-1,0]) && in_array($delivered_result,["已交付","郊区交付"]))
+                if(!in_array($delivered_client_id,['-1','0',-1,0]) && in_array($delivered_result,["已交付","郊区交付","内部交付"]))
                 {
                     $pivot_delivery = DK_Pivot_Client_Delivery::where(['pivot_type'=>95,'order_id'=>$id])->first();
                     if($pivot_delivery)
