@@ -305,8 +305,42 @@
                             }
                         },
                         {
+                            "title": "折扣通过",
+                            "data": "order_count_for_accepted_discount",
+                            "className": "bg-inspected",
+                            "width": "60px",
+                            "orderable": true,
+                            "orderSequence": ["desc", "asc"],
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
+                            render: function(data, type, row, meta) {
+                                return data;
+                            }
+                        },
+                        {
                             "title": "郊区通过",
                             "data": "order_count_for_accepted_suburb",
+                            "className": "bg-inspected",
+                            "width": "60px",
+                            "orderable": true,
+                            "orderSequence": ["desc", "asc"],
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
+                            render: function(data, type, row, meta) {
+                                return data;
+                            }
+                        },
+                        {
+                            "title": "内部通过",
+                            "data": "order_count_for_accepted_inside",
                             "className": "bg-inspected",
                             "width": "60px",
                             "orderable": true,
