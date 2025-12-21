@@ -62,7 +62,7 @@
             </select>
 
 
-            <select class="search-filter form-filter filter-md select2-box-c" name="order-delivery-result" multiple="multiple" style="width:100px;">
+            <select class="search-filter form-filter filter-md select2-box-c" name="order-delivery-result" multiple="multiple-" style="width:100px;">
                 <option value="-1">交付结果</option>
                 <option value="已交付">已交付</option>
                 <option value="折扣交付">折扣交付</option>
