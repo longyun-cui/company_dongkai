@@ -8838,10 +8838,16 @@ class DKAdminRepository {
         // 交付结果
         if(!empty($post_data['delivered_result']))
         {
-            if(count($post_data['delivered_result']))
+            // 单选
+            if(!in_array($post_data['delivered_result'],[-1,'-1']))
             {
-                $query->whereIn('delivered_result', $post_data['delivered_result']);
+                $query->where('delivered_result', $post_data['delivered_result']);
             }
+            // 多选
+//            if(count($post_data['delivered_result']))
+//            {
+//                $query->whereIn('delivered_result', $post_data['delivered_result']);
+//            }
         }
 
 
