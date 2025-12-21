@@ -39,12 +39,12 @@
                     d.client = $tableSearch.find('select[name="delivery-client"]').val();
                     d.project = $tableSearch.find('select[name="delivery-project"]').val();
                     d.status = $tableSearch.find('select[name="order-status"]').val();
-                    d.delivery_type = $tableSearch.find('select[name="order-delivery-type"]').val();
                     d.order_type = $tableSearch.find('select[name="order-type"]').val();
                     d.client_name = $tableSearch.find('input[name="order-client-name"]').val();
                     d.client_phone = $tableSearch.find('input[name="order-client-phone"]').val();
-                    d.delivered_status = $tableSearch.find('select[name="order-delivered-status"]').val();
-                    d.delivered_result = $tableSearch.find('select[name="order-delivered-result[]"]').val();
+                    d.delivery_type = $tableSearch.find('select[name="order-delivery-type"]').val();
+                    d.delivered_status = $tableSearch.find('select[name="order-delivery-status"]').val();
+                    d.delivered_result = $tableSearch.find('select[name="order-delivery-result"]').val();
                 },
             },
             "fixedColumns": {
@@ -261,6 +261,18 @@
                         if(!data) return "--";
                         var $result_html = '';
                         if(data == "已交付")
+                        {
+                            $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
+                        }
+                        else if(data == "折扣交付")
+                        {
+                            $result_html = '<small class="btn-xs bg-orange">'+data+'</small>';
+                        }
+                        else if(data == "郊区交付")
+                        {
+                            $result_html = '<small class="btn-xs bg-red">'+data+'</small>';
+                        }
+                        else if(data == "内部交付")
                         {
                             $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
                         }

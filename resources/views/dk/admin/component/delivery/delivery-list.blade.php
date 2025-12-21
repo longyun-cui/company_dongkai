@@ -55,10 +55,19 @@
             </select>
 
 
-            <select class="search-filter form-filter filter-md select2-box-c" name="order-delivery-type" style="width:88px;">
+            <select class="search-filter form-filter filter-md select2-box-c" name="order-delivery-type" style="width:100px;">
                 <option value="-1">交付类型</option>
                 <option value="95">交付</option>
                 <option value="96">分发</option>
+            </select>
+
+
+            <select class="search-filter form-filter filter-md select2-box-c" name="order-delivery-result" multiple="multiple" style="width:100px;">
+                <option value="-1">交付结果</option>
+                <option value="已交付">已交付</option>
+                <option value="折扣交付">折扣交付</option>
+                <option value="郊区交付">郊区交付</option>
+                <option value="内部交付">内部交付</option>
             </select>
 
 
