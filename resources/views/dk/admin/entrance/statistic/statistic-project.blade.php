@@ -480,14 +480,14 @@
                                 {
                                     $(nTd).addClass('_bold');
                                 }
-                                var $waiting_count = row.order_count_for_accepted - data;
+                                var $waiting_count = row.order_count_for_accepted + row.order_count_for_accepted_discount + row.order_count_for_accepted_suburb - data;
                                 if($waiting_count > 0)
                                 {
                                     $(nTd).addClass('_bold').addClass('text-red');
                                 }
                             },
                             render: function(data, type, row, meta) {
-                                var $waiting_count = row.order_count_for_accepted - data;
+                                var $waiting_count = row.order_count_for_accepted + row.order_count_for_accepted_discount + row.order_count_for_accepted_suburb - data;
                                 if($waiting_count > 0) return $waiting_count;
                                 else return '--';
                             }
