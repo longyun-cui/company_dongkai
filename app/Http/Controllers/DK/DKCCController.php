@@ -733,6 +733,11 @@ class DKCCController extends Controller
     {
         return $this->repo->operate_pool_telephone_download_of_score(request()->all());
     }
+    // 【电话数据】下载
+    public function operate_pool_telephone_download_of_all()
+    {
+        return $this->repo->operate_pool_telephone_download_of_all(request()->all());
+    }
 
 
 

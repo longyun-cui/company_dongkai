@@ -170,7 +170,7 @@
                     }
                 },
                 {
-                    "title": "郊区通过<br>(质检审核)",
+                    "title": "折扣通过<br>(审核)",
                     "data": "production_accepted_suburb_num",
                     "className": "bg-published",
                     "width": "80px",
@@ -188,7 +188,25 @@
                     }
                 },
                 {
-                    "title": "内部通过<br>(质检审核)",
+                    "title": "郊区通过<br>(审核)",
+                    "data": "production_accepted_suburb_num",
+                    "className": "bg-published",
+                    "width": "80px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.id == "统计")
+                        {
+                            $(nTd).addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        if(!data) return '--';
+                        return data;
+                    }
+                },
+                {
+                    "title": "内部通过<br>(审核)",
                     "data": "production_accepted_inside_num",
                     "className": "bg-published",
                     "width": "80px",
@@ -263,6 +281,24 @@
                     "title": "交付总量<br>(甲方交付)",
                     "data": "marketing_delivered_num",
                     "className": "bg-delivered _bold",
+                    "width": "80px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.id == "统计")
+                        {
+                            $(nTd).addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        if(!data) return '--';
+                        return data;
+                    }
+                },
+                {
+                    "title": "折扣交付",
+                    "data": "marketing_delivered_discount_num",
+                    "className": "bg-delivered",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],

@@ -150,7 +150,7 @@
                 //     }
                 // },
                 {
-                    "title": "当日出单",
+                    "title": "当日产出<br>(客服出单)",
                     "data": "production_accepted_num",
                     "className": "bg-published _bold",
                     "width": "100px",
@@ -167,7 +167,24 @@
                     }
                 },
                 {
-                    "title": "郊区通过",
+                    "title": "折扣通过<br>(审核)",
+                    "data": "production_accepted_discount_num",
+                    "className": "bg-published",
+                    "width": "100px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.id == "统计")
+                        {
+                            $(nTd).addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
+                    "title": "郊区通过<br>(审核)",
                     "data": "production_accepted_suburb_num",
                     "className": "bg-published",
                     "width": "100px",
@@ -184,7 +201,7 @@
                     }
                 },
                 {
-                    "title": "内部通过",
+                    "title": "内部通过<br>(审核)",
                     "data": "production_accepted_inside_num",
                     "className": "bg-published",
                     "width": "100px",
@@ -201,24 +218,7 @@
                     }
                 },
                 {
-                    "title": "交付总量",
-                    "data": "marketing_delivered_num",
-                    "className": "bg-delivered _bold",
-                    "width": "100px",
-                    "orderable": true,
-                    "orderSequence": ["desc", "asc"],
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.id == "统计")
-                        {
-                            $(nTd).addClass('_bold');
-                        }
-                    },
-                    render: function(data, type, row, meta) {
-                        return data;
-                    }
-                },
-                {
-                    "title": "前日存单",
+                    "title": "前日存单<br>(甲方交付)",
                     "data": "marketing_yesterday_num",
                     "className": "bg-delivered",
                     "width": "100px",
@@ -235,7 +235,7 @@
                     }
                 },
                 {
-                    "title": "当日产出",
+                    "title": "当日出单<br>(甲方交付)",
                     "data": "marketing_today_num",
                     "className": "bg-delivered",
                     "width": "100px",
@@ -266,6 +266,74 @@
                     },
                     render: function(data, type, row, meta) {
                         return data
+                    }
+                },
+                {
+                    "title": "交付总量<br>(甲方交付)",
+                    "data": "marketing_delivered_num",
+                    "className": "bg-delivered _bold",
+                    "width": "100px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.id == "统计")
+                        {
+                            $(nTd).addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
+                    "title": "折扣交付<br>(甲方交付)",
+                    "data": "marketing_delivered_discount_num",
+                    "className": "bg-delivered",
+                    "width": "100px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.client_id == "统计")
+                        {
+                            $(nTd).addClass('_bold').addClass('text-green');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
+                    "title": "郊区交付<br>(甲方交付)",
+                    "data": "marketing_delivered_suburb_num",
+                    "className": "bg-delivered",
+                    "width": "100px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.client_id == "统计")
+                        {
+                            $(nTd).addClass('_bold').addClass('text-green');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
+                    "title": "内部交付<br>(甲方交付)",
+                    "data": "marketing_delivered_inside_num",
+                    "className": "bg-delivered",
+                    "width": "100px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.client_id == "统计")
+                        {
+                            $(nTd).addClass('_bold').addClass('text-green');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        return data;
                     }
                 },
                 {

@@ -75,6 +75,8 @@
             $(".order_for_delivered_all").find('b').html($data.order_for_delivered_all);
             $(".order_for_delivered_effective").find('b').html($data.order_for_delivered_effective);
             $(".order_for_delivered_completed").find('b').html($data.order_for_delivered_completed);
+            $(".order_for_delivered_discount").find('b').html($data.order_for_delivered_discount);
+            $(".order_for_delivered_suburb").find('b').html($data.order_for_delivered_suburb);
             $(".order_for_delivered_inside").find('b').html($data.order_for_delivered_inside);
             $(".order_for_delivered_tomorrow").find('b').html($data.order_for_delivered_tomorrow);
             $(".order_for_delivered_repeated").find('b').html($data.order_for_delivered_repeated);
@@ -91,6 +93,8 @@
             $(".order_of_all_for_inspected_all").find('b').html($data.order_of_all_for_inspected_all);
             $(".order_of_all_for_delivered_all").find('b').html($data.order_of_all_for_delivered_all);
             $(".order_of_all_for_delivered_completed").find('b').html($data.order_of_all_for_delivered_completed);
+            $(".order_of_all_for_delivered_discount").find('b').html($data.order_of_all_for_delivered_discount);
+            $(".order_of_all_for_delivered_suburb").find('b').html($data.order_of_all_for_delivered_suburb);
             $(".order_of_all_for_delivered_inside").find('b').html($data.order_of_all_for_delivered_inside);
             $(".order_of_all_for_delivered_tomorrow").find('b').html($data.order_of_all_for_delivered_tomorrow);
             $(".order_of_all_for_delivered_repeated").find('b').html($data.order_of_all_for_delivered_repeated);
@@ -524,6 +528,7 @@
                     $target.find(".order_published_dental_for_published").find('b').html($data.order_published_data.order_dental_for_published);
                     $target.find(".order_published_dental_for_inspected_all").find('b').html($data.order_published_data.order_dental_for_inspected_all);
                     $target.find(".order_published_dental_for_inspected_accepted").find('b').html($data.order_published_data.order_dental_for_inspected_accepted);
+                    $target.find(".order_published_dental_for_inspected_accepted_discount").find('b').html($data.order_published_data.order_dental_for_inspected_accepted_discount);
                     $target.find(".order_published_dental_for_inspected_accepted_suburb").find('b').html($data.order_published_data.order_dental_for_inspected_accepted_suburb);
                     $target.find(".order_published_dental_for_inspected_accepted_inside").find('b').html($data.order_published_data.order_dental_for_inspected_accepted_inside);
                     $target.find(".order_published_dental_for_inspected_repeated").find('b').html($data.order_published_data.order_dental_for_inspected_repeated);
@@ -539,6 +544,7 @@
                     // 质检审核
                     $target.find(".order_inspected_dental_for_inspected_all").find('b').html($data.order_inspected_data.order_dental_for_inspected_all);
                     $target.find(".order_inspected_dental_for_inspected_accepted").find('b').html($data.order_inspected_data.order_dental_for_inspected_accepted);
+                    $target.find(".order_inspected_dental_for_inspected_accepted_discount").find('b').html($data.order_inspected_data.order_dental_for_inspected_accepted_discount);
                     $target.find(".order_inspected_dental_for_inspected_accepted_suburb").find('b').html($data.order_inspected_data.order_dental_for_inspected_accepted_suburb);
                     $target.find(".order_inspected_dental_for_inspected_accepted_inside").find('b').html($data.order_inspected_data.order_dental_for_inspected_accepted_inside);
                     $target.find(".order_inspected_dental_for_inspected_repeated").find('b').html($data.order_inspected_data.order_dental_for_inspected_repeated);
@@ -554,6 +560,8 @@
                     $target.find(".order_delivered_dental_for_completed_by_same_day").find('b').html($data.order_delivered_data.order_dental_for_delivered_completed_by_same_day);
                     $target.find(".order_delivered_dental_for_completed_by_other_day").find('b').html($data.order_delivered_data.order_dental_for_delivered_completed_by_other_day);
 
+                    $target.find(".order_delivered_dental_for_discount").find('b').html($data.order_delivered_data.order_dental_for_delivered_discount);
+                    $target.find(".order_delivered_dental_for_suburb").find('b').html($data.order_delivered_data.order_dental_for_delivered_suburb);
                     $target.find(".order_delivered_dental_for_inside").find('b').html($data.order_delivered_data.order_dental_for_delivered_inside);
                     $target.find(".order_delivered_dental_for_inside_by_same_day").find('b').html($data.order_delivered_data.order_dental_for_delivered_inside_by_same_day);
                     $target.find(".order_delivered_dental_for_inside_by_other_day").find('b').html($data.order_delivered_data.order_dental_for_delivered_inside_by_other_day);

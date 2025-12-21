@@ -775,7 +775,7 @@
                     {
                         "title": "操作",
                         "data": "id",
-                        "width": "80px",
+                        "width": "200px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 
@@ -786,6 +786,7 @@
                             var $html_able = '';
                             var $html_delete = '';
                             var $html_update = '';
+                            var $html_down_all = '<a class="btn btn-xs item-down-all-submit" data-id="'+data+'">一键下载</a>';
 
                             if("{{ in_array($me->user_type,[0,1]) }}")
                             {
@@ -817,6 +818,7 @@
                                 $html_update+
                                 $html_down+
                                 $html_detail+
+                                $html_down_all+
                                 // $html_able+
                                 // $html_delete+
                                 // $html_record+

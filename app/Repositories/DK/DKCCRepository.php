@@ -6482,6 +6482,138 @@ EOF;
         }
 
     }
+    public function operate_pool_telephone_download_of_all($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'pool_id.required' => '请选择城市！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'pool_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'telephone-download-of-all') return response_error([],"参数[operate]有误！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,61])) return response_error([],"你没有操作权限！");
+
+        $date = date('Y-m-d');
+        $datetime = date('Y-m-d H:i:s');
+        $date_Ymd = date('Ymd');
+
+        $pool_id = $post_data["pool_id"];
+        $pool = DK_Pool::find($pool_id);
+        if($pool)
+        {
+            $table = $pool->data_table;
+            $modal = $pool->data_modal;
+            $region_name = $pool->region_name;
+            $pool_name = $pool->region_name;
+        }
+        else return response_error([],"电话池不存在！");
+
+
+        $score_list = [95,90,85,80,10,-20,-40];
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $file_list = [];
+
+            foreach($score_list as $score)
+            {
+                $name = $pool_name.'-'.$date_Ymd.'-'.$score.'分';
+
+                $task = new DK_Pool_Task;
+
+                $task_insert['extraction_type'] = 9;
+                $task_insert['creator_id'] = $me->id;
+                $task_insert['name'] = $name;
+                $task_insert['pool_id'] = $pool_id;
+                $task_insert['region_name'] = $region_name;
+//            $task_insert['provinceCode'] = $provinceCode;
+//            $task_insert['cityCode'] = $cityCode;
+//            $task_insert['areaCode'] = $areaCode;
+//            $task_insert['tag'] = $tag;
+                $task_insert['extraction_name'] = $name;
+                $task_insert['extraction_telephone_count'] = 0;
+
+                $bool_t = $task->fill($task_insert)->save();
+                $task_id = $task->id;
+
+
+                $telephone_list = ($modal ?? false)::select('phone')->where('quality',$score)->get() ?: collect();
+//            dd($telephone_list->toArray());
+
+
+                $upload_path = <<<EOF
+resource/dk/cc/telephone/$date/
+EOF;
+                $url_path = env('DOMAIN_CDN').'/dk/cc/telephone/'.$date.'/';
+
+                $storage_path = storage_path($upload_path);
+                if (!is_dir($storage_path))
+                {
+                    mkdir($storage_path, 0755, true);
+                }
+//            $filename = $name.'-'.$task_id;
+                $filename = $task_id.'-'.$name;
+                $extension = '.txt';
+
+
+                $file_name = $filename.$extension;
+                $file_url = $url_path.$filename.$extension;
+                $file_path = $storage_path.$filename.$extension;
+
+                // 打开文件准备写入
+                $file = fopen($file_path, 'w');
+
+                // 遍历电话号码数组，逐行写入文件
+                foreach ($telephone_list as $phoneNumber)
+                {
+                    fwrite($file, $phoneNumber->phone . PHP_EOL);
+                }
+
+                // 关闭文件
+                fclose($file);
+
+                $i['name'] = $file_name;
+                $i['path'] = $file_path;
+                $i['url'] = $file_url;
+                $file_list[] = $i;
+
+                $task->extraction_telephone_count = $telephone_list->count();
+                $task->is_completed = 1;
+                $task->content = json_encode($file_list);
+                $task->save();
+
+            }
+
+            DB::commit();
+
+//            return response_success();
+            return response_success(json_encode($file_list));
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
     public function operate_pool_telephone_download_by_job_retry($post_data)
     {
         $this->get_me();

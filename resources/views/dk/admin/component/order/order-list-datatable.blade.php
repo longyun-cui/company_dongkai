@@ -275,13 +275,25 @@
                     render: function(data, type, row, meta) {
                         if(!row.inspected_at) return '--';
                         var $result_html = '';
-                        if(data == "通过" || data == "内部通过")
+                        if(data == "通过" || data == "折扣通过" || data == "郊区通过" || data == "内部通过")
                         {
                             $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
                         }
                         else if(data == "拒绝")
                         {
                             $result_html = '<small class="btn-xs bg-red">拒绝</small>';
+                        }
+                        else if(data == "拒绝可交付")
+                        {
+                            if("{{ in_array($me->user_type,[0,1,9,11,61,66]) }}" == "1")
+                            {
+                                console.log('x');
+                                $result_html = '<small class="btn-xs bg-red">拒绝可交付</small>';
+                            }
+                            else
+                            {
+                                $result_html = '<small class="btn-xs bg-red">拒绝</small>';
+                            }
                         }
                         else if(data == "重复")
                         {
@@ -384,6 +396,14 @@
                         {
                             $result_html = '<small class="btn-xs bg-blue">已操作</small>';
                         }
+                        else if(data == 9)
+                        {
+                            $result_html = '<small class="btn-xs bg-purple">不交付</small>';
+                        }
+                        else if(data == 99)
+                        {
+                            $result_html = '<small class="btn-xs bg-red">交付失败</small>';
+                        }
                         else
                         {
                             $result_html = '<small class="btn-xs bg-black">error</small>';
@@ -415,7 +435,7 @@
                     render: function(data, type, row, meta) {
                         if(!row.delivered_at) return '--';
                         var $result_html = '';
-                        if(data == "已交付")
+                        if(data == "已交付" || data == "折扣交付" || data == "郊区交付" || data == "内部交付")
                         {
                             $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
                         }
@@ -1570,6 +1590,7 @@
                         var $html_detail_inspected = '';
                         var $html_push = '';
                         var $html_deliver = '';
+                        var $html_deliver_fool = '';
                         var $html_distribute = '';
                         var $html_history = '';
                         var $html_appeal = '';
@@ -1664,6 +1685,7 @@
                                     // $html_push = '<a class="btn btn-xs bg-teal item-modal-show-for-deliver" data-id="'+data+'" data-key="client_id">交付</a>';
                                     // $html_deliver = '<a class="btn btn-xs bg-yellow item-deliver-submit" data-id="'+data+'">交付</a>';
                                     $html_deliver = '<a class="btn btn-xs bg-yellow item-deliver-show" data-id="'+data+'">交付</a>';
+                                    $html_deliver_fool = '<a class="btn btn-xs bg-yellow item-summit-for-deliver-by-fool" data-id="'+data+'">一键交付</a>';
                                 }
                                 else
                                 {
@@ -1743,6 +1765,7 @@
                             $html_appeal+
                             $html_appeal_handle+
                             $html_deliver+
+                            // $html_deliver_fool+
                             $html_distribute+
                             // $html_history+
                             $html_record+

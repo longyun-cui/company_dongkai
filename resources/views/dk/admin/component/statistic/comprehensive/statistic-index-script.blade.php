@@ -67,6 +67,8 @@
 
             $(".order_for_inspected_all").find('b').html($data.order_for_inspected_all);
             $(".order_for_inspected_accepted").find('b').html($data.order_for_inspected_accepted);
+            $(".order_for_inspected_accepted_discount").find('b').html($data.order_for_inspected_accepted_discount);
+            $(".order_for_inspected_accepted_suburb").find('b').html($data.order_for_inspected_accepted_suburb);
             $(".order_for_inspected_accepted_inside").find('b').html($data.order_for_inspected_accepted_inside);
             $(".order_for_inspected_refused").find('b').html($data.order_for_inspected_refused);
             $(".order_for_inspected_repeated").find('b').html($data.order_for_inspected_repeated);
@@ -75,6 +77,8 @@
             $(".order_for_delivered_all").find('b').html($data.order_for_delivered_all);
             $(".order_for_delivered_effective").find('b').html($data.order_for_delivered_effective);
             $(".order_for_delivered_completed").find('b').html($data.order_for_delivered_completed);
+            $(".order_for_delivered_discount").find('b').html($data.order_for_delivered_discount);
+            $(".order_for_delivered_suburb").find('b').html($data.order_for_delivered_suburb);
             $(".order_for_delivered_inside").find('b').html($data.order_for_delivered_inside);
             $(".order_for_delivered_tomorrow").find('b').html($data.order_for_delivered_tomorrow);
             $(".order_for_delivered_repeated").find('b').html($data.order_for_delivered_repeated);
@@ -91,6 +95,8 @@
             $(".order_of_all_for_inspected_all").find('b').html($data.order_of_all_for_inspected_all);
             $(".order_of_all_for_delivered_all").find('b').html($data.order_of_all_for_delivered_all);
             $(".order_of_all_for_delivered_completed").find('b').html($data.order_of_all_for_delivered_completed);
+            $(".order_of_all_for_delivered_discount").find('b').html($data.order_of_all_for_delivered_discount);
+            $(".order_of_all_for_delivered_suburb").find('b').html($data.order_of_all_for_delivered_suburb);
             $(".order_of_all_for_delivered_inside").find('b').html($data.order_of_all_for_delivered_inside);
             $(".order_of_all_for_delivered_tomorrow").find('b').html($data.order_of_all_for_delivered_tomorrow);
             $(".order_of_all_for_delivered_repeated").find('b').html($data.order_of_all_for_delivered_repeated);
@@ -99,6 +105,8 @@
             $(".order_of_all_for_delivered_effective_rate").find('b').html($data.order_of_all_for_delivered_effective_rate);
 
             $(".order_of_all_for_accepted").find('b').html($data.order_of_all_for_accepted);
+            $(".order_of_all_for_accepted_discount").find('b').html($data.order_of_tall_for_accepted_discount);
+            $(".order_of_all_for_accepted_suburb").find('b').html($data.order_of_tall_for_accepted_suburb);
             $(".order_of_all_for_accepted_inside").find('b').html($data.order_of_tall_for_accepted_inside);
             $(".order_of_all_for_refused").find('b').html($data.order_of_all_for_refused);
             $(".order_of_all_for_repeated").find('b').html($data.order_of_all_for_repeated);
@@ -127,6 +135,8 @@
             // 质检-审核
             $(".order_of_all_for_inspected_all").find('b').html($data.order_of_all_for_inspected_all);
             $(".order_of_all_for_inspected_accepted").find('b').html($data.order_of_all_for_inspected_accepted);
+            $(".order_of_all_for_inspected_accepted_discount").find('b').html($data.order_of_all_for_inspected_accepted_discount);
+            $(".order_of_all_for_inspected_accepted_suburb").find('b').html($data.order_of_all_for_inspected_accepted_suburb);
             $(".order_of_all_for_inspected_accepted_inside").find('b').html($data.order_of_all_for_inspected_accepted_inside);
             $(".order_of_all_for_inspected_refused").find('b').html($data.order_of_all_for_inspected_refused);
             $(".order_of_all_for_inspected_repeated").find('b').html($data.order_of_all_for_inspected_repeated);
@@ -141,6 +151,8 @@
             $(".order_of_today_for_inspected_all").find('b').html($data.order_of_today_for_inspected_all);
             $(".order_of_today_for_delivered_all").find('b').html($data.order_of_today_for_delivered_all);
             $(".order_of_today_for_delivered_completed").find('b').html($data.order_of_today_for_delivered_completed);
+            $(".order_of_today_for_delivered_discount").find('b').html($data.order_of_today_for_delivered_discount);
+            $(".order_of_today_for_delivered_suburb").find('b').html($data.order_of_today_for_delivered_suburb);
             $(".order_of_today_for_delivered_inside").find('b').html($data.order_of_today_for_delivered_inside);
             $(".order_of_today_for_delivered_tomorrow").find('b').html($data.order_of_today_for_delivered_tomorrow);
             $(".order_of_today_for_delivered_repeated").find('b').html($data.order_of_today_for_delivered_repeated);
@@ -149,6 +161,8 @@
             $(".order_of_today_for_delivered_effective_rate").find('b').html($data.order_of_today_for_delivered_effective_rate);
 
             $(".order_of_today_for_accepted").find('b').html($data.order_of_today_for_accepted);
+            $(".order_of_today_for_accepted_discount").find('b').html($data.order_of_today_for_accepted_discount);
+            $(".order_of_today_for_accepted_suburb").find('b').html($data.order_of_today_for_accepted_suburb);
             $(".order_of_today_for_accepted_inside").find('b').html($data.order_of_today_for_accepted_inside);
             $(".order_of_today_for_refused").find('b').html($data.order_of_today_for_refused);
             $(".order_of_today_for_repeated").find('b').html($data.order_of_today_for_repeated);
@@ -177,6 +191,8 @@
             // 质检-审核
             $(".order_of_today_for_inspected_all").find('b').html($data.order_of_today_for_inspected_all);
             $(".order_of_today_for_inspected_accepted").find('b').html($data.order_of_today_for_inspected_accepted);
+            $(".order_of_today_for_inspected_accepted_discount").find('b').html($data.order_of_today_for_inspected_accepted_discount);
+            $(".order_of_today_for_inspected_accepted_suburb").find('b').html($data.order_of_today_for_inspected_accepted_suburb);
             $(".order_of_today_for_inspected_accepted_inside").find('b').html($data.order_of_today_for_inspected_accepted_inside);
             $(".order_of_today_for_inspected_refused").find('b').html($data.order_of_today_for_inspected_refused);
             $(".order_of_today_for_inspected_repeated").find('b').html($data.order_of_today_for_inspected_repeated);
@@ -191,6 +207,8 @@
             $(".order_of_month_for_inspected_all").find('b').html($data.order_of_month_for_inspected_all);
             $(".order_of_month_for_delivered_all").find('b').html($data.order_of_month_for_delivered_all);
             $(".order_of_month_for_delivered_completed").find('b').html($data.order_of_month_for_delivered_completed);
+            $(".order_of_month_for_delivered_discount").find('b').html($data.order_of_month_for_delivered_discount);
+            $(".order_of_month_for_delivered_suburb").find('b').html($data.order_of_month_for_delivered_suburb);
             $(".order_of_month_for_delivered_inside").find('b').html($data.order_of_month_for_delivered_inside);
             $(".order_of_month_for_delivered_tomorrow").find('b').html($data.order_of_month_for_delivered_tomorrow);
             $(".order_of_month_for_delivered_repeated").find('b').html($data.order_of_month_for_delivered_repeated);
@@ -199,6 +217,8 @@
             $(".order_of_month_for_delivered_effective_rate").find('b').html($data.order_of_month_for_delivered_effective_rate);
 
             $(".order_of_month_for_accepted").find('b').html($data.order_of_month_for_accepted);
+            $(".order_of_month_for_accepted_discount").find('b').html($data.order_of_month_for_accepted_discount);
+            $(".order_of_month_for_accepted_suburb").find('b').html($data.order_of_month_for_accepted_suburb);
             $(".order_of_month_for_accepted_inside").find('b').html($data.order_of_month_for_accepted_inside);
             $(".order_of_month_for_refused").find('b').html($data.order_of_month_for_refused);
             $(".order_of_month_for_repeated").find('b').html($data.order_of_month_for_repeated);
@@ -227,6 +247,8 @@
             // 质检-审核
             $(".order_of_month_for_inspected_all").find('b').html($data.order_of_month_for_inspected_all);
             $(".order_of_month_for_inspected_accepted").find('b').html($data.order_of_month_for_inspected_accepted);
+            $(".order_of_month_for_inspected_accepted_discount").find('b').html($data.order_of_month_for_inspected_accepted_discount);
+            $(".order_of_month_for_inspected_accepted_suburb").find('b').html($data.order_of_month_for_inspected_accepted_suburb);
             $(".order_of_month_for_inspected_accepted_inside").find('b').html($data.order_of_month_for_inspected_accepted_inside);
             $(".order_of_month_for_inspected_refused").find('b').html($data.order_of_month_for_inspected_refused);
             $(".order_of_month_for_inspected_repeated").find('b').html($data.order_of_month_for_inspected_repeated);
@@ -237,6 +259,8 @@
             $(".order_of_month_for_all").find('b').html($data.order_of_month_for_all);
             $(".order_of_month_for_inspected").find('b').html($data.order_of_month_for_inspected);
             $(".order_of_month_for_accepted").find('b').html($data.order_of_month_for_accepted);
+            $(".order_of_month_for_accepted_discount").find('b').html($data.order_of_month_for_accepted_discount);
+            $(".order_of_month_for_accepted_suburb").find('b').html($data.order_of_month_for_accepted_suburb);
             $(".order_of_month_for_accepted_inside").find('b').html($data.order_of_month_for_accepted_inside);
             $(".order_of_month_for_refused").find('b').html($data.order_of_month_for_refused);
             $(".order_of_month_for_repeated").find('b').html($data.order_of_month_for_repeated);
@@ -245,6 +269,8 @@
             $(".order_of_month_for_delivered").find('b').html($data.order_of_month_for_delivered);
             $(".order_of_month_for_delivered_effective").find('b').html($data.order_of_month_for_delivered_effective);
             $(".order_of_month_for_delivered_completed").find('b').html($data.order_of_month_for_delivered_completed);
+            $(".order_of_month_for_delivered_discount").find('b').html($data.order_of_month_for_delivered_discount);
+            $(".order_of_month_for_delivered_suburb").find('b').html($data.order_of_month_for_delivered_suburb);
             $(".order_of_month_for_delivered_inside").find('b').html($data.order_of_month_for_delivered_inside);
             $(".order_of_month_for_delivered_tomorrow").find('b').html($data.order_of_month_for_delivered_tomorrow);
             $(".order_of_month_for_delivered_repeated").find('b').html($data.order_of_month_for_delivered_repeated);

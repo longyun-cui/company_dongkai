@@ -445,6 +445,11 @@ class DKAdminController extends Controller
     {
         return $this->repo->v1_operate_for_order_item_deliver(request()->all());
     }
+    // 【工单-管理】
+    public function v1_operate_for_order_item_deliver_by_fool()
+    {
+        return $this->repo->v1_operate_for_order_item_deliver_by_fool(request()->all());
+    }
     // 【工单-管理】批量-交付
     public function v1_operate_for_order_bulk_deliver()
     {

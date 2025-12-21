@@ -1363,6 +1363,68 @@
         });
 
 
+        // 【工单】一键交付
+        $(".main-content").on('click', ".item-summit-for-deliver-by-fool", function() {
+            var $that = $(this);
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $item_category = $datatable_wrapper.data('datatable-item-category');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+
+
+            //
+            var $index = layer.load(1, {
+                shade: [0.3, '#fff'],
+                content: '<span class="loadtip">正在提交</span>',
+                success: function (layer) {
+                    layer.find('.layui-layer-content').css({
+                        'padding-top': '40px',
+                        'width': '100px',
+                    });
+                    layer.find('.loadtip').css({
+                        'font-size':'20px',
+                        'margin-left':'-18px'
+                    });
+                }
+            });
+
+            //
+            $.post(
+                "{{ url('/v1/operate/order/item-deliver-by-fool') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: "order-item-deliver-by-fool",
+                    item_id: $that.attr('data-id')
+                },
+                'json'
+            )
+                .done(function($response, status, jqXHR) {
+                    console.log('done');
+                    $response = JSON.parse($response);
+                    if(!$response.success)
+                    {
+                        if($response.msg) layer.msg($response.msg);
+                    }
+                    else
+                    {
+                        $('#'+$table_id).DataTable().ajax.reload(null,false);
+                    }
+                })
+                .fail(function(jqXHR, status, error) {
+                    console.log('fail');
+                    layer.msg('服务器错误！');
+
+                })
+                .always(function(jqXHR, status) {
+                    console.log('always');
+                    layer.closeAll('loading');
+                });
+        });
+
+
+
+
+
+
 
 
         // 【交付】

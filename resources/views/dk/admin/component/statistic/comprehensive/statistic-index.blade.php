@@ -111,11 +111,17 @@
                         <li class="order_of_today_for_delivered_completed">
                             <a href="javascript:void(0);">已交付（交付客户）<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
-                        <li class="order_of_today_for_delivered_tomorrow">
-                            <a href="javascript:void(0);">隔日交付（今转明）<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                        <li class="order_of_today_for_delivered_discount">
+                            <a href="javascript:void(0);">折扣交付<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                        </li>
+                        <li class="order_of_today_for_delivered_suburb">
+                            <a href="javascript:void(0);">郊区交付<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
                         <li class="order_of_today_for_delivered_inside">
                             <a href="javascript:void(0);">内部交付<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                        </li>
+                        <li class="order_of_today_for_delivered_tomorrow">
+                            <a href="javascript:void(0);">隔日交付（今转明）<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
                         <li class="order_of_today_for_delivered_repeated">
                             <a href="javascript:void(0);">重复<span class="pull-right"><b class="badge bg-orange"></b> 单</span></a>
@@ -218,12 +224,12 @@
                         <li class="deliverer_of_today_for_rejected">
                             <a href="javascript:void(0);">驳回量 <span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
                         </li>
-                        {{--                                <li class="deliverer_of_today_for_effective">--}}
-                        {{--                                    <a href="javascript:void(0);">有效交付量（当日工单） <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>--}}
-                        {{--                                </li>--}}
-                        {{--                                <li class="deliverer_of_today_for_effective_rate">--}}
-                        {{--                                    <a href="javascript:void(0);">有效交付率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>--}}
-                        {{--                                </li>--}}
+                        {{--<li class="deliverer_of_today_for_effective">--}}
+                        {{--<a href="javascript:void(0);">有效交付量（当日工单） <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>--}}
+                        {{--</li>--}}
+                        {{--<li class="deliverer_of_today_for_effective_rate">--}}
+                        {{--<a href="javascript:void(0);">有效交付率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>--}}
+                        {{--</li>--}}
                         @if(in_array($me->user_type,[0,1,9,11,61,66]))
                             <li class="distributed_of_today_for_all">
                                 <a href="javascript:void(0);">总分发量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
@@ -251,6 +257,12 @@
                         <li class="order_of_today_for_inspected_accepted">
                             <a href="javascript:void(0);">通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
+                        <li class="order_of_today_for_inspected_accepted_discount">
+                            <a href="javascript:void(0);">折扣通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                        </li>
+                        <li class="order_of_today_for_inspected_accepted_suburb">
+                            <a href="javascript:void(0);">郊区通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                        </li>
                         <li class="order_of_today_for_inspected_accepted_inside">
                             <a href="javascript:void(0);">内部通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
@@ -265,6 +277,8 @@
             </div>
 
         </div>
+
+
 
 
         {{--月--}}
@@ -299,11 +313,17 @@
                         <li class="order_of_month_for_delivered_completed">
                             <a href="javascript:void(0);">已交付<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
-                        <li class="order_of_month_for_delivered_tomorrow">
-                            <a href="javascript:void(0);">隔日交付（今转明）<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                        <li class="order_of_month_for_delivered_discount">
+                            <a href="javascript:void(0);">折扣交付<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                        </li>
+                        <li class="order_of_month_for_delivered_suburb">
+                            <a href="javascript:void(0);">郊区交付<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
                         <li class="order_of_month_for_delivered_inside">
                             <a href="javascript:void(0);">内部交付<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                        </li>
+                        <li class="order_of_month_for_delivered_tomorrow">
+                            <a href="javascript:void(0);">隔日交付（今转明）<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
                         <li class="order_of_month_for_delivered_repeated">
                             <a href="javascript:void(0);">重复<span class="pull-right"><b class="badge bg-orange"></b> 单</span></a>
@@ -406,12 +426,12 @@
                         <li class="deliverer_of_month_for_rejected">
                             <a href="javascript:void(0);">驳回量 <span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
                         </li>
-                        {{--                                <li class="deliverer_of_month_for_effective">--}}
-                        {{--                                    <a href="javascript:void(0);">有效交付量（当日工单） <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>--}}
-                        {{--                                </li>--}}
-                        {{--                                <li class="deliverer_of_month_for_effective_rate">--}}
-                        {{--                                    <a href="javascript:void(0);">有效交付率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>--}}
-                        {{--                                </li>--}}
+                        {{--<li class="deliverer_of_month_for_effective">--}}
+                        {{--<a href="javascript:void(0);">有效交付量（当日工单） <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>--}}
+                        {{--</li>--}}
+                        {{--<li class="deliverer_of_month_for_effective_rate">--}}
+                        {{--<a href="javascript:void(0);">有效交付率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>--}}
+                        {{--</li>--}}
                         @if(in_array($me->user_type,[0,1,9,11,61,66]))
                             <li class="distributed_of_month_for_all">
                                 <a href="javascript:void(0);">总分发量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
@@ -439,6 +459,12 @@
                         <li class="order_of_month_for_inspected_accepted">
                             <a href="javascript:void(0);">通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
+                        <li class="order_of_month_for_inspected_accepted_discount">
+                            <a href="javascript:void(0);">折扣通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                        </li>
+                        <li class="order_of_month_for_inspected_accepted_suburb">
+                            <a href="javascript:void(0);">郊区通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                        </li>
                         <li class="order_of_month_for_inspected_accepted_inside">
                             <a href="javascript:void(0);">内部通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
@@ -453,6 +479,8 @@
             </div>
 
         </div>
+
+
 
 
         {{--全部--}}
@@ -487,11 +515,17 @@
                         <li class="order_of_all_for_delivered_completed">
                             <a href="javascript:void(0);">已交付<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
-                        <li class="order_of_all_for_delivered_tomorrow">
-                            <a href="javascript:void(0);">隔日交付（今转明）<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                        <li class="order_of_all_for_delivered_discount">
+                            <a href="javascript:void(0);">折扣交付<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                        </li>
+                        <li class="order_of_all_for_delivered_suburb">
+                            <a href="javascript:void(0);">郊区交付<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
                         <li class="order_of_all_for_delivered_inside">
                             <a href="javascript:void(0);">内部交付<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                        </li>
+                        <li class="order_of_all_for_delivered_tomorrow">
+                            <a href="javascript:void(0);">隔日交付（今转明）<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
                         <li class="order_of_all_for_delivered_repeated">
                             <a href="javascript:void(0);">重复<span class="pull-right"><b class="badge bg-orange"></b> 单</span></a>
@@ -594,12 +628,12 @@
                         <li class="deliverer_of_all_for_rejected">
                             <a href="javascript:void(0);">驳回量 <span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
                         </li>
-                        {{--                                <li class="deliverer_of_all_for_effective">--}}
-                        {{--                                    <a href="javascript:void(0);">有效交付量（当日工单） <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>--}}
-                        {{--                                </li>--}}
-                        {{--                                <li class="deliverer_of_all_for_effective_rate">--}}
-                        {{--                                    <a href="javascript:void(0);">有效交付率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>--}}
-                        {{--                                </li>--}}
+                        {{--<li class="deliverer_of_all_for_effective">--}}
+                        {{--<a href="javascript:void(0);">有效交付量（当日工单） <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>--}}
+                        {{--</li>--}}
+                        {{--<li class="deliverer_of_all_for_effective_rate">--}}
+                        {{--<a href="javascript:void(0);">有效交付率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>--}}
+                        {{--</li>--}}
                         @if(in_array($me->user_type,[0,1,9,11,61,66]))
                             <li class="distributed_of_all_for_all">
                                 <a href="javascript:void(0);">总分发量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
@@ -626,6 +660,12 @@
                         </li>
                         <li class="order_of_all_for_inspected_accepted">
                             <a href="javascript:void(0);">通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                        </li>
+                        <li class="order_of_all_for_inspected_accepted_discount">
+                            <a href="javascript:void(0);">折扣通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                        </li>
+                        <li class="order_of_all_for_inspected_accepted_suburb">
+                            <a href="javascript:void(0);">郊区通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                         </li>
                         <li class="order_of_all_for_inspected_accepted_inside">
                             <a href="javascript:void(0);">内部通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>

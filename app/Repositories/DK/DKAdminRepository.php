@@ -6301,6 +6301,196 @@ class DKAdminRepository {
                 $record_row['after'] = $inspected_description;
                 $record_content[] = $record_row;
 
+                $record_row['field'] = 'inspected_time';
+                $record_row['title'] = '时间';
+                $record_row['before'] = '';
+                $record_row['after'] = $datetime;
+                $record_content[] = $record_row;
+
+                $record_data["content"] = json_encode($record_content);
+
+                $record_data["before"] = $before;
+                $record_data["after"] = $inspected_result;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+
+//            if($item->created_type == 99 && in_array($inspected_result,['通过','重复','内部通过']))
+            if($item->created_type == 99 && in_array($inspected_result,['通过']))
+            {
+                $call_record_id = $item->call_record_id;
+                $call_record = DK_CC_Call_Record::find($call_record_id);
+
+                if($call_record)
+                {
+                    $call_statistic_id = $call_record->call_statistic_id;
+
+                    if($call_statistic_id != 0)
+                    {
+                        $statistic = DK_CC_Call_Statistic::lockForUpdate()->find($call_statistic_id);
+                        if($statistic) $statistic->increment('order_count_for_effective');
+                    }
+                    else
+                    {
+                        $call_date = date('Y-m-d',strtotime($call_record->startTime));
+                        $statistic_where['call_date'] = $call_date;
+                        $statistic_where['provinceName'] = $call_record->area;
+                        $statistic_where['cityName'] = $call_record->city;
+                        $statistic_where['trunkIndex'] = $call_record->trunkIndex;
+                        $statistic = DK_CC_Call_Statistic::lockForUpdate()->where($statistic_where)->first();
+                        if($statistic) $statistic->increment('order_count_for_effective');
+                    }
+                }
+
+
+            }
+
+
+            DB::commit();
+
+            if(env('APP_ENV') == "production" && $item->item_category == 1)
+            {
+                if(in_array($inspected_result,['通过','重复','内部通过',]))
+                {
+                    if($item->api_is_pushed == 0)
+                    {
+                        $push_data["item"] = "补牙";
+                        $push_data["name"] = $item->client_name;
+                        $push_data["phone"] = $item->client_phone;
+                        $push_data["intention"] = $item->client_intention;
+                        $push_data["city"] = $item->location_city;
+                        $push_data["area"] = $item->location_district;
+                        $push_data["toothcount"] = $item->teeth_count;
+                        $push_data["addvx"] = (($item->is_wx) ? '是' : '否');
+                        $push_data["vxaccount"] = (($item->wx_id) ? $item->wx_id : '');
+                        $push_data["source"] = $item->channel_source;
+                        $push_data["description"] = $item->description;
+
+                        $request_result = $this->operate_api_push_order($push_data);
+
+                        if($request_result['success'])
+                        {
+                            $result = json_decode($request_result['result']);
+                            if($result->code == 0)
+                            {
+                                $item->api_is_pushed = 1;
+                                $item->save();
+                                return response_success([],"审核成功，推送成功!");
+                            }
+                            else
+                            {
+                                return response_error([],"审核成功，推送返回失败!");
+                            }
+                        }
+                        else
+                        {
+                            return response_error([],"审核成功，接口推送失败!");
+                        }
+                    }
+                }
+            }
+
+
+            return response_success([],"审核完成!");
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【工单-管理】审核
+    public function v2_operate_for_order_item_inspect($post_data)
+    {
+//        dd($post_data);
+//        return response_success([]);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order-inspect') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,61,66,71,77])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $inspected_result = $post_data["inspected_result"];
+        if(!in_array($inspected_result,config('info.inspected_result'))) return response_error([],"审核结果非法！");
+        $inspected_description = $post_data["inspected_description"];
+        $recording_quality = $post_data["recording_quality"];
+
+
+        $before = $item->inspected_result;
+        $datetime = date('Y-m-d H:i:s');
+
+        $date = date("Y-m-d");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->inspector_id = $me->id;
+            $item->inspected_status = 1;
+            $item->inspected_result = $inspected_result;
+            if($inspected_description) $item->inspected_description = $inspected_description;
+            $item->recording_quality = $recording_quality;
+            $item->inspected_at = time();
+            $item->inspected_date = $date;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                $record = new DK_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $id;
+                $record_data["operate_object"] = 71;
+                $record_data["operate_category"] = 92;
+                $record_data["operate_type"] = 1;
+                $record_data["process_category"] = 1;
+                $record_data["description"] = $inspected_description;
+
+                $record_content = [];
+
+                $record_row['title'] = '结果';
+                $record_row['field'] = 'inspected_result';
+//                $record_row['code'] = $inspected_result;
+                $record_row['before'] = $before;
+                $record_row['after'] = $inspected_result;
+                $record_content[] = $record_row;
+
+                $record_row['field'] = 'inspected_description';
+                $record_row['title'] = '说明';
+                $record_row['before'] = '';
+                $record_row['after'] = $inspected_description;
+                $record_content[] = $record_row;
+
                 $record_row['field'] = 'appeal_handle_time';
                 $record_row['title'] = '时间';
                 $record_row['before'] = '';
@@ -6753,7 +6943,7 @@ class DKAdminRepository {
         try
         {
 //            if($delivered_client_id != "-1" && $delivered_result == "已交付")
-                if($delivered_client_id != "-1" && in_array($delivered_result,["已交付","郊区交付","内部交付"]))
+                if($delivered_client_id != "-1" && in_array($delivered_result,["已交付","折扣交付","郊区交付","内部交付"]))
             {
                 $pivot_delivery = DK_Pivot_Client_Delivery::where(['pivot_type'=>95,'order_id'=>$item->id])->first();
                 if($pivot_delivery)
@@ -6986,7 +7176,7 @@ class DKAdminRepository {
 
 
 //                if(!in_array($delivered_client_id,['-1','0',-1,0]) && $delivered_result == "已交付")
-                if(!in_array($delivered_client_id,['-1','0',-1,0]) && in_array($delivered_result,["已交付","郊区交付","内部交付"]))
+                if(!in_array($delivered_client_id,['-1','0',-1,0]) && in_array($delivered_result,["已交付","折扣交付","郊区交付","内部交付"]))
                 {
                     $pivot_delivery = DK_Pivot_Client_Delivery::where(['pivot_type'=>95,'order_id'=>$id])->first();
                     if($pivot_delivery)
@@ -7092,20 +7282,16 @@ class DKAdminRepository {
 
     }
     // 【工单-管理】交付（一键交付-傻瓜式交付）
-    public function v1_operate_for_order_item_deliver_by_one_check($post_data)
+    public function v1_operate_for_order_item_deliver_by_fool($post_data)
     {
 //        dd($post_data);
         $messages = [
             'operate.required' => 'operate.required.',
             'item_id.required' => 'item_id.required.',
-            'project_id.required' => '请选择项目',
-            'client_id.required' => '请选择客户',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
             'item_id' => 'required',
-            'project_id' => 'required',
-            'client_id' => 'required',
         ], $messages);
         if ($v->fails())
         {
@@ -7114,13 +7300,14 @@ class DKAdminRepository {
         }
 
         $operate = $post_data["operate"];
-        if($operate != 'order-deliver') return response_error([],"参数[operate]有误！");
+        if($operate != 'order-item-deliver-by-fool') return response_error([],"参数[operate]有误！");
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
         $item = DK_Order::withTrashed()->find($id);
         if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
         $client_phone = $item->client_phone;
+        $order_category = $item->item_category;
 
         $this->get_me();
         $me = $this->me;
@@ -7131,16 +7318,7 @@ class DKAdminRepository {
         {
 
         }
-        else return response_error([],"工单待审核！");
-
-        $delivered_result = '';
-        if($item->inspected_result == "通过") $delivered_result = '已交付';
-        else if($item->inspected_result == "郊区通过") $delivered_result = '内部通过';
-        else if($item->inspected_result == "内部通过") $delivered_result = '内部通过';
-
-
-        $delivered_result = $post_data["delivered_result"];
-        if(!in_array($delivered_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
+        else return response_error([],"请先审核工单！");
 
 
         $project_id = $item->project_id;
@@ -7153,52 +7331,94 @@ class DKAdminRepository {
 
 
 
-        // 是否已经分发
-        $is_distributed_list = DK_Pivot_Client_Delivery::where(['client_id'=>$client_id,'client_phone'=>$client_phone])->get();
-        if(count($is_distributed_list) > 0)
+        $is_delivery = 1;
+        $non_delivery_reason = '';
+
+        $delivered_result = '';
+        if($item->inspected_result == "通过") $delivered_result = '已交付';
+        else if($item->inspected_result == "折扣通过") $delivered_result = '折扣交付';
+        else if($item->inspected_result == "郊区通过") $delivered_result = '郊区交付';
+        else if($item->inspected_result == "内部通过") $delivered_result = '内部交付';
+        else
         {
-            return response_error([],"该客户已经交付过该号码，不可以重复分发！");
+            $is_delivery = 0;
+            $non_delivery_reason = '非有效审核单';
         }
 
-        // 是否已经交付
-        $is_order_list = DK_Order::with('project_er')
-            ->where(['client_phone'=>$client_phone])
-            ->whereIn('delivered_result',["已交付","郊区交付","内部交付"])
+        // 是否工单重复
+        $is_order_list = DK_Order::select('*')
+            ->where(['item_category'=>$order_category,'client_phone'=>$client_phone])
             ->get();
-//        dd($is_order_list->toArray());
-
         if(count($is_order_list) > 0)
         {
             foreach($is_order_list as $o)
             {
-                if($o->client_id == $client_id)
+                // 判断项目
+                if($o->project_id == $project_id)
                 {
-                    return response_error([],"该号码已交付过该客户，不要重复交付！");
+                    // 是否导入去重
+                    if($o->created_type == 9)
+                    {
+                        $is_delivery = 99;
+                        $non_delivery_reason = '【项目】重复';
+                        break; // 跳出循环
+                    }
+
+                    // 是否已交付
+                    if(in_array($o->delivered_result,["已交付","折扣交付","郊区交付","内部交付"]))
+                    {
+                        $is_delivery = 99;
+                        $non_delivery_reason = '【项目】重复';
+                        break; // 跳出循环
+                    }
                 }
 
-//                if($o->project_er->client_id == $delivered_client_id)
-//                {
-//                    return dd($o->project_er->client_id.'-'.$delivered_client_id);
-//                    return response_error([],"该号码已交付过【默认】客户，不要重复交付！");
-//                }
+                // 判断客户
+                if($o->client_id == $client_id)
+                {
+                    $is_delivery = 9;
+                    $non_delivery_reason = '【客户】重复';
+                    break; // 跳出循环
+                }
+            }
+        }
+
+
+        // 是否交付重复
+        $is_delivered_list = DK_Pivot_Client_Delivery::where(['order_category'=>$order_category,'client_phone'=>$client_phone])->get();
+        if(count($is_delivered_list) > 0)
+        {
+            foreach($is_delivered_list as $d)
+            {
+                // 判断项目
+                if($d->project_id == $project_id)
+                {
+                    $is_delivery = 99;
+                    $non_delivery_reason = '【项目】重复';
+                    break; // 跳出循环
+                }
+
+                // 判断客户
+                if($d->client_id == $client_id)
+                {
+                    $is_delivery = 99;
+                    $non_delivery_reason = '【客户】重复';
+                    break; // 跳出循环
+                }
             }
         }
 
         $before = $item->delivered_result;
-
-        $delivered_description = $post_data["delivered_description"];
-        $recording_address = $post_data["recording_address"];
-
-        $is_distributive_condition = $post_data["is_distributive_condition"];
+        $before = !empty($before) ? $before : '';
 
         $date = date("Y-m-d");
+        $datetime = date('Y-m-d H:i:s');
 
         // 启动数据库事务
         DB::beginTransaction();
         try
         {
-//            if($delivered_client_id != "-1" && $delivered_result == "已交付")
-            if($client_id != "-1" && in_array($delivered_result,["已交付","郊区交付","内部交付"]))
+            if($is_delivery == 1)
             {
                 $pivot_delivery = DK_Pivot_Client_Delivery::where(['pivot_type'=>95,'order_id'=>$item->id])->first();
                 if($pivot_delivery)
@@ -7240,21 +7460,132 @@ class DKAdminRepository {
                     $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
                     if(!$bool_0) throw new Exception("insert--pivot_client_delivery--fail");
                 }
-            }
 
-            $item->is_distributive_condition = $is_distributive_condition;
-            $item->client_id = $client_id;
-            $item->deliverer_id = $me->id;
-            $item->delivered_status = 1;
-            $item->delivered_result = $delivered_result;
-            $item->delivered_description = $delivered_description;
-            $item->recording_address = $recording_address;
-            $item->delivered_at = time();
-            $item->delivered_date = $date;
-            $bool = $item->save();
-            if(!$bool) throw new Exception("item--update--fail");
+                $item->delivered_project_id = $project_id;
+                $item->client_id = $client_id;
+                $item->deliverer_id = $me->id;
+                $item->delivered_status = 1;
+                $item->delivered_result = $delivered_result;
+//                $item->delivered_description = $delivered_description;
+                $item->delivered_at = time();
+                $item->delivered_date = $date;
+                $bool = $item->save();
+                if(!$bool) throw new Exception("DK_Order--update--fail");
+                else
+                {
+                    $record = new DK_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["order_id"] = $id;
+                    $record_data["operate_object"] = 71;
+                    $record_data["operate_category"] = 95;
+                    $record_data["operate_type"] = 1;
+                    $record_data["column_name"] = "delivered_result";
+
+                    $record_content = [];
+
+                    $record_row['title'] = '结果';
+                    $record_row['field'] = 'delivered_result';
+                    $record_row['code'] = '';
+                    $record_row['before'] = $before;
+                    $record_row['after'] = $delivered_result;
+                    $record_content[] = $record_row;
+
+                    $record_row['field'] = 'project_id';
+                    $record_row['title'] = '项目';
+                    $record_row['value'] = $project_id;
+                    $record_row['before'] = '';
+                    $record_row['after'] = $project->name.'('.$project_id.')';
+                    $record_content[] = $record_row;
+
+                    $record_row['field'] = 'client_id';
+                    $record_row['title'] = '客户';
+                    $record_row['value'] = $client_id;
+                    $record_row['before'] = '';
+                    $record_row['after'] = $client->username.'('.$client_id.')';
+                    $record_content[] = $record_row;
+
+//                $record_row['field'] = 'delivered_description';
+//                $record_row['title'] = '说明';
+//                $record_row['before'] = '';
+//                $record_row['after'] = $delivered_description;
+//                $record_content[] = $record_row;
+
+                    $record_row['field'] = 'delivered_time';
+                    $record_row['title'] = '时间';
+                    $record_row['before'] = '';
+                    $record_row['after'] = $datetime;
+                    $record_content[] = $record_row;
+
+                    $record_data["content"] = json_encode($record_content);
+
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $delivered_result;
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if(!$bool_1) throw new Exception("DK_Record--record--fail");
+                }
+            }
+            else if($is_delivery == 9)
+            {
+
+                $item->deliverer_id = $me->id;
+                $item->delivered_status = 9;
+                $item->delivered_result = '不交付';
+                $item->delivered_description = $non_delivery_reason;
+                $item->delivered_at = time();
+                $item->delivered_date = $date;
+                $bool = $item->save();
+                if(!$bool) throw new Exception("DK_Order--update--fail");
+                else
+                {
+                    $record = new DK_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["order_id"] = $id;
+                    $record_data["operate_object"] = 71;
+                    $record_data["operate_category"] = 95;
+                    $record_data["operate_type"] = 1;
+                    $record_data["column_name"] = "delivered_result";
+
+                    $record_content = [];
+
+                    $record_row['title'] = '结果';
+                    $record_row['field'] = 'delivered_result';
+                    $record_row['code'] = '';
+                    $record_row['before'] = $before;
+                    $record_row['after'] = '交付失败';
+                    $record_content[] = $record_row;
+
+                    $record_row['field'] = 'delivered_description';
+                    $record_row['title'] = '说明';
+                    $record_row['before'] = '';
+                    $record_row['after'] = $non_delivery_reason;
+                    $record_content[] = $record_row;
+
+                    $record_row['field'] = 'delivered_time';
+                    $record_row['title'] = '时间';
+                    $record_row['before'] = '';
+                    $record_row['after'] = $datetime;
+                    $record_content[] = $record_row;
+
+                    $record_data["content"] = json_encode($record_content);
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if(!$bool_1) throw new Exception("DK_Record--record--fail");
+                }
+            }
             else
             {
+
                 $record = new DK_Record;
 
                 $record_data["ip"] = Get_IP();
@@ -7268,14 +7599,31 @@ class DKAdminRepository {
                 $record_data["operate_type"] = 1;
                 $record_data["column_name"] = "delivered_result";
 
-                $record_data["before"] = $before;
-                $record_data["after"] = $delivered_result;
+                $record_content = [];
 
-//                $record_data["before_client_id"] = $before;
-//                $record_data["after_client_id"] = $client_id;
+                $record_row['title'] = '结果';
+                $record_row['field'] = 'delivered_result';
+                $record_row['code'] = '';
+                $record_row['before'] = $before;
+                $record_row['after'] = '未交付';
+                $record_content[] = $record_row;
+
+                $record_row['field'] = 'delivered_description';
+                $record_row['title'] = '说明';
+                $record_row['before'] = '';
+                $record_row['after'] = $non_delivery_reason;
+                $record_content[] = $record_row;
+
+                $record_row['field'] = 'delivered_time';
+                $record_row['title'] = '时间';
+                $record_row['before'] = '';
+                $record_row['after'] = $datetime;
+                $record_content[] = $record_row;
+
+                $record_data["content"] = json_encode($record_content);
 
                 $bool_1 = $record->fill($record_data)->save();
-                if(!$bool_1) throw new Exception("insert--record--fail");
+                if(!$bool_1) throw new Exception("DK_Record--record--fail");
             }
 
             DB::commit();
@@ -8949,12 +9297,16 @@ class DKAdminRepository {
                     
                     count(IF(is_published = 1 AND inspected_status <> 0, TRUE, NULL)) as order_count_for_inspected_all,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_inspected_accepted,
+                    count(IF(inspected_result = '折扣通过', TRUE, NULL)) as order_count_for_inspected_accepted_discount,
+                    count(IF(inspected_result = '郊区通过', TRUE, NULL)) as order_count_for_inspected_accepted_suburb,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_inspected_accepted_inside,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_inspected_repeated,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_inspected_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '拒绝可交付', TRUE, NULL)) as order_count_for_inspected_refused,
                     
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered_all,
                     count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
+                    count(IF(delivered_result = '折扣交付', TRUE, NULL)) as order_count_for_delivered_discount,
+                    count(IF(delivered_result = '郊区交付', TRUE, NULL)) as order_count_for_delivered_suburb,
                     count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
                     count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
                     count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
@@ -8973,12 +9325,16 @@ class DKAdminRepository {
 
         $order_of_all_for_inspected_all = $query_order_of_all[0]->order_count_for_inspected_all;
         $order_of_all_for_inspected_accepted = $query_order_of_all[0]->order_count_for_inspected_accepted;
+        $order_of_all_for_inspected_accepted_discount = $query_order_of_all[0]->order_count_for_inspected_accepted_discount;
+        $order_of_all_for_inspected_accepted_suburb = $query_order_of_all[0]->order_count_for_inspected_accepted_suburb;
         $order_of_all_for_inspected_accepted_inside = $query_order_of_all[0]->order_count_for_inspected_accepted_inside;
         $order_of_all_for_inspected_refused = $query_order_of_all[0]->order_count_for_inspected_refused;
         $order_of_all_for_inspected_repeated = $query_order_of_all[0]->order_count_for_inspected_repeated;
 
         $return_data['order_of_all_for_inspected_all'] = $order_of_all_for_inspected_all;
         $return_data['order_of_all_for_inspected_accepted'] = $order_of_all_for_inspected_accepted;
+        $return_data['order_of_all_for_inspected_accepted_discount'] = $order_of_all_for_inspected_accepted_discount;
+        $return_data['order_of_all_for_inspected_accepted_suburb'] = $order_of_all_for_inspected_accepted_suburb;
         $return_data['order_of_all_for_inspected_accepted_inside'] = $order_of_all_for_inspected_accepted_inside;
         $return_data['order_of_all_for_inspected_refused'] = $order_of_all_for_inspected_refused;
         $return_data['order_of_all_for_inspected_repeated'] = $order_of_all_for_inspected_repeated;
@@ -8986,6 +9342,8 @@ class DKAdminRepository {
 
         $order_of_all_for_delivered_all = $query_order_of_all[0]->order_count_for_delivered_all;
         $order_of_all_for_delivered_completed = $query_order_of_all[0]->order_count_for_delivered_completed;
+        $order_of_all_for_delivered_discount = $query_order_of_all[0]->order_count_for_delivered_discount;
+        $order_of_all_for_delivered_suburb = $query_order_of_all[0]->order_count_for_delivered_suburb;
         $order_of_all_for_delivered_inside = $query_order_of_all[0]->order_count_for_delivered_inside;
         $order_of_all_for_delivered_tomorrow = $query_order_of_all[0]->order_count_for_delivered_tomorrow;
         $order_of_all_for_delivered_repeated = $query_order_of_all[0]->order_count_for_delivered_repeated;
@@ -8999,6 +9357,8 @@ class DKAdminRepository {
 
         $return_data['order_of_all_for_delivered_all'] = $order_of_all_for_delivered_all;
         $return_data['order_of_all_for_delivered_completed'] = $order_of_all_for_delivered_completed;
+        $return_data['order_of_all_for_delivered_discount'] = $order_of_all_for_delivered_discount;
+        $return_data['order_of_all_for_delivered_suburb'] = $order_of_all_for_delivered_suburb;
         $return_data['order_of_all_for_delivered_inside'] = $order_of_all_for_delivered_inside;
         $return_data['order_of_all_for_delivered_tomorrow'] = $order_of_all_for_delivered_tomorrow;
         $return_data['order_of_all_for_delivered_repeated'] = $order_of_all_for_delivered_repeated;
@@ -9014,6 +9374,8 @@ class DKAdminRepository {
             ->select(DB::raw("
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as delivered_count_for_all,
                     count(IF(delivered_result = '已交付', TRUE, NULL)) as delivered_count_for_completed,
+                    count(IF(delivered_result = '折扣交付', TRUE, NULL)) as delivered_count_for_discount,
+                    count(IF(delivered_result = '郊区交付', TRUE, NULL)) as delivered_count_for_suburb,
                     count(IF(delivered_result = '内部交付', TRUE, NULL)) as delivered_count_for_inside,
                     count(IF(delivered_result = '隔日交付', TRUE, NULL)) as delivered_count_for_tomorrow,
                     count(IF(delivered_result = '重复', TRUE, NULL)) as delivered_count_for_repeated,
@@ -9023,6 +9385,8 @@ class DKAdminRepository {
 
         $deliverer_of_all_for_all = $query_delivered_of_all[0]->delivered_count_for_all;
         $deliverer_of_all_for_completed = $query_delivered_of_all[0]->delivered_count_for_completed;
+        $deliverer_of_all_for_discount = $query_delivered_of_all[0]->delivered_count_for_discount;
+        $deliverer_of_all_for_suburb = $query_delivered_of_all[0]->delivered_count_for_suburb;
         $deliverer_of_all_for_inside = $query_delivered_of_all[0]->delivered_count_for_inside;
         $deliverer_of_all_for_tomorrow = $query_delivered_of_all[0]->delivered_count_for_tomorrow;
         $deliverer_of_all_for_repeated = $query_delivered_of_all[0]->delivered_count_for_repeated;
@@ -9031,6 +9395,8 @@ class DKAdminRepository {
 
         $return_data['deliverer_of_all_for_all'] = $deliverer_of_all_for_all;
         $return_data['deliverer_of_all_for_completed'] = $deliverer_of_all_for_completed;
+        $return_data['deliverer_of_all_for_discount'] = $deliverer_of_all_for_discount;
+        $return_data['deliverer_of_all_for_suburb'] = $deliverer_of_all_for_suburb;
         $return_data['deliverer_of_all_for_inside'] = $deliverer_of_all_for_inside;
         $return_data['deliverer_of_all_for_tomorrow'] = $deliverer_of_all_for_tomorrow;
         $return_data['deliverer_of_all_for_repeated'] = $deliverer_of_all_for_repeated;
@@ -9065,12 +9431,16 @@ class DKAdminRepository {
                     
                     count(IF(is_published = 1 AND inspected_status <> 0, TRUE, NULL)) as order_count_for_inspected_all,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_inspected_accepted,
+                    count(IF(inspected_result = '折扣通过', TRUE, NULL)) as order_count_for_inspected_accepted_discount,
+                    count(IF(inspected_result = '郊区通过', TRUE, NULL)) as order_count_for_inspected_accepted_suburb,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_inspected_accepted_inside,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_inspected_repeated,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_inspected_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '拒绝可交付', TRUE, NULL)) as order_count_for_inspected_refused,
                     
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered_all,
                     count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
+                    count(IF(delivered_result = '折扣交付', TRUE, NULL)) as order_count_for_delivered_discount,
+                    count(IF(delivered_result = '郊区交付', TRUE, NULL)) as order_count_for_delivered_suburb,
                     count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
                     count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
                     count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
@@ -9089,12 +9459,16 @@ class DKAdminRepository {
 
         $order_of_today_for_inspected_all = $query_order_of_today[0]->order_count_for_inspected_all;
         $order_of_today_for_inspected_accepted = $query_order_of_today[0]->order_count_for_inspected_accepted;
+        $order_of_today_for_inspected_accepted_discount = $query_order_of_today[0]->order_count_for_inspected_accepted_discount;
+        $order_of_today_for_inspected_accepted_suburb = $query_order_of_today[0]->order_count_for_inspected_accepted_suburb;
         $order_of_today_for_inspected_accepted_inside = $query_order_of_today[0]->order_count_for_inspected_accepted_inside;
         $order_of_today_for_inspected_refused = $query_order_of_today[0]->order_count_for_inspected_refused;
         $order_of_today_for_inspected_repeated = $query_order_of_today[0]->order_count_for_inspected_repeated;
 
         $return_data['order_of_today_for_inspected_all'] = $order_of_today_for_inspected_all;
         $return_data['order_of_today_for_inspected_accepted'] = $order_of_today_for_inspected_accepted;
+        $return_data['order_of_today_for_inspected_accepted_discount'] = $order_of_today_for_inspected_accepted_discount;
+        $return_data['order_of_today_for_inspected_accepted_suburb'] = $order_of_today_for_inspected_accepted_suburb;
         $return_data['order_of_today_for_inspected_accepted_inside'] = $order_of_today_for_inspected_accepted_inside;
         $return_data['order_of_today_for_inspected_refused'] = $order_of_today_for_inspected_refused;
         $return_data['order_of_today_for_inspected_repeated'] = $order_of_today_for_inspected_repeated;
@@ -9102,6 +9476,8 @@ class DKAdminRepository {
 
         $order_of_today_for_delivered_all = $query_order_of_today[0]->order_count_for_delivered_all;
         $order_of_today_for_delivered_completed = $query_order_of_today[0]->order_count_for_delivered_completed;
+        $order_of_today_for_delivered_discount = $query_order_of_today[0]->order_count_for_delivered_discount;
+        $order_of_today_for_delivered_suburb = $query_order_of_today[0]->order_count_for_delivered_suburb;
         $order_of_today_for_delivered_inside = $query_order_of_today[0]->order_count_for_delivered_inside;
         $order_of_today_for_delivered_tomorrow = $query_order_of_today[0]->order_count_for_delivered_tomorrow;
         $order_of_today_for_delivered_repeated = $query_order_of_today[0]->order_count_for_delivered_repeated;
@@ -9115,6 +9491,8 @@ class DKAdminRepository {
 
         $return_data['order_of_today_for_delivered_all'] = $order_of_today_for_delivered_all;
         $return_data['order_of_today_for_delivered_completed'] = $order_of_today_for_delivered_completed;
+        $return_data['order_of_today_for_delivered_discount'] = $order_of_today_for_delivered_discount;
+        $return_data['order_of_today_for_delivered_suburb'] = $order_of_today_for_delivered_suburb;
         $return_data['order_of_today_for_delivered_inside'] = $order_of_today_for_delivered_inside;
         $return_data['order_of_today_for_delivered_tomorrow'] = $order_of_today_for_delivered_tomorrow;
         $return_data['order_of_today_for_delivered_repeated'] = $order_of_today_for_delivered_repeated;
@@ -9230,12 +9608,16 @@ class DKAdminRepository {
                     
                     count(IF(is_published = 1 AND inspected_status <> 0, TRUE, NULL)) as order_count_for_inspected_all,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_inspected_accepted,
+                    count(IF(inspected_result = '折扣通过', TRUE, NULL)) as order_count_for_inspected_accepted_discount,
+                    count(IF(inspected_result = '郊区通过', TRUE, NULL)) as order_count_for_inspected_accepted_suburb,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_inspected_accepted_inside,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_inspected_repeated,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_inspected_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '拒绝可交付', TRUE, NULL)) as order_count_for_inspected_refused,
                     
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered_all,
                     count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
+                    count(IF(delivered_result = '折扣交付', TRUE, NULL)) as order_count_for_delivered_discount,
+                    count(IF(delivered_result = '郊区交付', TRUE, NULL)) as order_count_for_delivered_suburb,
                     count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
                     count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
                     count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
@@ -9255,12 +9637,16 @@ class DKAdminRepository {
 
         $order_of_month_for_inspected_all = $query_order_of_month[0]->order_count_for_inspected_all;
         $order_of_month_for_inspected_accepted = $query_order_of_month[0]->order_count_for_inspected_accepted;
+        $order_of_month_for_inspected_accepted_discount = $query_order_of_month[0]->order_count_for_inspected_accepted_discount;
+        $order_of_month_for_inspected_accepted_suburb = $query_order_of_month[0]->order_count_for_inspected_accepted_suburb;
         $order_of_month_for_inspected_accepted_inside = $query_order_of_month[0]->order_count_for_inspected_accepted_inside;
         $order_of_month_for_inspected_refused = $query_order_of_month[0]->order_count_for_inspected_refused;
         $order_of_month_for_inspected_repeated = $query_order_of_month[0]->order_count_for_inspected_repeated;
 
         $return_data['order_of_month_for_inspected_all'] = $order_of_month_for_inspected_all;
         $return_data['order_of_month_for_inspected_accepted'] = $order_of_month_for_inspected_accepted;
+        $return_data['order_of_month_for_inspected_accepted_discount'] = $order_of_month_for_inspected_accepted_discount;
+        $return_data['order_of_month_for_inspected_accepted_suburb'] = $order_of_month_for_inspected_accepted_suburb;
         $return_data['order_of_month_for_inspected_accepted_inside'] = $order_of_month_for_inspected_accepted_inside;
         $return_data['order_of_month_for_inspected_refused'] = $order_of_month_for_inspected_refused;
         $return_data['order_of_month_for_inspected_repeated'] = $order_of_month_for_inspected_repeated;
@@ -9268,6 +9654,8 @@ class DKAdminRepository {
 
         $order_of_month_for_delivered_all = $query_order_of_month[0]->order_count_for_delivered_all;
         $order_of_month_for_delivered_completed = $query_order_of_month[0]->order_count_for_delivered_completed;
+        $order_of_month_for_delivered_discount = $query_order_of_month[0]->order_count_for_delivered_discount;
+        $order_of_month_for_delivered_suburb = $query_order_of_month[0]->order_count_for_delivered_suburb;
         $order_of_month_for_delivered_inside = $query_order_of_month[0]->order_count_for_delivered_inside;
         $order_of_month_for_delivered_tomorrow = $query_order_of_month[0]->order_count_for_delivered_tomorrow;
         $order_of_month_for_delivered_repeated = $query_order_of_month[0]->order_count_for_delivered_repeated;
@@ -9281,6 +9669,8 @@ class DKAdminRepository {
 
         $return_data['order_of_month_for_delivered_all'] = $order_of_month_for_delivered_all;
         $return_data['order_of_month_for_delivered_completed'] = $order_of_month_for_delivered_completed;
+        $return_data['order_of_month_for_delivered_discount'] = $order_of_month_for_delivered_discount;
+        $return_data['order_of_month_for_delivered_suburb'] = $order_of_month_for_delivered_suburb;
         $return_data['order_of_month_for_delivered_inside'] = $order_of_month_for_delivered_inside;
         $return_data['order_of_month_for_delivered_tomorrow'] = $order_of_month_for_delivered_tomorrow;
         $return_data['order_of_month_for_delivered_repeated'] = $order_of_month_for_delivered_repeated;
@@ -14578,11 +14968,13 @@ class DKAdminRepository {
         $total_data['production_published_num'] = 0;
         $total_data['production_inspected_num'] = 0;
         $total_data['production_accepted_num'] = 0;
+        $total_data['production_accepted_discount_num'] = 0;
         $total_data['production_accepted_suburb_num'] = 0;
         $total_data['production_accepted_inside_num'] = 0;
         $total_data['production_repeated_num'] = 0;
         $total_data['production_refused_num'] = 0;
         $total_data['marketing_delivered_num'] = 0;
+        $total_data['marketing_delivered_discount_num'] = 0;
         $total_data['marketing_delivered_suburb_num'] = 0;
         $total_data['marketing_delivered_inside_num'] = 0;
         $total_data['marketing_today_num'] = 0;
@@ -14600,11 +14992,13 @@ class DKAdminRepository {
             $total_data['production_published_num'] += $v->production_published_num;
             $total_data['production_inspected_num'] += $v->production_inspected_num;
             $total_data['production_accepted_num'] += $v->production_accepted_num;
+            $total_data['production_accepted_discount_num'] += $v->production_accepted_discount_num;
             $total_data['production_accepted_suburb_num'] += $v->production_accepted_suburb_num;
             $total_data['production_accepted_inside_num'] += $v->production_accepted_inside_num;
             $total_data['production_repeated_num'] += $v->production_repeated_num;
             $total_data['production_refused_num'] += $v->production_refused_num;
             $total_data['marketing_delivered_num'] += $v->marketing_delivered_num;
+            $total_data['marketing_delivered_discount_num'] += $v->marketing_delivered_discount_num;
             $total_data['marketing_delivered_suburb_num'] += $v->marketing_delivered_suburb_num;
             $total_data['marketing_delivered_inside_num'] += $v->marketing_delivered_inside_num;
             $total_data['marketing_today_num'] += $v->marketing_today_num;
@@ -15106,9 +15500,11 @@ class DKAdminRepository {
             ->addSelect(DB::raw("
                     count(*) as statistic_day_num,
                     sum(production_accepted_num) as production_accepted_total,
+                    sum(production_accepted_discount_num) as production_accepted_discount_total,
                     sum(production_accepted_suburb_num) as production_accepted_suburb_total,
                     sum(production_accepted_inside_num) as production_accepted_inside_total,
                     sum(marketing_delivered_num) as marketing_delivered_total,
+                    sum(marketing_delivered_discount_num) as marketing_delivered_discount_total,
                     sum(marketing_delivered_suburb_num) as marketing_delivered_suburb_total,
                     sum(marketing_delivered_inside_num) as marketing_delivered_inside_total,
                     sum(marketing_today_num) as marketing_today_total,
@@ -15214,9 +15610,11 @@ class DKAdminRepository {
         $total_data['statistic_date'] = '统计';
         $total_data['statistic_day_num'] = '统计';
         $total_data['production_accepted_total'] = 0;
+        $total_data['production_accepted_discount_total'] = 0;
         $total_data['production_accepted_suburb_total'] = 0;
         $total_data['production_accepted_inside_total'] = 0;
         $total_data['marketing_delivered_total'] = 0;
+        $total_data['marketing_delivered_discount_total'] = 0;
         $total_data['marketing_delivered_suburb_total'] = 0;
         $total_data['marketing_delivered_inside_total'] = 0;
         $total_data['marketing_today_total'] = 0;
@@ -15231,9 +15629,11 @@ class DKAdminRepository {
 //            $list[$k]->content_decode = json_decode($v->content);
 
             $total_data['production_accepted_total'] += $v->production_accepted_total;
+            $total_data['production_accepted_discount_total'] += $v->production_accepted_discount_total;
             $total_data['production_accepted_suburb_total'] += $v->production_accepted_suburb_total;
             $total_data['production_accepted_inside_total'] += $v->production_accepted_inside_total;
             $total_data['marketing_delivered_total'] += $v->marketing_delivered_total;
+            $total_data['marketing_delivered_discount_total'] += $v->marketing_delivered_discount_total;
             $total_data['marketing_delivered_suburb_total'] += $v->marketing_delivered_suburb_total;
             $total_data['marketing_delivered_inside_total'] += $v->marketing_delivered_inside_total;
             $total_data['marketing_today_total'] += $v->marketing_today_total;
@@ -15353,9 +15753,13 @@ class DKAdminRepository {
         $total_data['statistic_date'] = '统计';
         $total_data['description'] = '--';
         $total_data['production_accepted_num'] = 0;
+        $total_data['production_accepted_discount_num'] = 0;
         $total_data['production_accepted_suburb_num'] = 0;
         $total_data['production_accepted_inside_num'] = 0;
         $total_data['marketing_delivered_num'] = 0;
+        $total_data['marketing_delivered_discount_num'] = 0;
+        $total_data['marketing_delivered_suburb_num'] = 0;
+        $total_data['marketing_delivered_inside_num'] = 0;
         $total_data['marketing_today_num'] = 0;
         $total_data['marketing_yesterday_num'] = 0;
         $total_data['marketing_tomorrow_num'] = 0;
@@ -15368,9 +15772,13 @@ class DKAdminRepository {
 //            $list[$k]->content_decode = json_decode($v->content);
 
             $total_data['production_accepted_num'] += $v->production_accepted_num;
+            $total_data['production_accepted_discount_num'] += $v->production_accepted_discount_num;
             $total_data['production_accepted_suburb_num'] += $v->production_accepted_suburb_num;
             $total_data['production_accepted_inside_num'] += $v->production_accepted_inside_num;
             $total_data['marketing_delivered_num'] += $v->marketing_delivered_num;
+            $total_data['marketing_delivered_discount_num'] += $v->marketing_delivered_discount_num;
+            $total_data['marketing_delivered_suburb_num'] += $v->marketing_delivered_suburb_num;
+            $total_data['marketing_delivered_inside_num'] += $v->marketing_delivered_inside_num;
             $total_data['marketing_today_num'] += $v->marketing_today_num;
             $total_data['marketing_yesterday_num'] += $v->marketing_yesterday_num;
             $total_data['marketing_tomorrow_num'] += $v->marketing_tomorrow_num;
@@ -32075,7 +32483,7 @@ EOF;
         // 是否已经交付
         $is_order_list = DK_Order::with('project_er')
             ->where(['client_phone'=>$client_phone])
-            ->whereIn('delivered_result',["已交付","郊区交付","内部交付"])
+            ->whereIn('delivered_result',["已交付","折扣交付","郊区交付","内部交付"])
             ->get();
 //        dd($is_order_list->toArray());
 
@@ -32111,7 +32519,7 @@ EOF;
         try
         {
 //            if($delivered_client_id != "-1" && $delivered_result == "已交付")
-            if($delivered_client_id != "-1" && in_array($delivered_result,["已交付","郊区交付","内部交付"]))
+            if($delivered_client_id != "-1" && in_array($delivered_result,["已交付","折扣交付","郊区交付","内部交付"]))
             {
                 $pivot_delivery = DK_Pivot_Client_Delivery::where(['pivot_type'=>95,'order_id'=>$item->id])->first();
                 if($pivot_delivery)
@@ -32454,7 +32862,7 @@ EOF;
 
 
 //                if(!in_array($delivered_client_id,['-1','0',-1,0]) && $delivered_result == "已交付")
-                if(!in_array($delivered_client_id,['-1','0',-1,0]) && in_array($delivered_result,["已交付","郊区交付","内部交付"]))
+                if(!in_array($delivered_client_id,['-1','0',-1,0]) && in_array($delivered_result,["已交付","折扣交付","郊区交付","内部交付"]))
                 {
                     $pivot_delivery = DK_Pivot_Client_Delivery::where(['pivot_type'=>95,'order_id'=>$id])->first();
                     if($pivot_delivery)
