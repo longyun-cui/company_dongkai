@@ -95,9 +95,15 @@
             {{--审核结果--}}
             <select class="search-filter form-filter filter-xl select2-box-c" name="order-inspected-result[]" multiple="multiple">
                 <option value="-1">审核结果</option>
-                @foreach(config('info.inspected_result') as $v)
-                    <option value="{{ $v }}">{{ $v }}</option>
-                @endforeach
+                @if($me->department_district_id <= 0)
+                    @foreach(config('info.inspected_result') as $v)
+                        <option value="{{ $v }}">{{ $v }}</option>
+                    @endforeach
+                @else
+                    @foreach(config('info.inspected_result_for_team') as $v)
+                        <option value="{{ $v }}">{{ $v }}</option>
+                    @endforeach
+                @endif
             </select>
             {{--录音质量--}}
             @if(in_array($me->user_type,[0,1,9,11,61,66,71,77,81,84,88]))

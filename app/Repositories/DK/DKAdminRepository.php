@@ -5053,6 +5053,13 @@ class DKAdminRepository {
 //            {
 //                $query->where('inspected_result', $inspected_result);
 //            }
+            if($me->department_district_id > 0)
+            {
+                if(in_array('拒绝',$post_data['inspected_result']))
+                {
+                    $post_data['inspected_result'][] = '拒绝可交付';
+                }
+            }
             if(count($post_data['inspected_result']))
             {
                 $query->whereIn('dk_admin_order.inspected_result', $post_data['inspected_result']);
