@@ -171,7 +171,7 @@
                 },
                 {
                     "title": "折扣通过<br>(审核)",
-                    "data": "production_accepted_suburb_num",
+                    "data": "production_accepted_discount_num",
                     "className": "bg-published",
                     "width": "80px",
                     "orderable": true,
