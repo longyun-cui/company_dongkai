@@ -283,6 +283,18 @@
                         {
                             $result_html = '<small class="btn-xs bg-red">拒绝</small>';
                         }
+                        else if(data == "拒绝可交付")
+                        {
+                            if("{{ in_array($me->user_type,[0,1,9,11,61,66]) }}" == "1")
+                            {
+                                console.log('x');
+                                $result_html = '<small class="btn-xs bg-red">拒绝可交付</small>';
+                            }
+                            else
+                            {
+                                $result_html = '<small class="btn-xs bg-red">拒绝</small>';
+                            }
+                        }
                         else if(data == "不合格驳回")
                         {
                             if("{{ in_array($me->user_type,[0,1,9,11,61,66]) }}" == "1")
@@ -1719,7 +1731,7 @@
                             // 申诉
                             if("{{ in_array($me->user_type,[0,1,81,84,88]) }}")
                             {
-                                if(row.appealed_status == 0 && row.inspected_result == '拒绝')
+                                if(row.appealed_status == 0 && (row.inspected_result == '拒绝' || row.inspected_result == '拒绝可交付' || row.inspected_result == '不合格驳回'))
                                 {
                                     $html_appeal = '<a class="btn btn-xs bg-red modal-show-for-detail-appealed" data-id="'+data+'">申诉</a>';
                                 }
