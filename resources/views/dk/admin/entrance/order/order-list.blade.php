@@ -34,7 +34,9 @@
                         <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker" name="order-assign" placeholder="发布日期" value="{{ $assign or '' }}" readonly="readonly" />
 
                         {{--交付日期--}}
+                        @if(in_array($me->user_type,[0,1,9,11,61,66]))
                         <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker" name="order-delivered_date" placeholder="交付日期" value="{{ $assign or '' }}" readonly="readonly" />
+                        @endif
 
                         {{--创建方式--}}
                         @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
@@ -117,20 +119,24 @@
                         </select>
 
                         {{--交付状态--}}
+                        @if(in_array($me->user_type,[0,1,9,11,61,66]))
                         <select class="search-filter form-filter filter-lg select2-box" name="order-delivered-status">
                             <option value="-1">交付状态</option>
                             <option value="待交付" @if("待交付" == $delivered_status) selected="selected" @endif>待交付</option>
                             {{--<option value="已交付" @if("已交付" == $delivered_status) selected="selected" @endif>已交付</option>--}}
                             <option value="已操作" @if("已操作" == $delivered_status) selected="selected" @endif>已操作</option>
                         </select>
+                        @endif
 
                         {{--交付结果--}}
+                        @if(in_array($me->user_type,[0,1,9,11,61,66]))
                         <select class="search-filter form-filter filter-xl select2-box" name="order-delivered-result[]" multiple="multiple">
                             <option value="-1">交付结果</option>
                             @foreach(config('info.delivered_result') as $v)
                                 <option value="{{ $v }}">{{ $v }}</option>
                             @endforeach
                         </select>
+                        @endif
 
                         {{--城市--}}
                         <select class="search-filter form-filter filter-lg select2-box select2-district-city" name="order-city" id="order-city" data-target="#order-district">

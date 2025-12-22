@@ -126,12 +126,12 @@
 
 
             {{--交付日期--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
+            @if(in_array($me->user_type,[0,1,9,11,61,66]))
             <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="order-delivered_date" placeholder="交付日期" value="" readonly="readonly" />
             @endif
 
             {{--交付状态--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
+            @if(in_array($me->user_type,[0,1,9,11,61,66]))
             <select class="search-filter form-filter filter-lg select2-box-c" name="order-delivered-status">
                 <option value="-1">交付状态</option>
                 <option value="待交付">待交付</option>
@@ -141,7 +141,7 @@
             @endif
 
             {{--交付结果--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
+            @if(in_array($me->user_type,[0,1,9,11,61,66]))
             <select class="search-filter form-filter filter-xl select2-box-c" name="order-delivered-result[]" multiple="multiple">
                 <option value="-1">交付结果</option>
                 @foreach(config('info.delivered_result') as $v)
