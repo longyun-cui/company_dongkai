@@ -237,12 +237,12 @@
                             {
                                 $result_html = '<small class="btn-xs bg-red">拒绝</small>';
                             }
-                            else if(data == "拒绝可交付")
+                            else if(data == "不合格驳回")
                             {
                                 if("{{ in_array($me->user_type,[0,1,9,11,61,66]) }}" == "1")
                                 {
                                     console.log('x');
-                                    $result_html = '<small class="btn-xs bg-red">拒绝可交付</small>';
+                                    $result_html = '<small class="btn-xs bg-red">不合格驳回</small>';
                                 }
                                 else
                                 {

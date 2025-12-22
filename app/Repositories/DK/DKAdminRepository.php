@@ -5057,7 +5057,7 @@ class DKAdminRepository {
             {
                 if(in_array('拒绝',$post_data['inspected_result']))
                 {
-                    $post_data['inspected_result'][] = '拒绝可交付';
+                    $post_data['inspected_result'][] = '不合格驳回';
                 }
             }
             if(count($post_data['inspected_result']))
@@ -6298,17 +6298,17 @@ class DKAdminRepository {
                 $record_row['title'] = '结果';
                 $record_row['field'] = 'inspected_result';
 //                $record_row['code'] = $inspected_result;
-                if($before == '拒绝可交付')
+                if($before == '不合格驳回')
                 {
-                    $record_row['before'] = '拒绝';
+                    $record_row['before'] = '拒绝.';
                 }
                 else
                 {
                     $record_row['before'] = $before;
                 }
-                if($inspected_result == '拒绝可交付')
+                if($inspected_result == '不合格驳回')
                 {
-                    $record_row['after'] = '拒绝';
+                    $record_row['after'] = '拒绝.';
                 }
                 else
                 {
@@ -6330,17 +6330,17 @@ class DKAdminRepository {
 
                 $record_data["content"] = json_encode($record_content);
 
-                if($before == '拒绝可交付')
+                if($before == '不合格驳回')
                 {
-                    $record_data['before'] = '拒绝';
+                    $record_data['before'] = '拒绝.';
                 }
                 else
                 {
                     $record_data["before"] = $before;
                 }
-                if($inspected_result == '拒绝可交付')
+                if($inspected_result == '不合格驳回')
                 {
-                    $record_data['after'] = '拒绝';
+                    $record_data['after'] = '拒绝.';
                 }
                 else
                 {
@@ -9342,7 +9342,7 @@ class DKAdminRepository {
                     count(IF(inspected_result = '郊区通过', TRUE, NULL)) as order_count_for_inspected_accepted_suburb,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_inspected_accepted_inside,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_inspected_repeated,
-                    count(IF(inspected_result = '拒绝' or inspected_result = '拒绝可交付', TRUE, NULL)) as order_count_for_inspected_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格驳回', TRUE, NULL)) as order_count_for_inspected_refused,
                     
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered_all,
                     count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
@@ -9476,7 +9476,7 @@ class DKAdminRepository {
                     count(IF(inspected_result = '郊区通过', TRUE, NULL)) as order_count_for_inspected_accepted_suburb,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_inspected_accepted_inside,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_inspected_repeated,
-                    count(IF(inspected_result = '拒绝' or inspected_result = '拒绝可交付', TRUE, NULL)) as order_count_for_inspected_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格驳回', TRUE, NULL)) as order_count_for_inspected_refused,
                     
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered_all,
                     count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
@@ -9653,7 +9653,7 @@ class DKAdminRepository {
                     count(IF(inspected_result = '郊区通过', TRUE, NULL)) as order_count_for_inspected_accepted_suburb,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_inspected_accepted_inside,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_inspected_repeated,
-                    count(IF(inspected_result = '拒绝' or inspected_result = '拒绝可交付', TRUE, NULL)) as order_count_for_inspected_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格驳回', TRUE, NULL)) as order_count_for_inspected_refused,
                     
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered_all,
                     count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
@@ -39759,7 +39759,7 @@ EOF;
                     count(IF(inspected_result = '郊区通过', TRUE, NULL)) as order_count_for_accepted_suburb,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
-                    count(IF(inspected_result = '拒绝' or inspected_result = '拒绝可交付', TRUE, NULL)) as order_count_for_refused
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格驳回', TRUE, NULL)) as order_count_for_refused
                 "))
             ->addSelect(DB::raw("
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
