@@ -29865,6 +29865,14 @@ EOF;
             $query->whereNotIn('operate_category',[96]);
         }
 
+        if(!in_array($me->department_district_id,[0]))
+        {
+//            $department_district_id = $me->department_district_id;
+//            $staff_list = DK_User::select('id')->where('department_district_id',$department_district_id)->get();
+//            $query->whereIn('creator_id',$staff_list);
+            $query->whereNotIn('operate_category',[95,96]);
+        }
+
         $total = $query->count();
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
