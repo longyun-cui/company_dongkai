@@ -6298,8 +6298,22 @@ class DKAdminRepository {
                 $record_row['title'] = '结果';
                 $record_row['field'] = 'inspected_result';
 //                $record_row['code'] = $inspected_result;
-                $record_row['before'] = $before;
-                $record_row['after'] = $inspected_result;
+                if($before == '拒绝可交付')
+                {
+                    $record_row['before'] = '拒绝';
+                }
+                else
+                {
+                    $record_row['before'] = $before;
+                }
+                if($inspected_result == '拒绝可交付')
+                {
+                    $record_row['after'] = '拒绝';
+                }
+                else
+                {
+                    $record_row['after'] = $inspected_result;
+                }
                 $record_content[] = $record_row;
 
                 $record_row['field'] = 'inspected_description';
@@ -6316,8 +6330,22 @@ class DKAdminRepository {
 
                 $record_data["content"] = json_encode($record_content);
 
-                $record_data["before"] = $before;
-                $record_data["after"] = $inspected_result;
+                if($before == '拒绝可交付')
+                {
+                    $record_data['before'] = '拒绝';
+                }
+                else
+                {
+                    $record_data["before"] = $before;
+                }
+                if($inspected_result == '拒绝可交付')
+                {
+                    $record_data['after'] = '拒绝';
+                }
+                else
+                {
+                    $record_data["after"] = $inspected_result;
+                }
 
                 $bool_1 = $record->fill($record_data)->save();
                 if(!$bool_1) throw new Exception("insert--record--fail");
