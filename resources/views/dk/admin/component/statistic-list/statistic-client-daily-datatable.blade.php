@@ -416,7 +416,7 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        var $actual = row.marketing_delivered_num + row.marketing_special_num;
+                        var $actual = row.marketing_delivered_num - row.marketing_delivered_suburb_num + row.marketing_special_num;
                         return $actual;
                     }
                 },
