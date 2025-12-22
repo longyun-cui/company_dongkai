@@ -15070,6 +15070,7 @@ class DKAdminRepository {
                     count(IF(inspected_result = '通过', TRUE, NULL)) as production_accepted_num,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as production_repeated_num,
                     count(IF(inspected_result = '拒绝', TRUE, NULL)) as production_refused_num,
+                    count(IF(inspected_result = '折扣通过', TRUE, NULL)) as production_accepted_discount_num,
                     count(IF(inspected_result = '郊区通过', TRUE, NULL)) as production_accepted_suburb_num,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as production_accepted_inside_num
                 "))
@@ -15077,6 +15078,7 @@ class DKAdminRepository {
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_delivered_num,
                     count(IF(delivered_result = '已交付', TRUE, NULL)) as marketing_today_num,
                     count(IF(delivered_result = '隔日交付', TRUE, NULL)) as marketing_tomorrow_num,
+                    count(IF(delivered_result = '折扣交付', TRUE, NULL)) as order_delivered_discount_num,
                     count(IF(delivered_result = '郊区交付', TRUE, NULL)) as order_delivered_suburb_num,
                     count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_delivered_inside_num,
                     count(IF(delivered_result = '重复', TRUE, NULL)) as order_delivered_repeated_num,
@@ -15095,6 +15097,7 @@ class DKAdminRepository {
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as other_day_delivered_num,
                     count(IF(delivered_result = '已交付', TRUE, NULL)) as marketing_yesterday_num,
                     count(IF(delivered_result = '隔日交付', TRUE, NULL)) as other_day_delivered_tomorrow,
+                    count(IF(delivered_result = '折扣交付', TRUE, NULL)) as other_day_delivered_discount,
                     count(IF(delivered_result = '郊区交付', TRUE, NULL)) as other_day_delivered_suburb,
                     count(IF(delivered_result = '内部交付', TRUE, NULL)) as other_day_delivered_inside,
                     count(IF(delivered_result = '重复', TRUE, NULL)) as other_day_delivered_repeated,
@@ -15111,6 +15114,7 @@ class DKAdminRepository {
         $query_delivery = DK_Pivot_Client_Delivery::select('client_id')
             ->addSelect(DB::raw("
                     count(IF(order_category = 1, TRUE, NULL)) as marketing_delivered_num,
+                    count(IF(order_category = 1 AND delivered_result = '折扣交付', TRUE, NULL)) as marketing_delivered_discount_num,
                     count(IF(order_category = 1 AND delivered_result = '郊区交付', TRUE, NULL)) as marketing_delivered_suburb_num,
                     count(IF(order_category = 1 AND delivered_result = '内部交付', TRUE, NULL)) as marketing_delivered_inside_num,
                     count(IF(order_category = 1 AND pivot_type = 95, TRUE, NULL)) as marketing_normal_num,
@@ -15215,12 +15219,14 @@ class DKAdminRepository {
                 $daily->production_published_num = $v->production_published_num;
                 $daily->production_inspected_num = $v->production_inspected_num;
                 $daily->production_accepted_num = $v->production_accepted_num;
+                $daily->production_accepted_discount_num = $v->production_accepted_discount_num;
                 $daily->production_accepted_suburb_num = $v->production_accepted_suburb_num;
                 $daily->production_accepted_inside_num = $v->production_accepted_inside_num;
                 $daily->production_repeated_num = $v->production_repeated_num;
                 $daily->production_refused_num = $v->production_refused_num;
 
                 $daily->marketing_delivered_num = $v->marketing_delivered_num;
+                $daily->marketing_delivered_discount_num = $v->marketing_delivered_discount_num;
                 $daily->marketing_delivered_suburb_num = $v->marketing_delivered_suburb_num;
                 $daily->marketing_delivered_inside_num = $v->marketing_delivered_inside_num;
                 $daily->marketing_today_num = $v->marketing_today_num;
