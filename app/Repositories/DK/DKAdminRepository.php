@@ -15139,10 +15139,12 @@ class DKAdminRepository {
             $client_list[$k]->production_accepted_num = 0;
             $client_list[$k]->production_repeated_num = 0;
             $client_list[$k]->production_refused_num = 0;
+            $client_list[$k]->production_accepted_discount_num = 0;
             $client_list[$k]->production_accepted_suburb_num = 0;
             $client_list[$k]->production_accepted_inside_num = 0;
 
             $client_list[$k]->marketing_delivered_num = 0;
+            $client_list[$k]->marketing_delivered_discount_num = 0;
             $client_list[$k]->marketing_delivered_suburb_num = 0;
             $client_list[$k]->marketing_delivered_inside_num = 0;
             $client_list[$k]->marketing_today_num = 0;
@@ -15158,6 +15160,7 @@ class DKAdminRepository {
                 $client_list[$k]->production_accepted_num = $query_order_production[$v->id]['production_accepted_num'];
                 $client_list[$k]->production_repeated_num = $query_order_production[$v->id]['production_repeated_num'];
                 $client_list[$k]->production_refused_num = $query_order_production[$v->id]['production_refused_num'];
+                $client_list[$k]->production_accepted_discount_num = $query_order_production[$v->id]['production_accepted_discount_num'];
                 $client_list[$k]->production_accepted_suburb_num = $query_order_production[$v->id]['production_accepted_suburb_num'];
                 $client_list[$k]->production_accepted_inside_num = $query_order_production[$v->id]['production_accepted_inside_num'];
 
@@ -15175,6 +15178,7 @@ class DKAdminRepository {
             if(isset($query_delivery[$v->id]))
             {
                 $client_list[$k]->marketing_delivered_num = $query_delivery[$v->id]['marketing_delivered_num'];
+                $client_list[$k]->marketing_delivered_discount_num = $query_delivery[$v->id]['marketing_delivered_discount_num'];
                 $client_list[$k]->marketing_delivered_suburb_num = $query_delivery[$v->id]['marketing_delivered_suburb_num'];
                 $client_list[$k]->marketing_delivered_inside_num = $query_delivery[$v->id]['marketing_delivered_inside_num'];
                 $client_list[$k]->marketing_distribute_num = $query_delivery[$v->id]['marketing_distribute_num'];
