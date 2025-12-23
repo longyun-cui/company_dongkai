@@ -9946,7 +9946,7 @@ class DKAdminRepository {
                     count(IF(item_category = 1 and inspected_result = '郊区通过', TRUE, NULL)) as order_dental_for_inspected_accepted_suburb,
                     count(IF(item_category = 1 and inspected_result = '内部通过', TRUE, NULL)) as order_dental_for_inspected_accepted_inside,
                     count(IF(item_category = 1 and inspected_result = '重复', TRUE, NULL)) as order_dental_for_inspected_repeated,
-                    count(IF(item_category = 1 and inspected_result = '拒绝', TRUE, NULL)) as order_dental_for_inspected_refused,
+                    count(IF(item_category = 1 and inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_dental_for_inspected_refused,
                     
                     count(IF(item_category = 1 and appealed_status > 0, TRUE, NULL)) as order_dental_for_appealed,
                     count(IF(item_category = 1 and appealed_result = 1, TRUE, NULL)) as order_dental_for_appealed_success,
@@ -9966,7 +9966,7 @@ class DKAdminRepository {
                     count(IF(item_category = 31 and inspected_result = '通过', TRUE, NULL)) as order_luxury_for_inspected_accepted,
                     count(IF(item_category = 31 and inspected_result = '内部通过', TRUE, NULL)) as order_luxury_for_inspected_accepted_inside,
                     count(IF(item_category = 31 and inspected_result = '重复', TRUE, NULL)) as order_luxury_for_inspected_repeated,
-                    count(IF(item_category = 31 and inspected_result = '拒绝', TRUE, NULL)) as order_luxury_for_inspected_refused,
+                    count(IF(item_category = 31 and inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_luxury_for_inspected_refused,
                     
                     count(IF(item_category = 31 and delivered_status = 1, TRUE, NULL)) as order_luxury_for_delivered_all,
                     count(IF(item_category = 31 and delivered_result = '已交付', TRUE, NULL)) as order_luxury_for_delivered_completed,
@@ -10008,7 +10008,7 @@ class DKAdminRepository {
                     count(IF(item_category = 1 and inspected_result = '郊区通过', TRUE, NULL)) as order_dental_for_inspected_accepted_suburb,
                     count(IF(item_category = 1 and inspected_result = '内部通过', TRUE, NULL)) as order_dental_for_inspected_accepted_inside,
                     count(IF(item_category = 1 and inspected_result = '重复', TRUE, NULL)) as order_dental_for_inspected_repeated,
-                    count(IF(item_category = 1 and inspected_result = '拒绝', TRUE, NULL)) as order_dental_for_inspected_refused,
+                    count(IF(item_category = 1 and inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_dental_for_inspected_refused,
                     
                     
                     count(IF(item_category = 31, TRUE, NULL)) as order_luxury_for_inspected,
@@ -10017,7 +10017,7 @@ class DKAdminRepository {
                     count(IF(item_category = 31 and inspected_result = '通过', TRUE, NULL)) as order_luxury_for_inspected_accepted,
                     count(IF(item_category = 31 and inspected_result = '内部通过', TRUE, NULL)) as order_luxury_for_inspected_accepted_inside,
                     count(IF(item_category = 31 and inspected_result = '重复', TRUE, NULL)) as order_luxury_for_inspected_repeated,
-                    count(IF(item_category = 31 and inspected_result = '拒绝', TRUE, NULL)) as order_luxury_for_inspected_refused
+                    count(IF(item_category = 31 and inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_luxury_for_inspected_refused
                 "))
 //            ->groupBy('item_category')
             ->get();
@@ -10143,7 +10143,7 @@ class DKAdminRepository {
                     
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
                     
@@ -12458,7 +12458,7 @@ class DKAdminRepository {
                     count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
                 "))
@@ -12472,7 +12472,7 @@ class DKAdminRepository {
                     
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
                 "))
@@ -12485,7 +12485,7 @@ class DKAdminRepository {
                     count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
                 "))
@@ -12770,7 +12770,7 @@ class DKAdminRepository {
                     count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
                 "))
@@ -13049,7 +13049,7 @@ class DKAdminRepository {
 //        count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
 //                    count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
 //                    count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-//                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+//                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_refused,
 //                    count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
 //                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
 
@@ -13287,7 +13287,7 @@ class DKAdminRepository {
                     
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
                     
@@ -13386,7 +13386,7 @@ class DKAdminRepository {
             ->addSelect(DB::raw("
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_refused
                 "))
             ->groupBy('inspector_id');
 
@@ -13736,7 +13736,7 @@ class DKAdminRepository {
                     count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
                     
@@ -13957,7 +13957,7 @@ class DKAdminRepository {
                     
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
                 "))
@@ -14218,7 +14218,7 @@ class DKAdminRepository {
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as production_inspected_num,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as production_accepted_num,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as production_repeated_num,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as production_refused_num,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as production_refused_num,
                     count(IF(inspected_result = '郊区通过', TRUE, NULL)) as production_accepted_suburb_num,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as production_accepted_inside_num
                 "))
@@ -15069,7 +15069,7 @@ class DKAdminRepository {
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as production_inspected_num,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as production_accepted_num,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as production_repeated_num,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as production_refused_num,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as production_refused_num,
                     count(IF(inspected_result = '折扣通过', TRUE, NULL)) as production_accepted_discount_num,
                     count(IF(inspected_result = '郊区通过', TRUE, NULL)) as production_accepted_suburb_num,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as production_accepted_inside_num
@@ -35635,7 +35635,7 @@ EOF;
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_inspected_accepted,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_inspected_accepted_inside,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_inspected_repeated,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_inspected_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_inspected_refused,
                     
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered_all,
                     count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
@@ -35750,7 +35750,7 @@ EOF;
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_inspected_accepted,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_inspected_accepted_inside,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_inspected_repeated,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_inspected_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_inspected_refused,
                     
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered_all,
                     count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
@@ -35913,7 +35913,7 @@ EOF;
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_inspected_accepted,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_inspected_accepted_inside,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_inspected_repeated,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_inspected_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_inspected_refused,
                     
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered_all,
                     count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
@@ -36244,7 +36244,7 @@ EOF;
                     count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
                     
@@ -36734,7 +36734,7 @@ EOF;
                     count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
                 "))
@@ -38051,7 +38051,7 @@ EOF;
                     count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
                 "))
@@ -38073,7 +38073,7 @@ EOF;
                     
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
                 "))
@@ -38094,7 +38094,7 @@ EOF;
                     count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
                 "))
@@ -38607,7 +38607,7 @@ EOF;
             ->addSelect(DB::raw("
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_refused
                 "))
             ->groupBy('inspector_id');
 
@@ -40066,7 +40066,7 @@ EOF;
                     
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
                     
@@ -40400,7 +40400,7 @@ EOF;
                     
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
                     
@@ -40796,7 +40796,7 @@ EOF;
                     
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
                     
