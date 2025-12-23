@@ -6332,7 +6332,7 @@ class DKAdminRepository {
 
                 if($before == '不合格')
                 {
-                    $record_data['before'] = '拒绝.';
+                    $record_data['before'] = '拒绝';
                 }
                 else
                 {
@@ -6340,7 +6340,7 @@ class DKAdminRepository {
                 }
                 if($inspected_result == '不合格')
                 {
-                    $record_data['after'] = '拒绝.';
+                    $record_data['after'] = '拒绝';
                 }
                 else
                 {
@@ -6386,7 +6386,7 @@ class DKAdminRepository {
 
             if(env('APP_ENV') == "production" && $item->item_category == 1)
             {
-                if(in_array($inspected_result,['通过','重复','内部通过',]))
+                if(in_array($inspected_result,['通过','重复','内部通过','折扣通过','郊区通过']))
                 {
                     if($item->api_is_pushed == 0)
                     {
