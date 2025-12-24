@@ -912,7 +912,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-2"><sup class="text-red">*</sup> 审核结果</label>
                         <div class="col-md-9 ">
-                            <select class="form-control modal-select2" name="by-inspected-result" id="" style="width:100%;">
+                            <select class="form-control modal-select2-" name="by-inspected-result" id="" style="width:100%;">
                                 <option value="-1">选择审核结果</option>
                                 @foreach(config('info.by_inspected_result') as $k => $v)
                                     <option value ="{{ $k }}">{{ $v }}</option>
@@ -1002,7 +1002,7 @@
                     <div class="form-group by-inspected-accepted-box">
                         <label class="control-label col-md-2"><sup class="text-red">*</sup> 患者类型&牙齿数量</label>
                         <div class="col-md-9 ">
-                            <select class="form-control modal-select2 select2-reset" name="by_client_type" id="" style="width:100%;">
+                            <select class="form-control modal-select2- select2-reset" name="by_client_type" id="" style="width:100%;">
                                 <option value="">选择患者类型</option>
                                 @foreach(config('info.client_type') as $k => $v)
                                     <option value ="{{ $k }}">{{ $v }}</option>
@@ -1014,7 +1014,7 @@
                     <div class="form-group by-inspected-accepted-box">
                         <label class="control-label col-md-2"><sup class="text-red">*</sup> 牙齿数量</label>
                         <div class="col-md-9 ">
-                            <select class="form-control modal-select2 select2-reset" name="by_teeth_count" id="" style="width:100%;">
+                            <select class="form-control modal-select2- select2-reset" name="by_teeth_count" id="" style="width:100%;">
                                 <option value="">选择牙齿数量</option>
                                 @foreach(config('info.teeth_count') as $v)
                                     <option value ="{{ $v }}">{{ $v }}</option>
@@ -1026,7 +1026,7 @@
                     <div class="form-group by-inspected-accepted-box">
                         <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户意向</label>
                         <div class="col-md-9 ">
-                            <select class="form-control modal-select2 select2-reset" name="by_client_intention" id="" style="width:100%;">
+                            <select class="form-control modal-select2- select2-reset" name="by_client_intention" id="" style="width:100%;">
                                 <option value="">选择客户意向</option>
                                 @foreach(config('info.client_intention') as $k => $v)
                                     <option value ="{{ $k }}">{{ $v }}</option>

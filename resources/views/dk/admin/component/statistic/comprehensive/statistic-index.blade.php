@@ -204,6 +204,28 @@
                             </a>
                         </li>
                         <li>
+                            <a href="javascript:void(0);" class="deliverer_of_today_for_discount">
+                                折扣交付 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
+                            </a>
+                            <a href="javascript:void(0);" class="deliverer_of_today_for_discount_by_same_day">
+                                -- 当日 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
+                            </a>
+                            <a href="javascript:void(0);" class="deliverer_of_today_for_discount_by_other_day">
+                                -- 昨转今 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="deliverer_of_today_for_suburb">
+                                郊区交付 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
+                            </a>
+                            <a href="javascript:void(0);" class="deliverer_of_today_for_suburb_by_same_day">
+                                -- 当日 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
+                            </a>
+                            <a href="javascript:void(0);" class="deliverer_of_today_for_suburb_by_other_day">
+                                -- 昨转今 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
+                            </a>
+                        </li>
+                        <li>
                             <a href="javascript:void(0);" class="deliverer_of_today_for_inside">
                                 内部交付 <span class="pull-right"><b class="badge bg-olive"></b> 单</span>
                             </a>
@@ -406,6 +428,28 @@
                             </a>
                         </li>
                         <li>
+                            <a href="javascript:void(0);" class="deliverer_of_month_for_discount">
+                                折扣交付 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
+                            </a>
+                            <a href="javascript:void(0);" class="deliverer_of_month_for_discount_by_same_day">
+                                -- 当日 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
+                            </a>
+                            <a href="javascript:void(0);" class="deliverer_of_month_for_discount_by_other_day">
+                                -- 昨转今 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="deliverer_of_month_for_suburb">
+                                郊区交付 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
+                            </a>
+                            <a href="javascript:void(0);" class="deliverer_of_month_for_suburb_by_same_day">
+                                -- 当日 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
+                            </a>
+                            <a href="javascript:void(0);" class="deliverer_of_month_for_suburb_by_other_day">
+                                -- 昨转今 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
+                            </a>
+                        </li>
+                        <li>
                             <a href="javascript:void(0);" class="deliverer_of_month_for_inside">
                                 内部交付 <span class="pull-right"><b class="badge bg-olive"></b> 单</span>
                             </a>
@@ -604,6 +648,28 @@
                                 -- 当日 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
                             </a>
                             <a href="javascript:void(0);" class="deliverer_of_all_for_completed_by_other_day">
+                                -- 昨转今 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="deliverer_of_all_for_discount">
+                                折扣交付 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
+                            </a>
+                            <a href="javascript:void(0);" class="deliverer_of_all_for_discount_by_same_day">
+                                -- 当日 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
+                            </a>
+                            <a href="javascript:void(0);" class="deliverer_of_all_for_discount_by_other_day">
+                                -- 昨转今 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="deliverer_of_all_for_suburb">
+                                郊区交付 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
+                            </a>
+                            <a href="javascript:void(0);" class="deliverer_of_all_for_suburb_by_same_day">
+                                -- 当日 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
+                            </a>
+                            <a href="javascript:void(0);" class="deliverer_of_all_for_suburb_by_other_day">
                                 -- 昨转今 <span class="pull-right"><b class="badge bg-green"></b> 单</span>
                             </a>
                         </li>

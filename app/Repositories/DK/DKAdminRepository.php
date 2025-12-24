@@ -9554,6 +9554,14 @@ class DKAdminRepository {
                     count(IF(delivered_result = '已交付' AND published_date = '{$the_date}', TRUE, NULL)) as delivered_count_for_completed_by_same_day,
                     count(IF(delivered_result = '已交付' AND published_date <> '{$the_date}', TRUE, NULL)) as delivered_count_for_completed_by_other_day,
                     
+                    count(IF(delivered_result = '折扣交付', TRUE, NULL)) as delivered_count_for_discount,
+                    count(IF(delivered_result = '折扣交付' AND published_date = '{$the_date}', TRUE, NULL)) as delivered_count_for_discount_by_same_day,
+                    count(IF(delivered_result = '折扣交付' AND published_date <> '{$the_date}', TRUE, NULL)) as delivered_count_for_discount_by_other_day,
+                    
+                    count(IF(delivered_result = '郊区交付', TRUE, NULL)) as delivered_count_for_suburb,
+                    count(IF(delivered_result = '郊区交付' AND published_date = '{$the_date}', TRUE, NULL)) as delivered_count_for_suburb_by_same_day,
+                    count(IF(delivered_result = '郊区交付' AND published_date <> '{$the_date}', TRUE, NULL)) as delivered_count_for_suburb_by_other_day,
+                    
                     count(IF(delivered_result = '内部交付', TRUE, NULL)) as delivered_count_for_inside,
                     count(IF(delivered_result = '内部交付' AND published_date = '{$the_date}', TRUE, NULL)) as delivered_count_for_inside_by_same_day,
                     count(IF(delivered_result = '内部交付' AND published_date <> '{$the_date}', TRUE, NULL)) as delivered_count_for_inside_by_other_day,
@@ -9561,12 +9569,8 @@ class DKAdminRepository {
                     count(IF(delivered_result = '隔日交付', TRUE, NULL)) as delivered_count_for_tomorrow,
                     
                     count(IF(delivered_result = '重复', TRUE, NULL)) as delivered_count_for_repeated,
-                    count(IF(delivered_result = '重复' AND published_date = '{$the_date}', TRUE, NULL)) as delivered_count_for_repeated_by_same_day,
-                    count(IF(delivered_result = '重复' AND published_date <> '{$the_date}', TRUE, NULL)) as delivered_count_for_repeated_by_other_day,
                     
-                    count(IF(delivered_result = '驳回', TRUE, NULL)) as delivered_count_for_rejected,
-                    count(IF(delivered_result = '驳回' AND published_date = '{$the_date}', TRUE, NULL)) as delivered_count_for_rejected_by_same_day,
-                    count(IF(delivered_result = '驳回' AND published_date <> '{$the_date}', TRUE, NULL)) as delivered_count_for_rejected_by_other_day
+                    count(IF(delivered_result = '驳回', TRUE, NULL)) as delivered_count_for_rejected
                 "))
             ->get();
 
@@ -9577,6 +9581,14 @@ class DKAdminRepository {
         $deliverer_of_today_for_completed = $query_delivered_of_today[0]->delivered_count_for_completed;
         $deliverer_of_today_for_completed_by_same_day = $query_delivered_of_today[0]->delivered_count_for_completed_by_same_day;
         $deliverer_of_today_for_completed_by_other_day = $query_delivered_of_today[0]->delivered_count_for_completed_by_other_day;
+
+        $deliverer_of_today_for_discount = $query_delivered_of_today[0]->delivered_count_for_discount;
+        $deliverer_of_today_for_discount_by_same_day = $query_delivered_of_today[0]->delivered_count_for_discount_by_same_day;
+        $deliverer_of_today_for_discount_by_other_day = $query_delivered_of_today[0]->delivered_count_for_discount_by_other_day;
+
+        $deliverer_of_today_for_suburb = $query_delivered_of_today[0]->delivered_count_for_suburb;
+        $deliverer_of_today_for_suburb_by_same_day = $query_delivered_of_today[0]->delivered_count_for_suburb_by_same_day;
+        $deliverer_of_today_for_suburb_by_other_day = $query_delivered_of_today[0]->delivered_count_for_suburb_by_other_day;
 
         $deliverer_of_today_for_inside = $query_delivered_of_today[0]->delivered_count_for_inside;
         $deliverer_of_today_for_inside_by_same_day = $query_delivered_of_today[0]->delivered_count_for_inside_by_same_day;
@@ -9602,6 +9614,14 @@ class DKAdminRepository {
         $return_data['deliverer_of_today_for_completed'] = $deliverer_of_today_for_completed;
         $return_data['deliverer_of_today_for_completed_by_same_day'] = $deliverer_of_today_for_completed_by_same_day;
         $return_data['deliverer_of_today_for_completed_by_other_day'] = $deliverer_of_today_for_completed_by_other_day;
+
+        $return_data['deliverer_of_today_for_discount'] = $deliverer_of_today_for_discount;
+        $return_data['deliverer_of_today_for_discount_by_same_day'] = $deliverer_of_today_for_discount_by_same_day;
+        $return_data['deliverer_of_today_for_discount_by_other_day'] = $deliverer_of_today_for_discount_by_other_day;
+
+        $return_data['deliverer_of_today_for_suburb'] = $deliverer_of_today_for_suburb;
+        $return_data['deliverer_of_today_for_suburb_by_same_day'] = $deliverer_of_today_for_suburb_by_same_day;
+        $return_data['deliverer_of_today_for_suburb_by_other_day'] = $deliverer_of_today_for_suburb_by_other_day;
 
         $return_data['deliverer_of_today_for_inside'] = $deliverer_of_today_for_inside;
         $return_data['deliverer_of_today_for_inside_by_same_day'] = $deliverer_of_today_for_inside_by_same_day;
@@ -9727,77 +9747,87 @@ class DKAdminRepository {
             ->whereIn('created_type',[1,91,99])
             ->select(DB::raw("
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as delivered_count_for_all,
-                    count(IF(delivered_status = 1 AND published_date > '{$the_month_start_date}' AND published_date < '{$the_month_ended_date}', TRUE, NULL)) as delivered_count_for_all_by_same_day,
-                    count(IF(delivered_status = 1 AND published_date < '{$the_month_start_date}' AND published_date > '{$the_month_ended_date}', TRUE, NULL)) as delivered_count_for_all_by_other_day,
                     
                     count(IF(delivered_result = '已交付', TRUE, NULL)) as delivered_count_for_completed,
-                    count(IF(delivered_result = '已交付' AND published_date > '{$the_month_start_date}' AND published_date < '{$the_month_ended_timestamp}', TRUE, NULL)) as delivered_count_for_completed_by_same_day,
-                    count(IF(delivered_result = '已交付' AND published_date < '{$the_month_start_date}' AND published_date > '{$the_month_ended_timestamp}', TRUE, NULL)) as delivered_count_for_completed_by_other_day,
+                    
+                    count(IF(delivered_result = '折扣交付', TRUE, NULL)) as delivered_count_for_discount,
+                    
+                    count(IF(delivered_result = '郊区交付', TRUE, NULL)) as delivered_count_for_suburb,
                     
                     count(IF(delivered_result = '内部交付', TRUE, NULL)) as delivered_count_for_inside,
-                    count(IF(delivered_result = '内部交付' AND published_date > '{$the_month_start_date}' AND published_date < '{$the_month_ended_timestamp}', TRUE, NULL)) as delivered_count_for_inside_by_same_day,
-                    count(IF(delivered_result = '内部交付' AND published_date < '{$the_month_start_date}' AND published_date > '{$the_month_ended_timestamp}', TRUE, NULL)) as delivered_count_for_inside_by_other_day,
                     
                     count(IF(delivered_result = '隔日交付', TRUE, NULL)) as delivered_count_for_tomorrow,
                     
                     count(IF(delivered_result = '重复', TRUE, NULL)) as delivered_count_for_repeated,
-                    count(IF(delivered_result = '重复' AND published_date > '{$the_month_start_date}' AND published_date < '{$the_month_ended_date}', TRUE, NULL)) as delivered_count_for_repeated_by_same_day,
-                    count(IF(delivered_result = '重复' AND published_date < '{$the_month_start_date}' AND published_date > '{$the_month_ended_date}', TRUE, NULL)) as delivered_count_for_repeated_by_other_day,
                     
-                    count(IF(delivered_result = '驳回', TRUE, NULL)) as delivered_count_for_rejected,
-                    count(IF(delivered_result = '驳回' AND published_date > '{$the_month_start_date}' AND published_date < '{$the_month_ended_date}', TRUE, NULL)) as delivered_count_for_rejected_by_same_day,
-                    count(IF(delivered_result = '驳回' AND published_date < '{$the_month_start_date}' AND published_date > '{$the_month_ended_date}', TRUE, NULL)) as delivered_count_for_rejected_by_other_day
+                    count(IF(delivered_result = '驳回', TRUE, NULL)) as delivered_count_for_rejected
                 "))
             ->get();
 
         $deliverer_of_month_for_all = $query_delivered_of_month[0]->delivered_count_for_all;
-        $deliverer_of_month_for_all_by_same_day = $query_delivered_of_month[0]->delivered_count_for_all_by_same_day;
-        $deliverer_of_month_for_all_by_other_day = $query_delivered_of_month[0]->delivered_count_for_all_by_other_day;
+//        $deliverer_of_month_for_all_by_same_day = $query_delivered_of_month[0]->delivered_count_for_all_by_same_day;
+//        $deliverer_of_month_for_all_by_other_day = $query_delivered_of_month[0]->delivered_count_for_all_by_other_day;
 
         $deliverer_of_month_for_completed = $query_delivered_of_month[0]->delivered_count_for_completed;
-        $deliverer_of_month_for_completed_by_same_day = $query_delivered_of_month[0]->delivered_count_for_completed_by_same_day;
-        $deliverer_of_month_for_completed_by_other_day = $query_delivered_of_month[0]->delivered_count_for_completed_by_other_day;
+//        $deliverer_of_month_for_completed_by_same_day = $query_delivered_of_month[0]->delivered_count_for_completed_by_same_day;
+//        $deliverer_of_month_for_completed_by_other_day = $query_delivered_of_month[0]->delivered_count_for_completed_by_other_day;
+
+        $deliverer_of_month_for_discount = $query_delivered_of_month[0]->delivered_count_for_discount;
+//        $deliverer_of_month_for_discount_by_same_day = $query_delivered_of_month[0]->delivered_count_for_discount_by_same_day;
+//        $deliverer_of_month_for_discount_by_other_day = $query_delivered_of_month[0]->delivered_count_for_discount_by_other_day;
 
         $deliverer_of_month_for_inside = $query_delivered_of_month[0]->delivered_count_for_inside;
-        $deliverer_of_month_for_inside_by_same_day = $query_delivered_of_month[0]->delivered_count_for_inside_by_same_day;
-        $deliverer_of_month_for_inside_by_other_day = $query_delivered_of_month[0]->delivered_count_for_inside_by_other_day;
+//        $deliverer_of_month_for_inside_by_same_day = $query_delivered_of_month[0]->delivered_count_for_inside_by_same_day;
+//        $deliverer_of_month_for_inside_by_other_day = $query_delivered_of_month[0]->delivered_count_for_inside_by_other_day;
+
+        $deliverer_of_month_for_suburb = $query_delivered_of_month[0]->delivered_count_for_suburb;
+//        $deliverer_of_month_for_suburb_by_same_day = $query_delivered_of_month[0]->delivered_count_for_suburb_by_same_day;
+//        $deliverer_of_month_for_suburb_by_other_day = $query_delivered_of_month[0]->delivered_count_for_suburb_by_other_day;
 
         $deliverer_of_month_for_tomorrow = $query_delivered_of_month[0]->delivered_count_for_tomorrow;
-        $deliverer_of_month_for_tomorrow_by_same_day = $query_delivered_of_month[0]->delivered_count_for_tomorrow_by_same_day;
-        $deliverer_of_month_for_tomorrow_by_other_day = $query_delivered_of_month[0]->delivered_count_for_tomorrow_by_other_day;
+//        $deliverer_of_month_for_tomorrow_by_same_day = $query_delivered_of_month[0]->delivered_count_for_tomorrow_by_same_day;
+//        $deliverer_of_month_for_tomorrow_by_other_day = $query_delivered_of_month[0]->delivered_count_for_tomorrow_by_other_day;
 
         $deliverer_of_month_for_repeated = $query_delivered_of_month[0]->delivered_count_for_repeated;
-        $deliverer_of_month_for_repeated_by_same_day = $query_delivered_of_month[0]->delivered_count_for_repeated_by_same_day;
-        $deliverer_of_month_for_repeated_by_other_day = $query_delivered_of_month[0]->delivered_count_for_repeated_by_other_day;
+//        $deliverer_of_month_for_repeated_by_same_day = $query_delivered_of_month[0]->delivered_count_for_repeated_by_same_day;
+//        $deliverer_of_month_for_repeated_by_other_day = $query_delivered_of_month[0]->delivered_count_for_repeated_by_other_day;
 
         $deliverer_of_month_for_rejected = $query_delivered_of_month[0]->delivered_count_for_rejected;
-        $deliverer_of_month_for_rejected_by_same_day = $query_delivered_of_month[0]->delivered_count_for_rejected_by_same_day;
-        $deliverer_of_month_for_rejected_by_other_day = $query_delivered_of_month[0]->delivered_count_for_rejected_by_other_day;
+//        $deliverer_of_month_for_rejected_by_same_day = $query_delivered_of_month[0]->delivered_count_for_rejected_by_same_day;
+//        $deliverer_of_month_for_rejected_by_other_day = $query_delivered_of_month[0]->delivered_count_for_rejected_by_other_day;
 
 
         $return_data['deliverer_of_month_for_all'] = $deliverer_of_month_for_all;
-        $return_data['deliverer_of_month_for_all_by_same_day'] = $deliverer_of_month_for_all_by_same_day;
-        $return_data['deliverer_of_month_for_all_by_other_day'] = $deliverer_of_month_for_all_by_other_day;
+//        $return_data['deliverer_of_month_for_all_by_same_day'] = $deliverer_of_month_for_all_by_same_day;
+//        $return_data['deliverer_of_month_for_all_by_other_day'] = $deliverer_of_month_for_all_by_other_day;
 
         $return_data['deliverer_of_month_for_completed'] = $deliverer_of_month_for_completed;
-        $return_data['deliverer_of_month_for_completed_by_same_day'] = $deliverer_of_month_for_completed_by_same_day;
-        $return_data['deliverer_of_month_for_completed_by_other_day'] = $deliverer_of_month_for_completed_by_other_day;
+//        $return_data['deliverer_of_month_for_completed_by_same_day'] = $deliverer_of_month_for_completed_by_same_day;
+//        $return_data['deliverer_of_month_for_completed_by_other_day'] = $deliverer_of_month_for_completed_by_other_day;
+
+        $return_data['deliverer_of_month_for_discount'] = $deliverer_of_month_for_discount;
+//        $return_data['deliverer_of_month_for_discount_by_same_day'] = $deliverer_of_month_for_discount_by_same_day;
+//        $return_data['deliverer_of_month_for_discount_by_other_day'] = $deliverer_of_month_for_discount_by_other_day;
+
+        $return_data['deliverer_of_month_for_suburb'] = $deliverer_of_month_for_suburb;
+//        $return_data['deliverer_of_month_for_suburb_by_same_day'] = $deliverer_of_month_for_suburb_by_same_day;
+//        $return_data['deliverer_of_month_for_suburb_by_other_day'] = $deliverer_of_month_for_suburb_by_other_day;
 
         $return_data['deliverer_of_month_for_inside'] = $deliverer_of_month_for_inside;
-        $return_data['deliverer_of_month_for_inside_by_same_day'] = $deliverer_of_month_for_inside_by_same_day;
-        $return_data['deliverer_of_month_for_inside_by_other_day'] = $deliverer_of_month_for_inside_by_other_day;
+//        $return_data['deliverer_of_month_for_inside_by_same_day'] = $deliverer_of_month_for_inside_by_same_day;
+//        $return_data['deliverer_of_month_for_inside_by_other_day'] = $deliverer_of_month_for_inside_by_other_day;
 
         $return_data['deliverer_of_month_for_tomorrow'] = $deliverer_of_month_for_tomorrow;
-        $return_data['deliverer_of_month_for_tomorrow_by_same_day'] = $deliverer_of_month_for_tomorrow_by_same_day;
-        $return_data['deliverer_of_month_for_tomorrow_by_other_day'] = $deliverer_of_month_for_tomorrow_by_other_day;
+//        $return_data['deliverer_of_month_for_tomorrow_by_same_day'] = $deliverer_of_month_for_tomorrow_by_same_day;
+//        $return_data['deliverer_of_month_for_tomorrow_by_other_day'] = $deliverer_of_month_for_tomorrow_by_other_day;
 
         $return_data['deliverer_of_month_for_repeated'] = $deliverer_of_month_for_repeated;
-        $return_data['deliverer_of_month_for_repeated_by_same_day'] = $deliverer_of_month_for_repeated_by_same_day;
-        $return_data['deliverer_of_month_for_repeated_by_other_day'] = $deliverer_of_month_for_repeated_by_other_day;
+//        $return_data['deliverer_of_month_for_repeated_by_same_day'] = $deliverer_of_month_for_repeated_by_same_day;
+//        $return_data['deliverer_of_month_for_repeated_by_other_day'] = $deliverer_of_month_for_repeated_by_other_day;
 
         $return_data['deliverer_of_month_for_rejected'] = $deliverer_of_month_for_rejected;
-        $return_data['deliverer_of_month_for_rejected_by_same_day'] = $deliverer_of_month_for_rejected_by_same_day;
-        $return_data['deliverer_of_month_for_rejected_by_other_day'] = $deliverer_of_month_for_rejected_by_other_day;
+//        $return_data['deliverer_of_month_for_rejected_by_same_day'] = $deliverer_of_month_for_rejected_by_same_day;
+//        $return_data['deliverer_of_month_for_rejected_by_other_day'] = $deliverer_of_month_for_rejected_by_other_day;
 
 
 

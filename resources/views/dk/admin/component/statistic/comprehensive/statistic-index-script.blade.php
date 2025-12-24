@@ -122,13 +122,21 @@
             $(".deliverer_of_all_for_completed_by_same_day").find('b').html($data.deliverer_of_all_for_completed_by_same_day);
             $(".deliverer_of_all_for_completed_by_other_day").find('b').html($data.deliverer_of_all_for_completed_by_other_day);
 
+            $(".deliverer_of_all_for_discount").find('b').html($data.deliverer_of_all_for_discount);
+            $(".deliverer_of_all_for_discount_by_same_day").find('b').html($data.deliverer_of_all_for_discount_by_same_day);
+            $(".deliverer_of_all_for_discount_by_other_day").find('b').html($data.deliverer_of_all_for_discount_by_other_day);
+
+            $(".deliverer_of_all_for_suburb").find('b').html($data.deliverer_of_all_for_suburb);
+            $(".deliverer_of_all_for_suburb_by_same_day").find('b').html($data.deliverer_of_all_for_suburb_by_same_day);
+            $(".deliverer_of_all_for_suburb_by_other_day").find('b').html($data.deliverer_of_all_for_suburb_by_other_day);
+
             $(".deliverer_of_all_for_inside").find('b').html($data.deliverer_of_all_for_inside);
             $(".deliverer_of_all_for_inside_by_same_day").find('b').html($data.deliverer_of_all_for_inside_by_same_day);
             $(".deliverer_of_all_for_inside_by_other_day").find('b').html($data.deliverer_of_all_for_inside_by_other_day);
 
             $(".deliverer_of_all_for_tomorrow").find('b').html($data.deliverer_of_all_for_tomorrow);
             $(".deliverer_of_all_for_repeated").find('b').html($data.deliverer_of_all_for_repeated);
-            $(".deliverer_of_tall_for_rejected").find('b').html($data.deliverer_of_all_for_rejected);
+            $(".deliverer_of_all_for_rejected").find('b').html($data.deliverer_of_all_for_rejected);
             // $(".deliverer_of_all_for_effective").find('b').html($data.deliverer_of_all_for_effective);
             // $(".deliverer_of_all_for_effective_rate").find('b').html($data.deliverer_of_all_for_effective_rate);
 
@@ -177,6 +185,14 @@
             $(".deliverer_of_today_for_completed").find('b').html($data.deliverer_of_today_for_completed);
             $(".deliverer_of_today_for_completed_by_same_day").find('b').html($data.deliverer_of_today_for_completed_by_same_day);
             $(".deliverer_of_today_for_completed_by_other_day").find('b').html($data.deliverer_of_today_for_completed_by_other_day);
+
+            $(".deliverer_of_today_for_discount").find('b').html($data.deliverer_of_today_for_discount);
+            $(".deliverer_of_today_for_discount_by_same_day").find('b').html($data.deliverer_of_today_for_discount_by_same_day);
+            $(".deliverer_of_today_for_discount_by_other_day").find('b').html($data.deliverer_of_today_for_discount_by_other_day);
+
+            $(".deliverer_of_today_for_suburb").find('b').html($data.deliverer_of_today_for_suburb);
+            $(".deliverer_of_today_for_suburb_by_same_day").find('b').html($data.deliverer_of_today_for_suburb_by_same_day);
+            $(".deliverer_of_today_for_suburb_by_other_day").find('b').html($data.deliverer_of_today_for_suburb_by_other_day);
 
             $(".deliverer_of_today_for_inside").find('b').html($data.deliverer_of_today_for_inside);
             $(".deliverer_of_today_for_inside_by_same_day").find('b').html($data.deliverer_of_today_for_inside_by_same_day);
@@ -233,6 +249,14 @@
             $(".deliverer_of_month_for_completed").find('b').html($data.deliverer_of_month_for_completed);
             $(".deliverer_of_month_for_completed_by_same_day").find('b').html($data.deliverer_of_month_for_completed_by_same_day);
             $(".deliverer_of_month_for_completed_by_other_day").find('b').html($data.deliverer_of_month_for_completed_by_other_day);
+
+            $(".deliverer_of_month_for_discount").find('b').html($data.deliverer_of_month_for_discount);
+            $(".deliverer_of_month_for_discount_by_same_day").find('b').html($data.deliverer_of_month_for_discount_by_same_day);
+            $(".deliverer_of_month_for_discount_by_other_day").find('b').html($data.deliverer_of_month_for_discount_by_other_day);
+
+            $(".deliverer_of_month_for_suburb").find('b').html($data.deliverer_of_month_for_suburb);
+            $(".deliverer_of_month_for_suburb_by_same_day").find('b').html($data.deliverer_of_month_for_suburb_by_same_day);
+            $(".deliverer_of_month_for_suburb_by_other_day").find('b').html($data.deliverer_of_month_for_suburb_by_other_day);
 
             $(".deliverer_of_month_for_inside").find('b').html($data.deliverer_of_month_for_inside);
             $(".deliverer_of_month_for_inside_by_same_day").find('b').html($data.deliverer_of_month_for_inside_by_same_day);
