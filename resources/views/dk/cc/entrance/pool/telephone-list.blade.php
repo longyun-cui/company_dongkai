@@ -773,6 +773,16 @@
                         }
                     },
                     {
+                        "title": "长秒数",
+                        "data": "id",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return '<input type="text" class="form-control second_num" placeholder="长秒数" value="">';
+                        }
+                    },
+                    {
                         "title": "操作",
                         "data": "id",
                         "width": "200px",
@@ -787,6 +797,7 @@
                             var $html_delete = '';
                             var $html_update = '';
                             var $html_down_all = '<a class="btn btn-xs item-down-all-submit" data-id="'+data+'">一键下载</a>';
+                            var $html_down_second = '<a class="btn btn-xs item-down-second-submit" data-id="'+data+'">长秒下载</a>';
 
                             if("{{ in_array($me->user_type,[0,1]) }}")
                             {
@@ -819,6 +830,7 @@
                                 $html_down+
                                 $html_detail+
                                 $html_down_all+
+                                $html_down_second+
                                 // $html_able+
                                 // $html_delete+
                                 // $html_record+

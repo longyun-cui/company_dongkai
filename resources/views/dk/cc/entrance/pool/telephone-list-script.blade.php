@@ -355,6 +355,83 @@
                 });
 
         });
+        $(".main-content").on('click', ".item-down-second-submit", function() {
+            var $that = $(this);
+            var $row = $that.parents('tr');
+
+            var $pool_id = $that.attr('data-id');
+            var $second = $row.find('.second_num').val();
+
+            // if($second_num < 10)
+
+
+            var $index = layer.load(1, {
+                shade: [0.3, '#fff'],
+                content: '<span class="loadtip">耐心等待中</span>',
+                success: function (layer) {
+                    layer.find('.layui-layer-content').css({
+                        'padding-top': '40px',
+                        'width': '100px',
+                    });
+                    layer.find('.loadtip').css({
+                        'font-size':'20px',
+                        'margin-left':'-18px'
+                    });
+                }
+            });
+
+            $.post(
+                "{{ url('/pool/telephone-download-of-second') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: "telephone-download-of-second",
+                    pool_id: $pool_id,
+                    second: $second
+                },
+                'json'
+            )
+                .done(function($response) {
+                    console.log('done');
+                    $response = JSON.parse($response);
+                    if(!$response.success)
+                    {
+                        if($response.msg) layer.msg($response.msg);
+                    }
+                    else
+                    {
+                        // layer.msg("请求成功，请稍后到任务列表下载！");
+                        console.log(JSON.parse($response.data));
+                        $.each(JSON.parse($response.data), function(index, value) {
+                            // console.log(value);
+                            // console.log(value.url);
+                            // console.log(value.path);
+                            // console.log(value.name);
+
+                            var $obj = new Object();
+                            $obj.path = value.path;
+
+                            var $url = url_build('/download/file-download',$obj);
+                            window.open($url);
+
+                        });
+                    }
+                })
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                    console.log('fail');
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                    layer.msg('服务器错误！');
+
+                })
+                .always(function(jqXHR, textStatus) {
+                    console.log('always');
+                    // console.log(jqXHR);
+                    // console.log(textStatus);
+                    layer.closeAll('loading');
+                });
+
+        });
 
 
 

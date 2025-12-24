@@ -188,6 +188,7 @@ Route::group(['middleware' => ['dk.cc.login','dk.cc.password_change']], function
     Route::post('/pool/telephone-download', $controller.'@operate_pool_telephone_download');
     Route::post('/pool/telephone-download-of-score', $controller.'@operate_pool_telephone_download_of_score');
     Route::post('/pool/telephone-download-of-all', $controller.'@operate_pool_telephone_download_of_all');
+    Route::post('/pool/telephone-download-of-second', $controller.'@operate_pool_telephone_download_of_second');
     Route::get('/pool/telephone-download-by-job-retry', $controller.'@operate_pool_telephone_download_by_job_retry');
     /*
      * 任务管理
