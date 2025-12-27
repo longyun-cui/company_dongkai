@@ -129,9 +129,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-2"><sup class="text-red">*</sup> API_对接账户</label>
+                            <label class="control-label col-md-2"><sup class="text-red">*</sup> API_对接密码</label>
                             <div class="col-md-8 ">
-                                <input type="text" class="form-control" name="api_customer_password" placeholder="API_对接账户" value="{{ $data->api_customer_password or '' }}">
+                                <input type="text" class="form-control" name="api_customer_password" placeholder="API_对接密码" value="{{ $data->api_customer_password or '' }}">
                             </div>
                         </div>
 

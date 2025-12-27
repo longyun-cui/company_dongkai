@@ -62,6 +62,7 @@ class DK_CC_Call_Record_Current extends Model
         'serverFrom_id',
         'serverFrom_name',
         'api_customer_account',
+        'api_customer_name',
         'team_id',
         'staffNo',
 

@@ -744,7 +744,7 @@
                         }
                     },
                     {
-                        "title": "API_对接账户",
+                        "title": "API_对接密码",
                         "data": "api_customer_password",
                         "className": "",
                         "width": "160px",

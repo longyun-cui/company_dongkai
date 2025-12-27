@@ -23292,6 +23292,8 @@ EOF;
         $call_data['call_date'] = $call_data['startTime'];
         $call_data['serverFrom_id'] = $serverFrom_id;
         $call_data['serverFrom_name'] = $serverFrom;
+        $call_data['api_customer_account'] = $post_data['customerAccount'];
+        $call_data['api_customer_name'] = $post_data['customerName'];
 
 //        // 判断是否重复
 //        $session = $call_data['session'];
