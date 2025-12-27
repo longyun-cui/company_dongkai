@@ -23376,7 +23376,7 @@ EOF;
 //            if(!$bool_cr) throw new Exception("DK_CC_Call_Record--insert--fail");
 
 
-            $call_data['call_record_id'] = $call->id;
+//            $call_data['call_record_id'] = $call->id;
             $call_current = new DK_CC_Call_Record_Current;
             $bool_crc = $call_current->fill($call_data)->save();
             if(!$bool_crc) throw new Exception("DK_CC_Call_Record_Current--insert--fail");
