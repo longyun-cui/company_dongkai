@@ -9285,7 +9285,7 @@ EOF;
         $this->get_me();
         $me = $this->me;
 
-        $query = DK_CC_Call_Record::select('*')
+        $query = DK_CC_Call_Record_Current::select('*')
 //            ->withTrashed()
             ->with([
                 'staff_or'=>function($query) {
