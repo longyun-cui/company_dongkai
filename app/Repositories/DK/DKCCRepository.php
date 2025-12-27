@@ -23012,7 +23012,7 @@ EOF;
     }
 
     // 【API】接收-话单
-    public function operate_api_OKCC_receiving_result_by_billing($post_data)
+    public function v1_operate_api_OKCC_receiving_result_by_billing($post_data)
     {
 
 //        $insert_data['api_customer_account'] = $post_data['customerAccount'];
@@ -23241,9 +23241,502 @@ EOF;
 
 
     }
+    public function v2_operate_api_OKCC_receiving_result_by_billing($post_data)
+    {
+
+//        $insert_data['api_customer_account'] = $post_data['customerAccount'];
+//        $insert_data['api_type'] = $post_data['notify']['type'];
+//        $insert_data['content'] = json_encode($post_data);
+//
+//        $mine = new DK_CC_API_Received_From_OKCC;
+//
+//        $bool_c = $mine->fill($insert_data)->save();
+
+
+        $serverFrom = $post_data['serverFrom'];
+
+        if($serverFrom == 'FNJ')
+        {
+            $serverFrom_id = 11;
+            $server_http = 'http://feiniji.cn';
+        }
+        else if($serverFrom == 'call-01')
+        {
+            $serverFrom_id = 1;
+            $server_http = 'http://call01.zlyx.jjccyun.cn';
+        }
+        else if($serverFrom == 'call-02')
+        {
+            $serverFrom_id = 2;
+            $server_http = 'http://call02.zlyx.jjccyun.cn';
+        }
+        else if($serverFrom == 'call-03')
+        {
+            $serverFrom_id = 3;
+            $server_http = 'http://call03.zlyx.jjccyun.cn';
+        }
+        else if($serverFrom == 'call-04')
+        {
+            $serverFrom_id = 4;
+            $server_http = 'http://call04.zlyx.jjccyun.cn';
+        }
+        else
+        {
+            $serverFrom_id = 0;
+            $server_http = 'http://feiniji.cn';
+        }
+
+
+        $notify = $post_data['notify'];
+        $call_data = $notify;
+        $call_data['call_date'] = $call_data['startTime'];
+        $call_data['serverFrom_id'] = $serverFrom_id;
+        $call_data['serverFrom_name'] = $serverFrom;
+
+        // 判断是否重复
+        $session = $call_data['session'];
+        $mine = DK_CC_Call_Record_Current::where(['session'=>$session,'serverFrom_id'=>$serverFrom_id])->orderby('id','desc')->first();
+        if($mine)
+        {
+            $return['result']['error'] = 0;
+            $return['result']['msg'] = '已存在！';
+            return json_encode($return);
+        }
+
+        // 是否存在工号
+        if(empty($call_data['staffNo']) || $call_data['staffNo'] == '')
+        {
+            $call_data['staffNo'] = -1;
+        }
+        else
+        {
+            // 判断通话类型
+            $service = $call_data['service'];
+//            if($service != 4)
+//            {
+//                $order_where['api_staffNo'] = $call_data['staffNo'];
+//                $order_where['client_phone'] = $call_data['callee'];
+//                $order = DK_Order::where($order_where)->orderby('id','desc')->first();
+//            }
+        }
+
+
+
+        // 计时计费
+        $timeLength = $notify['timeLength'];
+        $callCost = 0;
+        if($timeLength > 0)
+        {
+            $timeMinute = ceil($timeLength / 60);
+
+            $customerAccount = $post_data['customerAccount'];
+            $team = DK_Department::select('id','api_customer_account','pre_unit_price')->where('api_customer_account',$customerAccount)->first();
+            if($team)
+            {
+                $call_data['pre_unit_price'] = $team->pre_unit_price;
+                $callCost = $team->pre_unit_price * $timeMinute;
+                $call_data['call_cost'] = $callCost;
+            }
+            else
+            {
+                $return['result']['error'] = 1;
+                $return['result']['msg'] = '有误!';
+                return json_encode($return);
+            }
+        }
+        else
+        {
+            $return['result']['error'] = 0;
+            $return['result']['msg'] = '有误';
+            return json_encode($return);
+        }
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+
+            $insert_data['api_customer_account'] = $post_data['customerAccount'];
+            $insert_data['api_type'] = $post_data['notify']['type'];
+            $insert_data['content'] = json_encode($post_data);
+
+//            $mine = new DK_CC_API_Received_From_OKCC;
+//            $bool_c = $mine->fill($insert_data)->save();
+//            if(!$bool_c) throw new Exception("DK_CC_API_Received_From_OKCC--insert--fail");
+
+
+//            $unique['session'] = $call_data['session'];
+//            $call = DK_CC_Call_Record::firstOrCreate($unique,$call_data);
+//            dd($call);
+
+
+            $call = new DK_CC_Call_Record;
+            $bool_cr = $call->fill($call_data)->save();
+            if(!$bool_cr) throw new Exception("DK_CC_Call_Record--insert--fail");
+
+
+            $call_data['call_record_id'] = $call->id;
+            $call_current = new DK_CC_Call_Record_Current;
+            $bool_crc = $call_current->fill($call_data)->save();
+            if(!$bool_crc) throw new Exception("DK_CC_Call_Record_Current--insert--fail");
+
+
+            DB::commit();
+
+            $return['result']['error'] = 0;
+            $return['result']['msg'] = '';
+            return json_encode($return);
+
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+//            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+//            return response_fail([],$msg);
+
+            $return['result']['error'] = 1;
+            $return['result']['msg'] = $msg;
+            return json_encode($return);
+        }
+
+
+    }
 
     // 【API】接收-客户资料
-    public function operate_api_OKCC_receiving_result_by_clientMark($post_data)
+    public function v1_operate_api_OKCC_receiving_result_by_clientMark($post_data)
+    {
+
+        $serverFrom = $post_data['serverFrom'];
+
+        if($serverFrom == 'FNJ')
+        {
+            $serverFrom_id = 11;
+        }
+        else if($serverFrom == 'call-01')
+        {
+            $serverFrom_id = 1;
+        }
+        else if($serverFrom == 'call-02')
+        {
+            $serverFrom_id = 2;
+        }
+        else if($serverFrom == 'call-03')
+        {
+            $serverFrom_id = 3;
+        }
+        else if($serverFrom == 'call-04')
+        {
+            $serverFrom_id = 4;
+        }
+        else
+        {
+            $serverFrom_id = 0;
+            $server_http = 'http://feiniji.cn';
+        }
+
+        $insert_data['serverFrom_id'] = $serverFrom_id;
+        $insert_data['serverFrom_name'] = $serverFrom;
+        $insert_data['api_customer_account'] = $post_data['customerAccount'];
+        $insert_data['api_type'] = $post_data['notify']['type'];
+        $insert_data['staffNo'] = $post_data['notify']['data']['userName'];
+        $insert_data['telephone_number'] = $post_data['notify']['data']['number1'];
+        $insert_data['content'] = json_encode($post_data);
+
+        $mine = new DK_CC_API_Received_From_OKCC;
+
+        $bool_c = $mine->fill($insert_data)->save();
+
+
+
+        $notify = $post_data['notify'];
+        $clientMark_data = $post_data['notify']['data'];
+        $clientMark_field = $post_data['notify']['field'];
+//        dd($clientMark_field);
+
+        $api_staffNo = (int)$clientMark_data['userName'];
+        $phone_number = $clientMark_data['number1'];
+
+
+        $staff = DK_User::with(['department_district_er','department_group_er'])->where('api_staffNo',$api_staffNo)->first();
+        if(!$staff)
+        {
+            $return['result']['error'] = 1;
+            $return['result']['msg'] = '该坐席未绑定员工！';
+            return json_encode($return);
+        }
+
+
+        foreach($clientMark_field as $v)
+        {
+            $field_name = $v['name'];
+            $field_value = $v['value'];
+            if($field_name == "项目")
+            {
+                $project = DK_Project::where('name',$v['value'])->first();
+                if($project) $insert_data['project_id'] = $project->id;
+                else
+                {
+                    $return['result']['error'] = 1;
+                    $return['result']['msg'] = '项目错误！';
+                    return json_encode($return);
+                }
+            }
+            else if($field_name == "城市")
+            {
+                $insert_data['location_city'] = $field_value;
+            }
+            else if($field_name == "行政区")
+            {
+                $insert_data['location_district'] = $field_value;
+            }
+            else if($field_name == "患者类型")
+            {
+                if($field_value == "种植牙") $insert_data['client_type'] = 1;
+                else if($field_value == "矫正") $insert_data['client_type'] = 2;
+                else if($field_value == "正畸") $insert_data['client_type'] = 3;
+            }
+            else if($field_name == "牙齿数量" || $field_name == "牙齿颗数")
+            {
+                $insert_data['teeth_count'] = $field_value;
+            }
+            else if($field_name == "客户意向")
+            {
+//                if($field_value == "【到店】客户上门到店") $insert_data['client_intention'] = '到店';
+//                else if($field_value == "【A类】意向度强烈，好沟通，有互动交流，沟通自然舒服，沟通中没有拒绝过") $insert_data['client_intention'] = 'A类';
+//                else if($field_value == "【B类】意向度一般，有明确牙齿需求，整体通话自然，通话中拒绝1次") $insert_data['client_intention'] = 'B类';
+//                else if($field_value == "【C类】在意价格，沟通寡淡，年纪不大，去过多家医院对比，通过引导成单的") $insert_data['client_intention'] = 'C类';
+
+                if(strpos($field_value, "【到店】") !== false) $insert_data['client_intention'] = '到店';
+                else if(strpos($field_value, "【A类】") !== false) $insert_data['client_intention'] = 'A类';
+                else if(strpos($field_value, "【B类】") !== false) $insert_data['client_intention'] = 'B类';
+                else if(strpos($field_value, "【C类】") !== false) $insert_data['client_intention'] = 'C类';
+            }
+            else if($field_name == "是否加微信")
+            {
+                if($field_value == "否") $insert_data['is_wx'] = 0;
+                else if($field_value == "是") $insert_data['is_wx'] = 1;
+            }
+            else if($field_name == "微信号")
+            {
+                $insert_data['wx_id'] = $field_value;
+            }
+            else if($field_name == "通话小结")
+            {
+                $insert_data['description'] = $field_value;
+            }
+        }
+
+
+        $order_where['created_type'] = 99;
+        $order_where['api_staffNo'] = $api_staffNo;
+        $order_where['client_phone'] = $phone_number;
+        $order = DK_Order::select('*')->where($order_where)->orderby('id','desc')->first();
+        if($order)
+        {
+//            if($order->is_published == 0)
+            if($order->inspected_status == 0)
+            {
+                // 启动数据库事务
+                DB::beginTransaction();
+                try
+                {
+//                    DK_Order::select('*')->where($order_where)->orderby('id','desc')->first();
+                    $bool_o = $order->update($insert_data);
+                    if(!$bool_o) throw new Exception("DK_Order--update--fail");
+
+                    DB::commit();
+
+                    $return['result']['error'] = 0;
+                    $return['result']['msg'] = '更新完成！';
+                    return json_encode($return);
+
+                }
+                catch (Exception $e)
+                {
+                    DB::rollback();
+//                    $msg = '操作失败，请重试！';
+                    $msg = $e->getMessage();
+//                    return response_fail([],$msg);
+
+                    $return['result']['error'] = 1;
+                    $return['result']['msg'] = $msg;
+                    return json_encode($return);
+                }
+            }
+            else
+            {
+                $return['result']['error'] = 0;
+                $return['result']['msg'] = '该客户资料已发布，无法更新！';
+                return json_encode($return);
+            }
+        }
+        else {
+
+            $is_repeat = DK_Order::where(['project_id' => $insert_data['project_id'], 'client_phone' => $phone_number])
+                ->where('is_published', '>', 0)->count("*");
+            if ($is_repeat == 0) {
+                $is_repeat = DK_Pivot_Client_Delivery::where(['project_id' => $insert_data['project_id'], 'client_phone' => $phone_number])->count("*");
+            }
+
+            $staff = DK_User::with(['department_district_er', 'department_group_er'])->where('api_staffNo', $api_staffNo)->first();
+
+            $insert_data["created_type"] = 99;
+            $insert_data["item_category"] = 1;
+            $insert_data["active"] = 1;
+            $insert_data["is_published"] = 1;
+            $insert_data["published_at"] = time();
+            $insert_data["is_repeat"] = $is_repeat;
+            $insert_data["creator_id"] = $staff->id;
+            $insert_data["api_staffNo"] = $api_staffNo;
+            $insert_data["client_name"] = $clientMark_data['clientName'];
+            $insert_data["client_phone"] = $phone_number;
+
+            $insert_data['department_district_id'] = $staff->department_district_id;
+            $insert_data['department_group_id'] = $staff->department_group_id;
+            if ($staff->department_district_er) $insert_data['department_manager_id'] = $staff->department_district_er->leader_id;
+            if ($staff->department_group_er) $insert_data['department_supervisor_id'] = $staff->department_group_er->leader_id;
+
+
+            $call_where['serverFrom_name'] = $serverFrom;
+            $call_where['staffNo'] = $api_staffNo;
+            $call_where['callee'] = $phone_number;
+
+//            $call = DK_CC_Call_Record::select("*")->where($call_where)->orderby('id','desc')->first();
+//            if($call) {
+//                $insert_data["call_record_id"] = $call->id;
+//
+//                if (!empty($call->recordFile)) {
+//                    $insert_data["recording_address"] = $server_http . $call->recordFile;
+////                    $recordFile = $call->recordFile;
+////                    $suffix = ".mp3";
+////
+////                    if (substr($recordFile, - strlen($suffix)) === $suffix)
+////                    {
+////                        // 以.mp3结尾
+////                        $insert_data["recording_address"] = $server_http . '/' . $call->recordFile;
+////                    }
+////                    else
+////                    {
+////                        // 以.mp3结尾
+////                        $decoded = base64_decode($v->recordFile, true);
+////                        if($decoded !== false && json_encode($decoded) !== 'null')
+////                        {
+////                            if(strpos($decoded, '/data/voicerecord') === 0)
+////                            {
+////                                $insert_data["recording_address"] = $server_http . $decoded;
+////                            }
+////                        }
+////                    }
+//                }
+//            }
+
+
+            $call_list = DK_CC_Call_Record_Current::select("*")->where($call_where)->orderby('id', 'desc')->get();
+            if(count($call_list) > 0)
+            {
+
+                if($serverFrom == 'FNJ')
+                {
+                    $server_http = 'http://feiniji.cn';
+                }
+                else if($serverFrom == 'call-01')
+                {
+                    $server_http = 'http://call01.zlyx.jjccyun.cn';
+                }
+                else if($serverFrom == 'call-02')
+                {
+                    $server_http = 'http://call02.zlyx.jjccyun.cn';
+                }
+                else if($serverFrom == 'call-03')
+                {
+                    $server_http = 'http://call03.zlyx.jjccyun.cn';
+                }
+                else if($serverFrom == 'call-04')
+                {
+                    $server_http = 'http://call04.zlyx.jjccyun.cn';
+                }
+                else $server_http = 'http://feiniji.cn';
+
+
+                if(count($call_list) == 1)
+                {
+                    $insert_data["call_record_id"] = $call_list[0]->call_record_id;
+                    $insert_data["recording_address"] = $server_http . $call_list[0]->recordFile;
+                }
+
+                $recording_address_list = [];
+                foreach($call_list as $call)
+                {
+                    $call_address = $server_http . $call->recordFile;
+                    $recording_address_list[$call->call_record_id] = $call_address;
+                }
+//                $insert_data["recording_address"] = collect($recording_address_list)->toJson();
+                $insert_data["recording_address_list"] = json_encode($recording_address_list,JSON_UNESCAPED_SLASHES);
+            }
+
+
+            // 启动数据库事务
+            DB::beginTransaction();
+            try
+            {
+
+                $mine = new DK_Order;
+                $bool_o = $mine->fill($insert_data)->save();
+                if(!$bool_o) throw new Exception("DK_Order--insert--fail");
+                else
+                {
+                    $call_update['order_id'] = $mine->id;
+                    DK_CC_Call_Record::where($call_where)->update($call_update);
+                }
+
+
+                $call_statistic_id = $call->call_statistic_id;
+                if($call_statistic_id != 0)
+                {
+                    $statistic = DK_CC_Call_Statistic::lockForUpdate()->find($call_statistic_id);
+                    if($statistic) $statistic->increment('order_count_for_total');
+                }
+                else
+                {
+                    $call_date = date('Y-m-d',strtotime($call->startTime));
+                    $statistic_where['call_date'] = $call_date;
+                    $statistic_where['provinceName'] = $call->area;
+                    $statistic_where['cityName'] = $call->city;
+                    $statistic_where['trunkIndex'] = $call->trunkIndex;
+                    $statistic = DK_CC_Call_Statistic::lockForUpdate()->where($statistic_where)->first();
+                    if($statistic) $statistic->increment('order_count_for_total');
+                }
+
+                DB::commit();
+
+                $return['result']['error'] = 0;
+                $return['result']['msg'] = '';
+                return json_encode($return);
+
+            }
+            catch (Exception $e)
+            {
+                DB::rollback();
+//            $msg = '操作失败，请重试！';
+                $msg = $e->getMessage();
+//            exit($e->getMessage());
+//            return response_fail([],$msg);
+
+//                $return['result']['error'] = 1;
+//                $return['result']['msg'] = $msg;
+//                return json_encode($return);
+            }
+
+        }
+
+
+
+
+    }
+    public function v2_operate_api_OKCC_receiving_result_by_clientMark($post_data)
     {
 
         $serverFrom = $post_data['serverFrom'];

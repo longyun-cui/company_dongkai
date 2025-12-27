@@ -1714,12 +1714,14 @@ class DKCCController extends Controller
         $api_type = $post_data['notify']['type'];
         if($api_type == 'billing')
         {
-            return $this->repo->operate_api_OKCC_receiving_result_by_billing(request()->all());
+//            return $this->repo->v1_operate_api_OKCC_receiving_result_by_billing(request()->all());
+            // 2025-12-27
+            return $this->repo->v2_operate_api_OKCC_receiving_result_by_billing(request()->all());
         }
-        else if($api_type == 'clientMark')
-        {
-            return $this->repo->operate_api_OKCC_receiving_result_by_clientMark(request()->all());
-        }
+//        else if($api_type == 'clientMark')
+//        {
+//            return $this->repo->operate_api_OKCC_receiving_result_by_clientMark(request()->all());
+//        }
         else  return $this->repo->operate_api_OKCC_receiving_result(request()->all());
     }
 
