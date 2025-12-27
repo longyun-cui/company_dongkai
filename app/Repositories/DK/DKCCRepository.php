@@ -23322,34 +23322,34 @@ EOF;
 
 
 
-        // 计时计费
-        $timeLength = $notify['timeLength'];
-        $callCost = 0;
-        if($timeLength > 0)
-        {
-            $timeMinute = ceil($timeLength / 60);
-
-            $customerAccount = $post_data['customerAccount'];
-            $team = DK_Department::select('id','api_customer_account','pre_unit_price')->where('api_customer_account',$customerAccount)->first();
-            if($team)
-            {
-                $call_data['pre_unit_price'] = $team->pre_unit_price;
-                $callCost = $team->pre_unit_price * $timeMinute;
-                $call_data['call_cost'] = $callCost;
-            }
-            else
-            {
-                $return['result']['error'] = 1;
-                $return['result']['msg'] = '有误!';
-                return json_encode($return);
-            }
-        }
-        else
-        {
-            $return['result']['error'] = 0;
-            $return['result']['msg'] = '有误';
-            return json_encode($return);
-        }
+//        // 计时计费
+//        $timeLength = $notify['timeLength'];
+//        $callCost = 0;
+//        if($timeLength > 0)
+//        {
+//            $timeMinute = ceil($timeLength / 60);
+//
+//            $customerAccount = $post_data['customerAccount'];
+//            $team = DK_Department::select('id','api_customer_account','pre_unit_price')->where('api_customer_account',$customerAccount)->first();
+//            if($team)
+//            {
+//                $call_data['pre_unit_price'] = $team->pre_unit_price;
+//                $callCost = $team->pre_unit_price * $timeMinute;
+//                $call_data['call_cost'] = $callCost;
+//            }
+//            else
+//            {
+//                $return['result']['error'] = 1;
+//                $return['result']['msg'] = '有误!';
+//                return json_encode($return);
+//            }
+//        }
+//        else
+//        {
+//            $return['result']['error'] = 0;
+//            $return['result']['msg'] = '有误';
+//            return json_encode($return);
+//        }
 
 
         // 启动数据库事务
