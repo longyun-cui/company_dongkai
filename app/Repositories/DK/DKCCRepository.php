@@ -23293,32 +23293,32 @@ EOF;
         $call_data['serverFrom_id'] = $serverFrom_id;
         $call_data['serverFrom_name'] = $serverFrom;
 
-        // 判断是否重复
-        $session = $call_data['session'];
-        $mine = DK_CC_Call_Record_Current::where(['session'=>$session,'serverFrom_id'=>$serverFrom_id])->orderby('id','desc')->first();
-        if($mine)
-        {
-            $return['result']['error'] = 0;
-            $return['result']['msg'] = '已存在！';
-            return json_encode($return);
-        }
-
-        // 是否存在工号
-        if(empty($call_data['staffNo']) || $call_data['staffNo'] == '')
-        {
-            $call_data['staffNo'] = -1;
-        }
-        else
-        {
-            // 判断通话类型
-            $service = $call_data['service'];
-//            if($service != 4)
-//            {
-//                $order_where['api_staffNo'] = $call_data['staffNo'];
-//                $order_where['client_phone'] = $call_data['callee'];
-//                $order = DK_Order::where($order_where)->orderby('id','desc')->first();
-//            }
-        }
+//        // 判断是否重复
+//        $session = $call_data['session'];
+//        $mine = DK_CC_Call_Record_Current::where(['session'=>$session,'serverFrom_id'=>$serverFrom_id])->orderby('id','desc')->first();
+//        if($mine)
+//        {
+//            $return['result']['error'] = 0;
+//            $return['result']['msg'] = '已存在！';
+//            return json_encode($return);
+//        }
+//
+//        // 是否存在工号
+//        if(empty($call_data['staffNo']) || $call_data['staffNo'] == '')
+//        {
+//            $call_data['staffNo'] = -1;
+//        }
+//        else
+//        {
+//            // 判断通话类型
+//            $service = $call_data['service'];
+////            if($service != 4)
+////            {
+////                $order_where['api_staffNo'] = $call_data['staffNo'];
+////                $order_where['client_phone'] = $call_data['callee'];
+////                $order = DK_Order::where($order_where)->orderby('id','desc')->first();
+////            }
+//        }
 
 
 
@@ -23371,9 +23371,9 @@ EOF;
 //            dd($call);
 
 
-            $call = new DK_CC_Call_Record;
-            $bool_cr = $call->fill($call_data)->save();
-            if(!$bool_cr) throw new Exception("DK_CC_Call_Record--insert--fail");
+//            $call = new DK_CC_Call_Record;
+//            $bool_cr = $call->fill($call_data)->save();
+//            if(!$bool_cr) throw new Exception("DK_CC_Call_Record--insert--fail");
 
 
             $call_data['call_record_id'] = $call->id;
