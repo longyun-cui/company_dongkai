@@ -1,5 +1,6 @@
 <?php
 namespace App\Repositories\DK;
+
 use App\Models\DK\DK_Company;
 use App\Models\DK\DK_Department;
 use App\Models\DK\DK_District;
@@ -28,6 +29,7 @@ use App\Models\DK\YH_Attachment;
 use App\Models\DK\YH_Item;
 
 use App\Models\DK_CC\DK_CC_Call_Record;
+use App\Models\DK_CC\DK_CC_Call_Record_Current;
 use App\Models\DK_CC\DK_CC_Call_Statistic;
 
 use App\Models\DK_VOS\DK_VOS_CDR;
@@ -14183,7 +14185,7 @@ class DKAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        if(!in_array($me->user_type,[0,1,9,11,61])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,9,11,61,66])) return response_error([],"你没有操作权限！");
 
         $query = DK_Statistic_Project_daily::select('*')
             ->with([
@@ -14237,7 +14239,7 @@ class DKAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        if(!in_array($me->user_type,[0,1,9,11,61])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,9,11,61,66])) return response_error([],"你没有操作权限！");
 
         $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date'] : date('Y-m-d');
 
@@ -14453,7 +14455,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         // 判断用户操作权限
-        if(!in_array($me->user_type,[0,1,9,11,61])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,9,11,61,66])) return response_error([],"你没有操作权限！");
 
         $operate_type = $post_data["operate-type"];
 
@@ -14576,7 +14578,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         // 权限
-        if(!in_array($me->user_type,[0,1,9,11,19,61])) return response_error([],"用户类型错误！");
+        if(!in_array($me->user_type,[0,1,9,11,61,66])) return response_error([],"你没有操作权限！");
 //        if(me->user_type ==88 && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
         $time = time();
@@ -14653,7 +14655,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         // 权限
-        if(!in_array($me->user_type,[0,1,9,11,19,61])) return response_error([],"用户类型错误！");
+        if(!in_array($me->user_type,[0,1,9,11,61,66])) return response_error([],"你没有操作权限！");
 //        if(me->user_type ==88 && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
         $time = time();
@@ -14991,7 +14993,7 @@ class DKAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        if(!in_array($me->user_type,[0,1,9,11,61])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,9,11,61,66])) return response_error([],"你没有操作权限！");
 
         $query = DK_Statistic_Client_daily::select('*')
             ->with([
@@ -15089,6 +15091,8 @@ class DKAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
+
+        if(!in_array($me->user_type,[0,1,9,11,61,66])) return response_error([],"你没有操作权限！");
 
         $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date'] : date('Y-m-d');
 
@@ -15324,7 +15328,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         // 判断用户操作权限
-        if(!in_array($me->user_type,[0,1,9,11,61])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,9,11,61,66])) return response_error([],"你没有操作权限！");
 
         $operate_type = $post_data["operate-type"];
 
@@ -15447,7 +15451,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         // 权限
-        if(!in_array($me->user_type,[0,1,9,11,19,61])) return response_error([],"用户类型错误！");
+        if(!in_array($me->user_type,[0,1,9,11,61,66])) return response_error([],"你没有操作权限！");
 //        if(me->user_type ==88 && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
         $time = time();
@@ -15524,7 +15528,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         // 权限
-        if(!in_array($me->user_type,[0,1,9,11,19,61])) return response_error([],"用户类型错误！");
+        if(!in_array($me->user_type,[0,1,9,11,61,66])) return response_error([],"你没有操作权限！");
 //        if(me->user_type ==88 && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
         $time = time();
@@ -15869,6 +15873,122 @@ class DKAdminRepository {
 //        dd($list->toArray());
 
         $list[] = $total_data;
+
+        return datatable_response($list, $draw, $total);
+    }
+
+
+
+
+    // 【统计列表】【客户】返回-列表-数据
+    public function v1_operate_for_statistic_call_task_analysis_datatable_list_query($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        if(!in_array($me->user_type,[0,1,9,11,61])) return response_error([],"你没有操作权限！");
+
+
+        $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date'] : date('Y-m-d');
+
+        $query = DK_CC_Call_Record_Current::select('taskId','taskName','call_date')
+//            ->addSelectRaw("
+//                count(*) as call_count,
+//                sum(ceil(timeLength / 60)) as call_time_sum,
+//                COUNT(DISTINCT orders.id) as order_count
+//            ")
+            ->addSelect(DB::raw("
+                count(*) as call_count,
+                sum(ceil(timeLength / 60)) as call_time_sum,
+                COUNT(DISTINCT orders.id) as order_count
+            "))
+            ->leftJoin('dk_admin_order as orders', function($join) use ($assign_date) {
+                $join->on('dk_cc_call_record_of_current.callee', '=', 'orders.client_phone')
+                    ->where('orders.published_date', '=', 'dk_cc_call_record_of_current.call_date')
+                    ->whereIn('orders.inspected_result', ['通过', '折扣通过', '内部通过', '不合格']);;
+            })
+            ->whereDate('call_date', $assign_date)
+            ->groupBy('taskID');
+
+//        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
+//        if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
+//        if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
+//        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 10;
+//        if($limit > 100) $limit = 100;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("taskID", "asc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+
+
+//        $total_data = [];
+//        $total_data['id'] = '统计';
+//        $total_data['client_id'] = '统计';
+//        $total_data['statistic_date'] = '统计';
+//        $total_data['statistic_day_num'] = '统计';
+//        $total_data['production_published_num'] = 0;
+//        $total_data['production_inspected_num'] = 0;
+//        $total_data['production_accepted_num'] = 0;
+//        $total_data['production_accepted_discount_num'] = 0;
+//        $total_data['production_accepted_suburb_num'] = 0;
+//        $total_data['production_accepted_inside_num'] = 0;
+//        $total_data['production_repeated_num'] = 0;
+//        $total_data['production_refused_num'] = 0;
+//        $total_data['marketing_delivered_num'] = 0;
+//        $total_data['marketing_delivered_discount_num'] = 0;
+//        $total_data['marketing_delivered_suburb_num'] = 0;
+//        $total_data['marketing_delivered_inside_num'] = 0;
+//        $total_data['marketing_today_num'] = 0;
+//        $total_data['marketing_yesterday_num'] = 0;
+//        $total_data['marketing_tomorrow_num'] = 0;
+//        $total_data['marketing_distribute_num'] = 0;
+//        $total_data['marketing_special_num'] = 0;
+//        $total_data['description'] = '--';
+//        $total_data['is_confirmed'] = '--';
+
+//        foreach ($list as $k => $v)
+//        {
+//            $list[$k]->encode_id = encode($v->id);
+//            $list[$k]->content_decode = json_decode($v->content);
+//            $total_data['production_published_num'] += $v->production_published_num;
+//            $total_data['production_inspected_num'] += $v->production_inspected_num;
+//            $total_data['production_accepted_num'] += $v->production_accepted_num;
+//            $total_data['production_accepted_discount_num'] += $v->production_accepted_discount_num;
+//            $total_data['production_accepted_suburb_num'] += $v->production_accepted_suburb_num;
+//            $total_data['production_accepted_inside_num'] += $v->production_accepted_inside_num;
+//            $total_data['production_repeated_num'] += $v->production_repeated_num;
+//            $total_data['production_refused_num'] += $v->production_refused_num;
+//            $total_data['marketing_delivered_num'] += $v->marketing_delivered_num;
+//            $total_data['marketing_delivered_discount_num'] += $v->marketing_delivered_discount_num;
+//            $total_data['marketing_delivered_suburb_num'] += $v->marketing_delivered_suburb_num;
+//            $total_data['marketing_delivered_inside_num'] += $v->marketing_delivered_inside_num;
+//            $total_data['marketing_today_num'] += $v->marketing_today_num;
+//            $total_data['marketing_yesterday_num'] += $v->marketing_yesterday_num;
+//            $total_data['marketing_tomorrow_num'] += $v->marketing_tomorrow_num;
+//            $total_data['marketing_distribute_num'] += $v->marketing_distribute_num;
+//            $total_data['marketing_special_num'] += $v->marketing_special_num;
+//        }
+//        dd($list->toArray());
+
+//        $list[] = $total_data;
 
         return datatable_response($list, $draw, $total);
     }

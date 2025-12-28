@@ -138,6 +138,9 @@
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-client-show')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-client-detail')
 
+
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic-call.statistic-task-analysis')
+
 </div>
 @endsection
 
@@ -250,6 +253,9 @@
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-client-daily-script')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-client-show-datatable')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic-list.statistic-client-detail-datatable')
+
+
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic-call.statistic-task-analysis-datatable')
 
 
 

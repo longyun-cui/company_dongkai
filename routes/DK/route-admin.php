@@ -244,6 +244,13 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
 
 
 
+
+    // 【通话分析】任务分析
+    Route::post('/v1/operate/statistic-call/statistic-task-analysis/datatable-list-query', $controller.'@v1_operate_for_statistic_call_task_analysis_datatable_list_query');
+
+
+
+
 });
 
 Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], function () {

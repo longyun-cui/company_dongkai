@@ -270,6 +270,7 @@ Route::group(['middleware' => ['dk.cc.login','dk.cc.password_change']], function
      */
     // 列表
     Route::match(['get','post'], '/service/call-record-list', $controller.'@view_service_call_record_list');
+//    Route::match(['get','post'], '/service/call-statistic-analysis', $controller.'@view_service_call_statistic_analysis');
     Route::match(['get','post'], '/service/call-statistic-list', $controller.'@view_service_call_statistic_list');
 
 

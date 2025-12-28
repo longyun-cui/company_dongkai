@@ -1020,6 +1020,14 @@ class DKAdminController extends Controller
 
 
 
+    // 【统计】【客户】统计日报列表
+    public function v1_operate_for_statistic_call_task_analysis_datatable_list_query()
+    {
+        return $this->repo->v1_operate_for_statistic_call_task_analysis_datatable_list_query(request()->all());
+    }
+
+
+
 
 
 

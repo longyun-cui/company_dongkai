@@ -525,6 +525,10 @@
                 {
                     Table_Datatable_Statistic_List_Client_Show('#'+$config.id);
                 }
+                else if($id == "datatable-statistic-call-task-analysis")
+                {
+                    Table_Datatable_Statistic_Call_Task_Analysis('#'+$config.id);
+                }
                 else if($id == "datatable-call-record-list")
                 {
                     Datatable_Call_Record_List('#'+$config.id);

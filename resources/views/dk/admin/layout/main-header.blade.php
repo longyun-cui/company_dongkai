@@ -632,6 +632,26 @@
                         <li class="divider"></li>
 
 
+                        <li>
+                            <a href="javascript:void(0);" class="tab-control datatable-control"
+                               data-type="create"
+                               data-unique="y"
+                               data-id="statistic-call-task-analysis"
+                               data-title='<i class="fa fa-pie-chart text-red"></i> 任务分析'
+                               data-content=''
+
+                               data-datatable-type="create"
+                               data-datatable-unique="y"
+                               data-datatable-id="datatable-statistic-call-task-analysis"
+                               data-datatable-target="statistic-call-task-analysis"
+                               data-datatable-clone-object="statistic-call-task-analysis-clone"
+                            >
+                                <i class="fa fa-pie-chart text-red"></i> <span>任务分析</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+
+
                     </ul>
                 </li>
                 @endif
