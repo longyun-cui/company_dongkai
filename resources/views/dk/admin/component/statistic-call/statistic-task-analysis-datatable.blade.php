@@ -10,7 +10,7 @@
             // "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
             "aLengthMenu": [[-1], ["全部"]],
             "processing": true,
-            "serverSide": true,
+            "serverSide": false,
             "searching": false,
             "pagingType": "simple_numbers",
             "sDom": '<t>',
