@@ -15903,14 +15903,15 @@ class DKAdminRepository {
             ->addSelect(DB::raw("
                 count(*) as call_count,
                 sum(ceil(timeLength / 60)) as call_time_sum,
-                COUNT(DISTINCT orders.id) as order_count
+                COUNT(DISTINCT o.id) as order_count
             "))
-            ->leftJoin('dk_admin_order as orders', function($join) use ($assign_date) {
-                $join->on('dk_cc_call_record_of_current.callee', '=', 'orders.client_phone')
-                    ->where('orders.published_date', '=', 'dk_cc_call_record_of_current.call_date')
-                    ->whereIn('orders.inspected_result', ['通过', '折扣通过', '内部通过', '不合格']);;
+            ->leftJoin('dk_admin_order as o', function($join) use ($assign_date) {
+                $join->on('dk_cc_call_record_of_current.callee', '=', 'o.client_phone')
+                    ->whereRaw('DATE(o.published_date) = DATE(dk_cc_call_record_of_current.call_date)')
+//                    ->whereDate('o.published_date', '=', DB::raw('DATE(dk_cc_call_record_of_current.call_date)'))
+                    ->whereIn('o.inspected_result', ['通过', '折扣通过', '内部通过', '不合格']);
             })
-            ->whereDate('call_date', $assign_date)
+            ->where('call_date', $assign_date)
             ->groupBy('taskID');
 
 //        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
@@ -15936,7 +15937,7 @@ class DKAdminRepository {
             $field = $columns[$order_column]["data"];
             $query->orderBy($field, $order_dir);
         }
-        else $query->orderBy("taskID", "asc");
+        else $query->orderBy("taskName", "asc");
 
         if($limit == -1) $list = $query->get();
         else $list = $query->skip($skip)->take($limit)->get();
