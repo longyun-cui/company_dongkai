@@ -6070,6 +6070,7 @@ class DKAdminRepository {
         {
             $is_repeat = DK_Pivot_Client_Delivery::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])->count("*");
         }
+        if($is_repeat > 0) $is_repeat += 1;
 
         // 启动数据库事务
         DB::beginTransaction();
@@ -8637,6 +8638,7 @@ class DKAdminRepository {
                 {
                     $is_repeat = DK_Pivot_Client_Delivery::where(['project_id'=>$project_id,'client_phone'=>(int)$column_value])->count("*");
                 }
+                if($is_repeat > 0) $is_repeat += 1;
                 $item->is_repeat = $is_repeat;
             }
             else if($column_key == "project_id")
@@ -8658,6 +8660,7 @@ class DKAdminRepository {
                     {
                         $is_repeat = DK_Pivot_Client_Delivery::where(['project_id'=>$column_value,'client_phone'=>(int)$client_phone])->count("*");
                     }
+                    if($is_repeat > 0) $is_repeat += 1;
                     $item->is_repeat = $is_repeat;
 
                     $return['text'] = $project->name;
