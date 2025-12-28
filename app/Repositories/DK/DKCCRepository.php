@@ -23360,6 +23360,7 @@ EOF;
         {
 
             $insert_data['api_customer_account'] = $post_data['customerAccount'];
+            $insert_data['api_customer_name'] = $post_data['customerName'];
             $insert_data['api_type'] = $post_data['notify']['type'];
             $insert_data['content'] = json_encode($post_data);
 
