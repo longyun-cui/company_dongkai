@@ -165,7 +165,8 @@
                 },
                 {
                     "title": "成单率",
-                    "data": "order_count",
+                    "data": null,
+                    "type": "num",
                     "className": "bg-published",
                     "width": "80px",
                     "orderable": true,
@@ -177,8 +178,29 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return parseFloat(data / row.call_count * 1000).toFixed(1) + " ‰";
+                        if(!row.order_count) return '--';
+
+                        // return parseFloat(row.order_count / row.call_count * 1000).toFixed(1) + "‰";
+                        // return parseFloat(row.order_count / row.call_count).toFixed(4);
+
+                        // 计算成单率（千分比）
+                        var $rate = parseFloat(row.order_count / row.call_count * 1000);
+
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            return $rate.toFixed(1) + " ‰";
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return $rate;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return $rate;
+                        }
                     }
                 },
                 // {
