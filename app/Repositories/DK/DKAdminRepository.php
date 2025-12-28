@@ -20711,6 +20711,10 @@ class DKAdminRepository {
         // 工单
         $query = DK_Order::select('dk_pivot_client_delivery.client_phone')
             ->join('dk_pivot_client_delivery', 'dk_admin_order.id', '=', 'dk_pivot_client_delivery.order_id')
+//            ->where(function($q) {
+//                $q->where('dk_admin_order.inspected_result', '不合格')
+//                    ->orWhereNotNull('dk_pivot_client_delivery.order_id'); // 保留原有连接条件
+//            })
 //            ->where('dk_admin_order.item_category',1)
             ->when(($time_type == "date"), function ($query) use ($when_data) {
                 return $query->where('dk_pivot_client_delivery.delivered_date',$when_data['date']);
@@ -20723,6 +20727,9 @@ class DKAdminRepository {
                     ->where('dk_pivot_client_delivery.delivered_date', '<=',$when_data['the_ended']);
             });
 
+
+        $query2 = DK_Order::select('client_phone')->where('inspected_result', '不合格');
+
         if($project_id)
         {
             $query->where('dk_pivot_client_delivery.project_id',$project_id);
@@ -20730,11 +20737,18 @@ class DKAdminRepository {
 //                $query->where('dk_admin_order.project_id',$project_id)
 //                    ->orWhere('dk_pivot_client_delivery.project_id',$project_id);
 //            });
+            $query2->where('project_id',$project_id);
         }
-        if($client_id) $query->where('dk_pivot_client_delivery.client_id',$client_id);
+        if($client_id)
+        {
+            $query->where('dk_pivot_client_delivery.client_id',$client_id);
+            $query2->where('client_id',$client_id);
+        }
 
         $data = $query->orderBy('dk_pivot_client_delivery.id','desc')->get();
+        $data2 = $query2->orderBy('id','desc')->get();
 
+        $data = $data->merge($data2)->unique('client_phone');
 
         $upload_path = <<<EOF
 resource/dk/admin/telephone/$date/
