@@ -231,7 +231,8 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(!row.order_count) return '--';
+                        // if(!row.order_count) return '--';
+                        // return data;
 
                         // return parseFloat(row.order_count / row.call_count * 1000).toFixed(1) + "‰";
                         // return parseFloat(row.order_count / row.call_count).toFixed(4);
@@ -242,7 +243,8 @@
                         if (type === 'display')
                         {
                             // 显示时返回格式化字符串
-                            return $rate.toFixed(1) + " ‰";
+                            if(!row.order_count) return '--';
+                            else return $rate.toFixed(1) + " ‰";
                         }
                         else if (type === 'sort')
                         {
