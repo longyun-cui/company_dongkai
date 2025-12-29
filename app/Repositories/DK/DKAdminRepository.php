@@ -15914,6 +15914,7 @@ class DKAdminRepository {
             ->where('call_date', $assign_date)
             ->groupBy('taskID');
 
+        if(!empty($post_data['keyword'])) $query->where('taskName', 'like', "%{$post_data['keyword']}%");
 //        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
 //        if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
 //        if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");

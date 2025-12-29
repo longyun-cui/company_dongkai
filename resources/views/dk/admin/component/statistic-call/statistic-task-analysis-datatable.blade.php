@@ -26,11 +26,12 @@
                 "dataType" : 'json',
                 "data": function (d) {
                     d._token = $('meta[name="_token"]').attr('content');
-                    d.id = $tableSearch.find('input[name="rank-id"]').val();
-                    d.name = $tableSearch.find('input[name="rank-name"]').val();
-                    d.title = $tableSearch.find('input[name="rank-title"]').val();
-                    d.keyword = $tableSearch.find('input[name="rank-keyword"]').val();
-                    d.status = $tableSearch.find('select[name="rank-status"]').val();
+                    d.id = $tableSearch.find('input[name="statistic-call-task-analysis-id"]').val();
+                    d.name = $tableSearch.find('input[name="statistic-call-task-analysis-name"]').val();
+                    d.title = $tableSearch.find('input[name="statistic-call-task-analysis-title"]').val();
+                    d.keyword = $tableSearch.find('input[name="statistic-call-task-analysis-keyword"]').val();
+                    d.status = $tableSearch.find('select[name="statistic-call-task-analysis-status"]').val();
+                    d.result = $tableSearch.find('select[name="statistic-call-task-analysis-result"]').val();
                     d.time_type = $tableSearch.find('input[name="statistic-call-task-analysis-time-type"]').val();
                     d.assign_month = $tableSearch.find('input[name="statistic-call-task-analysis-month"]').val();
                     d.assign_date = $tableSearch.find('input[name="statistic-call-task-analysis-date"]').val();

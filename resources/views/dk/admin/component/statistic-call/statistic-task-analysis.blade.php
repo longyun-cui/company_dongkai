@@ -18,6 +18,8 @@
 
             <input type="hidden" name="statistic-call-task-analysis-time-type" class="time-type" value="" readonly>
 
+            <input type="text" class="search-filter form-filter filter-keyup" name="statistic-call-task-analysis-keyword" placeholder="关键字" />
+
             {{--按天查看--}}
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre date-pre" data-target="statistic-call-task-analysis-date">
                 <i class="fa fa-chevron-left"></i>
