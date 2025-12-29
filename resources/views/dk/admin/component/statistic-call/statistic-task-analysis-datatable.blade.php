@@ -17,7 +17,8 @@
             "order": [],
             "orderCellsTop": true,
             "scrollX": true,
-            "scrollY": ($(document).height() - 400)+"px",
+            // "scrollY": true,
+            // "scrollY": ($(document).height() - 400)+"px",
             "scrollCollapse": true,
             "ajax": {
                 'url': "{{ url('/v1/operate/statistic-call/statistic-task-analysis/datatable-list-query') }}",
