@@ -87,7 +87,7 @@
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.taskId == "统计")
                         {
-                            $(nTd).addClass('_bold');
+                            $(nTd).addClass('text-red').addClass('_bold');
                         }
                     },
                     render: function(data, type, row, meta) {
@@ -104,7 +104,7 @@
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.taskId == "统计")
                         {
-                            $(nTd).addClass('_bold');
+                            $(nTd).addClass('text-red').addClass('_bold');
                         }
                     },
                     render: function(data, type, row, meta) {
@@ -122,12 +122,28 @@
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.taskId == "统计")
                         {
-                            $(nTd).addClass('_bold');
+                            $(nTd).addClass('text-red').addClass('_bold');
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
@@ -141,12 +157,28 @@
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.taskId == "统计")
                         {
-                            $(nTd).addClass('_bold');
+                            $(nTd).addClass('text-red').addClass('_bold');
                         }
                     },
                     render: function(data, type, row, meta) {
                         // if(!data) return '--';
-                        return data;
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
@@ -160,12 +192,28 @@
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.taskId == "统计")
                         {
-                            $(nTd).addClass('_bold');
+                            $(nTd).addClass('text-red').addClass('_bold');
                         }
                     },
                     render: function(data, type, row, meta) {
                         // if(!data) return '--';
-                        return data;
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
@@ -179,7 +227,7 @@
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.taskId == "统计")
                         {
-                            $(nTd).addClass('_bold');
+                            $(nTd).addClass('text-red').addClass('_bold');
                         }
                     },
                     render: function(data, type, row, meta) {
