@@ -112,6 +112,7 @@
                 {
                     "title": "通话数",
                     "data": "call_count",
+                    "type": "num",
                     "className": "bg-published",
                     "width": "80px",
                     "orderable": true,
@@ -130,6 +131,7 @@
                 {
                     "title": "通话时长",
                     "data": "call_time_sum",
+                    "type": "num",
                     "className": "bg-published",
                     "width": "80px",
                     "orderable": true,
@@ -148,6 +150,7 @@
                 {
                     "title": "成单数",
                     "data": "order_count",
+                    "type": "num",
                     "className": "bg-published",
                     "width": "80px",
                     "orderable": true,
