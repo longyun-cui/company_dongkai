@@ -4,7 +4,7 @@
     <div class="col-md-12 datatable-search-row datatable-search-box search-wrapper">
 
 
-        <div class=" pull-left">
+        <div class=" pull-left _none">
 
             <button type="button" onclick="" class="btn btn-filter btn-success- statistic-call-task-analysis-create">
                 <i class="fa fa-plus"></i> 生成日报
