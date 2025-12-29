@@ -15943,56 +15943,23 @@ class DKAdminRepository {
         else $list = $query->skip($skip)->take($limit)->get();
 
 
-//        $total_data = [];
-//        $total_data['id'] = '统计';
-//        $total_data['client_id'] = '统计';
-//        $total_data['statistic_date'] = '统计';
-//        $total_data['statistic_day_num'] = '统计';
-//        $total_data['production_published_num'] = 0;
-//        $total_data['production_inspected_num'] = 0;
-//        $total_data['production_accepted_num'] = 0;
-//        $total_data['production_accepted_discount_num'] = 0;
-//        $total_data['production_accepted_suburb_num'] = 0;
-//        $total_data['production_accepted_inside_num'] = 0;
-//        $total_data['production_repeated_num'] = 0;
-//        $total_data['production_refused_num'] = 0;
-//        $total_data['marketing_delivered_num'] = 0;
-//        $total_data['marketing_delivered_discount_num'] = 0;
-//        $total_data['marketing_delivered_suburb_num'] = 0;
-//        $total_data['marketing_delivered_inside_num'] = 0;
-//        $total_data['marketing_today_num'] = 0;
-//        $total_data['marketing_yesterday_num'] = 0;
-//        $total_data['marketing_tomorrow_num'] = 0;
-//        $total_data['marketing_distribute_num'] = 0;
-//        $total_data['marketing_special_num'] = 0;
-//        $total_data['description'] = '--';
-//        $total_data['is_confirmed'] = '--';
+        $total_data = [];
+        $total_data['taskId'] = '统计';
+        $total_data['taskName'] = '统计';
+        $total_data['call_date'] = $assign_date;
+        $total_data['call_count'] = 0;
+        $total_data['call_time_sum'] = 0;
+        $total_data['order_count'] = 0;
 
-//        foreach ($list as $k => $v)
-//        {
-//            $list[$k]->encode_id = encode($v->id);
-//            $list[$k]->content_decode = json_decode($v->content);
-//            $total_data['production_published_num'] += $v->production_published_num;
-//            $total_data['production_inspected_num'] += $v->production_inspected_num;
-//            $total_data['production_accepted_num'] += $v->production_accepted_num;
-//            $total_data['production_accepted_discount_num'] += $v->production_accepted_discount_num;
-//            $total_data['production_accepted_suburb_num'] += $v->production_accepted_suburb_num;
-//            $total_data['production_accepted_inside_num'] += $v->production_accepted_inside_num;
-//            $total_data['production_repeated_num'] += $v->production_repeated_num;
-//            $total_data['production_refused_num'] += $v->production_refused_num;
-//            $total_data['marketing_delivered_num'] += $v->marketing_delivered_num;
-//            $total_data['marketing_delivered_discount_num'] += $v->marketing_delivered_discount_num;
-//            $total_data['marketing_delivered_suburb_num'] += $v->marketing_delivered_suburb_num;
-//            $total_data['marketing_delivered_inside_num'] += $v->marketing_delivered_inside_num;
-//            $total_data['marketing_today_num'] += $v->marketing_today_num;
-//            $total_data['marketing_yesterday_num'] += $v->marketing_yesterday_num;
-//            $total_data['marketing_tomorrow_num'] += $v->marketing_tomorrow_num;
-//            $total_data['marketing_distribute_num'] += $v->marketing_distribute_num;
-//            $total_data['marketing_special_num'] += $v->marketing_special_num;
-//        }
+        foreach ($list as $k => $v)
+        {
+            $total_data['call_count'] += $v->call_count;
+            $total_data['call_time_sum'] += $v->call_time_sum;
+            $total_data['order_count'] += $v->order_count;
+        }
 //        dd($list->toArray());
 
-//        $list[] = $total_data;
+        $list[] = $total_data;
 
         return datatable_response($list, $draw, $total);
     }
