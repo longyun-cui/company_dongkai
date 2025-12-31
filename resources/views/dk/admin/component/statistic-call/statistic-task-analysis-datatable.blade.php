@@ -9,7 +9,12 @@
 
             // "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
             "aLengthMenu": [[-1], ["全部"]],
-            "processing": true,
+            "processing": true, // 开启处理提示
+            "language": {
+                url: '/common/dataTableI18n',
+                // processing: '<div class="spinner"></div> 加载中...' // 自定义处理提示，包含动画
+                processing: '<div class="spinner"></div> 正在加载数据，请稍候...',
+            },
             "serverSide": false,
             "searching": false,
             "pagingType": "simple_numbers",
@@ -39,6 +44,32 @@
                     d.assign_ended = $tableSearch.find('input[name="statistic-call-task-analysis-ended"]').val();
                     d.assign_client = $tableSearch.find('select[name="statistic-call-task-analysis-client"]').val();
                 },
+                "beforeSend": function() {
+                    // 显示加载提示，例如使用一个div，或者调用layer.load等
+                    // $('#loading').show();
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">正在加载</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
+                    });
+                },
+                "error": function() {
+                    layer.msg("请求失败！");
+                },
+                "complete": function() {
+                    // 隐藏加载提示
+                    // $('#loading').hide();
+                    layer.closeAll('loading');
+                }
             },
             // "fixedColumns": {
             {{--"leftColumns": "@if($is_mobile_equipment) 1 @else 3 @endif",--}}
@@ -340,7 +371,6 @@
             },
             "columnDefs": [
             ],
-            "language": { url: '/common/dataTableI18n' },
         });
 
     }
