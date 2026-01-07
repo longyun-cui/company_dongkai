@@ -53,6 +53,7 @@
         // 【获取录音】
         $(".main-content").on('click', ".item-get-recording-list-submit", function() {
             var $that = $(this);
+            var $id = $that.attr('data-id');
             var $td = $that.parents('td');
             var $row = $that.parents('tr');
             var $datatable_wrapper = $that.closest('.datatable-wrapper');
@@ -115,7 +116,15 @@
                             });
                             $row.find('[data-key="recording_address_play"]').html($recording_list_html);
                             $row.find('[data-key="description"]').attr('data-recording-address',$recording_list_html);
+
+                            $row.find('[data-key=recording_address_download]').attr('data-address-list',$item.recording_address_list);
+                            var $recording_download = '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+$id+'">下载</a>';
+                            $that.after($recording_download);
+                            var $recording_redirection = '<a class="btn btn-xs item-redirection-recording-list-submit" data-id="'+$id+'">跳转</a>';
+                            $that.after($recording_redirection);
                         }
+
+
 
                     }
                 })
@@ -137,7 +146,7 @@
         });
 
 
-        // 【获取录音】
+        // 【审核-获取录音】
         $(".main-content").on('click', ".item-inspected-get-recording-list-submit", function() {
             var $that = $(this);
             var $modal_wrapper = $that.closest('.modal-wrapper');
@@ -203,6 +212,10 @@
                             $modal_wrapper.find('.item-detail-recording .item-detail-text').html($recording_list_html);
                             $row.find('[data-key="recording_address_play"]').html($recording_list_html);
                             $row.find('[data-key="description"]').attr('data-recording-address',$recording_list_html);
+
+                            $row.find('[data-key=recording_address_download]').attr('data-address-list',$item.recording_address_list);
+                            var $recording_redirection = '<a class="btn btn-xs item-inspected-redirection-recording-list-submit" data-id="'+$id+'">跳转</a>';
+                            $that.after($recording_redirection);
                         }
 
                     }
@@ -372,6 +385,72 @@
             var $row = $that.parents('tr');
             var $item_id = $that.data('id');
             console.log($item_id);
+            console.log($row);
+
+            $recording_list_str = $row.find('td[data-key=recording_address_download]').attr('data-address-list');
+            if($recording_list_str)
+            {
+                var $recording_list = JSON.parse($recording_list_str);
+                console.log($recording_list);
+
+                $.each($recording_list, function($index, $value) {
+
+                    console.log('$recording_list_str');
+                    console.log($index);
+                    console.log($value);
+
+                    var $path = new URL($value).pathname;
+                    var $url = 'http://8.142.7.121:9091/res/rs1/recordFile/listen?file='+$path;
+                    window.open($url);
+
+                    // var $obj = new Object();
+                    // $obj.item_id = $item_id;
+                    //
+                    // $obj.url = $value;
+                    //
+                    // var $randomNumber = Math.floor(Math.random() * 100) + 1;
+                    // $obj.randomNumber = $randomNumber;
+                    // console.log($obj);
+                    //
+                    // var $url = url_build('/download/item-recording-download',$obj);
+                    // window.open($url);
+
+                    // var $url = url_build('/download/call-recording-download',$obj);
+                    // window.open($url);
+
+                    // setTimeout(() => {
+                    //     window.open($url, $randomNumber);
+                    //     this.printOrderDialogShow = false;
+                    // }, 0.3);
+
+
+                });
+            }
+            else
+            {
+                $call_record_id = $row.find('td[data-key=recording_address_download]').attr('data-call-record-id');
+                if($call_record_id && $call_record_id > 0)
+                {
+                    console.log('else');
+                    console.log($call_record_id);
+
+                    // var $obj = new Object();
+                    // $obj.call_record_id = $call_record_id;
+                    //
+                    // var $url = url_build('/download/call-recording-download',$obj);
+                    // window.open($url);
+                }
+
+            }
+
+        });
+        // 【审核-强制跳转】
+        $(".main-content").on('click', ".item-inspected-redirection-recording-list-submit", function() {
+            var $that = $(this);
+            var $modal_wrapper = $that.closest('.modal-wrapper');
+            var $id = $modal_wrapper.find('input[name="detail-inspected-order-id"]').val();
+            var $row = $('tr.operating');
+            console.log($id);
 
             $recording_list_str = $row.find('td[data-key=recording_address_download]').attr('data-address-list');
             if($recording_list_str)
