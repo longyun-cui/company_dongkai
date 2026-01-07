@@ -214,8 +214,8 @@
                             $row.find('[data-key="description"]').attr('data-recording-address',$recording_list_html);
 
                             $row.find('[data-key=recording_address_download]').attr('data-address-list',$item.recording_address_list);
-                            var $recording_redirection = '<a class="btn btn-xs item-inspected-redirection-recording-list-submit" data-id="'+$id+'">跳转</a>';
-                            $that.after($recording_redirection);
+                            // var $recording_redirection = '<a class="btn btn-xs item-inspected-redirection-recording-list-submit" data-id="'+$id+'">跳转</a>';
+                            // $that.after($recording_redirection);
                         }
 
                     }

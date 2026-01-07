@@ -256,6 +256,7 @@
                         <div class="col-md-8 control-label" style="text-align:left;">
                             <span class="item-detail-text"></span>
                             <a class="btn btn-xs item-inspected-get-recording-list-submit">获取录音</a>
+                            <a class="btn btn-xs item-inspected-redirection-recording-list-submit">跳转</a>
                         </div>
                     </div>
                     {{--播放速度--}}
@@ -433,6 +434,7 @@
                         <div class="col-md-8 control-label" style="text-align:left;">
                             <span class="item-detail-text"></span>
                             <a class="btn btn-xs item-inspected-get-recording-list-submit">获取录音</a>
+                            <a class="btn btn-xs item-inspected-redirection-recording-list-submit">跳转</a>
                         </div>
                     </div>
                     {{--审核说明--}}
@@ -547,6 +549,7 @@
                         <div class="col-md-8 control-label" style="text-align:left;">
                             <span class="item-detail-text"></span>
                             <a class="btn btn-xs item-inspected-get-recording-list-submit">获取录音</a>
+                            <a class="btn btn-xs item-inspected-redirection-recording-list-submit">跳转</a>
                         </div>
                     </div>
                     {{--审核说明--}}
