@@ -366,6 +366,71 @@
 
         });
 
+        // 【强制跳转】
+        $(".main-content").on('click', ".item-redirection-recording-list-submit", function() {
+            var $that = $(this);
+            var $row = $that.parents('tr');
+            var $item_id = $that.data('id');
+            console.log($item_id);
+
+            $recording_list_str = $row.find('td[data-key=recording_address_download]').attr('data-address-list');
+            if($recording_list_str)
+            {
+                var $recording_list = JSON.parse($recording_list_str);
+                console.log($recording_list);
+
+                $.each($recording_list, function($index, $value) {
+
+                    console.log('$recording_list_str');
+                    console.log($index);
+                    console.log($value);
+
+                    var $path = new URL($value).pathname;
+                    var $url = 'http://8.142.7.121:9091/res/rs1/recordFile/listen?file='+$path;
+                    window.open($url);
+
+                    // var $obj = new Object();
+                    // $obj.item_id = $item_id;
+                    //
+                    // $obj.url = $value;
+                    //
+                    // var $randomNumber = Math.floor(Math.random() * 100) + 1;
+                    // $obj.randomNumber = $randomNumber;
+                    // console.log($obj);
+                    //
+                    // var $url = url_build('/download/item-recording-download',$obj);
+                    // window.open($url);
+
+                    // var $url = url_build('/download/call-recording-download',$obj);
+                    // window.open($url);
+
+                    // setTimeout(() => {
+                    //     window.open($url, $randomNumber);
+                    //     this.printOrderDialogShow = false;
+                    // }, 0.3);
+
+
+                });
+            }
+            else
+            {
+                $call_record_id = $row.find('td[data-key=recording_address_download]').attr('data-call-record-id');
+                if($call_record_id && $call_record_id > 0)
+                {
+                    console.log('else');
+                    console.log($call_record_id);
+
+                    // var $obj = new Object();
+                    // $obj.call_record_id = $call_record_id;
+                    //
+                    // var $url = url_build('/download/call-recording-download',$obj);
+                    // window.open($url);
+                }
+
+            }
+
+        });
+
 
 
 
