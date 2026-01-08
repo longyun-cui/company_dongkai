@@ -404,7 +404,6 @@
                                 }
                             },
                             render: function(data, type, row, meta) {
-
                                 return data;
                             }
                         },
@@ -452,6 +451,23 @@
 
                         @if(in_array($me->user_type,[0,1,9,11,61,66]))
                         {
+                            "title": "不合格",
+                            "data": "order_count_for_accepted_non",
+                            "className": "bg-delivered",
+                            "width": "60px",
+                            "orderable": true,
+                            "orderSequence": ["desc", "asc"],
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
+                            render: function(data, type, row, meta) {
+                                return data;
+                            }
+                        },
+                        {
                             "title": "交付量",
                             "data": "order_count_for_delivered",
                             "className": "bg-delivered",
@@ -480,14 +496,14 @@
                                 {
                                     $(nTd).addClass('_bold');
                                 }
-                                var $waiting_count = row.order_count_for_accepted + row.order_count_for_accepted_discount + row.order_count_for_accepted_suburb - data;
+                                var $waiting_count = row.order_count_for_accepted + row.order_count_for_accepted_discount + row.order_count_for_accepted_suburb + row.order_count_for_accepted_non - data;
                                 if($waiting_count > 0)
                                 {
                                     $(nTd).addClass('_bold').addClass('text-red');
                                 }
                             },
                             render: function(data, type, row, meta) {
-                                var $waiting_count = row.order_count_for_accepted + row.order_count_for_accepted_discount + row.order_count_for_accepted_suburb - data;
+                                var $waiting_count = row.order_count_for_accepted + row.order_count_for_accepted_discount + row.order_count_for_accepted_suburb + row.order_count_for_accepted_non - data;
                                 if($waiting_count > 0) return $waiting_count;
                                 else return '--';
                             }

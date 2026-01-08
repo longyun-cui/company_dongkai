@@ -39894,6 +39894,7 @@ EOF;
                     count(IF(inspected_result = '折扣通过', TRUE, NULL)) as order_count_for_accepted_discount,
                     count(IF(inspected_result = '郊区通过', TRUE, NULL)) as order_count_for_accepted_suburb,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
+                    count(IF(inspected_result = '不合格', TRUE, NULL)) as order_count_for_accepted_non,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
                     count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_refused
                 "))
@@ -40002,6 +40003,7 @@ EOF;
         $total_data['order_count_for_accepted_discount'] = 0;
         $total_data['order_count_for_accepted_suburb'] = 0;
         $total_data['order_count_for_accepted_inside'] = 0;
+        $total_data['order_count_for_accepted_non'] = 0;
 
         $total_data['order_count_for_delivered'] = 0;
         $total_data['order_count_for_delivered_completed'] = 0;
@@ -40038,6 +40040,7 @@ EOF;
                 $list[$k]->order_count_for_accepted_discount = $query_order[$v->id]['order_count_for_accepted_discount'];
                 $list[$k]->order_count_for_accepted_suburb = $query_order[$v->id]['order_count_for_accepted_suburb'];
                 $list[$k]->order_count_for_accepted_inside = $query_order[$v->id]['order_count_for_accepted_inside'];
+                $list[$k]->order_count_for_accepted_non = $query_order[$v->id]['order_count_for_accepted_non'];
 
                 $list[$k]->order_count_for_delivered = $query_order[$v->id]['order_count_for_delivered'];
                 $list[$k]->order_count_for_delivered_completed = $query_order[$v->id]['order_count_for_delivered_completed'];
@@ -40058,6 +40061,7 @@ EOF;
                 $list[$k]->order_count_for_accepted_discount = 0;
                 $list[$k]->order_count_for_accepted_suburb = 0;
                 $list[$k]->order_count_for_accepted_inside = 0;
+                $list[$k]->order_count_for_accepted_non = 0;
 
                 $list[$k]->order_count_for_delivered = 0;
                 $list[$k]->order_count_for_delivered_completed = 0;
@@ -40117,6 +40121,7 @@ EOF;
             $total_data['order_count_for_accepted_discount'] += $v->order_count_for_accepted_discount;
             $total_data['order_count_for_accepted_suburb'] += $v->order_count_for_accepted_suburb;
             $total_data['order_count_for_accepted_inside'] += $v->order_count_for_accepted_inside;
+            $total_data['order_count_for_accepted_non'] += $v->order_count_for_accepted_non;
 
             $total_data['order_count_for_delivered'] += $v->order_count_for_delivered;
             $total_data['order_count_for_delivered_completed'] += $v->order_count_for_delivered_completed;
