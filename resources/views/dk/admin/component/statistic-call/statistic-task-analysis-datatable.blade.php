@@ -289,6 +289,45 @@
                         }
                     }
                 },
+                {
+                    "title": "单均话费",
+                    "data": "order_count",
+                    "type": "num",
+                    "className": "bg-published",
+                    "width": "80px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.taskId == "统计")
+                        {
+                            $(nTd).addClass('text-red').addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(data > 0) return parseFloat((parseInt(row.call_time_sum) * 0.13) / data).toFixed(2);
+                            else return '--';
+                            // if(!data) return '--';
+                            // return parseFloat((parseInt(row.call_time_sum) * 0.13) / data).toFixed(2);
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            if(data > 0) return parseFloat((parseInt(row.call_time_sum) * 0.13) / data).toFixed(2);
+                            else return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            if(data > 0) return parseFloat((parseInt(row.call_time_sum) * 0.13) / data).toFixed(2);
+                            else return data;
+                        }
+                    }
+                },
                 // {
                 //     "title": "备注",
                 //     "data": "description",
