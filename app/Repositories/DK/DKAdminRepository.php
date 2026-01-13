@@ -304,7 +304,7 @@ class DKAdminRepository {
             ->where('item_status',1)
             ->where('department_type',11)
             ->orderby('item_status','asc')
-            ->orderby('rank','desc')
+            ->orderby('rank','asc')
             ->get();
         $view_data['department_district_list'] = $department_district_list;
 
