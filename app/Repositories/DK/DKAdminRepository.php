@@ -300,7 +300,9 @@ class DKAdminRepository {
         $client_list = DK_Client::select('id','username')->whereIn('user_category',[1,11,31])->get();
         $view_data['client_list'] = $client_list;
 
-        $department_district_list = DK_Department::select('id','name')->where('department_type',11)
+        $department_district_list = DK_Department::select('id','name')
+            ->where('item_status',1)
+            ->where('department_type',11)
             ->orderby('item_status','asc')
             ->orderby('rank','desc')
             ->get();
