@@ -71,7 +71,7 @@
                 "leftColumns": "@if($is_mobile_equipment) 1 @else 5 @endif",
                 "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
                 @else
-                "leftColumns": "@if($is_mobile_equipment) 1 @else 7 @endif",
+                "leftColumns": "@if($is_mobile_equipment) 1 @else 4 @endif",
                 "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
                 @endif
 
@@ -80,7 +80,7 @@
                     {{--@if(!in_array($me->user_type,[0,1,11]))--}}
                     @if($me->department_district_id != 0)
                 {
-                    "targets": [0,6,9,10,11],
+                    "targets": [0,5,6,7,8,9,10,11],
                     "visible": false,
                 }
                 @endif
@@ -142,34 +142,34 @@
                         return $result_html;
                     }
                 },
-                {
-                    "title": "工单种类",
-                    "data": "item_category",
-                    "className": "",
-                    "width": "60px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        var $result_html = '';
-                        if(data == 1)
-                        {
-                            $result_html = '<small class="btn-xs bg-orange">口腔</small>';
-                        }
-                        if(data == 11)
-                        {
-                            $result_html = '<small class="btn-xs bg-red">医美</small>';
-                        }
-                        else if(data == 31)
-                        {
-                            $result_html = '<small class="btn-xs bg-purple">奢侈品</small>';
-                        }
-                        else
-                        {
-                            $result_html = '<small class="btn-xs bg-black">有误</small>';
-                        }
-                        return $result_html;
-                    }
-                },
+                // {
+                //     "title": "工单种类",
+                //     "data": "item_category",
+                //     "className": "",
+                //     "width": "60px",
+                //     "orderable": false,
+                //     render: function(data, type, row, meta) {
+                //         if(!data) return '--';
+                //         var $result_html = '';
+                //         if(data == 1)
+                //         {
+                //             $result_html = '<small class="btn-xs bg-orange">口腔</small>';
+                //         }
+                //         if(data == 11)
+                //         {
+                //             $result_html = '<small class="btn-xs bg-red">医美</small>';
+                //         }
+                //         else if(data == 31)
+                //         {
+                //             $result_html = '<small class="btn-xs bg-purple">奢侈品</small>';
+                //         }
+                //         else
+                //         {
+                //             $result_html = '<small class="btn-xs bg-black">有误</small>';
+                //         }
+                //         return $result_html;
+                //     }
+                // },
                 {
                     "title": "工单状态",
                     "className": "",
@@ -1226,7 +1226,11 @@
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return row.inspector == null ? '--' : '<a href="javascript:void(0);">'+row.inspector.true_name+'</a>';
+                        @if(in_array($me->user_type,[41,81,84,88]))
+                            return row.inspector == null ? '--' : '****';
+                        @else
+                            return row.inspector == null ? '--' : '<a href="javascript:void(0);">'+row.inspector.true_name+'</a>';
+                        @endif
                     }
                 },
                 {
