@@ -8012,10 +8012,11 @@ class DKAdminRepository {
         $timestamp = time();
         $seq = $timestamp;
         $digest = md5($API_Customer_Account.'@'.$timestamp.'@'.$seq.'@'.$API_Customer_Password);
+//        dd($API_Customer_Account.'--'.$seq.'--'.$digest);
 
         $request_data['authentication']['customer'] = $API_Customer_Account;
-        $request_data['authentication']['timestamp'] = $timestamp;
-        $request_data['authentication']['seq'] = $seq;
+        $request_data['authentication']['timestamp'] = strval($timestamp);
+        $request_data['authentication']['seq'] = strval($seq);
         $request_data['authentication']['digest'] = $digest;
 
         $request_data['request']['seq'] = '';
@@ -8069,6 +8070,7 @@ class DKAdminRepository {
 
 
         $request_data = json_encode($request_data);
+//        dd($request_data);
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -8090,6 +8092,7 @@ class DKAdminRepository {
             curl_close($ch);
 
             $result = json_decode($request_result);
+//            dd($result);
             if($result->result->error == "0")
             {
                 if($result->data)
