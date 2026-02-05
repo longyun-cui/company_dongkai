@@ -607,8 +607,8 @@ class DKAdminRepository {
         $digest = md5($API_Customer_Account.'@'.$timestamp.'@'.$seq.'@'.$API_Customer_Password);
 
         $request_data['authentication']['customer'] = $API_Customer_Account;
-        $request_data['authentication']['timestamp'] = $timestamp;
-        $request_data['authentication']['seq'] = $seq;
+        $request_data['authentication']['timestamp'] = strval($timestamp);
+        $request_data['authentication']['seq'] = strval($seq);
         $request_data['authentication']['digest'] = $digest;
 
         $request_data['request']['seq'] = '';
@@ -8248,8 +8248,8 @@ class DKAdminRepository {
 
                 $request_data = [];
                 $request_data['authentication']['customer'] = $API_Customer_Account;
-                $request_data['authentication']['timestamp'] = $timestamp;
-                $request_data['authentication']['seq'] = $seq;
+                $request_data['authentication']['timestamp'] = strval($timestamp);
+                $request_data['authentication']['seq'] = strval($seq);
                 $request_data['authentication']['digest'] = $digest;
 
                 $request_data['request']['seq'] = '';
