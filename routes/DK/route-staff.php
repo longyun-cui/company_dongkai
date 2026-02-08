@@ -2,7 +2,7 @@
 
 
 Route::get('/', function () {
-    dd('yh.staff');
+    dd('dk.staff');
 });
 
 
@@ -16,7 +16,7 @@ Route::match(['get','post'], 'logout', $controller.'@logout');
  * 电销员工系统（前台）
  * 需要登录
  */
-Route::group(['middleware' => ['yh.staff.login']], function () {
+Route::group(['middleware' => ['dk.staff.user.login']], function () {
 
     $controller = 'DKStaffController';
 
@@ -25,88 +25,99 @@ Route::group(['middleware' => ['yh.staff.login']], function () {
     Route::get('/404', $controller.'@view_staff_404');
 
 
-    /*
-     * 个人信息管理
-     */
-    Route::get('/my-account/my-profile-info-index', $controller.'@view_my_profile_info_index');
-    Route::match(['get','post'], '/my-account/my-profile-info-edit', $controller.'@operate_my_profile_info_edit');
-    Route::match(['get','post'], '/my-account/my-password-change', $controller.'@operate_my_account_password_change');
+
+    // 【公司】
+    Route::post('/o1/company/company-list/datatable-query', $controller.'@o1__company__list__datatable_query');
+    Route::post('/o1/company/item-get', $controller.'@o1__company__item_get');
+    Route::post('/o1/company/item-save', $controller.'@o1__company__item_save');
+    // 【公司】删除 & 恢复 & 永久删除
+    Route::post('/o1/company/item-delete', $controller.'@o1__company__item_delete');
+    Route::post('/o1/company/item-restore', $controller.'@o1__company__item_restore');
+    Route::post('/o1/company/item-delete-permanently', $controller.'@o1__company__item_delete_permanently');
+    // 【公司】启用 & 禁用
+    Route::post('/o1/company/item-enable', $controller.'@o1__company__item_enable');
+    Route::post('/o1/company/item-disable', $controller.'@o1__company__item_disable');
+    // 【公司】操作记录
+    Route::post('/o1/company/item-operation-record-list/datatable-query', $controller.'@o1__company__item_operation_record_list__datatable_query');
+
+
+    // 【部门】
+    Route::post('/o1/department/department-list/datatable-query', $controller.'@o1__department__list__datatable_query');
+    Route::post('/o1/department/item-get', $controller.'@o1__department__item_get');
+    Route::post('/o1/department/item-save', $controller.'@o1__department__item_save');
+    // 【部门】删除 & 恢复 & 永久删除
+    Route::post('/o1/department/item-delete', $controller.'@o1__department__item_delete');
+    Route::post('/o1/department/item-restore', $controller.'@o1__department__item_restore');
+    Route::post('/o1/department/item-delete-permanently', $controller.'@o1__department__item_delete_permanently');
+    // 【部门】启用 & 禁用
+    Route::post('/o1/department/item-enable', $controller.'@o1__department__item_enable');
+    Route::post('/o1/department/item-disable', $controller.'@o1__department__item_disable');
+    // 【部门】操作记录
+    Route::post('/o1/department/item-operation-record-list/datatable-query', $controller.'@o1__department__item_operation_record_list__datatable_query');
+
+
+    // 【团队】
+    Route::post('/o1/team/team-list/datatable-query', $controller.'@o1__team__list__datatable_query');
+    Route::post('/o1/team/item-get', $controller.'@o1__team__item_get');
+    Route::post('/o1/team/item-save', $controller.'@o1__team__item_save');
+    // 【团队】删除 & 恢复 & 永久删除
+    Route::post('/o1/team/item-delete', $controller.'@o1__team__item_delete');
+    Route::post('/o1/team/item-restore', $controller.'@o1__team__item_restore');
+    Route::post('/o1/team/item-delete-permanently', $controller.'@o1__team__item_delete_permanently');
+    // 【团队】启用 & 禁用
+    Route::post('/o1/team/item-enable', $controller.'@o1__team__item_enable');
+    Route::post('/o1/team/item-disable', $controller.'@o1__team__item_disable');
+    // 【团队】操作记录
+    Route::post('/o1/team/item-operation-record-list/datatable-query', $controller.'@o1__team__item_operation_record_list__datatable_query');
+
+
+    // 【员工】
+    Route::post('/o1/staff/staff-list/datatable-query', $controller.'@o1__staff__list__datatable_query');
+    Route::post('/o1/staff/item-get', $controller.'@o1__staff__item_get');
+    Route::post('/o1/staff/item-save', $controller.'@o1__staff__item_save');
+    // 【员工】删除 & 恢复 & 永久删除
+    Route::post('/o1/staff/item-delete', $controller.'@o1__staff__item_delete');
+    Route::post('/o1/staff/item-restore', $controller.'@o1__staff__item_restore');
+    Route::post('/o1/staff/item-delete-permanently', $controller.'@o1__staff__item_delete_permanently');
+    // 【员工】启用 & 禁用
+    Route::post('/o1/staff/item-enable', $controller.'@o1__staff__item_enable');
+    Route::post('/o1/staff/item-disable', $controller.'@o1__staff__item_disable');
+    // 【员工】操作记录
+    Route::post('/o1/staff/item-operation-record-list/datatable-query', $controller.'@o1__staff__item_operation_record_list__datatable_query');
 
 
 
 
-    /*
-     * 用户管理
-     */
-    Route::match(['get','post'], '/user/staff-create', $controller.'@operate_user_staff_create');
-    Route::match(['get','post'], '/user/staff-edit', $controller.'@operate_user_staff_edit');
-    Route::match(['get','post'], '/user/staff-list', $controller.'@view_user_staff_list');
-    Route::post('/user/staff-delete', $controller.'@operate_user_staff_delete');
-    Route::post('/user/staff-restore', $controller.'@operate_user_staff_restore');
-    Route::post('/user/staff-delete-permanently', $controller.'@operate_user_staff_delete_permanently');
+    // 【客户】
+    Route::post('/o1/client/client-list/datatable-query', $controller.'@o1__client__list__datatable_query');
+    Route::post('/o1/client/item-get', $controller.'@o1__client__item_get');
+    Route::post('/o1/client/item-save', $controller.'@o1__client__item_save');
+    // 【客户】删除 & 恢复 & 永久删除
+    Route::post('/o1/client/item-delete', $controller.'@o1__client__item_delete');
+    Route::post('/o1/client/item-restore', $controller.'@o1__client__item_restore');
+    Route::post('/o1/client/item-delete-permanently', $controller.'@o1__client__item_delete_permanently');
+    // 【客户】启用 & 禁用
+    Route::post('/o1/client/item-enable', $controller.'@o1__client__item_enable');
+    Route::post('/o1/client/item-disable', $controller.'@o1__client__item_disable');
+    // 【客户】操作记录
+    Route::post('/o1/client/item-operation-record-list/datatable-query', $controller.'@o1__client__item_operation_record_list__datatable_query');
 
 
+    // 【项目】
+    Route::post('/o1/project/project-list/datatable-query', $controller.'@o1__project__list__datatable_query');
+    Route::post('/o1/project/item-get', $controller.'@o1__project__item_get');
+    Route::post('/o1/project/item-save', $controller.'@o1__project__item_save');
+    // 【项目】删除 & 恢复 & 永久删除
+    Route::post('/o1/project/item-delete', $controller.'@o1__project__item_delete');
+    Route::post('/o1/project/item-restore', $controller.'@o1__project__item_restore');
+    Route::post('/o1/project/item-delete-permanently', $controller.'@o1__project__item_delete_permanently');
+    // 【项目】启用 & 禁用
+    Route::post('/o1/project/item-enable', $controller.'@o1__project__item_enable');
+    Route::post('/o1/project/item-disable', $controller.'@o1__project__item_disable');
+    // 【项目】操作记录
+    Route::post('/o1/project/item-operation-record-list/datatable-query', $controller.'@o1__project__item_operation_record_list__datatable_query');
 
 
-
-    /*
-     * 内容管理-模块
-     */
-
-
-    Route::match(['get','post'], '/item/item-list', $controller.'@view_item_list');
-    Route::match(['get','post'], '/item/item-list-for-all', $controller.'@view_item_list_for_all');
-    Route::match(['get','post'], '/item/item-list-for-menu_type', $controller.'@view_item_list_for_menu_type');
-    Route::match(['get','post'], '/item/item-list-for-time_line', $controller.'@view_item_list_for_time_line');
-    Route::match(['get','post'], '/item/item-list-for-debase', $controller.'@view_item_list_for_debase');
-
-
-    Route::match(['get','post'], '/item/content-management', $controller.'@view_item_content_management');
-    Route::post('/item/content-edit', $controller.'@operate_item_content_edit');
-    Route::post('/item/content-get', $controller.'@operate_item_content_get');
-    Route::post('/item/content-delete', $controller.'@operate_item_content_delete');
-    Route::post('/item/content-enable', $controller.'@operate_item_content_enable');
-    Route::post('/item/content-disable', $controller.'@operate_item_content_disable');
-
-
-
-
-    /*
-     * 任务管理-模块
-     */
-    Route::match(['get','post'], '/item/task-create', $controller.'@operate_item_task_create');
-    Route::match(['get','post'], '/item/task-edit', $controller.'@operate_item_task_edit');
-    Route::post('/item/task-delete', $controller.'@operate_item_task_delete');
-    Route::post('/item/task-restore', $controller.'@operate_item_task_restore');
-    Route::post('/item/task-delete-permanently', $controller.'@operate_item_task_delete_permanently');
-    Route::post('/item/task-publish', $controller.'@operate_item_task_publish');
-    Route::post('/item/task-complete', $controller.'@operate_item_task_complete');
-    Route::post('/item/task-remark-edit', $controller.'@operate_item_task_remark_edit');
-
-
-    Route::get('item/{id?}', $controller.'@view_item');
-
-
-
-
-
-
-
-
-    Route::match(['get','post'], '/user/my-administrator-list', $controller.'@view_user_my_administrator_list');
-    Route::match(['get','post'], '/user/relation-administrator', $controller.'@operate_user_relation_administrator');
-    Route::match(['get','post'], '/user/administrator-relation-add', $controller.'@operate_user_administrator_relation_add');
-    Route::match(['get','post'], '/user/administrator-relation-add-bulk', $controller.'@operate_user_administrator_relation_add_bulk');
-
-    Route::match(['get','post'], '/user/administrator-relation-remove', $controller.'@operate_user_administrator_relation_remove');
-
-
-
-
-    /*
-     * statistic 统计管理-模块
-     */
-    Route::match(['get','post'], '/statistic/statistic-index', $controller.'@view_statistic_index');
 
 
 });

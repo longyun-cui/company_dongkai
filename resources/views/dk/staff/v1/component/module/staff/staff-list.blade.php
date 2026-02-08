@@ -6,10 +6,10 @@
 
         <div class=" pull-left">
 
-            @if(in_array($me->user_type,[0,1,9,11,19,41,81,84,61]))
-            <button type="button" onclick="" class="btn btn-filter btn-success- item-create-modal-show"
-                    data-form-id="form-for-staff-edit"
-                    data-modal-id="modal-for-staff-edit"
+            @if(in_array($me->user_type,[0,1,9,11,19,41,81,61]))
+            <button type="button" onclick="" class="btn btn-filter modal-show--for--staff-item-create"
+                    data-form-id="form--for--staff-item-edit"
+                    data-modal-id="modal--for--staff-item-edit"
                     data-title="添加员工"
             >
                 <i class="fa fa-plus"></i> 添加
@@ -31,30 +31,29 @@
             <input type="text" class="search-filter form-filter filter-keyup" name="staff-username" placeholder="名称" />
 
             @if(in_array($me->user_type,[0,1,9,11]))
-            <select class="search-filter form-filter filter-md select2-box-c" name="staff-user-type">
+            <select class="search-filter form-filter filter-md select2-box-c" name="staff-type">
                 <option value="-1">全部人员</option>
-                <option value="66">运营人员</option>
-                <option value="61">运营经理</option>
-                <option value="77">质检员</option>
-                <option value="71">质检经理</option>
-                <option value="91">三方审核</option>
+                <option value="41">团队·总经理</option>
                 <option value="88">客服</option>
                 <option value="84">客服主管</option>
                 <option value="81">客服经理</option>
-                <option value="41">团队·总监</option>
+                <option value="77">质检员</option>
+                <option value="71">质检经理</option>
+                <option value="66">运营人员</option>
+                <option value="61">运营经理</option>
             </select>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11]))
-            <select class="search-filter form-filter filter-xl select2-box-c" name="staff-department-district">
-                <option value="-1">选择大区</option>
-                @foreach($department_district_list as $v)
-                    <option value="{{ $v->id }}">{{ $v->name }}</option>
-                @endforeach
-            </select>
-            @endif
+{{--            @if(in_array($me->user_type,[0,1,9,11]))--}}
+{{--            <select class="search-filter form-filter filter-md select2-box-c" name="staff-department-district">--}}
+{{--                <option value="-1">选择大区</option>--}}
+{{--                @foreach($department_district_list as $v)--}}
+{{--                    <option value="{{ $v->id }}">{{ $v->name }}</option>--}}
+{{--                @endforeach--}}
+{{--            </select>--}}
+{{--            @endif--}}
 
-            <select class="search-filter form-filter filter-md select2-box-c" name="staff-user-status">
+            <select class="search-filter form-filter filter-md select2-box-c" name="staff-status">
                 <option value ="-1">全部</option>
                 <option value ="1">启用</option>
                 <option value ="9">禁用</option>
@@ -85,15 +84,28 @@
 
 
     <div class="col-md-12 datatable-body">
-        <div class="tableArea full">
-            <table class='table table-striped table-bordered table-hover order-column'>
-                <thead>
-                </thead>
-                <tbody>
-                </tbody>
-                <tfoot>
-                </tfoot>
-            </table>
+        <div class="box box-primary box-solid-" style="box-shadow:0 0;">
+
+            <div class="box-header with-border- margin-top-16px padding-top-8px _none">
+                <h3 class="box-title datatable-title"></h3>
+            </div>
+
+            <div class="box-body no-padding">
+                <div class="tableArea full margin-top-8px">
+                    <table class='table table-striped table-bordered table-hover order-column'>
+                        <thead>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div class="box-header">
+            </div>
+
         </div>
     </div>
 

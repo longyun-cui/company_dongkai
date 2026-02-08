@@ -131,6 +131,13 @@ return [
             'provider' => 'dk_customers_staffs',
         ],
 
+
+
+        'dk_staff_user' => [
+            'driver' => 'session',
+            'provider' => 'dk_staff_users',
+        ],
+
     ],
 
     /*
@@ -247,6 +254,12 @@ return [
         'dk_customers_staffs' => [
             'driver' => 'eloquent',
             'model' => App\Models\DK_Customer\DK_Customer_User::class,
+        ],
+
+
+        'dk_staff_users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\DK\DK_Common\DK_Common__Staff::class,
         ],
 
     ],

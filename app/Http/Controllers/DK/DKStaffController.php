@@ -5,11 +5,15 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Models\DK\DK_User;
-use App\Models\DK\YH_Item;
-use App\Models\DK\YH_Pivot_Item_Relation;
+use App\Models\DK_Staff\DK_Staff__User;
 
 use App\Repositories\DK\DKStaffRepository;
+use App\Repositories\DK\DK_Staff\DK_Staff__IndexRepository;
+use App\Repositories\DK\DK_Staff\DK_Staff__CompanyRepository;
+use App\Repositories\DK\DK_Staff\DK_Staff__DepartmentRepository;
+use App\Repositories\DK\DK_Staff\DK_Staff__TeamRepository;
+use App\Repositories\DK\DK_Staff\DK_Staff__StaffRepository;
+use App\Repositories\DK\DK_Staff\DK_Staff__OrderRepository;
 
 use Response, Auth, Validator, DB, Exception;
 use QrCode, Excel;
@@ -19,9 +23,33 @@ class DKStaffController extends Controller
     //
     private $service;
     private $repo;
+
+    private $common_repo;
+
+    private $company_repo;
+    private $department_repo;
+    private $team_repo;
+    private $staff_repo;
+
+    private $motorcade_repo;
+    private $car_repo;
+    private $driver_repo;
+
+    private $client_repo;
+    private $project_repo;
+
+    private $order_repo;
+
     public function __construct()
     {
-        $this->repo = new DKStaffRepository;
+        $this->repo = new DK_Staff__IndexRepository;
+
+        $this->company_repo = new DK_Staff__CompanyRepository;
+        $this->department_repo = new DK_Staff__DepartmentRepository;
+        $this->team_repo = new DK_Staff__TeamRepository;
+        $this->staff_repo = new DK_Staff__StaffRepository;
+
+        $this->order_repo = new DK_Staff__OrderRepository;
     }
 
     /*
@@ -32,7 +60,7 @@ class DKStaffController extends Controller
     {
         if(request()->isMethod('get'))
         {
-            $view_blade = env('TEMPLATE_YH_STAFF').'entrance.login';
+            $view_blade = env('DK_STAFF__TEMPLATE').'login';
             return view($view_blade);
         }
         else if(request()->isMethod('post'))
@@ -44,21 +72,21 @@ class DKStaffController extends Controller
 //            $email = request()->get('email');
 //            $admin = OrgAdministrator::whereEmail($email)->first();
 
-            $mobile = request()->get('mobile');
-            $user = DK_User::withTrashed()->whereMobile($mobile)->first();
+            $login_number = request()->get('login_number');
+            $user = DK_Staff__User::withTrashed()->where('login_number',$login_number)->first();
 
             if($user)
             {
                 if($user->deleted_at == null)
                 {
-                    if($user->user_status == 1)
+                    if($user->item_status == 1)
                     {
                         $password = request()->get('password');
                         if(password_check($password,$user->password))
                         {
                             $remember = request()->get('remember');
-                            if($remember) Auth::guard('yh_staff')->login($user,true);
-                            else Auth::guard('yh_staff')->login($user,true);
+                            if($remember) Auth::guard('dk_staff_user')->login($user,true);
+                            else Auth::guard('dk_staff_user')->login($user,true);
                             return response_success();
                         }
                         else return response_error([],'账户or密码不正确！');
@@ -74,7 +102,7 @@ class DKStaffController extends Controller
     // 退出
     public function logout()
     {
-        Auth::guard('yh_staff')->logout();
+        Auth::guard('dk_staff_user')->logout();
         return redirect('/login');
     }
 
@@ -90,87 +118,60 @@ class DKStaffController extends Controller
 	}
 
 
-    // 【内容列表】返回-列表-视图
-    public function view_item_list()
+
+
+
+
+
+
+
+
+
+
+    // 【公司】datatable
+    public function o1__company__list__datatable_query()
     {
-        return $this->repo->view_item_list(request()->all());
+        return $this->company_repo->o1__company__list__datatable_query(request()->all());
     }
-
-
-    // 【内容详情】返回-列表-视图
-    public function view_item($id=0)
+    // 【公司】获取
+    public function o1__company__item_get()
     {
-        return $this->repo->view_item(request()->all(),$id);
+        return $this->company_repo->o1__company__item_get(request()->all());
     }
-
-
-
-
-
-    // 【K】【基本信息】返回
-    public function view_my_profile_info_index()
+    // 【公司】编辑-保存
+    public function o1__company__item_save()
     {
-        return $this->repo->view_my_profile_info_index();
+        return $this->company_repo->o1__company__item_save(request()->all());
     }
-    // 【K】【基本信息】编辑
-    public function operate_my_profile_info_edit()
+    // 【公司】删除
+    public function o1__company__item_delete()
     {
-        if(request()->isMethod('get')) return $this->repo->view_my_profile_info_edit();
-        else if (request()->isMethod('post')) return $this->repo->operate_my_profile_info_save(request()->all());
+        return $this->company_repo->o1__company__item_delete(request()->all());
     }
-
-    // 【K】【基本信息】编辑
-    public function operate_my_account_password_change()
+    // 【公司】恢复
+    public function o1__company__item_restore()
     {
-        if(request()->isMethod('get')) return $this->repo->view_my_account_password_change();
-        else if (request()->isMethod('post')) return $this->repo->operate_my_account_password_change_save(request()->all());
+        return $this->company_repo->o1__company__item_restore(request()->all());
     }
-
-
-
-    /*
-     * 员工管理
-     */
-    // 【员工】添加
-    public function operate_user_staff_create()
+    // 【公司】彻底删除
+    public function o1__company__item_delete_permanently()
     {
-        if(request()->isMethod('get')) return $this->repo->view_user_staff_create();
-        else if (request()->isMethod('post')) return $this->repo->operate_user_staff_save(request()->all());
+        return $this->company_repo->o1__company__item_delete_permanently(request()->all());
     }
-    // 【员工】编辑
-    public function operate_user_staff_edit()
+    // 【公司】启用
+    public function o1__company__item_enable()
     {
-        if(request()->isMethod('get')) return $this->repo->view_user_staff_edit();
-        else if (request()->isMethod('post')) return $this->repo->operate_user_staff_save(request()->all());
+        return $this->company_repo->o1__company__item_enable(request()->all());
     }
-
-
-    // 【员工】返回-列表-视图
-    public function view_user_staff_list()
+    // 【公司】禁用
+    public function o1__company__item_disable()
     {
-        if(request()->isMethod('get')) return $this->repo->view_user_staff_list(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_user_staff_list_datatable(request()->all());
+        return $this->company_repo->o1__company__item_disable(request()->all());
     }
-
-    // 【员工】获取-详情
-    public function operate_user_staff_get()
+    // 【公司】操作记录
+    public function o1__company__item_operation_record_list__datatable_query()
     {
-        return $this->repo->operate_user_staff_get(request()->all());
-    }
-    // 【员工】删除
-    public function operate_user_staff_delete()
-    {
-        return $this->repo->operate_user_staff_delete(request()->all());
-    }
-    // 【员工】恢复
-    public function operate_user_staff_restore()
-    {
-        return $this->repo->operate_user_staff_restore(request()->all());
-    }
-    // 【员工】永久删除
-    public function operate_user_staff_delete_permanently()
-    {
-        return $this->repo->operate_user_staff_delete_permanently(request()->all());
+        return $this->company_repo->o1__company__item_operation_record_list__datatable_query(request()->all());
     }
 
 
@@ -180,67 +181,50 @@ class DKStaffController extends Controller
 
 
 
-    /*
-     * 任务管理
-     */
-    // 【任务】添加
-    public function operate_item_task_create()
+    // 【部门】datatable
+    public function o1__department__list__datatable_query()
     {
-        if(request()->isMethod('get')) return $this->repo->view_item_task_create();
-        else if (request()->isMethod('post')) return $this->repo->operate_item_task_save(request()->all());
+        return $this->department_repo->o1__department__list__datatable_query(request()->all());
     }
-    // 【任务】编辑
-    public function operate_item_task_edit()
+    // 【部门】获取
+    public function o1__department__item_get()
     {
-        if(request()->isMethod('get')) return $this->repo->view_item_task_edit();
-        else if (request()->isMethod('post')) return $this->repo->operate_item_task_save(request()->all());
+        return $this->department_repo->o1__department__item_get(request()->all());
     }
-
-    // 【任务】获取-详情
-    public function operate_item_task_get()
+    // 【部门】编辑-保存
+    public function o1__department__item_save()
     {
-        return $this->repo->operate_item_task_get(request()->all());
+        return $this->department_repo->o1__department__item_save(request()->all());
     }
-    // 【任务】删除
-    public function operate_item_task_delete()
+    // 【部门】删除
+    public function o1__department__item_delete()
     {
-        return $this->repo->operate_item_task_delete(request()->all());
+        return $this->department_repo->o1__department__item_delete(request()->all());
     }
-    // 【任务】恢复
-    public function operate_item_task_restore()
+    // 【部门】恢复
+    public function o1__department__item_restore()
     {
-        return $this->repo->operate_item_task_restore(request()->all());
+        return $this->department_repo->o1__department__item_restore(request()->all());
     }
-    // 【任务】永久删除
-    public function operate_item_task_delete_permanently()
+    // 【部门】彻底删除
+    public function o1__department__item_delete_permanently()
     {
-        return $this->repo->operate_item_task_delete_permanently(request()->all());
+        return $this->department_repo->o1__department__item_delete_permanently(request()->all());
     }
-    // 【任务】发布
-    public function operate_item_task_publish()
+    // 【部门】启用
+    public function o1__department__item_enable()
     {
-        return $this->repo->operate_item_task_publish(request()->all());
+        return $this->department_repo->o1__department__item_enable(request()->all());
     }
-    // 【任务】完成
-    public function operate_item_task_complete()
+    // 【部门】禁用
+    public function o1__department__item_disable()
     {
-        return $this->repo->operate_item_task_complete(request()->all());
+        return $this->department_repo->o1__department__item_disable(request()->all());
     }
-    // 【任务】禁用
-    public function operate_item_task_disable()
+    // 【部门】操作记录
+    public function o1__department__item_operation_record_list__datatable_query()
     {
-        return $this->repo->operate_item_admin_disable(request()->all());
-    }
-    // 【任务】启用
-    public function operate_item_task_enable()
-    {
-        return $this->repo->operate_item_admin_enable(request()->all());
-    }
-
-    // 【任务】备注编辑
-    public function operate_item_task_remark_edit()
-    {
-        return $this->repo->operate_item_task_remark_save(request()->all());
+        return $this->department_repo->o1__department__item_operation_record_list__datatable_query(request()->all());
     }
 
 
@@ -250,27 +234,104 @@ class DKStaffController extends Controller
 
 
 
-
-
-
-    // 返回【主页】视图
-    public function operate_item_select2_people()
+    // 【团队】datatable
+    public function o1__team__list__datatable_query()
     {
-        return $this->repo->operate_item_select2_people(request()->all());
+        return $this->team_repo->o1__team__list__datatable_query(request()->all());
+    }
+    // 【团队】获取
+    public function o1__team__item_get()
+    {
+        return $this->team_repo->o1__team__item_get(request()->all());
+    }
+    // 【团队】编辑-保存
+    public function o1__team__item_save()
+    {
+        return $this->team_repo->o1__team__item_save(request()->all());
+    }
+    // 【团队】删除
+    public function o1__team__item_delete()
+    {
+        return $this->team_repo->o1__team__item_delete(request()->all());
+    }
+    // 【团队】恢复
+    public function o1__team__item_restore()
+    {
+        return $this->team_repo->o1__team__item_restore(request()->all());
+    }
+    // 【团队】彻底删除
+    public function o1__team__item_delete_permanently()
+    {
+        return $this->team_repo->o1__team__item_delete_permanently(request()->all());
+    }
+    // 【团队】启用
+    public function o1__team__item_enable()
+    {
+        return $this->team_repo->o1__team__item_enable(request()->all());
+    }
+    // 【团队】禁用
+    public function o1__team__item_disable()
+    {
+        return $this->team_repo->o1__team__item_disable(request()->all());
+    }
+    // 【团队】操作记录
+    public function o1__team__item_operation_record_list__datatable_query()
+    {
+        return $this->team_repo->o1__team__item_operation_record_list__datatable_query(request()->all());
     }
 
 
 
 
-    /*
-     * Statistic 统计
-     */
-    // 【统计】概览
-    public function view_statistic_index()
-    {
-        return $this->repo->view_statistic_index();
-    }
 
+
+
+
+    // 【员工】datatable
+    public function o1__staff__list__datatable_query()
+    {
+        return $this->staff_repo->o1__staff__list__datatable_query(request()->all());
+    }
+    // 【员工】获取
+    public function o1__staff__item_get()
+    {
+        return $this->staff_repo->o1__staff__item_get(request()->all());
+    }
+    // 【员工】编辑-保存
+    public function o1__staff__item_save()
+    {
+        return $this->staff_repo->o1__staff__item_save(request()->all());
+    }
+    // 【团队】删除
+    public function o1__staff__item_delete()
+    {
+        return $this->staff_repo->o1__staff__item_delete(request()->all());
+    }
+    // 【团队】恢复
+    public function o1__staff__item_restore()
+    {
+        return $this->staff_repo->o1__staff__item_restore(request()->all());
+    }
+    // 【团队】彻底删除
+    public function o1__staff__item_delete_permanently()
+    {
+        return $this->staff_repo->o1__staff__item_delete_permanently(request()->all());
+    }
+    // 【员工】启用
+    public function o1__staff__item_enable()
+    {
+        return $this->staff_repo->o1__staff__item_enable(request()->all());
+    }
+    // 【员工】禁用
+    public function o1__staff__item_disable()
+    {
+        return $this->staff_repo->o1__staff__item_disable(request()->all());
+    }
+    // 【员工】操作记录
+    public function o1__staff__item_operation_record_list__datatable_query()
+    {
+        return $this->staff_repo->o1__staff__item_operation_record_list__datatable_query(request()->all());
+    }
 
 
 

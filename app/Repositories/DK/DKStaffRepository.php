@@ -55,8 +55,9 @@ class DKStaffRepository {
 
 
     // 返回（后台）主页视图
-    public function view_staff_index()
+    public function view_staff__index()
     {
+
         $this->get_me();
         $me = $this->me;
 
