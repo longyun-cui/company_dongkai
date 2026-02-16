@@ -86,21 +86,27 @@
                         $modal.find('input[name="project_category"][value="'+$response.data.project_category+'"]').parents('.radio-project-category').show();
 
 
-                        $modal.find('input[name="settlement_period"]').prop('checked', false);
-                        $modal.find('input[name="settlement_period"][value="'+$response.data.settlement_period+'"]').prop('checked', true).trigger('change');
-
                         $modal.find('input[name="name"]').val($response.data.name);
-                        $modal.find('input[name="freight_amount"]').val($response.data.freight_amount);
-                        $modal.find('input[name="transport_departure_place"]').val($response.data.transport_departure_place);
-                        $modal.find('input[name="transport_destination_place"]').val($response.data.transport_destination_place);
-                        $modal.find('input[name="transport_distance"]').val($response.data.transport_distance);
-                        var $transport_time_limitation = parseFloat(($response.data.transport_time_limitation / 60).toFixed(2));
-                        $modal.find('input[name="transport_time_limitation"]').val($transport_time_limitation);
+                        $modal.find('input[name="alias_name"]').val($response.data.alias_name);
+                        $modal.find('input[name="location_city"]').val($response.data.location_city);
 
 
                         if($response.data.client_er)
                         {
                             $modal.find('select[name="client_id"]').append(new Option($response.data.client_er.name, $response.data.client_id, true, true)).trigger('change');
+                        }
+
+                        if($response.data.pivot_project_staff)
+                        {
+                            $.each($response.data.pivot_project_staff, function( key, val ) {
+                                $modal.find('select[name="peoples[]"]').append(new Option(this.username, this.id, true, true)).trigger('change');
+                            });
+                        }
+                        if($response.data.pivot_project_team)
+                        {
+                            $.each($response.data.pivot_project_team, function( key, val ) {
+                                $modal.find('select[name="teams[]"]').append(new Option(this.name, this.id, true, true)).trigger('change');
+                            });
                         }
 
                         var $datatable_wrapper = $that.closest('.datatable-wrapper');

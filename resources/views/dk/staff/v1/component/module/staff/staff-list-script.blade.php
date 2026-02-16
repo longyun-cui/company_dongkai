@@ -82,8 +82,7 @@
                         $modal.find('input[name="operate[id]"]').val($that.attr('data-id'));
 
                         $modal.find('input[name="login_number"]').val($response.data.login_number);
-                        $modal.find('input[name="username"]').val($response.data.username);
-                        $modal.find('input[name="true_name"]').val($response.data.true_name);
+                        $modal.find('input[name="name"]').val($response.data.name);
 
                         $modal.find('input[name="staff_category"]').prop('checked', false);
                         $modal.find('input[name="staff_category"][value="'+$response.data.staff_category+'"]').prop('checked', true).trigger('change');
@@ -112,6 +111,11 @@
                         if($response.data.team_er)
                         {
                             $modal.find('select[name="team_id"]').append(new Option($response.data.team_er.name, $response.data.team_id, true, true)).trigger('change');
+                        }
+                        // 小组
+                        if($response.data.group_er)
+                        {
+                            $modal.find('select[name="group_id"]').append(new Option($response.data.group_er.name, $response.data.group_id, true, true)).trigger('change');
                         }
 
                         var $datatable_wrapper = $that.closest('.datatable-wrapper');
@@ -210,7 +214,7 @@
             var $modal = $that.parents('.modal-wrapper');
 
             var $value = $(this).val();
-            if($value == 1)
+            if($value == 11)
             {
                 $modal.find('input[name="staff_position"]').prop('checked', false);
                 $modal.find('input[name="staff_position"][value="11"]').prop('checked', true).trigger('change');
@@ -658,6 +662,59 @@
                     $row.removeClass('operating');
                 }
             });
+        });
+
+
+        // 【员工】启用
+        $(".main-wrapper").off('click', ".staff--item-login-submit").on('click', ".staff--item-login-submit", function() {
+            var $that = $(this);
+            var $id = $that.attr('data-id');
+            var $row = $that.parents('tr');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $item_category = $datatable_wrapper.data('datatable-item-category');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+
+            $('.datatable-wrapper').removeClass('operating');
+            $datatable_wrapper.addClass('operating');
+            $datatable_wrapper.find('tr').removeClass('operating');
+            $row.addClass('operating');
+
+
+            //
+            $.post(
+                "{{ url('/o1/staff/item-login') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: "staff--item-login",
+                    item_category: $item_category,
+                    item_id: $that.attr('data-id')
+                },
+                'json'
+            )
+                .done(function($response, status, jqXHR) {
+                    console.log('#'+$that.attr('id')+'.post.done.');
+
+                    $response = JSON.parse($response);
+                    if(!$response.success)
+                    {
+                        if($response.msg) layer.msg($response.msg);
+                    }
+                    else
+                    {
+                        location.reload();
+                    }
+                })
+                .fail(function(jqXHR, status, error) {
+                    console.log('#'+$that.attr('id')+'.post.fail.');
+                    layer.msg('服务器错误！');
+
+                })
+                .always(function(jqXHR, status) {
+                    console.log('#'+$that.attr('id')+'.post.always.');
+                    layer.closeAll('loading');
+                });
+
+
         });
 
 

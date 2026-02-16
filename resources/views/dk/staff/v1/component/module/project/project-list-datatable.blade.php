@@ -110,23 +110,77 @@
                     }
                 },
                 {
-                    "title": "名称",
+                    "title": "项目名称",
                     "data": "name",
-                    "className": "",
-                    "width": "160px",
-                    "orderable": false,
+                    "className": "text-center",
+                    "width": "100px",
+                    "orderable": true,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
                         {
                             $(nTd).attr('data-row-index',iRow);
 
-                            $(nTd).addClass('modal-show--for--project-field-set');
-                            $(nTd).attr('data-column-type','text');
-                            $(nTd).attr('data-column-name','项目名称');
+                            $(nTd).addClass('modal-show-for-field-set');
 
                             $(nTd).attr('data-id',row.id).attr('data-name','项目名称');
                             $(nTd).attr('data-key','name').attr('data-value',data);
 
+                            $(nTd).attr('data-column-type','text');
+                            $(nTd).attr('data-column-name','项目名称');
+
+                            if(row.client_id) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
+                    "title": "真实名称",
+                    "data": "alias_name",
+                    "className": "text-center",
+                    "width": "100px",
+                    "orderable": true,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.is_completed != 1 && row.item_status != 97)
+                        {
+                            $(nTd).attr('data-row-index',iRow);
+
+                            $(nTd).addClass('modal-show-for-field-set');
+
+                            $(nTd).attr('data-id',row.id).attr('data-name','真实名称');
+                            $(nTd).attr('data-key','alias_name').attr('data-value',data);
+
+                            $(nTd).attr('data-column-type','text');
+                            $(nTd).attr('data-column-name','真实名称');
+
+                            if(row.client_id) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
+                    "title": "城市",
+                    "data": "location_city",
+                    "className": "text-center",
+                    "width": "100px",
+                    "orderable": true,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.is_completed != 1 && row.item_status != 97)
+                        {
+                            $(nTd).attr('data-row-index',iRow);
+
+                            $(nTd).addClass('modal-show-for-field-set');
+
+                            $(nTd).attr('data-id',row.id).attr('data-name','城市');
+                            $(nTd).attr('data-key','location_city').attr('data-value',data);
+
+                            $(nTd).attr('data-column-type','text');
+                            $(nTd).attr('data-column-name','城市');
 
                             if(row.client_id) $(nTd).attr('data-operate-type','edit');
                             else $(nTd).attr('data-operate-type','add');
@@ -147,16 +201,16 @@
                         {
                             $(nTd).attr('data-row-index',iRow);
 
-                            $(nTd).addClass('modal-show--for--project-field-set');
-                            $(nTd).attr('data-column-type','select2');
-                            $(nTd).attr('data-column-name','客户');
+                            $(nTd).addClass('modal-show-for-field-set');
 
                             $(nTd).attr('data-id',row.id).attr('data-name','客户');
                             $(nTd).attr('data-key','client_id').attr('data-value',data);
+
                             if(row.client_er == null) $(nTd).attr('data-option-name','未指定');
-                            else {
-                                $(nTd).attr('data-option-name',row.client_er.name);
-                            }
+                            else $(nTd).attr('data-option-name',row.client_er.name);
+
+                            $(nTd).attr('data-column-type','select2');
+                            $(nTd).attr('data-column-name','客户');
 
                             if(row.client_id) $(nTd).attr('data-operate-type','edit');
                             else $(nTd).attr('data-operate-type','add');
@@ -164,190 +218,91 @@
                     },
                     render: function(data, type, row, meta) {
                         if(row.client_er == null) return '--';
-                        else return '<a href="javascript:void(0);" class="text-black">'+row.client_er.name+' </a>';
+                        else return '<a href="javascript:void(0);">'+row.client_er.name+' </a>';
                     }
                 },
                 {
-                    "title": "账期",
-                    "data": "settlement_period",
-                    "className": "",
+                    "title": "团队",
+                    "data": "pivot_project_team",
+                    "className": "text-center white-space-normal",
+                    "width": "120px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    },
+                    render: function(data, type, row, meta) {
+                        var html = '';
+                        $.each(data,function( key, val ) {
+//                                console.log( key, val, this );
+                            html += '<a href="javascript:void(0);">'+this.name+'</a> &nbsp;';
+                        });
+                        return html;
+                    }
+                },
+                {
+                    "title": "质检员",
+                    "data": "pivot_project_staff",
+                    "className": "text-center white-space-normal",
+                    "width": "360px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    },
+                    render: function(data, type, row, meta) {
+                        var html = '';
+                        $.each(data,function( key, val ) {
+//                                console.log( key, val, this );
+                            html += '<a href="javascript:void(0);">'+this.username+'</a> &nbsp;';
+                        });
+                        return html;
+                    }
+                },
+                {
+                    "title": "每日目标",
+                    "data": "daily_goal",
+                    "className": "text-center",
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1)
+                        if(row.is_completed != 1 && row.item_status != 97)
+                        {
+                            $(nTd).addClass('modal-show-for-info-text-set');
+                            $(nTd).attr('data-id',row.id).attr('data-name','每日目标');
+                            $(nTd).attr('data-key','daily_goal').attr('data-value',data);
+                            $(nTd).attr('data-column-name','每日目标');
+                            $(nTd).attr('data-text-type','text');
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
+                    "title": "分发",
+                    "data": "is_distributive",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.is_completed != 1 && row.item_status != 97)
                         {
                             $(nTd).attr('data-row-index',iRow);
 
-                            $(nTd).addClass('modal-show--for--project-field-set');
+                            $(nTd).addClass('modal-show-for-field-set');
+                            $(nTd).attr('data-id',row.id).attr('data-name','是否+V');
+                            $(nTd).attr('data-key','is_distributive').attr('data-value',data);
+
                             $(nTd).attr('data-column-type','radio');
-                            $(nTd).attr('data-column-name','账期');
+                            $(nTd).attr('data-column-name','是否分发');
 
-                            $(nTd).attr('data-id',row.id);
-                            $(nTd).attr('data-name','运费');
-                            $(nTd).attr('data-key','freight_amount');
-                            $(nTd).attr('data-value',data);
-
-                            if(row.client_id) $(nTd).attr('data-operate-type','edit');
+                            if(data) $(nTd).attr('data-operate-type','edit');
                             else $(nTd).attr('data-operate-type','add');
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(data == 1)
-                        {
-                            return '<i class="fa fa-clock-o text-red"></i> 单次结算';
-                        }
-                        if(data == 3)
-                        {
-                            return '<i class="fa fa-clock-o text-yellow"></i> 多次结算</small>';
-                        }
-                        if(data == 7)
-                        {
-                            return '<i class="fa fa-clock-o text-blue"></i> 周结</small>';
-                        }
-                        if(data == 31)
-                        {
-                            return '<i class="fa fa-clock-o text-green"></i> 月结</small>';
-                        }
-                        else
-                        {
-                            return '有误';
-                        }
-                    }
-                },
-                {
-                    "title": "运费",
-                    "data": "freight_amount",
-                    "className": "",
-                    "width": "80px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1)
-                        {
-                            $(nTd).attr('data-row-index',iRow);
-
-                            $(nTd).addClass('modal-show--for--project-field-set');
-                            $(nTd).attr('data-column-type','text');
-                            $(nTd).attr('data-column-name','运费');
-
-                            $(nTd).attr('data-id',row.id);
-                            $(nTd).attr('data-name','运费');
-                            $(nTd).attr('data-key','freight_amount');
-                            $(nTd).attr('data-value',data);
-
-                            if(row.client_id) $(nTd).attr('data-operate-type','edit');
-                            else $(nTd).attr('data-operate-type','add');
-                        }
-                    },
-                    render: function(data, type, row, meta) {
-                        return data;
-                    }
-                },
-                {
-                    "title": "出发地",
-                    "data": "transport_departure_place",
-                    "className": "",
-                    "width": "80px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1)
-                        {
-                            $(nTd).attr('data-row-index',iRow);
-
-                            $(nTd).addClass('modal-show--for--project-field-set');
-                            $(nTd).attr('data-column-type','text');
-                            $(nTd).attr('data-column-name','出发地');
-
-                            $(nTd).attr('data-id',row.id);
-                            $(nTd).attr('data-name','出发地');
-                            $(nTd).attr('data-key','transport_departure_place');
-                            $(nTd).attr('data-value',data);
-
-                            if(row.client_id) $(nTd).attr('data-operate-type','edit');
-                            else $(nTd).attr('data-operate-type','add');
-                        }
-                    },
-                    render: function(data, type, row, meta) {
-                        return data;
-                    }
-                },
-                {
-                    "title": "目的地",
-                    "data": "transport_destination_place",
-                    "className": "",
-                    "width": "80px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
-                        {
-                            $(nTd).attr('data-row-index',iRow);
-
-                            $(nTd).addClass('modal-show--for--project-field-set');
-                            $(nTd).attr('data-column-type','text');
-                            $(nTd).attr('data-column-name','目的地');
-
-                            $(nTd).attr('data-id',row.id);
-                            $(nTd).attr('data-name','目的地');
-                            $(nTd).attr('data-key','transport_destination_place');
-                            $(nTd).attr('data-value',data);
-
-                            if(row.client_id) $(nTd).attr('data-operate-type','edit');
-                            else $(nTd).attr('data-operate-type','add');
-                        }
-                    },
-                    render: function(data, type, row, meta) {
-                        return data;
-                    }
-                },
-                {
-                    "title": "距离(km)",
-                    "data": "transport_distance",
-                    "className": "",
-                    "width": "80px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
-                        {
-                            $(nTd).attr('data-row-index',iRow);
-
-                            $(nTd).addClass('modal-show--for--project-field-set');
-                            $(nTd).attr('data-column-type','text');
-                            $(nTd).attr('data-column-name','距离');
-
-                            $(nTd).attr('data-id',row.id).attr('data-name','距离');
-                            $(nTd).attr('data-key','transport_distance').attr('data-value',data);
-
-                            if(row.client_id) $(nTd).attr('data-operate-type','edit');
-                            else $(nTd).attr('data-operate-type','add');
-                        }
-                    },
-                    render: function(data, type, row, meta) {
-                        return data;
-                    }
-                },
-                {
-                    "title": "时效(H)",
-                    "data": "transport_time_limitation",
-                    "className": "",
-                    "width": "80px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
-                        {
-                            $(nTd).attr('data-row-index',iRow);
-
-                            $(nTd).addClass('modal-show--for--project-field-set');
-                            $(nTd).attr('data-column-type','text');
-                            $(nTd).attr('data-column-name','时效');
-
-                            $(nTd).attr('data-id',row.id).attr('data-name','时效');
-                            $(nTd).attr('data-key','transport_time_limitation').attr('data-value',data);
-
-                            if(row.client_id) $(nTd).attr('data-operate-type','edit');
-                            else $(nTd).attr('data-operate-type','add');
-                        }
-                    },
-                    render: function(data, type, row, meta) {
-                        return convertMinutesToHoursAndMinutes(data);
+                        if(data == 0) return '<small class="btn-xs btn-danger">否</small>';
+                        else if(data == 1) return '<small class="btn-xs btn-success">是</small>';
+                        else return '--';
                     }
                 },
                 {

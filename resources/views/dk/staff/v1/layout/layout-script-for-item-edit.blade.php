@@ -2047,7 +2047,7 @@
 
 
     //
-    function form_reset($form_id)
+    function form_reset_($form_id)
     {
         console.log('form_reset');
         var $form = $($form_id);
@@ -2087,7 +2087,7 @@
 
 
     //
-    function selectFirstOption(selector)
+    function selectFirstOption_(selector)
     {
         var $select = $(selector);
         var firstVal = $select.find('option:first').val();
@@ -2105,7 +2105,7 @@
     }
 
     //
-    function select2FirstOptionSelected(dom)
+    function select2FirstOptionSelected_(dom)
     {
         var $dom = $(dom);
         var firstVal = $dom.find('option:first').val();
@@ -2119,7 +2119,7 @@
         }
     }
 
-    function select2_client_init(selector,$default)
+    function select2_client_init_(selector,$default)
     {
         var $element = $(selector);
         if ($element.data('select2'))
@@ -2161,7 +2161,7 @@
         if($default) $element.val($default).trigger('change');
     }
 
-    function select2_project_init(selector,$default)
+    function select2_project_init_(selector,$default)
     {
         var $element = $(selector);
         if ($element.data('select2'))
@@ -2203,7 +2203,7 @@
         if($default) $element.val($default).trigger('change');
     }
 
-    function select2_location_district_init(selector,$default)
+    function select2_location_district_init_(selector,$default)
     {
         var $element = $(selector);
         if ($element.data('select2'))

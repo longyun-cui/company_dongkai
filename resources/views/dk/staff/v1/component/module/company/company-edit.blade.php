@@ -23,7 +23,7 @@
                 {{--类型--}}
                 <div class="form-group form-category" style="height:70px;">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 类型</label>
-                    <div class="col-md-8">
+                    <div class="col-md-9">
                         <div class="btn-group">
 
                             @if(in_array($me->user_type, [0,1,11]))
@@ -66,7 +66,7 @@
                 {{--项目名称--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 名称</label>
-                    <div class="col-md-8 ">
+                    <div class="col-md-9 ">
                         <input type="text" class="form-control" name="name" placeholder="名称" value="">
                     </div>
                 </div>
@@ -75,7 +75,7 @@
                 {{--上级部门--}}
                 <div class="form-group select2-superior-box _none" style="height:70px;">
                     <label class="control-label col-md-2">选择上级部门</label>
-                    <div class="col-md-8 ">
+                    <div class="col-md-9 ">
                         <select class="form-control select2-box" name="superior_company_id" id="select2-superior-company" style="width:100%;">
                             <option data-id="-1" value="-1">选择上级部门</option>
                         </select>
@@ -86,7 +86,7 @@
                 {{--负责人--}}
                 <div class="form-group _none" style="height:70px;">
                     <label class="control-label col-md-2">选择负责人</label>
-                    <div class="col-md-8 ">
+                    <div class="col-md-9 ">
                         <select class="form-control select2-box" name="leader_id" id="select2-leader" data-type="manager" style="width:100%;">
                             <option data-id="-1" value="-1">选择负责人</option>
                         </select>
@@ -97,7 +97,7 @@
                 {{--描述--}}
                 <div class="form-group">
                     <label class="control-label col-md-2">描述</label>
-                    <div class="col-md-8 ">
+                    <div class="col-md-9 ">
                         {{--<input type="text" class="form-control" name="description" placeholder="描述" value="{{$data->description or ''}}">--}}
                         <textarea class="form-control" name="description" rows="3" cols="100%"></textarea>
                     </div>
@@ -107,7 +107,7 @@
                 {{--头像--}}
                 <div class="form-group _none">
                     <label class="control-label col-md-2">头像</label>
-                    <div class="col-md-8 fileinput-group">
+                    <div class="col-md-9 fileinput-group">
 
                         <div class="fileinput fileinput-new" data-provides="fileinput">
                             <div class="fileinput-new thumbnail">
@@ -136,7 +136,7 @@
                 {{--启用--}}
                 <div class="form-group form-type _none">
                     <label class="control-label col-md-2">启用</label>
-                    <div class="col-md-8">
+                    <div class="col-md-9">
                         <div class="btn-group">
 
                             <button type="button" class="btn">
@@ -164,7 +164,7 @@
 
             <div class="box-footer">
                 <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
+                    <div class="col-md-9 col-md-offset-2">
                         <button type="button" class="btn btn-success edit-submit" id="submit--for--company-item-edit">
                             <i class="fa fa-check"></i> 提交
                         </button>

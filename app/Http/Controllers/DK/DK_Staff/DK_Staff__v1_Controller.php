@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\DK\Staff;
+namespace App\Http\Controllers\DK\DK_Staff;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;

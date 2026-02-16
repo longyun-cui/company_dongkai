@@ -359,6 +359,576 @@
 
 
 
+    // select2
+    $(function() {
+
+
+        $(document).on('click', '.dropdown-menu.non-auto-hide', function(e) {
+            e.stopPropagation();
+        });
+
+        $(document).on('scroll', '.modal-body', function(e) {
+            e.stopPropagation();
+        });
+
+        $('.modal').on('scroll', function(e) {
+            e.stopPropagation();
+        });
+
+        // 通用
+        $('.modal--select2').each(function() {
+            var $that = $(this);
+
+            var $dropdownParent = $(document.body);
+            var $modalSelector = $that.data('modal');
+            if ($modalSelector)
+            {
+                $dropdownParent = $($modalSelector);
+            }
+
+            $that.select2({
+                dropdownParent: $dropdownParent.find('.modal-content'),
+                minimumInputLength: 0,
+                theme: 'classic'
+            });
+
+
+        });
+
+        // 公司
+        $('.select2--company').each(function() {
+            var $that = $(this);
+
+            var $dropdownParent = $(document.body);
+            var $modalSelector = $that.data('modal');
+            if ($modalSelector)
+            {
+                $dropdownParent = $($modalSelector);
+            }
+
+            $that.select2({
+                ajax: {
+                    url: "{{ url('/o1/select2/select2--company') }}",
+                    type: 'post',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            item_category: this.data('item-category'),
+                            item_type: this.data('item-type'),
+                            keyword: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function (markup) { return markup; },
+                dropdownParent: $dropdownParent.find('.modal-content'),
+                minimumInputLength: 0,
+                theme: 'classic'
+            });
+
+
+            $that.change(function() {
+
+                var $company_id = $(this).val();
+
+                var $department_target = $(this).data('department-target');
+                $($department_target).val(null).trigger('change');
+                $($department_target).data('company-id',$company_id);
+
+                var $team_target = $(this).data('team-target');
+                $($team_target).val(null).trigger('change');
+                $($team_target).data('company-id',$company_id);
+
+                var $staff_target = $(this).data('staff-target');
+                $($staff_target).val(null).trigger('change');
+                $($staff_target).data('company-id',$company_id);
+
+            });
+        });
+
+        // 公司
+        $('.select2--company').each(function() {
+            var $that = $(this);
+
+            var $dropdownParent = $(document.body);
+            var $modalSelector = $that.data('modal');
+            if ($modalSelector)
+            {
+                $dropdownParent = $($modalSelector);
+            }
+
+            $that.select2({
+                ajax: {
+                    url: "{{ url('/o1/select2/select2--company') }}",
+                    type: 'post',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            item_category: this.data('item-category'),
+                            item_type: this.data('item-type'),
+                            keyword: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function (markup) { return markup; },
+                dropdownParent: $dropdownParent.find('.modal-content'),
+                minimumInputLength: 0,
+                theme: 'classic'
+            });
+
+
+            $that.change(function() {
+
+                var $company_id = $(this).val();
+
+                var $department_target = $(this).data('department-target');
+                $($department_target).val(null).trigger('change');
+                $($department_target).data('company-id',$company_id);
+
+                var $team_target = $(this).data('team-target');
+                $($team_target).val(null).trigger('change');
+                $($team_target).data('company-id',$company_id);
+
+                var $staff_target = $(this).data('staff-target');
+                $($staff_target).val(null).trigger('change');
+                $($staff_target).data('company-id',$company_id);
+
+            });
+        });
+        // 部门
+        $('.select2--department').each(function() {
+            var $that = $(this);
+
+            var $dropdownParent = $(document.body);
+            var $modalSelector = $that.data('modal');
+            if ($modalSelector)
+            {
+                $dropdownParent = $($modalSelector);
+            }
+
+            $that.select2({
+                ajax: {
+                    url: "{{ url('/o1/select2/select2--department') }}",
+                    type: 'post',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            department_category: $(this.data('department-category')).find('input[type="radio"]:checked').val(),
+                            item_category: this.data('item-category'),
+                            item_type: this.data('item-type'),
+                            company_id: this.data('company-id'),
+                            keyword: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function (markup) { return markup; },
+                dropdownParent: $dropdownParent.find('.modal-content'),
+                minimumInputLength: 0,
+                theme: 'classic'
+            });
+
+
+            $that.change(function() {
+
+                var $department_id = $(this).val();
+
+                var $team_target = $(this).data('team-target');
+                $($team_target).val(null).trigger('change');
+                $($team_target).data('department-id',$department_id);
+
+                var $staff_target = $(this).data('staff-target');
+                $($staff_target).val(null).trigger('change');
+                $($staff_target).data('department-id',$department_id);
+            });
+        });
+        // 团队
+        $('.select2--team').each(function() {
+            var $that = $(this);
+
+            var $dropdownParent = $(document.body);
+            var $modalSelector = $that.data('modal');
+            if ($modalSelector)
+            {
+                $dropdownParent = $($modalSelector);
+            }
+
+            $that.select2({
+                ajax: {
+                    url: "{{ url('/o1/select2/select2--team') }}",
+                    type: 'post',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            item_category: this.data('item-category'),
+                            item_type: this.data('item-type'),
+                            department_id: this.data('department-id'),
+                            superior_team_id: this.data('superior-team-id'),
+                            keyword: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function (markup) { return markup; },
+                dropdownParent: $dropdownParent.find('.modal-content'),
+                minimumInputLength: 0,
+                theme: 'classic'
+            });
+
+
+            $that.change(function() {
+
+                var $team_id = $(this).val();
+
+                var $team_target = $(this).data('team-target');
+                $($team_target).val(null).trigger('change');
+                $($team_target).data('superior-team-id',$team_id);
+
+                var $staff_target = $(this).data('staff-target');
+                $($staff_target).val(null).trigger('change');
+                $($staff_target).data('team-id',$team_id);
+            });
+        });
+        // 员工
+        $('.select2--staff').each(function() {
+            var $that = $(this);
+
+            var $dropdownParent = $(document.body);
+            var $modalSelector = $that.data('modal');
+            if ($modalSelector)
+            {
+                $dropdownParent = $($modalSelector);
+            }
+
+            $that.select2({
+                ajax: {
+                    url: "{{ url('/o1/select2/select2--staff') }}",
+                    type: 'post',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            item_category: this.data('item-category'),
+                            item_type: this.data('item-type'),
+                            department_id: this.data('department-id'),
+                            team_id: this.data('team-id'),
+                            keyword: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function (markup) { return markup; },
+                dropdownParent: $dropdownParent.find('.modal-content'),
+                minimumInputLength: 0,
+                theme: 'classic'
+            });
+        });
+
+
+        $(".main-content").on('change', ".select2--location-city", function() {
+
+            var $city_value = $(this).val();
+
+            var $location_district_target = $(this).data('location-district-target');
+            $($location_district_target).val(null).trigger('change');
+            $($location_district_target).data('location-city',$city_value);
+
+        });
+        // 地区
+        $('.select2--location').each(function() {
+            var $that = $(this);
+
+            var $dropdownParent = $(document.body);
+            var $modalSelector = $that.data('modal');
+            if ($modalSelector)
+            {
+                $dropdownParent = $($modalSelector);
+            }
+
+            $that.select2({
+                ajax: {
+                    url: "{{ url('/o1/select2/select2--location') }}",
+                    type: 'post',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            item_category: this.data('item-category'),
+                            item_type: this.data('item-type'),
+                            location_city: this.data('location-city'),
+                            keyword: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function (markup) { return markup; },
+                dropdownParent: $dropdownParent.find('.modal-content'),
+                minimumInputLength: 0,
+                theme: 'classic'
+            });
+
+
+            $that.change(function() {
+
+                if($that.data('item-category') == 1)
+                {
+                    var $city_value = $(this).val();
+
+                    var $location_district_target = $(this).data('location-district-target');
+                    $($location_district_target).val(null).trigger('change');
+                    $($location_district_target).data('location-city',$city_value);
+                }
+            });
+        });
+
+
+        // 客户
+        $('.select2--client').each(function() {
+            var $that = $(this);
+
+            var $dropdownParent = $(document.body);
+            var $modalSelector = $that.data('modal');
+            if ($modalSelector)
+            {
+                $dropdownParent = $($modalSelector);
+            }
+
+            $that.select2({
+                ajax: {
+                    url: "{{ url('/o1/select2/select2--client') }}",
+                    type: 'post',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            item_category: this.data('item-category'),
+                            item_type: this.data('item-type'),
+                            keyword: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function (markup) { return markup; },
+                dropdownParent: $dropdownParent.find('.modal-content'),
+                minimumInputLength: 0,
+                theme: 'classic'
+            });
+        });
+        // 项目
+        $('.select2--project').each(function() {
+            var $that = $(this);
+
+            var $dropdownParent = $(document.body);
+            var $modalSelector = $that.data('modal');
+            if ($modalSelector)
+            {
+                $dropdownParent = $($modalSelector);
+            }
+
+            $that.select2({
+                ajax: {
+                    url: "{{ url('/o1/select2/select2--project') }}",
+                    type: 'post',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            item_category: this.data('item-category'),
+                            item_type: this.data('item-type'),
+                            keyword: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function (markup) { return markup; },
+                dropdownParent: $dropdownParent.find('.modal-content'),
+                minimumInputLength: 0,
+                theme: 'classic'
+            });
+        });
+
+
+    });
+
+
+
+
+
+    // 表单初始化
+    function form_reset($form_id)
+    {
+        console.log($form_id+'.form_reset');
+        var $form = $($form_id);
+        // $form.find('.select2-container').remove();
+        // input
+        $form.find('textarea.form-control, input.form-control').each(function () {
+            $(this).val("");
+            $(this).val($(this).data('default'));
+
+        });
+
+        // radio
+        $form.find('input[type="radio"][data-default="default"]').prop('checked', true).trigger('change');
+
+        // select
+        $form.find('select option').prop("selected",false);
+        $form.find('select').find('option:eq(0)').prop('selected', true).trigger('change');
+
+
+        // $form.find(".select2-box").val(-1).trigger("change");
+        // $form.find(".select2-box").val("-1").trigger("change");
+        // selectFirstOption($form_id + " .select2-box");
+        $.each( $form.find(".select2-box"), function(index, element) {
+            select2FirstOptionSelected(element);
+        });
+
+        // $form.find(".select2-box-c").val(-1).trigger("change");
+        // $form.find(".select2-box-c").val("-1").trigger("change");
+        // selectFirstOption($form_id + " .select2-box-c");
+        $.each( $form.find(".select2-box-c"), function(index, element) {
+            select2FirstOptionSelected(element);
+        });
+
+
+        $.each( $form.find(".select2-reset"), function(index, element) {
+            select2FirstOptionSelected(element);
+        });
+
+
+        $form.find(".select2-multi-box-c").val([]).trigger('change');
+        $form.find(".select2-multi-box-c").val(null).trigger('change');
+        $form.find(".select2-multi-box-c").empty().trigger('change');
+    }
+
+
+    //
+    function selectFirstOption(selector)
+    {
+        var $select = $(selector);
+        var firstVal = $select.find('option:first').val();
+        if(firstVal)
+        {
+            console.log('selectFirstOption is');
+            $select.val(firstVal).trigger('change');
+        }
+        else
+        {
+            console.log('selectFirstOption not');
+            // $select.val([]).trigger('change');
+            $select.val(null).trigger('change');
+        }
+    }
+
+    //
+    function select2FirstOptionSelected(dom)
+    {
+        var $dom = $(dom);
+        var firstVal = $dom.find('option:first').val();
+        if(firstVal)
+        {
+            $dom.val(firstVal).trigger('change');
+        }
+        else
+        {
+            $dom.val(null).trigger('change');
+        }
+    }
+
+
+
 
 
     //

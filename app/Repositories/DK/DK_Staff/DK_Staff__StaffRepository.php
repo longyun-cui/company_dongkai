@@ -68,15 +68,21 @@ class DK_Staff__StaffRepository {
 
         $query = DK_Common__Staff::withTrashed()->select('*')
             ->with([
-                'creator'=>function($query) { $query->select(['id','username','true_name']); },
+                'creator'=>function($query) { $query->select(['id','name']); },
                 'company_er'=>function($query) { $query->select(['id','name']); },
                 'department_er'=>function($query) { $query->select(['id','name']); },
                 'team_er'=>function($query) { $query->select(['id','name']); },
                 'sub_team_er'=>function($query) { $query->select(['id','name']); },
                 'group_er'=>function($query) { $query->select(['id','name']); },
-                'leader'=>function($query) { $query->select(['id','username','true_name']); }
+                'leader'=>function($query) { $query->select(['id','name']); }
             ])
-            ->whereIn('staff_category',[1,11,21,31,41,51,61,71,81,99]);
+            ->when(in_array($me->user_type, [0,1]), function ($query) {
+                return $query->whereIn('staff_category',[1,11,21,31,41,51,61,71,81,99]);
+            })
+            ->when($me->staff_category == 0, function ($query) {
+                return $query->whereIn('staff_category',[1,11,21,31,41,51,61,71,81,99]);
+            });
+
 
 
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
@@ -206,7 +212,7 @@ class DK_Staff__StaffRepository {
         $messages = [
             'operate.required' => '参数有误！',
             'login_number.required' => '请输入登录工号！',
-            'true_name.required' => '请输入用户名！',
+            'name.required' => '请输入姓名！',
             'company_id.required' => '请选择所属公司！',
 //            'mobile.unique' => '电话已存在！',
 //            'api_staffNo.required' => '请输入外呼系统坐席ID！',
@@ -216,7 +222,7 @@ class DK_Staff__StaffRepository {
         $v = Validator::make($post_data, [
             'operate' => 'required',
             'login_number' => 'required',
-            'true_name' => 'required',
+            'name' => 'required',
             'company_id' => 'required',
 //            'mobile' => 'required|unique:dk_user,mobile',
 //            'api_staffNo' => 'required|numeric|min:0',
@@ -236,25 +242,25 @@ class DK_Staff__StaffRepository {
         $me = $this->me;
 
         // 判断用户操作权限
-        if(!in_array($me->staff_type,[0,1,11,21,31,41])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->staff_position,[0,1,11,21,31,41,51])) return response_error([],"你没有操作权限！");
 
         if($operate_type == 'create') // 添加 ( $id==0，添加一个新用户 )
         {
             $is_exist = DK_Common__Staff::where('login_number',$post_data['login_number'])->first();
-            if($is_exist) return response_error([],"工号已存在！");
+            if($is_exist) return response_error([],"该【工号】已存在！");
 
             $mine = new DK_Common__Staff;
-            $post_data["user_status"] = 0;
-            $post_data["user_category"] = 11;
+            $post_data["item_status"] = 1;
+//            $post_data["user_category"] = 11;
             $post_data["active"] = 1;
             $post_data["password"] = password_encode("12345678");
             $post_data["creator_id"] = $me->id;
-            $post_data['username'] = $post_data['true_name'];
+//            $post_data['name'] = $post_data['name'];
         }
         else if($operate_type == 'edit') // 编辑
         {
             $mine = DK_Common__Staff::find($operate_id);
-            if(!$mine) return response_error([],"该用户不存在，刷新页面重试！");
+            if(!$mine) return response_error([],"该【员工】不存在，刷新页面重试！");
             if($mine->login_number != $post_data['login_number'])
             {
                 $is_exist = DK_Common__Staff::where('login_number',$post_data['login_number'])->where('id','!=',$operate_id)->first();
@@ -264,17 +270,20 @@ class DK_Staff__StaffRepository {
         else return response_error([],"参数有误！");
 
 
+
+
+
         // 启动数据库事务
         DB::beginTransaction();
         try
         {
-            if(!empty($post_data['custom']))
-            {
-                $post_data['custom'] = json_encode($post_data['custom']);
-            }
-
             $mine_data = $post_data;
             unset($mine_data['operate']);
+
+            if(!empty($mine_data['custom']))
+            {
+                $mine_data['custom'] = json_encode($mine_data['custom']);
+            }
 
             // 判断部门是否存在
             if(empty($post_data['department_id']))
@@ -283,7 +292,7 @@ class DK_Staff__StaffRepository {
             }
             else
             {
-                $department = WL_Common_Department::find($post_data['department_id']);
+                $department = DK_Common__Department::find($post_data['department_id']);
                 if($department) $mine_data['company_id'] = $department->company_id;
             }
 
@@ -614,7 +623,7 @@ class DK_Staff__StaffRepository {
     }
 
 
-    // 【员工】管理员-启用
+    // 【员工】启用
     public function o1__staff__item_enable($post_data)
     {
         $messages = [
@@ -702,7 +711,7 @@ class DK_Staff__StaffRepository {
         }
 
     }
-    // 【员工】管理员-禁用
+    // 【员工】禁用
     public function o1__staff__item_disable($post_data)
     {
         $messages = [
@@ -791,6 +800,45 @@ class DK_Staff__StaffRepository {
     }
 
 
+    // 【员工】登录
+    public function o1__staff__item_login($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+
+        $operate = $post_data["operate"];
+        if($operate != 'staff--item-login') return response_error([],"参数【operate】有误！");
+        $item_id = $post_data["item_id"];
+        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+        // 判断对象是否合法
+        $mine = DK_Common__Staff::find($item_id);
+        if(!$mine) return response_error([],"该【员工】不存在，刷新页面重试！");
+
+        Auth::guard('dk_staff_user')->login($mine,true);
+        return response_success();
+
+    }
+
+
     // 【员工】【操作记录】返回-列表-数据
     public function o1__staff__item_operation_record_list__datatable_query($post_data)
     {
@@ -800,7 +848,7 @@ class DK_Staff__StaffRepository {
         $id  = $post_data["id"];
         $query = DK_Common__Record_by_Operation::select('*')
             ->with([
-                'creator'=>function($query) { $query->select(['id','username','true_name']); },
+                'creator'=>function($query) { $query->select(['id','name']); },
             ])
             ->where(['staff_id'=>$id]);
 

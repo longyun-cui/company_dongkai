@@ -93,35 +93,35 @@
                 },
                 {
                     "title": "姓名",
-                    "data": "id",
+                    "data": "name",
                     "className": "",
                     "width": "100px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-//                            return '<a target="_blank" href="/user/'+data+'">'+row.true_name+'</a>';
-                        if(row.true_name) return row.true_name;
+//                            return '<a target="_blank" href="/user/'+data+'">'+data+'</a>';
+                        if(data) return data;
                         else return '--';
                     }
                 },
-                {
-                    "title": "用户名",
-                    "data": "id",
-                    "className": "",
-                    "width": "100px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-//                            return '<a target="_blank" href="/user/'+data+'">'+row.nickname+'</a>';
-                        if(row.username)
-                        {
-                            if(row.user_type == 88)
-                            {
-                                return '<a class="caller-control" data-id="'+row.id+'" data-title="'+data+'">'+data+' ('+row.id+')'+'</a>';
-                            }
-                            else return row.username;
-                        }
-                        else return '--';
-                    }
-                },
+//                 {
+//                     "title": "用户名",
+//                     "data": "id",
+//                     "className": "",
+//                     "width": "100px",
+//                     "orderable": false,
+//                     render: function(data, type, row, meta) {
+// //                            return '<a target="_blank" href="/user/'+data+'">'+row.nickname+'</a>';
+//                         if(row.username)
+//                         {
+//                             if(row.user_type == 88)
+//                             {
+//                                 return '<a class="caller-control" data-id="'+row.id+'" data-title="'+data+'">'+data+' ('+row.id+')'+'</a>';
+//                             }
+//                             else return row.username;
+//                         }
+//                         else return '--';
+//                     }
+//                 },
                 {
                     "title": "员工类型",
                     "data": 'staff_category',
@@ -133,7 +133,12 @@
                         else if(data == 11) return '<i class="fa fa-genderless text-red"></i> 人事';
                         else if(data == 21) return '<i class="fa fa-genderless text-orange"></i> 行政';
                         else if(data == 31) return '<i class="fa fa-genderless text-green"></i> 财务';
+                        else if(data == 41) return '<i class="fa fa-genderless text-blue"></i> 客服';
+                        else if(data == 51) return '<i class="fa fa-genderless text-blue"></i> 质检';
+                        else if(data == 61) return '<i class="fa fa-genderless text-blue"></i> 三方';
+                        else if(data == 71) return '<i class="fa fa-genderless text-blue"></i> 运营';
                         else if(data == 81) return '<i class="fa fa-genderless text-blue"></i> 业务';
+                        else if(data == 88) return '<i class="fa fa-genderless text-blue"></i> 销售商务';
                         else return "有误";
                     }
                 },
@@ -151,7 +156,7 @@
                         else if(data == 61) return '<i class="fa fa-star-o text-red"></i> 小组组长';
                         else if(data == 71) return '<i class="fa fa-star-o text-red"></i> 小队队长';
                         else if(data == 88) return '<i class="fa fa-genderless text-red"></i> 业务员';
-                        else if(data == 99) return '<i class="fa fa-genderless text-red"></i> 业务员';
+                        else if(data == 99) return '<i class="fa fa-genderless text-red"></i> 职员';
                         else return "有误";
                     }
                 },
@@ -198,12 +203,12 @@
                             {
                                 var $sub_team = row.sub_team_er.name;
                                 $return += ' - ' + $sub_team;
+                            }
 
-                                if(row.group_er)
-                                {
-                                    var $group = row.group_er.name;
-                                    $return += ' - ' + $group;
-                                }
+                            if(row.group_er)
+                            {
+                                var $group = row.group_er.name;
+                                $return += ' - ' + $group;
                             }
 
                             return '<a href="javascript:void(0);" class="text-black">'+$return+'</a>';
@@ -219,8 +224,7 @@
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         if(data == 0) return '未知';
-                        // return row.creator.true_name;
-                        if(row.creator) return '<a href="javascript:void(0);">'+row.creator.username+'</a>';
+                        if(row.creator) return '<a href="javascript:void(0);">'+row.creator.name+'</a>';
                         else return '--';
                     }
                 },
@@ -263,6 +267,7 @@
                         var $html_able = '';
                         var $html_delete = '';
                         var $html_promote = '';
+                        var $html_login = '<a class="btn btn-xs staff--item-login-submit" data-id="'+data+'">登录</a>';
                         var $html_password_reset = '<a class="btn btn-xs item-password-reset-submit" data-id="'+data+'">重置密码</a>';
                         var $html_operation_record = '<a class="btn btn-xs modal-show--for--staff--item-operation-record" data-id="'+data+'">记录</a>';
 
@@ -314,8 +319,9 @@
                             $html_able+
                             $html_delete+
                             $html_operation_record+
-                            // '<a class="btn btn-xs project--item-statistic" data-id="'+data+'">统计</a>'+
-                            // '<a class="btn btn-xs project--item-login-submit" data-id="'+data+'">登录</a>'+
+                            $html_login+
+                            // '<a class="btn btn-xs staff--item-statistic" data-id="'+data+'">统计</a>'+
+                            // '<a class="btn btn-xs staff--item-login-submit" data-id="'+data+'">登录</a>'+
                             '';
                         return html;
                     }

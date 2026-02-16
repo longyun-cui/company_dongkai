@@ -98,6 +98,29 @@
             @endif
 
 
+            {{--地域列表--}}
+            @if(in_array($me->user_type,[0,1,9,11,61]))
+                <li class="treeview _none-">
+                    <a class="tab-control datatable-control"
+                       data-type="create"
+                       data-unique="y"
+                       data-id="location-list"
+                       data-title='<i class="fa fa-location-arrow text-green"></i> 地域列表'
+                       data-content=''
+
+                       data-datatable-type="create"
+                       data-datatable-unique="y"
+                       data-datatable-id="datatable-location-list"
+                       data-datatable-target="location-list"
+                       data-datatable-clone-object="location-list-clone"
+                    >
+                        <i class="fa fa-location-arrow text-white"></i>
+                        <span>地域列表</span>
+                    </a>
+                </li>
+            @endif
+
+
 
 
             {{--客户列表--}}
@@ -151,14 +174,14 @@
 
 
 
-            {{--口腔工单--}}
+            {{--口腔•工单列表--}}
             <li class="treeview _none-">
                 <a class="tab-control datatable-control"
                    data-type="create"
                    data-unique="y"
                    data-id="order-list"
-                   data-title='订单'
-                   data-content='<i class="fa fa-file-text text-orange"></i> 口腔•工单'
+                   data-title='口腔•工单'
+                   data-content=''
                    data-icon='<i class="fa fa-file-text text-orange"></i>'
 
                    data-datatable-type="create"
@@ -168,24 +191,24 @@
                    data-datatable-clone-object="order-list-clone"
                 >
                     <i class="fa fa-file-text text-orange"></i>
-                    <span>订单列表</span>
+                    <span>口腔•工单</span>
                 </a>
             </li>
-            {{--交付列表--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66]))
+            {{--口腔•交付列表--}}
+            @if(in_array($me->staff_category,[0,1,9,71]))
                 <li class="treeview _none-">
                     <a class="tab-control datatable-control"
                        data-type="create"
                        data-unique="y"
-                       data-id="delivery-list"
+                       data-id="delivery-dental-list"
                        data-title='<i class="fa fa-share text-yellow"></i> 口腔•交付'
                        data-content=''
 
                        data-datatable-type="create"
                        data-datatable-unique="y"
-                       data-datatable-id="datatable-delivery-list"
-                       data-datatable-target="delivery-list"
-                       data-datatable-clone-object="delivery-list-clone"
+                       data-datatable-id="datatable-delivery-dental-list"
+                       data-datatable-target="delivery-dental-list"
+                       data-datatable-clone-object="delivery-dental-list-clone"
                     >
                         <i class="fa fa-share text-yellow"></i>
                         <span>口腔•交付</span>
@@ -194,6 +217,7 @@
             @endif
 
 
+            {{--医美•工单列表--}}
             <li class="treeview _none-">
                 <a class="tab-control datatable-control"
                    data-type="create"
@@ -212,8 +236,8 @@
                     <span>医美•工单</span>
                 </a>
             </li>
-            {{--交付列表--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66]))
+            {{--医美•交付列表--}}
+            @if(in_array($me->staff_category,[0,1,9,71]))
             <li class="treeview">
                 <a class="tab-control datatable-control"
                    data-type="create"
@@ -235,6 +259,7 @@
             @endif
 
 
+            {{--奢侈品•工单列表--}}
             <li class="treeview _none-">
                 <a class="tab-control datatable-control"
                    data-type="create"
@@ -253,8 +278,8 @@
                     <span>奢侈品•工单</span>
                 </a>
             </li>
-            {{--交付列表--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66]))
+            {{--奢侈品•交付列表--}}
+            @if(in_array($me->staff_category,[0,1,9,71]))
                 <li class="treeview _none-">
                     <a class="tab-control datatable-control"
                        data-type="create"

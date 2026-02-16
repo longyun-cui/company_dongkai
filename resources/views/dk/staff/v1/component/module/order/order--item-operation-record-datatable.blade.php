@@ -2,17 +2,17 @@
     var Datatable__for__Order_Item_Operation_Record_List = function ($id) {
         var datatableAjax__order_item_operation_record = function ($id) {
 
-            var dt__order_item_operation_record = $('#datatable--for--order-item-operation-record-list');
+            var dt__order_item_operation_record = $('#datatable--for--order--item-operation-record-list');
             if($.fn.DataTable.isDataTable(dt__order_item_operation_record))
             {
                 // 已经初始化
-                console.log('#datatable--for--order-item-operation-record-list // 已经初始化');
+                console.log('#datatable--for--order--item-operation-record-list // 已经初始化');
                 $(dt__order_item_operation_record).DataTable().destroy();
             }
             else
             {
                 // 未初始化
-                console.log('#datatable--for--order-item-operation-record-list // 未初始化');
+                console.log('#datatable--for--order--item-operation-record-list // 未初始化');
             }
 
             var ajax_datatable_order_operation_record = dt__order_item_operation_record.DataTable({
@@ -110,33 +110,33 @@
                             return $category_html + $type_html;
                         }
                     },
-                    {
-                        "className": "",
-                        "width": "120px",
-                        "title": "时间",
-                        "data": "custom_datetime",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(row.operate_type == 11)
-                            {
-                                return '';
-                            }
-
-                            if(data)
-                            {
-                                let d = new Date(data);
-                                let year = d.getFullYear();
-                                let month = ('0' + (d.getMonth() + 1)).slice(-2); // 月份是从0开始的
-                                let day = ('0' + d.getDate()).slice(-2);
-                                let hours = ('0' + d.getHours()).slice(-2);
-                                let minutes = ('0' + d.getMinutes()).slice(-2);
-                                let seconds = ('0' + d.getSeconds()).slice(-2);
-
-                                return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes;
-                            }
-                            return data;
-                        }
-                    },
+                    // {
+                    //     "className": "",
+                    //     "width": "120px",
+                    //     "title": "时间",
+                    //     "data": "custom_datetime",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         if(row.operate_type == 11)
+                    //         {
+                    //             return '';
+                    //         }
+                    //
+                    //         if(data)
+                    //         {
+                    //             let d = new Date(data);
+                    //             let year = d.getFullYear();
+                    //             let month = ('0' + (d.getMonth() + 1)).slice(-2); // 月份是从0开始的
+                    //             let day = ('0' + d.getDate()).slice(-2);
+                    //             let hours = ('0' + d.getHours()).slice(-2);
+                    //             let minutes = ('0' + d.getMinutes()).slice(-2);
+                    //             let seconds = ('0' + d.getSeconds()).slice(-2);
+                    //
+                    //             return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes;
+                    //         }
+                    //         return data;
+                    //     }
+                    // },
                     {
                         "className": "text-left",
                         "width": "480px",
@@ -174,7 +174,7 @@
                         "data": "creator_id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.username+'</a>';
+                            return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.name+'</a>';
                         }
                     },
                     {

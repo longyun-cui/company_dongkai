@@ -176,17 +176,9 @@
                 {
                     Datatable__for__Staff_List('#'+$config.id);
                 }
-                else if($id == "datatable-motorcade-list")
+                else if($id == "datatable-location-list")
                 {
-                    Datatable__for__Motorcade_List('#'+$config.id);
-                }
-                else if($id == "datatable-car-list")
-                {
-                    Datatable__for__Car_List('#'+$config.id);
-                }
-                else if($id == "datatable-driver-list")
-                {
-                    Datatable__for__Driver_List('#'+$config.id);
+                    Datatable__for__Location_List('#'+$config.id);
                 }
                 else if($id == "datatable-client-list")
                 {
@@ -198,19 +190,27 @@
                 }
                 else if($id == "datatable-order-list")
                 {
-                    Datatable__for__Order_List('#'+$config.id);
+                    Datatable__for__Order_List($config.id);
                 }
-                else if($id == "datatable-fee-list")
+                else if($id == "datatable-order-dental-list")
                 {
-                    Datatable__for__Fee_List('#'+$config.id);
+                    Datatable__for__Order_Dental_List($config.id);
                 }
-                else if($id == "datatable-finance-list")
+                else if($id == "datatable-delivery-list")
                 {
-                    Datatable__for__Finance_List('#'+$config.id);
+                    Datatable__for__Delivery_List('#'+$config.id);
                 }
-                else if($id == "datatable-statistic-order-daily")
+                else if($id == "datatable-delivery-dental-list")
                 {
-                    Datatable_Statistic_Order_Daily('#'+$config.id, $config.chart_id);
+                    Datatable__for__Delivery_Dental_List('#'+$config.id);
+                }
+                else if($id == "datatable-delivery-aesthetic-list")
+                {
+                    Datatable__for__Delivery_Aesthetic_List('#'+$config.id);
+                }
+                else if($id == "datatable-delivery-luxury-list")
+                {
+                    Datatable__for__Delivery_Luxury_List('#'+$config.id);
                 }
             }
 

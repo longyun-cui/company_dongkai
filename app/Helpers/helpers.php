@@ -1252,7 +1252,7 @@ if(!function_exists('datatable_response'))
             $result = array(
                 'message'			=> $message,
                 'data'				=> $data,
-                'draw'				=> 0,
+                'draw'				=> time(),
                 'recordsTotal'		=> 0,
                 'recordsFiltered'	=> 0,
             );

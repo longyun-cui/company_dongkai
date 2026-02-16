@@ -1,40 +1,16 @@
 <?php
 namespace App\Repositories\DK\DK_Staff;
 
-use App\Models\DK\DK_Company;
-use App\Models\DK\DK_Department;
-use App\Models\DK\DK_District;
-use App\Models\DK\DK_Pivot_Client_Delivery;
-use App\Models\DK\DK_User;
-use App\Models\DK\DK_UserExt;
-use App\Models\DK\DK_Project;
-use App\Models\DK\DK_Pivot_User_Project;
-use App\Models\DK\DK_Pivot_Team_Project;
-use App\Models\DK\DK_Order;
-use App\Models\DK\DK_Record;
-use App\Models\DK\DK_Record_Visit;
+use App\Models\DK\DK_Common\DK_Common__Company;
+use App\Models\DK\DK_Common\DK_Common__Department;
+use App\Models\DK\DK_Common\DK_Common__Team;
+use App\Models\DK\DK_Common\DK_Common__Staff;
 
-use App\Models\DK\DK_Statistic_Project_daily;
-use App\Models\DK\DK_Statistic_Client_daily;
-use App\Models\DK\DK_Statistic_Record;
+use App\Models\DK\DK_Common\DK_Common__Location;
 
-use App\Models\DK\DK_Client;
-use App\Models\DK\DK_Client_Funds_Recharge;
-use App\Models\DK\DK_Client_Funds_Using;
-
-use App\Models\DK_Client\DK_Client_User;
-use App\Models\DK_Client\DK_Client_Finance_Daily;
-
-use App\Models\DK\YH_Attachment;
-use App\Models\DK\YH_Item;
-
-use App\Models\DK_CC\DK_CC_Call_Record;
-use App\Models\DK_CC\DK_CC_Call_Record_Current;
-use App\Models\DK_CC\DK_CC_Call_Statistic;
-
-use App\Models\DK_VOS\DK_VOS_CDR;
-
-use App\Models\DK_A\DK_A_Order;
+use App\Models\DK\DK_Common\DK_Common__Client;
+use App\Models\DK\DK_Common\DK_Common__Project;
+use App\Models\DK\DK_Common\DK_Common__Order;
 
 use App\Models\DK\DK_API_BY_Received;
 
@@ -165,8 +141,11 @@ class DK_Staff__IndexRepository {
 
 
 
+        $location_city_list = DK_Common__Location::select('id','location_city')->whereIn('item_status',[1])->get();
+        $view_data['location_city_list'] = $location_city_list;
+
         $view_blade = env('DK_STAFF__TEMPLATE').'index';
-        return view($view_blade);
+        return view($view_blade)->with($view_data);
     }
 
 

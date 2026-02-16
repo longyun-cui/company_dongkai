@@ -136,14 +136,14 @@
                     }
                 },
                 {
-                    "title": "所属公司",
-                    "data": 'company_id',
+                    "title": "所属团队",
+                    "data": 'superior_team_er',
                     "width": "160px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        if(row.company_er == null) return '--';
-                        else return '<a href="javascript:void(0);" class="text-black">' + row.company_er.name + '</a>';
-                        // else return row.department_er.name+' ('+row.department_er.id+')';
+                        if(row.superior_team_er == null) return '--';
+                        else return '<a href="javascript:void(0);" class="text-black">' + row.superior_team_er.name + '</a>';
+                        // else return row.team_er.name+' ('+row.team_er.id+')';
                     }
                 },
                 {
@@ -154,6 +154,17 @@
                     render: function(data, type, row, meta) {
                         if(row.department_er == null) return '--';
                         else return '<a href="javascript:void(0);" class="text-black">' + row.department_er.name + '</a>';
+                        // else return row.department_er.name+' ('+row.department_er.id+')';
+                    }
+                },
+                {
+                    "title": "所属公司",
+                    "data": 'company_id',
+                    "width": "160px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.company_er == null) return '--';
+                        else return '<a href="javascript:void(0);" class="text-black">' + row.company_er.name + '</a>';
                         // else return row.department_er.name+' ('+row.department_er.id+')';
                     }
                 },

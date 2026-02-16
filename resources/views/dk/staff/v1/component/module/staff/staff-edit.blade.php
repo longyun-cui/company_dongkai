@@ -30,17 +30,47 @@
                             <button type="button" class="btn radio-btn radio-staff-category">
                                 <span class="radio">
                                     <label>
-                                        <input type="radio" name="staff_category" value="1"> 总裁
+                                        <input type="radio" name="staff_category" value="11"> 公司老总
                                     </label>
                                 </span>
                             </button>
                             @endif
+
+{{--                            @if(in_array($me->user_type, [0,1]))--}}
+{{--                            <button type="button" class="btn radio-btn radio-staff-category">--}}
+{{--                                <span class="radio">--}}
+{{--                                    <label>--}}
+{{--                                        <input type="radio" name="staff_category" value="11"> 人事--}}
+{{--                                    </label>--}}
+{{--                                </span>--}}
+{{--                            </button>--}}
+{{--                            @endif--}}
+
+{{--                            @if(in_array($me->user_type, [0,1,11]))--}}
+{{--                            <button type="button" class="btn radio-btn radio-staff-category">--}}
+{{--                                <span class="radio">--}}
+{{--                                    <label>--}}
+{{--                                        <input type="radio" name="staff_category" value="21"> 行政--}}
+{{--                                    </label>--}}
+{{--                                </span>--}}
+{{--                                </button>--}}
+{{--                            @endif--}}
+
+{{--                            @if(in_array($me->user_type, [0,1,11]))--}}
+{{--                            <button type="button" class="btn radio-btn radio-staff-category">--}}
+{{--                                <span class="radio">--}}
+{{--                                    <label>--}}
+{{--                                        <input type="radio" name="staff_category" value="31"> 财务--}}
+{{--                                    </label>--}}
+{{--                                </span>--}}
+{{--                            </button>--}}
+{{--                            @endif--}}
 
                             @if(in_array($me->user_type, [0,1]))
                             <button type="button" class="btn radio-btn radio-staff-category">
                                 <span class="radio">
                                     <label>
-                                        <input type="radio" name="staff_category" value="11"> 人事
+                                        <input type="radio" name="staff_category" value="41" checked="checked" data-default="default"> 客服
                                     </label>
                                 </span>
                             </button>
@@ -50,27 +80,47 @@
                             <button type="button" class="btn radio-btn radio-staff-category">
                                 <span class="radio">
                                     <label>
-                                        <input type="radio" name="staff_category" value="21"> 行政
+                                        <input type="radio" name="staff_category" value="51"> 质检员
                                     </label>
                                 </span>
-                                </button>
+                            </button>
                             @endif
 
                             @if(in_array($me->user_type, [0,1,11]))
                             <button type="button" class="btn radio-btn radio-staff-category">
                                 <span class="radio">
                                     <label>
-                                        <input type="radio" name="staff_category" value="31"> 财务
+                                        <input type="radio" name="staff_category" value="61"> 三方人员
                                     </label>
                                 </span>
                             </button>
                             @endif
+
+                            @if(in_array($me->user_type, [0,1,11]))
+                            <button type="button" class="btn radio-btn radio-staff-category">
+                                <span class="radio">
+                                    <label>
+                                        <input type="radio" name="staff_category" value="71"> 运营人员
+                                    </label>
+                                </span>
+                            </button>
+                            @endif
+
+{{--                            @if(in_array($me->user_type, [0,1,11,41]))--}}
+{{--                            <button type="button" class="btn radio-btn radio-staff-category">--}}
+{{--                                <span class="radio">--}}
+{{--                                    <label>--}}
+{{--                                        <input type="radio" name="staff_category" value="81" checked="checked"> 业务--}}
+{{--                                    </label>--}}
+{{--                                </span>--}}
+{{--                            </button>--}}
+{{--                            @endif--}}
 
                             @if(in_array($me->user_type, [0,1,11,41]))
                             <button type="button" class="btn radio-btn radio-staff-category">
                                 <span class="radio">
                                     <label>
-                                        <input type="radio" name="staff_category" value="81" checked="checked"> 业务
+                                        <input type="radio" name="staff_category" value="88"> 销售商务
                                     </label>
                                 </span>
                             </button>
@@ -117,13 +167,13 @@
                                     </label>
                                 </span>
                             </button>
-{{--                            <button type="button" class="btn radio-btn radio-staff-position">--}}
-{{--                                <span class="radio">--}}
-{{--                                    <label>--}}
-{{--                                        <input type="radio" name="staff_position" value="51"> 分部主管--}}
-{{--                                    </label>--}}
-{{--                                </span>--}}
-{{--                            </button>--}}
+                            <button type="button" class="btn radio-btn radio-staff-position">
+                                <span class="radio">
+                                    <label>
+                                        <input type="radio" name="staff_position" value="51"> 分部主管
+                                    </label>
+                                </span>
+                            </button>
 {{--                            <button type="button" class="btn radio-btn radio-staff-position">--}}
 {{--                                <span class="radio">--}}
 {{--                                    <label>--}}
@@ -134,7 +184,7 @@
                             <button type="button" class="btn radio-btn radio-staff-position">
                                 <span class="radio">
                                     <label>
-                                        <input type="radio" name="staff_position" value="99" checked="checked"> 业务员
+                                        <input type="radio" name="staff_position" value="99" checked="checked" data-default="default"> 职员
                                     </label>
                                 </span>
                             </button>
@@ -157,9 +207,9 @@
                 {{--公司--}}
                 @if(in_array($me->user_type, [0,1,11]))
                 <div class="form-group company-box">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 所属公司</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 公司&部门</label>
                     <div class="col-md-9 ">
-                        <div class="col-sm-4 col-md-4 padding-0">
+                        <div class="col-sm-6 col-md-6 padding-0">
                             <select class="form-control select2-reset select2--company"
                                     name="company_id"
                                     id="select2--company--for--staff-item-edit"
@@ -173,7 +223,7 @@
                                 <option data-id="" value="">选择公司</option>
                             </select>
                         </div>
-                        <div class="col-sm-4 col-md-4 padding-0 department-box">
+                        <div class="col-sm-6 col-md-6 padding-0 department-box">
                             <select class="form-control select2-reset select2--department"
                                     name="department_id"
                                     id="select2--department--for--staff-item-edit"
@@ -186,15 +236,35 @@
                                 <option data-id="" value="">选择部门</option>
                             </select>
                         </div>
-                        <div class="col-sm-4 col-md-4 padding-0 team-box">
+                    </div>
+                </div>
+                @endif
+                {{--团队--}}
+                @if(in_array($me->user_type, [0,1,11]))
+                <div class="form-group team-box">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 所属团队</label>
+                    <div class="col-md-9 ">
+                        <div class="col-sm-6 col-md-6 padding-0 team-box">
                             <select class="form-control select2-reset select2--team"
                                     name="team_id"
                                     id="select2--team--for--staff-item-edit"
                                     data-modal="#modal--for--staff-item-edit"
                                     data-item-category=""
-                                    data-item-type=""
+                                    data-item-type="11"
+                                    data-team-target="#select2---sub-team--for--staff-item-edit"
                             >
                                 <option data-id="" value="">选择团队</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0 team-box">
+                            <select class="form-control select2-reset select2--team"
+                                    name="group_id"
+                                    id="select2---sub-team--for--staff-item-edit"
+                                    data-modal="#modal--for--staff-item-edit"
+                                    data-item-category=""
+                                    data-item-type="31"
+                            >
+                                <option data-id="" value="">选择小组</option>
                             </select>
                         </div>
                     </div>
@@ -238,26 +308,34 @@
 {{--                </div>--}}
 
 
-                {{--手机--}}
+                {{--登录工号--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 登录工号</label>
                     <div class="col-md-9 ">
                         <input type="text" class="form-control" name="login_number" placeholder="登录工号" value="">
                     </div>
                 </div>
+                {{--姓名--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 姓名</label>
+                    <div class="col-md-9 ">
+                        <input type="text" class="form-control" name="name" placeholder="姓名" value="">
+                    </div>
+                </div>
+                {{--用户名--}}
+{{--                <div class="form-group">--}}
+{{--                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 用户名</label>--}}
+{{--                    <div class="col-md-9 ">--}}
+{{--                        <input type="text" class="form-control" name="username" placeholder="用户名" value="">--}}
+{{--                    </div>--}}
+{{--                </div>--}}
                 {{--真实姓名--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 真实姓名</label>
-                    <div class="col-md-9 ">
-                        <input type="text" class="form-control" name="true_name" placeholder="真实姓名" value="">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-2">用户名</label>
-                    <div class="col-md-9 ">
-                        <input type="text" class="form-control" name="username" placeholder="用户名" value="">
-                    </div>
-                </div>
+{{--                <div class="form-group">--}}
+{{--                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 真实姓名</label>--}}
+{{--                    <div class="col-md-9 ">--}}
+{{--                        <input type="text" class="form-control" name="true_name" placeholder="真实姓名" value="">--}}
+{{--                    </div>--}}
+{{--                </div>--}}
                 {{--描述--}}
                 <div class="form-group _none">
                     <label class="control-label col-md-2">描述</label>

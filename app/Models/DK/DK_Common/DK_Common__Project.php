@@ -27,15 +27,9 @@ class DK_Common__Project extends Model
 
         'client_id',
 
-        'transport_departure_place',
-        'transport_destination_place',
-
-        'transport_mileage',
-        'transport_distance',
-        'transport_time_limitation',
-
-        'freight_amount',
-        'settlement_period',
+        'location_city',
+        'is_distributive',
+        'daily_goal',
 
 
         'contact', 'contact_name', 'contact_phone', 'contact_email', 'contact_wx_id', 'contact_wx_qr_code_img', 'contact_address',
@@ -91,77 +85,31 @@ class DK_Common__Project extends Model
     }
 
 
-    // 附件
-    function attachment_list()
+
+
+    // 【一对一】审核员
+    function inspector_er()
     {
-        return $this->hasMany('App\Models\DK\YH_Attachment','item_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','inspector_id','id');
+    }
+
+    // 【多对多】审核人关联的项目
+    function pivot_project_staff()
+    {
+        return $this->belongsToMany('App\Models\DK\DK_Common\DK_Common__Staff','dk_pivot__staff_project','project_id','staff_id');
+//            ->wherePivot('relation_type', 1);
+//            ->withTimestamps();
+    }
+
+    // 【多对多】审核人关联的项目
+    function pivot_project_team()
+    {
+        return $this->belongsToMany('App\Models\DK\DK_Common\DK_Common__Team','dk_pivot__team_project','project_id','team_id');
+//            ->wherePivot('relation_type', 1);
+//            ->withTimestamps();
     }
 
 
 
 
-    // 其他人的
-    function pivot_item_relation()
-    {
-        return $this->hasMany('App\Models\DK\YH_Pivot_User_Item','item_id','id');
-    }
-
-    // 其他人的
-    function others()
-    {
-        return $this->hasMany('App\Models\DK\YH_Pivot_User_Item','item_id','id');
-    }
-
-    // 收藏
-    function collections()
-    {
-        return $this->hasMany('App\Models\DK\YH_Pivot_User_Collection','item_id','id');
-    }
-
-    // 转发内容
-    function forward_item()
-    {
-        return $this->belongsTo('App\Models\DK\YH_Item','item_id','id');
-    }
-
-
-
-
-    // 与我相关的话题
-    function pivot_collection_item_users()
-    {
-        return $this->belongsToMany('App\Models\DK\DK_Common\DK_Common__Staff','pivot_user_item','item_id','user_id');
-    }
-
-
-
-
-    // 一对多 关联的目录
-    function menu()
-    {
-        return $this->belongsTo('App\Models\DK\YH_Menu','menu_id','id');
-    }
-
-    // 多对多 关联的目录
-    function menus()
-    {
-        return $this->belongsToMany('App\Models\DK\YH_Menu','pivot_menu_item','item_id','menu_id');
-    }
-
-
-    /**
-     * 获得此文章的所有评论。
-     */
-    public function comments()
-    {
-        return $this->morphMany('App\Models\Comment', 'itemable');
-    }
-
-    /**
-     * 获得此文章的所有标签。
-     */
-    public function tags()
-    {
-        return $this->morphToMany('App\Models\Tag', 'taggable');
-    }
 }

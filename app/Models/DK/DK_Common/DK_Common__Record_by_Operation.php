@@ -91,54 +91,54 @@ class DK_Common__Record_by_Operation extends Model
     // 拥有者
     function owner()
     {
-        return $this->belongsTo('App\Models\WL\Common\WL_Common_Staff','owner_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','owner_id','id');
     }
     // 创作者
     function creator()
     {
-        return $this->belongsTo('App\Models\WL\Common\WL_Common_Staff','creator_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','creator_id','id');
     }
     // 创作者（客户）
     function client_creator()
     {
-        return $this->belongsTo('App\Models\WL\Common\WL_Common_Client','creator_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Client','creator_id','id');
     }
     // 创作者
     function updater()
     {
-        return $this->belongsTo('App\Models\WL\Common\WL_Common_Staff','updater_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','updater_id','id');
     }
     // 创作者
     function completer()
     {
-        return $this->belongsTo('App\Models\WL\Common\WL_Common_Staff','completer_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','completer_id','id');
     }
     // 用户
     function user()
     {
-        return $this->belongsTo('App\Models\WL\Common\WL_Common_Staff','user_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','user_id','id');
     }
 
 
     // 客户
     function before_client_er()
     {
-        return $this->belongsTo('App\Models\WL\Common\WL_Common_Client','before_client_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Client','before_client_id','id');
     }
     // 客户
     function after_client_er()
     {
-        return $this->belongsTo('App\Models\WL\Common\WL_Common_Client','after_client_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Client','after_client_id','id');
     }
     // 项目
     function before_project_er()
     {
-        return $this->belongsTo('App\Models\WL\Common\WL_Common_Project','before_project_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Project','before_project_id','id');
     }
     // 项目
     function after_project_er()
     {
-        return $this->belongsTo('App\Models\WL\Common\WL_Common_Project','after_project_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Project','after_project_id','id');
     }
 
 

@@ -23,47 +23,87 @@
                 {{--类型--}}
                 <div class="form-group form-category" style="height:70px;">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 类型</label>
-                    <div class="col-md-8">
+                    <div class="col-md-9">
                         <div class="btn-group">
 
-                            @if(in_array($me->user_type, [0,1,11]))
-                            <button type="button" class="btn radio-btn radio-department-category">
-                                <span class="radio">
-                                    <label>
-                                        <input type="radio" name="department_category" value="11"> 人事部
-                                    </label>
-                                </span>
-                            </button>
-                            @endif
+{{--                            @if(in_array($me->user_type, [0,1,11]))--}}
+{{--                            <button type="button" class="btn radio-btn radio-department-category">--}}
+{{--                                <span class="radio">--}}
+{{--                                    <label>--}}
+{{--                                        <input type="radio" name="department_category" value="11"> 人事部--}}
+{{--                                    </label>--}}
+{{--                                </span>--}}
+{{--                            </button>--}}
+{{--                            @endif--}}
+
+{{--                            @if(in_array($me->user_type, [0,1,11]))--}}
+{{--                            <button type="button" class="btn radio-btn radio-department-category">--}}
+{{--                                <span class="radio">--}}
+{{--                                    <label>--}}
+{{--                                        <input type="radio" name="department_category" value="21"> 行政部--}}
+{{--                                    </label>--}}
+{{--                                </span>--}}
+{{--                            </button>--}}
+{{--                            @endif--}}
+
+{{--                            @if(in_array($me->user_type, [0,1,11]))--}}
+{{--                            <button type="button" class="btn radio-btn radio-department-category">--}}
+{{--                                <span class="radio">--}}
+{{--                                    <label>--}}
+{{--                                        <input type="radio" name="department_category" value="31"> 财务部--}}
+{{--                                    </label>--}}
+{{--                                </span>--}}
+{{--                            </button>--}}
+{{--                            @endif--}}
 
                             @if(in_array($me->user_type, [0,1,11]))
                             <button type="button" class="btn radio-btn radio-department-category">
                                 <span class="radio">
                                     <label>
-                                        <input type="radio" name="department_category" value="21"> 行政部
+                                        <input type="radio" name="department_category" value="41" checked="checked"> 客服部
                                     </label>
                                 </span>
                             </button>
                             @endif
 
-                            @if(in_array($me->user_type, [0,1,11,41]))
+                            @if(in_array($me->user_type, [0,1,11]))
                             <button type="button" class="btn radio-btn radio-department-category">
                                 <span class="radio">
                                     <label>
-                                        <input type="radio" name="department_category" value="31"> 财务部
+                                        <input type="radio" name="department_category" value="51"> 质检部
                                     </label>
                                 </span>
                             </button>
                             @endif
 
-                            @if(in_array($me->user_type, [0,1,11,41]))
-                                <button type="button" class="btn radio-btn radio-department-category">
-                                    <span class="radio">
-                                        <label>
-                                            <input type="radio" name="department_category" value="81" checked="checked"> 业务部
-                                        </label>
-                                    </span>
-                                </button>
+                            @if(in_array($me->user_type, [0,1,11]))
+                            <button type="button" class="btn radio-btn radio-department-category">
+                                <span class="radio">
+                                    <label>
+                                        <input type="radio" name="department_category" value="61"> 三方质检部
+                                    </label>
+                                </span>
+                            </button>
+                            @endif
+
+                            @if(in_array($me->user_type, [0,1,11]))
+                            <button type="button" class="btn radio-btn radio-department-category">
+                                <span class="radio">
+                                    <label>
+                                        <input type="radio" name="department_category" value="71"> 运营部
+                                    </label>
+                                </span>
+                            </button>
+                            @endif
+
+                            @if(in_array($me->user_type, [0,1,11]))
+                            <button type="button" class="btn radio-btn radio-department-category">
+                                <span class="radio">
+                                    <label>
+                                        <input type="radio" name="department_category" value="88"> 销售渠道部
+                                    </label>
+                                </span>
+                            </button>
                             @endif
 
                         </div>
@@ -72,9 +112,9 @@
 
 
                 {{--公司--}}
-                <div class="form-group" style="height:70px;">
+                <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 所属公司</label>
-                    <div class="col-md-8 ">
+                    <div class="col-md-9 ">
                         <select class="form-control select2-reset select2--company" name="company_id" id="select2--company--for--department-item-edit" data-modal="#modal--for--department-item-edit" data-item-category="" data-item-type="">
                             <option data-id="" value="">选择公司</option>
                         </select>
@@ -87,16 +127,16 @@
                 {{--名称--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 名称</label>
-                    <div class="col-md-8 ">
+                    <div class="col-md-9 ">
                         <input type="text" class="form-control" name="name" placeholder="名称" value="">
                     </div>
                 </div>
 
 
                 {{--负责人--}}
-                <div class="form-group _none" style="height:70px;">
+                <div class="form-group _none">
                     <label class="control-label col-md-2">选择负责人</label>
-                    <div class="col-md-8 ">
+                    <div class="col-md-9 ">
                         <select class="form-control select2-reset select2--leader" name="leader_id" id="select2-leader" data-type="manager" style="width:100%;">
                             <option data-id="-1" value="-1">选择负责人</option>
                         </select>
@@ -107,7 +147,7 @@
                 {{--描述--}}
                 <div class="form-group">
                     <label class="control-label col-md-2">描述</label>
-                    <div class="col-md-8 ">
+                    <div class="col-md-9 ">
                         {{--<input type="text" class="form-control" name="description" placeholder="描述" value="{{$data->description or ''}}">--}}
                         <textarea class="form-control" name="description" rows="3" cols="100%"></textarea>
                     </div>
@@ -117,7 +157,7 @@
                 {{--头像--}}
                 <div class="form-group _none">
                     <label class="control-label col-md-2">头像</label>
-                    <div class="col-md-8 fileinput-group">
+                    <div class="col-md-9 fileinput-group">
 
                         <div class="fileinput fileinput-new" data-provides="fileinput">
                             <div class="fileinput-new thumbnail">
@@ -146,7 +186,7 @@
                 {{--启用--}}
                 <div class="form-group form-type _none">
                     <label class="control-label col-md-2">启用</label>
-                    <div class="col-md-8">
+                    <div class="col-md-9">
                         <div class="btn-group">
 
                             <button type="button" class="btn">
@@ -174,7 +214,7 @@
 
             <div class="box-footer">
                 <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
+                    <div class="col-md-9 col-md-offset-2">
                         <button type="button" class="btn btn-success edit-submit" id="submit--for--department-item-edit">
                             <i class="fa fa-check"></i> 提交
                         </button>

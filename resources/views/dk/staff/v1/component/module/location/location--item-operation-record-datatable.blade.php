@@ -1,22 +1,22 @@
 <script>
-    var Datatable__for__Order_Item_Fee_Record_List = function ($id) {
-        var datatableAjax_order_item_fee_record = function ($id) {
+    var Datatable__for__Location_Item_Operation_Record_List = function ($id) {
+        var datatableAjax__location_item_operation_record = function ($id) {
 
-            var dt_order_item_fee_record = $('#datatable--for--order-item-fee-record-list');
-            if($.fn.DataTable.isDataTable(dt_order_item_fee_record))
+            var $datatable_id = 'datatable--for--location-item-operation-record-list';
+            var dt__location_item_operation_record = $('#'+$datatable_id);
+            if($.fn.DataTable.isDataTable(dt__location_item_operation_record))
             {
                 // 已经初始化
-                console.log('#datatable--for--order-item-fee-record-list // 已经初始化');
-                $(dt_order_item_fee_record).DataTable().destroy();
-                dt_order_item_fee_record.DataTable().destroy();
+                console.log('#'+$datatable_id+' // 已经初始化');
+                $(dt__location_item_operation_record).DataTable().destroy();
             }
             else
             {
                 // 未初始化
-                console.log('#datatable--for--order-item-fee-record-list // 未初始化');
+                console.log('#'+$datatable_id+' // 未初始化');
             }
 
-            var ajax_datatable_order_item_fee_record = dt_order_item_fee_record.DataTable({
+            var ajax_datatable__location_item_operation_record = dt__location_item_operation_record.DataTable({
                 "retrieve": true,
                 "destroy": true,
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
@@ -26,16 +26,16 @@
                 "serverSide": true,
                 "searching": false,
                 "ajax": {
-                    'url': "/o1/order/item-fee-record-list/datatable-query?id="+$id,
+                    'url': "/o1/location/item-operation-record-list/datatable-query?id="+$id,
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
-                        d.name = $('input[name="order-fee-name"]').val();
-                        d.title = $('input[name="order-fee-title"]').val();
-                        d.keyword = $('input[name="order-fee-keyword"]').val();
-                        d.type = $('select[name="order-fee-type"]').val();
-                        d.status = $('select[name="order-fee-status"]').val();
+                        d.name = $('input[name="location-item-operation-name"]').val();
+                        d.title = $('input[name="location-item-operation-title"]').val();
+                        d.keyword = $('input[name="location-item-operation-keyword"]').val();
+                        d.type = $('select[name="location-item-operation-type"]').val();
+                        d.status = $('select[name="location-item-operation-status"]').val();
                     },
                 },
                 "pagingType": "simple_numbers",
@@ -73,23 +73,39 @@
                     },
                     {
                         "title": "类型",
-                        "data": "fee_type",
+                        "data": "operate_category",
                         "className": "",
-                        "width": "100px",
+                        "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(data == 1) return '<small class="btn-xs bg-green">收入</small>';
-                            else if(data == 99) return '<small class="btn-xs bg-red">费用</small>';
-                            else if(data == 101) return '<small class="btn-xs bg-orange">订单扣款</small>';
-                            else if(data == 111) return '<small class="btn-xs bg-yellow">司机罚款</small>';
-                            else return '有误';
+                            var $category_html = '' ;
+                            var $type_html ='' ;
+
+                            if(data == 1)
+                            {
+                                $category_html = '<small class="btn-xs bg-blue">操作</small>';
+
+                                if(row.operate_type == 1) $type_html = '<small class="btn-xs bg-blue">编辑</small>';
+                                if(row.operate_type == 9) $type_html = '<small class="btn-xs bg-blue">发布</small>';
+                            }
+                            else if(data == 11) $category_html = '<small class="btn-xs bg-teal">跟进</small>';
+                            else if(data == 21) $category_html = '<small class="btn-xs bg-yellow">客户回访</small>';
+                            else if(data == 31) $category_html = '<small class="btn-xs bg-yellow">上门状态</small>';
+                            else if(data == 71) $category_html = '<small class="btn-xs bg-purple">行程</small>';
+                            else if(data == 81) $category_html = '<small class="btn-xs bg-red">费用</small>';
+                            else if(data == 88) $category_html = '<small class="btn-xs bg-red">成交</small>';
+                            else if(data == 101) $category_html = '<small class="btn-xs bg-red">附件</small>';
+                            else $category_html = '<small class="btn-xs bg-red">附件</small>';
+
+
+                            return $category_html + $type_html;
                         }
                     },
                     {
-                        "title": "时间",
-                        "data": "fee_datetime",
                         "className": "",
-                        "width": "160px",
+                        "width": "120px",
+                        "title": "时间",
+                        "data": "custom_datetime",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(row.operate_type == 11)
@@ -113,33 +129,33 @@
                         }
                     },
                     {
-                        "title": "名目",
-                        "data": "fee_title",
-                        "className": "",
-                        "width": "120px",
+                        "className": "text-left",
+                        "width": "480px",
+                        "title": "详情",
+                        "data": "content",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "金额",
-                        "data": "fee_amount",
-                        "className": "",
-                        "width": "120px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "说明",
-                        "data": "fee_description",
-                        "className": "",
-                        "width": "300px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
+
+                            if($.trim(data))
+                            {
+                                try
+                                {
+                                    var $customer_list = JSON.parse(data);
+
+                                    var $return_html = '';
+                                    $.each($customer_list, function($index, $value) {
+                                        if($value.before == '') $return_html += '【'+ $value.title +'】' + $value.after + ' <br>';
+                                        else $return_html  += '【'+ $value.title +'】' + $value.before + ' → ' + $value.after + ' <br>';
+                                    });
+                                    return $return_html;
+                                }
+                                catch(e)
+                                {
+                                    return '';
+                                }
+                            }
+                            else return '';
+
                         }
                     },
                     {
@@ -154,7 +170,7 @@
                     },
                     {
                         "className": "",
-                        "width": "160px",
+                        "width": "120px",
                         "title": "记录时间",
                         "data": "created_at",
                         "orderable": false,
@@ -173,8 +189,8 @@
 //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
 
                             var $currentYear = new Date().getFullYear();
-                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-                            else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+                            else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
                         }
                     }
                 ],
@@ -192,7 +208,7 @@
 
         };
         return {
-            init: datatableAjax_order_item_fee_record
+            init: datatableAjax__location_item_operation_record
         }
     }();
 </script>

@@ -20,91 +20,39 @@
                 <input readonly type="hidden" class="form-control" name="operate[item_type]" value="project" data-default="project">
 
 
+
+
                 {{--项目类型--}}
                 <div class="form-group form-category">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 项目类型</label>
+                    <label class="control-label col-md-2">项目种类</label>
                     <div class="col-md-8">
                         <div class="btn-group">
 
-                            <button type="button" class="btn radio-btn radio-project-category">
+                            <button type="button" class="btn radio-btn radio-item-category">
                             <span class="radio">
                                 <label>
-                                    <input type="radio" name="project_category" value="1" checked="checked"> 长期
+                                    <input type="radio" name="project_category" value="1" checked="checked"> 口腔
                                 </label>
                             </span>
                             </button>
 
-                            <button type="button" class="btn radio-btn radio-project-category">
+                            <button type="button" class="btn radio-btn radio-item-category">
                             <span class="radio">
                                 <label>
-                                    <input type="radio" name="project_category" value="11"> 短期
+                                    <input type="radio" name="project_category" value="11"> 医美
                                 </label>
                             </span>
                             </button>
 
-                            <button type="button" class="btn radio-btn radio-project-category">
+                            <button type="button" class="btn radio-btn radio-item-category">
                             <span class="radio">
                                 <label>
-                                    <input type="radio" name="project_category" value="91"> 临时
+                                    <input type="radio" name="project_category" value="31"> 二手奢侈品
                                 </label>
                             </span>
                             </button>
 
                         </div>
-                    </div>
-                </div>
-
-
-                {{--结算账期--}}
-                <div class="form-group form-category">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 结算账期</label>
-                    <div class="col-md-8">
-                        <div class="btn-group">
-
-                            <button type="button" class="btn radio-btn radio-settlement-period">
-                            <span class="radio">
-                                <label>
-                                    <input type="radio" name="settlement_period" value="1" checked="checked" data-default="default"> 单次结算
-                                </label>
-                            </span>
-                            </button>
-
-                            <button type="button" class="btn radio-btn radio-settlement-period">
-                            <span class="radio">
-                                <label>
-                                    <input type="radio" name="settlement_period" value="3"> 多次结算
-                                </label>
-                            </span>
-                            </button>
-
-                            <button type="button" class="btn radio-btn radio-settlement-period">
-                            <span class="radio">
-                                <label>
-                                    <input type="radio" name="settlement_period" value="7"> 周结
-                                </label>
-                            </span>
-                            </button>
-
-                            <button type="button" class="btn radio-btn radio-settlement-period">
-                            <span class="radio">
-                                <label>
-                                    <input type="radio" name="settlement_period" value="31"> 月结
-                                </label>
-                            </span>
-                            </button>
-
-                        </div>
-                    </div>
-                </div>
-
-
-                {{--客户--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户</label>
-                    <div class="col-md-8 ">
-                        <select class="form-control select2-reset select2--client" name="client_id" id="select2--client--for--project-item-edit" data-modal="#modal--for--project-item-edit" data-item-category="" data-item-type="">
-                            <option data-id="0" value="0">选择客户</option>
-                        </select>
                     </div>
                 </div>
 
@@ -116,39 +64,63 @@
                         <input type="text" class="form-control" name="name" placeholder="项目名称" value="">
                     </div>
                 </div>
-
-
-                {{--运费 & 油卡--}}
+                {{--真实名称--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 运费</label>
+                    <label class="control-label col-md-2">真实名称</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="freight_amount" placeholder="运费" value="">
+                        <input type="text" class="form-control" name="alias_name" placeholder="真实名称" value="">
                     </div>
                 </div>
 
 
-                {{--出发地 & 目的地--}}
-                <div class="form-group" >
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 出发地 & 目的地</label>
+                {{--城市--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">城市</label>
                     <div class="col-md-8 ">
-                        <div class="col-sm-6 col-md-6 padding-0">
-                            <input type="text" class="form-control" name="transport_departure_place" placeholder="出发地" value="" data-default="">
-                        </div>
-                        <div class="col-sm-6 col-md-6 padding-0">
-                            <input type="text" class="form-control" name="transport_destination_place" placeholder="目的地" value="" data-default="">
-                        </div>
+                        <input type="text" class="form-control" name="location_city" placeholder="城市" value="">
                     </div>
                 </div>
-                {{--里程 & 时效--}}
-                <div class="form-group" >
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 距离 & 时效</label>
+
+
+                {{--客户--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">客户</label>
                     <div class="col-md-8 ">
-                        <div class="col-sm-6 col-md-6 padding-0">
-                            <input type="text" class="form-control" name="transport_distance" placeholder="距离" value="0" data-default="">
-                        </div>
-                        <div class="col-sm-6 col-md-6 padding-0">
-                            <input type="text" class="form-control" name="transport_time_limitation" placeholder="时效" value="0" data-default="">
-                        </div>
+                        <select class="form-control select2-reset select2--client"
+                                name="client_id"
+                                id="select2--client--for--project-item-edit"
+                                data-item-category=""
+                        >
+                            <option data-id="-1" value="-1">选择客户</option>
+                        </select>
+                    </div>
+                </div>
+
+                {{--团队--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">团队</label>
+                    <div class="col-md-8 ">
+                        <select class="form-control select2-reset select2--team" multiple="multiple"
+                                name="teams[]"
+                                id="select2--teams--for--project-item-edit"
+                                data-modal="#modal--for--project-item-edit"
+                                data-item-category=""
+                                data-item-type="11"
+                                data-team-target=""
+                        >
+                        </select>
+                    </div>
+                </div>
+
+                {{--质检员--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">质检员</label>
+                    <div class="col-md-8 ">
+                        <select class="form-control select2-reset select2--staff" multiple="multiple"
+                                name="peoples[]"
+                                id="select2--peoples--for--project-item-edit"
+                        >
+                        </select>
                     </div>
                 </div>
 

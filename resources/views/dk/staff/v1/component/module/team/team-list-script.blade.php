@@ -80,7 +80,7 @@
                     else
                     {
                         form_reset("#"+$form_id);
-s
+
                         $modal.find('.box-title').html('编辑团队【'+$that.attr('data-id')+'】');
                         $modal.find('input[name="operate[type]"]').val('edit');
                         $modal.find('input[name="operate[id]"]').val($that.attr('data-id'));
@@ -201,9 +201,26 @@ s
         });
 
 
+        // 【团队】部门类型
         $(".main-wrapper").on('change', "#department-category--for--team-item-edit", function() {
 
             $("#select2--department--for--team-item-edit").val(null).trigger('change');
+
+        });
+        // 【团队】部门类型
+        $(".main-wrapper").on('change', '#modal--for--team-item-edit input[name="team_type"]', function() {
+            var $that = $(this);
+            var $modal = $that.parents('.modal-wrapper');
+
+            var $value = $(this).val();
+            if($value == 11)
+            {
+                $modal.find('.team-box').hide();
+            }
+            else
+            {
+                $modal.find('.team-box').show();
+            }
 
         });
 

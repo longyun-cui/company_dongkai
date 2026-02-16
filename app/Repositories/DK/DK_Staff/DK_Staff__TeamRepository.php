@@ -66,12 +66,13 @@ class DK_Staff__TeamRepository {
         $me = $this->me;
 
 
-        $query = WL_Common_Team::select(['id','item_status','name','team_category','team_type','company_id','department_id','leader_id','remark','creator_id','created_at','updated_at','deleted_at'])
+        $query = DK_Common__Team::select(['id','item_status','name','team_category','team_type','company_id','department_id','superior_team_id','leader_id','remark','creator_id','created_at','updated_at','deleted_at'])
             ->withTrashed()
             ->with([
                 'creator'=>function($query) { $query->select(['id','username','true_name']); },
                 'company_er'=>function($query) { $query->select(['id','name']); },
                 'department_er'=>function($query) { $query->select(['id','name']); },
+                'superior_team_er'=>function($query) { $query->select(['id','name']); },
                 'leader'=>function($query) { $query->select(['id','username','true_name']); }
             ]);
 
@@ -177,10 +178,11 @@ class DK_Staff__TeamRepository {
         $item_id = $post_data["item_id"];
         if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数[ID]有误！");
 
-        $item = WL_Common_Team::withTrashed()
+        $item = DK_Common__Team::withTrashed()
             ->with([
                 'leader'=>function($query) { $query->select('id','username'); },
-                'department_er'=>function($query) { $query->select('id','name'); }
+                'department_er'=>function($query) { $query->select('id','name'); },
+                'superior_team_er'=>function($query) { $query->select(['id','name']); }
             ])
             ->find($item_id);
         if(!$item) return response_error([],"不存在警告，请刷新页面重试！");
@@ -194,13 +196,15 @@ class DK_Staff__TeamRepository {
             'operate.required' => 'operate.required.',
             'name.required' => '请输入团队名称！',
 //            'name.unique' => '该团队号已存在！',
-            'department_id.unique' => '请先选择部门！',
+            'department_id.required' => '请先选择部门！',
+            'department_id.numeric' => '请先选择部门！',
+            'department_id.min' => '请先选择部门！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
             'name' => 'required',
-//            'name' => 'required|unique:WL_Common_Team,name',
-            'department_id' => 'required',
+//            'name' => 'required|unique:DK_Common__Team,name',
+            'department_id' => 'required|numeric|min:1',
         ], $messages);
         if ($v->fails())
         {
@@ -222,16 +226,16 @@ class DK_Staff__TeamRepository {
 
         if($operate_type == 'create') // 添加 ( $id==0，添加一个新用户 )
         {
-            $is_exist = WL_Common_Team::select('id')->where('name',$post_data["name"])->count();
+            $is_exist = DK_Common__Team::select('id')->where('name',$post_data["name"])->count();
             if($is_exist) return response_error([],"该【团队】已存在，请勿重复添加！");
 
-            $mine = new WL_Common_Team;
+            $mine = new DK_Common__Team;
             $post_data["active"] = 1;
             $post_data["creator_id"] = $me->id;
         }
         else if($operate_type == 'edit') // 编辑
         {
-            $mine = WL_Common_Team::find($operate_id);
+            $mine = DK_Common__Team::find($operate_id);
             if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
         }
         else return response_error([],"参数有误！");
@@ -249,8 +253,13 @@ class DK_Staff__TeamRepository {
             $mine_data = $post_data;
             unset($mine_data['operate']);
 
-            $department = WL_Common_Department::find($post_data['department_id']);
+            $department = DK_Common__Department::find($post_data['department_id']);
             if($department) $mine_data['company_id'] = $department->company_id;
+
+            if($mine_data['team_type'] == 11)
+            {
+                unset($mine_data['superior_team_id']);  // 如果层级是团队，没有上级团队
+            }
 
 
 //            if(in_array($me->staff_type,[41,61,71,81]))
@@ -262,7 +271,7 @@ class DK_Staff__TeamRepository {
             if($bool)
             {
             }
-            else throw new Exception("WL_Common_Team--insert--fail");
+            else throw new Exception("DK_Common__Team--insert--fail");
 
             DB::commit();
             return response_success(['id'=>$mine->id]);
@@ -309,7 +318,7 @@ class DK_Staff__TeamRepository {
         if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
 
         // 判断对象是否合法
-        $mine = WL_Common_Team::withTrashed()->find($item_id);
+        $mine = DK_Common__Team::withTrashed()->find($item_id);
         if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
 
 
@@ -344,7 +353,7 @@ class DK_Staff__TeamRepository {
         {
             $mine->timestamps = false;
             $bool = $mine->delete();  // 普通删除
-            if(!$bool) throw new Exception("WL_Common_Team--delete--fail");
+            if(!$bool) throw new Exception("DK_Common__Team--delete--fail");
             else
             {
                 $staff_operation_record = new DK_Common__Record_by_Operation;
@@ -394,7 +403,7 @@ class DK_Staff__TeamRepository {
         if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"你没有操作权限！");
 
         // 判断对象是否合法
-        $mine = WL_Common_Team::withTrashed()->find($item_id);
+        $mine = DK_Common__Team::withTrashed()->find($item_id);
         if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
 
 
@@ -429,7 +438,7 @@ class DK_Staff__TeamRepository {
         {
             $mine->timestamps = false;
             $bool = $mine->restore();
-            if(!$bool) throw new Exception("WL_Common_Team--restore--fail");
+            if(!$bool) throw new Exception("DK_Common__Team--restore--fail");
             else
             {
                 $staff_operation_record = new DK_Common__Record_by_Operation;
@@ -479,7 +488,7 @@ class DK_Staff__TeamRepository {
         if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"你没有操作权限！");
 
         // 判断对象是否合法
-        $mine = WL_Common_Team::withTrashed()->find($item_id);
+        $mine = DK_Common__Team::withTrashed()->find($item_id);
         if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
 
 
@@ -514,7 +523,7 @@ class DK_Staff__TeamRepository {
         {
             $mine_copy = $mine;
             $bool = $mine->forceDelete();
-            if(!$bool) throw new Exception("WL_Common_Team--delete--fail");
+            if(!$bool) throw new Exception("DK_Common__Team--delete--fail");
             else
             {
                 $staff_operation_record = new DK_Common__Record_by_Operation;
@@ -567,7 +576,7 @@ class DK_Staff__TeamRepository {
         if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
 
         // 判断对象是否合法
-        $mine = WL_Common_Team::find($item_id);
+        $mine = DK_Common__Team::find($item_id);
         if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
 
 
@@ -603,7 +612,7 @@ class DK_Staff__TeamRepository {
             $mine->item_status = 1;
             $mine->timestamps = false;
             $bool = $mine->save();
-            if(!$bool) throw new Exception("WL_Common_Team--update--fail");
+            if(!$bool) throw new Exception("DK_Common__Team--update--fail");
             else
             {
                 $staff_operation_record = new DK_Common__Record_by_Operation;
@@ -654,7 +663,7 @@ class DK_Staff__TeamRepository {
         if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
 
         // 判断对象是否合法
-        $mine = WL_Common_Team::find($item_id);
+        $mine = DK_Common__Team::find($item_id);
         if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
 
 
@@ -690,7 +699,7 @@ class DK_Staff__TeamRepository {
             $mine->item_status = 9;
             $mine->timestamps = false;
             $bool = $mine->save();
-            if(!$bool) throw new Exception("WL_Common_Team--update--fail");
+            if(!$bool) throw new Exception("DK_Common__Team--update--fail");
             else
             {
                 $staff_operation_record = new DK_Common__Record_by_Operation;

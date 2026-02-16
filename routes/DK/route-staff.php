@@ -26,6 +26,20 @@ Route::group(['middleware' => ['dk.staff.user.login']], function () {
 
 
 
+
+    // select2
+    Route::post('/o1/select2/select2--company', $controller.'@o1__select2__company');
+    Route::post('/o1/select2/select2--department', $controller.'@o1__select2__department');
+    Route::post('/o1/select2/select2--team', $controller.'@o1__select2__team');
+    Route::post('/o1/select2/select2--staff', $controller.'@o1__select2__staff');
+    Route::post('/o1/select2/select2--client', $controller.'@o1__select2__client');
+    Route::post('/o1/select2/select2--location', $controller.'@o1__select2__location');
+    Route::post('/o1/select2/select2--project', $controller.'@o1__select2__project');
+    Route::post('/o1/select2/select2--order', $controller.'@o1__select2__order');
+
+
+
+
     // 【公司】
     Route::post('/o1/company/company-list/datatable-query', $controller.'@o1__company__list__datatable_query');
     Route::post('/o1/company/item-get', $controller.'@o1__company__item_get');
@@ -82,8 +96,27 @@ Route::group(['middleware' => ['dk.staff.user.login']], function () {
     // 【员工】启用 & 禁用
     Route::post('/o1/staff/item-enable', $controller.'@o1__staff__item_enable');
     Route::post('/o1/staff/item-disable', $controller.'@o1__staff__item_disable');
+    // 【员工】登录
+    Route::post('/o1/staff/item-login', $controller.'@o1__staff__item_login');
     // 【员工】操作记录
     Route::post('/o1/staff/item-operation-record-list/datatable-query', $controller.'@o1__staff__item_operation_record_list__datatable_query');
+
+
+
+
+    // 【地区】
+    Route::post('/o1/location/location-list/datatable-query', $controller.'@o1__location__list__datatable_query');
+    Route::post('/o1/location/item-get', $controller.'@o1__location__item_get');
+    Route::post('/o1/location/item-save', $controller.'@o1__location__item_save');
+    // 【地区】删除 & 恢复 & 永久删除
+    Route::post('/o1/location/item-delete', $controller.'@o1__location__item_delete');
+    Route::post('/o1/location/item-restore', $controller.'@o1__location__item_restore');
+    Route::post('/o1/location/item-delete-permanently', $controller.'@o1__location__item_delete_permanently');
+    // 【地区】启用 & 禁用
+    Route::post('/o1/location/item-enable', $controller.'@o1__location__item_enable');
+    Route::post('/o1/location/item-disable', $controller.'@o1__location__item_disable');
+    // 【地区】操作记录
+    Route::post('/o1/location/item-operation-record-list/datatable-query', $controller.'@o1__location__item_operation_record_list__datatable_query');
 
 
 
@@ -116,6 +149,49 @@ Route::group(['middleware' => ['dk.staff.user.login']], function () {
     Route::post('/o1/project/item-disable', $controller.'@o1__project__item_disable');
     // 【项目】操作记录
     Route::post('/o1/project/item-operation-record-list/datatable-query', $controller.'@o1__project__item_operation_record_list__datatable_query');
+
+
+
+
+
+
+
+
+    // 【工单】列表
+    Route::post('/o1/order/order-list/datatable-query', $controller.'@o1__order__list__datatable_query');
+    // 【工单】操作
+    Route::post('/o1/order/item-get', $controller.'@o1__order__item_get');
+    Route::post('/o1/order/item-save', $controller.'@o1__order__item_save');
+    Route::post('/o1/order/order-dental/item-save', $controller.'@o1__order_dental__item_save');
+    Route::post('/o1/order/order-aesthetic/item-save', $controller.'@o1__order_aesthetic__item_save');
+    Route::post('/o1/order/order-luxury/item-save', $controller.'@o1__order_dental__item_save');
+    // 【工单】删除 & 恢复 & 永久删除
+    Route::post('/o1/order/item-delete', $controller.'@o1__order__item_delete');
+    Route::post('/o1/order/item-restore', $controller.'@o1__order__item_restore');
+    Route::post('/o1/order/item-delete-permanently', $controller.'@o1__order__item_delete_permanently');
+    // 【工单】启用 & 禁用
+    Route::post('/o1/order/item-enable', $controller.'@o1__order__item_enable');
+    Route::post('/o1/order/item-disable', $controller.'@o1__order__item_disable');
+    // 【工单】发布
+    Route::post('/o1/order/item-publish', $controller.'@o1__order__item_publish');
+    // 【工单】完成
+    Route::post('/o1/order/item-complete', $controller.'@o1__order__item_publish');
+    // 【工单】跟进
+    Route::post('/o1/order/item-follow-save', $controller.'@o1__order__item_follow_save');
+    Route::post('/o1/order/item-inspecting-save', $controller.'@o1__order__item_inspecting_save');
+    Route::post('/o1/order/item-delivering-save', $controller.'@o1__order__item_delivering_save');
+    Route::post('/o1/order/bulk-delivering-save', $controller.'@o1__order__bulk_delivering_save');
+    Route::post('/o1/order/item-delivering-save--by-fool', $controller.'@o1__order__item_delivering_save__by_fool');
+    Route::post('/o1/order/bulk-delivering-save--by-fool', $controller.'@o1__order__bulk_delivering_save__by_fool');
+    // 【工单】操作记录
+    Route::post('/o1/order/item-operation-record-list/datatable-query', $controller.'@o1__order__item_operation_record_list__datatable_query');
+    Route::post('/o1/order/item-delivery-record-list/datatable-query', $controller.'@o1__order__item_delivery_record_list__datatable_query');
+
+
+
+
+    // 【交付】列表
+    Route::post('/o1/delivery/delivery-list/datatable-query', $controller.'@o1__delivery__list__datatable_query');
 
 
 

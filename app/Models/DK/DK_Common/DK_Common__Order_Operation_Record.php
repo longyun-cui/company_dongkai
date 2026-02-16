@@ -36,6 +36,11 @@ class DK_Common__Order_Operation_Record extends Model
         'parent_id',
         'p_id',
 
+        'creator_company_id',
+        'creator_department_id',
+        'creator_team_id',
+        'creator_staff_id',
+
         'company_id',
         'department_id',
         'team_id',
