@@ -283,7 +283,7 @@
                         layer.msg("添加" + $response.data.count + "条数据！");
 
                         // 重置输入框
-                        form_reset('#'+$form_id);
+                        // form_reset('#'+$form_id);
                         $form.find(".fileinput-remove-button").click();
 
                         // $modal.modal('hide').on("hidden.bs.modal", function () {
