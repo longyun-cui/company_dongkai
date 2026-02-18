@@ -96,19 +96,19 @@
                         }
                     }
                 },
-                {
-                    "title": "类型",
-                    "data": 'location_category',
-                    "width": "80px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(data == 0) return "未选择";
-                        else if(data == 1) return '<i class="fa fa-star text-red"></i> 公司';
-                        else if(data == 11) return '<i class="fa fa-star text-red"></i> 渠道';
-                        else if(data == 21) return '<i class="fa fa-star text-orange"></i> 商务';
-                        else return "有误";
-                    }
-                },
+                // {
+                //     "title": "类型",
+                //     "data": 'location_category',
+                //     "width": "80px",
+                //     "orderable": false,
+                //     render: function(data, type, row, meta) {
+                //         if(data == 0) return "未选择";
+                //         else if(data == 1) return '<i class="fa fa-star text-red"></i> 公司';
+                //         else if(data == 11) return '<i class="fa fa-star text-red"></i> 渠道';
+                //         else if(data == 21) return '<i class="fa fa-star text-orange"></i> 商务';
+                //         else return "有误";
+                //     }
+                // },
                 {
                     "title": "城市",
                     "data": "location_city",

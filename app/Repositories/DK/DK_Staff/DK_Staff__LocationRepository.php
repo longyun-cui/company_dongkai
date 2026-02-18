@@ -24,8 +24,8 @@ class DK_Staff__LocationRepository {
 
     public function __construct()
     {
-        $this->view_blade_403 = env('TEMPLATE_WL_STAFF').'entrance.errors.403';
-        $this->view_blade_404 = env('TEMPLATE_WL_STAFF').'entrance.errors.404';
+        $this->view_blade_403 = env('DK_STAFF__TEMPLATE').'403';
+        $this->view_blade_404 = env('DK_STAFF__TEMPLATE').'404';
 
         Blade::setEchoFormat('%s');
         Blade::setEchoFormat('e(%s)');
@@ -63,7 +63,7 @@ class DK_Staff__LocationRepository {
 
         $query = DK_Common__Location::withTrashed()->select('*')
             ->with([
-                'creator'=>function ($query) { $query->select('id','username'); },
+                'creator'=>function ($query) { $query->select('id','name'); },
             ]);
 
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
@@ -147,11 +147,7 @@ class DK_Staff__LocationRepository {
 
         $item = DK_Common__Location::withTrashed()
             ->with([
-                'creator'=>function ($query) { $query->select('id','username'); },
-                'motorcade_er'=>function ($query) { $query->select('id','name'); },
-                'trailer_er'=>function ($query) { $query->select('id','name'); },
-                'driver_er'=>function ($query) { $query->select('id','driver_name','driver_phone'); },
-                'copilot_er'=>function ($query) { $query->select('id','driver_name','driver_phone'); },
+                'creator'=>function ($query) { $query->select('id','name'); }
             ])
             ->find($item_id);
         if(!$item) return response_error([],"不存在警告，请刷新页面重试！");
@@ -164,12 +160,14 @@ class DK_Staff__LocationRepository {
 //        dd($post_data);
         $messages = [
             'operate.required' => 'operate.required.',
-            'name.required' => '请输入城市名称！',
+            'location_city.required' => '请输入城市名称！',
+            'location_district.required' => '请输入行政区名称！',
 //            'name.unique' => '该城市已存在！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
-            'name' => 'required',
+            'location_city' => 'required',
+            'location_district' => 'required',
 //            'name' => 'required|unique:yh_location,name',
         ], $messages);
         if ($v->fails())
@@ -190,7 +188,7 @@ class DK_Staff__LocationRepository {
 
         if($operate_type == 'create') // 添加 ( $id==0，添加一个新用户 )
         {
-            $is_exist = DK_Common__Location::select('id')->where('name',$post_data["name"])->count();
+            $is_exist = DK_Common__Location::select('id')->where('location_city',$post_data["location_city"])->count();
             if($is_exist) return response_error([],"该【城市】已存在，请勿重复添加！");
 
             $mine = new DK_Common__Location;
@@ -202,7 +200,7 @@ class DK_Staff__LocationRepository {
             $mine = DK_Common__Location::find($operate_id);
             if(!$mine) return response_error([],"该【地域】不存在，刷新页面重试！");
 
-            $is_exist = DK_Common__Location::select('id')->where('id','!=',$operate_id)->where('name',$post_data["name"])->count();
+            $is_exist = DK_Common__Location::select('id')->where('id','!=',$operate_id)->where('location_city',$post_data["location_city"])->count();
             if($is_exist) return response_error([],"该【城市】已存在，请勿重复添加！");
         }
         else return response_error([],"参数有误！");
@@ -691,7 +689,7 @@ class DK_Staff__LocationRepository {
         $id  = $post_data["id"];
         $query = WL_Staff_Record_Operation::select('*')
             ->with([
-                'creator'=>function($query) { $query->select(['id','username','true_name']); },
+                'creator'=>function($query) { $query->select(['id','name']); },
             ])
             ->where(['location_id'=>$id]);
 

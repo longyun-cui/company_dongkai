@@ -20,79 +20,21 @@
                 <input readonly type="hidden" class="form-control" name="operate[item_type]" value="location" data-default="location">
 
 
-                {{--类型--}}
-                <div class="form-group form-category" style="height:70px;">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 类型</label>
-                    <div class="col-md-9">
-                        <div class="btn-group">
-
-                            @if(in_array($me->user_type, [0,1,11]))
-                            <button type="button" class="btn radio-btn radio-location-category">
-                                <span class="radio">
-                                    <label>
-                                        <input type="radio" name="location_category" value="1" checked="checked"> 公司
-                                    </label>
-                                </span>
-                            </button>
-                            @endif
-
-                            @if(in_array($me->user_type, [0,1,11]))
-                            <button type="button" class="btn radio-btn radio-location-category">
-                                <span class="radio">
-                                    <label>
-                                        <input type="radio" name="location_category" value="21"> 渠道
-                                    </label>
-                                </span>
-                            </button>
-                            @endif
-
-                            @if(in_array($me->user_type, [0,1,11,41]))
-                            <button type="button" class="btn radio-btn radio-location-category">
-                                <span class="radio">
-                                    <label>
-                                        <input type="radio" name="location_category" value="31"> 商务
-                                    </label>
-                                </span>
-                            </button>
-                            @endif
-
-                        </div>
+                {{--项目名称--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 城市</label>
+                    <div class="col-md-9 ">
+                        <input type="text" class="form-control" name="location_city" placeholder="城市" value="">
                     </div>
                 </div>
-
-
-
 
                 {{--项目名称--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 名称</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 地区</label>
                     <div class="col-md-9 ">
-                        <input type="text" class="form-control" name="name" placeholder="名称" value="">
+                        <input type="text" class="form-control" name="location_district" placeholder="地区" value="">
                     </div>
                 </div>
-
-
-                {{--上级部门--}}
-                <div class="form-group select2-superior-box _none" style="height:70px;">
-                    <label class="control-label col-md-2">选择上级部门</label>
-                    <div class="col-md-9 ">
-                        <select class="form-control select2-box" name="superior_location_id" id="select2-superior-location" style="width:100%;">
-                            <option data-id="-1" value="-1">选择上级部门</option>
-                        </select>
-                    </div>
-                </div>
-
-
-                {{--负责人--}}
-                <div class="form-group _none" style="height:70px;">
-                    <label class="control-label col-md-2">选择负责人</label>
-                    <div class="col-md-9 ">
-                        <select class="form-control select2-box" name="leader_id" id="select2-leader" data-type="manager" style="width:100%;">
-                            <option data-id="-1" value="-1">选择负责人</option>
-                        </select>
-                    </div>
-                </div>
-
 
                 {{--描述--}}
                 <div class="form-group">

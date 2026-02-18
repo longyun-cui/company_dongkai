@@ -131,24 +131,36 @@
                     }
                 },
                 {
-                    "title": "名称",
+                    "title": "团队名称",
+                    "data": 'superior_team_er',
+                    "width": "120px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.team_type == 1) return '--';
+                        else if(row.team_type == 11)
+                        {
+                            return row.name;
+                        }
+                        else if(row.team_type == 31)
+                        {
+                            if(row.superior_team_er == null) return '--';
+                            else return '<a href="javascript:void(0);" class="text-black">' + row.superior_team_er.name + '</a>';
+                        }
+                        return '';
+                        // else return row.team_er.name+' ('+row.team_er.id+')';
+                    }
+                },
+                {
+                    "title": "小组名称",
                     "data": "name",
                     "className": "",
                     "width":"120px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return row.name;
-                    }
-                },
-                {
-                    "title": "所属团队",
-                    "data": 'superior_team_er',
-                    "width": "120px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(row.superior_team_er == null) return '--';
-                        else return '<a href="javascript:void(0);" class="text-black">' + row.superior_team_er.name + '</a>';
-                        // else return row.team_er.name+' ('+row.team_er.id+')';
+                        if(row.team_type == 1) return '--';
+                        else if(row.team_type == 11) return '--';
+                        else if(row.team_type == 31) return row.name;
+                        return '';
                     }
                 },
                 {

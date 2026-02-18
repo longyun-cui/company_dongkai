@@ -44,9 +44,8 @@ class DK_Staff__OrderRepository {
 
     public function __construct()
     {
-
-        $this->view_blade_403 = env('DK_STAFF__TEMPLATE').'entrance.errors.403';
-        $this->view_blade_404 = env('DK_STAFF__TEMPLATE').'entrance.errors.404';
+        $this->view_blade_403 = env('DK_STAFF__TEMPLATE').'403';
+        $this->view_blade_404 = env('DK_STAFF__TEMPLATE').'404';
 
         Blade::setEchoFormat('%s');
         Blade::setEchoFormat('e(%s)');

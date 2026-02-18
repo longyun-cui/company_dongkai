@@ -77,26 +77,13 @@
                         form_reset('#modal--for--location-item-edit');
 
                         var $modal = $('#modal--for--location-item-edit');
-                        $modal.find('.box-title').html('编辑公司【'+$that.attr('data-id')+'】');
+                        $modal.find('.box-title').html('编辑地域【'+$that.attr('data-id')+'】');
                         $modal.find('input[name="operate[type]"]').val('edit');
                         $modal.find('input[name="operate[id]"]').val($that.attr('data-id'));
 
-                        $modal.find('input[name="name"]').val($response.data.name);
-                        $modal.find('input[name="location_category"]').prop('checked', false);
-                        $modal.find('input[name="location_category"][value="'+$response.data.location_category+'"]').prop('checked', true).trigger('change');
-                        $modal.find('.radio-location-category').hide();
-                        $modal.find('input[name="location_category"][value="'+$response.data.location_category+'"]').parents('.radio-location-category').show();
+                        $modal.find('input[name="location_city"]').val($response.data.location_city);
+                        $modal.find('input[name="location_district"]').val($response.data.location_district);
 
-                        if($response.data.superior_location_er)
-                        {
-                            $modal.find('#select2-superior-location').append(new Option($response.data.superior_location_er.name, $response.data.superior_location_id, true, true)).trigger('change');
-                        }
-
-                        if($response.data.leader)
-                        {
-                            // $modal.find('#select2-leader option[value="'+$response.data.leader_id+'"]').prop('selected', true);
-                            $modal.find('#select2-leader').append(new Option($response.data.leader.username, $response.data.leader_id, true, true)).trigger('change');
-                        }
 
                         var $datatable_wrapper = $that.closest('.datatable-wrapper');
                         var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");

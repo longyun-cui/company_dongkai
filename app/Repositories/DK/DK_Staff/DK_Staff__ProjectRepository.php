@@ -27,8 +27,8 @@ class DK_Staff__ProjectRepository {
 
     public function __construct()
     {
-        $this->view_blade_403 = env('TEMPLATE_WL_STAFF').'entrance.errors.403';
-        $this->view_blade_404 = env('TEMPLATE_WL_STAFF').'entrance.errors.404';
+        $this->view_blade_403 = env('DK_STAFF__TEMPLATE').'403';
+        $this->view_blade_404 = env('DK_STAFF__TEMPLATE').'404';
 
         Blade::setEchoFormat('%s');
         Blade::setEchoFormat('e(%s)');
@@ -70,9 +70,9 @@ class DK_Staff__ProjectRepository {
         $query = DK_Common__Project::select('*')
             ->withTrashed()
             ->with([
-                'creator'=>function($query) { $query->select(['id','username']); },
+                'creator'=>function($query) { $query->select(['id','name']); },
                 'client_er'=>function($query) { $query->select(['id','name']); },
-                'inspector_er'=>function($query) { $query->select(['id','username']); }
+                'inspector_er'=>function($query) { $query->select(['id','name']); }
             ]);
 
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
@@ -827,7 +827,7 @@ class DK_Staff__ProjectRepository {
         $id  = $post_data["id"];
         $query = DK_Common__Record__by_Operation::select('*')
             ->with([
-                'creator'=>function($query) { $query->select(['id','username','true_name']); },
+                'creator'=>function($query) { $query->select(['id','name']); },
             ])
             ->where(['project_id'=>$id]);
 

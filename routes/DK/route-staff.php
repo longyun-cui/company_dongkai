@@ -14,15 +14,28 @@ Route::match(['get','post'], 'logout_without_token', $controller.'@logout_withou
 
 
 /*
- * 电销员工系统（前台）
- * 需要登录
+ * 员工系统
+ * 需要密码
  */
 Route::group(['middleware' => ['dk.staff.user.login']], function () {
 
     $controller = 'DKStaffController';
 
+    Route::match(['get','post'], '/my-account/my-password-change', $controller.'@o1__my_account__password_change');
 
     Route::post('/is_only_me', $controller.'@check_is_only_me');
+});
+
+
+/*
+ * 员工系统
+ * 需要登录
+ */
+Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_change']], function () {
+
+    $controller = 'DKStaffController';
+
+
     Route::get('/', $controller.'@view__staff__index');
     Route::get('/301', $controller.'@view__staff__301');
     Route::get('/403', $controller.'@view__staff__403');

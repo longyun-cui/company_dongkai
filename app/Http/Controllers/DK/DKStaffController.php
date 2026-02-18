@@ -293,6 +293,16 @@ class DKStaffController extends Controller
 
 
 
+    // 【基本信息】修改-密码
+    public function o1__my_account__password_change()
+    {
+        if(request()->isMethod('get')) return $this->common_repo->o1__my_account__password_change__view();
+        else if (request()->isMethod('post')) return $this->common_repo->o1__my_account__password_change__save(request()->all());
+    }
+
+
+
+
     /*
      * 首页
      */

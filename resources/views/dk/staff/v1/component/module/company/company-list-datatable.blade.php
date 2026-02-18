@@ -163,7 +163,7 @@
                     "width": "",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(row.is_completed != 1)
                         {
                             $(nTd).addClass('modal-show-for-info-text-set');
                             $(nTd).attr('data-id',row.id).attr('data-name','备注');
@@ -181,20 +181,20 @@
                     }
                 },
                 {
-                    "className": "text-center",
-                    "width": "80px",
                     "title": "创建者",
                     "data": "creator_id",
+                    "className": "text-center",
+                    "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return row.creator == null ? '未知' : row.creator.username;
+                        return row.creator == null ? '未知' : row.creator.name;
                     }
                 },
                 {
-                    "className": "font-12px",
-                    "width": "120px",
                     "title": "创建时间",
                     "data": 'created_at',
+                    "className": "font-12px",
+                    "width": "120px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
 //                            return data;

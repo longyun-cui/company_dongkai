@@ -24,8 +24,8 @@ class DK_Staff__DepartmentRepository {
 
     public function __construct()
     {
-        $this->view_blade_403 = env('TEMPLATE_WL_STAFF').'entrance.errors.403';
-        $this->view_blade_404 = env('TEMPLATE_WL_STAFF').'entrance.errors.404';
+        $this->view_blade_403 = env('DK_STAFF__TEMPLATE').'403';
+        $this->view_blade_404 = env('DK_STAFF__TEMPLATE').'404';
 
         Blade::setEchoFormat('%s');
         Blade::setEchoFormat('e(%s)');
@@ -67,10 +67,10 @@ class DK_Staff__DepartmentRepository {
         $query = DK_Common__Department::select(['id','item_status','name','department_category','department_type','company_id','leader_id','superior_department_id','remark','creator_id','created_at','updated_at','deleted_at'])
             ->withTrashed()
             ->with([
-                'creator'=>function($query) { $query->select(['id','username','true_name']); },
+                'creator'=>function($query) { $query->select(['id','name']); },
                 'company_er'=>function($query) { $query->select(['id','name']); },
                 'superior_department_er'=>function($query) { $query->select(['id','name']); },
-                'leader'=>function($query) { $query->select(['id','username','true_name']); }
+                'leader'=>function($query) { $query->select(['id','name']); }
             ]);
 
         if(in_array($me->staff_type,[41,81]))

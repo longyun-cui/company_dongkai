@@ -24,8 +24,8 @@ class DK_Staff__ClientRepository {
 
     public function __construct()
     {
-        $this->view_blade_403 = env('TEMPLATE_WL_STAFF').'entrance.errors.403';
-        $this->view_blade_404 = env('TEMPLATE_WL_STAFF').'entrance.errors.404';
+        $this->view_blade_403 = env('DK_STAFF__TEMPLATE').'403';
+        $this->view_blade_404 = env('DK_STAFF__TEMPLATE').'404';
 
         Blade::setEchoFormat('%s');
         Blade::setEchoFormat('e(%s)');
@@ -891,7 +891,7 @@ class DK_Staff__ClientRepository {
         $id  = $post_data["id"];
         $query = DK_Common__Record__by_Operation::select('*')
             ->with([
-                'creator'=>function($query) { $query->select(['id','username','true_name']); },
+                'creator'=>function($query) { $query->select(['id','name']); },
             ])
             ->where(['client_id'=>$id]);
 
