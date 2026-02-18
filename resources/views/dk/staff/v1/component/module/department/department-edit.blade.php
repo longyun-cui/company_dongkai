@@ -80,7 +80,7 @@
                             <button type="button" class="btn radio-btn radio-department-category">
                                 <span class="radio">
                                     <label>
-                                        <input type="radio" name="department_category" value="61"> 三方质检部
+                                        <input type="radio" name="department_category" value="61"> 复核部
                                     </label>
                                 </span>
                             </button>

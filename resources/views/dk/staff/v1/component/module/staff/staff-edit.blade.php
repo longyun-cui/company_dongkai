@@ -70,7 +70,7 @@
                             <button type="button" class="btn radio-btn radio-staff-category">
                                 <span class="radio">
                                     <label>
-                                        <input type="radio" name="staff_category" value="41" checked="checked" data-default="default"> 客服
+                                        <input type="radio" name="staff_category" value="41" checked="checked" data-default="default"> 客服人员
                                     </label>
                                 </span>
                             </button>
@@ -80,7 +80,7 @@
                             <button type="button" class="btn radio-btn radio-staff-category">
                                 <span class="radio">
                                     <label>
-                                        <input type="radio" name="staff_category" value="51"> 质检员
+                                        <input type="radio" name="staff_category" value="51"> 质检人员
                                     </label>
                                 </span>
                             </button>
@@ -90,7 +90,7 @@
                             <button type="button" class="btn radio-btn radio-staff-category">
                                 <span class="radio">
                                     <label>
-                                        <input type="radio" name="staff_category" value="61"> 三方人员
+                                        <input type="radio" name="staff_category" value="61"> 复核人员
                                     </label>
                                 </span>
                             </button>
