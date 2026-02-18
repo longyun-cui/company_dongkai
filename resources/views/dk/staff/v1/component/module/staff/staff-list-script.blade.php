@@ -113,10 +113,12 @@
                             $modal.find('select[name="team_id"]').append(new Option($response.data.team_er.name, $response.data.team_id, true, true)).trigger('change');
                         }
                         // 小组
-                        if($response.data.group_er)
+                        if($response.data.team_group_er)
                         {
-                            $modal.find('select[name="group_id"]').append(new Option($response.data.group_er.name, $response.data.group_id, true, true)).trigger('change');
+                            $modal.find('select[name="team_group_id"]').append(new Option($response.data.team_group_er.name, $response.data.team_group_id, true, true)).trigger('change');
                         }
+
+                        $modal.find('input[name="api_staffNo"]').val($response.data.api_staffNo);
 
                         var $datatable_wrapper = $that.closest('.datatable-wrapper');
                         var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");

@@ -1,12 +1,12 @@
 <?php
 namespace App\Http\Controllers\DK;
 
-use App\Repositories\DK\DK_Staff\DK_Staff__DeliveryRepository;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Models\DK\DK_Common\DK_Common__Staff;
+use App\Models\DK\DK_Staff\DK_Staff__Record__by_Visit;
 
 use App\Repositories\DK\DK_Staff\DK_Staff__CommonRepository;
 
@@ -23,6 +23,10 @@ use App\Repositories\DK\DK_Staff\DK_Staff__ClientRepository;
 use App\Repositories\DK\DK_Staff\DK_Staff__ProjectRepository;
 
 use App\Repositories\DK\DK_Staff\DK_Staff__OrderRepository;
+use App\Repositories\DK\DK_Staff\DK_Staff__DeliveryRepository;
+
+use App\Repositories\DK\DK_Staff\DK_Staff__StatisticRepository;
+
 
 use Response, Auth, Validator, DB, Exception;
 use QrCode, Excel;
@@ -48,6 +52,8 @@ class DKStaffController extends Controller
     private $order_repo;
     private $delivery_repo;
 
+    private $statistic_repo;
+
     public function __construct()
     {
         $this->repo = new DK_Staff__IndexRepository;
@@ -66,13 +72,15 @@ class DKStaffController extends Controller
 
         $this->order_repo = new DK_Staff__OrderRepository;
         $this->delivery_repo = new DK_Staff__DeliveryRepository;
+
+        $this->statistic_repo = new DK_Staff__StatisticRepository;
     }
 
     /*
      * 登录 & 退出
      */
     // 登陆
-    public function login()
+    public function login1()
     {
         if(request()->isMethod('get'))
         {
@@ -115,11 +123,171 @@ class DKStaffController extends Controller
         }
     }
 
+    public function login()
+    {
+        if(request()->isMethod('get'))
+        {
+            $record["record_category"] = 99; // record_category=1 browse/search/share/login
+            $record["record_type"] = 0; // record_type=1 browse
+            $record["page_type"] = 1; // page_type=1 login
+            $record["page_module"] = 1; // page_module=1 login page
+            $record["page_num"] = 0;
+            $record["open"] = "login";
+            $record["from"] = request('from',NULL);
+            $this->record_for_user_visit($record);
+
+            $view_blade = env('DK_STAFF__TEMPLATE').'login';
+            return view($view_blade);
+        }
+        else if(request()->isMethod('post'))
+        {
+            $where['email'] = request()->get('email');
+            $where['mobile'] = request()->get('mobile');
+            $where['password'] = request()->get('password');
+
+//            $email = request()->get('email');
+//            $admin = SuperAdministrator::whereEmail($email)->first();
+
+//            $mobile = request()->get('mobile');
+            $login_number = request()->get('login_number');
+            $staff = DK_Common__Staff::withTrashed()->where('login_number',$login_number)->first();
+
+
+            if($staff)
+            {
+                if($staff->item_status == 1)
+                {
+                    if($staff->login_error_num >= 3)
+                    {
+                        return response_error([],'账户or密码不正确啊啊啊！');
+                    }
+
+                    $token = request()->get('_token');
+                    $password = request()->get('password');
+                    if(password_check($password,$staff->password))
+                    {
+                        $remember = request()->get('remember');
+                        if($remember) Auth::guard('dk_staff_user')->login($staff,true);
+                        else Auth::guard('dk_staff_user')->login($staff);
+                        Auth::guard('dk_staff_user')->user()->login_error_num = 0;
+                        Auth::guard('dk_staff_user')->user()->only_token = $token;
+                        Auth::guard('dk_staff_user')->user()->save();
+
+                        if(Auth::guard('dk_staff_user')->user()->id > 10000)
+                        {
+                            $record["creator_id"] = Auth::guard('dk_staff_user')->user()->id;
+                            $record["record_category"] = 99; // record_category=99 browse/search/share/login
+                            $record["record_type"] = 1; // record_type=1 browse
+                            $record["page_type"] = 1; // page_type=9 login
+                            $record["page_module"] = 1; // page_module=9 login success
+                            $record["page_num"] = 0;
+                            $record["open"] = "login";
+                            $record["from"] = request('from',NULL);
+                            $this->record_for_user_visit($record);
+                        }
+
+                        return response_success();
+                    }
+                    else
+                    {
+                        $record["user_id"] = $staff->id;
+                        $record["record_category"] = 99; // record_category=1 browse/search/share/login
+                        $record["record_type"] = 99; // record_type=1 browse
+                        $record["page_type"] = 1; // page_type=9 login
+                        $record["page_module"] = 1; // page_module=1 login page
+                        $record["page_num"] = 0;
+                        $record["open"] = "login";
+                        $record["from"] = request('from',NULL);
+                        $this->record_for_user_visit($record);
+
+                        $staff->increment('login_error_num');
+                        if($staff->login_error_num >= 3)
+                        {
+                            $staff->staff_status = 99;
+                            $staff->only_token = '';
+                            $staff->save();
+                        }
+                        return response_error([],'账户or密码不正确！');
+                    }
+                }
+                else if($staff->item_status == 99)
+                {
+                    $record["user_id"] = $staff->id;
+                    $record["record_category"] = 99; // record_category=1 browse/search/share/login
+                    $record["record_type"] = 99; // record_type=1 browse
+                    $record["page_type"] = 1; // page_type=9 login
+                    $record["page_module"] = 1; // page_module=1 login page
+                    $record["page_num"] = 0;
+                    $record["open"] = "login";
+                    $record["from"] = request('from',NULL);
+                    $this->record_for_user_visit($record);
+
+                    $staff->increment('login_error_num');
+                    return response_error([],'账户or密码不正确啊！');
+                }
+                else return response_error([],'账户已禁用！');
+            }
+            else return response_error([],'账户or密码不正确.');
+        }
+    }
+
     // 退出
     public function logout()
     {
         Auth::guard('dk_staff_user')->logout();
         return redirect('/login');
+    }
+
+    // 退出
+    public function logout_without_token()
+    {
+        Auth::guard('dk_staff_user')->logout();
+        return redirect('/login');
+    }
+
+
+    // 【记录】
+    public function record_for_user_visit($post_data)
+    {
+        $record = new DK_Staff__Record__by_Visit();
+
+        $browseInfo = getBrowserInfo();
+        $post_data["browser_info"] = $browseInfo['browser_info'];
+        $post_data["referer"] = $browseInfo['referer'];
+        $type = $browseInfo['type'];
+        if($type == "Mobile") $post_data["open_device_type"] = 1;
+        else if($type == "PC") $post_data["open_device_type"] = 2;
+        $post_data["open_device_name"] = $browseInfo['device_name'];
+        $post_data["open_system"] = $browseInfo['system'];
+        $post_data["open_browser"] = $browseInfo['browser'];
+        $post_data["open_app"] = $browseInfo['app'];
+        $post_data["open_NetType"] = $browseInfo['open_NetType'];
+        $post_data["open_is_spider"] = $browseInfo['is_spider'];
+
+        $post_data["ip"] = Get_IP();
+        $bool = $record->fill($post_data)->save();
+        if($bool) return true;
+        else return false;
+    }
+
+
+    // 账号唯一登录
+    public function check_is_only_me()
+    {
+        $result['message'] = 'failed';
+        $result['result'] = 'denied';
+
+        if(Auth::guard('dk_staff_user')->check())
+        {
+            $token = request('_token');
+            if(Auth::guard('dk_staff_user')->user()->only_token == $token)
+            {
+                $result['message'] = 'success';
+                $result['result'] = 'access';
+            }
+        }
+
+        return Response::json($result);
     }
 
 
@@ -128,10 +296,18 @@ class DKStaffController extends Controller
     /*
      * 首页
      */
-	public function view_staff_index()
+	public function view__staff__index()
 	{
-        return $this->repo->view_staff_index();
+        return $this->repo->view__staff__index();
 	}
+    public function view__staff__403()
+    {
+        return $this->repo->view__staff__403();
+    }
+    public function view__staff__404()
+    {
+        return $this->repo->view__staff__404();
+    }
 
 
 
@@ -624,6 +800,15 @@ class DKStaffController extends Controller
     }
 
 
+    // 【工单】导入
+    public function o1__order__import__by_txt()
+    {
+        return $this->order_repo->o1__order__import__by_txt(request()->all());
+    }
+
+
+
+
     // 【工单】发布
     public function o1__order__item_publish()
     {
@@ -653,6 +838,13 @@ class DKStaffController extends Controller
     public function o1__order__bulk_delivering_save__by_fool()
     {
         return $this->order_repo->o1__order__bulk_delivering_save__by_fool(request()->all());
+    }
+
+
+    // 【工单】获取录音
+    public function o1__order__item_get_call_record__by_api()
+    {
+        return $this->order_repo->o1__order__item_get_call_record__by_api(request()->all());
     }
 
 
@@ -708,6 +900,166 @@ class DKStaffController extends Controller
 
 
 
+
+
+
+
+
+
+
+
+    /*
+     * 统计
+     */
+    // 【统计】【生产】项目看板
+    public function o1__statistic__production__project()
+    {
+        return $this->statistic_repo->o1__statistic__production__project(request()->all());
+    }
+    // 【统计】【生产】部门看板
+    public function o1__statistic__production__department()
+    {
+        return $this->statistic_repo->o1__statistic__production__department(request()->all());
+    }
+    // 【统计】【生产】团队看板
+    public function o1__statistic__production__team()
+    {
+        return $this->statistic_repo->o1__statistic__production__team(request()->all());
+    }
+
+
+    // 【统计】【员工】坐席概览
+    public function o1__statistic__production__caller_overview()
+    {
+        return $this->statistic_repo->o1__get_statistic_data_of_production_caller_overview(request()->all());
+    }
+    // 【统计】【员工】坐席排名
+    public function o1__statistic__production__caller_rank()
+    {
+        return $this->statistic_repo->o1__get_statistic_data_of_production_caller_rank(request()->all());
+    }
+    // 【统计】【员工】坐席近期
+    public function o1__statistic__production__caller_recent()
+    {
+        return $this->statistic_repo->o1__get_statistic_data_of_production_caller_recent(request()->all());
+    }
+    // 【统计】【员工】坐席日报
+    public function o1__statistic__production__caller_daily()
+    {
+        return $this->statistic_repo->o1__get_statistic_data_of_production_caller_daily(request()->all());
+    }
+
+
+    // 【统计】【交付】项目
+    public function o1__statistic__marketing__project()
+    {
+        return $this->statistic_repo->o1__statistic__marketing__project(request()->all());
+    }
+    // 【统计】【交付】客户
+    public function o1__statistic__marketing__client()
+    {
+        return $this->statistic_repo->o1__get_statistic_data_of_marketing_client(request()->all());
+    }
+
+
+    // 【统计】【销售统计】公司概览
+    public function o1__statistic__marketing____company_overview()
+    {
+        return $this->statistic_repo->o1__get_statistic_data_of_company_overview(request()->all());
+    }
+    // 【统计】【销售统计】公司日报
+    public function o1__statistic__marketing____company_daily()
+    {
+        return $this->statistic_repo->o1__get_statistic_data_of_company_daily(request()->all());
+    }
+
+
+
+
+
+
+
+
+    // 【统计】【项目】统计日报列表
+    public function o1__statistic__project_daily__list__datatable_query()
+    {
+        return $this->statistic_repo->o1__statistic__project_daily__list__datatable_query(request()->all());
+    }
+    // 【统计】【项目】项目统计日报-生成
+    public function o1__statistic__project_daily__create()
+    {
+        return $this->statistic_repo->o1__statistic__project_daily__create(request()->all());
+    }
+    // 【统计】【项目】字段修改
+    public function o1__statistic__project_daily__item_field_set()
+    {
+        return $this->statistic_repo->o1__statistic__project_daily__item_field_set(request()->all());
+    }
+    // 【统计】【项目】确认
+    public function o1__statistic__project_daily__item_confirm()
+    {
+        return $this->statistic_repo->o1__statistic__project_daily__item_confirm(request()->all());
+    }
+    // 【统计】【项目】删除
+    public function o1__statistic__project_daily__item_delete()
+    {
+        return $this->statistic_repo->o1__statistic__project_daily__item_delete(request()->all());
+    }
+    // 【统计】项目统计
+    public function o1__statistic__project_show()
+    {
+        return $this->statistic_repo->o1__statistic__project__show(request()->all());
+    }
+    // 【统计】项目统计
+    public function o1__statistic__project_detail()
+    {
+        return $this->statistic_repo->o1__statistic__project__detail(request()->all());
+    }
+
+
+    // 【统计】【客户】统计日报列表
+    public function o1__statistic__client_daily__list__datatable_query()
+    {
+        return $this->statistic_repo->o1__statistic__client_daily__list__datatable_query(request()->all());
+    }
+    // 【统计】【客户】统计日报列表-生成
+    public function o1__statistic__client_daily__create()
+    {
+        return $this->statistic_repo->o1__statistic__client_daily__create(request()->all());
+    }
+    // 【统计】【客户】字段修改
+    public function o1__statistic__client_daily__item_field_set()
+    {
+        return $this->statistic_repo->o1__statistic__client_daily__item_field_set(request()->all());
+    }
+    // 【统计】【客户】确认
+    public function o1__statistic__client_daily__item_confirm()
+    {
+        return $this->statistic_repo->o1__statistic__client_daily__item_confirm(request()->all());
+    }
+    // 【统计】【客户】删除
+    public function o1__statistic__client_daily__item_delete()
+    {
+        return $this->statistic_repo->o1__statistic__client_daily__item_delete(request()->all());
+    }
+    // 【统计】客户统计
+    public function o1__statistic__client__show()
+    {
+        return $this->statistic_repo->o1__statistic__client__show(request()->all());
+    }
+    // 【统计】客户统计
+    public function o1__statistic__client__detail()
+    {
+        return $this->statistic_repo->o1__statistic__client__detail(request()->all());
+    }
+
+
+
+    // 【统计】【通话统计】
+    public function o1_statistic__call_task_analysis__datatable_query()
+    {
+        return $this->statistic_repo->o1_statistic__call_task_analysis__datatable_query(request()->all());
+    }
 
 }
 

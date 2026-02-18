@@ -888,9 +888,14 @@
         });
 
 
-        $form.find(".select2-multi-box-c").val([]).trigger('change');
-        $form.find(".select2-multi-box-c").val(null).trigger('change');
-        $form.find(".select2-multi-box-c").empty().trigger('change');
+        $.each( $form.find(".select2-multiple-reset"), function(index, element) {
+            select2MultipleOptionClear(element);
+        });
+
+        // $form.find(".select2-multiple-reset").val([]).trigger('change');
+        // $form.find(".select2-multiple-reset").val(null).trigger('change');
+        // $form.find(".select2-multiple-reset").empty().trigger('change');
+
     }
 
 
@@ -925,6 +930,15 @@
         {
             $dom.val(null).trigger('change');
         }
+    }
+
+    //
+    function select2MultipleOptionClear(dom)
+    {
+        var $dom = $(dom);
+        $dom.val([]).trigger('change');
+        $dom.val(null).trigger('change');
+        $dom.empty().trigger('change');
     }
 
 

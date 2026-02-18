@@ -8,9 +8,9 @@
 
             @if(in_array($me->user_type,[0,1,9,11,19]))
                 <button type="button" onclick="" class="btn btn-filter btn-success modal-show--for--order--item-create"
-                    data-form-id="form--for--order-dental-item-edit"
-                    data-modal-id="modal--for--order-dental-item-edit"
-                    data-title="添加工单"
+                        data-form-id="form--for--order-dental--item-edit"
+                        data-modal-id="modal--for--order-dental--item-edit"
+                        data-title="添加工单"
                 >
                     <i class="fa fa-plus"></i> 添加
                 </button>

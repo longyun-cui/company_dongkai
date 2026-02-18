@@ -745,8 +745,8 @@
                 },
                 {
                     "title": "班次",
-                    "name": "field_2",
-                    "data": "field_2",
+                    "name": "work_shift",
+                    "data": "work_shift",
                     "className": "",
                     "width": "60px",
                     "orderable": false,
@@ -757,7 +757,7 @@
 
                             $(nTd).addClass('modal-show-for-field-set');
                             $(nTd).attr('data-id',row.id).attr('data-name','班次');
-                            $(nTd).attr('data-key','field_2').attr('data-value',data);
+                            $(nTd).attr('data-key','work_shift').attr('data-value',data);
 
                             $(nTd).attr('data-column-type','radio');
                             $(nTd).attr('data-column-name','班次');
@@ -768,7 +768,7 @@
                     },
                     render: function(data, type, row, meta) {
                         if(data == 1) return '<small class="btn-xs bg-green">白班</small>';
-                        else if(data == 9) return '<small class="btn-xs bg-navy">夜班</small>';
+                        else if(data == 2) return '<small class="btn-xs bg-navy">夜班</small>';
                         else return '--';
                     }
                 },
@@ -780,7 +780,7 @@
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return row.creator == null ? '未知' : '<a class="caller-control" data-id="'+data+'" data-title="'+row.creator.username+'">'+row.creator.username+'</a>';
+                        return row.creator == null ? '未知' : '<a class="caller-control" data-id="'+data+'" data-title="'+row.creator.name+'">'+row.creator.name+'</a>';
                     }
                 },
                 {
@@ -794,8 +794,8 @@
                         if(!data) return '--';
 
                         var $creator_team = row.creator_team_er == null ? '' : row.creator_team_er.name;
-                        var $creator_group = row.creator_group_er == null ? '' : ' - ' + row.creator_group_er.name;
-                        return '<a href="javascript:void(0);">'+$creator_team + $creator_group+'</a>';
+                        var $creator_team_group = row.creator_team_group_er == null ? '' : ' - ' + row.creator_team_group_er.name;
+                        return '<a href="javascript:void(0);">'+$creator_team + $creator_team_group+'</a>';
                     }
                 },
                 {
@@ -815,33 +815,41 @@
                         var $html_record = '';
 
 
+                        $html_detail = '<a class="btn btn-xs item-modal-show-for-detail" data-id="'+data+'">详情</a>';
 
-//                            if(row.is_me == 1 && row.item_active == 0)
+                        // 记录
+                        if(row.created_type != 9)
+                        {
+                            $html_record = '<a class="btn btn-xs modal-show--for--order--item-operation-record" data-id="'+data+'">记录</a>';
+                        }
+
+                        // 编辑
                         if(row.is_published == 0)
                         {
-                            $html_edit = '<a class="btn btn-xs order-edit-show" data-id="'+data+'">编辑</a>';
-                            $html_delete = '<a class="btn btn-xs item-delete-submit" data-id="'+data+'">删除</a>';
+                            $html_edit = '<a class="btn btn-xs modal-show--for--order-dental--item-edit" data-id="'+data+'">编辑</a>';
+                        }
+
+                        // 发布
+                        if(row.is_published == 0 || (row.inspected_status == 1 && row.inspected_result == '二次待审'))
+                        {
                             $html_publish = '<a class="btn btn-xs order--item-publish-submit" data-id="'+data+'">发布</a>';
                         }
-                        else
+                        // 已发布
+                        if(row.is_published > 0)
                         {
+                            // 编辑
                             if(row.inspected_status == 1 && row.inspected_result == '二次待审')
                             {
-                                $html_edit = '<a class="btn btn-xs btn-primary item-edit-link" data-id="'+data+'">编辑</a>';
-                                $html_publish = '<a class="btn btn-xs bg-olive item-publish-submit" data-id="'+data+'">发布</a>';
+                                $html_edit = '<a class="btn btn-xs modal-show--for--order-dental--item-edit" data-id="'+data+'">编辑</a>';
                             }
-                            $html_detail = '<a class="btn btn-xs item-modal-show-for-detail" data-id="'+data+'">详情</a>';
-                            $html_record = '<a class="btn btn-xs item-modal-show-for-operation-record" data-id="'+data+'">记录</a>';
-
 
                             // 申诉
-                            // if(row.appealed_status == 0 && (row.inspected_result == '拒绝' || row.inspected_result == '拒绝可交付' || row.inspected_result == '不合格'))
-                            if(row.appealed_status == 0 && (['拒绝','拒绝可交付','不合格'].includes(row.inspected_result)))
+                            if(row.appealed_status == 0 && ['拒绝','拒绝可交付','不合格'].includes(row.inspected_result))
                             {
-                                $html_appeal = '<a class="btn btn-xs modal-show-for-detail-appealed" data-id="'+data+'">申诉</a>';
+                                $html_appeal = '<a class="btn btn-xs bg-red modal-show--for--order--item-appealed" data-id="'+data+'">申诉</a>';
                             }
-
                         }
+
 
 
                         var $html =

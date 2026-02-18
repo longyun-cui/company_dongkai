@@ -31,7 +31,7 @@
                             <button type="button" class="btn radio-btn radio-client-category">
                             <span class="radio">
                                 <label>
-                                    <input type="radio" name="client_category" value="1" checked="checked"> 长期
+                                    <input type="radio" name="client_category" value="1" checked="checked"> 口腔
                                 </label>
                             </span>
                             </button>
@@ -39,7 +39,7 @@
                             <button type="button" class="btn radio-btn radio-client-category">
                             <span class="radio">
                                 <label>
-                                    <input type="radio" name="client_category" value="11"> 短期
+                                    <input type="radio" name="client_category" value="11"> 医美
                                 </label>
                             </span>
                             </button>
@@ -47,7 +47,7 @@
                             <button type="button" class="btn radio-btn radio-client-category">
                             <span class="radio">
                                 <label>
-                                    <input type="radio" name="client_category" value="91"> 临时
+                                    <input type="radio" name="client_category" value="31"> 二奢
                                 </label>
                             </span>
                             </button>

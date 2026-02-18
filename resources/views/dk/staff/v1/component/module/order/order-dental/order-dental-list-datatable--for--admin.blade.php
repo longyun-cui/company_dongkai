@@ -448,7 +448,8 @@
                     render: function(data, type, row, meta) {
                         if(!row.delivered_at) return '--';
                         var $result_html = '';
-                        if(data == "已交付" || data == "折扣交付" || data == "郊区交付" || data == "内部交付")
+                        // if(data == "交付" || data == "正常交付" || data == "折扣交付" || data == "郊区交付" || data == "内部交付")
+                        if(["交付","正常交付","折扣交付","郊区交付","内部交付"].includes(data))
                         {
                             $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
                         }
@@ -456,13 +457,13 @@
                         {
                             $result_html = '<small class="btn-xs bg-blue">'+data+'</small>';
                         }
-                        else if(data == "驳回")
-                        {
-                            $result_html = '<small class="btn-xs bg-red">'+data+'</small>';
-                        }
                         else if(data == "等待再审" || data == "隔日交付")
                         {
                             $result_html = '<small class="btn-xs bg-yellow">'+data+'</small>';
+                        }
+                        else if(data == "驳回")
+                        {
+                            $result_html = '<small class="btn-xs bg-red">'+data+'</small>';
                         }
                         else
                         {
@@ -1196,8 +1197,8 @@
                 },
                 {
                     "title": "班次",
-                    "name": "field_2",
-                    "data": "field_2",
+                    "name": "work_shift",
+                    "data": "work_shift",
                     "className": "",
                     "width": "60px",
                     "orderable": false,
@@ -1207,7 +1208,7 @@
 
                             $(nTd).addClass('modal-show-for-field-set');
                             $(nTd).attr('data-id',row.id).attr('data-name','班次');
-                            $(nTd).attr('data-key','field_2').attr('data-value',data);
+                            $(nTd).attr('data-key','work_shift').attr('data-value',data);
 
                             $(nTd).attr('data-column-type','radio');
                             $(nTd).attr('data-column-name','班次');
@@ -1218,7 +1219,7 @@
                     },
                     render: function(data, type, row, meta) {
                         if(data == 1) return '<small class="btn-xs bg-green">白班</small>';
-                        else if(data == 9) return '<small class="btn-xs bg-navy">夜班</small>';
+                        else if(data == 2) return '<small class="btn-xs bg-navy">夜班</small>';
                         else return '--';
                     }
                 },
@@ -1387,6 +1388,7 @@
                             $html_delete = '<a class="btn btn-xs order--item-delete-submit" data-id="'+data+'">删除</a>';
                         }
 
+                        // 编辑
                         if(row.is_published == 0)
                         {
                             $html_edit = '<a class="btn btn-xs modal-show--for--order-dental--item-edit" data-id="'+data+'">编辑</a>';
@@ -1398,7 +1400,7 @@
                             $html_publish = '<a class="btn btn-xs order--item-publish-submit" data-id="'+data+'">发布</a>';
                         }
 
-
+                        // 已发布
                         if(row.is_published > 0)
                         {
                             // 编辑

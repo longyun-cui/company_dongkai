@@ -93,6 +93,44 @@
     @include(env('DK_STAFF__TEMPLATE').'component.module.delivery.delivery-luxury.delivery-luxury-list')
     @endif
 
+
+
+
+    {{--交付--}}
+    {{--生产--}}
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.project.statistic-production-project')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.department.statistic-production-department')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.team.statistic-production-team')
+
+    {{--员工--}}
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.staff.statistic-caller-overview')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.staff.statistic-caller-rank')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.staff.statistic-caller-recent')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.staff.statistic-caller-daily')
+
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.staff.statistic-inspector-overview')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.staff.statistic-deliverer-overview')
+
+    {{--交付--}}
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.marketing.project.statistic-marketing-project')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.marketing.client.statistic-marketing-client')
+
+    {{--销售--}}
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.marketing.company.statistic-company-overview')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.marketing.company.statistic-company-daily')
+
+
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic-list.statistic-project.statistic-project-daily')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic-list.statistic-project.statistic-project-show')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic-list.statistic-project.statistic-project-detail')
+
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic-list.statistic-client.statistic-client-daily')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic-list.statistic-client.statistic-client-show')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic-list.statistic-client.statistic-client-detail')
+
+
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic-call.statistic-task-analysis')
+
 </div>
 
 
@@ -124,6 +162,7 @@
 
 
     {{--工单--}}
+    @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-import--by-txt')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-edit')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-aesthetic.order-aesthetic-edit')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-luxury.order-luxury-edit')
@@ -218,6 +257,49 @@
         @include(env('DK_STAFF__TEMPLATE').'component.module.delivery.delivery-aesthetic.delivery-aesthetic-list-datatable')
         @include(env('DK_STAFF__TEMPLATE').'component.module.delivery.delivery-luxury.delivery-luxury-list-datatable')
     @endif
+
+
+
+
+    {{--统计--}}
+    {{--生产--}}
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.project.statistic-production-project-datatable')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.department.statistic-production-department-datatable')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.team.statistic-production-team-datatable')
+
+    {{--员工--}}
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.staff.statistic-caller-overview-datatable')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.staff.statistic-caller-rank-datatable')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.staff.statistic-caller-recent-datatable')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.staff.statistic-caller-daily-datatable')
+
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.staff.statistic-inspector-overview-datatable')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.staff.statistic-deliverer-overview-datatable')
+
+    {{--交付--}}
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.marketing.project.statistic-marketing-project-datatable')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.marketing.client.statistic-marketing-client-datatable')
+
+    {{--销售--}}
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.marketing.company.statistic-company-overview-datatable')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.marketing.company.statistic-company-daily-datatable')
+
+
+
+
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic-list.statistic-project.statistic-project-daily-datatable')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic-list.statistic-project.statistic-project-daily-script')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic-list.statistic-project.statistic-project-show-datatable')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic-list.statistic-project.statistic-project-detail-datatable')
+
+
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic-list.statistic-client.statistic-client-daily-datatable')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic-list.statistic-client.statistic-client-daily-script')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic-list.statistic-client.statistic-client-show-datatable')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic-list.statistic-client.statistic-client-detail-datatable')
+
+
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic-call.statistic-task-analysis-datatable')
 
 
 @endsection

@@ -41,16 +41,16 @@
             @endif
 
             {{--选择员工--}}
-            @if(in_array($me->user_type,[0,1,9,11,41,81,84]))
-                <select class="search-filter form-filter filter-lg select2-box-c select2-staff-c" name="order-staff">
-                    <option value="-1">选择员工</option>
-                    @if(!empty($staff_list) && count($staff_list) > 0)
-                        @foreach($staff_list as $v)
-                            <option value="{{ $v->id }}">{{ $v->username }}</option>
-                        @endforeach
-                    @endif
-                </select>
-            @endif
+{{--            @if(in_array($me->user_type,[0,1,9,11,41,81,84]))--}}
+{{--                <select class="search-filter form-filter filter-lg select2-box-c select2-staff-c" name="order-staff">--}}
+{{--                    <option value="-1">选择员工</option>--}}
+{{--                    @if(!empty($staff_list) && count($staff_list) > 0)--}}
+{{--                        @foreach($staff_list as $v)--}}
+{{--                            <option value="{{ $v->id }}">{{ $v->username }}</option>--}}
+{{--                        @endforeach--}}
+{{--                    @endif--}}
+{{--                </select>--}}
+{{--            @endif--}}
 
             {{--选择客户--}}
             @if(in_array($me->user_type,[0,1,9,11,61,66]))
@@ -77,7 +77,7 @@
             {{--客户类型--}}
             <select class="search-filter form-filter filter-md select2-box-c" name="order-client-type">
                 <option value="-1">客户类型</option>
-                @foreach(config('info.client_type') as $k => $v)
+                @foreach(config('dk.common-config.dental_type') as $k => $v)
                     <option value="{{ $k }}">{{ $v }}</option>
                 @endforeach
             </select>
@@ -104,11 +104,11 @@
             <select class="search-filter form-filter filter-xl select2-box-c" name="order-inspected-result[]" multiple="multiple">
                 <option value="-1">审核结果</option>
                 @if($me->department_district_id <= 0)
-                    @foreach(config('info.inspected_result') as $v)
+                    @foreach(config('dk.common-config.inspected_result') as $v)
                         <option value="{{ $v }}">{{ $v }}</option>
                     @endforeach
                 @else
-                    @foreach(config('info.inspected_result_for_team') as $v)
+                    @foreach(config('dk.common-config.inspected_result_for_team') as $v)
                         <option value="{{ $v }}">{{ $v }}</option>
                     @endforeach
                 @endif
@@ -126,7 +126,7 @@
             @if(in_array($me->user_type,[0,1,9,11,91]))
                 <select class="search-filter form-filter filter-md select2-box-c" name="order-appealed-status">
                     <option value="">申诉状态</option>
-                    @foreach(config('info.appealed_status') as $v)
+                    @foreach(config('dk.common-config.appealed_status') as $v)
                         <option value="{{ $v }}">{{ $v }}</option>
                     @endforeach
                 </select>
@@ -152,7 +152,7 @@
             @if(in_array($me->user_type,[0,1,9,11,61,66]))
             <select class="search-filter form-filter filter-xl select2-box-c" name="order-delivered-result[]" multiple="multiple">
                 <option value="-1">交付结果</option>
-                @foreach(config('info.delivered_result') as $v)
+                @foreach(config('dk.common-config.delivered_result') as $v)
                     <option value="{{ $v }}">{{ $v }}</option>
                 @endforeach
             </select>

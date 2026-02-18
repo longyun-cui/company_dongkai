@@ -212,6 +212,62 @@
                 {
                     Datatable__for__Delivery_Luxury_List('#'+$config.id);
                 }
+                else if($id == "production")
+                {
+                    console.log("production");
+                }
+                else if($id == "datatable-statistic-production-project")
+                {
+                    Datatable__for__Statistic_Production_Project('#'+$config.id);
+                }
+                else if($id == "datatable-statistic-production-department")
+                {
+                    Datatable__for__Statistic_Production_Department('#'+$config.id);
+                }
+                else if($id == "datatable-statistic-production-team")
+                {
+                    Datatable__for__Statistic_Production_Team('#'+$config.id);
+                }
+                else if($id == "marketing")
+                {
+                    console.log("marketing");
+                }
+                else if($id == "datatable-statistic-marketing-project")
+                {
+                    Datatable__for__Statistic_Marketing_Project('#'+$config.id);
+                }
+                else if($id == "datatable-statistic-marketing-client")
+                {
+                    Datatable__for__Statistic_Marketing_Client('#'+$config.id);
+                }
+                else if($id == "statistic-list")
+                {
+                    console.log("statistic-list");
+                }
+                else if($id == "datatable-statistic-list-project-daily")
+                {
+                    Datatable__for__Statistic_List__Project_Daily('#'+$config.id);
+                }
+                else if($id == "datatable-statistic-list-project-show")
+                {
+                    Datatable__for__Statistic_List__Project_Show('#'+$config.id);
+                }
+                else if($id == "datatable-statistic-list-client-daily")
+                {
+                    Datatable__for__Statistic_List__Client_Daily('#'+$config.id);
+                }
+                else if($id == "datatable-statistic-list-client-show")
+                {
+                    Datatable__for__Statistic_List__Client_Show('#'+$config.id);
+                }
+                else if($id == "statistic-call")
+                {
+                    console.log("statistic-call");
+                }
+                else if($id == "datatable-statistic-call-task-analysis")
+                {
+                    Datatable__for__Statistic_Call_Task_Analysis('#'+$config.id);
+                }
             }
 
 

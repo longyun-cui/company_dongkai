@@ -2,7 +2,7 @@
 namespace App\Repositories\DK\DK_Staff;
 
 use App\Models\DK\DK_Common\DK_Common__Location;
-use App\Models\DK\DK_Common\DK_Common__Record_by_Operation;
+use App\Models\DK\DK_Common\DK_Common__Record__by_Operation;
 
 use App\Repositories\Common\CommonRepository;
 

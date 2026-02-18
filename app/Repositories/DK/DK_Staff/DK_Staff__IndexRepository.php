@@ -34,9 +34,8 @@ class DK_Staff__IndexRepository {
 
     public function __construct()
     {
-
-        $this->view_blade_403 = env('TEMPLATE_DK_ADMIN').'entrance.errors.403';
-        $this->view_blade_404 = env('TEMPLATE_DK_ADMIN').'entrance.errors.404';
+        $this->view_blade_403 = env('DK_STAFF__TEMPLATE').'403';
+        $this->view_blade_404 = env('DK_STAFF__TEMPLATE').'404';
 
         Blade::setEchoFormat('%s');
         Blade::setEchoFormat('e(%s)');
@@ -97,8 +96,8 @@ class DK_Staff__IndexRepository {
 
 
 
-    // 返回主页视图
-    public function view_staff_index()
+    // 返回【主页】视图
+    public function view__staff__index()
     {
         $this->get_me();
         $me = $this->me;
@@ -149,6 +148,20 @@ class DK_Staff__IndexRepository {
     }
 
 
+
+    // 返回【403】页面
+    public function view__staff__403()
+    {
+        $this->get_me();
+        return view($this->view_blade_403);
+    }
+
+    // 返回【404】页面
+    public function view__staff__404()
+    {
+        $this->get_me();
+        return view($this->view_blade_404);
+    }
 
 
 }

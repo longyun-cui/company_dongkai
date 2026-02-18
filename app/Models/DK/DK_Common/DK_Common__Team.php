@@ -35,8 +35,8 @@ class DK_Common__Team extends Model
         'company_id',
         'department_id',
         'superior_team_id',
-        'superior_sub_team_id',
-        'superior_group_id',
+        'superior_team_sub_id',
+        'superior_team_group_id',
         'leader_id',
 
         'visit_num', 'share_num', 'favor_num',  'follow_num', 'fans_num',

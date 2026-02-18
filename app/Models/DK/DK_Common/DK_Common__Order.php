@@ -45,6 +45,8 @@ class DK_Common__Order extends Model
         'creator_team_id',
         'creator_group_id',
 
+        'work_shift',
+
 
         'client_id',
         'project_id',

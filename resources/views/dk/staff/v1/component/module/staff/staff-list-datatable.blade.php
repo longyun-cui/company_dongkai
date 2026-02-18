@@ -135,7 +135,7 @@
                         else if(data == 31) return '<i class="fa fa-genderless text-green"></i> 财务';
                         else if(data == 41) return '<i class="fa fa-genderless text-blue"></i> 客服';
                         else if(data == 51) return '<i class="fa fa-genderless text-blue"></i> 质检';
-                        else if(data == 61) return '<i class="fa fa-genderless text-blue"></i> 三方';
+                        else if(data == 61) return '<i class="fa fa-genderless text-blue"></i> 复核';
                         else if(data == 71) return '<i class="fa fa-genderless text-blue"></i> 运营';
                         else if(data == 81) return '<i class="fa fa-genderless text-blue"></i> 业务';
                         else if(data == 88) return '<i class="fa fa-genderless text-blue"></i> 销售商务';
@@ -199,21 +199,31 @@
                             var $team = row.team_er.name;
                             $return += $team;
 
-                            if(row.sub_team_er)
+                            if(row.team_sub_er)
                             {
-                                var $sub_team = row.sub_team_er.name;
-                                $return += ' - ' + $sub_team;
+                                var $team_sub_name = row.team_sub_er.name;
+                                $return += ' - ' + $team_sub_name;
                             }
 
-                            if(row.group_er)
+                            if(row.team_group_er)
                             {
-                                var $group = row.group_er.name;
-                                $return += ' - ' + $group;
+                                var $team_group_name = row.team_group_er.name;
+                                $return += ' - ' + $team_group_name;
                             }
 
                             return '<a href="javascript:void(0);" class="text-black">'+$return+'</a>';
                         }
                         else return '--';
+                    }
+                },
+                {
+                    "title": "API坐席ID",
+                    "data": "api_staffNo",
+                    "className": "",
+                    "width": "100px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return '<a href="javascript:void(0);">'+data+'</a>';
                     }
                 },
                 {

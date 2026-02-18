@@ -4,7 +4,7 @@ namespace App\Repositories\DK\DK_Staff;
 use App\Models\DK\DK_Common\DK_Common__Company;
 use App\Models\DK\DK_Common\DK_Common__Department;
 use App\Models\DK\DK_Common\DK_Common__Team;
-use App\Models\DK\DK_Common\DK_Common__Record_by_Operation;
+use App\Models\DK\DK_Common\DK_Common__Record__by_Operation;
 
 use App\Repositories\Common\CommonRepository;
 
@@ -75,6 +75,29 @@ class DK_Staff__TeamRepository {
                 'superior_team_er'=>function($query) { $query->select(['id','name']); },
                 'leader'=>function($query) { $query->select(['id','username','true_name']); }
             ]);
+
+        if(in_array($me->staff_category,[11,21,31,41,51,61,71,81]))
+        {
+            $query->where('department_id',$me->department_id);
+            if($me->staff_position == 31)
+            {
+            }
+            else if($me->staff_position == 41)
+            {
+                $query->whereIn('team_type',[21,31,41]);
+                $query->where('superior_team_id',$me->team_id);
+            }
+            else if($me->staff_position == 51)
+            {
+                $query->whereIn('team_type',[31,41]);
+                $query->where('superior_team_sub_id',$me->team_sub_id);
+            }
+            else if($me->staff_position == 61)
+            {
+                $query->whereIn('team_type',[41]);
+                $query->where('superior_team_group_id',$me->team_group_id);
+            }
+        }
 
 
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
@@ -356,9 +379,9 @@ class DK_Staff__TeamRepository {
             if(!$bool) throw new Exception("DK_Common__Team--delete--fail");
             else
             {
-                $staff_operation_record = new DK_Common__Record_by_Operation;
+                $staff_operation_record = new DK_Common__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("DK_Common__Record_by_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -441,9 +464,9 @@ class DK_Staff__TeamRepository {
             if(!$bool) throw new Exception("DK_Common__Team--restore--fail");
             else
             {
-                $staff_operation_record = new DK_Common__Record_by_Operation;
+                $staff_operation_record = new DK_Common__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("DK_Common__Record_by_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -526,9 +549,9 @@ class DK_Staff__TeamRepository {
             if(!$bool) throw new Exception("DK_Common__Team--delete--fail");
             else
             {
-                $staff_operation_record = new DK_Common__Record_by_Operation;
+                $staff_operation_record = new DK_Common__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("DK_Common__Record_by_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -615,9 +638,9 @@ class DK_Staff__TeamRepository {
             if(!$bool) throw new Exception("DK_Common__Team--update--fail");
             else
             {
-                $staff_operation_record = new DK_Common__Record_by_Operation;
+                $staff_operation_record = new DK_Common__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("DK_Common__Record_by_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -702,9 +725,9 @@ class DK_Staff__TeamRepository {
             if(!$bool) throw new Exception("DK_Common__Team--update--fail");
             else
             {
-                $staff_operation_record = new DK_Common__Record_by_Operation;
+                $staff_operation_record = new DK_Common__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("DK_Common__Record_by_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -729,7 +752,7 @@ class DK_Staff__TeamRepository {
         $me = $this->me;
 
         $id  = $post_data["id"];
-        $query = DK_Common__Record_by_Operation::select('*')
+        $query = DK_Common__Record__by_Operation::select('*')
             ->with([
                 'creator'=>function($query) { $query->select(['id','username','true_name']); },
             ])

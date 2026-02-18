@@ -47,7 +47,7 @@
                             <button type="button" class="btn radio-btn radio-item-category">
                             <span class="radio">
                                 <label>
-                                    <input type="radio" name="project_category" value="31"> 二手奢侈品
+                                    <input type="radio" name="project_category" value="31"> 二奢
                                 </label>
                             </span>
                             </button>
@@ -100,7 +100,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2">团队</label>
                     <div class="col-md-8 ">
-                        <select class="form-control select2-reset select2--team" multiple="multiple"
+                        <select class="form-control select2-multiple-reset select2--team" multiple="multiple"
                                 name="teams[]"
                                 id="select2--teams--for--project-item-edit"
                                 data-modal="#modal--for--project-item-edit"
@@ -116,7 +116,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2">质检员</label>
                     <div class="col-md-8 ">
-                        <select class="form-control select2-reset select2--staff" multiple="multiple"
+                        <select class="form-control select2-multiple-reset select2--staff" multiple="multiple"
                                 name="peoples[]"
                                 id="select2--peoples--for--project-item-edit"
                         >

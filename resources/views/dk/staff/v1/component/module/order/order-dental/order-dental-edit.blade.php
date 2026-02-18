@@ -36,13 +36,13 @@
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 班次</label>
                     <div class="col-md-9 ">
                         <select class="form-control modal--select2 select2-reset"
-                                name="field_2"
+                                name="work_shift"
                                 id=""
                                 data-modal="#modal--for--order-dental--item-edit"
                         >
                             <option value="">选择班次</option>
                             <option value ="1">白班</option>
-                            <option value ="9">夜班</option>
+                            <option value ="2">夜班</option>
                         </select>
                     </div>
                 </div>

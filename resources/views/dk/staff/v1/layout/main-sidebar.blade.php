@@ -9,7 +9,7 @@
 
 
             {{--公司列表--}}
-            @if(in_array($me->staff_type,[0,1,9,11]))
+            @if(in_array($me->staff_category,[0,1,9]))
                 <li class="treeview">
                     <a class="tab-control datatable-control"
                        data-type="create"
@@ -31,7 +31,7 @@
                 </li>
             @endif
             {{--部门列表--}}
-            @if(in_array($me->staff_type,[0,1,9,11]))
+            @if(in_array($me->staff_category,[0,1,9]))
                 <li class="treeview">
                     <a class="tab-control datatable-control"
                        data-type="create"
@@ -53,121 +53,121 @@
                 </li>
             @endif
             {{--团队列表--}}
-            @if(in_array($me->staff_type,[0,1,9,11]))
-                <li class="treeview">
-                    <a class="tab-control datatable-control"
-                       data-type="create"
-                       data-unique="y"
-                       data-id="team-list"
-                       data-title='团队列表'
-                       data-content='<i class="fa fa-sitemap text-white"></i> 团队列表'
-                       data-icon='<i class="fa fa-sitemap text-blue"></i>'
+            @if(in_array($me->staff_category,[0,1,9,11,21,31,41,51,61,71,81,88]) && in_array($me->staff_position,[0,1,9,31,41,51,61,71]))
+            <li class="treeview">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="team-list"
+                   data-title='团队列表'
+                   data-content='<i class="fa fa-sitemap text-white"></i> 团队列表'
+                   data-icon='<i class="fa fa-sitemap text-blue"></i>'
 
-                       data-datatable-type="create"
-                       data-datatable-unique="y"
-                       data-datatable-id="datatable-team-list"
-                       data-datatable-target="team-list"
-                       data-datatable-clone-object="team-list-clone"
-                    >
-                        <i class="fa fa-sitemap text-white"></i>
-                        <span>团队列表</span>
-                    </a>
-                </li>
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-team-list"
+                   data-datatable-target="team-list"
+                   data-datatable-clone-object="team-list-clone"
+                >
+                    <i class="fa fa-sitemap text-white"></i>
+                    <span>团队列表</span>
+                </a>
+            </li>
             @endif
             {{--员工列表--}}
-            @if(in_array($me->staff_type,[0,1,9,11,81,84]))
-                <li class="treeview">
-                    <a class="tab-control datatable-control"
-                       data-type="create"
-                       data-unique="y"
-                       data-id="staff-list"
-                       data-title='员工列表'
-                       data-content='<i class="fa fa-user text-white"></i> 员工列表'
-                       data-icon='<i class="fa fa-user text-blue"></i>'
+            @if(in_array($me->staff_category,[0,1,9,11,21,31,41,51,61,71,81,88]) && in_array($me->staff_position,[0,1,9,31,41,51,61,71]))
+            <li class="treeview">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="staff-list"
+                   data-title='员工列表'
+                   data-content='<i class="fa fa-user text-white"></i> 员工列表'
+                   data-icon='<i class="fa fa-user text-blue"></i>'
 
-                       data-datatable-type="create"
-                       data-datatable-unique="y"
-                       data-datatable-id="datatable-staff-list"
-                       data-datatable-target="staff-list"
-                       data-datatable-clone-object="staff-list-clone"
-                    >
-                        <i class="fa fa-user text-white"></i>
-                        <span>员工列表</span>
-                    </a>
-                </li>
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-staff-list"
+                   data-datatable-target="staff-list"
+                   data-datatable-clone-object="staff-list-clone"
+                >
+                    <i class="fa fa-user text-white"></i>
+                    <span>员工列表</span>
+                </a>
+            </li>
             @endif
 
 
             {{--地域列表--}}
-            @if(in_array($me->user_type,[0,1,9,11,61]))
-                <li class="treeview _none-">
-                    <a class="tab-control datatable-control"
-                       data-type="create"
-                       data-unique="y"
-                       data-id="location-list"
-                       data-title='<i class="fa fa-location-arrow text-green"></i> 地域列表'
-                       data-content=''
+            @if(in_array($me->staff_category,[0,1,9]))
+            <li class="treeview _none-">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="location-list"
+                   data-title='<i class="fa fa-location-arrow text-green"></i> 地域列表'
+                   data-content=''
 
-                       data-datatable-type="create"
-                       data-datatable-unique="y"
-                       data-datatable-id="datatable-location-list"
-                       data-datatable-target="location-list"
-                       data-datatable-clone-object="location-list-clone"
-                    >
-                        <i class="fa fa-location-arrow text-white"></i>
-                        <span>地域列表</span>
-                    </a>
-                </li>
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-location-list"
+                   data-datatable-target="location-list"
+                   data-datatable-clone-object="location-list-clone"
+                >
+                    <i class="fa fa-location-arrow text-white"></i>
+                    <span>地域列表</span>
+                </a>
+            </li>
             @endif
 
 
 
 
             {{--客户列表--}}
-            @if(in_array($me->staff_type,[0,1,9,11,61]))
-                <li class="treeview _none-">
-                    <a class="tab-control datatable-control"
-                       data-type="create"
-                       data-unique="y"
-                       data-id="client-list"
-                       data-title='客户列表'
-                       data-content='<i class="fa fa-user-secret text-white"></i> 客户列表'
-                       data-icon='<i class="fa fa-user-secret text-blue"></i>'
+            @if(in_array($me->staff_category,[0,1,9]))
+            <li class="treeview _none-">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="client-list"
+                   data-title='客户列表'
+                   data-content='<i class="fa fa-user-secret text-white"></i> 客户列表'
+                   data-icon='<i class="fa fa-user-secret text-blue"></i>'
 
-                       data-datatable-type="create"
-                       data-datatable-unique="y"
-                       data-datatable-id="datatable-client-list"
-                       data-datatable-target="client-list"
-                       data-datatable-clone-object="client-list-clone"
-                    >
-                        <i class="fa fa-user-secret text-white"></i>
-                        <span>客户列表</span>
-                    </a>
-                </li>
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-client-list"
+                   data-datatable-target="client-list"
+                   data-datatable-clone-object="client-list-clone"
+                >
+                    <i class="fa fa-user-secret text-white"></i>
+                    <span>客户列表</span>
+                </a>
+            </li>
             @endif
 
 
             {{--项目列表--}}
-            @if(in_array($me->staff_type,[0,1,9,11,41,61,71,81]))
-                <li class="treeview _none-">
-                    <a class="tab-control datatable-control"
-                       data-type="create"
-                       data-unique="y"
-                       data-id="project-list"
-                       data-title='项目列表'
-                       data-content='<i class="fa fa-cube text-white"></i> 项目列表'
-                       data-icon='<i class="fa fa-cube text-blue"></i>'
+            @if(in_array($me->staff_category,[0,1,9]))
+            <li class="treeview _none-">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="project-list"
+                   data-title='项目列表'
+                   data-content='<i class="fa fa-cube text-white"></i> 项目列表'
+                   data-icon='<i class="fa fa-cube text-blue"></i>'
 
-                       data-datatable-type="create"
-                       data-datatable-unique="y"
-                       data-datatable-id="datatable-project-list"
-                       data-datatable-target="project-list"
-                       data-datatable-clone-object="project-list-clone"
-                    >
-                        <i class="fa fa-cube text-white"></i>
-                        <span>项目列表</span>
-                    </a>
-                </li>
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-project-list"
+                   data-datatable-target="project-list"
+                   data-datatable-clone-object="project-list-clone"
+                >
+                    <i class="fa fa-cube text-white"></i>
+                    <span>项目列表</span>
+                </a>
+            </li>
             @endif
 
 
@@ -196,24 +196,24 @@
             </li>
             {{--口腔•交付列表--}}
             @if(in_array($me->staff_category,[0,1,9,71]))
-                <li class="treeview _none-">
-                    <a class="tab-control datatable-control"
-                       data-type="create"
-                       data-unique="y"
-                       data-id="delivery-dental-list"
-                       data-title='<i class="fa fa-share text-yellow"></i> 口腔•交付'
-                       data-content=''
+            <li class="treeview _none-">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="delivery-dental-list"
+                   data-title='<i class="fa fa-share text-yellow"></i> 口腔•交付'
+                   data-content=''
 
-                       data-datatable-type="create"
-                       data-datatable-unique="y"
-                       data-datatable-id="datatable-delivery-dental-list"
-                       data-datatable-target="delivery-dental-list"
-                       data-datatable-clone-object="delivery-dental-list-clone"
-                    >
-                        <i class="fa fa-share text-yellow"></i>
-                        <span>口腔•交付</span>
-                    </a>
-                </li>
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-delivery-dental-list"
+                   data-datatable-target="delivery-dental-list"
+                   data-datatable-clone-object="delivery-dental-list-clone"
+                >
+                    <i class="fa fa-share text-yellow"></i>
+                    <span>口腔•交付</span>
+                </a>
+            </li>
             @endif
 
 
@@ -280,24 +280,24 @@
             </li>
             {{--奢侈品•交付列表--}}
             @if(in_array($me->staff_category,[0,1,9,71]))
-                <li class="treeview _none-">
-                    <a class="tab-control datatable-control"
-                       data-type="create"
-                       data-unique="y"
-                       data-id="delivery-luxury-list"
-                       data-title='<i class="fa fa-share text-purple"></i> 奢侈品•交付'
-                       data-content=''
+            <li class="treeview _none-">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="delivery-luxury-list"
+                   data-title='<i class="fa fa-share text-purple"></i> 奢侈品•交付'
+                   data-content=''
 
-                       data-datatable-type="create"
-                       data-datatable-unique="y"
-                       data-datatable-id="datatable-delivery-luxury-list"
-                       data-datatable-target="delivery-luxury-list"
-                       data-datatable-clone-object="delivery-luxury-list-clone"
-                    >
-                        <i class="fa fa-share text-purple"></i>
-                        <span>奢侈品•交付</span>
-                    </a>
-                </li>
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-delivery-luxury-list"
+                   data-datatable-target="delivery-luxury-list"
+                   data-datatable-clone-object="delivery-luxury-list-clone"
+                >
+                    <i class="fa fa-share text-purple"></i>
+                    <span>奢侈品•交付</span>
+                </a>
+            </li>
             @endif
 
 

@@ -10,6 +10,7 @@ $controller = "DKStaffController";
 
 Route::match(['get','post'], 'login', $controller.'@login');
 Route::match(['get','post'], 'logout', $controller.'@logout');
+Route::match(['get','post'], 'logout_without_token', $controller.'@logout_without_token');
 
 
 /*
@@ -21,8 +22,11 @@ Route::group(['middleware' => ['dk.staff.user.login']], function () {
     $controller = 'DKStaffController';
 
 
-    Route::get('/', $controller.'@view_staff_index');
-    Route::get('/404', $controller.'@view_staff_404');
+    Route::post('/is_only_me', $controller.'@check_is_only_me');
+    Route::get('/', $controller.'@view__staff__index');
+    Route::get('/301', $controller.'@view__staff__301');
+    Route::get('/403', $controller.'@view__staff__403');
+    Route::get('/404', $controller.'@view__staff__404');
 
 
 
@@ -159,12 +163,14 @@ Route::group(['middleware' => ['dk.staff.user.login']], function () {
 
     // 【工单】列表
     Route::post('/o1/order/order-list/datatable-query', $controller.'@o1__order__list__datatable_query');
-    // 【工单】操作
+    // 【工单】创建&编辑
     Route::post('/o1/order/item-get', $controller.'@o1__order__item_get');
     Route::post('/o1/order/item-save', $controller.'@o1__order__item_save');
     Route::post('/o1/order/order-dental/item-save', $controller.'@o1__order_dental__item_save');
     Route::post('/o1/order/order-aesthetic/item-save', $controller.'@o1__order_aesthetic__item_save');
     Route::post('/o1/order/order-luxury/item-save', $controller.'@o1__order_dental__item_save');
+    // 【工单】导入
+    Route::post('/o1/order/import--by-txt', $controller.'@o1__order__import__by_txt');
     // 【工单】删除 & 恢复 & 永久删除
     Route::post('/o1/order/item-delete', $controller.'@o1__order__item_delete');
     Route::post('/o1/order/item-restore', $controller.'@o1__order__item_restore');
@@ -183,6 +189,8 @@ Route::group(['middleware' => ['dk.staff.user.login']], function () {
     Route::post('/o1/order/bulk-delivering-save', $controller.'@o1__order__bulk_delivering_save');
     Route::post('/o1/order/item-delivering-save--by-fool', $controller.'@o1__order__item_delivering_save__by_fool');
     Route::post('/o1/order/bulk-delivering-save--by-fool', $controller.'@o1__order__bulk_delivering_save__by_fool');
+    // 【工单】api
+    Route::post('/o1/order/item-get-call-record--by-api', $controller.'@o1__order__item_get_call_record__by_api');
     // 【工单】操作记录
     Route::post('/o1/order/item-operation-record-list/datatable-query', $controller.'@o1__order__item_operation_record_list__datatable_query');
     Route::post('/o1/order/item-delivery-record-list/datatable-query', $controller.'@o1__order__item_delivery_record_list__datatable_query');
@@ -194,6 +202,62 @@ Route::group(['middleware' => ['dk.staff.user.login']], function () {
     Route::post('/o1/delivery/delivery-list/datatable-query', $controller.'@o1__delivery__list__datatable_query');
 
 
+
+
+    // 【统计】
+    // 【生产统计】
+    Route::post('/o1/statistic/production/project', $controller.'@o1__statistic__production__project');
+    Route::post('/o1/statistic/production/department', $controller.'@o1__statistic__production__department');
+    Route::post('/o1/statistic/production/team', $controller.'@o1__statistic__production__team');
+    // 【生产统计】
+    Route::post('/o1/statistic/production/caller-overview', $controller.'@o1__statistic__production__caller_overview');
+    Route::post('/o1/statistic/production/caller-rank', $controller.'@o1__statistic__production__caller_rank');
+    Route::post('/o1/statistic/production/caller-recent', $controller.'@o1__statistic__production__caller_recent');
+    Route::post('/o1/statistic/production/caller-daily', $controller.'@o1__statistic__production__caller_daily');
+    // 【交付统计】
+    Route::post('/o1/statistic/marketing/project', $controller.'@o1__statistic__marketing__project');
+    Route::post('/o1/statistic/marketing/client', $controller.'@o1__statistic__marketing__client');
+    // 【销售统计】
+    Route::post('/o1/statistic/marketing/company-overview', $controller.'@o1__statistic__marketing____company_overview');
+    Route::post('/o1/statistic/marketing/company-daily', $controller.'@o1__statistic__marketing___company_daily');
+    // 【销售统计】
+    Route::post('/o1/statistic/marketing/company-daily', $controller.'@o1__statistic__marketing___company_daily');
+
+
+
+
+    // 【项目日报】列表
+    Route::post('/o1/statistic-list/statistic-project-daily/datatable-query', $controller.'@o1__statistic__project_daily__list__datatable_query');
+    // 【项目日报】生成日报
+    Route::post('/o1/statistic-list/statistic-project-daily/daily-create', $controller.'@o1__statistic__project_daily__create');
+    // 【项目日报】字段修改
+    Route::post('/o1/statistic-list/statistic-project-daily/item-field-set', $controller.'@o1__statistic__project_daily__item_field_set');
+    // 【项目日报】确认 & 删除
+    Route::post('/o1/statistic-list/statistic-project-daily/item-confirm', $controller.'@o1__statistic__project_daily__item_confirm');
+    Route::post('/o1/statistic-list/statistic-project-daily/item-delete', $controller.'@o1__statistic__project_daily__item_delete');
+    // 【项目日报】统计看板
+    Route::post('/o1/statistic-list/statistic-project-show', $controller.'@o1__statistic__project__show');
+    Route::post('/o1/statistic-list/statistic-project-detail', $controller.'@o1__statistic__project__detail');
+
+
+    // 【客户日报】列表
+    Route::post('/o1/statistic-list/statistic-client-daily/datatable-query', $controller.'@o1__statistic__client_daily__list__datatable_query');
+    // 【客户日报】生成日报
+    Route::post('/o1/statistic-list/statistic-client-daily/daily-create', $controller.'@o1__statistic__client_daily__create');
+    // 【客户日报】字段修改
+    Route::post('/o1/statistic-list/statistic-client-daily/item-field-set', $controller.'@o1__statistic__client_daily__item_field_set');
+    // 【客户日报】确认 & 删除
+    Route::post('/o1/statistic-list/statistic-client-daily/item-confirm', $controller.'@o1__statistic__client_daily__item_confirm');
+    Route::post('/o1/statistic-list/statistic-client-daily/item-delete', $controller.'@o1__statistic__client_daily__item_delete');
+    // 【客户日报】统计看板
+    Route::post('/o1/statistic-list/statistic-client-show', $controller.'@o1__statistic__client__show');
+    Route::post('/o1/statistic-list/statistic-client-detail', $controller.'@o1__statistic__client__detail');
+
+
+
+
+    // 【通话分析】任务分析
+    Route::post('/o1/statistic-call/statistic-task-analysis', $controller.'@o1_statistic__call_task_analysis__datatable_query');
 
 
 });

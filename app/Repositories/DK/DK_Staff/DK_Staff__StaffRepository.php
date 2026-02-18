@@ -5,7 +5,7 @@ use App\Models\DK\DK_Common\DK_Common__Company;
 use App\Models\DK\DK_Common\DK_Common__Department;
 use App\Models\DK\DK_Common\DK_Common__Team;
 use App\Models\DK\DK_Common\DK_Common__Staff;
-use App\Models\DK\DK_Common\DK_Common__Record_by_Operation;
+use App\Models\DK\DK_Common\DK_Common__Record__by_Operation;
 
 use App\Repositories\Common\CommonRepository;
 
@@ -72,16 +72,41 @@ class DK_Staff__StaffRepository {
                 'company_er'=>function($query) { $query->select(['id','name']); },
                 'department_er'=>function($query) { $query->select(['id','name']); },
                 'team_er'=>function($query) { $query->select(['id','name']); },
-                'sub_team_er'=>function($query) { $query->select(['id','name']); },
-                'group_er'=>function($query) { $query->select(['id','name']); },
+                'team_sub_er'=>function($query) { $query->select(['id','name']); },
+                'team_group_er'=>function($query) { $query->select(['id','name']); },
                 'leader'=>function($query) { $query->select(['id','name']); }
             ])
-            ->when(in_array($me->user_type, [0,1]), function ($query) {
+//            ->when(in_array($me->staff_category, [0]), function ($query) {
+//                return $query->whereIn('staff_category',[1,11,21,31,41,51,61,71,81,99]);
+//            })
+            ->when($me->staff_category == 0, function ($query) use($me) {
                 return $query->whereIn('staff_category',[1,11,21,31,41,51,61,71,81,99]);
             })
-            ->when($me->staff_category == 0, function ($query) {
-                return $query->whereIn('staff_category',[1,11,21,31,41,51,61,71,81,99]);
+            ->when($me->staff_category == 1, function ($query) use($me) {
+                return $query->whereIn('staff_category',[11,21,31,41,51,61,71,81,99]);
+            })
+            ->when($me->staff_category == 41, function ($query) use($me) {
+                return $query->where('team_id',$me->team_id)->whereIn('staff_category',[41]);
             });
+
+        if(in_array($me->staff_category,[11,21,31,41,51,61,71,81]))
+        {
+            $query->where('department_id',$me->department_id);
+            if($me->staff_position == 41)
+            {
+                $query->where('team_id',$me->team_id);
+            }
+            else if($me->staff_position == 51)
+            {
+                $query->where('team_id',$me->team_id);
+                $query->where('team_sub_id',$me->team_sub_id);
+            }
+            else if($me->staff_position == 61)
+            {
+                $query->where('team_id',$me->team_id);
+                $query->where('team_group_id',$me->team_group_id);
+            }
+        }
 
 
 
@@ -198,7 +223,7 @@ class DK_Staff__StaffRepository {
                 'company_er'=>function($query) { $query->select('id','name'); },
                 'department_er'=>function($query) { $query->select('id','name'); },
                 'team_er'=>function($query) { $query->select('id','name'); },
-                'group_er'=>function($query) { $query->select('id','name'); }
+                'team_group_er'=>function($query) { $query->select('id','name'); }
             ])
             ->find($item_id);
         if(!$item) return response_error([],"不存在警告，请刷新页面重试！");
@@ -270,9 +295,6 @@ class DK_Staff__StaffRepository {
         else return response_error([],"参数有误！");
 
 
-
-
-
         // 启动数据库事务
         DB::beginTransaction();
         try
@@ -336,7 +358,7 @@ class DK_Staff__StaffRepository {
                 {
                     if($operate == 'create')
                     {
-                        $portrait_path = "wl/unique/portrait_for_user/".date('Y-m-d');
+                        $portrait_path = "dk_staff/unique/portrait_for_user/".date('Y-m-d');
                         if (!is_dir(storage_resource_path($portrait_path)))
                         {
                             mkdir(storage_resource_path($portrait_path), 0777, true);
@@ -412,6 +434,9 @@ class DK_Staff__StaffRepository {
         $record_data["creator_company_id"] = $me->company_id;
         $record_data["creator_department_id"] = $me->department_id;
         $record_data["creator_team_id"] = $me->team_id;
+        $record_data["creator_team_sub_id"] = $me->team_sub_id;
+        $record_data["creator_team_group_id"] = $me->team_group_id;
+        $record_data["creator_team_unit_id"] = $me->team_unit_id;
 
         $operation = [];
         $operation['operation'] = $operate;
@@ -433,9 +458,9 @@ class DK_Staff__StaffRepository {
             if(!$bool) throw new Exception("DK_Common__Staff--delete--fail");
             else
             {
-                $staff_operation_record = new DK_Common__Record_by_Operation;
+                $staff_operation_record = new DK_Common__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("DK_Common__Record_by_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -497,6 +522,9 @@ class DK_Staff__StaffRepository {
         $record_data["creator_company_id"] = $me->company_id;
         $record_data["creator_department_id"] = $me->department_id;
         $record_data["creator_team_id"] = $me->team_id;
+        $record_data["creator_team_sub_id"] = $me->team_sub_id;
+        $record_data["creator_team_group_id"] = $me->team_group_id;
+        $record_data["creator_team_unit_id"] = $me->team_unit_id;
 
         $operation = [];
         $operation['operation'] = $operate;
@@ -518,9 +546,9 @@ class DK_Staff__StaffRepository {
             if(!$bool) throw new Exception("DK_Common__Staff--restore--fail");
             else
             {
-                $staff_operation_record = new DK_Common__Record_by_Operation;
+                $staff_operation_record = new DK_Common__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("DK_Common__Record_by_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -582,6 +610,9 @@ class DK_Staff__StaffRepository {
         $record_data["creator_company_id"] = $me->company_id;
         $record_data["creator_department_id"] = $me->department_id;
         $record_data["creator_team_id"] = $me->team_id;
+        $record_data["creator_team_sub_id"] = $me->team_sub_id;
+        $record_data["creator_team_group_id"] = $me->team_group_id;
+        $record_data["creator_team_unit_id"] = $me->team_unit_id;
 
         $operation = [];
         $operation['operation'] = $operate;
@@ -603,9 +634,9 @@ class DK_Staff__StaffRepository {
             if(!$bool) throw new Exception("DK_Common__Staff--delete--fail");
             else
             {
-                $staff_operation_record = new DK_Common__Record_by_Operation;
+                $staff_operation_record = new DK_Common__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("DK_Common__Record_by_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -670,6 +701,9 @@ class DK_Staff__StaffRepository {
         $record_data["creator_company_id"] = $me->company_id;
         $record_data["creator_department_id"] = $me->department_id;
         $record_data["creator_team_id"] = $me->team_id;
+        $record_data["creator_team_sub_id"] = $me->team_sub_id;
+        $record_data["creator_team_group_id"] = $me->team_group_id;
+        $record_data["creator_team_unit_id"] = $me->team_unit_id;
 
         $operation = [];
         $operation['operation'] = $operate;
@@ -693,9 +727,9 @@ class DK_Staff__StaffRepository {
             if(!$bool) throw new Exception("DK_Common__Staff--update--fail");
             else
             {
-                $staff_operation_record = new DK_Common__Record_by_Operation;
+                $staff_operation_record = new DK_Common__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("DK_Common__Record_by_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -758,6 +792,9 @@ class DK_Staff__StaffRepository {
         $record_data["creator_company_id"] = $me->company_id;
         $record_data["creator_department_id"] = $me->department_id;
         $record_data["creator_team_id"] = $me->team_id;
+        $record_data["creator_team_sub_id"] = $me->team_sub_id;
+        $record_data["creator_team_group_id"] = $me->team_group_id;
+        $record_data["creator_team_unit_id"] = $me->team_unit_id;
 
         $operation = [];
         $operation['operation'] = $operate;
@@ -780,9 +817,9 @@ class DK_Staff__StaffRepository {
             if(!$bool) throw new Exception("DK_Common__Staff--update--fail");
             else
             {
-                $staff_operation_record = new DK_Common__Record_by_Operation;
+                $staff_operation_record = new DK_Common__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("DK_Common__Record_by_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -833,7 +870,10 @@ class DK_Staff__StaffRepository {
         $mine = DK_Common__Staff::find($item_id);
         if(!$mine) return response_error([],"该【员工】不存在，刷新页面重试！");
 
+        $token = request()->get('_token');
         Auth::guard('dk_staff_user')->login($mine,true);
+        Auth::guard('dk_staff_user')->user()->only_token = $token;
+        Auth::guard('dk_staff_user')->user()->save();
         return response_success();
 
     }
@@ -846,7 +886,7 @@ class DK_Staff__StaffRepository {
         $me = $this->me;
 
         $id  = $post_data["id"];
-        $query = DK_Common__Record_by_Operation::select('*')
+        $query = DK_Common__Record__by_Operation::select('*')
             ->with([
                 'creator'=>function($query) { $query->select(['id','name']); },
             ])

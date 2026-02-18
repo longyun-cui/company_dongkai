@@ -12,7 +12,7 @@ use App\Models\DK\DK_Common\DK_Common__Client;
 use App\Models\DK\DK_Common\DK_Common__Project;
 
 use App\Models\DK\DK_Common\DK_Common__Order;
-use App\Models\DK\DK_Common\DK_Common__Order_Operation_Record;
+use App\Models\DK\DK_Common\DK_Common__Order__Operation_Record;
 use App\Models\DK\DK_Common\DK_Common__Delivery;
 
 use App\Models\DK\DK_Common\DK_Pivot__Staff_Project;
@@ -45,8 +45,8 @@ class DK_Staff__OrderRepository {
     public function __construct()
     {
 
-        $this->view_blade_403 = env('TEMPLATE_DK_ADMIN').'entrance.errors.403';
-        $this->view_blade_404 = env('TEMPLATE_DK_ADMIN').'entrance.errors.404';
+        $this->view_blade_403 = env('DK_STAFF__TEMPLATE').'entrance.errors.403';
+        $this->view_blade_404 = env('DK_STAFF__TEMPLATE').'entrance.errors.404';
 
         Blade::setEchoFormat('%s');
         Blade::setEchoFormat('e(%s)');
@@ -87,76 +87,126 @@ class DK_Staff__OrderRepository {
         $query = DK_Common__Order::select('dk_common__order.*');
 
 
-        // 部门总监
-        if($me->user_type == 41)
+        // 客服部
+        if($me->staff_category == 41)
         {
-            $query->where('creator_department_id',$me->department_id);
-        }
-        // 客服经理
-        if($me->user_type == 81)
-        {
-            $query->where('creator_team_id',$me->team_id);
-        }
-        // 客服主管
-        if($me->user_type == 84)
-        {
-            $query->where('creator_team_id',$me->team_id);
-            $query->where('creator_group_id',$me->group_id);
-            $query->where('creator_group_id','>',0);
-        }
-        // 客服
-        if($me->user_type == 88)
-        {
-            $query->where('creator_id', $me->id);
-        }
-        // 质检经理
-        if($me->user_type == 71)
-        {
-            // 一对一
-//            $subordinates = DK_Common__Staff::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
-//            $query->where('is_published','<>',0)->whereHas('project_er', function ($query) use ($subordinates) {
-//                $query->whereIn('user_id', $subordinates);
-//            });
-            // 多对对
-            $subordinates = DK_Common__Staff::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
-            $project_list = DK_Pivot__Staff_Project::select('project_id')->whereIn('user_id',$subordinates)->get()->pluck('project_id')->toArray();
-            $query->where('is_published','<>',0)->whereIn('dk_common__order.project_id', $project_list);
-            if($me->department_district_id != 0)
+            if($me->staff_position == 31)
             {
-                $query->where('dk_common__order.department_district_id',$me->department_district_id);
+                // 部门总监
+                $query->where('creator_department_id',$me->department_id);
+            }
+            else if($me->staff_position == 41)
+            {
+                // 团队经理
+                $query->where('creator_team_id',$me->team_id);
+            }
+            else if($me->staff_position == 61)
+            {
+                // 小组主管
+                $query->where('creator_team_id',$me->team_id);
+                $query->where('creator_team_group_id',$me->team_group_id);
+                $query->where('creator_team_group_id','>',0);
+            }
+            else if($me->staff_position == 99)
+            {
+                // 职员
+                $query->where('creator_id', $me->id);
             }
         }
-        // 质检员
-        if($me->user_type == 77)
+
+        // 质检部
+        if($me->staff_category == 51)
         {
-            // 一对一
-//            $query->where('is_published','<>',0)->whereHas('project_er', function ($query) use ($me) {
-//                $query->where('user_id', $me->id);
-//            });
-            // 多对多
-            $project_list = DK_Pivot__Staff_Project::select('project_id')->where('user_id',$me->id)->get()->pluck('project_id')->toArray();
-            $query->where('dk_common__order.is_published','<>',0)->whereIn('dk_common__order.project_id', $project_list);
-            if($me->department_district_id != 0)
+            if($me->staff_position == 31)
             {
-                $query->where('dk_common__order.department_district_id',$me->department_district_id);
+                // 部门总监
+            }
+            else if($me->staff_position == 41)
+            {
+                // 团队经理
+                // 一对一
+//                $subordinates = DK_Common__Staff::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
+//                $query->where('is_published','<>',0)->whereHas('project_er', function ($query) use ($subordinates) {
+//                    $query->whereIn('user_id', $subordinates);
+//                });
+                // 多对对
+                $subordinates = DK_Common__Staff::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
+                $project_list = DK_Pivot__Staff_Project::select('project_id')->whereIn('user_id',$subordinates)->get()->pluck('project_id')->toArray();
+                $query->where('is_published','<>',0)->whereIn('dk_common__order.project_id', $project_list);
+                if($me->team_id != 0)
+                {
+                    $query->where('dk_common__order.team_id',$me->team_id);
+                }
+            }
+            else if($me->staff_position == 61)
+            {
+                // 小组主管
+            }
+            else if($me->staff_position == 99)
+            {
+                // 职员
+                // 一对一
+//                $query->where('is_published','<>',0)->whereHas('project_er', function ($query) use ($me) {
+//                    $query->where('user_id', $me->id);
+//                });
+                // 多对多
+                $project_list = DK_Pivot__Staff_Project::select('project_id')->where('user_id',$me->id)->get()->pluck('project_id')->toArray();
+                $query->where('dk_common__order.is_published','<>',0)->whereIn('dk_common__order.project_id', $project_list);
+                if($me->team_id != 0)
+                {
+                    $query->where('dk_common__order.team_id',$me->team_id);
+                }
             }
         }
-        // 运营经理
-        if($me->user_type == 61)
+
+        // 复核部
+        if($me->staff_category == 61)
         {
-            $query->where('dk_common__order.is_published','<>',0);
+            if($me->staff_position == 31)
+            {
+                // 部门总监
+            }
+            else if($me->staff_position == 41)
+            {
+                // 团队经理
+                $query->where('dk_common__order.is_published','<>',0);
+            }
+            else if($me->staff_position == 61)
+            {
+                // 小组主管
+            }
+            else if($me->staff_position == 99)
+            {
+                // 职员
+                $query->where('dk_common__order.is_published','<>',0);
+            }
         }
-        // 运营人员
-        if($me->user_type == 66)
-        {
-            $query->where('dk_common__order.is_published','<>',0);
-        }
-        // 三方审核
-        if($me->user_type == 91)
+
+        // 运营部
+        if($me->staff_category == 71)
         {
             $query->where('dk_common__order.is_published','<>',0);
             $query->where('dk_common__order.appealed_status','>',0);
+
+            if($me->staff_position == 31)
+            {
+                // 部门总监
+            }
+            else if($me->staff_position == 41)
+            {
+                // 团队经理
+            }
+            else if($me->staff_position == 61)
+            {
+                // 小组主管
+            }
+            else if($me->staff_position == 99)
+            {
+                // 职员
+            }
         }
+
+
 
         if(!empty($post_data['id'])) $query->where('dk_common__order.id', $post_data['id']);
         if(!empty($post_data['remark'])) $query->where('dk_common__order.remark', 'like', "%{$post_data['remark']}%");
@@ -491,8 +541,8 @@ class DK_Staff__OrderRepository {
 //                'inspector'=>function($query) { $query->select('id','name'); },
 //                'deliverer'=>function($query) { $query->select('id','name'); },
 //                'project_er'=>function($query) { $query->select('id','name','alias_name'); },
-//                'department_district_er',
-//                'department_group_er',
+//                'team_er',
+//                'team_group_er',
 //                'department_manager_er',
 //                'department_supervisor_er'
 //            ])
@@ -610,18 +660,19 @@ class DK_Staff__OrderRepository {
 
         $fields = [
             'operate' => 'required',
+            'work_shift' => 'required',
             'project_id' => 'required|numeric|min:1',
             'client_name' => 'required',
             'client_phone' => 'required|numeric',
             'client_intention' => 'required',
 //            'field_1' => 'required',
-//            'field_2' => 'required',
 //            'location_city' => 'required',
 //            'location_district' => 'required',
             'description' => 'required',
         ];
         $messages = [
             'operate.required' => 'operate.required.',
+            'work_shift.required' => '请选择班次！',
             'project_id.required' => '请选择项目！',
             'project_id.numeric' => '选择项目参数有误！',
             'project_id.min' => '请选择项目！',
@@ -630,7 +681,6 @@ class DK_Staff__OrderRepository {
             'client_phone.numeric' => '客户电话格式有误！',
 //            'client_type.required' => '请选择患者类型！',
             'client_intention.required' => '请选择客户意向！',
-//            'field_2.required' => '请选择班次！',
 //            'location_city.required' => '请选择城市！',
 //            'location_district.required' => '请选择行政区！',
             'description.required' => '请输入通话小结！',
@@ -642,24 +692,18 @@ class DK_Staff__OrderRepository {
         {
             $fields['client_type'] = 'required';
             $fields['field_1'] = 'required';
-            $fields['field_2'] = 'required';
             $messages['client_type.required'] = '请选择患者类型！';
             $messages['field_1.required'] = '请选择牙齿数量！';
-            $messages['field_2.required'] = '请选择班次！';
         }
         else if ($orderCategory == 11)
         {
             $fields['field_1'] = 'required';
-            $fields['field_2'] = 'required';
-            $messages['field_1.required'] = '请选择牙齿数量！';
-            $messages['field_2.required'] = '请选择班次！';
+            $messages['field_1.required'] = '请选择类型！';
         }
         else if ($orderCategory == 31)
         {
             $fields['field_1'] = 'required';
-            $fields['field_2'] = 'required';
-            $messages['field_1.required'] = '请选择牙齿数量！';
-            $messages['field_2.required'] = '请选择班次！';
+            $messages['field_1.required'] = '请选择品类！';
         }
 
         $v = Validator::make($post_data, $fields, $messages);
@@ -696,7 +740,7 @@ class DK_Staff__OrderRepository {
         // 判断用户操作权限
 //        if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
 //
-//        $me->load(['department_district_er','department_group_er']);
+//        $me->load(['team_er','team_group_er']);
 
 
         if($operate_type == 'create') // 添加 ( $id==0，添加一个新用户 )
@@ -705,12 +749,12 @@ class DK_Staff__OrderRepository {
 //            $post_data["order_category"] = 1;
             $post_data["active"] = 1;
             $post_data["creator_id"] = $me->id;
-
             $post_data["creator_company_id"] = $me->company_id;
             $post_data["creator_department_id"] = $me->department_id;
             $post_data["creator_team_id"] = $me->team_id;
-//            $post_data["creator_sub_team_id"] = $me->sub_team_id;
-            $post_data["creator_group_id"] = $me->group_id;
+            $post_data["creator_team_sub_id"] = $me->team_sub_id;
+            $post_data["creator_team_group_id"] = $me->team_group_id;
+            $post_data["creator_team_unit_id"] = $me->team_unit_id;
 
         }
         else if($operate_type == 'edit') // 编辑
@@ -755,10 +799,10 @@ class DK_Staff__OrderRepository {
             unset($mine_data['operate_category']);
             unset($mine_data['operate_type']);
 
-//            $mine_data['department_district_id'] = $me->department_district_id;
-//            $mine_data['department_group_id'] = $me->department_group_id;
-//            if($me->department_district_er) $mine_data['department_manager_id'] = $me->department_district_er->leader_id;
-//            if($me->department_group_er) $mine_data['department_supervisor_id'] = $me->department_group_er->leader_id;
+//            $mine_data['team_id'] = $me->team_id;
+//            $mine_data['team_group_id'] = $me->team_group_id;
+//            if($me->team_er) $mine_data['department_manager_id'] = $me->team_er->leader_id;
+//            if($me->team_group_er) $mine_data['department_supervisor_id'] = $me->team_group_er->leader_id;
 //
 //            if(!empty($custom_location_city) && !empty($custom_location_district))
 //            {
@@ -773,13 +817,6 @@ class DK_Staff__OrderRepository {
             $bool = $mine->fill($mine_data)->save();
             if($bool)
             {
-//                if(!empty($post_data['circle_id']))
-//                {
-//                    $circle_data['order_id'] = $mine->id;
-//                    $circle_data['creator_id'] = $me->id;
-//                    $circle->pivot_order_list()->attach($circle_data);  //
-////                    $circle->pivot_order_list()->syncWithoutDetaching($circle_data);  //
-//                }
             }
             else throw new Exception("insert--order--fail");
 
@@ -850,7 +887,7 @@ class DK_Staff__OrderRepository {
         // 判断用户操作权限
         if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
 
-//        $me->load(['department_district_er','department_group_er']);
+//        $me->load(['team_er','team_group_er']);
 
 
         if($operate_type == 'create') // 添加 ( $id==0，添加一个新用户 )
@@ -866,10 +903,10 @@ class DK_Staff__OrderRepository {
 //            $post_data["creator_sub_team_id"] = $me->sub_team_id;
             $post_data["creator_group_id"] = $me->group_id;
 
-//            $mine_data['department_district_id'] = $me->department_district_id;
-//            $mine_data['department_group_id'] = $me->department_group_id;
-//            if($me->department_district_er) $mine_data['department_manager_id'] = $me->department_district_er->leader_id;
-//            if($me->department_group_er) $mine_data['department_supervisor_id'] = $me->department_group_er->leader_id;
+//            $mine_data['team_id'] = $me->team_id;
+//            $mine_data['team_group_id'] = $me->team_group_id;
+//            if($me->team_er) $mine_data['department_manager_id'] = $me->team_er->leader_id;
+//            if($me->team_group_er) $mine_data['department_supervisor_id'] = $me->team_group_er->leader_id;
 
 //            $is_repeat = DK_Common__Order::where('client_phone',$post_data['client_phone'])->where('project_id',$post_data['project_id'])->count("*");
         }
@@ -993,7 +1030,7 @@ class DK_Staff__OrderRepository {
         // 判断用户操作权限
         if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
 
-//        $me->load(['department_district_er','department_group_er']);
+//        $me->load(['team_er','team_group_er']);
 
 
         if($operate_type == 'create') // 添加 ( $id==0，添加一个新用户 )
@@ -1051,10 +1088,10 @@ class DK_Staff__OrderRepository {
 
 
             $mine_data = $post_data;
-            $mine_data['department_district_id'] = $me->department_district_id;
-            $mine_data['department_group_id'] = $me->department_group_id;
-            if($me->department_district_er) $mine_data['department_manager_id'] = $me->department_district_er->leader_id;
-            if($me->department_group_er) $mine_data['department_supervisor_id'] = $me->department_group_er->leader_id;
+            $mine_data['team_id'] = $me->team_id;
+            $mine_data['team_group_id'] = $me->team_group_id;
+            if($me->team_er) $mine_data['department_manager_id'] = $me->team_er->leader_id;
+            if($me->team_group_er) $mine_data['department_supervisor_id'] = $me->team_group_er->leader_id;
 
             if(!empty($custom_location_city) && !empty($custom_location_district))
             {
@@ -1161,7 +1198,7 @@ class DK_Staff__OrderRepository {
         // 判断用户操作权限
         if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
 
-        $me->load(['department_district_er','department_group_er']);
+        $me->load(['team_er','team_group_er']);
 
 
         if($operate_type == 'create') // 添加 ( $id==0，添加一个新用户 )
@@ -1219,10 +1256,10 @@ class DK_Staff__OrderRepository {
 
 
             $mine_data = $post_data;
-            $mine_data['department_district_id'] = $me->department_district_id;
-            $mine_data['department_group_id'] = $me->department_group_id;
-            if($me->department_district_er) $mine_data['department_manager_id'] = $me->department_district_er->leader_id;
-            if($me->department_group_er) $mine_data['department_supervisor_id'] = $me->department_group_er->leader_id;
+            $mine_data['team_id'] = $me->team_id;
+            $mine_data['team_group_id'] = $me->team_group_id;
+            if($me->team_er) $mine_data['department_manager_id'] = $me->team_er->leader_id;
+            if($me->team_group_er) $mine_data['department_supervisor_id'] = $me->team_group_er->leader_id;
 
             if(!empty($custom_location_city) && !empty($custom_location_district))
             {
@@ -1265,6 +1302,149 @@ class DK_Staff__OrderRepository {
     }
 
 
+    public function o1__order__import__by_txt($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required',
+            'project_id.required' => '请选择项目！',
+            'project_id.numeric' => '选择项目参数有误！',
+            'project_id.min' => '请选择项目！',
+            'client_id.required' => '请选择客户！',
+            'client_id.numeric' => '选择客户参数有误！',
+            'client_id.min' => '请选择客户！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'project_id' => 'required|numeric|min:0',
+            'client_id' => 'required|numeric|min:0',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $time = time();
+        $date = date('Y-m-d');
+
+        $this->get_me();
+        $me = $this->me;
+
+        if(!in_array($me->staff_category,[0,1,9])) return response_error([],"你没有操作权限！");
+
+        $project_id = $post_data['project_id'];
+        $client_id = $post_data['client_id'];
+        if($project_id > 0 || $client_id > 0)
+        {
+        }
+        else return response_error([],"项目和客户必须选择一个！");
+
+        $order_category = 0;
+
+        if($project_id > 0)
+        {
+            $project = DK_Common__Project::find($project_id);
+            if($project)
+            {
+                $order_category = $project->project_category;
+            }
+            else response_error([],"该【项目】不存在！");
+        }
+        else
+        {
+            if($client_id > 0)
+            {
+                $client = DK_Common__Client::find($client_id);
+                if($client)
+                {
+                    $order_category = $client->client_category;
+                }
+                else response_error([],"该【项目】不存在！");
+            }
+        }
+
+        // 单文件
+        if(!empty($post_data["txt-file"]))
+        {
+
+//            $result = upload_storage($post_data["attachment"]);
+//            $result = upload_storage($post_data["attachment"], null, null, 'assign');
+            $result = upload_file_storage($post_data["txt-file"],null,'dk/unique/attachment','');
+            if($result["result"])
+            {
+//                $mine->attachment_name = $result["name"];
+//                $mine->attachment_src = $result["local"];
+//                $mine->save();
+                $attachment_file = storage_resource_path($result["local"]);
+
+                $file_data = file($attachment_file);
+
+                $collection = collect($file_data)->map(function ($line) {
+                    return trim($line);
+                });
+                $chunks = $collection->chunk(500);
+                $chunks = $chunks->toArray();
+//                dd($chunks);
+
+                $insert_data = [];
+                foreach($chunks as $key => $value)
+                {
+                    $data = [];
+                    foreach($value as $v)
+                    {
+                        if(is_numeric(trim($v)))
+                        {
+                            $data[] = [
+                                'creator_id'=>$me->id,
+                                'created_type'=>9,
+                                'client_phone'=>trim($v),
+                                'order_category'=>$order_category,
+                                'delivered_client_id'=>$client_id,
+                                'delivered_project_id'=>$project_id,
+                                'is_published'=>1,
+//                                'published_date'=>$date,
+                                'inspected_status'=>1,
+                                'inspected_result'=>'通过',
+                                'created_at'=>$time
+                            ];
+                        }
+                    }
+                    $insert_data[] = $data;
+                };
+
+
+
+                // 启动数据库事务
+                DB::beginTransaction();
+                try
+                {
+                    foreach($insert_data as $insert_value)
+                    {
+                        $modal_order = new DK_Common__Order;
+                        $bool = $modal_order->insert($insert_value);
+
+                        if(!$bool) throw new Exception("DK_Common__Order--insert--fail");
+                    }
+
+                    DB::commit();
+                    return response_success(['count'=>$collection->count()]);
+                }
+                catch (Exception $e)
+                {
+                    DB::rollback();
+                    $msg = '操作失败，请重试！';
+                    $msg = $e->getMessage();
+//                    exit($e->getMessage());
+                    return response_fail([],$msg);
+                }
+            }
+            else return response_error([],"attachment-file--upload--fail");
+        }
+        else return response_error([],"清选择txt文件！");
+
+    }
+
+
 
 
     // 【工单】【操作记录】返回-列表-数据
@@ -1274,7 +1454,7 @@ class DK_Staff__OrderRepository {
         $me = $this->me;
 
         $id  = $post_data["id"];
-        $query = DK_Common__Order_Operation_Record::select('*')
+        $query = DK_Common__Order__Operation_Record::select('*')
             ->with([
                 'creator'=>function($query) { $query->select(['id','name']); },
             ])
@@ -1514,7 +1694,7 @@ class DK_Staff__OrderRepository {
             if(!$bool) throw new Exception("DK_Common__Order--update--fail");
             else
             {
-                $record = new DK_Common__Order_Operation_Record;
+                $record = new DK_Common__Order__Operation_Record;
 
                 $record_data["ip"] = Get_IP();
                 $record_data["record_object"] = 21;
@@ -1528,7 +1708,7 @@ class DK_Staff__OrderRepository {
                 $record_data["process_category"] = 1;
 
                 $bool_1 = $record->fill($record_data)->save();
-                if(!$bool_1) throw new Exception("DK_Common__Order_Operation_Record--insert--fail");
+                if(!$bool_1) throw new Exception("DK_Common__Order__Operation_Record--insert--fail");
             }
 
             DB::commit();
@@ -1860,10 +2040,10 @@ class DK_Staff__OrderRepository {
             if(!$bool) throw new Exception("item--update--fail");
             else
             {
-                $record = new DK_Common__Order_Operation_Record;
+                $record = new DK_Common__Order__Operation_Record;
 
                 $bool_1 = $record->fill($record_data)->save();
-                if(!$bool_1) throw new Exception("DK_Common__Order_Operation_Record--insert--fail");
+                if(!$bool_1) throw new Exception("DK_Common__Order__Operation_Record--insert--fail");
             }
 
 
@@ -1983,7 +2163,7 @@ class DK_Staff__OrderRepository {
             if(!$bool) throw new Exception("DK_Common__Order--update--fail");
             else
             {
-                $record = new DK_Common__Order_Operation_Record;
+                $record = new DK_Common__Order__Operation_Record;
 
                 $record_data["ip"] = Get_IP();
                 $record_data["record_object"] = 21;
@@ -2023,7 +2203,7 @@ class DK_Staff__OrderRepository {
                 $record_data["content"] = json_encode($record_content);
 
                 $bool_1 = $record->fill($record_data)->save();
-                if(!$bool_1) throw new Exception("DK_Common__Order_Operation_Record--insert--fail");
+                if(!$bool_1) throw new Exception("DK_Common__Order__Operation_Record--insert--fail");
             }
 
 
@@ -2102,7 +2282,7 @@ class DK_Staff__OrderRepository {
             if(!$bool) throw new Exception("DK_Common__Order--update--fail");
             else
             {
-                $record = new DK_Common__Order_Operation_Record;
+                $record = new DK_Common__Order__Operation_Record;
 
                 $record_data["ip"] = Get_IP();
                 $record_data["record_object"] = 21;
@@ -2143,7 +2323,7 @@ class DK_Staff__OrderRepository {
                 $record_data["content"] = json_encode($record_content);
 
                 $bool_1 = $record->fill($record_data)->save();
-                if(!$bool_1) throw new Exception("DK_Common__Order_Operation_Record--insert--fail");
+                if(!$bool_1) throw new Exception("DK_Common__Order__Operation_Record--insert--fail");
             }
 
 
@@ -2162,253 +2342,6 @@ class DK_Staff__OrderRepository {
 
     }
 
-    // 【工单】交付
-    public function o1__order__item_delivering_save1($post_data)
-    {
-//        dd($post_data);
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'item_id.required' => 'item_id.required.',
-            'project_id.required' => '请选择项目',
-//            'client_id.required' => '请选择客户',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'item_id' => 'required',
-            'project_id' => 'required',
-//            'client_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'order-deliver') return response_error([],"参数[operate]有误！");
-        $id = $post_data["item_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
-
-        $item = DK_Common__Order::withTrashed()->find($id);
-        if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
-        $client_phone = $item->client_phone;
-        $order_category = $item->order_category;
-
-        $this->get_me();
-        $me = $this->me;
-
-        // [判断]操作权限
-        if(!in_array($me->staff_category,[0,1,9,71])) return response_error([],"你没有操作权限！");
-//        if(in_array($me->staff_position,[99]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-        $delivered_result = $post_data["delivered_result"];
-        if(!in_array($delivered_result,config('dk.common-config.delivered_result'))) return response_error([],"交付结果参数有误！");
-
-        $time = time();
-        $date = date("Y-m-d");
-        $datetime = date('Y-m-d H:i:s');
-
-
-        $project_id = !empty($post_data["project_id"]) ? (int)$post_data["project_id"] : 0;
-        $client_id = !empty($post_data["client_id"]) ? (int)$post_data["client_id"] : 0;
-        $delivered_description = $post_data["delivered_description"];
-        $recording_address = $post_data["recording_address"];
-        $is_distributive_condition = $post_data["is_distributive_condition"];
-
-        $delivered_project_id = 0;
-        $delivered_client_id = 0;
-
-        if($client_id > 0)
-        {
-            $client = DK_Common__Client::find($client_id);
-            if(!$client) return response_error([],"交付【客户】不存在！");
-            $delivered_client_id = $client_id;
-        }
-
-        if($project_id > 0)
-        {
-            $delivered_project_id = $project_id;
-        }
-        else
-        {
-            $delivered_project_id = $item->project_id;
-        }
-
-
-        $project = DK_Common__Project::find($delivered_project_id);
-        if(!$project) return response_error([],"交付【项目】不存在！");
-
-        if($delivered_client_id <= 0)
-        {
-            $delivered_client_id == $project->client_id;
-            if($delivered_client_id > 0)
-            {
-                $client = DK_Common__Client::find($client_id);
-                if(!$client) return response_error([],"交付【客户】不存在！");
-            }
-            else
-            {
-                return response_error([],"交付【客户】不存在！");
-            }
-        }
-
-
-
-        // [判断]【工单】是否重复
-        $is_order_list = DK_Common__Order::select('id','order_category','client_phone','delivered_project_id','delivered_client_id')
-            ->where('order_category',$order_category)
-            ->where('client_phone',$client_phone)
-            ->where(function ($query) use($delivered_project_id,$delivered_client_id) {
-                $query->where('delivered_project_id',$delivered_project_id)->orWhere('delivered_client_id',$delivered_client_id);
-            })
-            ->get();
-        if(count($is_order_list) > 0)
-        {
-            $is_delivery = 99;
-            $delivered_result = '交付失败';
-            foreach($is_order_list as $o)
-            {
-                // 判断项目
-                if($o->delivered_project_id == $project_id)
-                {
-                    $non_delivery_reason = '【项目】重复';
-                    break; // 跳出循环
-                }
-
-                // 判断客户
-                if($o->delivered_client_id == $client_id)
-                {
-                    $non_delivery_reason = '【客户】重复';
-                    break; // 跳出循环
-                }
-            }
-        }
-
-
-        // [判断]【交付】是否重复
-        $is_delivered_list = DK_Common__Delivery::select('id','order_category','client_phone','project_id','client_id')
-            ->where('order_category',$order_category)
-            ->where('client_phone',$client_phone)
-            ->where(function ($query) use($delivered_project_id,$delivered_client_id) {
-                $query->where('project_id',$delivered_project_id) ->orWhere('client_id',$delivered_client_id);
-            })
-            ->get();
-        if(count($is_delivered_list) > 0)
-        {
-            $is_delivery = 99;
-            $delivered_result = '交付失败';
-            foreach($is_delivered_list as $d)
-            {
-                // 判断项目
-                if($d->project_id == $project_id)
-                {
-                    $non_delivery_reason = '交付【项目】重复';
-                    break; // 跳出循环
-                }
-
-                // 判断客户
-                if($d->client_id == $client_id)
-                {
-                    $non_delivery_reason = '交付【客户】重复';
-                    break; // 跳出循环
-                }
-            }
-        }
-
-        $is_new = 0;
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-//            if($delivered_client_id != "-1" && $delivered_result == "已交付")
-            if($delivered_client_id != "-1" && in_array($delivered_result,["已交付","折扣交付","郊区交付","内部交付"]))
-            {
-                $delivery = DK_Common__Delivery::where(['delivery_type'=>1,'order_id'=>$item->id])->first();
-                if($delivery)
-                {
-                    if($client)
-                    {
-                        $delivery->company_id = $client->company_id;
-                        $delivery->channel_id = $client->channel_id;
-                        $delivery->business_id = $client->business_id;
-                    }
-                    $delivery->project_id = $delivered_project_id;
-                    $delivery->client_id = $delivered_client_id;
-                    $delivery->delivered_result = $delivered_result;
-                    $delivery->delivered_date = $date;
-                    $bool_0 = $delivery->save();
-                    if(!$bool_0) throw new Exception("DK_Common__Delivery--update--fail");
-                }
-                else
-                {
-                    $is_new = 1;
-                    $delivery = new DK_Common__Delivery;
-                    if($client)
-                    {
-                        $delivery_data["company_id"] = $client->company_id;
-                        $delivery_data["channel_id"] = $client->channel_id;
-                        $delivery_data["business_id"] = $client->business_id;
-                    }
-                    $delivery_data["order_category"] = $item->order_category;
-                    $delivery_data["delivery_type"] = 1;
-                    $delivery_data["project_id"] = $delivered_project_id;
-                    $delivery_data["client_id"] = $delivered_client_id;
-                    $delivery_data["original_project_id"] = $item->project_id;
-                    $delivery_data["order_id"] = $item->id;
-                    $delivery_data["client_type"] = $item->client_type;
-                    $delivery_data["client_phone"] = $item->client_phone;
-                    $delivery_data["delivered_result"] = $delivered_result;
-                    $delivery_data["delivered_date"] = $date;
-                    $delivery_data["creator_id"] = $me->id;
-
-                    $bool_0 = $delivery->fill($delivery_data)->save();
-                    if(!$bool_0) throw new Exception("DK_Common__Delivery--insert--fail");
-                }
-            }
-
-
-
-//            $item->is_distributive_condition = $is_distributive_condition;
-            $item->delivered_client_id = $delivered_client_id;
-            $item->deliverer_id = $me->id;
-            $item->delivered_status = 1;
-            $item->delivered_result = $delivered_result;
-//            $item->delivered_description = $delivered_description;
-            $item->recording_address = $recording_address;
-            $item->delivered_date = $date;
-            $item->delivered_at = $time;
-            $bool = $item->save();
-            if(!$bool) throw new Exception("DK_Common__Order--update--fail");
-            else
-            {
-                $record = new DK_Common__Order_Operation_Record;
-
-                $bool_record = $record->fill($record_data)->save();
-                if(!$bool_record) throw new Exception("DK_Common__Order_Operation_Record--insert--fail");
-            }
-
-            DB::commit();
-
-
-            $client = DK_Common__Client::find($delivered_client_id);
-            if($client->is_automatic_dispatching == 1)
-            {
-                AutomaticDispatchingJob::dispatch($client->id);
-            }
-
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
     // 【工单】交付
     public function o1__order__item_delivering_save($post_data)
     {
@@ -2806,9 +2739,9 @@ class DK_Staff__OrderRepository {
                 }
             }
 
-            $record = new DK_Common__Order_Operation_Record;
+            $record = new DK_Common__Order__Operation_Record;
             $bool_record = $record->fill($record_data)->save();
-            if(!$bool_record) throw new Exception("DK_Common__Order_Operation_Record--insert--fail");
+            if(!$bool_record) throw new Exception("DK_Common__Order__Operation_Record--insert--fail");
 
             DB::commit();
 
@@ -3033,7 +2966,7 @@ class DK_Staff__OrderRepository {
                 if(!$bool) throw new Exception("item--update--fail");
                 else
                 {
-                    $record = new DK_Common__Order_Operation_Record;
+                    $record = new DK_Common__Order__Operation_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 21;
@@ -3245,7 +3178,7 @@ class DK_Staff__OrderRepository {
             if($item->inspected_result == "通过")
             {
                 $is_delivery = 1;
-                $delivered_result = '交付';
+                $delivered_result = '正常交付';
             }
             else if($item->inspected_result == "折扣通过")
             {
@@ -3322,7 +3255,8 @@ class DK_Staff__OrderRepository {
                     // 判断项目
                     if($o->delivered_project_id == $project_id)
                     {
-                        $delivered_result = '项目·重复';
+                        $delivered_result = '重复';
+//                        $delivered_result = '项目·重复';
                         $non_delivery_reason = '【项目】重复';
                         break; // 跳出循环
                     }
@@ -3330,7 +3264,8 @@ class DK_Staff__OrderRepository {
                     // 判断客户
                     if($o->delivered_client_id == $client_id)
                     {
-                        $delivered_result = '客户·重复';
+                        $delivered_result = '重复';
+//                        $delivered_result = '客户·重复';
                         $non_delivery_reason = '【客户】重复';
                         break; // 跳出循环
                     }
@@ -3357,7 +3292,8 @@ class DK_Staff__OrderRepository {
                     // 判断项目
                     if($d->project_id == $project_id)
                     {
-                        $delivered_result = '项目·重复';
+                        $delivered_result = '重复';
+//                        $delivered_result = '项目·重复';
                         $non_delivery_reason = '【交付项目】重复';
                         break; // 跳出循环
                     }
@@ -3365,7 +3301,8 @@ class DK_Staff__OrderRepository {
                     // 判断客户
                     if($d->client_id == $client_id)
                     {
-                        $delivered_result = '客户·重复';
+                        $delivered_result = '重复';
+//                        $delivered_result = '客户·重复';
                         $non_delivery_reason = '【交付客户】重复';
                         break; // 跳出循环
                     }
@@ -3550,9 +3487,9 @@ class DK_Staff__OrderRepository {
                 }
             }
 
-            $record = new DK_Common__Order_Operation_Record;
+            $record = new DK_Common__Order__Operation_Record;
             $bool_record = $record->fill($record_data)->save();
-            if(!$bool_record) throw new Exception("DK_Common__Order_Operation_Record--insert--fail");
+            if(!$bool_record) throw new Exception("DK_Common__Order__Operation_Record--insert--fail");
 
             DB::commit();
 
@@ -3711,7 +3648,7 @@ class DK_Staff__OrderRepository {
 //            if(!$bool) throw new Exception("item--update--fail");
 //            else
 //            {
-            $record = new DK_Common__Order_Operation_Record;
+            $record = new DK_Common__Order__Operation_Record;
 
             $record_data["ip"] = Get_IP();
             $record_data["record_object"] = 21;
@@ -3854,7 +3791,7 @@ class DK_Staff__OrderRepository {
 
 
     // 【工单】外呼系统呼叫记录
-    public function v1_operate_for_order_item_get_api_call_record($post_data)
+    public function o1__order__item_get_call_record__by_api($post_data)
     {
 //        dd($post_data);
 //        return response_success([]);
@@ -3883,17 +3820,17 @@ class DK_Staff__OrderRepository {
 
         $staff = DK_Common__Staff::withTrashed()->find($staff_id);
         if(!$staff) return response_error([],"该【员工】不存在，刷新页面重试！");
-        $department_id = $staff->department_district_id;
+        $team_id = $staff->team_id;
         $agent[] = $staff->api_staffNo;
 
-        $department = DK_Common__Department::withTrashed()->find($department_id);
-        if(!$department) return response_error([],"该【所属部门】不存在，刷新页面重试！");
+        $team = DK_Common__Team::withTrashed()->find($team_id);
+        if(!$team) return response_error([],"该【所属部门】不存在，刷新页面重试！");
 
 
-        $serverFrom_name = $department->serverFrom_name;
-        $API_Customer_Password = $department->api_customer_password;
-        $API_Customer_Account = $department->api_customer_account;
-        $API_customerUserName = $department->api_customer_name;
+        $serverFrom_name = $team->serverFrom_name;
+        $API_Customer_Password = $team->api_customer_password;
+        $API_Customer_Account = $team->api_customer_account;
+        $API_customerUserName = $team->api_customer_name;
 
 
         $timestamp = time();
@@ -4179,14 +4116,14 @@ class DK_Staff__OrderRepository {
                     $inspector_list = $post_data["column_value"];
                     foreach($inspector_list as $i)
                     {
-                        $inspector_list_insert[$i] = ['creator_id'=>$me->id,'department_id'=>$me->department_district_id,'relation_type'=>1,'created_at'=>$current_time,'updated_at'=>$current_time];
+                        $inspector_list_insert[$i] = ['creator_id'=>$me->id,'department_id'=>$me->team_id,'relation_type'=>1,'created_at'=>$current_time,'updated_at'=>$current_time];
                     }
-                    $item->pivot_project_user()->wherePivot('department_id',$me->department_district_id)->sync($inspector_list_insert);
+                    $item->pivot_project_user()->wherePivot('department_id',$me->team_id)->sync($inspector_list_insert);
 //                    $mine->pivot_project_user()->syncWithoutDetaching($people_insert);
                 }
                 else
                 {
-                    $item->pivot_project_user()->wherePivot('department_id',$me->department_district_id)->detach();
+                    $item->pivot_project_user()->wherePivot('department_id',$me->team_id)->detach();
                 }
             }
             else if($column_key == "client_id")
@@ -4221,7 +4158,7 @@ class DK_Staff__OrderRepository {
                 }
                 else
                 {
-                    $record = new DK_Common__Order_Operation_Record;
+                    $record = new DK_Common__Order__Operation_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 21;
@@ -4256,7 +4193,7 @@ class DK_Staff__OrderRepository {
                     if($bool_1)
                     {
                     }
-                    else throw new Exception("DK_Common__Order_Operation_Record--insert--fail");
+                    else throw new Exception("DK_Common__Order__Operation_Record--insert--fail");
                 }
             }
 
@@ -4464,7 +4401,7 @@ class DK_Staff__OrderRepository {
                 }
                 else
                 {
-                    $record = new DK_Common__Order_Operation_Record;
+                    $record = new DK_Common__Order__Operation_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 21;
@@ -4506,7 +4443,7 @@ class DK_Staff__OrderRepository {
                     if($bool_1)
                     {
                     }
-                    else throw new Exception("DK_Common__Order_Operation_Record--insert--fail");
+                    else throw new Exception("DK_Common__Order__Operation_Record--insert--fail");
                 }
             }
 
@@ -4555,7 +4492,7 @@ class DK_Staff__OrderRepository {
         $return['list_text'] = $list_text;
         $return['list_link'] = $list_link;
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.order.order-import';
+        $view_blade = env('DK_STAFF__TEMPLATE').'entrance.order.order-import';
         return view($view_blade)->with($return);
     }
     // 【工单】保存-导入-数据
@@ -4581,12 +4518,12 @@ class DK_Staff__OrderRepository {
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
 
-        $me->load(['department_district_er','department_group_er']);
-        $department_district_id = $me->department_district_id;
-        $department_group_id = $me->department_group_id;
-        if($me->department_district_er) $department_manager_id = $me->department_district_er->leader_id;
+        $me->load(['team_er','team_group_er']);
+        $team_id = $me->team_id;
+        $team_group_id = $me->team_group_id;
+        if($me->team_er) $department_manager_id = $me->team_er->leader_id;
         else $department_manager_id = 0;
-        if($me->department_group_er) $department_supervisor_id = $me->department_group_er->leader_id;
+        if($me->team_group_er) $department_supervisor_id = $me->team_group_er->leader_id;
         else $department_supervisor_id = 0;
 
         $project_id = $post_data['project_id'];
@@ -4673,8 +4610,8 @@ class DK_Staff__OrderRepository {
                         $order->recording_address = $value['recording_address'];
                         $order->description = $value['description'];
 
-                        $order->department_district_id = $department_district_id;
-                        $order->department_group_id = $department_group_id;
+                        $order->team_id = $team_id;
+                        $order->team_group_id = $team_group_id;
                         $order->department_manager_id = $department_manager_id;
                         $order->department_supervisor_id = $department_supervisor_id;
 
@@ -4780,8 +4717,8 @@ class DK_Staff__OrderRepository {
                                 $order->recording_address = $value['recording_address'];
                                 $order->description = $value['description'];
 
-                                $order->department_district_id = $department_district_id;
-                                $order->department_group_id = $department_group_id;
+                                $order->team_id = $team_id;
+                                $order->team_group_id = $team_group_id;
                                 $order->department_manager_id = $department_manager_id;
                                 $order->department_supervisor_id = $department_supervisor_id;
 
@@ -4838,7 +4775,7 @@ class DK_Staff__OrderRepository {
         $return['list_text'] = $list_text;
         $return['list_link'] = $list_link;
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.order.order-import-for-admin';
+        $view_blade = env('DK_STAFF__TEMPLATE').'entrance.order.order-import-for-admin';
         return view($view_blade)->with($return);
     }
     // 【工单】保存-导入-数据
@@ -5056,7 +4993,7 @@ class DK_Staff__OrderRepository {
         $return['list_text'] = $list_text;
         $return['list_link'] = $list_link;
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.order.order-import-for-admin-by-txt';
+        $view_blade = env('DK_STAFF__TEMPLATE').'entrance.order.order-import-for-admin-by-txt';
         return view($view_blade)->with($return);
     }
     // 【工单】保存-导入-数据
@@ -5343,7 +5280,7 @@ class DK_Staff__OrderRepository {
                 }
                 else
                 {
-                    $record = new DK_Common__Order_Operation_Record;
+                    $record = new DK_Common__Order__Operation_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 21;
@@ -5507,7 +5444,7 @@ class DK_Staff__OrderRepository {
                 }
                 else
                 {
-                    $record = new DK_Common__Order_Operation_Record;
+                    $record = new DK_Common__Order__Operation_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 21;
@@ -5644,7 +5581,7 @@ class DK_Staff__OrderRepository {
                 }
                 else
                 {
-                    $record = new DK_Common__Order_Operation_Record;
+                    $record = new DK_Common__Order__Operation_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 21;
@@ -5887,7 +5824,7 @@ class DK_Staff__OrderRepository {
             if(!$bool) throw new Exception("item--update--fail");
             else
             {
-                $record = new DK_Common__Order_Operation_Record;
+                $record = new DK_Common__Order__Operation_Record;
 
                 $record_data["ip"] = Get_IP();
                 $record_data["record_object"] = 21;
@@ -6228,7 +6165,7 @@ class DK_Staff__OrderRepository {
                 if(!$bool) throw new Exception("item--update--fail");
                 else
                 {
-                    $record = new DK_Common__Order_Operation_Record;
+                    $record = new DK_Common__Order__Operation_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 21;
@@ -6618,7 +6555,7 @@ class DK_Staff__OrderRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = DK_Common__Order_Operation_Record::select('*')->withTrashed()
+        $query = DK_Common__Order__Operation_Record::select('*')->withTrashed()
             ->with('creator')
 //            ->where(['owner_id'=>100,'item_category'=>100])
 //            ->where('item_type', '!=',0);

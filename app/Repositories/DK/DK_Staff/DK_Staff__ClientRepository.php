@@ -2,7 +2,7 @@
 namespace App\Repositories\DK\DK_Staff;
 
 use App\Models\DK\DK_Common\DK_Common__Client;
-use App\Models\DK\DK_Common\DK_Common__Record_by_Operation;
+use App\Models\DK\DK_Common\DK_Common__Record__by_Operation;
 
 use App\Repositories\Common\CommonRepository;
 
@@ -514,9 +514,9 @@ class DK_Staff__ClientRepository {
             if(!$bool) throw new Exception("DK_Common__Client--delete--fail");
             else
             {
-                $staff_operation_record = new DK_Common__Record_by_Operation;
+                $staff_operation_record = new DK_Common__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("DK_Common__Record_by_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -599,9 +599,9 @@ class DK_Staff__ClientRepository {
             if(!$bool) throw new Exception("DK_Common__Client--restore--fail");
             else
             {
-                $staff_operation_record = new DK_Common__Record_by_Operation;
+                $staff_operation_record = new DK_Common__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("DK_Common__Record_by_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -684,9 +684,9 @@ class DK_Staff__ClientRepository {
             if(!$bool) throw new Exception("DK_Common__Client--delete--fail");
             else
             {
-                $staff_operation_record = new DK_Common__Record_by_Operation;
+                $staff_operation_record = new DK_Common__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("DK_Common__Record_by_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -774,9 +774,9 @@ class DK_Staff__ClientRepository {
             if(!$bool) throw new Exception("DK_Common__Client--update--fail");
             else
             {
-                $staff_operation_record = new DK_Common__Record_by_Operation;
+                $staff_operation_record = new DK_Common__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("DK_Common__Record_by_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -862,9 +862,9 @@ class DK_Staff__ClientRepository {
             if(!$bool) throw new Exception("DK_Common__Client--update--fail");
             else
             {
-                $staff_operation_record = new DK_Common__Record_by_Operation;
+                $staff_operation_record = new DK_Common__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("DK_Common__Record_by_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -889,7 +889,7 @@ class DK_Staff__ClientRepository {
         $me = $this->me;
 
         $id  = $post_data["id"];
-        $query = DK_Common__Record_by_Operation::select('*')
+        $query = DK_Common__Record__by_Operation::select('*')
             ->with([
                 'creator'=>function($query) { $query->select(['id','username','true_name']); },
             ])

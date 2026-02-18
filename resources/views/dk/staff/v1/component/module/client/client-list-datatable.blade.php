@@ -89,15 +89,15 @@
                     render: function(data, type, row, meta) {
                         if(data == 1)
                         {
-                            return '<i class="fa fa-clock-o text-green"></i> 长期';
+                            return '<small class="btn-xs bg-orange">口腔</small>';
                         }
                         if(data == 11)
                         {
-                            return '<i class="fa fa-clock-o text-yellow"></i> 短期</small>';
+                            return '<small class="btn-xs bg-red">医美</small>';
                         }
                         if(data == 31)
                         {
-                            return '<i class="fa fa-clock-o text-grey"></i> 临时</small>';
+                            return '<small class="btn-xs bg-purple">二奢</small>';
                         }
                         else
                         {

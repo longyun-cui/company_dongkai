@@ -138,7 +138,7 @@
                 {
                     "title": "所属团队",
                     "data": 'superior_team_er',
-                    "width": "160px",
+                    "width": "120px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         if(row.superior_team_er == null) return '--';
@@ -149,7 +149,7 @@
                 {
                     "title": "所属部门",
                     "data": 'department_id',
-                    "width": "160px",
+                    "width": "120px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         if(row.department_er == null) return '--';
@@ -160,7 +160,7 @@
                 {
                     "title": "所属公司",
                     "data": 'company_id',
-                    "width": "160px",
+                    "width": "120px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         if(row.company_er == null) return '--';
@@ -172,7 +172,7 @@
                     "title": "负责人",
                     "data": "leader_id",
                     "className": "text-center",
-                    "width": "160px",
+                    "width": "120px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
@@ -208,7 +208,7 @@
                     "title": "备注",
                     "data": "remark",
                     "className": "text-center",
-                    "width": "",
+                    "width": "240px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
@@ -229,10 +229,10 @@
                     }
                 },
                 {
-                    "className": "text-center",
-                    "width": "80px",
                     "title": "创建者",
                     "data": "creator_id",
+                    "className": "text-center",
+                    "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         return row.creator == null ? '未知' : row.creator.username;
@@ -240,10 +240,10 @@
                     }
                 },
                 {
-                    "className": "font-12px",
-                    "width": "120px",
                     "title": "创建时间",
                     "data": 'created_at',
+                    "className": "font-12px",
+                    "width": "120px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
 //                            return data;
@@ -265,10 +265,10 @@
                     }
                 },
                 {
-                    "className": "font-12px",
-                    "width": "120px",
                     "title": "更新时间",
                     "data": 'updated_at',
+                    "className": "font-12px",
+                    "width": "120px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
 //                            return data;

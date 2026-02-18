@@ -167,17 +167,24 @@
                                     </label>
                                 </span>
                             </button>
+{{--                            <button type="button" class="btn radio-btn radio-staff-position">--}}
+{{--                                <span class="radio">--}}
+{{--                                    <label>--}}
+{{--                                        <input type="radio" name="staff_position" value="51"> 分部主管--}}
+{{--                                    </label>--}}
+{{--                                </span>--}}
+{{--                            </button>--}}
                             <button type="button" class="btn radio-btn radio-staff-position">
                                 <span class="radio">
                                     <label>
-                                        <input type="radio" name="staff_position" value="51"> 分部主管
+                                        <input type="radio" name="staff_position" value="61"> 小组组长
                                     </label>
                                 </span>
                             </button>
 {{--                            <button type="button" class="btn radio-btn radio-staff-position">--}}
 {{--                                <span class="radio">--}}
 {{--                                    <label>--}}
-{{--                                        <input type="radio" name="staff_position" value="61"> 小组组长--}}
+{{--                                        <input type="radio" name="staff_position" value="71"> 小队队长--}}
 {{--                                    </label>--}}
 {{--                                </span>--}}
 {{--                            </button>--}}
@@ -251,15 +258,15 @@
                                     data-modal="#modal--for--staff-item-edit"
                                     data-item-category=""
                                     data-item-type="11"
-                                    data-team-target="#select2---sub-team--for--staff-item-edit"
+                                    data-team-target="#select2---team-group--for--staff-item-edit"
                             >
                                 <option data-id="" value="">选择团队</option>
                             </select>
                         </div>
                         <div class="col-sm-6 col-md-6 padding-0 team-box">
                             <select class="form-control select2-reset select2--team"
-                                    name="group_id"
-                                    id="select2---sub-team--for--staff-item-edit"
+                                    name="team_group_id"
+                                    id="select2---team-group--for--staff-item-edit"
                                     data-modal="#modal--for--staff-item-edit"
                                     data-item-category=""
                                     data-item-type="31"
@@ -336,6 +343,13 @@
 {{--                        <input type="text" class="form-control" name="true_name" placeholder="真实姓名" value="">--}}
 {{--                    </div>--}}
 {{--                </div>--}}
+                {{--外呼系统坐席ID--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 外呼系统坐席ID</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="api_staffNo" placeholder="API坐席ID，没有添0" value="">
+                    </div>
+                </div>
                 {{--描述--}}
                 <div class="form-group _none">
                     <label class="control-label col-md-2">描述</label>
