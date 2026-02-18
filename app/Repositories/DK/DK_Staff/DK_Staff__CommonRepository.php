@@ -169,6 +169,9 @@ class DK_Staff__CommonRepository {
     // 团队
     public function o1__select2__team($post_data)
     {
+        $this->get_me();
+        $me = $this->me;
+
         $query = DK_Common__Team::select(['id','name as text'])
             ->where(['item_status'=>1]);
 
@@ -176,6 +179,22 @@ class DK_Staff__CommonRepository {
         {
             $keyword = "%{$post_data['keyword']}%";
             $query->where('name','like',"%$keyword%");
+        }
+
+
+        if(in_array($me->staff_position,[31,41,51,61,71]))
+        {
+            $query->where('department_id',$me->department_id);
+        }
+
+        if(in_array($me->staff_position,[41,51,61,71]))
+        {
+            $query->where('superior_team_id',$me->team_id);
+        }
+
+        if(in_array($me->staff_position,[61]))
+        {
+            $query->where('superior_team_group_id',$me->team_group_id);
         }
 
 

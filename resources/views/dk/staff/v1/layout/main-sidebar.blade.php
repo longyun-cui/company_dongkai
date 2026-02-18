@@ -53,7 +53,7 @@
                 </li>
             @endif
             {{--团队列表--}}
-            @if(in_array($me->staff_category,[0,1,9,11,21,31,41,51,61,71,81,88]) && in_array($me->staff_position,[0,1,9,31,41,51,61,71]))
+            @if(in_array($me->staff_category,[0,1,9,11,21,31,41,51,61,71,81,88]) && in_array($me->staff_position,[0,1,9,31,41,51]))
             <li class="treeview">
                 <a class="tab-control datatable-control"
                    data-type="create"

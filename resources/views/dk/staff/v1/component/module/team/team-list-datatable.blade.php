@@ -240,7 +240,7 @@
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return row.creator == null ? '未知' : row.creator.username;
+                        return row.creator == null ? '未知' : row.creator.name;
                         // return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.username+'</a>';
                     }
                 },

@@ -259,10 +259,35 @@
 
                 $modal.find('select[name="team_id"]').val(null).trigger('change');
             }
+            else if($value == 41)
+            {
+                $modal.find('.department-box').show();
+                $modal.find('.team-box').show();
+                $modal.find('.group-box').hide();
+
+                $modal.find('select[name="team_group_id"]').val(null).trigger('change');
+            }
+            else if($value == 61)
+            {
+                $modal.find('.department-box').show();
+                $modal.find('.team-box').show();
+                $modal.find('.group-box').show();
+
+                $modal.find('select[name="team_id"]').val(null).trigger('change');
+            }
+            else if($value == 99)
+            {
+                $modal.find('.department-box').show();
+                $modal.find('.team-box').show();
+                $modal.find('.group-box').show();
+
+                $modal.find('select[name="team_id"]').val(null).trigger('change');
+            }
             else
             {
                 $modal.find('.department-box').show();
                 $modal.find('.team-box').show();
+                $modal.find('.group-box').show();
             }
         });
 

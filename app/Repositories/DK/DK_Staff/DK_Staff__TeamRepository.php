@@ -219,15 +219,15 @@ class DK_Staff__TeamRepository {
             'operate.required' => 'operate.required.',
             'name.required' => '请输入团队名称！',
 //            'name.unique' => '该团队号已存在！',
-            'department_id.required' => '请先选择部门！',
-            'department_id.numeric' => '请先选择部门！',
-            'department_id.min' => '请先选择部门！',
+//            'department_id.required' => '请先选择部门！',
+//            'department_id.numeric' => '请先选择部门！',
+//            'department_id.min' => '请先选择部门！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
             'name' => 'required',
 //            'name' => 'required|unique:DK_Common__Team,name',
-            'department_id' => 'required|numeric|min:1',
+//            'department_id' => 'required|numeric|min:1',
         ], $messages);
         if ($v->fails())
         {
@@ -276,8 +276,31 @@ class DK_Staff__TeamRepository {
             $mine_data = $post_data;
             unset($mine_data['operate']);
 
-            $department = DK_Common__Department::find($post_data['department_id']);
-            if($department) $mine_data['company_id'] = $department->company_id;
+
+
+            if(in_array($me->staff_position,[0,1,9,11]))
+            {
+                $department = DK_Common__Department::find($post_data['department_id']);
+                if($department) $mine_data['company_id'] = $department->company_id;
+            }
+            if($me->staff_position == 31)
+            {
+                $mine_data['company_id'] = $me->company_id;
+                $mine_data['department_id'] = $me->department_id;
+            }
+            if($me->staff_position == 41)
+            {
+                $mine_data['company_id'] = $me->company_id;
+                $mine_data['department_id'] = $me->department_id;
+                $mine_data['superior_team_id'] = $me->team_id;
+            }
+            if($me->staff_position == 61)
+            {
+                $mine_data['company_id'] = $me->company_id;
+                $mine_data['department_id'] = $me->department_id;
+                $mine_data['superior_team_id'] = $me->team_id;
+                $mine_data['superior_team_group_id'] = $me->team_group_id;
+            }
 
             if($mine_data['team_type'] == 11)
             {

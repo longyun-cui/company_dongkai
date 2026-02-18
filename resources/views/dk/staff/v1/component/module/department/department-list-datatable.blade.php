@@ -204,7 +204,7 @@
                     "data": "creator_id",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return row.creator == null ? '未知' : row.creator.username;
+                        return row.creator == null ? '未知' : row.creator.name;
                     }
                 },
                 {

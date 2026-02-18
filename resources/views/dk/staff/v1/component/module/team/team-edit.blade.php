@@ -56,7 +56,7 @@
 {{--                            </button>--}}
 {{--                            @endif--}}
 
-                            @if(in_array($me->user_type, [0,1,11]))
+                            @if(in_array($me->staff_category, [0,1,9,41]))
                             <button type="button" class="btn radio-btn radio-team-category">
                                 <span class="radio">
                                     <label>
@@ -66,7 +66,7 @@
                             </button>
                             @endif
 
-                            @if(in_array($me->user_type, [0,1,11]))
+                            @if(in_array($me->staff_category, [0,1,9,51]))
                             <button type="button" class="btn radio-btn radio-team-category">
                                 <span class="radio">
                                     <label>
@@ -76,7 +76,7 @@
                             </button>
                             @endif
 
-                            @if(in_array($me->user_type, [0,1,11]))
+                            @if(in_array($me->staff_category, [0,1,9,61]))
                             <button type="button" class="btn radio-btn radio-team-category">
                                 <span class="radio">
                                     <label>
@@ -86,7 +86,7 @@
                             </button>
                             @endif
 
-                            @if(in_array($me->user_type, [0,1,11]))
+                            @if(in_array($me->staff_category, [0,1,9,71]))
                             <button type="button" class="btn radio-btn radio-team-category">
                                 <span class="radio">
                                     <label>
@@ -106,7 +106,7 @@
 {{--                            </button>--}}
 {{--                            @endif--}}
 
-                            @if(in_array($me->user_type, [0,1,11]))
+                            @if(in_array($me->staff_category, [0,1,9,88]))
                             <button type="button" class="btn radio-btn radio-team-category">
                                 <span class="radio">
                                     <label>
@@ -122,6 +122,7 @@
 
 
                 {{--部门--}}
+                @if(in_array($me->staff_position, [0,1,11,21]))
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 选择部门</label>
                     <div class="col-md-8 ">
@@ -139,6 +140,7 @@
                         </select>
                     </div>
                 </div>
+                @endif
 
 
                 {{--层级--}}
@@ -147,7 +149,7 @@
                     <div class="col-md-8">
                         <div class="btn-group">
 
-                            @if(in_array($me->staff_position, [0,1,11,21]))
+                            @if(in_array($me->staff_position, [0,1,11,21,31]))
                             <button type="button" class="btn radio-btn radio-team-type">
                                 <span class="radio">
                                     <label>
@@ -156,7 +158,7 @@
                                 </span>
                             </button>
                             @endif
-                            @if(in_array($me->staff_position, [0,1,11,21]))
+                            @if(in_array($me->staff_position, [0,1,11,21,31,41]))
                             <button type="button" class="btn radio-btn radio-team-type">
                                 <span class="radio">
                                     <label>

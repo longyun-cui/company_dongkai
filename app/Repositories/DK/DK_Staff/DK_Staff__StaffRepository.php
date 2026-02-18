@@ -79,6 +79,7 @@ class DK_Staff__StaffRepository {
 //            ->when(in_array($me->staff_category, [0]), function ($query) {
 //                return $query->whereIn('staff_category',[1,11,21,31,41,51,61,71,81,99]);
 //            })
+            ->where('id','<>',$me->id)
             ->when($me->staff_category == 0, function ($query) use($me) {
                 return $query->whereIn('staff_category',[1,11,21,31,41,51,61,71,81,99]);
             })
@@ -86,10 +87,25 @@ class DK_Staff__StaffRepository {
                 return $query->whereIn('staff_category',[11,21,31,41,51,61,71,81,99]);
             })
             ->when($me->staff_category == 41, function ($query) use($me) {
-                return $query->where('team_id',$me->team_id)->whereIn('staff_category',[41]);
+                return $query->whereIn('staff_category',[41]);
+            })
+            ->when($me->staff_category == 51, function ($query) use($me) {
+                return $query->whereIn('staff_category',[51]);
+            })
+            ->when($me->staff_category == 61, function ($query) use($me) {
+                return $query->whereIn('staff_category',[61]);
+            })
+            ->when($me->staff_category == 71, function ($query) use($me) {
+                return $query->whereIn('staff_category',[71]);
+            })
+            ->when($me->staff_category == 81, function ($query) use($me) {
+                return $query->whereIn('staff_category',[81]);
+            })
+            ->when($me->staff_category == 88, function ($query) use($me) {
+                return $query->whereIn('staff_category',[88]);
             });
 
-        if(in_array($me->staff_category,[11,21,31,41,51,61,71,81]))
+        if(in_array($me->staff_category,[11,21,31,41,51,61,71,81,88]))
         {
             $query->where('department_id',$me->department_id);
             if($me->staff_position == 41)
@@ -238,19 +254,19 @@ class DK_Staff__StaffRepository {
             'operate.required' => '参数有误！',
             'login_number.required' => '请输入登录工号！',
             'name.required' => '请输入姓名！',
-            'company_id.required' => '请选择所属公司！',
+//            'company_id.required' => '请选择所属公司！',
 //            'mobile.unique' => '电话已存在！',
-//            'api_staffNo.required' => '请输入外呼系统坐席ID！',
-//            'api_staffNo.numeric' => '坐席用户ID必须为数字！',
-//            'api_staffNo.min' => '坐席用户ID必须为数字，并且不小于0！',
+            'api_staffNo.required' => '请输入外呼系统坐席ID！',
+            'api_staffNo.numeric' => '坐席用户ID必须为数字！',
+            'api_staffNo.min' => '坐席用户ID必须为数字，并且不小于0！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
             'login_number' => 'required',
             'name' => 'required',
-            'company_id' => 'required',
+//            'company_id' => 'required',
 //            'mobile' => 'required|unique:dk_user,mobile',
-//            'api_staffNo' => 'required|numeric|min:0',
+            'api_staffNo' => 'required|numeric|min:0',
         ], $messages);
         if ($v->fails())
         {
@@ -267,7 +283,7 @@ class DK_Staff__StaffRepository {
         $me = $this->me;
 
         // 判断用户操作权限
-        if(!in_array($me->staff_position,[0,1,11,21,31,41,51])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->staff_position,[0,1,11,21,31,41,51,61,71])) return response_error([],"你没有操作权限！");
 
         if($operate_type == 'create') // 添加 ( $id==0，添加一个新用户 )
         {
@@ -281,6 +297,7 @@ class DK_Staff__StaffRepository {
             $post_data["password"] = password_encode("12345678");
             $post_data["creator_id"] = $me->id;
 //            $post_data['name'] = $post_data['name'];
+
         }
         else if($operate_type == 'edit') // 编辑
         {
@@ -294,6 +311,20 @@ class DK_Staff__StaffRepository {
         }
         else return response_error([],"参数有误！");
 
+        if($me->staff_position == 31)
+        {
+            if(!empty($post_data['team_id']))
+            {
+                if((int)$post_data['team_id'] <= 0) response_error([],"请选择团队！");
+            }
+            else response_error([],"请选择团队！");
+        }
+        if($me->staff_position == 41)
+        {
+        }
+        if($me->staff_position == 61)
+        {
+        }
 
         // 启动数据库事务
         DB::beginTransaction();
@@ -320,6 +351,26 @@ class DK_Staff__StaffRepository {
 
             // 判断团队是否存在
             if(empty($post_data['team_id'])) unset($mine_data['team_id']);
+
+
+            if($me->staff_position == 31)
+            {
+                $mine_data['company_id'] = $me->company_id;
+                $mine_data['department_id'] = $me->department_id;
+            }
+            if($me->staff_position == 41)
+            {
+                $mine_data['company_id'] = $me->company_id;
+                $mine_data['department_id'] = $me->department_id;
+                $mine_data['team_id'] = $me->team_id;
+            }
+            if($me->staff_position == 61)
+            {
+                $mine_data['company_id'] = $me->company_id;
+                $mine_data['department_id'] = $me->department_id;
+                $mine_data['team_id'] = $me->team_id;
+                $mine_data['team_group_id'] = $me->team_group_id;
+            }
 
 
 

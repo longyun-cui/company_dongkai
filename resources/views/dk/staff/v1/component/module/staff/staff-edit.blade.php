@@ -26,7 +26,7 @@
                     <div class="col-md-8">
                         <div class="btn-group" id="department-category--for--staff-item-edit">
 
-                            @if(in_array($me->user_type, [0,1]))
+                            @if(in_array($me->staff_category, [0,1]))
                             <button type="button" class="btn radio-btn radio-staff-category">
                                 <span class="radio">
                                     <label>
@@ -66,7 +66,7 @@
 {{--                            </button>--}}
 {{--                            @endif--}}
 
-                            @if(in_array($me->user_type, [0,1]))
+                            @if(in_array($me->staff_category, [0,1,9,41]))
                             <button type="button" class="btn radio-btn radio-staff-category">
                                 <span class="radio">
                                     <label>
@@ -76,7 +76,7 @@
                             </button>
                             @endif
 
-                            @if(in_array($me->user_type, [0,1,11]))
+                            @if(in_array($me->staff_category, [0,1,9,51]))
                             <button type="button" class="btn radio-btn radio-staff-category">
                                 <span class="radio">
                                     <label>
@@ -86,7 +86,7 @@
                             </button>
                             @endif
 
-                            @if(in_array($me->user_type, [0,1,11]))
+                            @if(in_array($me->staff_category, [0,1,9,61]))
                             <button type="button" class="btn radio-btn radio-staff-category">
                                 <span class="radio">
                                     <label>
@@ -96,7 +96,7 @@
                             </button>
                             @endif
 
-                            @if(in_array($me->user_type, [0,1,11]))
+                            @if(in_array($me->staff_category, [0,1,9,71]))
                             <button type="button" class="btn radio-btn radio-staff-category">
                                 <span class="radio">
                                     <label>
@@ -116,7 +116,7 @@
 {{--                            </button>--}}
 {{--                            @endif--}}
 
-                            @if(in_array($me->user_type, [0,1,11,41]))
+                            @if(in_array($me->staff_category, [0,1,9,88]))
                             <button type="button" class="btn radio-btn radio-staff-category">
                                 <span class="radio">
                                     <label>
@@ -146,6 +146,7 @@
                     <div class="col-md-8">
                         <div class="btn-group">
 
+                            @if(in_array($me->staff_position, [0,1,9]))
                             <button type="button" class="btn radio-btn radio-staff-position">
                                 <span class="radio">
                                     <label>
@@ -153,6 +154,8 @@
                                     </label>
                                 </span>
                             </button>
+                            @endif
+                            @if(in_array($me->staff_position, [0,1,9,11]))
                             <button type="button" class="btn radio-btn radio-staff-position">
                                 <span class="radio">
                                     <label>
@@ -160,6 +163,8 @@
                                     </label>
                                 </span>
                             </button>
+                            @endif
+                            @if(in_array($me->staff_position, [0,1,9,11,31]))
                             <button type="button" class="btn radio-btn radio-staff-position">
                                 <span class="radio">
                                     <label>
@@ -167,6 +172,8 @@
                                     </label>
                                 </span>
                             </button>
+                            @endif
+{{--                            @if(in_array($me->staff_position, [0,1,9,11,31,41]))--}}
 {{--                            <button type="button" class="btn radio-btn radio-staff-position">--}}
 {{--                                <span class="radio">--}}
 {{--                                    <label>--}}
@@ -174,6 +181,8 @@
 {{--                                    </label>--}}
 {{--                                </span>--}}
 {{--                            </button>--}}
+{{--                            @endif--}}
+                            @if(in_array($me->staff_position, [0,1,9,11,31,41,51]))
                             <button type="button" class="btn radio-btn radio-staff-position">
                                 <span class="radio">
                                     <label>
@@ -181,6 +190,8 @@
                                     </label>
                                 </span>
                             </button>
+                            @endif
+{{--                            @if(in_array($me->staff_position, [0,1,9,11,31,41,51,61]))--}}
 {{--                            <button type="button" class="btn radio-btn radio-staff-position">--}}
 {{--                                <span class="radio">--}}
 {{--                                    <label>--}}
@@ -188,6 +199,8 @@
 {{--                                    </label>--}}
 {{--                                </span>--}}
 {{--                            </button>--}}
+{{--                            @endif--}}
+                            @if(in_array($me->staff_position, [0,1,9,11,31,41,51,61,71]))
                             <button type="button" class="btn radio-btn radio-staff-position">
                                 <span class="radio">
                                     <label>
@@ -195,6 +208,7 @@
                                     </label>
                                 </span>
                             </button>
+                            @endif
 
                         </div>
                     </div>
@@ -212,10 +226,11 @@
 {{--                </div>--}}
 
                 {{--公司--}}
-                @if(in_array($me->user_type, [0,1,11]))
+                @if(in_array($me->staff_position, [0,1,9,11]))
                 <div class="form-group company-box">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 公司&部门</label>
                     <div class="col-md-9 ">
+                        @if(in_array($me->staff_position, [0,1,9]))
                         <div class="col-sm-6 col-md-6 padding-0">
                             <select class="form-control select2-reset select2--company"
                                     name="company_id"
@@ -230,6 +245,7 @@
                                 <option data-id="" value="">选择公司</option>
                             </select>
                         </div>
+                        @endif
                         <div class="col-sm-6 col-md-6 padding-0 department-box">
                             <select class="form-control select2-reset select2--department"
                                     name="department_id"
@@ -247,10 +263,11 @@
                 </div>
                 @endif
                 {{--团队--}}
-                @if(in_array($me->user_type, [0,1,11]))
+                @if(in_array($me->staff_position, [0,1,11,31,41]))
                 <div class="form-group team-box">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 所属团队</label>
                     <div class="col-md-9 ">
+                        @if(in_array($me->staff_position, [0,1,11,31]))
                         <div class="col-sm-6 col-md-6 padding-0 team-box">
                             <select class="form-control select2-reset select2--team"
                                     name="team_id"
@@ -263,7 +280,8 @@
                                 <option data-id="" value="">选择团队</option>
                             </select>
                         </div>
-                        <div class="col-sm-6 col-md-6 padding-0 team-box">
+                        @endif
+                        <div class="col-sm-6 col-md-6 padding-0 group-box">
                             <select class="form-control select2-reset select2--team"
                                     name="team_group_id"
                                     id="select2---team-group--for--staff-item-edit"
