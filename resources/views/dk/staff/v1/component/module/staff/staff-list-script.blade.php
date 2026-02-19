@@ -692,7 +692,92 @@
         });
 
 
-        // 【员工】启用
+        // 【员工】重置密码
+        $(".main-wrapper").off('click', ".staff--item-password-reset-submit").on('click', ".staff--item-password-reset-submit", function() {
+            var $that = $(this);
+            var $id = $that.attr('data-id');
+            var $row = $that.parents('tr');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $item_category = $datatable_wrapper.data('datatable-item-category');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+
+            $('.datatable-wrapper').removeClass('operating');
+            $datatable_wrapper.addClass('operating');
+            $datatable_wrapper.find('tr').removeClass('operating');
+            $row.addClass('operating');
+
+
+
+
+            layer.msg('确定"重置"么?', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index)
+                {
+                    layer.close(index);
+
+                    //
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">正在提交</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
+                    });
+
+                    //
+                    $.post(
+                        "{{ url('/o1/staff/item-password-reset') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "staff--item-password-reset",
+                            item_category: $item_category,
+                            item_id: $that.attr('data-id')
+                        },
+                        'json'
+                    )
+                        .done(function($response, status, jqXHR) {
+                            console.log('#'+$that.attr('id')+'.post.done.');
+
+                            $response = JSON.parse($response);
+                            if(!$response.success)
+                            {
+                                if($response.msg) layer.msg($response.msg);
+                            }
+                            else
+                            {
+                                layer.msg("重置完成！");
+                            }
+                        })
+                        .fail(function(jqXHR, status, error) {
+                            console.log('#'+$that.attr('id')+'.post.fail.');
+                            layer.msg('服务器错误！');
+
+                        })
+                        .always(function(jqXHR, status) {
+                            console.log('#'+$that.attr('id')+'.post.always.');
+                            layer.closeAll('loading');
+                        });
+                }
+                ,btn2: function(index)
+                {
+                    layer.close(index);
+                    $row.removeClass('operating');
+                }
+            });
+
+
+        });
+
+
+        // 【员工】登录
         $(".main-wrapper").off('click', ".staff--item-login-submit").on('click', ".staff--item-login-submit", function() {
             var $that = $(this);
             var $id = $that.attr('data-id');

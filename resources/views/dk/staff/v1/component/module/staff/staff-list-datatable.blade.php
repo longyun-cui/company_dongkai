@@ -279,7 +279,7 @@
                         var $html_delete = '';
                         var $html_promote = '';
                         var $html_login = '<a class="btn btn-xs staff--item-login-submit" data-id="'+data+'">登录</a>';
-                        var $html_password_reset = '<a class="btn btn-xs item-password-reset-submit" data-id="'+data+'">重置密码</a>';
+                        var $html_password_reset = '<a class="btn btn-xs staff--item-password-reset-submit" data-id="'+data+'">重置密码</a>';
                         var $html_operation_record = '<a class="btn btn-xs modal-show--for--staff--item-operation-record" data-id="'+data+'">记录</a>';
 
                         if(row.user_category == 1)
@@ -309,18 +309,18 @@
                             $html_delete = '<a class="btn btn-xs staff--item-restore-submit" data-id="'+data+'">恢复</a>';
                         }
 
-                        if(row.user_type == 88)
-                        {
-                            $html_promote = '<a class="btn btn-xs staff--item-promote-submit" data-id="'+data+'">晋升</a>';
-                        }
-                        else if(row.user_type == 84)
-                        {
-                            $html_promote = '<a class="btn btn-xs staff--item-demote-submit" data-id="'+data+'">降职</a>';
-                        }
-                        else
-                        {
-                            $html_promote = '<a class="btn btn-xs btn-default disabled" data-id="'+data+'">晋升</a>';
-                        }
+                        // if(row.user_type == 88)
+                        // {
+                        //     $html_promote = '<a class="btn btn-xs staff--item-promote-submit" data-id="'+data+'">晋升</a>';
+                        // }
+                        // else if(row.user_type == 84)
+                        // {
+                        //     $html_promote = '<a class="btn btn-xs staff--item-demote-submit" data-id="'+data+'">降职</a>';
+                        // }
+                        // else
+                        // {
+                        //     $html_promote = '<a class="btn btn-xs btn-default disabled" data-id="'+data+'">晋升</a>';
+                        // }
 
 
                         var html =

@@ -114,6 +114,7 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
     Route::post('/o1/staff/item-enable', $controller.'@o1__staff__item_enable');
     Route::post('/o1/staff/item-disable', $controller.'@o1__staff__item_disable');
     // 【员工】登录
+    Route::post('/o1/staff/item-password-reset', $controller.'@o1__staff__item_password_reset');
     Route::post('/o1/staff/item-login', $controller.'@o1__staff__item_login');
     // 【员工】操作记录
     Route::post('/o1/staff/item-operation-record-list/datatable-query', $controller.'@o1__staff__item_operation_record_list__datatable_query');

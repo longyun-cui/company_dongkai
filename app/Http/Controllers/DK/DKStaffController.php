@@ -586,6 +586,16 @@ class DKStaffController extends Controller
         return $this->staff_repo->o1__staff__item_disable(request()->all());
     }
     // 【员工】登录
+    public function o1__staff__item_password_reset()
+    {
+        return $this->staff_repo->o1__staff__item_password_reset(request()->all());
+    }
+    // 【员工】登录
+    public function o1__staff__item_password_change()
+    {
+        return $this->staff_repo->o1__staff__item_password_change(request()->all());
+    }
+    // 【员工】登录
     public function o1__staff__item_login()
     {
         return $this->staff_repo->o1__staff__item_login(request()->all());
