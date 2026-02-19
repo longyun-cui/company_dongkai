@@ -81,10 +81,10 @@ class DK_Staff__StaffRepository {
 //            })
             ->where('id','<>',$me->id)
             ->when($me->staff_category == 0, function ($query) use($me) {
-                return $query->whereIn('staff_category',[1,11,21,31,41,51,61,71,81,99]);
+                return $query->whereIn('staff_category',[1,9,11,21,31,41,51,61,71,81,99]);
             })
             ->when($me->staff_category == 1, function ($query) use($me) {
-                return $query->whereIn('staff_category',[11,21,31,41,51,61,71,81,99]);
+                return $query->whereIn('staff_category',[9,11,21,31,41,51,61,71,81,99]);
             })
             ->when($me->staff_category == 41, function ($query) use($me) {
                 return $query->whereIn('staff_category',[41]);
