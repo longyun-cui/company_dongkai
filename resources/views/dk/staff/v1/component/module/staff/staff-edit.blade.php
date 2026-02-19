@@ -30,7 +30,7 @@
                             <button type="button" class="btn radio-btn radio-staff-category">
                                 <span class="radio">
                                     <label>
-                                        <input type="radio" name="staff_category" value="11"> 公司老总
+                                        <input type="radio" name="staff_category" value="9"> 公司老总
                                     </label>
                                 </span>
                             </button>

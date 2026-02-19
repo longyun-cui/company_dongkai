@@ -129,10 +129,11 @@
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         if(data == 0) return '<small class="btn-xs bg-black">Admin</small>';
-                        else if(data == 1) return '<i class="fa fa-genderless text-black"></i> 总裁';
-                        else if(data == 11) return '<i class="fa fa-genderless text-red"></i> 人事';
-                        else if(data == 21) return '<i class="fa fa-genderless text-orange"></i> 行政';
-                        else if(data == 31) return '<i class="fa fa-genderless text-green"></i> 财务';
+                        else if(data == 1) return '<i class="fa fa-genderless text-black"></i> Admin';
+                        else if(data == 9) return '<i class="fa fa-genderless text-red"></i> 总裁';
+                        else if(data == 11) return '<i class="fa fa-genderless text-blue"></i> 人事';
+                        else if(data == 21) return '<i class="fa fa-genderless text-blue"></i> 行政';
+                        else if(data == 31) return '<i class="fa fa-genderless text-blue"></i> 财务';
                         else if(data == 41) return '<i class="fa fa-genderless text-blue"></i> 客服';
                         else if(data == 51) return '<i class="fa fa-genderless text-blue"></i> 质检';
                         else if(data == 61) return '<i class="fa fa-genderless text-blue"></i> 复核';
