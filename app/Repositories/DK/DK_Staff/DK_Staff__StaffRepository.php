@@ -312,6 +312,14 @@ class DK_Staff__StaffRepository {
         }
         else return response_error([],"参数有误！");
 
+        if($me->staff_position == 11)
+        {
+            if(!empty($post_data['team_id']))
+            {
+                if((int)$post_data['team_id'] <= 0) response_error([],"请选择团队！");
+            }
+            else response_error([],"请选择团队！");
+        }
         if($me->staff_position == 31)
         {
             if(!empty($post_data['team_id']))
@@ -354,16 +362,26 @@ class DK_Staff__StaffRepository {
             if(empty($post_data['team_id'])) unset($mine_data['team_id']);
 
 
+            if($me->staff_position == 11)
+            {
+                $mine_data['company_id'] = $me->company_id;
+                $mine_data['department_id'] = 0;
+                $mine_data['team_id'] = 0;
+                $mine_data['team_group_id'] = 0;
+            }
             if($me->staff_position == 31)
             {
                 $mine_data['company_id'] = $me->company_id;
                 $mine_data['department_id'] = $me->department_id;
+                $mine_data['team_id'] = 0;
+                $mine_data['team_group_id'] = 0;
             }
             if($me->staff_position == 41)
             {
                 $mine_data['company_id'] = $me->company_id;
                 $mine_data['department_id'] = $me->department_id;
                 $mine_data['team_id'] = $me->team_id;
+                $mine_data['team_group_id'] = 0;
             }
             if($me->staff_position == 61)
             {
