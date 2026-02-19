@@ -80,7 +80,7 @@
                             <button type="button" class="btn radio-btn radio-team-category">
                                 <span class="radio">
                                     <label>
-                                        <input type="radio" name="team_category" value="61"> 三方质检
+                                        <input type="radio" name="team_category" value="61"> 复核
                                     </label>
                                 </span>
                             </button>
@@ -272,29 +272,29 @@
                 </div>
 
                 {{--启用--}}
-                <div class="form-group form-type _none">
-                    <label class="control-label col-md-2">启用</label>
-                    <div class="col-md-8">
-                        <div class="btn-group">
+{{--                <div class="form-group form-type _none">--}}
+{{--                    <label class="control-label col-md-2">启用</label>--}}
+{{--                    <div class="col-md-8">--}}
+{{--                        <div class="btn-group">--}}
 
-                            <button type="button" class="btn">
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="active" value="0" checked="checked"> 暂不启用
-                                    </label>
-                                </div>
-                            </button>
-                            <button type="button" class="btn">
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="active" value="1"> 启用
-                                    </label>
-                                </div>
-                            </button>
+{{--                            <button type="button" class="btn">--}}
+{{--                                <div class="radio">--}}
+{{--                                    <label>--}}
+{{--                                        <input type="radio" name="active" value="0" checked="checked"> 暂不启用--}}
+{{--                                    </label>--}}
+{{--                                </div>--}}
+{{--                            </button>--}}
+{{--                            <button type="button" class="btn">--}}
+{{--                                <div class="radio">--}}
+{{--                                    <label>--}}
+{{--                                        <input type="radio" name="active" value="1"> 启用--}}
+{{--                                    </label>--}}
+{{--                                </div>--}}
+{{--                            </button>--}}
 
-                        </div>
-                    </div>
-                </div>
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
             </div>
             </form>
