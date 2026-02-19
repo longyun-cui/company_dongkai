@@ -115,7 +115,7 @@
 
                 {{--质检员--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">质检员</label>
+                    <label class="control-label col-md-2">质检</label>
                     <div class="col-md-8 ">
                         <select class="form-control select2-multiple-reset select2--staff" multiple="multiple"
                                 name="peoples[]"
@@ -125,6 +125,31 @@
                                 data-staff-type="11"
                         >
                         </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group form-type">
+                    <label class="control-label col-md-2">是否允许分发</label>
+                    <div class="col-md-8">
+                        <div class="btn-group">
+
+                            <button type="button" class="btn">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="is_distributive" value="0" checked="checked"> 否
+                                    </label>
+                                </div>
+                            </button>
+                            <button type="button" class="btn">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="is_distributive" value="1"> 是
+                                    </label>
+                                </div>
+                            </button>
+
+                        </div>
                     </div>
                 </div>
 

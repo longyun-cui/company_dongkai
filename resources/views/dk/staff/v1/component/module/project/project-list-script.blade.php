@@ -90,6 +90,10 @@
                         $modal.find('input[name="alias_name"]').val($response.data.alias_name);
                         $modal.find('input[name="location_city"]').val($response.data.location_city);
 
+                        $modal.find('input[name="is_distributive"]').prop('checked', false);
+                        $modal.find('input[name="is_distributive"][value="'+$response.data.is_distributive+'"]').prop('checked', true).trigger('change');
+
+
 
                         if($response.data.client_er)
                         {

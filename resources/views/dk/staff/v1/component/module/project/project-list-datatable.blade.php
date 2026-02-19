@@ -289,7 +289,7 @@
                             $(nTd).attr('data-row-index',iRow);
 
                             $(nTd).addClass('modal-show-for-field-set');
-                            $(nTd).attr('data-id',row.id).attr('data-name','是否+V');
+                            $(nTd).attr('data-id',row.id).attr('data-name','是否分发');
                             $(nTd).attr('data-key','is_distributive').attr('data-value',data);
 
                             $(nTd).attr('data-column-type','radio');
@@ -309,7 +309,7 @@
                     "title": "备注",
                     "data": "remark",
                     "className": "",
-                    "width": "",
+                    "width": "240px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
