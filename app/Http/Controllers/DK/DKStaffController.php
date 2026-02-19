@@ -25,6 +25,8 @@ use App\Repositories\DK\DK_Staff\DK_Staff__ProjectRepository;
 use App\Repositories\DK\DK_Staff\DK_Staff__OrderRepository;
 use App\Repositories\DK\DK_Staff\DK_Staff__DeliveryRepository;
 
+use App\Repositories\DK\DK_Staff\DK_Staff__ExportRepository;
+
 use App\Repositories\DK\DK_Staff\DK_Staff__StatisticRepository;
 
 
@@ -52,6 +54,8 @@ class DKStaffController extends Controller
     private $order_repo;
     private $delivery_repo;
 
+    private $export_repo;
+
     private $statistic_repo;
 
     public function __construct()
@@ -72,6 +76,8 @@ class DKStaffController extends Controller
 
         $this->order_repo = new DK_Staff__OrderRepository;
         $this->delivery_repo = new DK_Staff__DeliveryRepository;
+
+        $this->export_repo = new DK_Staff__ExportRepository;
 
         $this->statistic_repo = new DK_Staff__StatisticRepository;
     }
@@ -829,6 +835,16 @@ class DKStaffController extends Controller
     {
         return $this->order_repo->o1__order__item_inspecting_save(request()->all());
     }
+    // 【工单】申诉
+    public function o1__order__item_appealing_save()
+    {
+        return $this->order_repo->o1__order__item_appealing_save(request()->all());
+    }
+    // 【工单】申诉处理
+    public function o1__order__item_appealed_handling_save()
+    {
+        return $this->order_repo->o1__order__item_appealed_handling_save(request()->all());
+    }
     // 【工单】交付
     public function o1__order__item_delivering_save()
     {
@@ -907,6 +923,44 @@ class DKStaffController extends Controller
         return $this->delivery_repo->o1__delivery__list__datatable_query(request()->all());
     }
 
+
+
+
+
+
+
+
+    /*
+     * EXPORT - 导出
+     */
+    // 【工单】datatable
+    public function o1__export__list__datatable_query()
+    {
+        return $this->export_repo->o1__export__list__datatable_query(request()->all());
+    }
+
+    // 【数据-导出】工单-下载
+    public function o1__export__order__export__by_ids()
+    {
+        $order_category = request('order_category',0);
+
+        if($order_category == 1)
+        {
+            return $this->export_repo->o1__export__order_dental__export__by_ids(request()->all());
+        }
+        else if($order_category == 11)
+        {
+            return $this->export_repo->o1__export__order_aesthetic__export__by_ids(request()->all());
+        }
+        else if($order_category == 31)
+        {
+            return $this->export_repo->o1__export__order_luxury__export__by_ids(request()->all());
+        }
+        else
+        {
+            return $this->export_repo->o1__export__order__export__by_ids(request()->all());
+        }
+    }
 
 
 

@@ -280,9 +280,9 @@ class DK_Common__Order extends Model
     }
 
     // 部门-大区
-    function creator_group_er()
+    function creator_team_group_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Team','creator_group_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Team','creator_team_group_id','id');
     }
 
 

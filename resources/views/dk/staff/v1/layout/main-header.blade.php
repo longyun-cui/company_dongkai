@@ -45,14 +45,12 @@
 
 
                         @if(in_array($me->staff_category,[0]))
-                        <li class="header">
+                        <li class="header _none">
                             <a href="{{ url('/item/order-create') }}">
                                 <i class="fa fa-plus text-yellow"></i> 添加工单
                             </a>
                         </li>
                         @endif
-
-
 
 
                         @if(in_array($me->staff_category,[0,1]))
@@ -77,261 +75,261 @@
 
                 {{--生产统计--}}
                 @if(in_array($me->staff_category,[0,1,9,11,61,66,41,81,84]))
-                    <li class="dropdown tasks-menu add-menu">
+                <li class="dropdown tasks-menu add-menu">
 
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            统计 <span class="caret"></span>
-                        </a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        统计 <span class="caret"></span>
+                    </a>
 
-                        <ul class="dropdown-menu right" role="menu">
+                    <ul class="dropdown-menu right" role="menu">
 
 
-                            <li class="header margin-bottom-8px">生产统计</li>
+                        <li class="header margin-bottom-8px">生产统计</li>
 
-                            @if(in_array($me->staff_category,[0,1,9,41,51,71]))
+                        @if(in_array($me->staff_category,[0,1,9,41,51,71]))
+                        <li>
+                            <a href="javascript:void(0);" class="tab-control datatable-control"
+                               data-type="create"
+                               data-unique="y"
+                               data-id="statistic-production-project"
+                               data-title='<i class="fa fa-area-chart text-blue"></i> <span>项目看板</span>'
+                               data-content=''
+
+                               data-datatable-type="create"
+                               data-datatable-unique="y"
+                               data-datatable-id="datatable-statistic-production-project"
+                               data-datatable-target="statistic-production-project"
+                               data-datatable-clone-object="statistic-production-project-clone"
+                            >
+                                <i class="fa fa-area-chart text-blue"></i> <span>项目看板</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        @endif
+
+                        @if(in_array($me->staff_category,[0,1,9]))
+                        <li>
+                            <a href="javascript:void(0);" class="tab-control datatable-control"
+                               data-type="create"
+                               data-unique="y"
+                               data-id="statistic-production-team"
+                               data-title='<i class="fa fa-area-chart text-blue"></i> <span>团队看板</span>'
+                               data-content=''
+
+                               data-datatable-type="create"
+                               data-datatable-unique="y"
+                               data-datatable-id="datatable-statistic-production-team"
+                               data-datatable-target="statistic-production-team"
+                               data-datatable-clone-object="statistic-production-team-clone"
+                            >
+                                <i class="fa fa-area-chart text-blue"></i> <span>团队看板</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        @endif
+
+
+
+
+                        <li class="header margin-bottom-8px">交付统计</li>
+
+                        @if(in_array($me->staff_category,[0,1,9,71]))
                             <li>
                                 <a href="javascript:void(0);" class="tab-control datatable-control"
                                    data-type="create"
                                    data-unique="y"
-                                   data-id="statistic-production-project"
-                                   data-title='<i class="fa fa-area-chart text-blue"></i> <span>项目看板</span>'
+                                   data-id="statistic-marketing-project"
+                                   data-title='<i class="fa fa-area-chart text-green"></i> (项目)交付看板'
                                    data-content=''
 
                                    data-datatable-type="create"
                                    data-datatable-unique="y"
-                                   data-datatable-id="datatable-statistic-production-project"
-                                   data-datatable-target="statistic-production-project"
-                                   data-datatable-clone-object="statistic-production-project-clone"
+                                   data-datatable-id="datatable-statistic-marketing-project"
+                                   data-datatable-target="statistic-marketing-project"
+                                   data-datatable-clone-object="statistic-marketing-project-clone"
                                 >
-                                    <i class="fa fa-area-chart text-blue"></i> <span>项目看板</span>
+                                    <i class="fa fa-area-chart text-green"></i> <span>(项目)交付看板</span>
                                 </a>
                             </li>
                             <li class="divider"></li>
-                            @endif
-
-                            @if(in_array($me->staff_category,[0,1,9]))
+                        @endif
+                        @if(in_array($me->staff_category,[0,1,9,71]))
                             <li>
                                 <a href="javascript:void(0);" class="tab-control datatable-control"
                                    data-type="create"
                                    data-unique="y"
-                                   data-id="statistic-production-team"
-                                   data-title='<i class="fa fa-area-chart text-blue"></i> <span>团队看板</span>'
+                                   data-id="statistic-marketing-client"
+                                   data-title='<i class="fa fa-area-chart text-green"></i> (客户)交付看板'
                                    data-content=''
 
                                    data-datatable-type="create"
                                    data-datatable-unique="y"
-                                   data-datatable-id="datatable-statistic-production-team"
-                                   data-datatable-target="statistic-production-team"
-                                   data-datatable-clone-object="statistic-production-team-clone"
+                                   data-datatable-id="datatable-statistic-marketing-client"
+                                   data-datatable-target="statistic-marketing-client"
+                                   data-datatable-clone-object="statistic-marketing-client-clone"
                                 >
-                                    <i class="fa fa-area-chart text-blue"></i> <span>团队看板</span>
+                                    <i class="fa fa-area-chart text-green"></i> <span>(客户)交付看板</span>
                                 </a>
                             </li>
                             <li class="divider"></li>
-                            @endif
+                        @endif
 
 
 
 
-                            <li class="header margin-bottom-8px">交付统计</li>
+                        <li class="header margin-bottom-8px">销售统计</li>
 
-                            @if(in_array($me->staff_category,[0,1,9,71]))
-                                <li>
-                                    <a href="javascript:void(0);" class="tab-control datatable-control"
-                                       data-type="create"
-                                       data-unique="y"
-                                       data-id="statistic-marketing-project"
-                                       data-title='<i class="fa fa-area-chart text-green"></i> (项目)交付看板'
-                                       data-content=''
-
-                                       data-datatable-type="create"
-                                       data-datatable-unique="y"
-                                       data-datatable-id="datatable-statistic-marketing-project"
-                                       data-datatable-target="statistic-marketing-project"
-                                       data-datatable-clone-object="statistic-marketing-project-clone"
-                                    >
-                                        <i class="fa fa-area-chart text-green"></i> <span>(项目)交付看板</span>
-                                    </a>
-                                </li>
-                                <li class="divider"></li>
-                            @endif
-                            @if(in_array($me->staff_category,[0,1,9,71]))
-                                <li>
-                                    <a href="javascript:void(0);" class="tab-control datatable-control"
-                                       data-type="create"
-                                       data-unique="y"
-                                       data-id="statistic-marketing-client"
-                                       data-title='<i class="fa fa-area-chart text-green"></i> (客户)交付看板'
-                                       data-content=''
-
-                                       data-datatable-type="create"
-                                       data-datatable-unique="y"
-                                       data-datatable-id="datatable-statistic-marketing-client"
-                                       data-datatable-target="statistic-marketing-client"
-                                       data-datatable-clone-object="statistic-marketing-client-clone"
-                                    >
-                                        <i class="fa fa-area-chart text-green"></i> <span>(客户)交付看板</span>
-                                    </a>
-                                </li>
-                                <li class="divider"></li>
-                            @endif
-
-
-
-
-                            <li class="header margin-bottom-8px">销售统计</li>
-
-                            @if(in_array($me->staff_category,[0,1,9,11]))
-                                <li>
-                                    <a href="javascript:void(0);" class="tab-control datatable-control"
-                                       data-type="create"
-                                       data-unique="y"
-                                       data-id="statistic-company-overview"
-                                       data-title='<i class="fa fa-pie-chart text-orange"></i> 公司概览'
-                                       data-content=''
-
-                                       data-datatable-type="create"
-                                       data-datatable-unique="y"
-                                       data-datatable-id="datatable-statistic-company-overview"
-                                       data-datatable-target="statistic-company-overview"
-                                       data-datatable-clone-object="statistic-company-overview-clone"
-                                    >
-                                        <i class="fa fa-pie-chart text-green"></i> <span>公司概览</span>
-                                    </a>
-                                </li>
-                                <li class="divider"></li>
-                            @endif
-                            @if(in_array($me->staff_category,[0,1,9,11]))
-                                <li>
-                                    <a href="javascript:void(0);" class="tab-control datatable-control"
-                                       data-type="create"
-                                       data-unique="y"
-                                       data-id="statistic-company-daily"
-                                       data-title='<i class="fa fa-bar-chart text-orange"></i> 公司日报'
-                                       data-content=''
-
-                                       data-datatable-type="create"
-                                       data-datatable-unique="y"
-                                       data-datatable-id="datatable-statistic-company-daily"
-                                       data-datatable-target="statistic-company-daily"
-                                       data-datatable-clone-object="statistic-company-daily-clone"
-
-                                       data-chart-id="eChart-statistic-company-daily"
-                                    >
-                                        <i class="fa fa-bar-chart text-green"></i> <span>公司日报</span>
-                                    </a>
-                                </li>
-                                <li class="divider"></li>
-                            @endif
-
-
-                            <li class="header margin-bottom-8px">员工统计</li>
-
-                            @if(in_array($me->staff_category,[0,1,9,11,41,81,84]))
+                        @if(in_array($me->staff_category,[0,1,9,11]))
                             <li>
                                 <a href="javascript:void(0);" class="tab-control datatable-control"
                                    data-type="create"
                                    data-unique="y"
-                                   data-id="statistic-caller-overview"
-                                   data-title='<i class="fa fa-bar-chart text-orange"></i> 坐席统计'
+                                   data-id="statistic-company-overview"
+                                   data-title='<i class="fa fa-pie-chart text-orange"></i> 公司概览'
                                    data-content=''
 
                                    data-datatable-type="create"
                                    data-datatable-unique="y"
-                                   data-datatable-id="datatable-statistic-caller-overview"
-                                   data-datatable-target="statistic-caller-overview"
-                                   data-datatable-clone-object="statistic-caller-overview-clone"
+                                   data-datatable-id="datatable-statistic-company-overview"
+                                   data-datatable-target="statistic-company-overview"
+                                   data-datatable-clone-object="statistic-company-overview-clone"
                                 >
-                                    <i class="fa fa-bar-chart text-orange"></i> <span>坐席统计</span>
+                                    <i class="fa fa-pie-chart text-green"></i> <span>公司概览</span>
                                 </a>
                             </li>
                             <li class="divider"></li>
-                            @endif
-                            @if(in_array($me->staff_category,[0,1,9,11,41,81,84]))
+                        @endif
+                        @if(in_array($me->staff_category,[0,1,9,11]))
                             <li>
                                 <a href="javascript:void(0);" class="tab-control datatable-control"
                                    data-type="create"
                                    data-unique="y"
-                                   data-id="statistic-caller-rank"
-                                   data-title='<i class="fa fa-line-chart text-orange"></i> 坐席排名'
+                                   data-id="statistic-company-daily"
+                                   data-title='<i class="fa fa-bar-chart text-orange"></i> 公司日报'
                                    data-content=''
 
                                    data-datatable-type="create"
                                    data-datatable-unique="y"
-                                   data-datatable-id="datatable-statistic-caller-rank"
-                                   data-datatable-target="statistic-caller-rank"
-                                   data-datatable-clone-object="statistic-caller-rank-clone"
+                                   data-datatable-id="datatable-statistic-company-daily"
+                                   data-datatable-target="statistic-company-daily"
+                                   data-datatable-clone-object="statistic-company-daily-clone"
+
+                                   data-chart-id="eChart-statistic-company-daily"
                                 >
-                                    <i class="fa fa-line-chart text-orange"></i> <span>坐席排名</span>
+                                    <i class="fa fa-bar-chart text-green"></i> <span>公司日报</span>
                                 </a>
                             </li>
                             <li class="divider"></li>
-                            @endif
-                            @if(in_array($me->staff_category,[0,1,9,11,41,81,84]))
-                            <li>
-                                <a href="javascript:void(0);" class="tab-control datatable-control"
-                                   data-type="create"
-                                   data-unique="y"
-                                   data-id="statistic-caller-recent"
-                                   data-title='<i class="fa fa-bar-chart text-orange"></i> 近期成果'
-                                   data-content=''
-
-                                   data-datatable-type="create"
-                                   data-datatable-unique="y"
-                                   data-datatable-id="datatable-statistic-caller-recent"
-                                   data-datatable-target="statistic-caller-recent"
-                                   data-datatable-clone-object="statistic-caller-recent-clone"
-                                >
-                                    <i class="fa fa-area-chart text-orange"></i> <span>近期成果</span>
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                            @endif
-                            @if(in_array($me->staff_category,[0,1,9,11,61,71]))
-                            <li>
-                                <a href="javascript:void(0);" class="tab-control datatable-control"
-                                   data-type="create"
-                                   data-unique="y"
-                                   data-id="statistic-inspector-overview"
-                                   data-title='<i class="fa fa-pie-chart text-orange"></i> 质检统计'
-                                   data-content=''
-
-                                   data-datatable-type="create"
-                                   data-datatable-unique="y"
-                                   data-datatable-id="datatable-statistic-inspector-overview"
-                                   data-datatable-target="statistic-inspector-overview"
-                                   data-datatable-clone-object="statistic-inspector-overview-clone"
-                                >
-                                    <i class="fa fa-pie-chart text-purple"></i> <span>质检统计</span>
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                            @endif
-
-                            @if(in_array($me->staff_category,[0,1,9,11,61]))
-                            <li>
-                                <a href="javascript:void(0);" class="tab-control datatable-control"
-                                   data-type="create"
-                                   data-unique="y"
-                                   data-id="statistic-deliverer-overview"
-                                   data-title='<i class="fa fa-bar-chart text-orange"></i> 运营看板'
-                                   data-content=''
-
-                                   data-datatable-type="create"
-                                   data-datatable-unique="y"
-                                   data-datatable-id="datatable-statistic-deliverer-overview"
-                                   data-datatable-target="statistic-deliverer-overview"
-                                   data-datatable-clone-object="statistic-deliverer-overview-clone"
-                                >
-                                    <i class="fa fa-bar-chart text-red"></i> <span>运营统计</span>
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                            @endif
+                        @endif
 
 
-                        </ul>
-                    </li>
+                        <li class="header margin-bottom-8px">员工统计</li>
+
+                        @if(in_array($me->staff_category,[0,1,9,11,41,81,84]))
+                        <li>
+                            <a href="javascript:void(0);" class="tab-control datatable-control"
+                               data-type="create"
+                               data-unique="y"
+                               data-id="statistic-caller-overview"
+                               data-title='<i class="fa fa-bar-chart text-orange"></i> 坐席统计'
+                               data-content=''
+
+                               data-datatable-type="create"
+                               data-datatable-unique="y"
+                               data-datatable-id="datatable-statistic-caller-overview"
+                               data-datatable-target="statistic-caller-overview"
+                               data-datatable-clone-object="statistic-caller-overview-clone"
+                            >
+                                <i class="fa fa-bar-chart text-orange"></i> <span>坐席统计</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        @endif
+                        @if(in_array($me->staff_category,[0,1,9,11,41,81,84]))
+                        <li>
+                            <a href="javascript:void(0);" class="tab-control datatable-control"
+                               data-type="create"
+                               data-unique="y"
+                               data-id="statistic-caller-rank"
+                               data-title='<i class="fa fa-line-chart text-orange"></i> 坐席排名'
+                               data-content=''
+
+                               data-datatable-type="create"
+                               data-datatable-unique="y"
+                               data-datatable-id="datatable-statistic-caller-rank"
+                               data-datatable-target="statistic-caller-rank"
+                               data-datatable-clone-object="statistic-caller-rank-clone"
+                            >
+                                <i class="fa fa-line-chart text-orange"></i> <span>坐席排名</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        @endif
+                        @if(in_array($me->staff_category,[0,1,9,11,41,81,84]))
+                        <li>
+                            <a href="javascript:void(0);" class="tab-control datatable-control"
+                               data-type="create"
+                               data-unique="y"
+                               data-id="statistic-caller-recent"
+                               data-title='<i class="fa fa-bar-chart text-orange"></i> 近期成果'
+                               data-content=''
+
+                               data-datatable-type="create"
+                               data-datatable-unique="y"
+                               data-datatable-id="datatable-statistic-caller-recent"
+                               data-datatable-target="statistic-caller-recent"
+                               data-datatable-clone-object="statistic-caller-recent-clone"
+                            >
+                                <i class="fa fa-area-chart text-orange"></i> <span>近期成果</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        @endif
+                        @if(in_array($me->staff_category,[0,1,9,11,61,71]))
+                        <li>
+                            <a href="javascript:void(0);" class="tab-control datatable-control"
+                               data-type="create"
+                               data-unique="y"
+                               data-id="statistic-inspector-overview"
+                               data-title='<i class="fa fa-pie-chart text-orange"></i> 质检统计'
+                               data-content=''
+
+                               data-datatable-type="create"
+                               data-datatable-unique="y"
+                               data-datatable-id="datatable-statistic-inspector-overview"
+                               data-datatable-target="statistic-inspector-overview"
+                               data-datatable-clone-object="statistic-inspector-overview-clone"
+                            >
+                                <i class="fa fa-pie-chart text-purple"></i> <span>质检统计</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        @endif
+
+                        @if(in_array($me->staff_category,[0,1,9,11,61]))
+                        <li>
+                            <a href="javascript:void(0);" class="tab-control datatable-control"
+                               data-type="create"
+                               data-unique="y"
+                               data-id="statistic-deliverer-overview"
+                               data-title='<i class="fa fa-bar-chart text-orange"></i> 运营看板'
+                               data-content=''
+
+                               data-datatable-type="create"
+                               data-datatable-unique="y"
+                               data-datatable-id="datatable-statistic-deliverer-overview"
+                               data-datatable-target="statistic-deliverer-overview"
+                               data-datatable-clone-object="statistic-deliverer-overview-clone"
+                            >
+                                <i class="fa fa-bar-chart text-red"></i> <span>运营统计</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        @endif
+
+
+                    </ul>
+                </li>
                 @endif
 
 

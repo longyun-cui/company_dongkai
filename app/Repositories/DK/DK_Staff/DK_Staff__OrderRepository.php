@@ -455,13 +455,13 @@ class DK_Staff__OrderRepository {
         if(!empty($post_data['delivered_status']))
         {
             $delivered_status = $post_data['delivered_status'];
-            if(in_array($delivered_status,['待交付','已交付','已操作','已处理']))
+            if(in_array($delivered_status,['待交付','正常交付','已操作','已处理']))
             {
                 if($delivered_status == '待交付')
                 {
                     $query->where('dk_common__order.delivered_status', 0);
                 }
-                else if($delivered_status == '已交付')
+                else if($delivered_status == '正常交付')
                 {
                     $query->where('dk_common__order.delivered_status', 1);
                 }
@@ -1463,6 +1463,13 @@ class DK_Staff__OrderRepository {
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
 
 
+        if(in_array($me->staff_category,[41,51,61]))
+        {
+            $query->whereIn('operate_category',[1,41]);
+            $query->whereIn('operate_type',[1,9,11,12,51,61,69]);
+        }
+
+
         $total = $query->count();
 
         $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
@@ -1628,7 +1635,7 @@ class DK_Staff__OrderRepository {
             if($item->order_category == 99 && false)
             {
                 $inspected_result = '通过';
-                $delivered_result = '已交付';
+                $delivered_result = '正常交付';
 
                 // 审核
                 $item->inspector_id = 0;
@@ -1668,14 +1675,14 @@ class DK_Staff__OrderRepository {
                     $pivot_delivery_data["business_id"] = $client->business_id;
                 }
                 $pivot_delivery_data["order_category"] = $item->order_category;
-                $pivot_delivery_data["pivot_type"] = 95;
+                $pivot_delivery_data["delivery_type"] = 1;
                 $pivot_delivery_data["project_id"] = $delivered_project_id;
                 $pivot_delivery_data["client_id"] = $delivered_client_id;
                 $pivot_delivery_data["original_project_id"] = $item->project_id;
                 $pivot_delivery_data["order_id"] = $item->id;
                 $pivot_delivery_data["client_type"] = $item->client_type;
                 $pivot_delivery_data["client_phone"] = $item->client_phone;
-                $pivot_delivery_data["delivered_result"] = '已交付';
+                $pivot_delivery_data["delivered_result"] = '正常交付';
                 $pivot_delivery_data["delivered_date"] = $date;
                 $pivot_delivery_data["creator_id"] = $me->id;
 
@@ -1802,7 +1809,7 @@ class DK_Staff__OrderRepository {
         }
 
         $inspected_result = $post_data["order-item-inspecting--inspected-result"];
-        if(!in_array($inspected_result,config('info.inspected_result')))
+        if(!in_array($inspected_result,config('dk.common-config.inspected_result')))
         {
             return response_error([],"审核结果非法！");
         }
@@ -1836,9 +1843,8 @@ class DK_Staff__OrderRepository {
         $record_data["creator_team_id"] = $me->team_id;
         $record_data["order_id"] = $id;
         $record_data["operate_object"] = 1;
-        $record_data["operate_category"] = 1;
-        $record_data["operate_type"] = 41;
-        $record_data["process_category"] = 1;
+        $record_data["operate_category"] = 41;
+        $record_data["operate_type"] = 51;
         $record_data["description"] = $inspected_description;
 
 
@@ -2007,8 +2013,6 @@ class DK_Staff__OrderRepository {
         }
 
 
-
-
         $record_data["content"] = json_encode($record_content);
 
 
@@ -2036,7 +2040,7 @@ class DK_Staff__OrderRepository {
             $item->inspected_at = $time;
             $item->inspected_date = $date;
             $bool = $item->save();
-            if(!$bool) throw new Exception("item--update--fail");
+            if(!$bool) throw new Exception("DK_Common__Order--update--fail");
             else
             {
                 $record = new DK_Common__Order__Operation_Record;
@@ -2102,7 +2106,428 @@ class DK_Staff__OrderRepository {
 //            exit($e->getMessage());
             return response_fail([],$msg);
         }
+    }
 
+    // 【工单】申诉
+    public function o1__order__item_appealing_save($post_data)
+    {
+//        dd($post_data);
+//        return response_success([]);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order--item-appealing') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Common__Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->staff_category,[0,1,41]))
+        {
+            return response_error([],"你没有操作权限！");
+        }
+
+        $appealed_url = $post_data["order--item-appealing--url"];
+        $appealed_description = $post_data["order--item-appealing--description"];
+
+
+
+        $time = time();
+        $date = date("Y-m-d");
+        $datetime = date('Y-m-d H:i:s');
+
+
+
+        $record_data["ip"] = Get_IP();
+        $record_data["record_object"] = 1;
+        $record_data["record_category"] = 1;
+        $record_data["record_type"] = 1;
+        $record_data["creator_id"] = $me->id;
+        $record_data["creator_company_id"] = $me->company_id;
+        $record_data["creator_department_id"] = $me->department_id;
+        $record_data["creator_team_id"] = $me->team_id;
+        $record_data["order_id"] = $id;
+        $record_data["operate_object"] = 1;
+        $record_data["operate_category"] = 41;
+        $record_data["operate_type"] = 61;
+        $record_data["description"] = $appealed_description;
+
+
+        $record_content = [];
+
+
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '员工操作';
+            $record_row['field'] = 'item_operation';
+            $record_row['before'] = '';
+            $record_row['after'] = '工单申诉';
+            $record_content[] = $record_row;
+        }
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '申诉时间';
+            $record_row['field'] = 'handled_time';
+            $record_row['before'] = '';
+            $record_row['after'] = $datetime;
+            $record_content[] = $record_row;
+        }
+        if($appealed_url)
+        {
+            $record_row = [];
+            $record_row['title'] = '录音url';
+            $record_row['field'] = 'handled_url';
+            $record_row['code'] = $appealed_url;
+
+            $record_row['before'] = '';
+            $record_row['after'] = $appealed_url;
+
+            $record_content[] = $record_row;
+        }
+        if($appealed_description)
+        {
+            $record_row = [];
+            $record_row['title'] = '申诉说明';
+            $record_row['field'] = 'handled_description';
+            $record_row['before'] = '';
+            $record_row['after'] = $appealed_description;
+            $record_content[] = $record_row;
+        }
+        $record_data["content"] = json_encode($record_content);
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->appellant_id = $me->id;
+            $item->appealed_status = 1;
+            if($appealed_url) $item->appealed_url = $appealed_url;
+//            if($appealed_description) $item->appealed_description = $appealed_description;
+//            $item->appealed_at = time();
+            $item->appealed_date = $date;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("DK_Common__Order--update--fail");
+            else
+            {
+                $record = new DK_Common__Order__Operation_Record;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("DK_Common__Order__Operation_Record--insert--fail");
+            }
+
+            DB::commit();
+
+            return response_success([],"申诉完成!");
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+    }
+
+    // 【工单】申诉·处理
+    public function o1__order__item_appealed_handling_save($post_data)
+    {
+//        dd($post_data);
+//        return response_success([]);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order--item-appealed-handling') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Common__Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->staff_category,[0,1,51,61,71]))
+        {
+            return response_error([],"你没有操作权限！");
+        }
+
+        $appealed_handled_result = $post_data["order--item-appealed-handling--result"];
+        if(!array_key_exists($appealed_handled_result,config('dk.common-config.appealed_handled_result')))
+        {
+            return response_error([],"处理结果非法！");
+        }
+        $appealed_handled_description = $post_data["order--item-appealed-handling--description"];
+
+        $project_id = $post_data["project_id"];
+        $client_type = $post_data["client_type"];
+        $client_name = $post_data["client_name"];
+        $client_intention = $post_data["client_intention"];
+        $location_city = $post_data["location_city"];
+        $location_district = $post_data["location_district"];
+        $field_1 = $post_data["field_1"];
+        $description = trim($post_data["description"]);
+
+
+        $time = time();
+        $date = date("Y-m-d");
+        $datetime = date('Y-m-d H:i:s');
+
+
+        $record_data["ip"] = Get_IP();
+        $record_data["record_object"] = 1;
+        $record_data["record_category"] = 1;
+        $record_data["record_type"] = 1;
+        $record_data["creator_id"] = $me->id;
+        $record_data["creator_company_id"] = $me->company_id;
+        $record_data["creator_department_id"] = $me->department_id;
+        $record_data["creator_team_id"] = $me->team_id;
+        $record_data["order_id"] = $id;
+        $record_data["operate_object"] = 1;
+        $record_data["operate_category"] = 41;
+        $record_data["operate_type"] = 69;
+        $record_data["description"] = $appealed_handled_description;
+
+
+        $record_content = [];
+
+
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '员工操作';
+            $record_row['field'] = 'item_operation';
+            $record_row['before'] = '';
+            $record_row['after'] = '复核处理';
+            $record_content[] = $record_row;
+        }
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '审核时间';
+            $record_row['field'] = 'handled_time';
+            $record_row['before'] = '';
+            $record_row['after'] = $datetime;
+            $record_content[] = $record_row;
+        }
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '复核结果';
+            $record_row['field'] = 'handled_result';
+            $record_row['code'] = $appealed_handled_result;
+
+            $record_row['before'] = '';
+            $record_row['after'] = $appealed_handled_result;
+
+            $record_content[] = $record_row;
+        }
+        if($appealed_handled_description)
+        {
+            $record_row = [];
+            $record_row['title'] = '复核说明';
+            $record_row['field'] = 'handled_description';
+            $record_row['before'] = '';
+            $record_row['after'] = $appealed_handled_description;
+            $record_content[] = $record_row;
+        }
+
+        // 项目
+        if($item->project_id != $project_id)
+        {
+            $item->load([
+                'project_er'=>function($query) { $query->select('id','name'); }
+            ]);
+
+            $project = DK_Common__Project::find($project_id);
+            if($project)
+            {
+                $record_row = [];
+                $record_row['title'] = '项目修改';
+                $record_row['field'] = 'project_id';
+                $record_row['before'] = $item->project_er->name.'('.$item->project_id.')';
+                $record_row['after'] = $project->name.'('.$project_id.')';
+                $record_content[] = $record_row;
+            }
+            else return response_error([],"选择的【项目】不存在，刷新页面重试！");
+        }
+        // 客户姓名
+        if($item->client_name != $client_name)
+        {
+            $record_row = [];
+            $record_row['title'] = '客户姓名';
+            $record_row['field'] = 'client_name';
+            $record_row['before'] = $item->client_name;
+            $record_row['after'] = $client_name;
+            $record_content[] = $record_row;
+        }
+        // 患者类型
+        if($item->client_type != $client_type)
+        {
+            $record_row = [];
+            $record_row['title'] = '患者类型';
+            $record_row['field'] = 'client_type';
+            $record_row['before'] = config('dk.common-config.dental_type.'.$item->client_type);
+            $record_row['after'] = config('dk.common-config.dental_type.'.$client_type);
+            $record_content[] = $record_row;
+        }
+        // 客户意愿
+        if($item->client_intention != $client_intention)
+        {
+            $record_row = [];
+            $record_row['title'] = '客户意愿';
+            $record_row['field'] = 'client_intention';
+            $record_row['before'] = $item->client_intention;
+            $record_row['after'] = $client_intention;
+            $record_content[] = $record_row;
+        }
+        // 城市区域
+        if($item->location_city != $location_city || $item->location_district != $location_district)
+        {
+            $record_row = [];
+            $record_row['title'] = '城市区域';
+            $record_row['field'] = 'location_city';
+            $record_row['before'] = $item->location_city.'-'.$item->location_district;
+            $record_row['after'] = $location_city.'-'.$location_district;
+            $record_content[] = $record_row;
+        }
+//        // 城市
+//        if($item->location_city != $location_city)
+//        {
+//            $record_row = [];
+//            $record_row['title'] = '城市';
+//            $record_row['field'] = 'location_city';
+//            $record_row['before'] = $item->location_city;
+//            $record_row['after'] = $location_city;
+//            $record_content[] = $record_row;
+//        }
+//        // 区域
+//        if($item->location_district != $location_district)
+//        {
+//            $record_row = [];
+//            $record_row['title'] = '区域';
+//            $record_row['field'] = 'location_district';
+//            $record_row['before'] = $item->location_district;
+//            $record_row['after'] = $location_district;
+//            $record_content[] = $record_row;
+//        }
+        // 自定义1
+        if($item->field_1 != $field_1)
+        {
+            $record_row = [];
+            if($item->order_category == 1)
+            {
+                $record_row['title'] = '牙齿数量';
+                $record_row['field'] = 'field_1';
+                $record_row['before'] = config('dk.common-config.teeth_count.'.$item->field_1);
+                $record_row['after'] = config('dk.common-config.teeth_count.'.$field_1);
+            }
+            else if($item->order_category == 11)
+            {
+                $record_row['title'] = '品类';
+                $record_row['field'] = 'field_1';
+                $record_row['before'] = config('dk.common-config.aesthetic_type.'.$item->field_1);
+                $record_row['after'] = config('dk.common-config.aesthetic_type.'.$field_1);
+            }
+            else if($item->order_category == 31)
+            {
+                $record_row['title'] = '品类';
+                $record_row['field'] = 'field_1';
+                $record_row['before'] = config('dk.common-config.luxury_type.'.$item->field_1);
+                $record_row['after'] = config('dk.common-config.luxury_type.'.$field_1);
+            }
+            $record_content[] = $record_row;
+        }
+        // 通话小结
+        if($item->description != $description)
+        {
+            $record_row = [];
+            $record_row['title'] = '通话小结';
+            $record_row['field'] = 'project_id';
+            $record_row['before'] = $item->description;
+            $record_row['after'] = $description;
+            $record_content[] = $record_row;
+        }
+
+
+        $record_data["content"] = json_encode($record_content);
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if($item->project_id != $project_id) $item->project_id = $project_id;
+            if($item->client_name != $client_name) $item->client_name = $client_name;
+            if($item->client_type != $client_type) $item->client_type = $client_type;
+            if($item->client_intention != $client_intention) $item->client_intention = $client_intention;
+            if($item->location_city != $location_city) $item->location_city = $location_city;
+            if($item->location_district != $location_district) $item->location_district = $location_district;
+            if($item->field_1 != $field_1) $item->field_1 = $field_1;
+            if($item->description != $description) $item->description = $description;
+
+            if($appealed_handled_result == 1)
+            {
+                $item->inspected_result = '通过';
+            }
+            $item->appealed_handler_id = $me->id;
+            $item->appealed_status = 9;
+            $item->appealed_result = $appealed_handled_result;
+//            if($appealed_handled_description) $item->appealed_handled_description = $appealed_handled_description;
+//            $item->appealed_at = time();
+            $item->appealed_handled_date = $date;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("DK_Common__Order--update--fail");
+            else
+            {
+                $record = new DK_Common__Order__Operation_Record;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("DK_Common__Order__Operation_Record--insert--fail");
+            }
+
+
+            DB::commit();
+
+            return response_success([],"申诉·处理完成!");
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
     }
 
     // 【工单】申诉
@@ -2392,7 +2817,7 @@ class DK_Staff__OrderRepository {
 
 
         // [判断]交付结果
-        if(in_array($delivered_result,['交付','折扣交付','郊区交付','内部交付']))
+        if(in_array($delivered_result,['正常交付','折扣交付','郊区交付','内部交付']))
         {
             // 立即交付
             $is_next = 1;
@@ -2578,8 +3003,8 @@ class DK_Staff__OrderRepository {
         $record_data["creator_id"] = $me->id;
         $record_data["order_id"] = $id;
         $record_data["operate_object"] = 1;
-        $record_data["operate_category"] = 61;
-        $record_data["operate_type"] = 1;
+        $record_data["operate_category"] = 1;
+        $record_data["operate_type"] = 71;
         $record_data["column_name"] = "delivered_result";
 
         $record_content = [];
@@ -2590,7 +3015,7 @@ class DK_Staff__OrderRepository {
             $record_row['title'] = '操作';
             $record_row['field'] = 'item_delivering';
             $record_row['before'] = '';
-            $record_row['after'] = '交付';
+            $record_row['after'] = '正常交付';
             $record_content[] = $record_row;
         }
         if(true)
@@ -2906,8 +3331,8 @@ class DK_Staff__OrderRepository {
                 }
 
 
-//                if(!in_array($delivered_client_id,['-1','0',-1,0]) && $delivered_result == "已交付")
-                if(!in_array($delivered_client_id,['-1','0',-1,0]) && in_array($delivered_result,["已交付","折扣交付","郊区交付","内部交付"]))
+//                if(!in_array($delivered_client_id,['-1','0',-1,0]) && $delivered_result == "正常交付")
+                if(!in_array($delivered_client_id,['-1','0',-1,0]) && in_array($delivered_result,["正常交付","折扣交付","郊区交付","内部交付"]))
                 {
                     $pivot_delivery = DK_Common__Delivery::where(['delivery_type'=>1,'order_id'=>$id])->first();
                     if($pivot_delivery)
@@ -3150,14 +3575,18 @@ class DK_Staff__OrderRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,9,11,61,66])) return response_error([],"你没有操作权限！");
-//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+        if(!in_array($me->staff_category,[0,1,9,71])) return response_error([],"你没有操作权限！");
+
+
+        $time = time();
+        $date = date("Y-m-d");
+        $datetime = date('Y-m-d H:i:s');
+
 
         $is_next = 0;
         $is_delivery = 0;
         $delivered_result = '';
         $non_delivery_reason = '';
-
 
 
         // [判断]【工单】是否审核
@@ -3193,6 +3622,11 @@ class DK_Staff__OrderRepository {
             {
                 $is_delivery = 1;
                 $delivered_result = '内部交付';
+            }
+            else if($item->inspected_result == "不合格")
+            {
+                $is_delivery = 1;
+                $delivered_result = '正常交付';
             }
             else
             {
@@ -3310,11 +3744,6 @@ class DK_Staff__OrderRepository {
         }
 
 
-        $time = time();
-        $date = date("Y-m-d");
-        $datetime = date('Y-m-d H:i:s');
-
-
         $before = $item->delivered_result;
         $before = !empty($before) ? $before : '';
 
@@ -3326,8 +3755,8 @@ class DK_Staff__OrderRepository {
         $record_data["creator_id"] = $me->id;
         $record_data["order_id"] = $id;
         $record_data["operate_object"] = 1;
-        $record_data["operate_category"] = 61;
-        $record_data["operate_type"] = 1;
+        $record_data["operate_category"] = 71;
+        $record_data["operate_type"] = 9;
         $record_data["column_name"] = "delivered_result";
 
         $record_content = [];
@@ -3335,7 +3764,7 @@ class DK_Staff__OrderRepository {
         if(true)
         {
             $record_row = [];
-            $record_row['title'] = '操作';
+            $record_row['title'] = '员工操作';
             $record_row['field'] = 'item_delivering';
             $record_row['before'] = '';
             $record_row['after'] = '一键交付';
@@ -3344,7 +3773,7 @@ class DK_Staff__OrderRepository {
         if(true)
         {
             $record_row = [];
-            $record_row['title'] = '时间';
+            $record_row['title'] = '操作时间';
             $record_row['field'] = 'delivered_time';
             $record_row['before'] = '';
             $record_row['after'] = $datetime;
@@ -3354,7 +3783,7 @@ class DK_Staff__OrderRepository {
         if($is_next == 1)
         {
             $record_row = [];
-            $record_row['title'] = '项目';
+            $record_row['title'] = '交付项目';
             $record_row['field'] = 'project_id';
             $record_row['before'] = '';
             if($project)
@@ -3372,7 +3801,7 @@ class DK_Staff__OrderRepository {
         if($is_next == 1)
         {
             $record_row = [];
-            $record_row['title'] = '客户';
+            $record_row['title'] = '交付客户';
             $record_row['field'] = 'client_id';
             $record_row['before'] = '';
             if($client)
@@ -3391,7 +3820,7 @@ class DK_Staff__OrderRepository {
         if(true)
         {
             $record_row = [];
-            $record_row['title'] = '结果';
+            $record_row['title'] = '交付结果';
             $record_row['field'] = 'delivered_result';
             $record_row['code'] = '';
             $record_row['before'] = $before;
@@ -3402,7 +3831,7 @@ class DK_Staff__OrderRepository {
         if($non_delivery_reason)
         {
             $record_row = [];
-            $record_row['title'] = '说明';
+            $record_row['title'] = '结果说明';
             $record_row['field'] = 'delivered_description';
             $record_row['before'] = '';
             $record_row['after'] = $non_delivery_reason;
@@ -3516,6 +3945,529 @@ class DK_Staff__OrderRepository {
         }
 
     }
+    // 【工单】批量-交付（一键交付-傻瓜式交付）
+    public function o1__order__bulk_delivering_save__by_fool($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'ids.required' => 'ids.required.',
+//            'project_id.required' => 'project_id.required.',
+//            'client_id.required' => 'client_id.required.',
+//            'delivered_result.required' => 'delivered_result.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'ids' => 'required',
+//            'project_id' => 'required',
+//            'client_id' => 'required',
+//            'delivered_result' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order--bulk-delivering-save--by-fool') return response_error([],"参数[operate]有误！");
+        $ids = $post_data['ids'];
+        $ids_array = explode("-", $ids);
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->staff_category,[0,1,9,71])) return response_error([],"你没有操作权限！");
+
+
+        $time = time();
+        $date = date("Y-m-d");
+        $datetime = date('Y-m-d H:i:s');
+
+
+        $sorted = collect($ids_array)->sort();
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+
+            $count = 0;
+            $msg = '';
+            $ids = [];
+
+            foreach($sorted as $key => $id)
+            {
+                $is_next = 0;
+                $is_delivery = 0;
+                $delivered_result = '';
+                $non_delivery_reason = '';
+
+                $item = DK_Common__Order::withTrashed()->find($id);
+                if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+                $client_phone = $item->client_phone;
+                $order_category = $item->order_category;
+
+
+                // [判断]【工单】是否审核
+                if($item->inspected_status != 1)
+                {
+                    // 【工单】未审核
+//            return response_error([],"请先审核工单！");
+                    $is_next = 0;
+                    $is_delivery = 0;
+                    $delivered_result = '交付失败';
+                    $non_delivery_reason = '工单未审核';
+                }
+                else
+                {
+                    // 【工单】已审核
+                    $is_next = 1;
+                    if($item->inspected_result == "通过")
+                    {
+                        $is_delivery = 1;
+                        $delivered_result = '正常交付';
+                    }
+                    else if($item->inspected_result == "折扣通过")
+                    {
+                        $is_delivery = 1;
+                        $delivered_result = '折扣交付';
+                    }
+                    else if($item->inspected_result == "郊区通过")
+                    {
+                        $is_delivery = 1;
+                        $delivered_result = '郊区交付';
+                    }
+                    else if($item->inspected_result == "内部通过")
+                    {
+                        $is_delivery = 1;
+                        $delivered_result = '内部交付';
+                    }
+                    else if($item->inspected_result == "不合格")
+                    {
+                        $is_delivery = 1;
+                        $delivered_result = '正常交付';
+                    }
+                    else
+                    {
+                        $is_next = 1;
+                        $is_delivery = 91;
+                        $delivered_result = '不交付';
+                        $non_delivery_reason = '非有效单';
+                    }
+                }
+
+
+                // [判断]【项目】是否存在
+                if($is_next == 1)
+                {
+                    $project_id = $item->project_id;
+                    $project = DK_Common__Project::find($project_id);
+                    if(!$project)
+                    {
+//            return response_error([],"项目不存在！");
+                        $is_next = 0;
+                        $is_delivery = 99;
+                        $delivered_result = '交付失败';
+                        $non_delivery_reason = '项目不存在！';
+                    }
+                }
+
+                // [判断]【客户】是否存在
+                if($is_next == 1)
+                {
+                    $client_id = $project->client_id;
+                    $client = DK_Common__Client::find($client_id);
+                    if(!$client)
+                    {
+//            return response_error([],"客户不存在！");
+                        $is_next = 0;
+                        $is_delivery = 99;
+                        $delivered_result = '交付失败';
+                        $non_delivery_reason = '客户不存在！';
+                    }
+                }
+
+
+                // [判断]【工单】是否重复
+                if($is_next == 1)
+                {
+                    $is_order_list = DK_Common__Order::select('id','order_category','client_phone','delivered_project_id','delivered_client_id')
+                        ->where('order_category',$order_category)
+                        ->where('client_phone',$client_phone)
+                        ->where(function ($query) use($project_id,$client_id) {
+                            $query->where('delivered_project_id',$project_id)->orWhere('delivered_client_id',$client_id);
+                        })
+                        ->get();
+                    if(count($is_order_list) > 0)
+                    {
+                        $is_delivery = 99;
+                        $delivered_result = '交付失败';
+                        foreach($is_order_list as $o)
+                        {
+                            // 判断项目
+                            if($o->delivered_project_id == $project_id)
+                            {
+                                $delivered_result = '重复';
+//                        $delivered_result = '项目·重复';
+                                $non_delivery_reason = '【项目】重复';
+                                break; // 跳出循环
+                            }
+
+                            // 判断客户
+                            if($o->delivered_client_id == $client_id)
+                            {
+                                $delivered_result = '重复';
+//                        $delivered_result = '客户·重复';
+                                $non_delivery_reason = '【客户】重复';
+                                break; // 跳出循环
+                            }
+                        }
+                    }
+                }
+
+
+                // [判断]【交付】是否重复
+                if($is_next == 1)
+                {
+                    $is_delivered_list = DK_Common__Delivery::select('id','order_category','client_phone','project_id','client_id')
+                        ->where(['order_category'=>$order_category,'client_phone'=>$client_phone])
+                        ->where(function ($query) use($project_id,$client_id) {
+                            $query->where('project_id',$project_id)->orWhere('client_id',$client_id);
+                        })
+                        ->get();
+                    if(count($is_delivered_list) > 0)
+                    {
+                        $is_delivery = 99;
+                        $delivered_result = '交付失败';
+                        foreach($is_delivered_list as $d)
+                        {
+                            // 判断项目
+                            if($d->project_id == $project_id)
+                            {
+                                $delivered_result = '重复';
+//                        $delivered_result = '项目·重复';
+                                $non_delivery_reason = '【交付项目】重复';
+                                break; // 跳出循环
+                            }
+
+                            // 判断客户
+                            if($d->client_id == $client_id)
+                            {
+                                $delivered_result = '重复';
+//                        $delivered_result = '客户·重复';
+                                $non_delivery_reason = '【交付客户】重复';
+                                break; // 跳出循环
+                            }
+                        }
+                    }
+                }
+
+
+                $before = $item->delivered_result;
+                $before = !empty($before) ? $before : '';
+
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 1;
+                $record_data["record_category"] = 1;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $id;
+                $record_data["operate_object"] = 1;
+                $record_data["operate_category"] = 71;
+                $record_data["operate_type"] = 19;
+                $record_data["column_name"] = "delivered_result";
+
+                $record_content = [];
+
+                if(true)
+                {
+                    $record_row = [];
+                    $record_row['title'] = '员工操作';
+                    $record_row['field'] = 'item_delivering';
+                    $record_row['before'] = '';
+                    $record_row['after'] = '一键交付';
+                    $record_content[] = $record_row;
+                }
+                if(true)
+                {
+                    $record_row = [];
+                    $record_row['title'] = '操作时间';
+                    $record_row['field'] = 'delivered_time';
+                    $record_row['before'] = '';
+                    $record_row['after'] = $datetime;
+                    $record_content[] = $record_row;
+                }
+
+                if($is_next == 1)
+                {
+                    $record_row = [];
+                    $record_row['title'] = '交付项目';
+                    $record_row['field'] = 'project_id';
+                    $record_row['before'] = '';
+                    if($project)
+                    {
+                        $record_row['value'] = $project_id;
+                        $record_row['after'] = $project->name.'('.$project_id.')';
+                    }
+                    else
+                    {
+                        $record_row['after'] = $item->project_id;
+                    }
+                    $record_content[] = $record_row;
+                }
+
+                if($is_next == 1)
+                {
+                    $record_row = [];
+                    $record_row['title'] = '交付客户';
+                    $record_row['field'] = 'client_id';
+                    $record_row['before'] = '';
+                    if($client)
+                    {
+                        $record_row['value'] = $client_id;
+                        $record_row['after'] = $client->name.'('.$client_id.')';
+                    }
+                    else
+                    {
+                        $record_row['after'] = $item->client_id;
+                    }
+                    $record_content[] = $record_row;
+                }
+
+
+                if(true)
+                {
+                    $record_row = [];
+                    $record_row['title'] = '交付结果';
+                    $record_row['field'] = 'delivered_result';
+                    $record_row['code'] = '';
+                    $record_row['before'] = $before;
+                    $record_row['after'] = $delivered_result;
+                    $record_content[] = $record_row;
+                }
+
+                if($non_delivery_reason)
+                {
+                    $record_row = [];
+                    $record_row['title'] = '结果说明';
+                    $record_row['field'] = 'delivered_description';
+                    $record_row['before'] = '';
+                    $record_row['after'] = $non_delivery_reason;
+                    $record_content[] = $record_row;
+                }
+
+                $record_data["content"] = json_encode($record_content);
+
+
+
+                if($is_delivery > 0)
+                {
+                    if($is_delivery == 1)
+                    {
+                        $delivery = DK_Common__Delivery::where(['delivery_type'=>1,'order_id'=>$item->id])->first();
+                        if($delivery)
+                        {
+                            if($client)
+                            {
+                                $delivery->company_id = $client->company_id;
+                                $delivery->channel_id = $client->channel_id;
+                                $delivery->business_id = $client->business_id;
+                            }
+                            $delivery->project_id = $project_id;
+                            $delivery->client_id = $client_id;
+                            $delivery->delivered_result = $delivered_result;
+                            $delivery->delivered_date = $date;
+                            $bool_delivery = $delivery->save();
+                            if(!$bool_delivery) throw new Exception("DK_Common__Delivery--update--fail");
+                        }
+                        else
+                        {
+                            $delivery = new DK_Common__Delivery;
+                            if($client)
+                            {
+                                $delivery_data["company_id"] = $client->company_id;
+                                $delivery_data["channel_id"] = $client->channel_id;
+                                $delivery_data["business_id"] = $client->business_id;
+                            }
+                            $delivery_data["order_category"] = $item->order_category;
+                            $delivery_data["delivery_type"] = 1;
+                            $delivery_data["project_id"] = $project_id;
+                            $delivery_data["client_id"] = $client_id;
+                            $delivery_data["original_project_id"] = $item->project_id;
+                            $delivery_data["order_id"] = $item->id;
+                            $delivery_data["client_type"] = $item->client_type;
+                            $delivery_data["client_phone"] = $item->client_phone;
+                            $delivery_data["delivered_result"] = $delivered_result;
+                            $delivery_data["delivered_date"] = $date;
+                            $delivery_data["creator_id"] = $me->id;
+
+                            $bool_delivery = $delivery->fill($delivery_data)->save();
+                            if(!$bool_delivery) throw new Exception("DK_Common__Delivery--insert--fail");
+                        }
+
+                        $item->delivered_project_id = $project_id;
+                        $item->delivered_client_id = $client_id;
+                        $item->deliverer_id = $me->id;
+                        $item->delivered_status = 1;
+                        $item->delivered_result = $delivered_result;
+//                $item->delivered_description = $delivered_description;
+                        $item->delivered_date = $date;
+                        $item->delivered_at = $time;
+                        $bool = $item->save();
+                        if(!$bool) throw new Exception("DK_Common__Order--update--fail");
+                    }
+                    else
+                    {
+
+                        $item->deliverer_id = $me->id;
+                        $item->delivered_status = $is_delivery;
+                        $item->delivered_result = $delivered_result;
+//                $item->delivered_description = $non_delivery_reason;
+                        $item->delivered_date = $date;
+                        $item->delivered_at = $time;
+                        $bool = $item->save();
+                        if(!$bool) throw new Exception("DK_Common__Order--update--fail");
+                    }
+                }
+
+                $record = new DK_Common__Order__Operation_Record;
+                $bool_record = $record->fill($record_data)->save();
+                if(!$bool_record) throw new Exception("DK_Common__Order__Operation_Record--insert--fail");
+
+
+
+                $count += 1;
+                $ids[] = $id;
+
+            }
+
+
+            DB::commit();
+
+
+//            $client = DK_Common__Client::find($delivered_client_id);
+//            if($client->is_automatic_dispatching == 1)
+//            {
+//                AutomaticDispatchingJob::dispatch($client->id);
+//            }
+
+            return response_success(['ids'=>$ids],$msg);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+
+
+//        // 启动数据库事务
+//        DB::beginTransaction();
+//        try
+//        {
+//            foreach($ids_array as $key => $id)
+//            {
+//
+//                $item = DK_Common__Order::withTrashed()->find($id);
+//                if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+//
+//                if(in_array($client_id,['-1','0',-1,0]))
+//                {
+//                    $project = DK_Common__Project::find($item->project_id);
+//                    if($project->client_id != 0)
+//                    {
+//                        $delivered_client_id = $project->client_id;
+//                    }
+//                    else $delivered_client_id = 0;
+//                }
+//                else
+//                {
+//                    $delivered_client_id = $client_id;
+//                }
+//
+//                $is_new = 1;
+//                if($is_new == 1)
+//                {
+//                    $client = DK_Common__Client::find($delivered_client_id);
+//                    $is_automatic_dispatching = $client->is_automatic_dispatching;
+//                    if($is_automatic_dispatching == 1)
+//                    {
+//
+//                        $staff_list = DK_Common__Client_User::select('id','client_id','is_take_order','is_take_order_date','is_take_order_datetime')
+//                            ->where('client_id',$delivered_client_id)
+//                            ->where('is_take_order',1)
+//                            ->where('is_take_order_date',date('Y-m-d'))
+//                            ->orderBy('is_take_order_datetime','asc')
+//                            ->get();
+//                        $staff_list = $staff_list->values(); // 重置索引确保从0开始
+//                        $staffCount = $staff_list->count();
+//                        if($staffCount > 0)
+//                        {
+//                            // 使用原子锁避免并发冲突
+//                            $lock = Cache::lock("client:{$delivered_client_id}:assign_lock", 10);
+//                            if (!$lock->get())
+//                            {
+//                                dd(1);
+//                            }
+//                            else
+//                                {
+//                                    // 尝试获取锁，最多等待5秒
+//                                    $lock->block(5); // 这里会阻塞直到获取锁或超时
+//
+//                                    // 从缓存获取上次位置（不存在则初始化为0）
+//                                    $lastIndex = Cache::get("client:{$delivered_client_id}:last_staff_index", 0);
+//                                    $currentIndex = $lastIndex % $staffCount;
+//                                    $newIndex = $currentIndex;
+//
+//                                    $staff = $staff_list[$currentIndex];
+//                                    $pivot_delivery->client_staff_id = $staff->id;
+//                                    $pivot_delivery->save();
+//
+//                                    // 计算下一个索引
+//                                    $currentIndex = ($currentIndex + 1) % $staffCount;
+//                                    $newIndex = $currentIndex; // 记录最后的下一个位置
+//
+//                                    // 将新位置写入缓存（有效期10小时）
+//                                    Cache::put(
+//                                        "client:{$delivered_client_id}:last_staff_index",
+//                                        $newIndex,
+//                                        now()->addHours(10)
+//                                    );
+//
+//                                    optional($lock)->release(); // 确保无论如何都释放锁
+//
+//                            }
+//
+//                        }
+//                    }
+//                }
+//            }
+//
+//            DB::commit();
+//            return response_success([]);
+//        }
+//        catch (Exception $e)
+//        {
+//            DB::rollback();
+////            dd(2);
+////                        $lock->release();
+////            optional($lock)->release(); // 确保无论如何都释放锁
+//            $msg = '操作失败，请重试！';
+//            $msg = $e->getMessage();
+////                        exit($e->getMessage());
+//            return response_fail([],$msg);
+//        }
+//        finally
+//        {
+////                        $lock->release();
+////            optional($lock)->release(); // 确保无论如何都释放锁
+//        }
+
+
+    }
 
     // 【工单】分发
     public function o1__order__item_distributing_save($post_data)
@@ -3585,7 +4537,7 @@ class DK_Staff__OrderRepository {
         }
 
         // 是否已经交付
-        $is_order_list = DK_Common__Order::with('project_er')->where(['client_phone'=>$client_phone,'delivered_result'=>'已交付'])->get();
+        $is_order_list = DK_Common__Order::with('project_er')->where(['client_phone'=>$client_phone,'delivered_result'=>'正常交付'])->get();
         if(count($is_order_list) > 0)
         {
             foreach($is_order_list as $o)
@@ -5727,7 +6679,7 @@ class DK_Staff__OrderRepository {
         // 是否已经交付
         $is_order_list = DK_Common__Order::with('project_er')
             ->where(['client_phone'=>$client_phone])
-            ->whereIn('delivered_result',["已交付","折扣交付","郊区交付","内部交付"])
+            ->whereIn('delivered_result',["正常交付","折扣交付","郊区交付","内部交付"])
             ->get();
 //        dd($is_order_list->toArray());
 
@@ -5737,13 +6689,13 @@ class DK_Staff__OrderRepository {
             {
                 if($o->client_id == $delivered_client_id)
                 {
-                    return response_error([],"该号码已交付过该客户，不要重复交付！");
+                    return response_error([],"该号码正常交付过该客户，不要重复交付！");
                 }
 
 //                if($o->project_er->client_id == $delivered_client_id)
 //                {
 //                    return dd($o->project_er->client_id.'-'.$delivered_client_id);
-//                    return response_error([],"该号码已交付过【默认】客户，不要重复交付！");
+//                    return response_error([],"该号码正常交付过【默认】客户，不要重复交付！");
 //                }
             }
         }
@@ -5762,8 +6714,8 @@ class DK_Staff__OrderRepository {
         DB::beginTransaction();
         try
         {
-//            if($delivered_client_id != "-1" && $delivered_result == "已交付")
-            if($delivered_client_id != "-1" && in_array($delivered_result,["已交付","折扣交付","郊区交付","内部交付"]))
+//            if($delivered_client_id != "-1" && $delivered_result == "正常交付")
+            if($delivered_client_id != "-1" && in_array($delivered_result,["正常交付","折扣交付","郊区交付","内部交付"]))
             {
                 $pivot_delivery = DK_Common__Delivery::where(['delivery_type'=>1,'order_id'=>$item->id])->first();
                 if($pivot_delivery)
@@ -6105,8 +7057,8 @@ class DK_Staff__OrderRepository {
                 }
 
 
-//                if(!in_array($delivered_client_id,['-1','0',-1,0]) && $delivered_result == "已交付")
-                if(!in_array($delivered_client_id,['-1','0',-1,0]) && in_array($delivered_result,["已交付","折扣交付","郊区交付","内部交付"]))
+//                if(!in_array($delivered_client_id,['-1','0',-1,0]) && $delivered_result == "正常交付")
+                if(!in_array($delivered_client_id,['-1','0',-1,0]) && in_array($delivered_result,["正常交付","折扣交付","郊区交付","内部交付"]))
                 {
                     $pivot_delivery = DK_Common__Delivery::where(['delivery_type'=>1,'order_id'=>$id])->first();
                     if($pivot_delivery)
@@ -6319,7 +7271,7 @@ class DK_Staff__OrderRepository {
 
 
     }
-    // 【工单】【获取】已交付记录
+    // 【工单】【获取】正常交付记录
     public function operate_item_order_deliver_get_delivered($post_data)
     {
         $messages = [

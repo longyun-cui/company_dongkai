@@ -1140,10 +1140,8 @@
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(row.is_completed != 1)
                         {
-                            console.log(iRow);
-                            console.log(iCol);
                             $(nTd).attr('data-row-index',iRow);
 
                             $(nTd).attr('data-id',row.id).attr('data-name','录音下载');
@@ -1422,13 +1420,13 @@
                             // 申诉
                             if(row.appealed_status == 0 && ['拒绝','拒绝可交付','不合格'].includes(row.inspected_result))
                             {
-                                $html_appeal = '<a class="btn btn-xs bg-red modal-show--for--order--item-appealed" data-id="'+data+'">申诉</a>';
+                                $html_appeal = '<a class="btn btn-xs modal-show--for--order--item-appealing" data-id="'+data+'">申诉</a>';
                             }
 
                             // 申诉处理
                             if(row.appealed_status == 1)
                             {
-                                $html_appeal_handle = '<a class="btn btn-xs bg-red modal-show-for-order--item-appealed-handled" data-id="'+data+'">处理</a>';
+                                $html_appeal_handle = '<a class="btn btn-xs modal-show--for--order--item-appealed-handling" data-id="'+data+'">处理</a>';
                             }
 
                             // 交付

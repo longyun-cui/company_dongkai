@@ -1,8 +1,9 @@
 <script>
-    var Datatable__for__Order_Item_Operation_Record_List = function ($id) {
-        var datatableAjax__order_item_operation_record = function ($id) {
+    var Datatable__for__Order_Item_Operation_Record_List = function ($datatable_id,$id,$type) {
+        var datatableAjax__order_item_operation_record = function ($datatable_id,$id) {
 
-            var dt__order_item_operation_record = $('#datatable--for--order--item-operation-record-list');
+            // var dt__order_item_operation_record = $('#datatable--for--order--item-operation-record-list');
+            var dt__order_item_operation_record = $('#'+$datatable_id);
             if($.fn.DataTable.isDataTable(dt__order_item_operation_record))
             {
                 // 已经初始化
@@ -77,20 +78,30 @@
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            var $category_html = '' ;
-                            var $type_html ='' ;
+                            var $category_html = '';
+                            var $html_type = '';
 
                             if(data == 1)
                             {
                                 $category_html = '<small class="btn-xs bg-blue">操作</small>';
 
-                                if(row.operate_type == 1) $type_html = '<small class="btn-xs bg-blue">编辑</small>';
-                                if(row.operate_type == 9) $type_html = '<small class="btn-xs bg-blue">发布</small>';
+                                if(row.operate_type == 1) $html_type = '<small class="btn-xs bg-blue">编辑</small>';
+                                if(row.operate_type == 9) $html_type = '<small class="btn-xs bg-blue">发布</small>';
                             }
-                            else if(data == 11) $category_html = '<small class="btn-xs bg-teal">跟进</small>';
-                            else if(data == 21) $category_html = '<small class="btn-xs bg-yellow">客户回访</small>';
-                            else if(data == 31) $category_html = '<small class="btn-xs bg-yellow">上门状态</small>';
-                            else if(data == 71) $category_html = '<small class="btn-xs bg-purple">行程</small>';
+                            else if(data == 41)
+                            {
+                                // $category_html = '<small class="btn-xs bg-blue">生产</small>';
+                                if(row.operate_type == 51) $html_type = '<small class="btn-xs bg-blue">审核</small>';
+                                if(row.operate_type == 61) $html_type = '<small class="btn-xs bg-red">申诉</small>';
+                                if(row.operate_type == 69) $html_type = '<small class="btn-xs bg-red">申诉·处理</small>';
+                            }
+                            else if(data == 71)
+                            {
+                                if(row.operate_type == 1) $category_html = '<small class="btn-xs bg-green">交付</small>';
+                                else if(row.operate_type == 11) $category_html = '<small class="btn-xs bg-green">批量·交付</small>';
+                                else if(row.operate_type == 9) $category_html = '<small class="btn-xs bg-green">一键交付</small>';
+                                else if(row.operate_type == 19) $category_html = '<small class="btn-xs bg-green">批量·一键交付</small>';
+                            }
                             else if(data == 81)
                             {
                                 $category_text = "费用";
@@ -102,12 +113,25 @@
                                 }
                                 $category_html = '<small class="btn-xs bg-yellow">'+$category_text+'</small>';
                             }
-                            else if(data == 88) $category_html = '<small class="btn-xs bg-red">入账</small>';
-                            else if(data == 101) $category_html = '<small class="btn-xs bg-red">附件</small>';
-                            else $category_html = '<small class="btn-xs bg-red">附件</small>';
+                            else if(data == 88)
+                            {
+                                $category_html = '<small class="btn-xs bg-red">入账</small>';
+                            }
+                            else if(data == 91)
+                            {
+                                $category_html = '<small class="btn-xs bg-teal">跟进</small>';
+                                if(row.operate_type == 11) $html_type = '<small class="btn-xs bg-blue">跟进</small>';
+                                if(row.operate_type == 16) $html_type = '<small class="btn-xs bg-blue">客户回访</small>';
+                                if(row.operate_type == 18) $html_type = '<small class="btn-xs bg-blue">上门状态</small>';
+                            }
+                            else if(data == 101)
+                            {
+                                $category_html = '<small class="btn-xs bg-red">附件</small>';
+                            }
+                            else $category_html = '';
 
 
-                            return $category_html + $type_html;
+                            return $category_html + $html_type;
                         }
                     },
                     // {

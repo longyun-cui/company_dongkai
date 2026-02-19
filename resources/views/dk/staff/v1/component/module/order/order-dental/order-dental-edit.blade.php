@@ -54,7 +54,7 @@
                                 name="project_id"
                                 id="order-edit-select2-project"
                                 data-modal="#modal--for--order-dental--item-edit"
-                                data-item-category="1"
+                                data-project-category="1"
                         >
                             <option data-id="" value="">选择项目</option>
                         </select>

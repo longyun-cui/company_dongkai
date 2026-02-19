@@ -202,49 +202,57 @@
             </button>
 
 
-            <button type="button" onclick="" class="btn btn-default btn-filter bulk-submit-for-order-export" id="" data-item-category="31">
-                <i class="fa fa-download"></i> 批量导出
-            </button>
+{{--            <button type="button" onclick="" class="btn btn-default btn-filter bulk-submit-for-order-export" id="" data-item-category="31">--}}
+{{--                <i class="fa fa-download"></i> 批量导出--}}
+{{--            </button>--}}
             {{--<button type="button" onclick="" class="btn btn-default btn-filter"><i class="fa fa-trash-o"></i> 批量删除</button>--}}
 
 
-            @if(in_array($me->department_district_id,[0]))
-                @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
+{{--            @if(in_array($me->department_district_id,[0]))--}}
+{{--                @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))--}}
 
-                    {{--交付项目--}}
-                    <select class="search-filter form-filter filter-lg select2-box-c- select2-project-c" data-item-category="31" name="bulk-operate-delivered-project">
-                        <option value="-1">选择交付项目</option>
-                        {{--@foreach($project_list as $v)--}}
-                        {{--<option value="{{ $v->id }}">{{ $v->name }}</option>--}}
-                        {{--@endforeach--}}
-                    </select>
+{{--                    --}}{{--交付项目--}}
+{{--                    <select class="search-filter form-filter filter-lg select2-box-c- select2-project-c" data-item-category="31" name="bulk-operate-delivered-project">--}}
+{{--                        <option value="-1">选择交付项目</option>--}}
+{{--                        --}}{{--@foreach($project_list as $v)--}}
+{{--                        --}}{{--<option value="{{ $v->id }}">{{ $v->name }}</option>--}}
+{{--                        --}}{{--@endforeach--}}
+{{--                    </select>--}}
 
-                    {{--交付客户--}}
-                    <select class="search-filter form-filter filter-lg select2-box-c- select2-client-c" data-user-category="31" name="bulk-operate-delivered-client">
-                        <option value="-1">交付客户</option>
-                        @foreach($client_list as $v)
-                            <option value="{{ $v->id }}">{{ $v->username }}</option>
-                        @endforeach
-                    </select>
+{{--                    --}}{{--交付客户--}}
+{{--                    <select class="search-filter form-filter filter-lg select2-box-c- select2-client-c" data-user-category="31" name="bulk-operate-delivered-client">--}}
+{{--                        <option value="-1">交付客户</option>--}}
+{{--                        @foreach($client_list as $v)--}}
+{{--                            <option value="{{ $v->id }}">{{ $v->username }}</option>--}}
+{{--                        @endforeach--}}
+{{--                    </select>--}}
 
-                    {{--交付结果--}}
-                    <select class="search-filter form-filter filter-lg select2-box-c" name="bulk-operate-delivered-result">
-                        <option value="-1">选择交付结果</option>
-                        @foreach(config('info.delivered_result') as $v)
-                            <option value="{{ $v }}">{{ $v }}</option>
-                        @endforeach
-                    </select>
+{{--                    --}}{{--交付结果--}}
+{{--                    <select class="search-filter form-filter filter-lg select2-box-c" name="bulk-operate-delivered-result">--}}
+{{--                        <option value="-1">选择交付结果</option>--}}
+{{--                        @foreach(config('info.delivered_result') as $v)--}}
+{{--                            <option value="{{ $v }}">{{ $v }}</option>--}}
+{{--                        @endforeach--}}
+{{--                    </select>--}}
 
-                    {{--交付说明--}}
-                    <input type="text" class="search-filter filter-lg form-filter" name="bulk-operate-delivered-description" placeholder="交付说明">
+{{--                    --}}{{--交付说明--}}
+{{--                    <input type="text" class="search-filter filter-lg form-filter" name="bulk-operate-delivered-description" placeholder="交付说明">--}}
 
 
-                    <button type="button" class="btn btn-default btn-filter bulk-submit-for-order-delivered" id="">
-                        <i class="fa fa-share"></i> 批量交付
-                    </button>
+{{--                    <button type="button" class="btn btn-default btn-filter bulk-submit-for-order-delivered" id="">--}}
+{{--                        <i class="fa fa-share"></i> 批量交付--}}
+{{--                    </button>--}}
 
-                @endif
-            @endif
+{{--                @endif--}}
+{{--            @endif--}}
+
+            <button type="button" onclick="" class="btn btn-default btn-filter order--bulk-export-summit" data-order-category="31">
+                <i class="fa fa-download"></i> 批量导出
+            </button>
+
+            <button type="button" class="btn btn-default btn-filter order--bulk-delivering-summit--by-fool">
+                <i class="fa fa-share"></i> 批量一键交付
+            </button>
 
         </div>
 

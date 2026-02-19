@@ -127,13 +127,47 @@
 
 
         $('.time_picker').datetimepicker({
-            locale: moment.locale('zh-cn'),
-            format: "YYYY-MM-DD HH:mm",
+            // 1. 格式控制是否显示时间
+            format: 'YYYY-MM-DD HH:mm',  // 包含HH:mm自动启用时间选择
+            // format: 'YYYY-MM-DD',      // 只显示日期
+
+            // 2. 显示模式
+            sideBySide: true,           // ✅ 并排显示日期和时间选择器
+            inline: false,              // 内联模式
+
+            // 3. 工具栏按钮
+            showTodayButton: true,      // 今天按钮
+            showClear: true,            // 清除按钮
+            showClose: true,            // 关闭按钮
+
+            // 4. 语言
+            locale: moment.locale('zh-cn'),          // 中文
+
+            // 6. 工具栏位置
+            toolbarPlacement: 'bottom', // 'top' 或 'bottom'
+
             ignoreReadonly: true
         });
         $('.date_picker').datetimepicker({
-            locale: moment.locale('zh-cn'),
-            format: "YYYY-MM-DD",
+            // 1. 格式控制是否显示时间
+            format: 'YYYY-MM-DD',  // 包含HH:mm自动启用时间选择
+            // format: 'YYYY-MM-DD',      // 只显示日期
+
+            // 2. 显示模式
+            sideBySide: true,           // ✅ 并排显示日期和时间选择器
+            inline: false,              // 内联模式
+
+            // 3. 工具栏按钮
+            showTodayButton: true,      // 今天按钮
+            showClear: true,            // 清除按钮
+            showClose: true,            // 关闭按钮
+
+            // 4. 语言
+            locale: moment.locale('zh-cn'),          // 中文
+
+            // 6. 工具栏位置
+            toolbarPlacement: 'bottom', // 'top' 或 'bottom'
+
             ignoreReadonly: true
         });
         $('.month_picker').datetimepicker({
@@ -601,6 +635,8 @@
                             _token: $('meta[name="_token"]').attr('content'),
                             item_category: this.data('item-category'),
                             item_type: this.data('item-type'),
+                            team_category: this.data('team-category'),
+                            team_type: this.data('team-type'),
                             department_id: this.data('department-id'),
                             superior_team_id: this.data('superior-team-id'),
                             keyword: params.term,
@@ -660,6 +696,8 @@
                             _token: $('meta[name="_token"]').attr('content'),
                             item_category: this.data('item-category'),
                             item_type: this.data('item-type'),
+                            staff_category: this.data('staff-category'),
+                            staff_type: this.data('staff-type'),
                             department_id: this.data('department-id'),
                             team_id: this.data('team-id'),
                             keyword: params.term,
@@ -775,6 +813,8 @@
                             _token: $('meta[name="_token"]').attr('content'),
                             item_category: this.data('item-category'),
                             item_type: this.data('item-type'),
+                            client_category: this.data('client-category'),
+                            client_type: this.data('client-type'),
                             keyword: params.term,
                             page: params.page
                         };
@@ -818,6 +858,8 @@
                             _token: $('meta[name="_token"]').attr('content'),
                             item_category: this.data('item-category'),
                             item_type: this.data('item-type'),
+                            project_category: this.data('project-category'),
+                            project_type: this.data('project-type'),
                             keyword: params.term,
                             page: params.page
                         };

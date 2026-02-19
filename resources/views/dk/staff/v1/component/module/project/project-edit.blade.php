@@ -89,7 +89,8 @@
                         <select class="form-control select2-reset select2--client"
                                 name="client_id"
                                 id="select2--client--for--project-item-edit"
-                                data-item-category=""
+                                data-modal="#modal--for--project-item-edit"
+                                data-client-category=""
                         >
                             <option data-id="-1" value="-1">选择客户</option>
                         </select>
@@ -119,6 +120,9 @@
                         <select class="form-control select2-multiple-reset select2--staff" multiple="multiple"
                                 name="peoples[]"
                                 id="select2--peoples--for--project-item-edit"
+                                data-modal="#modal--for--project-item-edit"
+                                data-staff-category="51"
+                                data-staff-type="11"
                         >
                         </select>
                     </div>

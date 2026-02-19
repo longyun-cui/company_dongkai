@@ -963,76 +963,6 @@
             minimumInputLength: 0,
             theme: 'classic'
         });
-        $('#'+$config.target).find('.select2-car-c').select2({
-            ajax: {
-                url: "{{ url('/v1/operate/select2/select2-car') }}",
-                type: 'post',
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        _token: $('meta[name="_token"]').attr('content'),
-                        car_category: this.data('car-category'),
-                        car_type: this.data('car-type'),
-                        keyword: params.term, // search term
-                        page: params.page
-                    };
-                },
-                processResults: function (data, params) {
-
-                    params.page = params.page || 1;
-                    return {
-                        results: data,
-                        pagination: {
-                            more: (params.page * 30) < data.total_count
-                        }
-                    };
-                },
-                cache: true
-            },
-            escapeMarkup: function (markup) { return markup; }, // var our custom formatter work
-            // dropdownParent: this.data('modal'), // 替换为你的模态框 ID
-            // dropdownParent: function() {
-            //     // 获取当前元素的 modal 属性
-            //     var modalSelector = $(this).data('modal');
-            //     return $(modalSelector).length ? $(modalSelector) : $(document.body);
-            // },
-            minimumInputLength: 0,
-            // width: '100%',
-            theme: 'classic'
-            // placeholder: "搜索或选择车辆..."
-        });
-        $('#'+$config.target).find('.select2-driver-c').select2({
-            ajax: {
-                url: "{{ url('/v1/operate/select2/select2-driver') }}",
-                type: 'post',
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        _token: $('meta[name="_token"]').attr('content'),
-                        car_category: this.data('driver-category'),
-                        car_type: this.data('driver-type'),
-                        keyword: params.term, // search term
-                        page: params.page
-                    };
-                },
-                processResults: function (data, params) {
-
-                    params.page = params.page || 1;
-                    return {
-                        results: data,
-                        pagination: {
-                            more: (params.page * 30) < data.total_count
-                        }
-                    };
-                },
-                cache: true
-            },
-            escapeMarkup: function (markup) { return markup; }, // var our custom formatter work
-            minimumInputLength: 0,
-            theme: 'classic'
-        });
         $('#'+$config.target).find('.select2-client-c').select2({
             ajax: {
                 url: "{{ url('/v1/operate/select2/select2-client') }}",
@@ -1094,6 +1024,165 @@
             escapeMarkup: function (markup) { return markup; }, // var our custom formatter work
             minimumInputLength: 0,
             theme: 'classic'
+        });
+
+
+
+
+        // 团队
+        $('#'+$config.target).find('.select2--team-c').each(function() {
+            var $that = $(this);
+
+            var $dropdownParent = $(document.body);
+            // var $modalSelector = $that.data('modal');
+            var $modalSelector = '#'+$config.target;
+            if ($modalSelector)
+            {
+                $dropdownParent = $($modalSelector);
+            }
+
+            $that.select2({
+                ajax: {
+                    url: "{{ url('/o1/select2/select2--team') }}",
+                    type: 'post',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            item_category: this.data('item-category'),
+                            item_type: this.data('item-type'),
+                            team_category: this.data('team-category'),
+                            team_type: this.data('team-type'),
+                            department_id: this.data('department-id'),
+                            superior_team_id: this.data('superior-team-id'),
+                            keyword: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function (markup) { return markup; },
+                dropdownParent: $dropdownParent,
+                minimumInputLength: 0,
+                theme: 'classic'
+            });
+
+
+            $that.change(function() {
+
+                var $team_id = $(this).val();
+
+                var $team_target = $(this).data('team-target');
+                $($team_target).val(null).trigger('change');
+                $($team_target).data('superior-team-id',$team_id);
+
+                var $staff_target = $(this).data('staff-target');
+                $($staff_target).val(null).trigger('change');
+                $($staff_target).data('team-id',$team_id);
+            });
+        });
+
+        // 客户
+        $('#'+$config.target).find('.select2--client-c').each(function() {
+            var $that = $(this);
+
+            var $dropdownParent = $(document.body);
+            // var $modalSelector = $that.data('modal');
+            var $modalSelector = '#'+$config.target;
+            if ($modalSelector)
+            {
+                $dropdownParent = $($modalSelector);
+            }
+
+            $that.select2({
+                ajax: {
+                    url: "{{ url('/o1/select2/select2--client') }}",
+                    type: 'post',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            item_category: this.data('item-category'),
+                            item_type: this.data('item-type'),
+                            client_category: this.data('client-category'),
+                            client_type: this.data('client-type'),
+                            keyword: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function (markup) { return markup; },
+                dropdownParent: $dropdownParent,
+                minimumInputLength: 0,
+                theme: 'classic'
+            });
+        });
+        // 项目
+        $('#'+$config.target).find('.select2--project-c').each(function() {
+            var $that = $(this);
+
+            var $dropdownParent = $(document.body);
+            // var $modalSelector = $that.data('modal');
+            var $modalSelector = '#'+$config.target;
+            if ($modalSelector)
+            {
+                $dropdownParent = $($modalSelector);
+            }
+
+            $that.select2({
+                ajax: {
+                    url: "{{ url('/o1/select2/select2--project') }}",
+                    type: 'post',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            item_category: this.data('item-category'),
+                            item_type: this.data('item-type'),
+                            project_category: this.data('project-category'),
+                            project_type: this.data('project-type'),
+                            keyword: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function (markup) { return markup; },
+                dropdownParent: $dropdownParent,
+                minimumInputLength: 0,
+                theme: 'classic'
+            });
         });
     }
 

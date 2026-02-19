@@ -14,8 +14,8 @@
 
             {{--发布日期--}}
 {{--            <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="order-assign" placeholder="发布日期" value="" readonly="readonly" />--}}
-            <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="order-start" placeholder="开始日期" value="" readonly="readonly" />
-            <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="order-ended" placeholder="结束日期" value="" readonly="readonly" />
+            <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-start" placeholder="开始日期" value="" readonly="readonly" />
+            <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-ended" placeholder="结束日期" value="" readonly="readonly" />
 
             {{--创建方式--}}
             @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
@@ -30,7 +30,12 @@
 
             {{--选择团队--}}
             @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
-                <select class="search-filter form-filter filter-xl select2-box-c" name="order-teams[]" id="order-teams" multiple="multiple">
+                <select class="search-filter form-filter filter-xl select2--team-c"
+                        name="order-teams[]"
+                        data-team-category="41"
+                        data-team-type="11"
+                        id="order-teams" multiple="multiple"
+                >
                     <option value="-1">选择团队</option>
                     @if(!empty($team_list) && count($team_list) > 0)
                         @foreach($team_list as $v)
@@ -54,7 +59,7 @@
 
             {{--选择客户--}}
             @if(in_array($me->user_type,[0,1,9,11,61,66]))
-                <select class="search-filter form-filter filter-lg select2-box-c- select2-client-c" data-user-category="1" name="order-client">
+                <select class="search-filter form-filter filter-lg select2--client-c" data-client-category="1" name="order-client">
                     <option value="-1">选择客户</option>
                     @if(!empty($client_list) && count($client_list) > 0)
                         @foreach($client_list as $v)
@@ -65,7 +70,7 @@
             @endif
 
             {{--选择项目--}}
-            <select class="search-filter form-filter filter-lg select2-box-c- select2-project-c" data-item-category="1" name="order-project">
+            <select class="search-filter form-filter filter-lg select2--project-c" data-item-category="1" name="order-project">
                 <option value="-1">选择项目</option>
                 @if(!empty($project_list) && count($project_list) > 0)
                     @foreach($project_list as $v)
@@ -252,51 +257,60 @@
             </button>
 
 
-            <button type="button" onclick="" class="btn btn-default btn-filter bulk-submit-for-order-export" data-item-category="1">
-                <i class="fa fa-download"></i> 批量导出
-            </button>
+{{--            <button type="button" onclick="" class="btn btn-default btn-filter bulk-submit-for-order-export" data-item-category="1">--}}
+{{--                <i class="fa fa-download"></i> 批量导出--}}
+{{--            </button>--}}
             {{--<button type="button" onclick="" class="btn btn-default btn-filter"><i class="fa fa-trash-o"></i> 批量删除</button>--}}
 
 
 
-            {{--交付项目--}}
-            <select class="search-filter form-filter filter-lg select2--project-c"
-                    name="bulk-operate-delivered-project"
-                    data-item-category="1"
-            >
-                <option value="-1">选择交付项目</option>
-                {{--@foreach($project_list as $v)--}}
-                {{--<option value="{{ $v->id }}">{{ $v->name }}</option>--}}
-                {{--@endforeach--}}
-            </select>
+{{--            --}}{{--交付项目--}}
+{{--            <select class="search-filter form-filter filter-lg select2--project-c"--}}
+{{--                    name="bulk-operate-delivered-project"--}}
+{{--                    data-project-category="1"--}}
+{{--            >--}}
+{{--                <option value="-1">选择交付项目</option>--}}
+{{--                --}}{{--@foreach($project_list as $v)--}}
+{{--                --}}{{--<option value="{{ $v->id }}">{{ $v->name }}</option>--}}
+{{--                --}}{{--@endforeach--}}
+{{--            </select>--}}
 
-            {{--交付客户--}}
-            <select class="search-filter form-filter filter-lg select2-box-c- select2-client-c"
-                    name="bulk-operate-delivered-client"
-                    data-user-category="1"
-            >
-                <option value="-1">交付客户</option>
-                @if(!empty($client_list) && count($client_list) > 0)
-                    @foreach($client_list as $v)
-                        <option value="{{ $v->id }}">{{ $v->username }}</option>
-                    @endforeach
-                @endif
-            </select>
+{{--            --}}{{--交付客户--}}
+{{--            <select class="search-filter form-filter filter-lg select2--client-c"--}}
+{{--                    name="bulk-operate-delivered-client"--}}
+{{--                    data-client-category="1"--}}
+{{--            >--}}
+{{--                <option value="-1">选择交付客户</option>--}}
+{{--                @if(!empty($client_list) && count($client_list) > 0)--}}
+{{--                    @foreach($client_list as $v)--}}
+{{--                        <option value="{{ $v->id }}">{{ $v->username }}</option>--}}
+{{--                    @endforeach--}}
+{{--                @endif--}}
+{{--            </select>--}}
 
-            {{--交付结果--}}
-            <select class="search-filter form-filter filter-lg select2-box-c" name="bulk-operate-delivered-result">
-                <option value="-1">选择交付结果</option>
-                @foreach(config('info.delivered_result') as $v)
-                    <option value="{{ $v }}">{{ $v }}</option>
-                @endforeach
-            </select>
+{{--            --}}{{--交付结果--}}
+{{--            <select class="search-filter form-filter filter-lg select2-box-c" name="bulk-operate-delivered-result">--}}
+{{--                <option value="-1">选择交付结果</option>--}}
+{{--                @foreach(config('info.delivered_result') as $v)--}}
+{{--                    <option value="{{ $v }}">{{ $v }}</option>--}}
+{{--                @endforeach--}}
+{{--            </select>--}}
 
-            {{--交付说明--}}
-            <input type="text" class="search-filter filter-lg form-filter" name="bulk-operate-delivered-description" placeholder="交付说明">
+{{--            --}}{{--交付说明--}}
+{{--            <input type="text" class="search-filter filter-lg form-filter" name="bulk-operate-delivered-description" placeholder="交付说明">--}}
 
 
-            <button type="button" class="btn btn-default btn-filter" id="bulk-submit-for-delivered">
-                <i class="fa fa-share"></i> 批量交付
+{{--            <button type="button" class="btn btn-default btn-filter" id="bulk-submit-for-delivered">--}}
+{{--                <i class="fa fa-share"></i> 批量交付--}}
+{{--            </button>--}}
+
+
+            <button type="button" onclick="" class="btn btn-default btn-filter order--bulk-export-summit" data-order-category="1">
+                <i class="fa fa-download"></i> 批量导出
+            </button>
+
+            <button type="button" class="btn btn-default btn-filter order--bulk-delivering-summit--by-fool">
+                <i class="fa fa-share"></i> 批量一键交付
             </button>
 
 

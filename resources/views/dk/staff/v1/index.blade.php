@@ -168,6 +168,8 @@
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-luxury.order-luxury-edit')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-operation-record')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-inspecting')
+    @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-appealing')
+    @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-appealed-handling')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-delivering')
 
 

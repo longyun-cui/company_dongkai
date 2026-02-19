@@ -846,7 +846,7 @@
                             // 申诉
                             if(row.appealed_status == 0 && ['拒绝','拒绝可交付','不合格'].includes(row.inspected_result))
                             {
-                                $html_appeal = '<a class="btn btn-xs bg-red modal-show--for--order--item-appealed" data-id="'+data+'">申诉</a>';
+                                $html_appeal = '<a class="btn btn-xs modal-show--for--order--item-appealing" data-id="'+data+'">申诉</a>';
                             }
                         }
 
