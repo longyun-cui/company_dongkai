@@ -74,7 +74,8 @@ class DK_Staff__TeamRepository {
                 'department_er'=>function($query) { $query->select(['id','name']); },
                 'superior_team_er'=>function($query) { $query->select(['id','name']); },
                 'leader'=>function($query) { $query->select(['id','name']); }
-            ]);
+            ])
+            ->where('active',1);
 
         if(in_array($me->staff_category,[11,21,31,41,51,61,71,81]))
         {

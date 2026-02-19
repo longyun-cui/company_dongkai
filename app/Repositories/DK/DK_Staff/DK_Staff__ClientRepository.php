@@ -68,7 +68,8 @@ class DK_Staff__ClientRepository {
                 'creator'=>function($query) { $query->select(['id','username']); }
             ])
             ->whereIn('client_category',[1,11,31])
-            ->whereIn('client_type',[0,1,9,11,19,21,22,41,61]);
+            ->whereIn('client_type',[0,1,9,11,19,21,22,41,61])
+            ->where('active',1);
 
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");

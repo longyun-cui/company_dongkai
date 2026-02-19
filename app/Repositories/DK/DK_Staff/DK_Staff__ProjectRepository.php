@@ -829,7 +829,8 @@ class DK_Staff__ProjectRepository {
             ->with([
                 'creator'=>function($query) { $query->select(['id','name']); },
             ])
-            ->where(['project_id'=>$id]);
+            ->where(['project_id'=>$id])
+            ->where('active',1);
 
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
 

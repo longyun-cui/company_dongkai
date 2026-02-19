@@ -103,7 +103,8 @@ class DK_Staff__StaffRepository {
             })
             ->when($me->staff_category == 88, function ($query) use($me) {
                 return $query->whereIn('staff_category',[88]);
-            });
+            })
+            ->where('active',1);
 
         if(in_array($me->staff_category,[11,21,31,41,51,61,71,81,88]))
         {
