@@ -216,7 +216,7 @@
             var $modal = $that.parents('.modal-wrapper');
 
             var $value = $(this).val();
-            if($value == 11)
+            if($value == 9)
             {
                 $modal.find('input[name="staff_position"]').prop('checked', false);
                 $modal.find('input[name="staff_position"][value="11"]').prop('checked', true).trigger('change');
