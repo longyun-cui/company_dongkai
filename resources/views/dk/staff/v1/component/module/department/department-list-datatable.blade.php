@@ -110,7 +110,7 @@
                         else if(data == 31) return '<i class="fa fa-star text-green"></i> 财务部';
                         else if(data == 41) return '<i class="fa fa-star text-blue"></i> 客服部';
                         else if(data == 51) return '<i class="fa fa-star text-blue"></i> 质检部';
-                        else if(data == 61) return '<i class="fa fa-star text-blue"></i> 三方质检部';
+                        else if(data == 61) return '<i class="fa fa-star text-blue"></i> 复核部';
                         else if(data == 71) return '<i class="fa fa-star text-blue"></i> 运营部';
                         else if(data == 81) return '<i class="fa fa-star text-blue"></i> 业务部';
                         else if(data == 88) return '<i class="fa fa-star text-blue"></i> 销售渠道部';

@@ -63,7 +63,7 @@
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(row.is_completed != 1)
                         {
                             $(nTd).addClass('modal-show-for-attachment-');
                             $(nTd).attr('data-id',row.id).attr('data-name','附件');

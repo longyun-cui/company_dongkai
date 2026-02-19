@@ -26,7 +26,7 @@
                     <div class="col-md-9">
                         <div class="btn-group">
 
-                            @if(in_array($me->user_type, [0,1,11]))
+                            @if(in_array($me->staff_category, [0,1,9]))
                             <button type="button" class="btn radio-btn radio-company-category">
                                 <span class="radio">
                                     <label>
@@ -36,25 +36,25 @@
                             </button>
                             @endif
 
-                            @if(in_array($me->user_type, [0,1,11]))
-                            <button type="button" class="btn radio-btn radio-company-category">
-                                <span class="radio">
-                                    <label>
-                                        <input type="radio" name="company_category" value="21"> 渠道
-                                    </label>
-                                </span>
-                            </button>
-                            @endif
+{{--                            @if(in_array($me->staff_category, [0,1,11]))--}}
+{{--                            <button type="button" class="btn radio-btn radio-company-category">--}}
+{{--                                <span class="radio">--}}
+{{--                                    <label>--}}
+{{--                                        <input type="radio" name="company_category" value="21"> 渠道--}}
+{{--                                    </label>--}}
+{{--                                </span>--}}
+{{--                            </button>--}}
+{{--                            @endif--}}
 
-                            @if(in_array($me->user_type, [0,1,11,41]))
-                            <button type="button" class="btn radio-btn radio-company-category">
-                                <span class="radio">
-                                    <label>
-                                        <input type="radio" name="company_category" value="31"> 商务
-                                    </label>
-                                </span>
-                            </button>
-                            @endif
+{{--                            @if(in_array($me->staff_category, [0,1,11,41]))--}}
+{{--                            <button type="button" class="btn radio-btn radio-company-category">--}}
+{{--                                <span class="radio">--}}
+{{--                                    <label>--}}
+{{--                                        <input type="radio" name="company_category" value="31"> 商务--}}
+{{--                                    </label>--}}
+{{--                                </span>--}}
+{{--                            </button>--}}
+{{--                            @endif--}}
 
                         </div>
                     </div>
