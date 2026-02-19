@@ -74,7 +74,8 @@ class DK_Staff__CommonRepository {
         $me = $this->me;
 
         $query = DK_Common__Company::select(['id','name as text'])
-            ->where(['item_status'=>1]);
+            ->where(['item_status'=>1])
+            ->where('active',1);
 
         if(!empty($post_data['keyword']))
         {
@@ -136,7 +137,8 @@ class DK_Staff__CommonRepository {
     public function o1__select2__department($post_data)
     {
         $query = DK_Common__Department::select(['id','name as text'])
-            ->where(['item_status'=>1]);
+            ->where(['item_status'=>1])
+            ->where('active',1);
 
         if(!empty($post_data['keyword']))
         {
@@ -173,7 +175,8 @@ class DK_Staff__CommonRepository {
         $me = $this->me;
 
         $query = DK_Common__Team::select(['id','name as text'])
-            ->where(['item_status'=>1]);
+            ->where(['item_status'=>1])
+            ->where('active',1);
 
         if(!empty($post_data['keyword']))
         {
@@ -250,7 +253,8 @@ class DK_Staff__CommonRepository {
         $me = $this->me;
 
         $query = DK_Common__Staff::select(['id','username as text'])
-            ->where(['item_status'=>1]);
+            ->where(['item_status'=>1])
+            ->where('active',1);
 
         if(!empty($post_data['keyword']))
         {
@@ -369,7 +373,8 @@ class DK_Staff__CommonRepository {
     public function o1__select2__client($post_data)
     {
         $query = DK_Common__Client::select(['id','name as text'])
-            ->where(['item_status'=>1]);
+            ->where(['item_status'=>1])
+            ->where('active',1);
 
         if(!empty($post_data['keyword']))
         {
@@ -409,8 +414,9 @@ class DK_Staff__CommonRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = DK_Common__Project::select(['id','name as text','transport_departure_place','transport_destination_place','transport_distance','transport_time_limitation','freight_amount'])
-            ->where('item_status',1);
+        $query = DK_Common__Project::select(['id','name as text','alias_name'])
+            ->where('item_status',1)
+            ->where('active',1);
 
         if(!empty($post_data['keyword']))
         {
