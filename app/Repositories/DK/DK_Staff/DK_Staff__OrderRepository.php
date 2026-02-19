@@ -529,7 +529,7 @@ class DK_Staff__OrderRepository {
             'delivered_project_er'=>function($query) { $query->select('id','name','alias_name'); },
             'delivered_client_er'=>function($query) { $query->select('id','name'); },
             'creator_team_er'=>function($query) { $query->select('id','name'); },
-            'creator_group_er'=>function($query) { $query->select('id','name'); },
+            'creator_team_group_er'=>function($query) { $query->select('id','name'); },
         ]);
 
 //        $list = DK_Common__Order::whereIn('id', $query)
