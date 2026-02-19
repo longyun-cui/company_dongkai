@@ -361,27 +361,33 @@ class DK_Staff__StaffRepository {
             // 判断团队是否存在
             if(empty($post_data['team_id'])) unset($mine_data['team_id']);
 
-
-            if($me->staff_position == 11)
+            if($mine_data['staff_position'] == 11)
             {
-                $mine_data['company_id'] = $me->company_id;
                 $mine_data['department_id'] = 0;
                 $mine_data['team_id'] = 0;
                 $mine_data['team_group_id'] = 0;
             }
+            if($mine_data['staff_position'] == 31)
+            {
+                $mine_data['team_id'] = 0;
+                $mine_data['team_group_id'] = 0;
+            }
+            if($mine_data['staff_position'] == 41)
+            {
+                $mine_data['team_group_id'] = 0;
+            }
+
+
             if($me->staff_position == 31)
             {
                 $mine_data['company_id'] = $me->company_id;
                 $mine_data['department_id'] = $me->department_id;
-                $mine_data['team_id'] = 0;
-                $mine_data['team_group_id'] = 0;
             }
             if($me->staff_position == 41)
             {
                 $mine_data['company_id'] = $me->company_id;
                 $mine_data['department_id'] = $me->department_id;
                 $mine_data['team_id'] = $me->team_id;
-                $mine_data['team_group_id'] = 0;
             }
             if($me->staff_position == 61)
             {
@@ -390,7 +396,6 @@ class DK_Staff__StaffRepository {
                 $mine_data['team_id'] = $me->team_id;
                 $mine_data['team_group_id'] = $me->team_group_id;
             }
-
 
 
             $bool = $mine->fill($mine_data)->save();
