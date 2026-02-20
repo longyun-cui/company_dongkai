@@ -35,6 +35,7 @@
 
 
                 {{--<!-- Add Menu -->--}}
+                @if(in_array($me->staff_category,[0,1,9]) || ($me->staff_category == 71 && $me->staff_position == 31))
                 <li class="dropdown tasks-menu add-menu">
                     <!-- Menu toggle button -->
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -53,7 +54,7 @@
                         @endif
 
 
-                        @if(in_array($me->staff_category,[0,1]))
+                        @if(in_array($me->staff_category,[0,1,9,71]))
                         <li class="header">
                             <a class="modal-show--for--order--import--by-txt"
                                data-form-id="form--for--order--import--by-txt"
@@ -68,6 +69,7 @@
                         <li class="footer"><a href="#">See All Messages</a></li>
                     </ul>
                 </li>
+                @endif
 
 
 
