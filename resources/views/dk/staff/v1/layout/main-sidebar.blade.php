@@ -148,7 +148,7 @@
 
 
             {{--项目列表--}}
-            @if(in_array($me->staff_category,[0,1,9]))
+            @if(in_array($me->staff_category,[0,1,9,71]))
             <li class="treeview _none-">
                 <a class="tab-control datatable-control"
                    data-type="create"
