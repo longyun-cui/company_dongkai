@@ -134,10 +134,10 @@
                         else if(data == 11) return '<i class="fa fa-genderless text-blue"></i> 人事';
                         else if(data == 21) return '<i class="fa fa-genderless text-blue"></i> 行政';
                         else if(data == 31) return '<i class="fa fa-genderless text-blue"></i> 财务';
-                        else if(data == 41) return '<i class="fa fa-genderless text-blue"></i> 客服';
+                        else if(data == 41) return '<i class="fa fa-genderless text-green"></i> 客服';
                         else if(data == 51) return '<i class="fa fa-genderless text-blue"></i> 质检';
-                        else if(data == 61) return '<i class="fa fa-genderless text-blue"></i> 复核';
-                        else if(data == 71) return '<i class="fa fa-genderless text-blue"></i> 运营';
+                        else if(data == 61) return '<i class="fa fa-genderless text-red"></i> 复核';
+                        else if(data == 71) return '<i class="fa fa-genderless text-orange"></i> 运营';
                         else if(data == 81) return '<i class="fa fa-genderless text-blue"></i> 业务';
                         else if(data == 88) return '<i class="fa fa-genderless text-blue"></i> 销售商务';
                         else return "有误";
