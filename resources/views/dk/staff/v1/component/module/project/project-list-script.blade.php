@@ -281,7 +281,7 @@
                         // 团队
                         if($response.data.pivot__project_team)
                         {
-                            $.each($response.data.pivot_project_team, function( key, val ) {
+                            $.each($response.data.pivot__project_team, function( key, val ) {
                                 $modal.find('select[name="team_list[]"]').append(new Option(this.name, this.id, true, true)).trigger('change');
                             });
                         }
