@@ -817,20 +817,66 @@
 
 
 
+        window.addEventListener('play', function(e) {
+            console.log('[全局监听] 播放事件触发:', e.target);
+            const audio = e.target;
+
+            // 1. 获取音频源地址
+            const audioSrc = audio.currentSrc || $(audio).find('source').attr('src');
+            // console.log('音频开始播放:', audioSrc);
+
+            // 2. 设置播放速度 (1.5倍速)
+            var $speed = $('input[name="recording-speed"]:checked').val();
+            audio.playbackRate = $speed; // 默认值1.0，范围0.5-4.0
+            console.log('播放速率已设置:', audio.playbackRate);
+
+            // 3. 可选: 防止多音频同时播放
+            // $('audio').not(this).each(function() {
+            //     this.pause();
+            //     this.currentTime = 0;
+            // });
+            // 暂停其他音频
+            $('audio').each(function() {
+                if (this !== audio && !this.paused) {
+                    this.pause();
+                    this.currentTime = 0;
+                    // updateAudioStatus(this, '已停止');
+                    // addLog(`暂停其他音频: ${this.dataset.audioId}`, 'warning');
+                }
+                else
+                {
+
+                }
+            });
+
+            // this.play();
+
+            // 4. 业务逻辑可在此处添加
+        }, true);
+
+        // 【录音】播放速度
+        $(".main-wrapper").on('click', 'input[name="recording-speed"]', function() {
+            var $speed = $('input[name="recording-speed"]:checked').val();
+
+            $('#modal--for--order--item-inspecting audio').each(function() {
+                if (this.played)
+                {
+                    this.playbackRate = $speed; // 默认值1.0，范围0.5-4.0
+                }
+            });
+        });
 
 
-
-
-
-        // 【审核-获取录音】
-        $(".main-wrapper").on('click', ".item-recording-list-get--for--order--item-inspecting", function() {
+        // 【获取录音】
+        $(".main-wrapper").on('click', ".order--item-recording-list-get-submit", function() {
             var $that = $(this);
-            var $modal_wrapper = $that.closest('.modal-wrapper');
-            var $id = $modal_wrapper.find('input[name="item_id"]').val();
-            var $row = $('tr.operating');
-            console.log($id);
-            // return false;
-
+            var $id = $that.attr('data-id');
+            var $td = $that.parents('td');
+            var $row = $that.parents('tr');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $item_category = $datatable_wrapper.data('datatable-item-category');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+            var $rowIndex = $td.attr('data-row-index');
 
             var $index = layer.load(1, {
                 shade: [0.3, '#fff'],
@@ -848,11 +894,11 @@
             });
 
             $.post(
-                "{{ url('/o1/order/item-call-recording--get--by-api') }}",
+                "{{ url('order--item-recording-list-get-submit') }}",
                 {
                     _token: $('meta[name="_token"]').attr('content'),
                     operate: "order--item-call-recording--get--by-api",
-                    item_id: $id
+                    item_id: $that.attr('data-id')
                 },
                 'json'
             )
@@ -885,14 +931,17 @@
                                 var $audio_html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
                                 $recording_list_html += $audio_html;
                             });
-                            $modal_wrapper.find('.item-recording-box .item-detail-text').html($recording_list_html);
                             $row.find('[data-key="recording_address_play"]').html($recording_list_html);
                             $row.find('[data-key="description"]').attr('data-recording-address',$recording_list_html);
 
                             $row.find('[data-key=recording_address_download]').attr('data-address-list',$item.recording_address_list);
-                            // var $recording_redirection = '<a class="btn btn-xs item-inspected-redirection-recording-list-submit" data-id="'+$id+'">跳转</a>';
-                            // $that.after($recording_redirection);
+                            var $recording_download = '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+$id+'">下载</a>';
+                            $that.after($recording_download);
+                            var $recording_redirection = '<a class="btn btn-xs item-redirection-recording-list-submit" data-id="'+$id+'">跳转</a>';
+                            $that.after($recording_redirection);
                         }
+
+
 
                     }
                 })
@@ -914,6 +963,136 @@
         });
 
 
+
+        // 【强制跳转】
+        $(".main-wrapper").on('click', ".item-redirection-recording-list-submit", function() {
+            var $that = $(this);
+            var $row = $that.parents('tr');
+            var $item_id = $that.data('id');
+            console.log($item_id);
+            console.log($row);
+
+            $recording_list_str = $row.find('td[data-key=recording_address_download]').attr('data-address-list');
+            if($recording_list_str)
+            {
+                var $recording_list = JSON.parse($recording_list_str);
+                console.log($recording_list);
+
+                $.each($recording_list, function($index, $value) {
+
+                    console.log('$recording_list_str');
+                    console.log($index);
+                    console.log($value);
+
+                    var $path = new URL($value).pathname;
+                    var $url = 'http://8.142.7.121:9091/res/rs1/recordFile/listen?file='+$path;
+                    window.open($url);
+
+                    // var $obj = new Object();
+                    // $obj.item_id = $item_id;
+                    //
+                    // $obj.url = $value;
+                    //
+                    // var $randomNumber = Math.floor(Math.random() * 100) + 1;
+                    // $obj.randomNumber = $randomNumber;
+                    // console.log($obj);
+                    //
+                    // var $url = url_build('/download/item-recording-download',$obj);
+                    // window.open($url);
+
+                    // var $url = url_build('/download/call-recording-download',$obj);
+                    // window.open($url);
+
+                    // setTimeout(() => {
+                    //     window.open($url, $randomNumber);
+                    //     this.printOrderDialogShow = false;
+                    // }, 0.3);
+
+
+                });
+            }
+            else
+            {
+                $call_record_id = $row.find('td[data-key=recording_address_download]').attr('data-call-record-id');
+                if($call_record_id && $call_record_id > 0)
+                {
+                    console.log('else');
+                    console.log($call_record_id);
+
+                    // var $obj = new Object();
+                    // $obj.call_record_id = $call_record_id;
+                    //
+                    // var $url = url_build('/download/call-recording-download',$obj);
+                    // window.open($url);
+                }
+
+            }
+
+        });
+        // 【审核-强制跳转】
+        $(".main-wrapper").on('click', ".item-inspected-redirection-recording-list-submit", function() {
+            var $that = $(this);
+            var $modal_wrapper = $that.closest('.modal-wrapper');
+            var $id = $modal_wrapper.find('input[name="detail-inspected-order-id"]').val();
+            var $row = $('tr.operating');
+            console.log($id);
+
+            $recording_list_str = $row.find('td[data-key=recording_address_download]').attr('data-address-list');
+            if($recording_list_str)
+            {
+                var $recording_list = JSON.parse($recording_list_str);
+                console.log($recording_list);
+
+                $.each($recording_list, function($index, $value) {
+
+                    console.log('$recording_list_str');
+                    console.log($index);
+                    console.log($value);
+
+                    var $path = new URL($value).pathname;
+                    var $url = 'http://8.142.7.121:9091/res/rs1/recordFile/listen?file='+$path;
+                    window.open($url);
+
+                    // var $obj = new Object();
+                    // $obj.item_id = $item_id;
+                    //
+                    // $obj.url = $value;
+                    //
+                    // var $randomNumber = Math.floor(Math.random() * 100) + 1;
+                    // $obj.randomNumber = $randomNumber;
+                    // console.log($obj);
+                    //
+                    // var $url = url_build('/download/item-recording-download',$obj);
+                    // window.open($url);
+
+                    // var $url = url_build('/download/call-recording-download',$obj);
+                    // window.open($url);
+
+                    // setTimeout(() => {
+                    //     window.open($url, $randomNumber);
+                    //     this.printOrderDialogShow = false;
+                    // }, 0.3);
+
+
+                });
+            }
+            else
+            {
+                $call_record_id = $row.find('td[data-key=recording_address_download]').attr('data-call-record-id');
+                if($call_record_id && $call_record_id > 0)
+                {
+                    console.log('else');
+                    console.log($call_record_id);
+
+                    // var $obj = new Object();
+                    // $obj.call_record_id = $call_record_id;
+                    //
+                    // var $url = url_build('/download/call-recording-download',$obj);
+                    // window.open($url);
+                }
+            }
+
+        });
 
 
 
@@ -1206,6 +1385,32 @@
                         $modal.find('input[name="field_2"][value="'+$response.data.field_2+'"]').prop('checked', true).trigger('change');
 
                         $modal.find('input[name="recording_address"]').val($response.data.recording_address);
+
+
+                        if($response.data.recording_address)
+                        {
+                            // var $html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+$item.recording_address+'" type="audio/mpeg"></audio>'
+                            // $row.find('[data-key="recording_address_play"]').html($html);
+
+                            var $recording_list = JSON.parse($response.data.recording_address);
+                            var $recording_list_html = '';
+                            $.each($recording_list, function(index, value)
+                            {
+
+                                var $audio_html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
+                                $recording_list_html += $audio_html;
+                            });
+                            $modal.find('.item-recording-box .item-detail-text').html($recording_list_html);
+
+                            $row.find('[data-key="recording_address_play"]').html($recording_list_html);
+                            $row.find('[data-key="order_status"]').attr('data-recording-address',$recording_list_html);
+
+                            $row.find('[data-key=recording_address_download]').attr('data-address-list',$item.recording_address_list);
+                            // var $recording_redirection = '<a class="btn btn-xs item-inspected-redirection-recording-list-submit" data-id="'+$id+'">跳转</a>';
+                            // $that.after($recording_redirection);
+                        }
+
+
                         $modal.find('textarea[name="description"]').val($response.data.description);
 
 
@@ -1303,6 +1508,98 @@
 
             };
             $form.ajaxSubmit(options);
+        });
+
+
+        // 【工单】【审核】【获取录音】
+        $(".main-wrapper").on('click', ".item-recording-list-get--for--order--item-inspecting", function() {
+            var $that = $(this);
+            var $modal_wrapper = $that.closest('.modal-wrapper');
+            var $id = $modal_wrapper.find('input[name="item_id"]').val();
+            var $row = $('tr.operating');
+            console.log($id);
+            // return false;
+
+
+            var $index = layer.load(1, {
+                shade: [0.3, '#fff'],
+                content: '<span class="loadtip">耐心等待中</span>',
+                success: function (layer) {
+                    layer.find('.layui-layer-content').css({
+                        'padding-top': '40px',
+                        'width': '100px',
+                    });
+                    layer.find('.loadtip').css({
+                        'font-size':'20px',
+                        'margin-left':'-18px'
+                    });
+                }
+            });
+
+            $.post(
+                "{{ url('/o1/order/item-call-recording--get--by-api') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: "order--item-call-recording--get--by-api",
+                    item_id: $id
+                },
+                'json'
+            )
+                .done(function($response) {
+
+                    layer.closeAll('loading');
+                    console.log('done');
+                    $response = JSON.parse($response);
+                    if(!$response.success)
+                    {
+                        if($response.msg) layer.msg($response.msg);
+                    }
+                    else
+                    {
+                        layer.msg("请求成功！");
+                        // console.log(JSON.parse($response.data));
+
+                        console.log($response.data.data);
+                        var $item = $response.data.data;
+                        if($item.recording_address_list)
+                        {
+                            // var $html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+$item.recording_address+'" type="audio/mpeg"></audio>'
+                            // $row.find('[data-key="recording_address_play"]').html($html);
+
+                            var $recording_list = JSON.parse($item.recording_address_list);
+                            var $recording_list_html = '';
+                            $.each($recording_list, function(index, value)
+                            {
+
+                                var $audio_html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
+                                $recording_list_html += $audio_html;
+                            });
+                            $modal_wrapper.find('.item-recording-box .item-detail-text').html($recording_list_html);
+                            $row.find('[data-key="recording_address_play"]').html($recording_list_html);
+                            $row.find('[data-key="description"]').attr('data-recording-address',$recording_list_html);
+
+                            $row.find('[data-key=recording_address_download]').attr('data-address-list',$item.recording_address_list);
+                            // var $recording_redirection = '<a class="btn btn-xs item-inspected-redirection-recording-list-submit" data-id="'+$id+'">跳转</a>';
+                            // $that.after($recording_redirection);
+                        }
+
+                    }
+                })
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                    console.log('fail');
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                    layer.msg('服务器错误！');
+
+                })
+                .always(function(jqXHR, textStatus) {
+                    console.log('always');
+                    // console.log(jqXHR);
+                    // console.log(textStatus);
+                    layer.closeAll('loading');
+                });
+
         });
 
 
