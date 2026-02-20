@@ -40,7 +40,7 @@
 
 
             {{--选择项目--}}
-            <select class="search-filter form-filter filter-lg select2-box-c- select2-project-c" data-item-category="1" name="order-project">
+            <select class="search-filter form-filter filter-lg select2-box-c select2-project-c-" data-item-category="1" name="order-project">
                 <option value="-1">选择项目</option>
                 @if(!empty($project_list) && count($project_list) > 0)
                     @foreach($project_list as $v)
