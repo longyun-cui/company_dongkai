@@ -202,7 +202,7 @@ class DK_Staff__ProjectRepository {
         return response_success($item,"");
     }
     // 【项目】获取 GET
-    public function o1__project__item_get_team($post_data)
+    public function o1__project__item_team__get($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -242,7 +242,7 @@ class DK_Staff__ProjectRepository {
         return response_success($item,"");
     }
     // 【项目】获取 GET
-    public function o1__project__item_get_staff($post_data)
+    public function o1__project__item_staff__get($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -476,18 +476,18 @@ class DK_Staff__ProjectRepository {
 
     }
     // 【项目】保存 SAVE
-    public function o1__project__item_set_team__save($post_data)
+    public function o1__project__item_team_set__save($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
-            'project_category.required' => '请选择项目种类！',
-            'name.required' => '请输入项目名称！',
+//            'project_category.required' => '请选择项目种类！',
+//            'name.required' => '请输入项目名称！',
 //            'name.unique' => '该项目已存在！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
-            'project_category' => 'required',
-            'name' => 'required',
+//            'project_category' => 'required',
+//            'name' => 'required',
 //            'name' => 'required|unique:dk_project,name',
         ], $messages);
         if ($v->fails())
@@ -532,7 +532,7 @@ class DK_Staff__ProjectRepository {
             $bool = $mine->fill($mine_data)->save();
             if($bool)
             {
-                // 客服部门
+                // 团队
                 if(!empty($post_data["team_list"]))
                 {
                     $team_insert = [];
@@ -540,13 +540,14 @@ class DK_Staff__ProjectRepository {
                     foreach($list as $v)
                     {
                         $insert = [];
-                        $insert['department_category'] = 41;
                         $insert['department_id'] = $me->department_id;
                         $insert['team_id'] = $v;
                         $insert['created_at'] = $time;
                         $insert['updated_at'] = $time;
                         $team_insert[$v] = $insert;
                     }
+//                    $mine->pivot__project_team()->sync($team_insert);
+                    $mine->pivot__project_team()->detach(['department_id'=>$me->department_id]);
                     $mine->pivot__project_team()->syncWithoutDetaching($team_insert);
                 }
                 else

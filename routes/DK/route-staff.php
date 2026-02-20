@@ -157,8 +157,11 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
     // 【项目】
     Route::post('/o1/project/project-list/datatable-query', $controller.'@o1__project__list__datatable_query');
     Route::post('/o1/project/item-get', $controller.'@o1__project__item_get');
-    Route::post('/o1/project/item-get-team', $controller.'@o1__project__item_get_team');
+    Route::post('/o1/project/item-team--get', $controller.'@o1__project__item_team__get');
+    Route::post('/o1/project/item-staff--get', $controller.'@o1__project__item_staff__get');
     Route::post('/o1/project/item-save', $controller.'@o1__project__item_save');
+    Route::post('/o1/project/item-team-set--save', $controller.'@o1__project__item_team_set__save');
+    Route::post('/o1/project/item-staff-set--save', $controller.'@o1__project__item_staff_set__save');
     // 【项目】删除 & 恢复 & 永久删除
     Route::post('/o1/project/item-delete', $controller.'@o1__project__item_delete');
     Route::post('/o1/project/item-restore', $controller.'@o1__project__item_restore');
