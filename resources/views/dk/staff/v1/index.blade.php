@@ -247,6 +247,14 @@
 {{--    @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-edit-script')--}}
     @if(in_array($me->staff_category,[0,1,9]))
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--admin')
+    @elseif(in_array($me->staff_category,[41]))
+        @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--CSD')
+    @elseif(in_array($me->staff_category,[51]))
+        @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--QID')
+    @elseif(in_array($me->staff_category,[61]))
+        @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--AD')
+    @elseif(in_array($me->staff_category,[71]))
+        @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--OD')
     @else
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--CSD')
     @endif

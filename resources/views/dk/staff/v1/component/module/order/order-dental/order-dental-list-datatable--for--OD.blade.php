@@ -68,7 +68,7 @@
                 },
             },
             "fixedColumns": {
-                "leftColumns": "@if($is_mobile_equipment) 1 @else 3 @endif",
+                "leftColumns": "@if($is_mobile_equipment) 1 @else 2 @endif",
                 "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif",
             },
             "columnDefs": [

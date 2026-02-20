@@ -226,7 +226,7 @@
             </div>
 
             <div class="box-body no-padding">
-                <div class="tableArea table-order full- margin-top-8px">
+                <div class="tableArea table-order- full- margin-top-8px">
                     <table class='table table-striped table-bordered table-hover order-column'>
                         <thead>
                         </thead>
