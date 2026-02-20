@@ -100,9 +100,9 @@ class DK_Staff__OrderRepository {
             {
                 $me_team_id = $me->team_id;
                 $project_ids = DK_Pivot__Team_Project::select('project_id')->where('team_id',$me_team_id)->get()->pluck('project_id')->toArray();
-//                $query->whereIn('dk_common__order.project_id', $project_ids);
+                $query->whereIn('dk_common__order.project_id', $project_ids);
 
-                if(count($project_ids) > 0) $query->whereIn('dk_common__order.project_id', $project_ids);
+//                if(count($project_ids) > 0) $query->whereIn('dk_common__order.project_id', $project_ids);
 //                else $query->whereIn('dk_common__order.project_id', [-1]);
             }
         }
@@ -126,15 +126,6 @@ class DK_Staff__OrderRepository {
                 $query->where('creator_team_id',$me->team_id);
                 $query->where('creator_team_group_id',$me->team_group_id);
                 $query->where('creator_team_group_id','>',0);
-
-//                $query->where(function ($query) use($me) {
-//                    $query->where('creator_id', $me->id)
-//                        ->orWhere(function ($query) use($me) {
-//                            $query->where('creator_team_id',$me->team_id)
-//                                ->where('creator_team_group_id',$me->team_group_id)
-//                                ->where('creator_team_group_id','>',0);
-//                        });
-//                });
             }
             else if($me->staff_position == 99)
             {
@@ -151,63 +142,58 @@ class DK_Staff__OrderRepository {
             if($me->staff_position == 31)
             {
                 // 部门总监
+                $project_list = DK_Pivot__Department_Project::select('project_id')->where('department_id',$me->department_id)->get()->pluck('project_id')->toArray();
+                $query->where('is_published','<>',0)->whereIn('dk_common__order.project_id', $project_list);
             }
             else if($me->staff_position == 41)
             {
-                // 团队经理
-                // 一对一
-//                $subordinates = DK_Common__Staff::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
-//                $query->where('is_published','<>',0)->whereHas('project_er', function ($query) use ($subordinates) {
-//                    $query->whereIn('user_id', $subordinates);
-//                });
-                // 多对对
-//                $subordinates = DK_Common__Staff::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
-//                $project_list = DK_Pivot__Staff_Project::select('project_id')->whereIn('staff_id',$subordinates)->get()->pluck('project_id')->toArray();
-//                $query->where('is_published','<>',0)->whereIn('dk_common__order.project_id', $project_list);
-
+                // 团队经理（多对对）
                 $project_list = DK_Pivot__Team_Project::select('project_id')->where('team_id',$me->team_id)->get()->pluck('project_id')->toArray();
                 $query->where('is_published','<>',0)->whereIn('dk_common__order.project_id', $project_list);
             }
             else if($me->staff_position == 61)
             {
-                // 小组主管
+                // 小组主管（多对对）
+                $staff_ids = DK_Common__Staff::select('id')->where('team_group_id',$me->id)->get()->pluck('id')->toArray();
+                $project_list = DK_Pivot__Staff_Project::select('project_id')->whereIn('staff_id',$staff_ids)->get()->pluck('project_id')->toArray();
+                $query->whereIn('dk_common__order.project_id', $project_list);
             }
             else if($me->staff_position == 99)
             {
-                // 职员
-                // 一对一
-//                $query->where('is_published','<>',0)->whereHas('project_er', function ($query) use ($me) {
-//                    $query->where('user_id', $me->id);
-//                });
-                // 多对多
+                // 职员（多对多）
                 $project_list = DK_Pivot__Staff_Project::select('project_id')->where('staff_id',$me->id)->get()->pluck('project_id')->toArray();
-                $query->where('dk_common__order.is_published','<>',0)->whereIn('dk_common__order.project_id', $project_list);
+                $query->whereIn('dk_common__order.project_id', $project_list);
             }
         }
 
         // 复核部
         if($me->staff_category == 61)
         {
-            $query->where('dk_common__order.is_published','<>',0);
-            $query->where('dk_common__order.appealed_status','>',0);
 
             if($me->staff_position == 31)
             {
-                // 部门总监
+                // 部门总监（多对对）
+                $project_list = DK_Pivot__Department_Project::select('project_id')->where('department_id',$me->department_id)->get()->pluck('project_id')->toArray();
+                $query->where('is_published','<>',0)->whereIn('dk_common__order.project_id', $project_list);
             }
             else if($me->staff_position == 41)
             {
-                // 团队经理
-                $query->where('dk_common__order.is_published','<>',0);
+                // 团队经理（多对对）
+                $project_list = DK_Pivot__Team_Project::select('project_id')->where('team_id',$me->team_id)->get()->pluck('project_id')->toArray();
+                $query->where('is_published','<>',0)->whereIn('dk_common__order.project_id', $project_list);
             }
             else if($me->staff_position == 61)
             {
-                // 小组主管
+                // 小组主管（多对对）
+                $staff_ids = DK_Common__Staff::select('id')->where('team_group_id',$me->id)->get()->pluck('id')->toArray();
+                $project_list = DK_Pivot__Staff_Project::select('project_id')->whereIn('staff_id',$staff_ids)->get()->pluck('project_id')->toArray();
+                $query->whereIn('dk_common__order.project_id', $project_list);
             }
             else if($me->staff_position == 99)
             {
-                // 职员
-                $query->where('dk_common__order.is_published','<>',0);
+                // 职员（多对多）
+                $project_list = DK_Pivot__Staff_Project::select('project_id')->where('staff_id',$me->id)->get()->pluck('project_id')->toArray();
+                $query->whereIn('dk_common__order.project_id', $project_list);
             }
         }
 
@@ -348,21 +334,59 @@ class DK_Staff__OrderRepository {
         }
 
 
-        // 客户
-        if(isset($post_data['client']))
-        {
-            $client = intval($post_data['client']);
-            if(!in_array($client,[-1,0]))
-            {
-                $query->where('dk_common__order.client_id', $client);
-            }
-        }
+
+        // 项目
+//        if(isset($post_data['project']))
+//        {
+//            $projectId = intval($post_data['project']);
+//            if(!in_array($projectId,[-1,0]))
+//            {
+//                if(isset($post_data['distribute_type']) && $post_data['distribute_type'] == 1)
+//                {
+//                    $project = DK_Common__Project::find($post_data['project']);
+//                    $project_ids = DK_Common__Project::select('id')
+//                        ->where('item_status',1)
+//                        ->where('location_city',$project->location_city)
+//                        ->pluck('id');
+//
+//                    $query
+//                        ->leftJoin('dk_common__delivery as d', function($join) use ($post_data,$project_ids) {
+//                            $join->on('d.client_phone', '=', 'dk_common__order.client_phone')
+//                                ->where('d.project_id', '=', $post_data['project']);
+//                        })
+//                        ->leftJoin('dk_common__order as o2', function($join) use ($projectId) {
+//                            $join->on('o2.client_phone', '=', 'dk_common__order.client_phone')
+//                                ->where('o2.project_id', '=', $projectId);
+//                        })
+//                        ->whereIn('dk_common__order.project_id', $project_ids)
+//                        ->where('dk_common__order.project_id', '!=', $post_data['project'])
+//                        ->whereNull('d.client_phone')
+//                        ->whereNull('o2.id')
+//                        ->where('dk_common__order.inspected_result','通过');
+//                }
+//                else
+//                {
+//                    $query->where('dk_common__order.project_id', $projectId);
+//                }
+//            }
+//        }
+
 
         // 项目
         if(isset($post_data['project']))
         {
-            $projectId = intval($post_data['project']);
-            if(!in_array($projectId,[-1,0]))
+            $project = intval($post_data['project']);
+            if(!in_array($project,[-1,0]))
+            {
+                $query->where('dk_common__order.project_id', $project);
+            }
+        }
+
+        // 交付项目
+        if(isset($post_data['delivered_project']))
+        {
+            $delivered_projectId = intval($post_data['delivered_project']);
+            if(!in_array($delivered_projectId,[-1,0]))
             {
                 if(isset($post_data['distribute_type']) && $post_data['distribute_type'] == 1)
                 {
@@ -373,26 +397,38 @@ class DK_Staff__OrderRepository {
                         ->pluck('id');
 
                     $query
-                        ->leftJoin('dk_pivot_client_delivery as d', function($join) use ($post_data,$project_ids) {
+                        ->leftJoin('dk_common__delivery as d', function($join) use ($post_data,$project_ids) {
                             $join->on('d.client_phone', '=', 'dk_common__order.client_phone')
                                 ->where('d.project_id', '=', $post_data['project']);
                         })
-                        ->leftJoin('dk_common__order as o2', function($join) use ($projectId) {
+                        ->leftJoin('dk_common__order as o2', function($join) use ($delivered_projectId) {
                             $join->on('o2.client_phone', '=', 'dk_common__order.client_phone')
-                                ->where('o2.project_id', '=', $projectId);
+                                ->where('o2.delivered_project_id', '=', $delivered_projectId);
                         })
-                        ->whereIn('dk_common__order.project_id', $project_ids)
-                        ->where('dk_common__order.project_id', '!=', $post_data['project'])
+                        ->whereIn('dk_common__order.delivered_project_id', $project_ids)
+                        ->where('dk_common__order.delivered_project_id', '!=', $delivered_projectId)
                         ->whereNull('d.client_phone')
                         ->whereNull('o2.id')
                         ->where('dk_common__order.inspected_result','通过');
                 }
                 else
                 {
-                    $query->where('dk_common__order.project_id', $projectId);
+                    $query->where('dk_common__order.project_id', $delivered_projectId);
                 }
             }
         }
+
+
+        // 交付客户
+        if(isset($post_data['delivered_client']))
+        {
+            $client = intval($post_data['delivered_client']);
+            if(!in_array($client,[-1,0]))
+            {
+                $query->where('dk_common__order.delivered_client_id', $client);
+            }
+        }
+
 
         // 客户类型
         if(isset($post_data['client_type']))

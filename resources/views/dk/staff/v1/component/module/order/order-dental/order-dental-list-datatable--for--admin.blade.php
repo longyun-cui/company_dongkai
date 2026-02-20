@@ -44,11 +44,12 @@
                     d.name = $tableSearch.find('input[name="order-name"]').val();
                     d.title = $tableSearch.find('input[name="order-title"]').val();
                     d.keyword = $tableSearch.find('input[name="order-keyword"]').val();
-                    d.department_district = $tableSearch.find('select[name="order-department-district[]"]').val();
+                    d.team_list = $tableSearch.find('select[name="order-team-list[]"]').val();
                     d.staff = $tableSearch.find('select[name="order-staff"]').val();
                     d.distribute_type = $tableSearch.find('select[name="order-distribute-type"]').val();
                     d.project = $tableSearch.find('select[name="order-project"]').val();
-                    d.client = $tableSearch.find('select[name="order-client"]').val();
+                    d.delivered_project = $tableSearch.find('select[name="order-delivered-project"]').val();
+                    d.delivered_client = $tableSearch.find('select[name="order-delivered-client"]').val();
                     d.status = $tableSearch.find('select[name="order-status"]').val();
                     d.order_type = $tableSearch.find('select[name="order-type"]').val();
                     d.client_name = $tableSearch.find('input[name="order-client-name"]').val();

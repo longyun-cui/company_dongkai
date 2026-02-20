@@ -29,9 +29,9 @@
             @endif
 
             {{--选择团队--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
+            @if(in_array($me->staff_category,[0,1,9,51,71]))
                 <select class="search-filter form-filter filter-xl select2--team-c"
-                        name="order-teams[]"
+                        name="order-team-list[]"
                         data-team-category="41"
                         data-team-type="11"
                         id="order-teams" multiple="multiple"
@@ -57,20 +57,8 @@
 {{--                </select>--}}
 {{--            @endif--}}
 
-            {{--选择客户--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66]))
-                <select class="search-filter form-filter filter-lg select2--client-c" data-client-category="1" name="order-client">
-                    <option value="-1">选择客户</option>
-                    @if(!empty($client_list) && count($client_list) > 0)
-                        @foreach($client_list as $v)
-                            <option value="{{ $v->id }}">{{ $v->username }}</option>
-                        @endforeach
-                    @endif
-                </select>
-            @endif
-
             {{--选择项目--}}
-            <select class="search-filter form-filter filter-lg select2--project-c" data-item-category="1" name="order-project">
+            <select class="search-filter form-filter filter-lg select2-box-c select2--project-c-" data-item-category="1" name="order-project">
                 <option value="-1">选择项目</option>
                 @if(!empty($project_list) && count($project_list) > 0)
                     @foreach($project_list as $v)
@@ -78,6 +66,30 @@
                     @endforeach
                 @endif
             </select>
+
+            {{--选择交付项目--}}
+            @if(in_array($me->staff_category,[0,1,9,71]))
+            <select class="search-filter form-filter filter-lg select2-box-c select2--project-c-" data-client-category="1" name="order-delivered-project">
+                <option value="-1">选择交付项目</option>
+                @if(!empty($project_list) && count($project_list) > 0)
+                    @foreach($project_list as $v)
+                        <option value="{{ $v->id }}">{{ $v->name }}</option>
+                    @endforeach
+                @endif
+            </select>
+            @endif
+
+            {{--选择交付客户--}}
+            @if(in_array($me->staff_category,[0,1,9,71]))
+            <select class="search-filter form-filter filter-lg select2--client-c" data-client-category="1" name="order-delivered-client">
+                <option value="-1">选择交付项目</option>
+                @if(!empty($client_list) && count($client_list) > 0)
+                    @foreach($client_list as $v)
+                        <option value="{{ $v->id }}">{{ $v->name }}</option>
+                    @endforeach
+                @endif
+            </select>
+            @endif
 
             {{--客户类型--}}
             <select class="search-filter form-filter filter-md select2-box-c" name="order-client-type">

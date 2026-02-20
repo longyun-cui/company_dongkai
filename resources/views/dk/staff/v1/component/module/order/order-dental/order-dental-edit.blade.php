@@ -50,13 +50,18 @@
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 项目</label>
                     <div class="col-md-9 ">
-                        <select class="form-control select2-box-c select2--project"
+                        <select class="form-control modal--select2 select2-box-c- select2--project-"
                                 name="project_id"
                                 id="order-edit-select2-project"
                                 data-modal="#modal--for--order-dental--item-edit"
                                 data-project-category="1"
                         >
                             <option data-id="" value="">选择项目</option>
+                            @if(!empty($project_list) && count($project_list) > 0)
+                                @foreach($project_list as $v)
+                                    <option value="{{ $v->id }}">{{ $v->name }}</option>
+                                @endforeach
+                            @endif
                         </select>
                     </div>
                 </div>

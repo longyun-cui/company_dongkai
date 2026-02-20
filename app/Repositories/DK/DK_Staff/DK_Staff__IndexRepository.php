@@ -12,6 +12,10 @@ use App\Models\DK\DK_Common\DK_Common__Client;
 use App\Models\DK\DK_Common\DK_Common__Project;
 use App\Models\DK\DK_Common\DK_Common__Order;
 
+use App\Models\DK\DK_Common\DK_Pivot__Department_Project;
+use App\Models\DK\DK_Common\DK_Pivot__Staff_Project;
+use App\Models\DK\DK_Common\DK_Pivot__Team_Project;
+
 use App\Models\DK\DK_API_BY_Received;
 
 
@@ -138,7 +142,83 @@ class DK_Staff__IndexRepository {
         $last_month_start_timestamp = strtotime($last_month_start_date); // 上月开始时间戳
         $last_month_ended_timestamp = strtotime($last_month_ended_datetime); // 上月月结束时间戳
 
+//        $project_list
 
+
+        // 客服部
+        if($me->staff_category == 41)
+        {
+            if($me->staff_position == 31)
+            {
+                // 部门总监
+                $project_ids = DK_Pivot__Department_Project::select('project_id')->where('department_id',$me->department_id)->get()->pluck('project_id')->toArray();
+                $project_list = DK_Common__Project::select('id','name')->where('item_status',1)->whereIn('id',$project_ids)->get();
+                $view_data['project_list'] = $project_list;
+            }
+            if(in_array($me->staff_position,[41,51,61,71,99]))
+            {
+                // 团队成员
+                $project_ids = DK_Pivot__Team_Project::select('project_id')->where('team_id',$me->team_id)->get()->pluck('project_id')->toArray();
+                $project_list = DK_Common__Project::select('id','name')->where('item_status',1)->whereIn('id',$project_ids)->get();
+                $view_data['project_list'] = $project_list;
+            }
+        }
+
+        // 质检部 & 复核部
+        if(in_array($me->staff_category,[51,61]))
+        {
+            if($me->staff_position == 31)
+            {
+                // 部门总监
+                $project_ids = DK_Pivot__Department_Project::select('project_id')->where('department_id',$me->department_id)->get()->pluck('project_id')->toArray();
+                $project_list = DK_Common__Project::select('id','name')->where('item_status',1)->whereIn('id',$project_ids)->get();
+                $view_data['project_list'] = $project_list;
+            }
+            else if($me->staff_position == 41)
+            {
+                // 团队经理（多对对）
+                $project_ids = DK_Pivot__Team_Project::select('project_id')->where('team_id',$me->team_id)->get()->pluck('project_id')->toArray();
+                $project_list = DK_Common__Project::select('id','name')->where('item_status',1)->whereIn('id',$project_ids)->get();
+                $view_data['project_list'] = $project_list;
+            }
+            else if($me->staff_position == 61)
+            {
+                // 小组主管（多对对）
+                $staff_ids = DK_Common__Staff::select('id')->where('team_group_id',$me->id)->get()->pluck('id')->toArray();
+                $project_ids = DK_Pivot__Staff_Project::select('project_id')->whereIn('staff_id',$staff_ids)->get()->pluck('project_id')->toArray();
+                $project_list = DK_Common__Project::select('id','name')->where('item_status',1)->whereIn('id',$project_ids)->get();
+                $view_data['project_list'] = $project_list;
+            }
+            else if($me->staff_position == 99)
+            {
+                // 职员（多对多）
+                $project_ids = DK_Pivot__Staff_Project::select('project_id')->where('staff_id',$me->id)->get()->pluck('project_id')->toArray();
+                $project_list = DK_Common__Project::select('id','name')->where('item_status',1)->whereIn('id',$project_ids)->get();
+                $view_data['project_list'] = $project_list;
+            }
+        }
+
+        // 运营部
+        if($me->staff_category == 71)
+        {
+
+            if($me->staff_position == 31)
+            {
+                // 部门总监
+            }
+            else if($me->staff_position == 41)
+            {
+                // 团队经理
+            }
+            else if($me->staff_position == 61)
+            {
+                // 小组主管
+            }
+            else if($me->staff_position == 99)
+            {
+                // 职员
+            }
+        }
 
         $location_city_list = DK_Common__Location::select('id','location_city')->whereIn('item_status',[1])->get();
         $view_data['location_city_list'] = $location_city_list;
