@@ -35,6 +35,11 @@ Route::group(['middleware' => ['yh.super.login']], function () {
 
 
 
+    Route::match(['get','post'], '/staff/staff--list', $controller.'@view__staff__staff_list');
+    Route::match(['get','post'], '/staff/staff--item-login', $controller.'@operate__staff__item_login');
+
+
+
     /*
      * 用户管理
      */

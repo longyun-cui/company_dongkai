@@ -2,6 +2,7 @@
 namespace App\Repositories\DK;
 
 use App\Models\DK\DK_Client;
+use App\Models\DK\DK_Common\DK_Common__Staff;
 use App\Models\DK\DK_Customer;
 use App\Models\DK\DK_Department;
 use App\Models\DK\DK_Order;
@@ -71,6 +72,75 @@ class DKSuperRepository {
         $view_blade = env('TEMPLATE_DK_SUPER').'entrance.index';
         return view($view_blade);
     }
+
+
+
+
+
+
+
+
+
+    // 【用户】【员工管理】返回-列表-视图
+    public function view__staff__staff_list($post_data)
+    {
+        $this->get_me();
+
+        $return['menu_active_of_user_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_SUPER').'entrance.staff.staff-list';
+        return view($view_blade)->with($return);
+    }
+    // 【用户】【员工管理】返回-列表-数据
+    public function get__staff__staff_list__datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_Common__Staff::select('*')
+            ->with([
+                'creator'=>function($query) { $query->select(['id','name']); },
+                'company_er'=>function($query) { $query->select(['id','name']); },
+                'department_er'=>function($query) { $query->select(['id','name']); },
+                'team_er'=>function($query) { $query->select(['id','name']); },
+                'team_sub_er'=>function($query) { $query->select(['id','name']); },
+                'team_group_er'=>function($query) { $query->select(['id','name']); },
+                'leader'=>function($query) { $query->select(['id','name']); }
+            ]);
+//            ->whereIn('user_category',[11])
+//            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,71,77,81,84,88,91]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
 
 
 

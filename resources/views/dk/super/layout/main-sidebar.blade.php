@@ -56,6 +56,16 @@
 
 
             {{--用户管理--}}
+            <li class="header">员工系统</li>
+
+            <li class="treeview {{ $menu_active_of_staff_list or '' }}">
+                <a href="{{ url('/staff/staff--list') }}">
+                    <i class="fa fa-user"></i><span>员工列表</span>
+                </a>
+            </li>
+
+
+            {{--用户管理--}}
             <li class="header">用户管理</li>
 
             <li class="treeview {{ $menu_active_of_staff_list_for_all or '' }}">

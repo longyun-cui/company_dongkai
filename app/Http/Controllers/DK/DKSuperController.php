@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\DK;
 
+use App\Models\DK\DK_Common\DK_Common__Staff;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -85,6 +86,42 @@ class DKSuperController extends Controller
     {
         return $this->repo->view_super_index();
     }
+
+
+
+
+
+    // 【用户】【全部用户】返回-列表-视图
+    public function view__staff__staff_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view__staff__staff_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get__staff__staff_list__datatable(request()->all());
+    }
+    public function operate__staff__item_login()
+    {
+        $staff_id = request()->get('staff_id');
+        $mine = DK_Common__Staff::where('id',$staff_id)->first();
+        if($mine)
+        {
+            Auth::guard('dk_staff_user')->login($mine,true);
+            $token = request()->get('_token');
+            Auth::guard('dk_staff_user')->user()->only_token = $token;
+            Auth::guard('dk_staff_user')->user()->save();
+
+            $return['user'] = $mine;
+            $return['url'] = env('DK_STAFF__DOMAIN');
+
+            if(request()->isMethod('get')) return redirect(env('DK_STAFF__DOMAIN'));
+            else if(request()->isMethod('post'))
+            {
+                return response_success($return);
+            }
+        }
+        else return response_error([]);
+    }
+
+
+
 
 
     /*
