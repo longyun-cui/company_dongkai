@@ -91,6 +91,16 @@
             </select>
             @endif
 
+
+            {{--可分发--}}
+            @if(in_array($me->staff_category,[0,1,9,71]))
+                <select class="search-filter form-filter filter-md select2-box-c" name="order-distribute-type">
+                    <option value="">常规筛选</option>
+                    <option value="1">可分发</option>
+                </select>
+            @endif
+
+
             {{--客户类型--}}
             <select class="search-filter form-filter filter-md select2-box-c" name="order-client-type">
                 <option value="-1">客户类型</option>
@@ -98,11 +108,15 @@
                     <option value="{{ $k }}">{{ $v }}</option>
                 @endforeach
             </select>
-            {{--可分发--}}
-            @if(in_array($me->staff_category,[0,1,9,71]))
-                <select class="search-filter form-filter filter-md select2-box-c" name="order-distribute-type">
-                    <option value="">常规筛选</option>
-                    <option value="1">可分发</option>
+
+
+            {{--录音质量--}}
+            @if(in_array($me->staff_category,[0,1,9,51,61,71]))
+                <select class="search-filter form-filter filter-md select2-box-c" name="order-recording-quality">
+                    <option value="-1">录音质量</option>
+                    <option value="0">合格</option>
+                    <option value="1">优秀</option>
+                    <option value="9">问题</option>
                 </select>
             @endif
 
@@ -130,15 +144,8 @@
                     @endforeach
                 @endif
             </select>
-            {{--录音质量--}}
-            @if(in_array($me->staff_category,[0,1,9,51,61,71]))
-                <select class="search-filter form-filter filter-md select2-box-c" name="order-recording-quality">
-                    <option value="-1">录音质量</option>
-                    <option value="0">合格</option>
-                    <option value="1">优秀</option>
-                    <option value="9">问题</option>
-                </select>
-            @endif
+
+
             {{--申诉状态--}}
             @if(in_array($me->staff_category,[0,1,9,61]))
                 <select class="search-filter form-filter filter-md select2-box-c" name="order-appealed-status">
@@ -154,7 +161,6 @@
             @if(in_array($me->staff_category,[0,1,9,71]))
             <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="order-delivered_date" placeholder="交付日期" value="" readonly="readonly" />
             @endif
-
             {{--交付状态--}}
             @if(in_array($me->staff_category,[0,1,9,71]))
             <select class="search-filter form-filter filter-lg select2-box-c" name="order-delivered-status">
@@ -164,7 +170,6 @@
                 <option value="已操作">已操作</option>
             </select>
             @endif
-
             {{--交付结果--}}
             @if(in_array($me->staff_category,[0,1,9,71]))
             <select class="search-filter form-filter filter-xl select2-box-c" name="order-delivered-result[]" multiple="multiple">
