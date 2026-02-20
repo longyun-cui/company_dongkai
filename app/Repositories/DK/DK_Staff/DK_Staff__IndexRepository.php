@@ -144,7 +144,7 @@ class DK_Staff__IndexRepository {
 
 //        $project_list
 
-
+        $project_query = DK_Common__Project::select('id','name')->where('item_status',1);
         // 客服部
         if($me->staff_category == 41)
         {
@@ -152,15 +152,16 @@ class DK_Staff__IndexRepository {
             {
                 // 部门总监
                 $project_ids = DK_Pivot__Department_Project::select('project_id')->where('department_id',$me->department_id)->get()->pluck('project_id')->toArray();
-                $project_list = DK_Common__Project::select('id','name')->where('item_status',1)->whereIn('id',$project_ids)->get();
-                $view_data['project_list'] = $project_list;
+//                $project_list = DK_Common__Project::select('id','name')->where('item_status',1)->whereIn('id',$project_ids)->get();
+                $project_query->whereIn('id',$project_ids)->get();
             }
             if(in_array($me->staff_position,[41,51,61,71,99]))
             {
                 // 团队成员
                 $project_ids = DK_Pivot__Team_Project::select('project_id')->where('team_id',$me->team_id)->get()->pluck('project_id')->toArray();
-                $project_list = DK_Common__Project::select('id','name')->where('item_status',1)->whereIn('id',$project_ids)->get();
-                $view_data['project_list'] = $project_list;
+                $project_query->whereIn('id',$project_ids)->get();
+//                $project_list = DK_Common__Project::select('id','name')->where('item_status',1)->whereIn('id',$project_ids)->get();
+//                $view_data['project_list'] = $project_list;
             }
         }
 
@@ -171,30 +172,34 @@ class DK_Staff__IndexRepository {
             {
                 // 部门总监
                 $project_ids = DK_Pivot__Department_Project::select('project_id')->where('department_id',$me->department_id)->get()->pluck('project_id')->toArray();
-                $project_list = DK_Common__Project::select('id','name')->where('item_status',1)->whereIn('id',$project_ids)->get();
-                $view_data['project_list'] = $project_list;
+                $project_query->whereIn('id',$project_ids)->get();
+//                $project_list = DK_Common__Project::select('id','name')->where('item_status',1)->whereIn('id',$project_ids)->get();
+//                $view_data['project_list'] = $project_list;
             }
             else if($me->staff_position == 41)
             {
                 // 团队经理（多对对）
                 $project_ids = DK_Pivot__Team_Project::select('project_id')->where('team_id',$me->team_id)->get()->pluck('project_id')->toArray();
-                $project_list = DK_Common__Project::select('id','name')->where('item_status',1)->whereIn('id',$project_ids)->get();
-                $view_data['project_list'] = $project_list;
+                $project_query->whereIn('id',$project_ids)->get();
+//                $project_list = DK_Common__Project::select('id','name')->where('item_status',1)->whereIn('id',$project_ids)->get();
+//                $view_data['project_list'] = $project_list;
             }
             else if($me->staff_position == 61)
             {
                 // 小组主管（多对对）
                 $staff_ids = DK_Common__Staff::select('id')->where('team_group_id',$me->id)->get()->pluck('id')->toArray();
                 $project_ids = DK_Pivot__Staff_Project::select('project_id')->whereIn('staff_id',$staff_ids)->get()->pluck('project_id')->toArray();
-                $project_list = DK_Common__Project::select('id','name')->where('item_status',1)->whereIn('id',$project_ids)->get();
-                $view_data['project_list'] = $project_list;
+                $project_query->whereIn('id',$project_ids)->get();
+//                $project_list = DK_Common__Project::select('id','name')->where('item_status',1)->whereIn('id',$project_ids)->get();
+//                $view_data['project_list'] = $project_list;
             }
             else if($me->staff_position == 99)
             {
                 // 职员（多对多）
                 $project_ids = DK_Pivot__Staff_Project::select('project_id')->where('staff_id',$me->id)->get()->pluck('project_id')->toArray();
-                $project_list = DK_Common__Project::select('id','name')->where('item_status',1)->whereIn('id',$project_ids)->get();
-                $view_data['project_list'] = $project_list;
+                $project_query->whereIn('id',$project_ids)->get();
+//                $project_list = DK_Common__Project::select('id','name')->where('item_status',1)->whereIn('id',$project_ids)->get();
+//                $view_data['project_list'] = $project_list;
             }
         }
 
@@ -219,6 +224,10 @@ class DK_Staff__IndexRepository {
                 // 职员
             }
         }
+
+        $project_list = $project_query->get();
+        $view_data['project_list'] = $project_list;
+
 
         $location_city_list = DK_Common__Location::select('id','location_city')->whereIn('item_status',[1])->get();
         $view_data['location_city_list'] = $location_city_list;
