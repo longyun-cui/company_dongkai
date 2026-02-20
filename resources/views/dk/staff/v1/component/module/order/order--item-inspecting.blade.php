@@ -191,7 +191,7 @@
                         <label class="control-label col-md-2">通话录音</label>
                         <div class="col-md-9 control-label" style="text-align:left;">
                             <span class="item-detail-text"></span>
-                            <a class="btn btn-xs item-inspected-get-recording-list-submit">获取录音</a>
+                            <a class="btn btn-xs item-recording-list-get--for--order--item-inspecting">获取录音</a>
                         </div>
                         <div class="col-md-9 col-md-offset-2">
                             <div class="btn-group">

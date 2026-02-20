@@ -19,6 +19,9 @@ class DK_Common__Team extends Model
         'team_active', 'team_status',
         'team_category', 'team_type',
 
+        'rank',
+        'version',
+
         'owner_id', 'creator_id', 'updater_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id', 'admin_id',
 
         'name', 'username', 'nickname', 'true_name', 'short_name', 'alias_name',
@@ -38,6 +41,16 @@ class DK_Common__Team extends Model
         'superior_team_sub_id',
         'superior_team_group_id',
         'leader_id',
+
+
+        'serverFrom_id',
+        'serverFrom_name',
+        'api_customer_account',
+        'api_customer_name',
+        'api_customer_user_name',
+        'api_customer_password',
+
+        'pre_unit_price',
 
         'visit_num', 'share_num', 'favor_num',  'follow_num', 'fans_num',
     ];

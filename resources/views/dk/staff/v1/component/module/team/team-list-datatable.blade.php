@@ -315,6 +315,7 @@
                     render: function(data, type, row, meta) {
 
                         var $html_edit = '';
+                        var $html_set = '<a class="btn btn-xs modal-show--for--team-item-edit--by--super" data-id="'+data+'">设置</a>';
                         var $html_detail = '';
                         var $html_able = '';
                         var $html_delete = '';
@@ -340,6 +341,9 @@
 
                         var html =
                             '<a class="btn btn-xs modal-show--for--team-item-edit" data-id="'+data+'">编辑</a>'+
+                            @if($me->staff_category == 0)
+                            $html_set+
+                            @endif
                             $html_able+
                             $html_delete+
                             $html_operation_record+

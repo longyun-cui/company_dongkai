@@ -145,6 +145,7 @@
     @include(env('DK_STAFF__TEMPLATE').'component.module.department.department--item-operation-record')
     {{--团队--}}
     @include(env('DK_STAFF__TEMPLATE').'component.module.team.team-edit')
+    @include(env('DK_STAFF__TEMPLATE').'component.module.team.team-edit--by--super')
     @include(env('DK_STAFF__TEMPLATE').'component.module.team.team--item-operation-record')
     {{--员工--}}
     @include(env('DK_STAFF__TEMPLATE').'component.module.staff.staff-edit')

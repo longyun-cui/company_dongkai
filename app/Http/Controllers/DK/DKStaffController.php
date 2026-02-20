@@ -507,6 +507,11 @@ class DKStaffController extends Controller
     {
         return $this->team_repo->o1__team__item_save(request()->all());
     }
+    // 【团队】编辑-保存
+    public function o1__team__item_save__by__super()
+    {
+        return $this->team_repo->o1__team__item_save__by__super(request()->all());
+    }
     // 【团队】删除
     public function o1__team__item_delete()
     {
@@ -898,9 +903,9 @@ class DKStaffController extends Controller
 
 
     // 【工单】获取录音
-    public function o1__order__item_get_call_record__by_api()
+    public function o1__order__item_call_recording__get__by_api()
     {
-        return $this->order_repo->o1__order__item_get_call_record__by_api(request()->all());
+        return $this->order_repo->o1__order__item_call_recording__get__by_api(request()->all());
     }
 
 

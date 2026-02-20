@@ -343,6 +343,90 @@ class DK_Staff__TeamRepository {
         }
 
     }
+    // 【团队】保存 SAVE
+    public function o1__team__item_save__by__super($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+//            'name.required' => '请输入团队名称！',
+//            'name.unique' => '该团队号已存在！',
+//            'department_id.required' => '请先选择部门！',
+//            'department_id.numeric' => '请先选择部门！',
+//            'department_id.min' => '请先选择部门！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+//            'name' => 'required',
+//            'name' => 'required|unique:DK_Common__Team,name',
+//            'department_id' => 'required|numeric|min:1',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+
+        $operate = $post_data["operate"];
+        $operate_type = $operate["type"];
+        $operate_id = $operate['id'];
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->staff_category,[0])) return response_error([],"你没有操作权限！");
+
+
+        if($operate_type == 'create') // 添加 ( $id==0，添加一个新用户 )
+        {
+            $is_exist = DK_Common__Team::select('id')->where('name',$post_data["name"])->count();
+            if($is_exist) return response_error([],"该【团队】已存在，请勿重复添加！");
+
+            $mine = new DK_Common__Team;
+            $post_data["active"] = 1;
+            $post_data["creator_id"] = $me->id;
+        }
+        else if($operate_type == 'edit') // 编辑
+        {
+            $mine = DK_Common__Team::find($operate_id);
+            if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
+        }
+        else return response_error([],"参数有误！");
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if(!empty($post_data['custom']))
+            {
+                $post_data['custom'] = json_encode($post_data['custom']);
+            }
+
+            $mine_data = $post_data;
+            unset($mine_data['operate']);
+
+
+            $bool = $mine->fill($mine_data)->save();
+            if($bool)
+            {
+            }
+            else throw new Exception("DK_Common__Team--update--fail");
+
+            DB::commit();
+            return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
 
 
     // 【团队】删除

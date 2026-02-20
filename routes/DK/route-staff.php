@@ -72,6 +72,8 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
     Route::post('/o1/company/item-operation-record-list/datatable-query', $controller.'@o1__company__item_operation_record_list__datatable_query');
 
 
+
+
     // 【部门】
     Route::post('/o1/department/department-list/datatable-query', $controller.'@o1__department__list__datatable_query');
     Route::post('/o1/department/item-get', $controller.'@o1__department__item_get');
@@ -87,10 +89,13 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
     Route::post('/o1/department/item-operation-record-list/datatable-query', $controller.'@o1__department__item_operation_record_list__datatable_query');
 
 
+
+
     // 【团队】
     Route::post('/o1/team/team-list/datatable-query', $controller.'@o1__team__list__datatable_query');
     Route::post('/o1/team/item-get', $controller.'@o1__team__item_get');
     Route::post('/o1/team/item-save', $controller.'@o1__team__item_save');
+    Route::post('/o1/team/item-save--by--super', $controller.'@o1__team__item_save__by__super');
     // 【团队】删除 & 恢复 & 永久删除
     Route::post('/o1/team/item-delete', $controller.'@o1__team__item_delete');
     Route::post('/o1/team/item-restore', $controller.'@o1__team__item_restore');
@@ -100,6 +105,8 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
     Route::post('/o1/team/item-disable', $controller.'@o1__team__item_disable');
     // 【团队】操作记录
     Route::post('/o1/team/item-operation-record-list/datatable-query', $controller.'@o1__team__item_operation_record_list__datatable_query');
+
+
 
 
     // 【员工】
@@ -211,7 +218,7 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
     Route::post('/o1/order/bulk-delivering-save--by-fool', $controller.'@o1__order__bulk_delivering_save__by_fool');
     Route::post('/o1/order/item-distributing-save', $controller.'@o1__order__item_distributing_save');
     // 【工单】api
-    Route::post('/o1/order/item-get-call-record--by-api', $controller.'@o1__order__item_get_call_record__by_api');
+    Route::post('/o1/order/item-call-recording--get--by-api', $controller.'@o1__order__item_call_recording__get__by_api');
     // 【工单】操作记录
     Route::post('/o1/order/item-operation-record-list/datatable-query', $controller.'@o1__order__item_operation_record_list__datatable_query');
     Route::post('/o1/order/item-delivery-record-list/datatable-query', $controller.'@o1__order__item_delivery_record_list__datatable_query');

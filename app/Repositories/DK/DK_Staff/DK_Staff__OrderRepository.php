@@ -4804,7 +4804,7 @@ class DK_Staff__OrderRepository {
 
 
     // 【工单】外呼系统呼叫记录
-    public function o1__order__item_get_call_record__by_api($post_data)
+    public function o1__order__item_call_recording__get__by_api($post_data)
     {
 //        dd($post_data);
 //        return response_success([]);
@@ -4823,7 +4823,7 @@ class DK_Staff__OrderRepository {
         }
 
         $operate = $post_data["operate"];
-        if($operate != 'item-get-api-call-record') return response_error([],"参数[operate]有误！");
+        if($operate != 'order--item-call-recording--get--by-api') return response_error([],"参数[operate]有误！");
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
@@ -4837,7 +4837,7 @@ class DK_Staff__OrderRepository {
         $agent[] = $staff->api_staffNo;
 
         $team = DK_Common__Team::withTrashed()->find($team_id);
-        if(!$team) return response_error([],"该【所属部门】不存在，刷新页面重试！");
+        if(!$team) return response_error([],"所属【团队】不存在，刷新页面重试！");
 
 
         $serverFrom_name = $team->serverFrom_name;
@@ -4948,7 +4948,7 @@ class DK_Staff__OrderRepository {
 
                             if(count($file) == 1)
                             {
-                                $item->recording_address = $file[0];
+//                                $item->recording_address = $file[0];
                                 $item->recording_address_list = json_encode($file);
                             }
                             else
