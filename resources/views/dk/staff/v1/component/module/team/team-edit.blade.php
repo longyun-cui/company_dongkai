@@ -70,7 +70,9 @@
                             <button type="button" class="btn radio-btn radio-team-category">
                                 <span class="radio">
                                     <label>
-                                        <input type="radio" name="team_category" value="51"> 质检
+                                        <input type="radio" name="team_category" value="51"
+                                               @if($me->staff_category == 51) checked="checked" data-default="default" @endif
+                                        > 质检
                                     </label>
                                 </span>
                             </button>
@@ -80,7 +82,9 @@
                             <button type="button" class="btn radio-btn radio-team-category">
                                 <span class="radio">
                                     <label>
-                                        <input type="radio" name="team_category" value="61"> 复核
+                                        <input type="radio" name="team_category" value="61"
+                                               @if($me->staff_category == 61) checked="checked" data-default="default" @endif
+                                        > 复核
                                     </label>
                                 </span>
                             </button>
@@ -90,7 +94,9 @@
                             <button type="button" class="btn radio-btn radio-team-category">
                                 <span class="radio">
                                     <label>
-                                        <input type="radio" name="team_category" value="71"> 运营
+                                        <input type="radio" name="team_category" value="71"
+                                               @if($me->staff_category == 71) checked="checked" data-default="default" @endif
+                                        > 运营
                                     </label>
                                 </span>
                             </button>
