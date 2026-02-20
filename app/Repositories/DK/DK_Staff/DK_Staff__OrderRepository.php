@@ -100,9 +100,9 @@ class DK_Staff__OrderRepository {
             {
                 $me_team_id = $me->team_id;
                 $project_ids = DK_Pivot__Team_Project::select('project_id')->where('team_id',$me_team_id)->get()->pluck('project_id')->toArray();
-                $query->whereIn('dk_common__order.project_id', $project_ids);
+//                $query->whereIn('dk_common__order.project_id', $project_ids);
 
-//                if(count($project_ids) > 0) $query->whereIn('dk_common__order.project_id', $project_ids);
+                if(count($project_ids) > 0) $query->whereIn('dk_common__order.project_id', $project_ids);
 //                else $query->whereIn('dk_common__order.project_id', [-1]);
             }
         }
