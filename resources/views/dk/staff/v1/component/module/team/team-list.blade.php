@@ -30,10 +30,19 @@
 
             <input type="text" class="search-filter form-filter filter-keyup" name="team-name" placeholder="名称" />
 
+            <select class="search-filter form-filter select2-box-c" name="team-category">
+                <option value ="-1">全部</option>
+                <option value ="41">客服</option>
+                <option value ="51">质检</option>
+                <option value ="61">复核</option>
+                <option value ="71">运营</option>
+                <option value ="88">销售</option>
+            </select>
+
             <select class="search-filter form-filter select2-box-c" name="team-type">
                 <option value ="-1">全部</option>
-                <option value ="11">大区</option>
-                <option value ="21">小组</option>
+                <option value ="11">团队</option>
+                <option value ="31">小组</option>
             </select>
 
             <select class="search-filter form-filter select2-box-c" name="team-status">

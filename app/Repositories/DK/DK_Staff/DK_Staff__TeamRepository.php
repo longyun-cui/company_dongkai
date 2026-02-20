@@ -122,10 +122,20 @@ class DK_Staff__TeamRepository {
             $query->where('item_status', 1);
         }
 
+        // 团队种类 [客服|质检|复核|运营]
+        if(!empty($post_data['team_category']))
+        {
+            $team_category_int = intval($post_data['team_category']);
+            if(!in_array($team_category_int,[-1,0]))
+            {
+                $query->where('team_category', $team_category_int);
+            }
+        }
+
         // 团队类型 [团队|分部|小组|小队]
         if(!empty($post_data['team_type']))
         {
-            $team_type_int = intval($post_data['item_status']);
+            $team_type_int = intval($post_data['team_type']);
             if(!in_array($team_type_int,[-1,0]))
             {
                 $query->where('team_type', $team_type_int);

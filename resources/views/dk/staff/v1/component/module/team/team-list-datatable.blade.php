@@ -28,8 +28,9 @@
                     d.name = $tableSearch.find('input[name="team-name"]').val();
                     d.title = $tableSearch.find('input[name="team-title"]').val();
                     d.keyword = $tableSearch.find('input[name="team-keyword"]').val();
-                    d.item_status = $tableSearch.find('select[name="team-status"]').val();
+                    d.team_category = $tableSearch.find('select[name="team-category"]').val();
                     d.team_type = $tableSearch.find('select[name="team-type"]').val();
+                    d.item_status = $tableSearch.find('select[name="team-status"]').val();
                     d.team_work_status = $tableSearch.find('select[name="team-work-status"]').val();
                 },
             },
