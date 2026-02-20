@@ -35,7 +35,7 @@
 
 
                 {{--<!-- Add Menu -->--}}
-                @if(in_array($me->staff_category,[0,1,9]) || ($me->staff_category == 71 && $me->staff_position == 31))
+                @if(in_array($me->staff_category,[0,1]))
                 <li class="dropdown tasks-menu add-menu">
                     <!-- Menu toggle button -->
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -76,7 +76,7 @@
 
 
                 {{--生产统计--}}
-                @if(in_array($me->staff_category,[0,1,9,11,61,66,41,81,84]))
+                @if(in_array($me->staff_category,[0,1,9,11,71]))
                 <li class="dropdown tasks-menu add-menu">
 
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -337,7 +337,7 @@
 
 
                 {{--销售统计--}}
-                @if(in_array($me->staff_category,[0,1,9,11,61,66]))
+                @if(in_array($me->staff_category,[0,1,9,11,71]))
                 <li class="dropdown tasks-menu add-menu _none">
 
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -373,7 +373,7 @@
 
 
                 {{--销售统计--}}
-                @if(in_array($me->staff_category,[0,1,9,11,61,66]))
+                @if(in_array($me->staff_category,[0,1,9,11,71]))
                 <li class="dropdown tasks-menu add-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                         统计日报 <span class="caret"></span>

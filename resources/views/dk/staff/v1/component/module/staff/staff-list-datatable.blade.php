@@ -25,10 +25,12 @@
                     d._token = $('meta[name="_token"]').attr('content');
                     d.id = $('input[name="staff-id"]').val();
                     d.mobile = $('input[name="staff-mobile"]').val();
-                    d.username = $('input[name="staff-username"]').val();
-                    d.department_district = $tableSearch.find('select[name="staff-department-district"]').val();
-                    d.staff_type = $tableSearch.find('select[name="staff-type"]').val();
+                    d.name = $('input[name="staff-name"]').val();
+                    d.department = $tableSearch.find('select[name="staff-department"]').val();
+                    d.team = $tableSearch.find('select[name="staff-team"]').val();
                     d.staff_status = $tableSearch.find('select[name="staff-status"]').val();
+                    d.staff_category = $tableSearch.find('select[name="staff-category"]').val();
+                    d.staff_position = $tableSearch.find('select[name="staff-position"]').val();
                 },
             },
             "fixedColumns": {

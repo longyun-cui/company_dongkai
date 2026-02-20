@@ -157,6 +157,15 @@ class DK_Staff__StaffRepository {
                 $query->where('staff_category', $staff_category_int);
             }
         }
+        // 员工职位
+        if(!empty($post_data['staff_position']))
+        {
+            $staff_position_int = intval($post_data['staff_position']);
+            if(!in_array($staff_position_int,[-1,0]))
+            {
+                $query->where('staff_position', $staff_position_int);
+            }
+        }
 
 
         // 公司
@@ -176,6 +185,16 @@ class DK_Staff__StaffRepository {
             if(!in_array($department_id_int,[-1,0]))
             {
                 $query->where('department_id', $department_id_int);
+            }
+        }
+
+        // 团队
+        if(!empty($post_data['team_id']))
+        {
+            $team_id_int = intval($post_data['team_id']);
+            if(!in_array($team_id_int,[-1,0]))
+            {
+                $query->where('team_id', $department_id_int);
             }
         }
 
