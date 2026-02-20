@@ -885,7 +885,7 @@
                                 var $audio_html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
                                 $recording_list_html += $audio_html;
                             });
-                            $modal_wrapper.find('.item-detail-recording .item-detail-text').html($recording_list_html);
+                            $modal_wrapper.find('.item-recording-box .item-detail-text').html($recording_list_html);
                             $row.find('[data-key="recording_address_play"]').html($recording_list_html);
                             $row.find('[data-key="description"]').attr('data-recording-address',$recording_list_html);
 
