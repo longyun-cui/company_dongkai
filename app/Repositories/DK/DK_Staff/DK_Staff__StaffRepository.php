@@ -360,6 +360,7 @@ class DK_Staff__StaffRepository {
 
             // 判断团队是否存在
             if(empty($post_data['team_id'])) unset($mine_data['team_id']);
+            if(empty($mine_data['team_group_id'])) unset($mine_data['team_group_id']);
 
             if($mine_data['staff_position'] == 11)
             {
@@ -396,6 +397,7 @@ class DK_Staff__StaffRepository {
                 $mine_data['team_id'] = $me->team_id;
                 $mine_data['team_group_id'] = $me->team_group_id;
             }
+
 
 
             $bool = $mine->fill($mine_data)->save();

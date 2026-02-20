@@ -36,6 +36,7 @@
                         d.keyword = $('input[name="order-delivery-keyword"]').val();
                         d.type = $('select[name="order-delivery-type"]').val();
                         d.status = $('select[name="order-delivery-status"]').val();
+                        d.draw = (new Date().getTime());
                     },
                     "cache": false,
                 },

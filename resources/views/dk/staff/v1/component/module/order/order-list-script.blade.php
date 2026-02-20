@@ -1622,6 +1622,7 @@
 
 
 
+
         // 【工单】【交付】显示
         $(".main-wrapper").off('click', ".modal-show--for--order--item-delivering").on('click', ".modal-show--for--order--item-delivering", function() {
             var $that = $(this);
@@ -1721,6 +1722,122 @@
                         // var $order = $response.data.order;
                         // console.log($row);
                         // console.log($order);
+                        // update_order_row($row,$order);
+                    }
+                },
+                error: function(xhr, status, error, $form) {
+                    // 请求失败时的回调
+                    layer.closeAll('loading');
+                    layer.msg('服务器错误！');
+                    console.log($(this).attr('id')+'.click.error');
+                },
+                complete: function(xhr, status, $form) {
+                    // 无论成功或失败都会执行的回调
+                    layer.closeAll('loading');
+                    console.log($(this).attr('id')+'.click.complete');
+                }
+            };
+            $form.ajaxSubmit(options);
+        });
+
+
+        // 【工单】【交付】显示
+        $(".main-wrapper").off('click', ".modal-show--for--order--item-distributing").on('click', ".modal-show--for--order--item-distributing", function() {
+            var $that = $(this);
+            var $id = $(this).data('id');
+            var $row = $that.parents('tr');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $item_category = $datatable_wrapper.data('datatable-item-category');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+
+            var $delivery_datatable_id = 'datatable--for--order--item-distributing--of--delivery-record-list';
+            Datatable__for__Order_Item_Delivery_Record_List.init($delivery_datatable_id,$id);
+
+
+            $('.datatable-wrapper').removeClass('operating');
+            $datatable_wrapper.addClass('operating');
+            $datatable_wrapper.find('tr').removeClass('operating');
+            $row.addClass('operating');
+
+
+            var $modal_id = 'modal--for--order--item-distributing';
+            var $modal = $("#"+$modal_id);
+
+            var $form_id = 'form--for--order--item-distributing';
+            var $form = $("#"+$form_id);
+
+
+            $modal.find('input[name="operate[id]"]').val($id);
+            $modal.find('input[name="item_id"]').val($id);
+
+
+            form_reset("#"+$form_id);
+
+
+            $modal.find('.id-box').html('【'+$id+'】');
+
+
+            $modal.find('.edit-submit').attr('data-datatable-list-id',$table_id);
+
+            $modal.modal('show');
+        });
+        // 【工单】【交付】提交
+        $(".main-wrapper").off('click', "#item-submit--for--order--item-distributing").on('click', "#item-submit--for--order--item-distributing", function() {
+            var $that = $(this);
+            var $item_id = $that.data('item-id');
+            var $table_id = $that.data('datatable-list-id');
+            var $row = $('#'+$table_id).find('[data-key="id"][data-value='+$item_id+']').parents('tr');
+
+            var $modal_id = 'modal--for--order--item-distributing';
+            var $modal = $("#"+$modal_id);
+
+            var $form_id = 'form--for--order--item-distributing';
+            var $form = $("#"+$form_id);
+
+            var $index = layer.load(1, {
+                shade: [0.3, '#fff'],
+                content: '<span class="loadtip">正在提交</span>',
+                success: function (layer) {
+                    layer.find('.layui-layer-content').css({
+                        'padding-top': '40px',
+                        'width': '100px',
+                    });
+                    layer.find('.loadtip').css({
+                        'font-size':'20px',
+                        'margin-left':'-18px'
+                    });
+                }
+            });
+
+            var options = {
+                url: "{{ url('/o1/order/item-distributing-save') }}",
+                type: "post",
+                dataType: "json",
+                // target: "#div2",
+                // clearForm: true,
+                // restForm: true,
+                success: function ($response, status, xhr, $form) {
+                    // 请求成功时的回调
+                    layer.closeAll('loading');
+                    if(!$response.success)
+                    {
+                        layer.msg($response.msg);
+                    }
+                    else
+                    {
+                        layer.msg($response.msg);
+
+                        // 重置输入框
+                        form_reset("#"+$form_id);
+
+                        // $modal.modal('hide');
+                        // $modal.modal('hide').on("hidden.bs.modal", function () {
+                        //     $("body").addClass("modal-open");
+                        // });
+
+                        // $('#'+$table_id).DataTable().ajax.reload(null,false);
+
+                        // var $order = $response.data.order;
                         // update_order_row($row,$order);
                     }
                 },
