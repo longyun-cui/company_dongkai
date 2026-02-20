@@ -141,7 +141,7 @@
                         >
                             <option value="">选择牙齿数量</option>
                             @if(!empty(config('dk.common-config.teeth_count')))
-                            @foreach(config('dk.common-config.teeth_count') as $v)
+                            @foreach(config('dk.common-config.teeth_count') as $k => $v)
                                 <option value ="{{ $k }}">{{ $v }}</option>
                             @endforeach
                             @endif

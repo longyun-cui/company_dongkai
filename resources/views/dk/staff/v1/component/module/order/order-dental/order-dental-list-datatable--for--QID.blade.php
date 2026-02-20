@@ -655,12 +655,12 @@
                 {
                     "title": "牙齿数量",
                     "name": "teeth_count",
-                    "data": "teeth_count",
+                    "data": "field_1",
                     "className": "",
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -676,7 +676,13 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        return data;
+                        if(data == 1) return '1-2颗';
+                        else if(data == 2) return '3-5颗';
+                        else if(data == 3) return '6颗';
+                        else if(data == 11) return '半口';
+                        else if(data == 19) return '全口';
+                        else if(data == 99) return '其他';
+                        else return data;
                     }
                 },
                 {

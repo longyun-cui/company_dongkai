@@ -809,7 +809,7 @@
                 {
                     "title": "牙齿数量",
                     "name": "teeth_count",
-                    "data": "teeth_count",
+                    "data": "field_1",
                     "className": "",
                     "width": "80px",
                     "orderable": false,
@@ -830,7 +830,13 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        return data;
+                        if(data == 1) return '1-2颗';
+                        else if(data == 2) return '3-5颗';
+                        else if(data == 3) return '6颗';
+                        else if(data == 11) return '半口';
+                        else if(data == 19) return '全口';
+                        else if(data == 99) return '其他';
+                        else return data;
                     }
                 },
                 {

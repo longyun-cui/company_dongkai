@@ -1007,6 +1007,29 @@ class DKStaffController extends Controller
         }
     }
 
+    // 【数据-导出】工单-下载
+    public function o1__export__delivery__export__by_ids()
+    {
+        $order_category = request('order_category',0);
+
+        if($order_category == 1)
+        {
+            return $this->export_repo->o1__export__delivery_dental__export__by_ids(request()->all());
+        }
+        else if($order_category == 11)
+        {
+            return $this->export_repo->o1__export__delivery_aesthetic__export__by_ids(request()->all());
+        }
+        else if($order_category == 31)
+        {
+            return $this->export_repo->o1__export__delivery_luxury__export__by_ids(request()->all());
+        }
+        else
+        {
+            return $this->export_repo->o1__export__delivery__export__by_ids(request()->all());
+        }
+    }
+
 
 
 

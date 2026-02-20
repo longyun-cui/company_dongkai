@@ -1085,5 +1085,259 @@ class DK_Staff__ExportRepository {
     }
 
 
+    // 【数据导出】工单
+    public function operate_statistic_export_for_order_by_ids($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->staff_cagetory,[0,1,9,71])) return view($this->view_blade_403);
+
+
+        if(in_array($me->staff_cagetory,[0,1,9,71]))
+        {
+            $team_id = $me->team_id;
+        }
+        else $team_id = 0;
+
+
+        $ids = $post_data['ids'];
+        $ids_array = explode("-", $ids);
+
+        $record_operate_type = 100;
+        $record_column_type = 'ids';
+        $record_before = '';
+        $record_after = '';
+        $record_title = $ids;
+
+        // 工单
+        $query = DK_Order::select('*')
+            ->with([
+                'creator'=>function($query) { $query->select('id','name'); },
+                'inspector'=>function($query) { $query->select('id','name'); },
+                'client_er'=>function($query) { $query->select('id','name'); },
+                'project_er'=>function($query) { $query->select('id','name','alias_name'); },
+                'team_er'=>function($query) { $query->select('id','name'); },
+                'team_group_er'=>function($query) { $query->select('id','name'); }
+            ])
+//            ->when($team_id, function ($query) use ($team_id) {
+//                return $query->where('team_id', $team_id);
+//            })
+            ->whereIn('id',$ids_array);
+
+//        if(in_array($me->user_type,[77]))
+//        {
+//            $query->where('inspector_id',$me->id);
+//        }
+
+
+
+        $data = $query->orderBy('id','desc')->get();
+        $data = $data->toArray();
+//        $data = $data->groupBy('car_id')->toArray();
+//        dd($data);
+
+        $cellData = [];
+        foreach($data as $k => $v)
+        {
+            $cellData[$k]['id'] = $v['id'];
+
+            $cellData[$k]['client_er_name'] = $v['client_er']['name'];
+            if($v['delivered_at']) $cellData[$k]['delivered_at'] = date('Y-m-d H:i:s', $v['delivered_at']);
+            else $cellData[$k]['delivered_at'] = '';
+
+            $cellData[$k]['creator_name'] = $v['creator']['true_name'];
+            $cellData[$k]['team'] = $v['department_district_er']['name'].' - '.$v['department_group_er']['name'];
+            $cellData[$k]['published_time'] = date('Y-m-d H:i:s', $v['published_at']);
+
+            $cellData[$k]['project_er_name'] = $v['project_er']['name'];
+            if($me->department_district_id <= 0)
+            {
+                $cellData[$k]['project_er_alias_name'] = $v['project_er']['alias_name'];
+            }
+//            $cellData[$k]['channel_source'] = $v['channel_source'];
+
+
+            if($v['client_type'] == 1) $cellData[$k]['client_type'] = "种植牙";
+            else if($v['client_type'] == 2) $cellData[$k]['client_type'] = "矫正";
+            else if($v['client_type'] == 3) $cellData[$k]['client_type'] = "正畸";
+            else $cellData[$k]['client_type'] = "未选择";
+
+
+            $cellData[$k]['client_name'] = $v['client_name'];
+            $cellData[$k]['client_phone'] = $v['client_phone'];
+            if(in_array($me->user_type,[71,77]))
+            {
+                $time = time();
+                // if(($v['inspected_at'] > 0) && (($time - $v['inspected_at']) > 86400))
+                if(($v['inspected_at'] > 0) && (!isToday($v['inspected_at'])))
+                {
+                    $client_phone = $v['client_phone'];
+                    $cellData[$k]['client_phone'] = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
+                }
+            }
+
+
+            // 微信号 & 是否+V
+            $cellData[$k]['wx_id'] = $v['wx_id'];
+            if($v['is_wx'] == 1) $cellData[$k]['is_wx'] = '是';
+            else $cellData[$k]['is_wx'] = '--';
+
+            $cellData[$k]['location_city'] = $v['location_city'];
+            $cellData[$k]['location_district'] = $v['location_district'];
+
+            $cellData[$k]['teeth_count'] = $v['teeth_count'];
+
+            $cellData[$k]['description'] = $v['description'];
+
+            // 录音
+//            if($v['recording_address_list'])
+//            {
+//                $recording_address_list_text = "";
+//                $recording_address_list = json_decode($v['recording_address_list']);
+//                if(count($recording_address_list) > 0)
+//                {
+//                    foreach($recording_address_list as $key => $recording)
+//                    {
+////                        $recording_address_list_text .= $recording."\r\n";
+//                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
+//                    }
+//                }
+//                else
+//                {
+//                    if($v['call_record_id'] > 0)
+//                    {
+//                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+//                    }
+//                    else $recording_address_list_text = $v['recording_address'];
+//                }
+//                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
+//
+//            }
+//            else
+//            {
+//                if($v['call_record_id'] > 0)
+//                {
+//                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+//                }
+//                else $cellData[$k]['recording_address'] = $v['recording_address'];
+//            }
+            if(!empty($v['recording_address_list']))
+            {
+                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['id'],'2024').'&phone='.$v['client_phone'];
+            }
+            else
+            {
+                $cellData[$k]['recording_address'] = '';
+            }
+
+
+            // 是否重复
+            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
+            else $cellData[$k]['is_repeat'] = '--';
+
+            // 审核
+            $cellData[$k]['inspector_name'] = $v['inspector']['true_name'];
+            $cellData[$k]['inspected_time'] = date('Y-m-d H:i:s', $v['inspected_at']);
+            $cellData[$k]['inspected_result'] = $v['inspected_result'];
+        }
+
+
+        if($me->department_district_id <= 0)
+        {
+            $title_row = [
+                'id'=>'ID',
+                'client_er_name'=>'客户',
+                'delivered_at'=>'交付时间',
+                'creator_name'=>'创建人',
+                'team'=>'团队',
+                'published_time'=>'提交时间',
+                'project_er_name'=>'项目',
+                'project_er_alias_name'=>'医院真实名称',
+//            'channel_source'=>'渠道来源',
+                'client_type'=>'患者类型',
+                'client_name'=>'客户姓名',
+                'client_phone'=>'客户电话',
+                'wx_id'=>'微信号',
+                'is_wx'=>'是否+V',
+                'location_city'=>'所在城市',
+                'location_district'=>'行政区',
+                'teeth_count'=>'牙齿数量',
+                'description'=>'通话小结',
+                'recording_address'=>'录音地址',
+                'is_repeat'=>'是否重复',
+                'inspector_name'=>'审核人',
+                'inspected_time'=>'审核时间',
+                'inspected_result'=>'审核结果',
+            ];
+        }
+        else
+        {
+            $title_row = [
+                'id'=>'ID',
+                'client_er_name'=>'客户',
+                'delivered_at'=>'交付时间',
+                'creator_name'=>'创建人',
+                'team'=>'团队',
+                'published_time'=>'提交时间',
+                'project_er_name'=>'项目',
+//            'channel_source'=>'渠道来源',
+                'client_type'=>'患者类型',
+                'client_name'=>'客户姓名',
+                'client_phone'=>'客户电话',
+                'wx_id'=>'微信号',
+                'is_wx'=>'是否+V',
+                'location_city'=>'所在城市',
+                'location_district'=>'行政区',
+                'teeth_count'=>'牙齿数量',
+                'description'=>'通话小结',
+                'recording_address'=>'录音地址',
+                'is_repeat'=>'是否重复',
+                'inspector_name'=>'审核人',
+                'inspected_time'=>'审核时间',
+                'inspected_result'=>'审核结果',
+            ];
+        }
+        array_unshift($cellData, $title_row);
+
+
+        $record = new DK_Record;
+
+        $record_data["ip"] = Get_IP();
+        $record_data["record_object"] = 21;
+        $record_data["record_category"] = 11;
+        $record_data["record_type"] = 1;
+        $record_data["creator_id"] = $me->id;
+        $record_data["operate_object"] = 71;
+        $record_data["operate_category"] = 109;
+        $record_data["operate_type"] = $record_operate_type;
+        $record_data["column_type"] = $record_column_type;
+        $record_data["before"] = $record_before;
+        $record_data["after"] = $record_after;
+        $record_data["title"] = $record_title;
+
+        $record->fill($record_data)->save();
+
+
+
+
+        $title = '【工单】'.date('Ymd.His').'_by_ids';
+
+        $file = Excel::create($title, function($excel) use($cellData) {
+            $excel->sheet('全部工单', function($sheet) use($cellData) {
+                $sheet->rows($cellData);
+                $sheet->setWidth(array(
+                    'A'=>10, 'B'=>20, 'C'=>20, 'D'=>20, 'E'=>20, 'F'=>20, 'G'=>20,
+                    'H'=>20, 'I'=>20, 'J'=>20, 'K'=>20, 'L'=>20, 'M'=>20, 'N'=>20,
+                    'O'=>20, 'P'=>20, 'Q'=>60, 'R'=>60, 'S'=>60, 'T'=>20,
+                    'U'=>20, 'V'=>20, 'W'=>20, 'X'=>60, 'Y'=>60, 'Z'=>20
+                ));
+                $sheet->setAutoSize(false);
+                $sheet->freezeFirstRow();
+            });
+        })->export('xls');
+
+    }
+
+
 
 }
