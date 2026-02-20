@@ -100,18 +100,42 @@
                             $modal.find('select[name="client_id"]').append(new Option($response.data.client_er.name, $response.data.client_id, true, true)).trigger('change');
                         }
 
-                        if($response.data.pivot_project_staff)
+                        // 客服部
+                        if($response.data.pivot__project_department__csd)
                         {
-                            $.each($response.data.pivot_project_staff, function( key, val ) {
-                                $modal.find('select[name="peoples[]"]').append(new Option(this.username, this.id, true, true)).trigger('change');
+                            $.each($response.data.pivot__project_department__csd, function( key, val ) {
+                                $modal.find('select[name="CSD_department_list[]"]').append(new Option(this.name, this.id, true, true)).trigger('change');
                             });
                         }
-                        if($response.data.pivot_project_team)
+                        // 质检部
+                        if($response.data.pivot__project_department__qid)
                         {
-                            $.each($response.data.pivot_project_team, function( key, val ) {
-                                $modal.find('select[name="teams[]"]').append(new Option(this.name, this.id, true, true)).trigger('change');
+                            $.each($response.data.pivot__project_department__qid, function( key, val ) {
+                                $modal.find('select[name="QID_department_list[]"]').append(new Option(this.name, this.id, true, true)).trigger('change');
                             });
                         }
+                        // 复核部
+                        if($response.data.pivot__project_department__ad)
+                        {
+                            $.each($response.data.pivot__project_department__ad, function( key, val ) {
+                                $modal.find('select[name="AD_department_list[]"]').append(new Option(this.name, this.id, true, true)).trigger('change');
+                            });
+                        }
+
+                        // // 团队
+                        // if($response.data.pivot__project_team)
+                        // {
+                        //     $.each($response.data.pivot_project_team, function( key, val ) {
+                        //         $modal.find('select[name="teams[]"]').append(new Option(this.name, this.id, true, true)).trigger('change');
+                        //     });
+                        // }
+                        // // 员工
+                        // if($response.data.pivot__project_staff)
+                        // {
+                        //     $.each($response.data.pivot_project_staff, function( key, val ) {
+                        //         $modal.find('select[name="peoples[]"]').append(new Option(this.username, this.id, true, true)).trigger('change');
+                        //     });
+                        // }
 
                         var $datatable_wrapper = $that.closest('.datatable-wrapper');
                         var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");

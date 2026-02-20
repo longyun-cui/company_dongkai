@@ -122,39 +122,6 @@
                     }
                 },
                 {
-                    "title": "来源",
-                    "name": "created_type",
-                    "data": "created_type",
-                    "className": "",
-                    "width": "60px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        var $result_html = '';
-                        if(data == 1)
-                        {
-                            $result_html = '<small class="btn-xs bg-green">人工</small>';
-                        }
-                        else if(data == 91)
-                        {
-                            $result_html = '<small class="btn-xs bg-red">百应AI</small>';
-                        }
-                        else if(data == 99)
-                        {
-                            $result_html = '<small class="btn-xs bg-red">API</small>';
-                        }
-                        else if(data == 9)
-                        {
-                            $result_html = '<small class="btn-xs bg-yellow">导入</small>';
-                        }
-                        else
-                        {
-                            $result_html = '<small class="btn-xs bg-black">有误</small>';
-                        }
-                        return $result_html;
-                    }
-                },
-                {
                     "title": "工单状态",
                     "name": "order_status",
                     "data": "id",
@@ -245,6 +212,39 @@
                     }
                 },
                 {
+                    "title": "来源",
+                    "name": "created_type",
+                    "data": "created_type",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(!data) return '--';
+                        var $result_html = '';
+                        if(data == 1)
+                        {
+                            $result_html = '<small class="btn-xs bg-green">人工</small>';
+                        }
+                        else if(data == 91)
+                        {
+                            $result_html = '<small class="btn-xs bg-red">百应AI</small>';
+                        }
+                        else if(data == 99)
+                        {
+                            $result_html = '<small class="btn-xs bg-red">API</small>';
+                        }
+                        else if(data == 9)
+                        {
+                            $result_html = '<small class="btn-xs bg-yellow">导入</small>';
+                        }
+                        else
+                        {
+                            $result_html = '<small class="btn-xs bg-black">有误</small>';
+                        }
+                        return $result_html;
+                    }
+                },
+                {
                     "title": "审核状态",
                     "name": "inspected_status",
                     "data": "inspected_status",
@@ -311,27 +311,11 @@
                         }
                         else if(data == "拒绝可交付")
                         {
-                            if("{{ in_array($me->user_type,[0,1,9,11,61,66]) }}" == "1")
-                            {
-                                console.log('x');
-                                $result_html = '<small class="btn-xs bg-red">拒绝可交付</small>';
-                            }
-                            else
-                            {
-                                $result_html = '<small class="btn-xs bg-red">拒绝</small>';
-                            }
+                            $result_html = '<small class="btn-xs bg-red">拒绝可交付</small>';
                         }
                         else if(data == "不合格")
                         {
-                            if("{{ in_array($me->user_type,[0,1,9,11,61,66]) }}" == "1")
-                            {
-                                console.log('x');
-                                $result_html = '<small class="btn-xs bg-red">不合格</small>';
-                            }
-                            else
-                            {
-                                $result_html = '<small class="btn-xs bg-red">拒绝</small>';
-                            }
+                            $result_html = '<small class="btn-xs bg-red">不合格</small>';
                         }
                         else if(data == "重复")
                         {
@@ -339,15 +323,7 @@
                         }
                         else if(data == "重复•可分发")
                         {
-                            if("{{ in_array($me->user_type,[0,1,9,11,61,66]) }}" == "1")
-                            {
-                                console.log('x');
-                                $result_html = '<small class="btn-xs bg-yellow">重复•可分发</small>';
-                            }
-                            else
-                            {
-                                $result_html = '<small class="btn-xs bg-yellow">重复</small>';
-                            }
+                            $result_html = '<small class="btn-xs bg-yellow">重复•可分发</small>';
                         }
                         else
                         {
@@ -611,7 +587,7 @@
                     "width": "160px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -870,7 +846,7 @@
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -897,7 +873,7 @@
                     "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -925,7 +901,7 @@
                     "width": "100px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -952,7 +928,7 @@
                     "width": "120px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
                         {
                             $(nTd).addClass('modal-show-for-field-set');
                             $(nTd).attr('data-id',row.id).attr('data-name','所在城市');
@@ -981,7 +957,7 @@
                     {{--    "width": "60px",--}}
                     {{--    "orderable": false,--}}
                     {{--    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {--}}
-                    {{--        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))--}}
+                    {{--        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))--}}
                     {{--        {--}}
                     {{--            $(nTd).addClass('modal-show-for-field-set');--}}
                     {{--            $(nTd).attr('data-id',row.id).attr('data-name','渠道来源');--}}
@@ -1229,16 +1205,7 @@
                     "width": "120px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        // if(row.is_completed != 1 && row.item_status != 97)
-                        // {
-                        //     $(nTd).addClass('modal-show-for-field-set-');
-                        //     $(nTd).attr('data-id',row.id).attr('data-name','团队大区');
-                        //     $(nTd).attr('data-key','team_district').attr('data-value',data);
-                        //     $(nTd).attr('data-column-name','团队大区');
-                        //     if(data) $(nTd).attr('data-operate-type','edit');
-                        //     else $(nTd).attr('data-operate-type','add');
-                        // }
-                        if("{{ in_array($me->user_type,[0,1,11,19]) }}")
+                        if(true)
                         {
                             $(nTd).attr('data-row-index',iRow);
 

@@ -4,11 +4,11 @@ namespace App\Models\DK\DK_Common;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DK_Pivot__Staff_Project extends Model
+class DK_Pivot__Department_Project extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "dk_pivot__staff_project";
+    protected $table = "dk_pivot__department_project";
     protected $fillable = [
         'pivot_active',
         'pivot_status',
@@ -20,9 +20,9 @@ class DK_Pivot__Staff_Project extends Model
         'relation_category',
         'relation_type',
 
-        'staff_category',
-        'staff_type',
-        'staff_id',
+        'department_category',
+        'department_type',
+        'department_id',
 
         'project_category',
         'project_type',
@@ -40,10 +40,10 @@ class DK_Pivot__Staff_Project extends Model
 //    }
 
 
-    // 审核人
-    function inspector_er()
+    // 部门
+    function department_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','staff_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Department','department_id','id');
     }
 
     // 项目

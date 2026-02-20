@@ -72,7 +72,7 @@ class DK_Staff__ProjectRepository {
             ->with([
                 'creator'=>function($query) { $query->select(['id','name']); },
                 'client_er'=>function($query) { $query->select(['id','name']); },
-                'inspector_er'=>function($query) { $query->select(['id','name']); }
+//                'inspector_er'=>function($query) { $query->select(['id','name']); }
             ])
             ->where('active',1);
 
@@ -97,7 +97,7 @@ class DK_Staff__ProjectRepository {
             $query->where('item_status', 1);
         }
 
-        if(in_array($me->user_type, [41,71,81]))
+        if(in_array($me->staff_category, [41,51,61]))
         {
             $team_id = $me->team_id;
             $project_list = DK_Pivot__Team_Project::select('project_id')->where('team_id',$team_id)->get();
@@ -105,11 +105,17 @@ class DK_Staff__ProjectRepository {
 
             $team_id = $me->team_id;
             $inspector_list = DK_Common__Staff::select('id')->whereIn('user_type',[71,77])->where('team_id',$team_id)->get();
-            $query->with(['pivot_project_staff'=>function($query) use($inspector_list) { $query->whereIn('staff_id',$inspector_list); }]);
+            $query->with([
+                'pivot__project_staff'=>function($query) use($inspector_list) { $query->whereIn('staff_id',$inspector_list); }
+                ]);
         }
         else
         {
-            $query->with(['pivot_project_staff','pivot_project_team']);
+            $query->with([
+                'pivot__project_department__csd',
+                'pivot__project_department__qid',
+                'pivot__project_department__ad'
+            ]);
         }
 
 
@@ -171,9 +177,11 @@ class DK_Staff__ProjectRepository {
         $item = DK_Common__Project::withTrashed()
             ->with([
                 'client_er'=>function($query) { $query->select(['id','name']); },
-                'inspector_er'=>function($query) { $query->select(['id','username']); },
-                'pivot_project_staff',
-                'pivot_project_team'
+                'pivot__project_department__csd',
+                'pivot__project_department__qid',
+                'pivot__project_department__ad',
+                'pivot__project_team',
+                'pivot__project_staff'
             ])
             ->find($item_id);
         if(!$item) return response_error([],"不存在警告，请刷新页面重试！");
@@ -181,92 +189,6 @@ class DK_Staff__ProjectRepository {
         return response_success($item,"");
     }
     // 【项目】保存 SAVE
-    public function o1__project__item_save1($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'project_category.required' => '请选择项目种类！',
-            'name.required' => '请输入项目名称！',
-//            'name.unique' => '该项目已存在！',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'project_category' => 'required',
-            'name' => 'required',
-//            'name' => 'required|unique:dk_project,name',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-
-        $operate = $post_data["operate"];
-        $operate_type = $operate["type"];
-        $operate_id = $operate['id'];
-
-
-        $this->get_me();
-        $me = $this->me;
-
-        // 判断用户操作权限
-        if(!in_array($me->staff_type,[0,1,11])) return response_error([],"你没有操作权限！");
-
-        if($operate_type == 'create')
-        {
-            // 添加 ( $id==0，添加一个项目 )
-            $is_exist = DK_Common__Project::select('id')->where('name',$post_data["name"])->count();
-            if($is_exist) return response_error([],"该【项目名称】已存在，请勿重复添加！");
-
-            $mine = new DK_Common__Project;
-            $post_data["active"] = 1;
-            $post_data["creator_id"] = $me->id;
-        }
-        else if($operate_type == 'edit')
-        {
-            // 编辑
-            $mine = DK_Common__Project::find($operate_id);
-            if(!$mine) return response_error([],"该【项目】不存在，刷新页面重试！");
-        }
-        else return response_error([],"参数有误！");
-
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            if(!empty($post_data['custom']))
-            {
-                $post_data['custom'] = json_encode($post_data['custom']);
-            }
-
-            $mine_data = $post_data;
-            unset($mine_data['operate']);
-
-            $transport_time_limitation = $post_data["transport_time_limitation"];
-            $mine_data["transport_time_limitation"] = !empty($transport_time_limitation) ? ($transport_time_limitation * 60) : 0;
-
-
-            $bool = $mine->fill($mine_data)->save();
-            if($bool)
-            {
-            }
-            else throw new Exception("DK_Common__Project--insert--fail");
-
-            DB::commit();
-            return response_success(['id'=>$mine->id]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
     public function o1__project__item_save($post_data)
     {
         $messages = [
@@ -286,6 +208,10 @@ class DK_Staff__ProjectRepository {
             $messages = $v->errors();
             return response_error([],$messages->first());
         }
+
+
+        $time = time();
+        $date = date('Y-m-d');
 
 
         $operate = $post_data["operate"];
@@ -334,39 +260,112 @@ class DK_Staff__ProjectRepository {
             $bool = $mine->fill($mine_data)->save();
             if($bool)
             {
-                if(!empty($post_data["peoples"]))
+//                if(!empty($post_data["peoples"]))
+//                {
+////                    $product->peoples()->attach($post_data["peoples"]);
+//                    $current_time = time();
+//                    $peoples = $post_data["peoples"];
+//                    foreach($peoples as $p)
+//                    {
+//                        $people_insert[$p] = ['creator_id'=>$me->id,'team_id'=>$me->team_id,'relation_type'=>1,'created_at'=>$time,'updated_at'=>$time];
+//                    }
+//                    $mine->pivot__project_staff()->sync($people_insert);
+////                    $mine->pivot_project_staff()->syncWithoutDetaching($people_insert);
+//                }
+//                else
+//                {
+//                    $mine->pivot_project_staff()->detach();
+//                }
+
+                // 客服部门
+                if(!empty($post_data["CSD_department_list"]))
                 {
-//                    $product->peoples()->attach($post_data["peoples"]);
-                    $current_time = time();
-                    $peoples = $post_data["peoples"];
-                    foreach($peoples as $p)
+                    $department_insert = [];
+                    $list = $post_data["CSD_department_list"];
+                    foreach($list as $v)
                     {
-                        $people_insert[$p] = ['creator_id'=>$me->id,'team_id'=>$me->team_id,'relation_type'=>1,'created_at'=>$current_time,'updated_at'=>$current_time];
+                        $insert = [];
+                        $insert['department_category'] = 41;
+                        $insert['department_id'] = $v;
+                        $insert['created_at'] = $time;
+                        $insert['updated_at'] = $time;
+                        $department_insert[$v] = $insert;
                     }
-                    $mine->pivot_project_staff()->sync($people_insert);
-//                    $mine->pivot_project_staff()->syncWithoutDetaching($people_insert);
+//                    dd($department_insert);
+                    $mine->pivot__project_department__csd()->sync($department_insert);
+//                    $mine->pivot__project_department__csd()->syncWithoutDetaching($department_insert);
                 }
                 else
                 {
-                    $mine->pivot_project_staff()->detach();
+//                    $mine->pivot__project_department()->detach(['department_category'=>41]);
+                    $mine->pivot__project_department__csd()->detach();
                 }
 
-                if(!empty($post_data["teams"]))
+                // 质检部门
+                if(!empty($post_data["QID_department_list"]))
                 {
-//                    $product->peoples()->attach($post_data["peoples"]);
-                    $current_time = time();
-                    $teams = $post_data["teams"];
-                    foreach($teams as $t)
+                    $department_insert = [];
+                    $list = $post_data["QID_department_list"];
+                    foreach($list as $v)
                     {
-                        $team_insert[$t] = ['relation_type'=>1,'created_at'=>$current_time,'updated_at'=>$current_time];
+                        $insert = [];
+                        $insert['department_category'] = 51;
+                        $insert['department_id'] = $v;
+                        $insert['created_at'] = $time;
+                        $insert['updated_at'] = $time;
+                        $department_insert[$v] = $insert;
                     }
-                    $mine->pivot_project_team()->sync($team_insert);
-//                    $mine->pivot_project_team()->syncWithoutDetaching($people_insert);
+                    $mine->pivot__project_department__qid()->sync($department_insert);
+//                    $mine->pivot__project_department__csd()->syncWithoutDetaching($department_insert);
                 }
                 else
                 {
-                    $mine->pivot_project_team()->detach();
+//                    $mine->pivot__project_department()->detach(['department_category'=>41]);
+                    $mine->pivot__project_department__qid()->detach();
                 }
+
+                // 复核部门
+                if(!empty($post_data["AD_department_list"]))
+                {
+                    $department_insert = [];
+                    $list = $post_data["AD_department_list"];
+                    foreach($list as $v)
+                    {
+                        $insert = [];
+                        $insert['department_category'] = 61;
+                        $insert['department_id'] = $v;
+                        $insert['created_at'] = $time;
+                        $insert['updated_at'] = $time;
+                        $department_insert[$v] = $insert;
+                    }
+//                    dd($department_insert);
+                    $mine->pivot__project_department__ad()->sync($department_insert);
+//                    $mine->pivot__project_department__ad()->syncWithoutDetaching($department_insert);
+                }
+                else
+                {
+//                    $mine->pivot__project_department()->detach(['department_category'=>41]);
+                    $mine->pivot__project_department__ad()->detach();
+                }
+
+
+
+//                if(!empty($post_data["teams"]))
+//                {
+////                    $product->peoples()->attach($post_data["peoples"]);
+//                    $current_time = time();
+//                    $teams = $post_data["teams"];
+//                    foreach($teams as $t)
+//                    {
+//                        $team_insert[$t] = ['relation_type'=>1,'created_at'=>$current_time,'updated_at'=>$current_time];
+//                    }
+//                    $mine->pivot_project_team()->sync($team_insert);
+////                    $mine->pivot_project_team()->syncWithoutDetaching($people_insert);
+//                }
+//                else
+//                {
+//                    $mine->pivot_project_team()->detach();
+//                }
             }
             else throw new Exception("DK_Common__Project--insert--fail");
 

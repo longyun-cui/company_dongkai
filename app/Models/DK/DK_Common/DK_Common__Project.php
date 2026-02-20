@@ -85,28 +85,110 @@ class DK_Common__Project extends Model
     }
 
 
+    // 【多对多】关联的部门
+    function pivot__project_department()
+    {
+        return $this->belongsToMany('App\Models\DK\DK_Common\DK_Common__Department','dk_pivot__department_project','project_id','department_id');
+//            ->withTimestamps();
+    }
+    // 【多对多】关联的部门（客服部）
+    function pivot__project_department__csd()
+    {
+        return $this->belongsToMany('App\Models\DK\DK_Common\DK_Common__Department','dk_pivot__department_project','project_id','department_id')
+            ->wherePivot('department_category', 41);
+    }
+    // 【多对多】关联的部门（质检部）
+    function pivot__project_department__qid()
+    {
+        return $this->belongsToMany('App\Models\DK\DK_Common\DK_Common__Department','dk_pivot__department_project','project_id','department_id')
+            ->wherePivot('department_category', 51);
+    }
+    // 【多对多】关联的部门（复核部）
+    function pivot__project_department__ad()
+    {
+        return $this->belongsToMany('App\Models\DK\DK_Common\DK_Common__Department','dk_pivot__department_project','project_id','department_id')
+            ->wherePivot('department_category', 61);
+    }
+    // 【多对多】关联的部门（运营部）
+    function pivot__project_department__od()
+    {
+        return $this->belongsToMany('App\Models\DK\DK_Common\DK_Common__Department','dk_pivot__department_project','project_id','department_id')
+            ->wherePivot('department_category', 71);
+    }
+
+
+
+
+    // 【多对多】关联的团队
+    function pivot__project_team()
+    {
+        return $this->belongsToMany('App\Models\DK\DK_Common\DK_Common__Team','dk_pivot__team_project','project_id','team_id');
+//            ->withTimestamps();
+    }
+    // 【多对多】关联的团队（客服部）
+    function pivot__project_team__csd()
+    {
+        return $this->belongsToMany('App\Models\DK\DK_Common\DK_Common__Team','dk_pivot__team_project','project_id','team_id')
+            ->wherePivot('team_category', 41);
+    }
+    // 【多对多】关联的团队（质检部）
+    function pivot__project_team__qid()
+    {
+        return $this->belongsToMany('App\Models\DK\DK_Common\DK_Common__Team','dk_pivot__team_project','project_id','team_id')
+            ->wherePivot('team_category', 51);
+    }
+    // 【多对多】关联的团队（复核部）
+    function pivot__project_team__ad()
+    {
+        return $this->belongsToMany('App\Models\DK\DK_Common\DK_Common__Team','dk_pivot__team_project','project_id','team_id')
+            ->wherePivot('team_category', 61);
+    }
+    // 【多对多】关联的团队（运营部）
+    function pivot__project_team__od()
+    {
+        return $this->belongsToMany('App\Models\DK\DK_Common\DK_Common__Team','dk_pivot__team_project','project_id','team_id')
+            ->wherePivot('team_category', 71);
+    }
+
+
+
+
+    // 【多对多】关联的员工
+    function pivot__project_staff()
+    {
+        return $this->belongsToMany('App\Models\DK\DK_Common\DK_Common__Staff','dk_pivot__staff_project','project_id','staff_id');
+//            ->withTimestamps();
+    }
+    // 【多对多】关联的员工（客服部）
+    function pivot__project_staff__csd()
+    {
+        return $this->belongsToMany('App\Models\DK\DK_Common\DK_Common__Staff','dk_pivot__staff_project','project_id','staff_id')
+            ->wherePivot('staff_category', 41);
+    }
+    // 【多对多】关联的员工（质检部）
+    function pivot__project_staff__qid()
+    {
+        return $this->belongsToMany('App\Models\DK\DK_Common\DK_Common__Staff','dk_pivot__staff_project','project_id','staff_id')
+            ->wherePivot('staff_category', 51);
+    }
+    // 【多对多】关联的员工（复核部）
+    function pivot__project_staff__ad()
+    {
+        return $this->belongsToMany('App\Models\DK\DK_Common\DK_Common__Staff','dk_pivot__staff_project','project_id','staff_id')
+            ->wherePivot('staff_category', 61);
+    }
+    // 【多对多】关联的员工（运营部）
+    function pivot__project_staff__od()
+    {
+        return $this->belongsToMany('App\Models\DK\DK_Common\DK_Common__Staff','dk_pivot__staff_project','project_id','staff_id')
+            ->wherePivot('staff_category', 71);
+    }
 
 
     // 【一对一】审核员
     function inspector_er()
     {
         return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','inspector_id','id');
-    }
-
-    // 【多对多】审核人关联的项目
-    function pivot_project_staff()
-    {
-        return $this->belongsToMany('App\Models\DK\DK_Common\DK_Common__Staff','dk_pivot__staff_project','project_id','staff_id');
-//            ->wherePivot('relation_type', 1);
-//            ->withTimestamps();
-    }
-
-    // 【多对多】审核人关联的项目
-    function pivot_project_team()
-    {
-        return $this->belongsToMany('App\Models\DK\DK_Common\DK_Common__Team','dk_pivot__team_project','project_id','team_id');
-//            ->wherePivot('relation_type', 1);
-//            ->withTimestamps();
     }
 
 

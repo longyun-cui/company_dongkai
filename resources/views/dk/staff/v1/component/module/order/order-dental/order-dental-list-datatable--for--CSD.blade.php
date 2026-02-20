@@ -246,16 +246,7 @@
                         }
                         else if(data == "重复•可分发")
                         {
-                            console.log('x1');
-                            if("{{ in_array($me->user_type,[0,1,9,11,61,66]) }}" == "1")
-                            {
-                                console.log('x');
-                                $result_html = '<small class="btn-xs bg-yellow">重复•可分发</small>';
-                            }
-                            else
-                            {
-                                $result_html = '<small class="btn-xs bg-yellow">重复</small>';
-                            }
+                            $result_html = '<small class="btn-xs bg-yellow">重复</small>';
                         }
                         else
                         {

@@ -20,7 +20,12 @@ class DK_Pivot__Team_Project extends Model
         'relation_category',
         'relation_type',
 
+        'team_category',
+        'team_type',
         'team_id',
+
+        'project_category',
+        'project_type',
         'project_id',
 
         'creator_id', 'updater_id'
@@ -35,7 +40,7 @@ class DK_Pivot__Team_Project extends Model
 //    }
 
 
-    // 审核人
+    // 团队
     function team_er()
     {
         return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Team','team_id','id');

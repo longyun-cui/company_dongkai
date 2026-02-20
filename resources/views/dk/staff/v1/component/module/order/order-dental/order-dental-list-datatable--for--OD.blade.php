@@ -68,17 +68,10 @@
                 },
             },
             "fixedColumns": {
-                "leftColumns": "@if($is_mobile_equipment) 1 @else 2 @endif",
+                "leftColumns": "@if($is_mobile_equipment) 1 @else 3 @endif",
                 "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif",
             },
             "columnDefs": [
-                {{--@if(!in_array($me->user_type,[0,1,11]))--}}
-                {{--                @if($me->department_district_id != 0)--}}
-                {{--                {--}}
-                {{--                    "targets": [0,5,6,7,8,9,10,11],--}}
-                {{--                    "visible": false,--}}
-                {{--                }--}}
-                {{--                @endif--}}
             ],
             "columns": [
                 {
@@ -108,7 +101,7 @@
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(row.is_completed != 1)
                         {
                             $(nTd).addClass('order_id');
                             $(nTd).attr('data-id',row.id).attr('data-name','工单ID');
@@ -116,42 +109,25 @@
                             if(data) $(nTd).attr('data-operate-type','edit');
                             else $(nTd).attr('data-operate-type','add');
                         }
+
+                        if(row.recording_address_list)
+                        {
+                            var $recording_address = row.recording_address_list;
+                            if($recording_address)
+                            {
+                                var $recording_list = JSON.parse($recording_address);
+                                var $recording_list_html = '';
+                                $.each($recording_list, function(index, value)
+                                {
+                                    var $audio_html = '<audio controls controlsList="nodownload" style="width:480px;height:40px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
+                                    $recording_list_html += $audio_html;
+                                });
+                                $(nTd).attr('data-recording-address',$recording_list_html);
+                            }
+                        }
                     },
                     render: function(data, type, row, meta) {
                         return row.id;
-                    }
-                },
-                {
-                    "title": "来源",
-                    "name": "created_type",
-                    "data": "created_type",
-                    "className": "",
-                    "width": "60px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        var $result_html = '';
-                        if(data == 1)
-                        {
-                            $result_html = '<small class="btn-xs bg-green">人工</small>';
-                        }
-                        else if(data == 91)
-                        {
-                            $result_html = '<small class="btn-xs bg-red">百应AI</small>';
-                        }
-                        else if(data == 99)
-                        {
-                            $result_html = '<small class="btn-xs bg-red">API</small>';
-                        }
-                        else if(data == 9)
-                        {
-                            $result_html = '<small class="btn-xs bg-yellow">导入</small>';
-                        }
-                        else
-                        {
-                            $result_html = '<small class="btn-xs bg-black">有误</small>';
-                        }
-                        return $result_html;
                     }
                 },
                 {
@@ -245,6 +221,39 @@
                     }
                 },
                 {
+                    "title": "来源",
+                    "name": "created_type",
+                    "data": "created_type",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(!data) return '--';
+                        var $result_html = '';
+                        if(data == 1)
+                        {
+                            $result_html = '<small class="btn-xs bg-green">人工</small>';
+                        }
+                        else if(data == 91)
+                        {
+                            $result_html = '<small class="btn-xs bg-red">百应AI</small>';
+                        }
+                        else if(data == 99)
+                        {
+                            $result_html = '<small class="btn-xs bg-red">API</small>';
+                        }
+                        else if(data == 9)
+                        {
+                            $result_html = '<small class="btn-xs bg-yellow">导入</small>';
+                        }
+                        else
+                        {
+                            $result_html = '<small class="btn-xs bg-black">有误</small>';
+                        }
+                        return $result_html;
+                    }
+                },
+                {
                     "title": "审核状态",
                     "name": "inspected_status",
                     "data": "inspected_status",
@@ -311,27 +320,11 @@
                         }
                         else if(data == "拒绝可交付")
                         {
-                            if("{{ in_array($me->user_type,[0,1,9,11,61,66]) }}" == "1")
-                            {
-                                console.log('x');
-                                $result_html = '<small class="btn-xs bg-red">拒绝可交付</small>';
-                            }
-                            else
-                            {
-                                $result_html = '<small class="btn-xs bg-red">拒绝</small>';
-                            }
+                            $result_html = '<small class="btn-xs bg-red">拒绝可交付</small>';
                         }
                         else if(data == "不合格")
                         {
-                            if("{{ in_array($me->user_type,[0,1,9,11,61,66]) }}" == "1")
-                            {
-                                console.log('x');
-                                $result_html = '<small class="btn-xs bg-red">不合格</small>';
-                            }
-                            else
-                            {
-                                $result_html = '<small class="btn-xs bg-red">拒绝</small>';
-                            }
+                            $result_html = '<small class="btn-xs bg-red">不合格</small>';
                         }
                         else if(data == "重复")
                         {
@@ -339,15 +332,7 @@
                         }
                         else if(data == "重复•可分发")
                         {
-                            if("{{ in_array($me->user_type,[0,1,9,11,61,66]) }}" == "1")
-                            {
-                                console.log('x');
-                                $result_html = '<small class="btn-xs bg-yellow">重复•可分发</small>';
-                            }
-                            else
-                            {
-                                $result_html = '<small class="btn-xs bg-yellow">重复</small>';
-                            }
+                            $result_html = '<small class="btn-xs bg-yellow">重复•可分发</small>';
                         }
                         else
                         {
@@ -611,7 +596,7 @@
                     "width": "160px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -638,29 +623,15 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if("{{ in_array($me->user_type,[0,1,11,61,66]) }}")
+                        if(row.project_er == null)
                         {
-                            if(row.project_er == null)
-                            {
-                                return '未指定';
-                            }
-                            else
-                            {
-                                if(row.project_er.alias_name)
-                                {
-                                    return '<a href="javascript:void(0);">'+row.project_er.name+' ('+row.project_er.alias_name+')'+'</a>';
-                                }
-                                else
-                                {
-                                    return '<a href="javascript:void(0);">'+row.project_er.name+'</a>';
-                                }
-                            }
+                            return '未指定';
                         }
                         else
                         {
-                            if(row.project_er == null)
+                            if(row.project_er.alias_name)
                             {
-                                return '未指定';
+                                return '<a href="javascript:void(0);">'+row.project_er.name+' ('+row.project_er.alias_name+')'+'</a>';
                             }
                             else
                             {
@@ -870,7 +841,7 @@
                     "width": "120px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
                         {
                             $(nTd).addClass('modal-show-for-field-set');
                             $(nTd).attr('data-id',row.id).attr('data-name','所在城市');
@@ -899,7 +870,7 @@
                     {{--    "width": "60px",--}}
                     {{--    "orderable": false,--}}
                     {{--    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {--}}
-                    {{--        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))--}}
+                    {{--        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))--}}
                     {{--        {--}}
                     {{--            $(nTd).addClass('modal-show-for-field-set');--}}
                     {{--            $(nTd).attr('data-id',row.id).attr('data-name','渠道来源');--}}

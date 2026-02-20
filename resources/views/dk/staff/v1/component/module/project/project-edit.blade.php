@@ -98,13 +98,31 @@
                 </div>
 
                 {{--团队--}}
+{{--                <div class="form-group">--}}
+{{--                    <label class="control-label col-md-2">团队</label>--}}
+{{--                    <div class="col-md-8 ">--}}
+{{--                        <select class="form-control select2-multiple-reset select2--team" multiple="multiple"--}}
+{{--                                name="teams[]"--}}
+{{--                                id="select2--teams--for--project-item-edit"--}}
+{{--                                data-modal="#modal--for--project-item-edit"--}}
+{{--                                data-item-category=""--}}
+{{--                                data-item-type="11"--}}
+{{--                                data-team-target=""--}}
+{{--                        >--}}
+{{--                        </select>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+
+                {{--客服部门--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">团队</label>
+                    <label class="control-label col-md-2">客服部门</label>
                     <div class="col-md-8 ">
-                        <select class="form-control select2-multiple-reset select2--team" multiple="multiple"
-                                name="teams[]"
+                        <select class="form-control select2-multiple-reset select2--department" multiple="multiple"
+                                name="CSD_department_list[]"
                                 id="select2--teams--for--project-item-edit"
                                 data-modal="#modal--for--project-item-edit"
+                                data-department-category="41"
+                                data-department-type=""
                                 data-item-category=""
                                 data-item-type="11"
                                 data-team-target=""
@@ -113,20 +131,56 @@
                     </div>
                 </div>
 
-                {{--质检员--}}
+                {{--质检部门--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">质检</label>
+                    <label class="control-label col-md-2">质检部门</label>
                     <div class="col-md-8 ">
-                        <select class="form-control select2-multiple-reset select2--staff" multiple="multiple"
-                                name="peoples[]"
-                                id="select2--peoples--for--project-item-edit"
+                        <select class="form-control select2-multiple-reset select2--department" multiple="multiple"
+                                name="QID_department_list[]"
+                                id="select2--teams--for--project-item-edit"
                                 data-modal="#modal--for--project-item-edit"
-                                data-staff-category="51"
-                                data-staff-type="11"
+                                data-department-category="51"
+                                data-department-type=""
+                                data-item-category=""
+                                data-item-type="51"
+                                data-team-target=""
                         >
                         </select>
                     </div>
                 </div>
+
+                {{--复核部门--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">复核部门</label>
+                    <div class="col-md-8 ">
+                        <select class="form-control select2-multiple-reset select2--department" multiple="multiple"
+                                name="AD_department_list[]"
+                                id="select2--teams--for--project-item-edit"
+                                data-modal="#modal--for--project-item-edit"
+                                data-department-category="61"
+                                data-department-type=""
+                                data-item-category=""
+                                data-item-type="61"
+                                data-team-target=""
+                        >
+                        </select>
+                    </div>
+                </div>
+
+                {{--质检员--}}
+{{--                <div class="form-group">--}}
+{{--                    <label class="control-label col-md-2">质检</label>--}}
+{{--                    <div class="col-md-8 ">--}}
+{{--                        <select class="form-control select2-multiple-reset select2--staff" multiple="multiple"--}}
+{{--                                name="peoples[]"--}}
+{{--                                id="select2--peoples--for--project-item-edit"--}}
+{{--                                data-modal="#modal--for--project-item-edit"--}}
+{{--                                data-staff-category="51"--}}
+{{--                                data-staff-type="11"--}}
+{{--                        >--}}
+{{--                        </select>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
 
                 <div class="form-group form-type">
