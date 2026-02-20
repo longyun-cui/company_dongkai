@@ -1100,36 +1100,12 @@
                     "className": "",
                     "width": "120px",
                     "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        // if(row.is_completed != 1 && row.item_status != 97)
-                        // {
-                        //     $(nTd).addClass('modal-show-for-field-set-');
-                        //     $(nTd).attr('data-id',row.id).attr('data-name','团队大区');
-                        //     $(nTd).attr('data-key','team_district').attr('data-value',data);
-                        //     $(nTd).attr('data-column-name','团队大区');
-                        //     if(data) $(nTd).attr('data-operate-type','edit');
-                        //     else $(nTd).attr('data-operate-type','add');
-                        // }
-                        if("{{ in_array($me->user_type,[0,1,11,19]) }}")
-                        {
-                            $(nTd).attr('data-row-index',iRow);
-
-                            $(nTd).addClass('modal-show-for-phone-pool-info');
-                            $(nTd).attr('data-id',row.id).attr('data-name','电话池');
-                            $(nTd).attr('data-key','pool').attr('data-value',row.id);
-                            $(nTd).attr('data-phone',row.client_phone);
-                            $(nTd).attr('data-city',row.location_city);
-
-                            $(nTd).attr('data-column-type','info');
-                            $(nTd).attr('data-column-name','电话池');
-                        }
-                    },
                     render: function(data, type, row, meta) {
                         if(!data) return '--';
 
-                        var $team = row.creator_team_er == null ? '' : row.creator_team_er.name;
-                        var $group = row.creator_group_er == null ? '' : ' - ' + row.creator_group_er.name;
-                        return '<a href="javascript:void(0);">'+$team + $group+'</a>';
+                        var $creator_team = row.creator_team_er == null ? '' : row.creator_team_er.name;
+                        var $creator_team_group = row.creator_team_group_er == null ? '' : ' - ' + row.creator_team_group_er.name;
+                        return '<a href="javascript:void(0);">'+$creator_team + $creator_team_group+'</a>';
                     }
                 },
                 {

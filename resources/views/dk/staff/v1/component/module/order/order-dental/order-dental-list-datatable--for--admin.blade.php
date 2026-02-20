@@ -1255,9 +1255,9 @@
                     render: function(data, type, row, meta) {
                         if(!data) return '--';
 
-                        var $team = row.creator_team_er == null ? '' : row.creator_team_er.name;
-                        var $group = row.creator_group_er == null ? '' : ' - ' + row.creator_group_er.name;
-                        return '<a href="javascript:void(0);">'+$team + $group+'</a>';
+                        var $creator_team = row.creator_team_er == null ? '' : row.creator_team_er.name;
+                        var $creator_team_group = row.creator_team_group_er == null ? '' : ' - ' + row.creator_team_group_er.name;
+                        return '<a href="javascript:void(0);">'+$creator_team + $creator_team_group+'</a>';
                     }
                 },
                 {
