@@ -41,6 +41,7 @@
             </select>
             <select class="search-filter form-filter filter-md select2-box-c" name="staff-position">
                 <option value="-1">全部职位</option>
+                <option value="99">职员</option>
                 <option value="61">小组主管</option>
                 <option value="41">团队经理</option>
                 <option value="31">部门总监</option>
