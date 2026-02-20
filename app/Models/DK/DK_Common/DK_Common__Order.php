@@ -43,7 +43,9 @@ class DK_Common__Order extends Model
         'creator_company_id',
         'creator_department_id',
         'creator_team_id',
-        'creator_group_id',
+        'creator_team_sub_id',
+        'creator_team_group_id',
+        'creator_team_unit_id',
 
         'work_shift',
 
