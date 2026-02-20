@@ -1222,7 +1222,7 @@
                     }
                 },
                 {
-                    "title": "部门",
+                    "title": "团队",
                     "name": "creator_team_id",
                     "data": "creator_team_id",
                     "className": "",
@@ -1499,23 +1499,23 @@
                 }
             ],
             "initComplete": function() {
-                var api = this.api();
-
-                // 1. 获取“班次”列的所有数据
-                var shiftData = api.column('field_2:name').data();
-                var dayCount = 0;
-                var nightCount = 0;
-
-                // 2. 统计班次类型
-                shiftData.each(function(value) {
-                    if (value == 1) dayCount++;
-                    if (value == 9) nightCount++;
-                });
-
-                // 3. 根据统计结果动态设置标题
-                var column = api.column('field_2:name');
-                var header = $(column.header());
-                header.html('班次1');
+                // var api = this.api();
+                //
+                // // 1. 获取“班次”列的所有数据
+                // var shiftData = api.column('field_2:name').data();
+                // var dayCount = 0;
+                // var nightCount = 0;
+                //
+                // // 2. 统计班次类型
+                // shiftData.each(function(value) {
+                //     if (value == 1) dayCount++;
+                //     if (value == 9) nightCount++;
+                // });
+                //
+                // // 3. 根据统计结果动态设置标题
+                // var column = api.column('field_2:name');
+                // var header = $(column.header());
+                // header.html('班次1');
             },
             "drawCallback": function (settings) {
 

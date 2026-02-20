@@ -116,6 +116,8 @@ class DK_Staff__OrderRepository {
         // 质检部
         if($me->staff_category == 51)
         {
+            $query->where('dk_common__order.is_published','<>',0);
+
             if($me->staff_position == 31)
             {
                 // 部门总监
@@ -161,6 +163,9 @@ class DK_Staff__OrderRepository {
         // 复核部
         if($me->staff_category == 61)
         {
+            $query->where('dk_common__order.is_published','<>',0);
+            $query->where('dk_common__order.appealed_status','>',0);
+
             if($me->staff_position == 31)
             {
                 // 部门总监
@@ -185,7 +190,6 @@ class DK_Staff__OrderRepository {
         if($me->staff_category == 71)
         {
             $query->where('dk_common__order.is_published','<>',0);
-            $query->where('dk_common__order.appealed_status','>',0);
 
             if($me->staff_position == 31)
             {
