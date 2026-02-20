@@ -28,9 +28,9 @@
                     d.name = $tableSearch.find('input[name="department-name"]').val();
                     d.title = $tableSearch.find('input[name="department-title"]').val();
                     d.keyword = $tableSearch.find('input[name="department-keyword"]').val();
-                    d.item_status = $tableSearch.find('select[name="department-status"]').val();
                     d.department_category = $tableSearch.find('select[name="department-category"]').val();
                     d.department_type = $tableSearch.find('select[name="department-type"]').val();
+                    d.item_status = $tableSearch.find('select[name="department-status"]').val();
                     d.department_work_status = $tableSearch.find('select[name="department-work-status"]').val();
                 },
             },
