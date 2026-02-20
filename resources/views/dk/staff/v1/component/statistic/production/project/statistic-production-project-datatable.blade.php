@@ -536,7 +536,7 @@
                 @if($me->team_id == 0)
                 {
                     "title": "团队",
-                    "data": "pivot_project_team",
+                    "data": "pivot__project_team",
                     "className": "text-center",
                     "width": "240px",
                     "orderable": false,

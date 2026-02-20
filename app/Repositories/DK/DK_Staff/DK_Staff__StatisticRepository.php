@@ -2682,7 +2682,7 @@ class DK_Staff__StatisticRepository {
             $team = (int)$post_data['team'];
             if(!in_array($team,[-1,0]))
             {
-                $query->whereHas('pivot_project_team',  function ($query) use($team) {
+                $query->whereHas('pivot__project_team',  function ($query) use($team) {
                     $query->where('team_id', $team);
                 });
             }
@@ -2714,7 +2714,7 @@ class DK_Staff__StatisticRepository {
         $total_data = [];
         $total_data['id'] = '统计';
         $total_data['name'] = '所有项目';
-        $total_data['pivot_project_team'] = [];
+        $total_data['pivot__project_team'] = [];
         $total_data['daily_goal'] = 0;
 
         $total_data['count__for__order_today_all'] = 0;
@@ -2860,7 +2860,7 @@ class DK_Staff__StatisticRepository {
         $query = DK_Common__Project::select('*')
             ->where('item_status', 1)
             ->withTrashed()
-            ->with(['creator','inspector_er','pivot_project_staff','pivot_project_team']);
+            ->with(['creator','inspector_er','pivot__project_staff','pivot__project_team']);
 
         if(in_array($me->user_type,[41,81,84]))
         {
@@ -2896,7 +2896,7 @@ class DK_Staff__StatisticRepository {
         {
             if(!in_array($post_data['department_district'],[-1,0]))
             {
-                $query->whereHas('pivot_project_team',  function ($query) use($post_data) {
+                $query->whereHas('pivot__project_team',  function ($query) use($post_data) {
                     $query->where('team_id', $post_data['department_district']);
                 });
             }
@@ -2929,7 +2929,7 @@ class DK_Staff__StatisticRepository {
         $total_data = [];
         $total_data['id'] = '统计';
         $total_data['name'] = '所有项目';
-        $total_data['pivot_project_team'] = [];
+        $total_data['pivot__project_team'] = [];
         $total_data['daily_goal'] = 0;
 
         $total_data['order_count_for_delivered'] = 0;
@@ -3082,7 +3082,7 @@ class DK_Staff__StatisticRepository {
         {
             if(!in_array($post_data['team'],[-1,0]))
             {
-                $query->whereHas('pivot_project_team',  function ($query) use($post_data) {
+                $query->whereHas('pivot__project_team',  function ($query) use($post_data) {
                     $query->where('team_id', $post_data['team']);
                 });
             }
@@ -3115,7 +3115,7 @@ class DK_Staff__StatisticRepository {
         $total_data = [];
         $total_data['id'] = '统计';
         $total_data['name'] = '所有项目';
-        $total_data['pivot_project_team'] = [];
+        $total_data['pivot__project_team'] = [];
         $total_data['daily_goal'] = 0;
 
         $total_data['order_count_for_delivered'] = 0;
@@ -3392,7 +3392,7 @@ class DK_Staff__StatisticRepository {
         {
             if(!in_array($post_data['department_district'],[-1,0,'-1','0']))
             {
-                $query->whereHas('pivot_project_team',  function ($query) use($post_data) {
+                $query->whereHas('pivot__project_team',  function ($query) use($post_data) {
                     $query->where('team_id', $post_data['department_district']);
                 });
             }
@@ -3425,7 +3425,7 @@ class DK_Staff__StatisticRepository {
         $total_data = [];
         $total_data['id'] = '统计';
         $total_data['name'] = '所有项目';
-        $total_data['pivot_project_team'] = [];
+        $total_data['pivot__project_team'] = [];
         $total_data['daily_goal'] = 0;
 
         $total_data['order_count_for_delivered'] = 0;
@@ -4859,8 +4859,8 @@ class DK_Staff__StatisticRepository {
             ->with([
                 'creator',
                 'inspector_er',
-                'pivot_project_staff',
-                'pivot_project_team'
+                'pivot__project_staff',
+                'pivot__project_team'
             ]);
 
 
@@ -4898,7 +4898,7 @@ class DK_Staff__StatisticRepository {
             $team = (int)$post_data['team'];
             if(!in_array($team,[-1,0]))
             {
-                $query->whereHas('pivot_project_team',  function ($query) use($team) {
+                $query->whereHas('pivot__project_team',  function ($query) use($team) {
                     $query->where('team_id', $team);
                 });
             }
@@ -4931,7 +4931,7 @@ class DK_Staff__StatisticRepository {
         $total_data = [];
         $total_data['id'] = '统计';
         $total_data['name'] = '所有项目';
-        $total_data['pivot_project_team'] = [];
+        $total_data['pivot__project_team'] = [];
         $total_data['daily_goal'] = 0;
         $total_data['order_count_for_all'] = 0;
         $total_data['order_count_for_inspected'] = 0;
@@ -6167,9 +6167,9 @@ class DK_Staff__StatisticRepository {
 
         $query = DK_Statistic__Client_Daily::select('*')
             ->with([
-                'client_er'=>function ($query) { $query->select('id','username'); },
-                'creator'=>function ($query) { $query->select('id','username','true_name'); },
-                'completer'=>function ($query) { $query->select('id','username','true_name'); }
+                'client_er'=>function ($query) { $query->select('id','name'); },
+                'creator'=>function ($query) { $query->select('id','name'); },
+                'completer'=>function ($query) { $query->select('id','name'); }
             ]);
 
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
@@ -6267,7 +6267,7 @@ class DK_Staff__StatisticRepository {
         $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date'] : date('Y-m-d');
 
         // 工单统计（当日）
-        $query_order_production = DK_Common__Order::select('client_id')
+        $query_order_production = DK_Common__Order::select('delivered_client_id')
             ->addSelect(DB::raw("
                     count(IF(is_published = 1, TRUE, NULL)) as production_published_num,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as production_inspected_num,
@@ -6289,14 +6289,14 @@ class DK_Staff__StatisticRepository {
                     count(IF(delivered_result = '驳回', TRUE, NULL)) as order_delivered_rejected_num
                 "))
             ->where('published_date',$assign_date)
-            ->groupBy('client_id')
+            ->groupBy('delivered_client_id')
             ->get()
-            ->keyBy('client_id')
+            ->keyBy('delivered_client_id')
             ->toArray();
 
 
         // 工单统计（隔日）
-        $query_order_other_day = DK_Common__Order::select('client_id')
+        $query_order_other_day = DK_Common__Order::select('delivered_client_id')
             ->addSelect(DB::raw("
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as other_day_delivered_num,
                     count(IF(delivered_result = '正常交付', TRUE, NULL)) as marketing_yesterday_num,
@@ -6309,9 +6309,9 @@ class DK_Staff__StatisticRepository {
                 "))
             ->where('published_date','<>',$assign_date)
             ->where('delivered_date',$assign_date)
-            ->groupBy('client_id')
+            ->groupBy('delivered_client_id')
             ->get()
-            ->keyBy('client_id')
+            ->keyBy('delivered_client_id')
             ->toArray();
 
 
@@ -6331,7 +6331,7 @@ class DK_Staff__StatisticRepository {
             ->toArray();
 
 
-        $client_list = DK_Common__Client::select('id','username')
+        $client_list = DK_Common__Client::select('id','name')
 //            ->where('item_status', 1)
             ->withTrashed()
             ->get();
@@ -15858,7 +15858,7 @@ EOF;
         $query = DK_Common__Project::select('*')
             ->where('item_status', 1)
             ->withTrashed()
-            ->with(['creator','inspector_er','pivot_project_staff','pivot_project_team']);
+            ->with(['creator','inspector_er','pivot__project_staff','pivot__project_team']);
 
         if(in_array($me->user_type,[41,81,84]))
         {
@@ -15894,7 +15894,7 @@ EOF;
         {
             if(!in_array($post_data['department_district'],[-1,0]))
             {
-                $query->whereHas('pivot_project_team',  function ($query) use($post_data) {
+                $query->whereHas('pivot__project_team',  function ($query) use($post_data) {
                     $query->where('team_id', $post_data['department_district']);
                 });
             }
@@ -15927,7 +15927,7 @@ EOF;
         $total_data = [];
         $total_data['id'] = '统计';
         $total_data['name'] = '所有项目';
-        $total_data['pivot_project_team'] = [];
+        $total_data['pivot__project_team'] = [];
         $total_data['daily_goal'] = 0;
 
         $total_data['order_count_for_delivered'] = 0;
@@ -16094,7 +16094,7 @@ EOF;
         {
             if(!in_array($post_data['department_district'],[-1,0]))
             {
-                $query->whereHas('pivot_project_team',  function ($query) use($post_data) {
+                $query->whereHas('pivot__project_team',  function ($query) use($post_data) {
                     $query->where('team_id', $post_data['department_district']);
                 });
             }
@@ -16127,7 +16127,7 @@ EOF;
         $total_data = [];
         $total_data['id'] = '统计';
         $total_data['name'] = '所有项目';
-        $total_data['pivot_project_team'] = [];
+        $total_data['pivot__project_team'] = [];
         $total_data['daily_goal'] = 0;
 
         $total_data['order_count_for_delivered'] = 0;
@@ -16279,7 +16279,7 @@ EOF;
         $query = DK_Common__Project::select('*')
             ->where('item_status', 1)
             ->withTrashed()
-            ->with(['creator','inspector_er','pivot_project_staff','pivot_project_team']);
+            ->with(['creator','inspector_er','pivot__project_staff','pivot__project_team']);
 
         if(in_array($me->user_type,[41,81,84]))
         {
@@ -16315,7 +16315,7 @@ EOF;
         {
             if(!in_array($post_data['department_district'],[-1,0]))
             {
-                $query->whereHas('pivot_project_team',  function ($query) use($post_data) {
+                $query->whereHas('pivot__project_team',  function ($query) use($post_data) {
                     $query->where('team_id', $post_data['department_district']);
                 });
             }
@@ -16348,7 +16348,7 @@ EOF;
         $total_data = [];
         $total_data['id'] = '统计';
         $total_data['name'] = '所有项目';
-        $total_data['pivot_project_team'] = [];
+        $total_data['pivot__project_team'] = [];
         $total_data['daily_goal'] = 0;
 
         $total_data['order_count_for_delivered'] = 0;
@@ -16524,7 +16524,7 @@ EOF;
         $query = DK_Common__Project::select('*')
             ->where('item_status', 1)
             ->withTrashed()
-            ->with(['creator','inspector_er','pivot_project_staff','pivot_project_team']);
+            ->with(['creator','inspector_er','pivot__project_staff','pivot__project_team']);
 
         if(in_array($me->user_type,[41,81,84]))
         {
@@ -16560,7 +16560,7 @@ EOF;
         {
             if(!in_array($post_data['department_district'],[-1,0]))
             {
-                $query->whereHas('pivot_project_team',  function ($query) use($post_data) {
+                $query->whereHas('pivot__project_team',  function ($query) use($post_data) {
                     $query->where('team_id', $post_data['department_district']);
                 });
             }
@@ -16593,7 +16593,7 @@ EOF;
         $total_data = [];
         $total_data['id'] = '统计';
         $total_data['name'] = '所有项目';
-        $total_data['pivot_project_team'] = [];
+        $total_data['pivot__project_team'] = [];
         $total_data['daily_goal'] = 0;
         $total_data['order_count_for_all'] = 0;
         $total_data['order_count_for_inspected'] = 0;

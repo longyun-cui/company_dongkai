@@ -112,7 +112,7 @@
                         }
                         else
                         {
-                            var $client_name = row.client_er.username;
+                            var $client_name = row.client_er.name;
                             return '<a class="statistic-client-detail-control" data-id="'+data+'" data-title="'+$client_name+'">'+$client_name+'</a>';
                         }
                     }
