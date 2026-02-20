@@ -750,6 +750,11 @@ class DKStaffController extends Controller
     {
         return $this->project_repo->o1__project__item_team_set__save(request()->all());
     }
+    // 【项目】编辑-保存
+    public function o1__project__item_staff_set__save()
+    {
+        return $this->project_repo->o1__project__item_staff_set__save(request()->all());
+    }
     // 【项目】删除
     public function o1__project__item_delete()
     {

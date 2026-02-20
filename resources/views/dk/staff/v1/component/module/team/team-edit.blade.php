@@ -138,7 +138,8 @@
                                 data-modal="#modal--for--team-item-edit"
                                 data-item-category=""
                                 data-item-type=""
-                                data-department-category="#department-category--for--team-item-edit"
+                                data-department-category="41"
+                                data-department-type=""
                                 data-team-target="#select2--team--for--team-item-edit"
                                 data-staff-target="#select2--staff--for--team-item-edit"
                         >

@@ -252,7 +252,7 @@ class DK_Staff__CommonRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = DK_Common__Staff::select(['id','username as text'])
+        $query = DK_Common__Staff::select(['id','name as text'])
             ->where(['item_status'=>1])
             ->where('active',1);
 

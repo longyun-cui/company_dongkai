@@ -171,7 +171,7 @@
                         var $html_operation_record = '<a class="btn btn-xs modal-show--for--project--item-operation-record" data-id="'+data+'">记录</a>';
 
                         var html =
-                            '<a class="btn btn-xs modal-show--for--project--item-team-set" data-id="'+data+'">编辑</a>'+
+                            '<a class="btn btn-xs modal-show--for--project--item-staff-set" data-id="'+data+'">编辑</a>'+
                             $html_able+
                             $html_delete+
                             $html_operation_record+

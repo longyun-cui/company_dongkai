@@ -339,7 +339,7 @@
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return row.creator == null ? '未知' : '<a class="caller-control" data-id="'+data+'" data-title="'+row.creator.username+'">'+row.creator.username+'</a>';
+                        return row.creator == null ? '未知' : '<a class="caller-control" data-id="'+data+'" data-title="'+row.creator.name+'">'+row.creator.name+'</a>';
                     }
                 },
                 {
@@ -387,8 +387,8 @@
                 },
                 {
                     "title": "班次",
-                    "name": "field_2",
-                    "data": "field_2",
+                    "name": "work_shift",
+                    "data": "work_shift",
                     "className": "",
                     "width": "60px",
                     "orderable": false,
@@ -399,7 +399,7 @@
 
                             $(nTd).addClass('modal-show-for-field-set');
                             $(nTd).attr('data-id',row.id).attr('data-name','班次');
-                            $(nTd).attr('data-key','field_2').attr('data-value',data);
+                            $(nTd).attr('data-key','work_shift').attr('data-value',data);
 
                             $(nTd).attr('data-column-type','radio');
                             $(nTd).attr('data-column-name','班次');

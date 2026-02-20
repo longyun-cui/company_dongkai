@@ -204,6 +204,7 @@
         // 【团队】部门类型
         $(".main-wrapper").on('change', "#department-category--for--team-item-edit", function() {
 
+            $("#select2--department--for--team-item-edit").data('department-category',$(this).val());
             $("#select2--department--for--team-item-edit").val(null).trigger('change');
 
         });

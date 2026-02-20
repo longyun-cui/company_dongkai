@@ -162,6 +162,7 @@
     {{--项目--}}
     @include(env('DK_STAFF__TEMPLATE').'component.module.project.project-edit')
     @include(env('DK_STAFF__TEMPLATE').'component.module.project.project--item-team-set')
+    @include(env('DK_STAFF__TEMPLATE').'component.module.project.project--item-staff-set')
     @include(env('DK_STAFF__TEMPLATE').'component.module.project.project--item-operation-record')
 
 

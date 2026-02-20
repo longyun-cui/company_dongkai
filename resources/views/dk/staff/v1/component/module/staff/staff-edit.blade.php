@@ -259,7 +259,8 @@
                                     data-modal="#modal--for--staff-item-edit"
                                     data-item-category=""
                                     data-item-type=""
-                                    data-department-category="#department-category--for--staff-item-edit"
+                                    data-department-category=""
+                                    data-department-type=""
                                     data-team-target="#select2--team--for--staff-item-edit"
                             >
                                 <option data-id="" value="">选择部门</option>
@@ -281,6 +282,8 @@
                                     data-modal="#modal--for--staff-item-edit"
                                     data-item-category=""
                                     data-item-type="11"
+                                    data-team-category=""
+                                    data-team-type="11"
                                     data-team-target="#select2---team-group--for--staff-item-edit"
                             >
                                 <option data-id="" value="">选择团队</option>

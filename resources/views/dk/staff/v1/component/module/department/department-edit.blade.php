@@ -115,7 +115,15 @@
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 所属公司</label>
                     <div class="col-md-9 ">
-                        <select class="form-control select2-reset select2--company" name="company_id" id="select2--company--for--department-item-edit" data-modal="#modal--for--department-item-edit" data-item-category="" data-item-type="">
+                        <select class="form-control select2-reset select2--company"
+                                name="company_id"
+                                id="select2--company--for--department-item-edit"
+                                data-modal="#modal--for--department-item-edit"
+                                data-item-category=""
+                                data-item-type=""
+                                data-company-category=""
+                                data-company-type=""
+                        >
                             <option data-id="" value="">选择公司</option>
                         </select>
                     </div>

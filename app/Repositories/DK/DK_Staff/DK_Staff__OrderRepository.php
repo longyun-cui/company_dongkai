@@ -161,13 +161,12 @@ class DK_Staff__OrderRepository {
 //                    $query->whereIn('user_id', $subordinates);
 //                });
                 // 多对对
-                $subordinates = DK_Common__Staff::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
-                $project_list = DK_Pivot__Staff_Project::select('project_id')->whereIn('user_id',$subordinates)->get()->pluck('project_id')->toArray();
+//                $subordinates = DK_Common__Staff::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
+//                $project_list = DK_Pivot__Staff_Project::select('project_id')->whereIn('staff_id',$subordinates)->get()->pluck('project_id')->toArray();
+//                $query->where('is_published','<>',0)->whereIn('dk_common__order.project_id', $project_list);
+
+                $project_list = DK_Pivot__Team_Project::select('project_id')->where('team_id',$me->team_id)->get()->pluck('project_id')->toArray();
                 $query->where('is_published','<>',0)->whereIn('dk_common__order.project_id', $project_list);
-                if($me->team_id != 0)
-                {
-                    $query->where('dk_common__order.team_id',$me->team_id);
-                }
             }
             else if($me->staff_position == 61)
             {
@@ -181,7 +180,7 @@ class DK_Staff__OrderRepository {
 //                    $query->where('user_id', $me->id);
 //                });
                 // 多对多
-                $project_list = DK_Pivot__Staff_Project::select('project_id')->where('user_id',$me->id)->get()->pluck('project_id')->toArray();
+                $project_list = DK_Pivot__Staff_Project::select('project_id')->where('staff_id',$me->id)->get()->pluck('project_id')->toArray();
                 $query->where('dk_common__order.is_published','<>',0)->whereIn('dk_common__order.project_id', $project_list);
             }
         }

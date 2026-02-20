@@ -54,7 +54,7 @@
                         @endif
 
 
-                        @if(in_array($me->staff_category,[0,1,9,71]))
+                        @if(in_array($me->staff_category,[0,1]))
                         <li class="header">
                             <a class="modal-show--for--order--import--by-txt"
                                data-form-id="form--for--order--import--by-txt"

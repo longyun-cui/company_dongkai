@@ -67,7 +67,7 @@ class DK_Staff__ProjectRepository {
         $this->get_me();
         $me = $this->me;
 
-        if(in_array($me->staff_category,[0,1,9,71]) || in_array($me->staff_position,[31]))
+        if(in_array($me->staff_category,[0,1,9,71]) || in_array($me->staff_position,[31,41]))
         {
         }
         else return response_error([],"你没有操作权限！");
@@ -111,19 +111,27 @@ class DK_Staff__ProjectRepository {
 
         if(in_array($me->staff_category, [41,51,61]))
         {
-            $department_id = $me->department_id;
-            $project_list = DK_Pivot__Department_Project::select('project_id')->where('department_id',$department_id)->get();
-            $query->whereIn('id',$project_list);
+            if($me->staff_position == 31)
+            {
+                $department_id = $me->department_id;
+                $project_list = DK_Pivot__Department_Project::select('project_id')->where('department_id',$department_id)->get();
+                $query->whereIn('id',$project_list);
 
-            $query->with([
-                'pivot__project_team'=>function($query) use($me) { $query->where('dk_pivot__team_project.department_id',$me->department_id); }
-            ]);
+                $query->with([
+                    'pivot__project_team'=>function($query) use($me) { $query->where('dk_pivot__team_project.department_id',$me->department_id); }
+                ]);
+            }
+            else if($me->staff_position == 41)
+            {
+                $team_id = $me->team_id;
+                $project_list = DK_Pivot__Team_Project::select('project_id')->where('team_id',$team_id)->get();
+                $query->whereIn('id',$project_list);
 
-//            $team_id = $me->team_id;
-//            $inspector_list = DK_Common__Staff::select('id')->whereIn('user_type',[71,77])->where('team_id',$team_id)->get();
-            $query->with([
-                'pivot__project_staff'=>function($query) use($me) { $query->where('dk_pivot__staff_project.department_id',$me->department_id); }
-            ]);
+                $query->with([
+                    'pivot__project_staff'=>function($query) use($me) { $query->where('dk_pivot__staff_project.team_id',$me->team_id); }
+                ]);
+            }
+            else return response_error([],"你没有操作权限！");
         }
         else
         {
@@ -268,7 +276,7 @@ class DK_Staff__ProjectRepository {
         $me = $this->me;
 
         // 判断用户操作权限
-        if(in_array($me->staff_category,[0,1,9,71]) || in_array($me->staff_position,[31]))
+        if(in_array($me->staff_category,[0,1,9,71]) || in_array($me->staff_position,[41]))
         {
         }
         else return response_error([],"你没有操作权限！");
@@ -280,7 +288,7 @@ class DK_Staff__ProjectRepository {
 
         $item = DK_Common__Project::withTrashed()
             ->with([
-                'pivot__project_staff'=>function($query) use($me) { $query->where('department_id',$me->department_id); },
+                'pivot__project_staff'=>function($query) use($me) { $query->where('dk_pivot__staff_project.team_id',$me->team_id); },
             ])
             ->find($item_id);
         if(!$item) return response_error([],"不存在警告，请刷新页面重试！");
@@ -515,8 +523,7 @@ class DK_Staff__ProjectRepository {
         $this->get_me();
         $me = $this->me;
 
-        // 判断用户操作权限
-//        if(!in_array($me->user_type,[0,1,11,19,61])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->staff_position,[31])) return response_error([],"你没有操作权限！");
 
         // 编辑
         $mine = DK_Common__Project::find($operate_id);
@@ -559,6 +566,102 @@ class DK_Staff__ProjectRepository {
                 else
                 {
                     $mine->pivot__project_team()->detach(['department_id'=>$me->department_id]);
+                }
+            }
+            else throw new Exception("DK_Common__Project--insert--fail");
+
+            DB::commit();
+            return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【项目】保存 SAVE
+    public function o1__project__item_staff_set__save($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+//            'project_category.required' => '请选择项目种类！',
+//            'name.required' => '请输入项目名称！',
+//            'name.unique' => '该项目已存在！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+//            'project_category' => 'required',
+//            'name' => 'required',
+//            'name' => 'required|unique:dk_project,name',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+
+        $time = time();
+        $date = date('Y-m-d');
+
+
+        $operate = $post_data["operate"];
+        $operate_type = $operate["type"];
+        $operate_id = $operate['id'];
+
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->staff_position,[41])) return response_error([],"你没有操作权限！");
+
+        // 编辑
+        $mine = DK_Common__Project::find($operate_id);
+        if(!$mine) return response_error([],"该【项目】不存在，刷新页面重试！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if(!empty($post_data['custom']))
+            {
+                $post_data['custom'] = json_encode($post_data['custom']);
+            }
+
+            $mine_data = $post_data;
+            unset($mine_data['operate']);
+
+
+            $bool = $mine->fill($mine_data)->save();
+            if($bool)
+            {
+                // 员工
+                if(!empty($post_data["staff_list"]))
+                {
+                    $staff_insert = [];
+                    $list = $post_data["staff_list"];
+                    foreach($list as $v)
+                    {
+                        $insert = [];
+                        $insert['department_id'] = $me->department_id;
+                        $insert['team_id'] = $me->team_id;
+                        $insert['staff_id'] = $v;
+                        $insert['created_at'] = $time;
+                        $insert['updated_at'] = $time;
+                        $staff_insert[$v] = $insert;
+                    }
+//                    $mine->pivot__project_team()->sync($team_insert);
+                    $mine->pivot__project_staff()->detach(['department_id'=>$me->department_id,'team_id'=>$me->team_id]);
+                    $mine->pivot__project_staff()->syncWithoutDetaching($staff_insert);
+                }
+                else
+                {
+                    $mine->pivot__project_staff()->detach(['department_id'=>$me->department_id,'team_id'=>$me->team_id]);
                 }
             }
             else throw new Exception("DK_Common__Project--insert--fail");
