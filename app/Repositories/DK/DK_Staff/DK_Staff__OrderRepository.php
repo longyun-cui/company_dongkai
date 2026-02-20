@@ -15,6 +15,7 @@ use App\Models\DK\DK_Common\DK_Common__Order;
 use App\Models\DK\DK_Common\DK_Common__Order__Operation_Record;
 use App\Models\DK\DK_Common\DK_Common__Delivery;
 
+use App\Models\DK\DK_Common\DK_Pivot__Department_Project;
 use App\Models\DK\DK_Common\DK_Pivot__Staff_Project;
 use App\Models\DK\DK_Common\DK_Pivot__Team_Project;
 
@@ -85,6 +86,20 @@ class DK_Staff__OrderRepository {
 
         $query = DK_Common__Order::select('dk_common__order.*');
 
+
+        if(in_array($me->staff_category,[41,51,61]))
+        {
+            $me_department_id = $me->department_id;
+            $project_ids = DK_Pivot__Department_Project::select('project_id')->whereIn('department_id',$me_department_id)->get()->pluck('project_id')->toArray();
+            $query->whereIn('dk_common__order.project_id', $project_ids);
+
+            if($me->staff_position > 31)
+            {
+                $me_team_id = $me->team_id;
+                $project_ids = DK_Pivot__Team_Project::select('project_id')->whereIn('team_id',$me_team_id)->get()->pluck('project_id')->toArray();
+                $query->whereIn('dk_common__order.project_id', $project_ids);
+            }
+        }
 
         // 客服部
         if($me->staff_category == 41)
@@ -162,10 +177,6 @@ class DK_Staff__OrderRepository {
                 // 多对多
                 $project_list = DK_Pivot__Staff_Project::select('project_id')->where('user_id',$me->id)->get()->pluck('project_id')->toArray();
                 $query->where('dk_common__order.is_published','<>',0)->whereIn('dk_common__order.project_id', $project_list);
-                if($me->team_id != 0)
-                {
-                    $query->where('dk_common__order.team_id',$me->team_id);
-                }
             }
         }
 
