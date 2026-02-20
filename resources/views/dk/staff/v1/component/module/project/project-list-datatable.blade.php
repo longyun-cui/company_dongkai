@@ -259,7 +259,7 @@
                     "title": "复核部门",
                     "data": "pivot__project_department__ad",
                     "className": "text-center white-space-normal",
-                    "width": "160px",
+                    "width": "240px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                     },
