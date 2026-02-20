@@ -99,7 +99,7 @@
                 @endforeach
             </select>
             {{--可分发--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
+            @if(in_array($me->staff_category,[0,1,9,71]))
                 <select class="search-filter form-filter filter-md select2-box-c" name="order-distribute-type">
                     <option value="">常规筛选</option>
                     <option value="1">可分发</option>
@@ -110,7 +110,7 @@
             {{--审核状态--}}
             <select class="search-filter form-filter filter-lg select2-box-c" name="order-inspected-status">
                 <option value="-1">审核状态</option>
-                @if(in_array($me->user_type,[0,1,9,11,81,84,88]))
+                @if(in_array($me->staff_category,[0,1,9,41]))
                     <option value="待发布">待发布</option>
                 @endif
                 <option value="待审核">待审核</option>
@@ -131,7 +131,7 @@
                 @endif
             </select>
             {{--录音质量--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77,81,84,88]))
+            @if(in_array($me->staff_category,[0,1,9,51,61,71]))
                 <select class="search-filter form-filter filter-md select2-box-c" name="order-recording-quality">
                     <option value="-1">录音质量</option>
                     <option value="0">合格</option>
@@ -140,7 +140,7 @@
                 </select>
             @endif
             {{--申诉状态--}}
-            @if(in_array($me->user_type,[0,1,9,11,91]))
+            @if(in_array($me->staff_category,[0,1,9,61]))
                 <select class="search-filter form-filter filter-md select2-box-c" name="order-appealed-status">
                     <option value="">申诉状态</option>
                     @foreach(config('dk.common-config.appealed_status') as $v)
@@ -151,12 +151,12 @@
 
 
             {{--交付日期--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66]))
+            @if(in_array($me->staff_category,[0,1,9,71]))
             <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="order-delivered_date" placeholder="交付日期" value="" readonly="readonly" />
             @endif
 
             {{--交付状态--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66]))
+            @if(in_array($me->staff_category,[0,1,9,71]))
             <select class="search-filter form-filter filter-lg select2-box-c" name="order-delivered-status">
                 <option value="-1">交付状态</option>
                 <option value="待交付">待交付</option>
@@ -166,7 +166,7 @@
             @endif
 
             {{--交付结果--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66]))
+            @if(in_array($me->staff_category,[0,1,9,71]))
             <select class="search-filter form-filter filter-xl select2-box-c" name="order-delivered-result[]" multiple="multiple">
                 <option value="-1">交付结果</option>
                 @foreach(config('dk.common-config.delivered_result') as $v)
@@ -179,21 +179,16 @@
             {{--城市--}}
             <select class="search-filter form-filter filter-lg select2-box-c select2-district-city" name="order-city" id="order-city" data-target="#order-district">
                 <option value="-1">选择城市</option>
-                @if(!empty($district_city_list) && count($district_city_list) > 0)
-                    @foreach($district_city_list as $v)
-                        <option value="{{ $v->district_city }}">{{ $v->district_city }}</option>
+                @if(!empty($location_city_list) && count($location_city_list) > 0)
+                    @foreach($location_city_list as $v)
+                        <option value="{{ $v->location_city }}">{{ $v->location_city }}</option>
                     @endforeach
                 @endif
             </select>
 
             {{--行政区--}}
-            <select class="search-filter form-filter filter-xxl select2-box-c select2-district-district" name="order-district[]" id="order-district" data-target="order-city" multiple="multiple">
-                <option value="-1">选择区域</option>
-                @if(!empty($district_district_list) && count($district_district_list) > 0)
-                    @foreach($district_district_list as $v)
-                        <option value="{{ $v }}">{{ $v }}</option>
-                    @endforeach
-                @endif
+            <select class="search-filter form-filter filter-xxl select2-box-c select2--location-c" name="order-district[]" id="order-district" data-target="order-city" multiple="multiple">
+                <option value="">选择区域</option>
             </select>
 
 
@@ -216,6 +211,7 @@
             </button>
 
 
+            @if(in_array($me->staff_category,[0,1,9]))
             <button type="button" onclick="" class="btn btn-filter btn-success modal-show--for--order--item-create"
                     data-form-id="form--for--order-dental--item-edit"
                     data-modal-id="modal--for--order-dental--item-edit"
@@ -223,6 +219,7 @@
             >
                 <i class="fa fa-plus"></i> 添加
             </button>
+            @endif
 
         </div>
 
