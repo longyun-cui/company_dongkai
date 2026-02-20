@@ -111,12 +111,12 @@
                         </div>
                     </div>
                     {{--编辑订单--}}
-                    <div class="form-group">
-                        <label class="control-label col-md-2">录音地址</label>
-                        <div class="col-md-9 ">
-                            <input type="text" class="form-control" name="order-item-distributing--recording-address" autocomplete="off" placeholder="" value="">
-                        </div>
-                    </div>
+{{--                    <div class="form-group">--}}
+{{--                        <label class="control-label col-md-2">录音地址</label>--}}
+{{--                        <div class="col-md-9 ">--}}
+{{--                            <input type="text" class="form-control" name="order-item-distributing--recording-address" autocomplete="off" placeholder="" value="">--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
                     {{--编辑订单--}}
                     <div class="form-group">
                         <label class="control-label col-md-2">交付说明</label>

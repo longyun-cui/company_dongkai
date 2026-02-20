@@ -900,6 +900,11 @@ class DKStaffController extends Controller
     {
         return $this->order_repo->o1__order__bulk_delivering_save__by_fool(request()->all());
     }
+    // 【工单】分发
+    public function o1__order__item_distributing_save()
+    {
+        return $this->order_repo->o1__order__item_distributing_save(request()->all());
+    }
 
 
     // 【工单】获取录音
@@ -952,10 +957,15 @@ class DKStaffController extends Controller
     /*
      * DELIVERY - 交付
      */
-    // 【工单】datatable
+    // 【交付】datatable
     public function o1__delivery__list__datatable_query()
     {
         return $this->delivery_repo->o1__delivery__list__datatable_query(request()->all());
+    }
+    // 【交付】删除
+    public function o1__delivery__item_delete()
+    {
+        return $this->delivery_repo->o1__delivery__item_delete(request()->all());
     }
 
 

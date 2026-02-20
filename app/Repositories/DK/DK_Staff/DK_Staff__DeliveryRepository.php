@@ -12,7 +12,7 @@ use App\Models\DK\DK_Common\DK_Common__Client;
 use App\Models\DK\DK_Common\DK_Common__Project;
 
 use App\Models\DK\DK_Common\DK_Common__Order;
-use App\Models\DK\DK_Common\DK_Common__Order_Operation_Record;
+use App\Models\DK\DK_Common\DK_Common__Order__Operation_Record;
 use App\Models\DK\DK_Common\DK_Common__Delivery;
 
 use Response, Auth, Validator, DB, Exception, Cache, Blade, Carbon, DateTime;
@@ -233,8 +233,8 @@ class DK_Staff__DeliveryRepository {
     }
 
 
-    // 【交付-管理】删除
-    public function v1_operate_for_delivery_item_delete_by_admin($post_data)
+    // 【交付】删除
+    public function o1__delivery__item_delete($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -251,85 +251,105 @@ class DK_Staff__DeliveryRepository {
         }
 
 
+        $time = time();
+        $date = date("Y-m-d");
+        $datetime = date('Y-m-d H:i:s');
+
+
         $operate = $post_data["operate"];
-        if($operate != 'item-delete-by-admin') return response_error([],"参数【operate】有误！");
+        if($operate != 'delivery--item-delete') return response_error([],"参数【operate】有误！");
         $item_id = $post_data["item_id"];
         if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
 
         $item = DK_Common__Delivery::withTrashed()->find($item_id);
         if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
 
+        $order_id  = $item->order_id;
+        $order = DK_Common__Order::withTrashed()->find($order_id);
+        if(!$order) return response_error([],"该内容不存在，刷新页面重试！");
+
         $this->get_me();
         $me = $this->me;
 
         // 判断操作权限
-        if(!in_array($me->user_type,[0,1,9,11,19,61,66])) return response_error([],"用户类型错误！");
-//        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
-        if(in_array($me->user_type,[66]))
+        if(!in_array($me->staff_category,[0,1,9,71])) return response_error([],"用户类型错误！");
+
+
+        $record_data["ip"] = Get_IP();
+        $record_data["record_object"] = 1;
+        $record_data["record_category"] = 1;
+        $record_data["record_type"] = 1;
+        $record_data["creator_id"] = $me->id;
+        $record_data["delivery_id"] = $item_id;
+        $record_data["order_id"] = $item->order_id;
+        $record_data["operate_object"] = 1;
+        $record_data["operate_category"] = 71;
+        $record_data["operate_type"] = 101;
+        $record_data["column_name"] = "delivered_result";
+
+        $record_content = [];
+
+        if(true)
         {
-            if($item->creator_id != $me->id) return response_error([],"你没有操作权限！");
+            $record_row = [];
+            $record_row['title'] = '员工操作';
+            $record_row['field'] = 'deliver_delete';
+            $record_row['before'] = '';
+            if($item->delivery_type == 1) $record_row['after'] = '交付删除';
+            else if($item->delivery_type == 11) $record_row['after'] = '分发删除';
+
+            $record_content[] = $record_row;
         }
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '操作时间';
+            $record_row['field'] = 'delivered_time';
+            $record_row['before'] = '';
+            $record_row['after'] = $datetime;
+            $record_content[] = $record_row;
+        }
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '交付id';
+            $record_row['field'] = 'delivered_id';
+            $record_row['code'] = '';
+            $record_row['before'] = '';
+            $record_row['after'] = $item_id;
+            $record_content[] = $record_row;
+        }
+
+        $record_data["content"] = json_encode($record_content);
+
 
         // 启动数据库事务
         DB::beginTransaction();
         try
         {
-            $item->timestamps = false;
-            if($item->is_published == 0 && $item->creator_id == $me->id)
+            if($item->delivery_type == 1)
             {
-                $item_copy = $item;
-
-                $item->timestamps = false;
-//                $bool = $item->forceDelete();  // 永久删除
-                $bool = $item->delete();  // 普通删除
-                if(!$bool) throw new Exception("item--delete--fail");
-                else
-                {
-                    $record = new DK_Common__Order_Operation_Record;
-
-                    $record_data["ip"] = Get_IP();
-                    $record_data["record_object"] = 21;
-                    $record_data["record_category"] = 11;
-                    $record_data["record_type"] = 1;
-                    $record_data["creator_id"] = $me->id;
-                    $record_data["order_id"] = $item_id;
-                    $record_data["operate_object"] = 91;
-                    $record_data["operate_category"] = 101;
-                    $record_data["operate_type"] = 1;
-
-                    $bool_1 = $record->fill($record_data)->save();
-                    if(!$bool_1) throw new Exception("insert--record--fail");
-                }
-
-                DB::commit();
-                $this->delete_the_item_files($item_copy);
+                $order->delivered_status = 101;
+                $order->delivered_result = '交付撤回';
+                $order->delivered_project_id = 0;
+                $order->delivered_client_id = 0;
+                $bool_order = $order->save();  // 普通删除
+                if(!$bool_order) throw new Exception("DK_Common__Order--update--fail");
             }
+
+            $item->timestamps = false;
+//            $bool = $item->forceDelete();  // 永久删除
+            $bool = $item->delete();  // 普通删除
+            if(!$bool) throw new Exception("DK_Common__Delivery--delete--fail");
             else
             {
-                $item->timestamps = false;
-                $bool = $item->delete();  // 普通删除
-//                $bool = $item->forceDelete();  // 永久删除
-                if(!$bool) throw new Exception("item--delete--fail");
-                else
-                {
-                    $record = new DK_Common__Order_Operation_Record;
+                $record = new DK_Common__Order__Operation_Record;
 
-                    $record_data["ip"] = Get_IP();
-                    $record_data["record_object"] = 21;
-                    $record_data["record_category"] = 11;
-                    $record_data["record_type"] = 1;
-                    $record_data["creator_id"] = $me->id;
-                    $record_data["order_id"] = $item_id;
-                    $record_data["operate_object"] = 91;
-                    $record_data["operate_category"] = 101;
-                    $record_data["operate_type"] = 1;
-
-                    $bool_1 = $record->fill($record_data)->save();
-                    if(!$bool_1) throw new Exception("insert--record--fail");
-                }
-
-                DB::commit();
+                $bool_record = $record->fill($record_data)->save();
+                if(!$bool_record) throw new Exception("DK_Common__Order__Operation_Record--insert--fail");
             }
+
+            DB::commit();
 
             return response_success([]);
         }
@@ -343,6 +363,8 @@ class DK_Staff__DeliveryRepository {
         }
 
     }
+
+
     // 【交付-管理】导出状态
     public function v1_operate_for_delivery_exported($post_data)
     {

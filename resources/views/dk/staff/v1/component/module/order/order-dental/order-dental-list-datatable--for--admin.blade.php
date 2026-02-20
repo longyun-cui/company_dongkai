@@ -424,6 +424,10 @@
                         {
                             $result_html = '<small class="btn-xs bg-red">交付失败</small>';
                         }
+                        else if(data == 101)
+                        {
+                            $result_html = '<small class="btn-xs bg-red">交付撤回</small>';
+                        }
                         else
                         {
                             $result_html = '<small class="btn-xs bg-black">error</small>';

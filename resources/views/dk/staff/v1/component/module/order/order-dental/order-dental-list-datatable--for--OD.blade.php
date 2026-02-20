@@ -1205,26 +1205,9 @@
                             $html_delete = '<a class="btn btn-xs order--item-delete-submit" data-id="'+data+'">删除</a>';
                         }
 
-                        // 编辑
-                        if(row.is_published == 0)
-                        {
-                            $html_edit = '<a class="btn btn-xs modal-show--for--order-dental--item-edit" data-id="'+data+'">编辑</a>';
-                        }
-
-                        // 发布
-                        if(row.is_published == 0 || (row.inspected_status == 1 && row.inspected_result == '二次待审'))
-                        {
-                            $html_publish = '<a class="btn btn-xs order--item-publish-submit" data-id="'+data+'">发布</a>';
-                        }
-
                         // 已发布
                         if(row.is_published > 0)
                         {
-                            // 编辑
-                            if(row.inspected_status == 1 && row.inspected_result == '二次待审')
-                            {
-                                $html_edit = '<a class="btn btn-xs modal-show--for--order-dental--item-edit" data-id="'+data+'">编辑</a>';
-                            }
 
                             // 审核
                             if(row.inspector_id == 0)
@@ -1234,18 +1217,6 @@
                             else
                             {
                                 $html_inspect = '<a class="btn btn-xs modal-show--for--order--item-inspecting" data-id="'+data+'">再审</a>';
-                            }
-
-                            // 申诉
-                            if(row.appealed_status == 0 && ['拒绝','拒绝可交付','不合格'].includes(row.inspected_result))
-                            {
-                                $html_appeal = '<a class="btn btn-xs modal-show--for--order--item-appealing" data-id="'+data+'">申诉</a>';
-                            }
-
-                            // 申诉处理
-                            if(row.appealed_status == 1)
-                            {
-                                $html_appeal_handle = '<a class="btn btn-xs modal-show--for--order--item-appealed-handling" data-id="'+data+'">处理</a>';
                             }
 
                             // 交付

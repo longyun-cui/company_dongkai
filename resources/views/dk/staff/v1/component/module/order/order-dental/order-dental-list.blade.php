@@ -165,9 +165,12 @@
             @if(in_array($me->staff_category,[0,1,9,71]))
             <select class="search-filter form-filter filter-lg select2-box-c" name="order-delivered-status">
                 <option value="-1">交付状态</option>
-                <option value="待交付">待交付</option>
-                {{--<option value="已交付" @if("已交付" == $delivered_status) selected="selected" @endif>已交付</option>--}}
-                <option value="已操作">已操作</option>
+                <option value="0">未操作</option>
+                <option value="1">已交付</option>
+                <option value="9">待交付</option>
+                <option value="91">不交付</option>
+                <option value="99">交付失败</option>
+                <option value="101">交付撤回</option>
             </select>
             @endif
             {{--交付结果--}}
