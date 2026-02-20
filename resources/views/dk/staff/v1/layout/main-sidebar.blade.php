@@ -124,7 +124,7 @@
 
 
             {{--客户列表--}}
-            @if(in_array($me->staff_category,[0,1,9,71]))
+            @if(in_array($me->staff_category,[0,1,9]) || ($me->staff_category == 71 && $me->staff_position == 31))
             <li class="treeview _none-">
                 <a class="tab-control datatable-control"
                    data-type="create"
@@ -148,7 +148,7 @@
 
 
             {{--项目列表--}}
-            @if(in_array($me->staff_category,[0,1,9,71]) || in_array($me->staff_position,[31]))
+            @if(in_array($me->staff_category,[0,1,9]) || in_array($me->staff_position,[31]))
             <li class="treeview _none-">
                 <a class="tab-control datatable-control"
                    data-type="create"
