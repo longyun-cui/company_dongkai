@@ -1741,7 +1741,7 @@
         });
 
 
-        // 【工单】【交付】显示
+        // 【工单】【分发】显示
         $(".main-wrapper").off('click', ".modal-show--for--order--item-distributing").on('click', ".modal-show--for--order--item-distributing", function() {
             var $that = $(this);
             var $id = $(this).data('id');
@@ -1781,7 +1781,7 @@
 
             $modal.modal('show');
         });
-        // 【工单】【交付】提交
+        // 【工单】【分发】提交
         $(".main-wrapper").off('click', "#item-submit--for--order--item-distributing").on('click', "#item-submit--for--order--item-distributing", function() {
             var $that = $(this);
             var $item_id = $that.data('item-id');

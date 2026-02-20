@@ -53,7 +53,7 @@
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border" style="margin:8px 0;">
-                <h3 class="box-title">交付-订单<span class="id-box"></span></h3>
+                <h3 class="box-title">分发-订单<span class="id-box"></span></h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>

@@ -74,18 +74,6 @@
                         }
                     },
                     {
-                        "title": "类型",
-                        "data": "item_type",
-                        "className": "",
-                        "width": "100px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(data == 'order') return '<small class="btn-xs bg-green">工单</small>';
-                            else if(data == 'delivery') return '<small class="btn-xs bg-blue">交付</small>';
-                            else return '有误';
-                        }
-                    },
-                    {
                         "title": "来源",
                         "data": "id",
                         "className": "",
@@ -122,6 +110,18 @@
                                 else if(row.pivot_type == 96) return '<small class="btn-xs bg-orange">分发</small>';
                             }
                             return $result_html;
+                        }
+                    },
+                    {
+                        "title": "类型",
+                        "data": "item_type",
+                        "className": "",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data == 'order') return '<small class="btn-xs bg-green">工单</small>';
+                            else if(data == 'delivery') return '<small class="btn-xs bg-blue">交付</small>';
+                            else return '有误';
                         }
                     },
                     {

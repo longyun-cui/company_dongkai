@@ -209,6 +209,7 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
     Route::post('/o1/order/bulk-delivering-save', $controller.'@o1__order__bulk_delivering_save');
     Route::post('/o1/order/item-delivering-save--by-fool', $controller.'@o1__order__item_delivering_save__by_fool');
     Route::post('/o1/order/bulk-delivering-save--by-fool', $controller.'@o1__order__bulk_delivering_save__by_fool');
+    Route::post('/o1/order/item-distributing-save', $controller.'@o1__order__item_distributing_save');
     // 【工单】api
     Route::post('/o1/order/item-get-call-record--by-api', $controller.'@o1__order__item_get_call_record__by_api');
     // 【工单】操作记录
