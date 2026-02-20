@@ -142,14 +142,14 @@
 {{--                            <button type="button" class="btn">--}}
 {{--                                <div class="radio">--}}
 {{--                                    <label>--}}
-{{--                                        <input type="radio" name="active" value="0" checked="checked"> 暂不启用--}}
+{{--                                        <input type="radio" name="active" value="0"> 暂不启用--}}
 {{--                                    </label>--}}
 {{--                                </div>--}}
 {{--                            </button>--}}
 {{--                            <button type="button" class="btn">--}}
 {{--                                <div class="radio">--}}
 {{--                                    <label>--}}
-{{--                                        <input type="radio" name="active" value="1"> 启用--}}
+{{--                                        <input type="radio" name="active" value="1" checked="checked"> 启用--}}
 {{--                                    </label>--}}
 {{--                                </div>--}}
 {{--                            </button>--}}

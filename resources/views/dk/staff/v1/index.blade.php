@@ -161,6 +161,7 @@
     @include(env('DK_STAFF__TEMPLATE').'component.module.client.client--item-operation-record')
     {{--项目--}}
     @include(env('DK_STAFF__TEMPLATE').'component.module.project.project-edit')
+    @include(env('DK_STAFF__TEMPLATE').'component.module.project.project--item-team-set')
     @include(env('DK_STAFF__TEMPLATE').'component.module.project.project--item-operation-record')
 
 
@@ -234,9 +235,35 @@
     @include(env('DK_STAFF__TEMPLATE').'component.module.client.client-list-datatable')
     @include(env('DK_STAFF__TEMPLATE').'component.module.client.client-list-script')
     @include(env('DK_STAFF__TEMPLATE').'component.module.client.client--item-operation-record-datatable')
+
+
+
+
     {{--项目--}}
     @include(env('DK_STAFF__TEMPLATE').'component.module.project.project-edit-script')
-    @include(env('DK_STAFF__TEMPLATE').'component.module.project.project-list-datatable')
+
+{{--    @if(in_array($me->staff_category,[0,1,9,71]))--}}
+{{--        @include(env('DK_STAFF__TEMPLATE').'component.module.project.project-list-datatable')--}}
+{{--    @elseif(in_array($me->staff_category,[41]))--}}
+{{--        @include(env('DK_STAFF__TEMPLATE').'component.module.project.project-list-datatable--for--d-CSD')--}}
+{{--    @elseif(in_array($me->staff_category,[51]))--}}
+{{--        @include(env('DK_STAFF__TEMPLATE').'component.module.project.project-list-datatable--for--d-QID')--}}
+{{--    @elseif(in_array($me->staff_category,[61]))--}}
+{{--        @include(env('DK_STAFF__TEMPLATE').'component.module.project.project-list-datatable--for--d-AD')--}}
+{{--    @else--}}
+{{--        @include(env('DK_STAFF__TEMPLATE').'component.module.project.project-list-datatable--for--d-CSD')--}}
+{{--    @endif--}}
+
+    @if(in_array($me->staff_category,[0,1,9,71]))
+        @include(env('DK_STAFF__TEMPLATE').'component.module.project.project-list-datatable')
+    @else
+        @if($me->staff_position == 31)
+            @include(env('DK_STAFF__TEMPLATE').'component.module.project.project-list-datatable--for--p-director')
+        @elseif($me->staff_position == 41)
+            @include(env('DK_STAFF__TEMPLATE').'component.module.project.project-list-datatable--for--p-manager')
+        @endif
+    @endif
+
     @include(env('DK_STAFF__TEMPLATE').'component.module.project.project-list-script')
     @include(env('DK_STAFF__TEMPLATE').'component.module.project.project--item-operation-record-datatable')
 

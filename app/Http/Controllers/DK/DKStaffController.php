@@ -730,10 +730,25 @@ class DKStaffController extends Controller
     {
         return $this->project_repo->o1__project__item_get(request()->all());
     }
+    // 【项目】获取
+    public function o1__project__item_get_team()
+    {
+        return $this->project_repo->o1__project__item_get_team(request()->all());
+    }
+    // 【项目】获取
+    public function o1__project__item_get_staff()
+    {
+        return $this->project_repo->o1__project__item_get_staff(request()->all());
+    }
     // 【项目】编辑-保存
     public function o1__project__item_save()
     {
         return $this->project_repo->o1__project__item_save(request()->all());
+    }
+    // 【项目】编辑-保存
+    public function o1__project__item_set_team__save()
+    {
+        return $this->project_repo->o1__project__item_set_team__save(request()->all());
     }
     // 【项目】删除
     public function o1__project__item_delete()
