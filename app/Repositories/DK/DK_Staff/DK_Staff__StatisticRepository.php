@@ -4876,7 +4876,7 @@ class DK_Staff__StatisticRepository {
             else if($me->staff_category == 41)
             {
                 $team_id = $me->team_id;
-                $project_list = DK_Pivot__Team_sProject::select('project_id')->where('team_id',$team_id)->get();
+                $project_list = DK_Pivot__Team_Project::select('project_id')->where('team_id',$team_id)->get();
                 $query->whereIn('id',$project_list);
             }
         }
