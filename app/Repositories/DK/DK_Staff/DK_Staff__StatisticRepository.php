@@ -4867,16 +4867,21 @@ class DK_Staff__StatisticRepository {
         // 客服部
         if($me->staff_category == 41)
         {
-            if($me->staff_category == 31)
+            if($me->staff_position == 31)
             {
                 $department_id = $me->department_id;
                 $project_list = DK_Pivot__Team_Project::select('project_id')->where('department_id',$department_id)->get();
                 $query->whereIn('id',$project_list);
             }
-            else if($me->staff_category == 41)
+            else if($me->staff_position == 41)
             {
                 $team_id = $me->team_id;
                 $project_list = DK_Pivot__Team_Project::select('project_id')->where('team_id',$team_id)->get();
+                $query->whereIn('id',$project_list);
+            }
+            else if($me->staff_position == 99)
+            {
+                $project_list = DK_Pivot__Staff_Project::select('project_id')->where('staff_id',$me->id)->get();
                 $query->whereIn('id',$project_list);
             }
         }
@@ -4884,14 +4889,19 @@ class DK_Staff__StatisticRepository {
         // 质检部
         if($me->staff_category == 51)
         {
-            $team_id = $me->team_id;
-            if($me->team_id > 0)
+            if($me->staff_position == 31)
             {
+                $department_id = $me->department_id;
+                $project_list = DK_Pivot__Team_Project::select('project_id')->where('department_id',$department_id)->get();
+                $query->whereIn('id',$project_list);
+            }
+            else if($me->staff_position == 41)
+            {
+                $team_id = $me->team_id;
                 $project_list = DK_Pivot__Team_Project::select('project_id')->where('team_id',$team_id)->get();
                 $query->whereIn('id',$project_list);
             }
-
-            if($me->staff_position == 99)
+            else if($me->staff_position == 99)
             {
                 $project_list = DK_Pivot__Staff_Project::select('project_id')->where('staff_id',$me->id)->get();
                 $query->whereIn('id',$project_list);
