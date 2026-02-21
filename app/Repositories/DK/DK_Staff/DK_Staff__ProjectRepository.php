@@ -138,7 +138,9 @@ class DK_Staff__ProjectRepository {
             $query->with([
                 'pivot__project_department__csd',
                 'pivot__project_department__qid',
-                'pivot__project_department__ad'
+                'pivot__project_department__ad',
+                'pivot__project_team',
+                'pivot__project_staff'
             ]);
         }
 
@@ -559,13 +561,15 @@ class DK_Staff__ProjectRepository {
                         $insert['updated_at'] = $time;
                         $team_insert[$v] = $insert;
                     }
-//                    $mine->pivot__project_team()->sync($team_insert);
-                    $mine->pivot__project_team()->detach(['department_id'=>$me->department_id]);
-                    $mine->pivot__project_team()->syncWithoutDetaching($team_insert);
+                    $mine->pivot__project_team()->wherePivot('department_id',$me->department_id)->sync($team_insert);
+//                    $mine->pivot__project_team()->wherePivot(['department_id'=>$me->department_id])->detach();
+//                    $mine->pivot__project_team()->syncWithoutDetaching($team_insert);
                 }
                 else
                 {
-                    $mine->pivot__project_team()->detach(['department_id'=>$me->department_id]);
+                    $mine->pivot__project_team()
+                        ->wherePivot('department_id',$me->department_id)
+                        ->detach();
                 }
             }
             else throw new Exception("DK_Common__Project--insert--fail");
@@ -655,13 +659,19 @@ class DK_Staff__ProjectRepository {
                         $insert['updated_at'] = $time;
                         $staff_insert[$v] = $insert;
                     }
-//                    $mine->pivot__project_team()->sync($team_insert);
-                    $mine->pivot__project_staff()->detach(['department_id'=>$me->department_id,'team_id'=>$me->team_id]);
-                    $mine->pivot__project_staff()->syncWithoutDetaching($staff_insert);
+                    $mine->pivot__project_staff()
+                        ->wherePivot('department_id',$me->department_id)
+                        ->wherePivot('team_id',$me->team_id)
+                        ->sync($staff_insert);
+//                    $mine->pivot__project_staff()->wherePivot(['department_id'=>$me->department_id,'team_id'=>$me->team_id])->detach();
+//                    $mine->pivot__project_staff()->wherePivot(['department_id'=>$me->department_id,'team_id'=>$me->team_id])->syncWithoutDetaching($staff_insert);
                 }
                 else
                 {
-                    $mine->pivot__project_staff()->detach(['department_id'=>$me->department_id,'team_id'=>$me->team_id]);
+                    $mine->pivot__project_staff()
+                        ->wherePivot('department_id',$me->department_id)
+                        ->wherePivot('team_id',$me->team_id)
+                        ->detach();
                 }
             }
             else throw new Exception("DK_Common__Project--insert--fail");

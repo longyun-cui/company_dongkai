@@ -430,7 +430,7 @@
                         if($response.data.pivot__project_staff)
                         {
                             $.each($response.data.pivot__project_staff, function( key, val ) {
-                                $modal.find('select[name="team_list[]"]').append(new Option(this.name, this.id, true, true)).trigger('change');
+                                $modal.find('select[name="staff_list[]"]').append(new Option(this.name, this.id, true, true)).trigger('change');
                             });
                         }
 

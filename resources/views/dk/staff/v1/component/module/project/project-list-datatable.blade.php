@@ -32,7 +32,7 @@
             },
             "fixedColumns": {
                 "leftColumns": "@if($is_mobile_equipment) 1 @else 1 @endif",
-                "rightColumns": "0"
+                "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
             },
             "columns": [
                 {
@@ -259,7 +259,7 @@
                     "title": "复核部门",
                     "data": "pivot__project_department__ad",
                     "className": "text-center white-space-normal",
-                    "width": "240px",
+                    "width": "160px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                     },
@@ -272,40 +272,40 @@
                         return html;
                     }
                 },
-//                 {
-//                     "title": "团队",
-//                     "data": "pivot__project_team",
-//                     "className": "text-center white-space-normal",
-//                     "width": "120px",
-//                     "orderable": false,
-//                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-//                     },
-//                     render: function(data, type, row, meta) {
-//                         var html = '';
-//                         $.each(data,function( key, val ) {
-// //                                console.log( key, val, this );
-//                             html += '<a href="javascript:void(0);">'+this.name+'</a> &nbsp;';
-//                         });
-//                         return html;
-//                     }
-//                 },
-//                 {
-//                     "title": "质检员",
-//                     "data": "pivot_project_staff",
-//                     "className": "text-center white-space-normal",
-//                     "width": "360px",
-//                     "orderable": false,
-//                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-//                     },
-//                     render: function(data, type, row, meta) {
-//                         var html = '';
-//                         $.each(data,function( key, val ) {
-// //                                console.log( key, val, this );
-//                             html += '<a href="javascript:void(0);">'+this.username+'</a> &nbsp;';
-//                         });
-//                         return html;
-//                     }
-//                 },
+                {
+                    "title": "团队",
+                    "data": "pivot__project_team",
+                    "className": "text-center white-space-normal",
+                    "width": "160px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    },
+                    render: function(data, type, row, meta) {
+                        var html = '';
+                        $.each(data,function( key, val ) {
+//                                console.log( key, val, this );
+                            html += '<a href="javascript:void(0);">'+this.name+'</a> &nbsp; <br>';
+                        });
+                        return html;
+                    }
+                },
+                {
+                    "title": "员工",
+                    "data": "pivot__project_staff",
+                    "className": "text-center white-space-normal",
+                    "width": "120px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    },
+                    render: function(data, type, row, meta) {
+                        var html = '';
+                        $.each(data,function( key, val ) {
+//                                console.log( key, val, this );
+                            html += '<a href="javascript:void(0);">'+this.name+'</a> &nbsp; <br>';
+                        });
+                        return html;
+                    }
+                },
                 {
                     "title": "每日目标",
                     "data": "daily_goal",
@@ -360,7 +360,7 @@
                     "title": "备注",
                     "data": "remark",
                     "className": "",
-                    "width": "240px",
+                    "width": "300px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)

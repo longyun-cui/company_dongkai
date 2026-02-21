@@ -533,7 +533,7 @@
                 //         // else return '';
                 //     }
                 // }
-                @if($me->team_id == 0)
+                @if(in_array($me->staff_category,[0,1,9,71]))
                 {
                     "title": "团队",
                     "data": "pivot__project_team",
