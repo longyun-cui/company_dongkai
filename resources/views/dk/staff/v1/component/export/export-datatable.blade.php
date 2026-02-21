@@ -234,7 +234,7 @@
                     }
                 },
                 {
-                    "title": "终止时间",
+                    "title": "结束时间",
                     "data": "after",
                     "className": "font-12px",
                     "width": "120px",
@@ -289,7 +289,7 @@
                     "data": "creator_id",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.true_name+'</a>';
+                        return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.name+'</a>';
                     }
                 },
                 {
