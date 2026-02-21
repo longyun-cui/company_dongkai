@@ -3667,6 +3667,10 @@ class DK_Staff__OrderRepository {
             $delivered_result = '不操作';
             $non_delivery_reason = '已交付过，不再交付';
         }
+        else
+        {
+            $is_next = 1;
+        }
 
 
         // [判断]【工单】是否审核
@@ -4106,6 +4110,10 @@ class DK_Staff__OrderRepository {
                     $is_delivery = 0;
                     $delivered_result = '不操作';
                     $non_delivery_reason = '已交付过，不再交付';
+                }
+                else
+                {
+                    $is_next = 1;
                 }
 
 
