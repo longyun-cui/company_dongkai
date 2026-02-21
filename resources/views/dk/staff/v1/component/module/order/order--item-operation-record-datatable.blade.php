@@ -75,7 +75,7 @@
                         "title": "类型",
                         "data": "operate_category",
                         "className": "",
-                        "width": "80px",
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             var $category_html = '';
