@@ -234,10 +234,35 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
 
 
 
+
+
+
+
     // 【导出】列表
     Route::post('/o1/export/export-list/datatable-query', $controller.'@o1__export__list__datatable_query');
     Route::get('/o1/export/order--export--by-ids', $controller.'@o1__export__order__export__by_ids');
     Route::get('/o1/export/delivery--export--by-ids', $controller.'@o1__export__delivery__export__by_ids');
+
+
+    Route::get('/o1/export/delivery--export--by-ids', $controller.'@o1__export__delivery__export__by_ids');
+
+    // 【导出-管理】
+    Route::post('/o1/record/datatable-list-query', $controller.'@v1_operate_for_record_datatable_list_query');
+    Route::post('/o1/export/export-list/datatable-query', $controller.'@o1__export__list__datatable_query');
+
+    Route::get('/o1/export/order-export', $controller.'@o1__order_export');
+    Route::get('/o1/export/order-export-by-ids', $controller.'@o1__order_export__by_ids');
+    Route::get('/o1/export/delivery-export', $controller.'@o1__delivery_export');
+    Route::get('/o1/export/duplicate-export', $controller.'@o1__duplicate_export');
+
+
+
+
+
+
+    // 【记录】列表
+    Route::post('/o1/record/record-list/datatable-query', $controller.'@o1__record__list__datatable_query');
+
 
 
 

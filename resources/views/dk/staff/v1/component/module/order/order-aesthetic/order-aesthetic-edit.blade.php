@@ -45,8 +45,16 @@
                     <div class="form-group">
                         <label class="control-label col-md-2"><sup class="text-red">*</sup> 项目</label>
                         <div class="col-md-8 ">
-                            <select class="form-control select2-box-c select2-project" name="project_id" id="order-edit-select2-project" data-item-category="11" style="width:100%;">
-                                <option data-id="-1" value="-1">选择项目</option>
+                            <select class="form-control select2-box-c select2-project-"
+                                    name="project_id"
+                                    data-project-category="11"
+                            >
+                                <option data-id="" value="">选择项目</option>
+                                @if(!empty($project_list) && count($project_list) > 0)
+                                    @foreach($project_list as $v)
+                                        <option value="{{ $v->id }}">{{ $v->name }}</option>
+                                    @endforeach
+                                @endif
                             </select>
                         </div>
                     </div>

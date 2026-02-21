@@ -82,7 +82,7 @@
             {{--选择交付客户--}}
             @if(in_array($me->staff_category,[0,1,9,71]))
             <select class="search-filter form-filter filter-lg select2--client-c" data-client-category="1" name="order-delivered-client">
-                <option value="-1">选择交付项目</option>
+                <option value="-1">选择交付客户</option>
                 @if(!empty($client_list) && count($client_list) > 0)
                     @foreach($client_list as $v)
                         <option value="{{ $v->id }}">{{ $v->name }}</option>

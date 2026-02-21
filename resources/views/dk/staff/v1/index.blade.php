@@ -134,6 +134,10 @@
 
     @include(env('DK_STAFF__TEMPLATE').'component.statistic-call.statistic-task-analysis')
 
+
+    @include(env('DK_STAFF__TEMPLATE').'component.export.export')
+
+
 </div>
 
 
@@ -343,6 +347,10 @@
 
 
     @include(env('DK_STAFF__TEMPLATE').'component.statistic-call.statistic-task-analysis-datatable')
+
+
+    @include(env('DK_STAFF__TEMPLATE').'component.export.export-script')
+    @include(env('DK_STAFF__TEMPLATE').'component.export.export-datatable')
 
 
 @endsection

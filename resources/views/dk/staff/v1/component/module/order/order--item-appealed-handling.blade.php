@@ -131,7 +131,6 @@
                         <div class="col-md-9 ">
                             <select class="form-control modal--select2 select2-reset"
                                     name="client_type"
-                                    id=""
                                     data-modal="#modal--for--order--item-appealed-handling"
                             >
                                 <option value="">选择患者类型</option>
@@ -149,7 +148,6 @@
                         <div class="col-md-9 ">
                             <select class="form-control modal--select2 select2-reset"
                                     name="field_1"
-                                    id=""
                                     data-modal="#modal--for--order--item-appealed-handling"
                             >
                                 <option value="">选择牙齿数量</option>
@@ -167,7 +165,6 @@
                         <div class="col-md-9 ">
                             <select class="form-control modal--select2 select2-reset"
                                     name="client_intention"
-                                    id=""
                                     data-modal="#modal--for--order--item-appealed-handling"
                             >
                                 <option value="">选择客户意向</option>
@@ -229,7 +226,6 @@
                         <div class="col-md-9 ">
                             <select class="form-control modal--select2"
                                     name="order--item-appealed-handling--result"
-                                    id=""
                                     data-modal="#modal--for--order--item-appealed-handling"
                             >
                                 <option value="">选择处理结果</option>
@@ -261,7 +257,7 @@
                         >
                             <i class="fa fa-check"></i> 提交
                         </button>
-                        <button type="button" class="btn btn-default edit-cancel" id="">取消</button>
+                        <button type="button" class="btn btn-default edit-cancel">取消</button>
                     </div>
                 </div>
             </div>

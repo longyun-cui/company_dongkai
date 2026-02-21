@@ -263,21 +263,6 @@
                     "width": "120px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if("{{ in_array($me->user_type,[0,1,11,19]) }}")
-                        {
-                            $(nTd).attr('data-row-index',iRow);
-
-                            $(nTd).addClass('modal-show-for-phone-pool-info');
-                            $(nTd).attr('data-id',row.id).attr('data-name','电话池');
-                            $(nTd).attr('data-key','pool').attr('data-value',row.id);
-                            $(nTd).attr('data-phone',row.client_phone);
-                            $(nTd).attr('data-city',row.location_city);
-
-                            $(nTd).attr('data-column-type','info');
-                            $(nTd).attr('data-column-name','电话池');
-                        }
-                    },
                     render: function(data, type, row, meta) {
 //                            return data;
                         if(!data) return '';
@@ -306,7 +291,7 @@
                     "width": "160px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -315,14 +300,7 @@
                             $(nTd).attr('data-key','project_id').attr('data-value',data);
                             if(row.project_er == null) $(nTd).attr('data-option-name','未指定');
                             else {
-                                if(row.project_er.alias_name)
-                                {
-                                    $(nTd).attr('data-option-name',row.project_er.name+' ('+row.project_er.alias_name+')');
-                                }
-                                else
-                                {
-                                    $(nTd).attr('data-option-name',row.project_er.name);
-                                }
+                                $(nTd).attr('data-option-name',row.project_er.name);
                             }
 
                             $(nTd).attr('data-column-type','select2');
@@ -333,34 +311,13 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if("{{ in_array($me->user_type,[0,1,11,61,66]) }}")
+                        if(row.project_er == null)
                         {
-                            if(row.project_er == null)
-                            {
-                                return '未指定';
-                            }
-                            else
-                            {
-                                if(row.project_er.alias_name)
-                                {
-                                    return '<a href="javascript:void(0);">'+row.project_er.name+' ('+row.project_er.alias_name+')'+'</a>';
-                                }
-                                else
-                                {
-                                    return '<a href="javascript:void(0);">'+row.project_er.name+'</a>';
-                                }
-                            }
+                            return '未指定';
                         }
                         else
                         {
-                            if(row.project_er == null)
-                            {
-                                return '未指定';
-                            }
-                            else
-                            {
-                                return '<a href="javascript:void(0);">'+row.project_er.name+'</a>';
-                            }
+                            return '<a href="javascript:void(0);">'+row.project_er.name+'</a>';
                         }
                     }
                 },
@@ -395,7 +352,7 @@
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -422,7 +379,7 @@
                     "width": "100px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -449,7 +406,7 @@
                     "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -503,7 +460,7 @@
                     "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -599,7 +556,7 @@
                     "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -627,7 +584,7 @@
                     "width": "100px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -654,7 +611,7 @@
                     "width": "120px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
                         {
                             $(nTd).addClass('modal-show-for-field-set');
                             $(nTd).attr('data-id',row.id).attr('data-name','所在城市');
@@ -683,7 +640,7 @@
                     {{--    "width": "60px",--}}
                     {{--    "orderable": false,--}}
                     {{--    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {--}}
-                    {{--        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))--}}
+                    {{--        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))--}}
                     {{--        {--}}
                     {{--            $(nTd).addClass('modal-show-for-field-set');--}}
                     {{--            $(nTd).attr('data-id',row.id).attr('data-name','渠道来源');--}}

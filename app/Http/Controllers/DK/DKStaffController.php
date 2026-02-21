@@ -27,6 +27,8 @@ use App\Repositories\DK\DK_Staff\DK_Staff__DeliveryRepository;
 
 use App\Repositories\DK\DK_Staff\DK_Staff__ExportRepository;
 
+use App\Repositories\DK\DK_Staff\DK_Staff__RecordRepository;
+
 use App\Repositories\DK\DK_Staff\DK_Staff__StatisticRepository;
 
 
@@ -56,6 +58,8 @@ class DKStaffController extends Controller
 
     private $export_repo;
 
+    private $record_repo;
+
     private $statistic_repo;
 
     public function __construct()
@@ -78,6 +82,8 @@ class DKStaffController extends Controller
         $this->delivery_repo = new DK_Staff__DeliveryRepository;
 
         $this->export_repo = new DK_Staff__ExportRepository;
+
+        $this->record_repo = new DK_Staff__RecordRepository;
 
         $this->statistic_repo = new DK_Staff__StatisticRepository;
     }
@@ -978,13 +984,17 @@ class DKStaffController extends Controller
     /*
      * EXPORT - 导出
      */
+    public function v1_operate_for_record_datatable_list_query()
+    {
+        return $this->repo->v1_operate_for_record_datatable_list_query(request()->all());
+    }
     // 【工单】datatable
     public function o1__export__list__datatable_query()
     {
         return $this->export_repo->o1__export__list__datatable_query(request()->all());
     }
 
-    // 【数据-导出】工单-下载
+    // 【导出】工单-下载
     public function o1__export__order__export__by_ids()
     {
         $order_category = request('order_category',0);
@@ -1007,7 +1017,7 @@ class DKStaffController extends Controller
         }
     }
 
-    // 【数据-导出】工单-下载
+    // 【导出】工单-下载
     public function o1__export__delivery__export__by_ids()
     {
         $order_category = request('order_category',0);
@@ -1030,6 +1040,122 @@ class DKStaffController extends Controller
         }
     }
 
+
+
+
+
+    // 【导出】工单-下载
+    public function o1__order_export()
+    {
+        $order_category = request('order_category',0);
+
+        if($order_category == 1)
+        {
+            return $this->export_repo->o1__order_export__for__dental(request()->all());
+        }
+        else if($order_category == 11)
+        {
+            return $this->export_repo->o1__order_export__for__aesthetic(request()->all());
+        }
+        else if($order_category == 31)
+        {
+            return $this->export_repo->o1__order_export__for__luxury(request()->all());
+        }
+        else
+        {
+            return $this->export_repo->o1__order_export(request()->all());
+        }
+
+    }
+    // 【导出】工单-下载
+    public function o1__order_export__by_ids()
+    {
+        $order_category = request('order_category',0);
+
+        if($order_category == 1)
+        {
+            return $this->export_repo->o1__order_export__by_ids__for__dental(request()->all());
+        }
+        else if($order_category == 11)
+        {
+            return $this->export_repo->o1__order_export__by_ids__for__aesthetic(request()->all());
+        }
+        else if($order_category == 31)
+        {
+            return $this->export_repo->o1__order_export__by_ids__for__luxury(request()->all());
+        }
+        else
+        {
+            return $this->export_repo->o1__order_export__by_ids(request()->all());
+        }
+    }
+
+
+    // 【导出】交付-下载
+    public function o1__delivery_export()
+    {
+        $order_category = request('order_category',0);
+
+        if($order_category == 1)
+        {
+            return $this->export_repo->o1__delivery_export__for__dental(request()->all());
+        }
+        else if($order_category == 11)
+        {
+            return $this->export_repo->o1__delivery_export__for__aesthetic(request()->all());
+        }
+        else if($order_category == 31)
+        {
+            return $this->export_repo->o1__delivery_export__for__luxury(request()->all());
+        }
+        else
+        {
+            return $this->export_repo->o1__delivery_export(request()->all());
+        }
+    }
+
+
+    // 【导出】去重-下载
+    public function o1__duplicate_export()
+    {
+        $order_category = request('order_category',0);
+
+        if($order_category == 1)
+        {
+            return $this->export_repo->o1__duplicate_export(request()->all());
+//            return $this->export_repo->o1__duplicate_export__for__dental(request()->all());
+        }
+        else if($order_category == 11)
+        {
+            return $this->export_repo->o1__duplicate_export(request()->all());
+//            return $this->export_repo->o1__duplicate_export__for__aesthetic(request()->all());
+        }
+        else if($order_category == 31)
+        {
+            return $this->export_repo->o1__duplicate_export(request()->all());
+//            return $this->export_repo->o1__duplicate_export__for__luxury(request()->all());
+        }
+        else
+        {
+            return $this->export_repo->o1__duplicate_export(request()->all());
+        }
+    }
+
+
+
+
+
+
+
+
+    /*
+     * RECORD - 记录
+     */
+    // 【记录】datatable
+    public function o1__record__list__datatable_query()
+    {
+        return $this->record_repo->o1__record__list__datatable_query(request()->all());
+    }
 
 
 

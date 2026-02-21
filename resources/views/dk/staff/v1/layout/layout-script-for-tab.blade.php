@@ -215,6 +215,8 @@
                 else if($id == "production")
                 {
                     console.log("production");
+                    console.log("production");
+                    console.log("production");
                 }
                 else if($id == "datatable-statistic-production-project")
                 {
@@ -231,6 +233,8 @@
                 else if($id == "marketing")
                 {
                     console.log("marketing");
+                    console.log("marketing");
+                    console.log("marketing");
                 }
                 else if($id == "datatable-statistic-marketing-project")
                 {
@@ -242,6 +246,8 @@
                 }
                 else if($id == "statistic-list")
                 {
+                    console.log("statistic-list");
+                    console.log("statistic-list");
                     console.log("statistic-list");
                 }
                 else if($id == "datatable-statistic-list-project-daily")
@@ -263,10 +269,22 @@
                 else if($id == "statistic-call")
                 {
                     console.log("statistic-call");
+                    console.log("statistic-call");
+                    console.log("statistic-call");
                 }
                 else if($id == "datatable-statistic-call-task-analysis")
                 {
                     Datatable__for__Statistic_Call_Task_Analysis('#'+$config.id);
+                }
+                else if($id == "export")
+                {
+                    console.log("export");
+                    console.log("export");
+                    console.log("export");
+                }
+                else if($id == "datatable-export")
+                {
+                    Datatable__for__Export('#'+$config.id);
                 }
             }
 

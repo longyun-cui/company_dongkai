@@ -15,7 +15,7 @@
                 </div>
             </div>
 
-            <div class="box-body datatable-body" id="">
+            <div class="box-body datatable-body">
 
                 <div class="row col-md-12 datatable-search-row _none">
                     <div class="input-group">
@@ -26,10 +26,10 @@
                             <option value="-1">选择属性</option>
                         </select>
 
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="">
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit">
                             <i class="fa fa-search"></i> 搜索
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="">
+                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel">
                             <i class="fa fa-circle-o-notch"></i> 重置
                         </button>
 
@@ -94,7 +94,7 @@
                         >
                             <i class="fa fa-check"></i> 提交
                         </button>
-                        <button type="button" class="btn btn-default edit-cancel" id="">取消</button>
+                        <button type="button" class="btn btn-default edit-cancel">取消</button>
                     </div>
                 </div>
             </div>

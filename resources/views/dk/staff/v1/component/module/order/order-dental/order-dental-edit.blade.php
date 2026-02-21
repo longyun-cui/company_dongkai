@@ -37,7 +37,6 @@
                     <div class="col-md-9 ">
                         <select class="form-control modal--select2 select2-reset"
                                 name="work_shift"
-                                id=""
                                 data-modal="#modal--for--order-dental--item-edit"
                         >
                             <option value="">选择班次</option>
@@ -52,7 +51,6 @@
                     <div class="col-md-9 ">
                         <select class="form-control modal--select2 select2-box-c- select2--project-"
                                 name="project_id"
-                                id="order-edit-select2-project"
                                 data-modal="#modal--for--order-dental--item-edit"
                                 data-project-category="1"
                         >
@@ -118,7 +116,6 @@
                     <div class="col-md-9 ">
                         <select class="form-control modal--select2 select2-reset"
                                 name="client_type"
-                                id=""
                                 data-modal="#modal--for--order-dental--item-edit"
                         >
                             <option value="">选择患者类型</option>
@@ -136,7 +133,6 @@
                     <div class="col-md-9 ">
                         <select class="form-control modal--select2 select2-reset"
                                 name="field_1"
-                                id=""
                                 data-modal="#modal--for--order-dental--item-edit"
                         >
                             <option value="">选择牙齿数量</option>
@@ -154,7 +150,6 @@
                     <div class="col-md-9 ">
                         <select class="form-control modal--select2 select2-reset"
                                 name="client_intention"
-                                id=""
                                 data-modal="#modal--for--order-dental--item-edit"
                         >
                             <option value="">选择客户意向</option>

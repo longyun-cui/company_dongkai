@@ -131,7 +131,6 @@
                         <div class="col-md-9 ">
                             <select class="form-control modal--select2 select2-reset"
                                     name="client_type"
-                                    id=""
                                     data-modal="#modal--for--order--item-inspecting"
                             >
                                 <option value="">选择患者类型</option>
@@ -149,7 +148,6 @@
                         <div class="col-md-9 ">
                             <select class="form-control modal--select2 select2-reset"
                                     name="field_1"
-                                    id=""
                                     data-modal="#modal--for--order--item-inspecting"
                             >
                                 <option value="">选择牙齿数量</option>
@@ -167,7 +165,6 @@
                         <div class="col-md-9 ">
                             <select class="form-control modal--select2 select2-reset"
                                     name="client_intention"
-                                    id=""
                                     data-modal="#modal--for--order--item-inspecting"
                             >
                                 <option value="">选择客户意向</option>
@@ -229,7 +226,6 @@
                         <div class="col-md-9 ">
                             <select class="form-control modal--select2"
                                     name="order-item-inspecting--inspected-result"
-                                    id=""
                                     data-modal="#modal--for--order--item-inspecting"
                             >
                                 <option value="">选择审核结果</option>

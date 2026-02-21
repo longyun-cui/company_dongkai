@@ -301,6 +301,29 @@
             @endif
 
 
+            {{----}}
+            @if(in_array($me->staff_category,[0,1,9,71]))
+                <li class="treeview _none-">
+                    <a class="tab-control datatable-control"
+                       data-type="create"
+                       data-unique="y"
+                       data-id="export"
+                       data-title='<i class="fa fa-download text-default"></i> 数据导出'
+                       data-content=''
+
+                       data-datatable-type="create"
+                       data-datatable-unique="y"
+                       data-datatable-id="datatable-export"
+                       data-datatable-target="export"
+                       data-datatable-clone-object="export-clone"
+                    >
+                        <i class="fa fa-download text-default"></i>
+                        <span>数据导出</span>
+                    </a>
+                </li>
+            @endif
+
+
 
 
 
