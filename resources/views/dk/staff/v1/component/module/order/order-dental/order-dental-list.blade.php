@@ -18,7 +18,7 @@
             <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-ended" placeholder="结束日期" value="" readonly="readonly" />
 
             {{--创建方式--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
+            @if(in_array($me->staff_category,[0,1,9,71]))
                 <select class="search-filter form-filter filter-md select2-box-c" name="order-created-type">
                     <option value="-1">创建方式</option>
                     <option value="1">人工</option>

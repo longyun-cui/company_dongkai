@@ -228,6 +228,8 @@ class DK_Staff__IndexRepository {
         $project_list = $project_query->get();
         $view_data['project_list'] = $project_list;
 
+        $client_list = DK_Common__Client::select('id','name')->where('item_status',1)->get();
+        $view_data['client_list'] = $client_list;
 
         $location_city_list = DK_Common__Location::select('id','location_city')->whereIn('item_status',[1])->get();
         $view_data['location_city_list'] = $location_city_list;

@@ -31,11 +31,11 @@
 {{--            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next date-next" data-target="order-assign">--}}
 {{--                <i class="fa fa-chevron-right"></i>--}}
 {{--            </button>--}}
-            <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="order-start" placeholder="开始日期" value="" readonly="readonly" />
-            <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="order-ended" placeholder="结束日期" value="" readonly="readonly" />
+            <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-start" placeholder="开始日期" value="" readonly="readonly" />
+            <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-ended" placeholder="结束日期" value="" readonly="readonly" />
 
 
-            <select class="search-filter form-filter filter-lg select2-project-c delivery-project" data-item-category="1" name="delivery-project">
+            <select class="search-filter form-filter filter-lg select2-box-c select2--project-c- delivery-project" data-item-category="1" name="delivery-project">
                 <option value="-1">选择项目</option>
                 @if(!empty($project_list))
                     @foreach($project_list as $v)
@@ -45,11 +45,11 @@
             </select>
 
 
-            <select class="search-filter form-filter filter-lg select2-box-c delivery-client" name="delivery-client">
+            <select class="search-filter form-filter filter-lg select2-box-c select2--client-c- delivery-client" name="delivery-client">
                 <option value="-1">选择客户</option>
                 @if(!empty($client_list))
                     @foreach($client_list as $v)
-                        <option value="{{ $v->id }}">{{ $v->username }}</option>
+                        <option value="{{ $v->id }}">{{ $v->name }}</option>
                     @endforeach
                 @endif
             </select>
