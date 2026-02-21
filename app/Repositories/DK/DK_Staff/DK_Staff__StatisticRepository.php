@@ -4867,9 +4867,18 @@ class DK_Staff__StatisticRepository {
         // 客服部
         if($me->staff_category == 41)
         {
-            $team_id = $me->team_id;
-            $project_list = DK_Pivot__Team_Project::select('project_id')->where('team_id',$team_id)->get();
-            $query->whereIn('id',$project_list);
+            if($me->staff_category == 31)
+            {
+                $department_id = $me->department_id;
+                $project_list = DK_Pivot__Team_Project::select('project_id')->where('department_id',$department_id)->get();
+                $query->whereIn('id',$project_list);
+            }
+            else if($me->staff_category == 41)
+            {
+                $team_id = $me->team_id;
+                $project_list = DK_Pivot__Team_sProject::select('project_id')->where('team_id',$team_id)->get();
+                $query->whereIn('id',$project_list);
+            }
         }
 
         // 质检部
