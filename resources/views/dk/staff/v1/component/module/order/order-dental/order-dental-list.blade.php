@@ -34,7 +34,7 @@
                         name="order-team-list[]"
                         data-team-category="41"
                         data-team-type="11"
-                        id="order-teams" multiple="multiple"
+                        id="order-team-list[]" multiple="multiple"
                 >
                     <option value="-1">选择团队</option>
                     @if(!empty($team_list) && count($team_list) > 0)

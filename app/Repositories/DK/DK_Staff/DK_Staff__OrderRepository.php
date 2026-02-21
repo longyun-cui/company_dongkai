@@ -317,9 +317,9 @@ class DK_Staff__OrderRepository {
 //            }
 //        }
         // 团队-多选
-        if(!empty($post_data['team']) && count($post_data['team']) > 0)
+        if(!empty($post_data['team_list']) && count($post_data['team_list']) > 0)
         {
-            $query->whereIn('dk_common__order.creator_team_id', $post_data['team']);
+            $query->whereIn('dk_common__order.creator_team_id', $post_data['team_list']);
         }
 
 
