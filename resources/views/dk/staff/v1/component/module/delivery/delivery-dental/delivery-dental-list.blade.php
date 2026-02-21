@@ -57,8 +57,8 @@
 
             <select class="search-filter form-filter filter-md select2-box-c" name="order-delivery-type" style="width:100px;">
                 <option value="-1">交付类型</option>
-                <option value="95">交付</option>
-                <option value="96">分发</option>
+                <option value="1">交付</option>
+                <option value="11">分发</option>
             </select>
 
 
