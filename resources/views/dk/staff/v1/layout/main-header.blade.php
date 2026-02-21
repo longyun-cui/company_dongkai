@@ -76,7 +76,7 @@
 
 
                 {{--生产统计--}}
-                @if(in_array($me->staff_category,[0,1,9,11,41,71]))
+                @if(in_array($me->staff_category,[0,1,9,11,41,51,61,71]))
                 <li class="dropdown tasks-menu add-menu">
 
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -86,9 +86,11 @@
                     <ul class="dropdown-menu right" role="menu">
 
 
+                        @if(in_array($me->staff_category,[0,1,9,51,61,71]))
                         <li class="header margin-bottom-8px">生产统计</li>
+                        @endif
 
-                        @if(in_array($me->staff_category,[0,1,9,41,51,71]))
+                        @if(in_array($me->staff_category,[0,1,9,41,51,61,71]) && $me->staff_position <= 100)
                         <li>
                             <a href="javascript:void(0);" class="tab-control datatable-control"
                                data-type="create"
@@ -109,7 +111,7 @@
                         <li class="divider"></li>
                         @endif
 
-                        @if(in_array($me->staff_category,[0,1,9]))
+                        @if(in_array($me->staff_category,[0,1,9,71]) && $me->staff_position <= 31)
                         <li>
                             <a href="javascript:void(0);" class="tab-control datatable-control"
                                data-type="create"
