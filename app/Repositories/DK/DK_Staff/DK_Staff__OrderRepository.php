@@ -3658,51 +3658,65 @@ class DK_Staff__OrderRepository {
         $non_delivery_reason = '';
 
 
-        // [判断]【工单】是否审核
-        if($item->inspected_status != 1)
+
+        // [判断]【工单】是否交付过
+        if($item->delivered_status != 0)
         {
-            // 【工单】未审核
-//            return response_error([],"请先审核工单！");
             $is_next = 0;
             $is_delivery = 0;
-            $delivered_result = '交付失败';
-            $non_delivery_reason = '工单未审核';
+            $delivered_result = '不操作';
+            $non_delivery_reason = '已交付过，不再交付';
         }
-        else
+
+
+        // [判断]【工单】是否审核
+        if($is_next == 1)
         {
-            // 【工单】已审核
-            $is_next = 1;
-            if($item->inspected_result == "通过")
+            if($item->inspected_status != 1)
             {
-                $is_delivery = 1;
-                $delivered_result = '正常交付';
-            }
-            else if($item->inspected_result == "折扣通过")
-            {
-                $is_delivery = 1;
-                $delivered_result = '折扣交付';
-            }
-            else if($item->inspected_result == "郊区通过")
-            {
-                $is_delivery = 1;
-                $delivered_result = '郊区交付';
-            }
-            else if($item->inspected_result == "内部通过")
-            {
-                $is_delivery = 1;
-                $delivered_result = '内部交付';
-            }
-            else if($item->inspected_result == "不合格")
-            {
-                $is_delivery = 1;
-                $delivered_result = '正常交付';
+                // 【工单】未审核
+    //            return response_error([],"请先审核工单！");
+                $is_next = 0;
+                $is_delivery = 0;
+                $delivered_result = '交付失败';
+                $non_delivery_reason = '工单未审核';
             }
             else
             {
+                // 【工单】已审核
                 $is_next = 1;
-                $is_delivery = 91;
-                $delivered_result = '不交付';
-                $non_delivery_reason = '非有效单';
+                if($item->inspected_result == "通过")
+                {
+                    $is_delivery = 1;
+                    $delivered_result = '正常交付';
+                }
+                else if($item->inspected_result == "折扣通过")
+                {
+                    $is_delivery = 1;
+                    $delivered_result = '折扣交付';
+                }
+                else if($item->inspected_result == "郊区通过")
+                {
+                    $is_delivery = 1;
+                    $delivered_result = '郊区交付';
+                }
+                else if($item->inspected_result == "内部通过")
+                {
+                    $is_delivery = 1;
+                    $delivered_result = '内部交付';
+                }
+                else if($item->inspected_result == "不合格")
+                {
+                    $is_delivery = 1;
+                    $delivered_result = '正常交付';
+                }
+                else
+                {
+                    $is_next = 1;
+                    $is_delivery = 91;
+                    $delivered_result = '不交付';
+                    $non_delivery_reason = '非有效单';
+                }
             }
         }
 
@@ -3886,13 +3900,23 @@ class DK_Staff__OrderRepository {
         }
 
 
-        if(true)
+        if($is_delivery > 0)
         {
             $record_row = [];
             $record_row['title'] = '交付结果';
             $record_row['field'] = 'delivered_result';
             $record_row['code'] = '';
             $record_row['before'] = $before;
+            $record_row['after'] = $delivered_result;
+            $record_content[] = $record_row;
+        }
+        else
+        {
+            $record_row = [];
+            $record_row['title'] = '交付情况';
+            $record_row['field'] = 'delivered_result';
+            $record_row['code'] = '';
+            $record_row['before'] = '';
             $record_row['after'] = $delivered_result;
             $record_content[] = $record_row;
         }
@@ -4076,51 +4100,62 @@ class DK_Staff__OrderRepository {
                 $order_category = $item->order_category;
 
 
-                // [判断]【工单】是否审核
-                if($item->inspected_status != 1)
+                if($item->delivered_status != 0)
                 {
-                    // 【工单】未审核
-//            return response_error([],"请先审核工单！");
                     $is_next = 0;
                     $is_delivery = 0;
-                    $delivered_result = '交付失败';
-                    $non_delivery_reason = '工单未审核';
+                    $delivered_result = '不操作';
+                    $non_delivery_reason = '已交付过，不再交付';
                 }
-                else
+
+
+                // [判断]【工单】是否审核
+                if($is_next == 1)
                 {
-                    // 【工单】已审核
-                    $is_next = 1;
-                    if($item->inspected_result == "通过")
+                    if($item->inspected_status != 1)
                     {
-                        $is_delivery = 1;
-                        $delivered_result = '正常交付';
-                    }
-                    else if($item->inspected_result == "折扣通过")
-                    {
-                        $is_delivery = 1;
-                        $delivered_result = '折扣交付';
-                    }
-                    else if($item->inspected_result == "郊区通过")
-                    {
-                        $is_delivery = 1;
-                        $delivered_result = '郊区交付';
-                    }
-                    else if($item->inspected_result == "内部通过")
-                    {
-                        $is_delivery = 1;
-                        $delivered_result = '内部交付';
-                    }
-                    else if($item->inspected_result == "不合格")
-                    {
-                        $is_delivery = 1;
-                        $delivered_result = '正常交付';
+                        // 【工单】未审核
+                        $is_next = 0;
+                        $is_delivery = 0;
+                        $delivered_result = '交付失败';
+                        $non_delivery_reason = '工单未审核';
                     }
                     else
                     {
+                        // 【工单】已审核
                         $is_next = 1;
-                        $is_delivery = 91;
-                        $delivered_result = '不交付';
-                        $non_delivery_reason = '非有效单';
+                        if($item->inspected_result == "通过")
+                        {
+                            $is_delivery = 1;
+                            $delivered_result = '正常交付';
+                        }
+                        else if($item->inspected_result == "折扣通过")
+                        {
+                            $is_delivery = 1;
+                            $delivered_result = '折扣交付';
+                        }
+                        else if($item->inspected_result == "郊区通过")
+                        {
+                            $is_delivery = 1;
+                            $delivered_result = '郊区交付';
+                        }
+                        else if($item->inspected_result == "内部通过")
+                        {
+                            $is_delivery = 1;
+                            $delivered_result = '内部交付';
+                        }
+                        else if($item->inspected_result == "不合格")
+                        {
+                            $is_delivery = 1;
+                            $delivered_result = '正常交付';
+                        }
+                        else
+                        {
+                            $is_next = 1;
+                            $is_delivery = 91;
+                            $delivered_result = '不交付';
+                            $non_delivery_reason = '非有效单';
+                        }
                     }
                 }
 
@@ -4304,13 +4339,23 @@ class DK_Staff__OrderRepository {
                 }
 
 
-                if(true)
+                if($is_delivery > 0)
                 {
                     $record_row = [];
                     $record_row['title'] = '交付结果';
                     $record_row['field'] = 'delivered_result';
                     $record_row['code'] = '';
                     $record_row['before'] = $before;
+                    $record_row['after'] = $delivered_result;
+                    $record_content[] = $record_row;
+                }
+                else
+                {
+                    $record_row = [];
+                    $record_row['title'] = '交付情况';
+                    $record_row['field'] = 'delivered_result';
+                    $record_row['code'] = '';
+                    $record_row['before'] = '';
                     $record_row['after'] = $delivered_result;
                     $record_content[] = $record_row;
                 }
