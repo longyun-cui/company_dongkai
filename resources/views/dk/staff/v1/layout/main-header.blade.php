@@ -76,7 +76,7 @@
 
 
                 {{--生产统计--}}
-                @if(in_array($me->staff_category,[0,1,9,11,71]))
+                @if(in_array($me->staff_category,[0,1,9,11,41,71]))
                 <li class="dropdown tasks-menu add-menu">
 
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -133,7 +133,9 @@
 
 
 
+                        @if(in_array($me->staff_category,[0,1,9,71]))
                         <li class="header margin-bottom-8px">交付统计</li>
+                        @endif
 
                         @if(in_array($me->staff_category,[0,1,9,71]))
                             <li>
@@ -179,9 +181,11 @@
 
 
 
+                        @if(in_array($me->staff_category,[0,1,9]))
                         <li class="header margin-bottom-8px">销售统计</li>
+                        @endif
 
-                        @if(in_array($me->staff_category,[0,1,9,11]))
+                        @if(in_array($me->staff_category,[0,1,9]))
                             <li>
                                 <a href="javascript:void(0);" class="tab-control datatable-control"
                                    data-type="create"
@@ -201,7 +205,7 @@
                             </li>
                             <li class="divider"></li>
                         @endif
-                        @if(in_array($me->staff_category,[0,1,9,11]))
+                        @if(in_array($me->staff_category,[0,1,9]))
                             <li>
                                 <a href="javascript:void(0);" class="tab-control datatable-control"
                                    data-type="create"
@@ -225,9 +229,11 @@
                         @endif
 
 
+                        @if(in_array($me->staff_category,[0,1,9,41]))
                         <li class="header margin-bottom-8px">员工统计</li>
+                        @endif
 
-                        @if(in_array($me->staff_category,[0,1,9,11,41,81,84]))
+                        @if(in_array($me->staff_category,[0,1,9,41]))
                         <li>
                             <a href="javascript:void(0);" class="tab-control datatable-control"
                                data-type="create"
@@ -247,7 +253,7 @@
                         </li>
                         <li class="divider"></li>
                         @endif
-                        @if(in_array($me->staff_category,[0,1,9,11,41,81,84]))
+                        @if(in_array($me->staff_category,[0,1,9,41]))
                         <li>
                             <a href="javascript:void(0);" class="tab-control datatable-control"
                                data-type="create"
@@ -267,7 +273,7 @@
                         </li>
                         <li class="divider"></li>
                         @endif
-                        @if(in_array($me->staff_category,[0,1,9,11,41,81,84]))
+                        @if(in_array($me->staff_category,[0,1,9,41]))
                         <li>
                             <a href="javascript:void(0);" class="tab-control datatable-control"
                                data-type="create"
@@ -287,47 +293,47 @@
                         </li>
                         <li class="divider"></li>
                         @endif
-                        @if(in_array($me->staff_category,[0,1,9,11,61,71]))
-                        <li>
-                            <a href="javascript:void(0);" class="tab-control datatable-control"
-                               data-type="create"
-                               data-unique="y"
-                               data-id="statistic-inspector-overview"
-                               data-title='<i class="fa fa-pie-chart text-orange"></i> 质检统计'
-                               data-content=''
+{{--                        @if(in_array($me->staff_category,[0,1,9,11,61,71]))--}}
+{{--                        <li>--}}
+{{--                            <a href="javascript:void(0);" class="tab-control datatable-control"--}}
+{{--                               data-type="create"--}}
+{{--                               data-unique="y"--}}
+{{--                               data-id="statistic-inspector-overview"--}}
+{{--                               data-title='<i class="fa fa-pie-chart text-orange"></i> 质检统计'--}}
+{{--                               data-content=''--}}
 
-                               data-datatable-type="create"
-                               data-datatable-unique="y"
-                               data-datatable-id="datatable-statistic-inspector-overview"
-                               data-datatable-target="statistic-inspector-overview"
-                               data-datatable-clone-object="statistic-inspector-overview-clone"
-                            >
-                                <i class="fa fa-pie-chart text-purple"></i> <span>质检统计</span>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        @endif
+{{--                               data-datatable-type="create"--}}
+{{--                               data-datatable-unique="y"--}}
+{{--                               data-datatable-id="datatable-statistic-inspector-overview"--}}
+{{--                               data-datatable-target="statistic-inspector-overview"--}}
+{{--                               data-datatable-clone-object="statistic-inspector-overview-clone"--}}
+{{--                            >--}}
+{{--                                <i class="fa fa-pie-chart text-purple"></i> <span>质检统计</span>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+{{--                        <li class="divider"></li>--}}
+{{--                        @endif--}}
 
-                        @if(in_array($me->staff_category,[0,1,9,11,61]))
-                        <li>
-                            <a href="javascript:void(0);" class="tab-control datatable-control"
-                               data-type="create"
-                               data-unique="y"
-                               data-id="statistic-deliverer-overview"
-                               data-title='<i class="fa fa-bar-chart text-orange"></i> 运营看板'
-                               data-content=''
+{{--                        @if(in_array($me->staff_category,[0,1,9,11,61]))--}}
+{{--                        <li>--}}
+{{--                            <a href="javascript:void(0);" class="tab-control datatable-control"--}}
+{{--                               data-type="create"--}}
+{{--                               data-unique="y"--}}
+{{--                               data-id="statistic-deliverer-overview"--}}
+{{--                               data-title='<i class="fa fa-bar-chart text-orange"></i> 运营看板'--}}
+{{--                               data-content=''--}}
 
-                               data-datatable-type="create"
-                               data-datatable-unique="y"
-                               data-datatable-id="datatable-statistic-deliverer-overview"
-                               data-datatable-target="statistic-deliverer-overview"
-                               data-datatable-clone-object="statistic-deliverer-overview-clone"
-                            >
-                                <i class="fa fa-bar-chart text-red"></i> <span>运营统计</span>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        @endif
+{{--                               data-datatable-type="create"--}}
+{{--                               data-datatable-unique="y"--}}
+{{--                               data-datatable-id="datatable-statistic-deliverer-overview"--}}
+{{--                               data-datatable-target="statistic-deliverer-overview"--}}
+{{--                               data-datatable-clone-object="statistic-deliverer-overview-clone"--}}
+{{--                            >--}}
+{{--                                <i class="fa fa-bar-chart text-red"></i> <span>运营统计</span>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+{{--                        <li class="divider"></li>--}}
+{{--                        @endif--}}
 
 
                     </ul>

@@ -517,7 +517,7 @@ class DK_Staff__OrderRepository {
 
 
         // 交付状态
-        if(!empty($post_data['delivered_status']))
+        if(isset($post_data['delivered_status']))
         {
             $delivered_status = (int)$post_data['delivered_status'];
             if(!in_array($delivered_status,[-1]))
