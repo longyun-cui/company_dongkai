@@ -3767,18 +3767,19 @@ class DK_Staff__StatisticRepository {
 
         foreach ($list as $k => $v)
         {
-            if(!empty($group_count) && count($group_count) && !empty($staff_count[$v->id]))
+            $staff_id = $v->id;
+            if($staff_id && !empty($group_count) && count($group_count) && !empty($staff_count[$v->id]))
             {
-                $list[$k]->staff_count__for__all = $staff_count[$v->id]['order_count__for__all'];
-                $list[$k]->staff_count__for__inspected = $staff_count[$v->id]['order_count__for__inspected'];
-                $list[$k]->staff_count__for__effective = $staff_count[$v->id]['order_count__for__effective'];
-                $list[$k]->staff_count__for__accepted = $staff_count[$v->id]['order_count__for__accepted'];
-                $list[$k]->staff_count__for__accepted_normal = $staff_count[$v->id]['order_count__for__accepted_normal'];
-                $list[$k]->staff_count__for__accepted_discount = $staff_count[$v->id]['order_count__for__accepted_discount'];
-                $list[$k]->staff_count__for__accepted_suburb = $staff_count[$v->id]['order_count__for__accepted_suburb'];
-                $list[$k]->staff_count__for__accepted_inside = $staff_count[$v->id]['order_count__for__accepted_inside'];
-                $list[$k]->staff_count__for__repeated = $staff_count[$v->id]['order_count__for__repeated'];
-                $list[$k]->staff_count__for__refused = $staff_count[$v->id]['order_count__for__refused'];
+                $list[$k]->staff_count__for__all = $staff_count[$staff_id]['order_count__for__all'];
+                $list[$k]->staff_count__for__inspected = $staff_count[$staff_id]['order_count__for__inspected'];
+                $list[$k]->staff_count__for__effective = $staff_count[$staff_id]['order_count__for__effective'];
+                $list[$k]->staff_count__for__accepted = $staff_count[$staff_id]['order_count__for__accepted'];
+                $list[$k]->staff_count__for__accepted_normal = $staff_count[$staff_id]['order_count__for__accepted_normal'];
+                $list[$k]->staff_count__for__accepted_discount = $staff_count[$staff_id]['order_count__for__accepted_discount'];
+                $list[$k]->staff_count__for__accepted_suburb = $staff_count[$staff_id]['order_count__for__accepted_suburb'];
+                $list[$k]->staff_count__for__accepted_inside = $staff_count[$staff_id]['order_count__for__accepted_inside'];
+                $list[$k]->staff_count__for__repeated = $staff_count[$staff_id]['order_count__for__repeated'];
+                $list[$k]->staff_count__for__refused = $staff_count[$staff_id]['order_count__for__refused'];
             }
             else
             {
@@ -3814,10 +3815,10 @@ class DK_Staff__StatisticRepository {
                 $list[$k]->group_count__for__inspected = $group_count[$team_group_id]['order_count__for__inspected'];
                 $list[$k]->group_count__for__effective = $group_count[$team_group_id]['order_count__for__effective'];
                 $list[$k]->group_count__for__accepted = $group_count[$team_group_id]['order_count__for__accepted'];
-                $list[$k]->group_count__for__accepted_normal = $group_count[$v->id]['order_count__for__accepted_normal'];
-                $list[$k]->group_count__for__accepted_discount = $group_count[$v->id]['order_count__for__accepted_discount'];
-                $list[$k]->group_count__for__accepted_suburb = $group_count[$v->id]['order_count__for__accepted_suburb'];
-                $list[$k]->group_count__for__accepted_inside = $group_count[$v->id]['order_count__for__accepted_inside'];
+                $list[$k]->group_count__for__accepted_normal = $group_count[$team_group_id]['order_count__for__accepted_normal'];
+                $list[$k]->group_count__for__accepted_discount = $group_count[$team_group_id]['order_count__for__accepted_discount'];
+                $list[$k]->group_count__for__accepted_suburb = $group_count[$team_group_id]['order_count__for__accepted_suburb'];
+                $list[$k]->group_count__for__accepted_inside = $group_count[$team_group_id]['order_count__for__accepted_inside'];
                 $list[$k]->group_count__for__repeated = $group_count[$team_group_id]['order_count__for__repeated'];
                 $list[$k]->group_count__for__refused = $group_count[$team_group_id]['order_count__for__refused'];
             }
