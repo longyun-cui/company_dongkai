@@ -144,7 +144,7 @@ class DK_Staff__IndexRepository {
 
 
 
-        $team_list = DK_Common__Team::select('id','name')->where('team_type',11)->get();
+        $team_list = DK_Common__Team::select('id','name')->where('active',1)->where('team_type',11)->get();
         $view_data['team_list'] = $team_list;
 
 
