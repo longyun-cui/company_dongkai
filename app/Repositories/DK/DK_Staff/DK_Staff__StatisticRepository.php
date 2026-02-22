@@ -3858,7 +3858,8 @@ class DK_Staff__StatisticRepository {
                 $list[$k]->team_count__for__accepted_normal = $team_count[$team_id]['order_count__for__accepted_normal'];
                 $list[$k]->team_count__for__accepted_discount = $team_count[$team_id]['order_count__for__accepted_discount'];
                 $list[$k]->team_count__for__accepted_suburb = $team_count[$team_id]['order_count__for__accepted_suburb'];
-                $list[$k]->team_count__for__repeated_inside = $team_count[$team_id]['order_count__for__repeated_inside'];
+                $list[$k]->team_count__for__accepted_inside = $team_count[$team_id]['order_count__for__accepted_inside'];
+                $list[$k]->team_count__for__repeated = $team_count[$team_id]['order_count__for__repeated'];
                 $list[$k]->team_count__for__refused = $team_count[$team_id]['order_count__for__refused'];
             }
             else
