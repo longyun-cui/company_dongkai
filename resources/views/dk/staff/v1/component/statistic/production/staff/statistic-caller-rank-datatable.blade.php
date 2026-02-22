@@ -32,11 +32,9 @@
                     d.time_date = $tableSearch.find('input[name="statistic-caller-rank-date"]').val();
                     d.date_start = $tableSearch.find('input[name="statistic-caller-rank-start"]').val();
                     d.date_ended = $tableSearch.find('input[name="statistic-caller-rank-ended"]').val();
-                    d.project = $tableSearch.find('input[name="statistic-caller-project"]').val();
-                    d.rank_object_type = $tableSearch.find('select[name="statistic-caller-rank-object-type"]').val();
-                    d.rank_staff_type = $tableSearch.find('select[name="statistic-caller-rank-staff-type"]').val();
-                    d.team = $tableSearch.find('select[name="statistic-caller-rank-team"]').val();
-                    d.group = $tableSearch.find('select[name="statistic-caller-rank-group"]').val();
+                    d.project = $tableSearch.find('input[name="statistic-caller--project"]').val();
+                    d.team = $tableSearch.find('select[name="statistic-caller-rank--team"]').val();
+                    d.group = $tableSearch.find('select[name="statistic-caller-rank--group"]').val();
 
                 },
             },
@@ -101,33 +99,7 @@
                 },
                 {
                     "title": "客服<br>提交量",
-                    "data": "order_count_for_all",
-                    "className": "bg-inspected",
-                    "width": "80px",
-                    "orderable": true,
-                    "orderSequence": ["desc", "asc"],
-                    render: function(data, type, row, meta) {
-                        return data;
-                    }
-                },
-
-
-                // {
-                //     "title": "交付<br>总量",
-                //     "data": "order_count_for_delivered",
-                //     "className": "bg-delivered",
-                //     "width": "80px",
-                //     "orderable": true,
-                //     "orderSequence": ["desc", "asc"],
-                //     render: function(data, type, row, meta) {
-                //         return data;
-                //     }
-                // },
-
-
-                {
-                    "title": "审核<br>有效量",
-                    "data": "order_count_for_effective",
+                    "data": "order_count__for__all",
                     "className": "bg-inspected",
                     "width": "80px",
                     "orderable": true,
@@ -137,8 +109,8 @@
                     }
                 },
                 {
-                    "title": "审核<br>通过量",
-                    "data": "order_count_for_accepted",
+                    "title": "通过量",
+                    "data": "order_count__for__accepted_normal",
                     "className": "bg-inspected",
                     "width": "80px",
                     "orderable": true,
@@ -148,19 +120,30 @@
                     }
                 },
                 {
-                    "title": "审核<br>拒绝量",
-                    "data": "order_count_for_refused",
+                    "title": "折扣通过",
+                    "data": "order_count__for__accepted_discount",
                     "className": "bg-inspected",
                     "width": "80px",
-                    "orderable": false,
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
                     render: function(data, type, row, meta) {
-
+                        return data;
+                    }
+                },
+                {
+                    "title": "有效量",
+                    "data": "order_count__for__effective",
+                    "className": "bg-inspected",
+                    "width": "80px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    render: function(data, type, row, meta) {
                         return data;
                     }
                 },
                 // {
-                //     "title": "审核<br>重复量",
-                //     "data": "order_count_for_repeated",
+                //     "title": "审核<br>拒绝量",
+                //     "data": "order_count_for_refused",
                 //     "className": "bg-inspected",
                 //     "width": "80px",
                 //     "orderable": false,
@@ -170,12 +153,13 @@
                 //     }
                 // },
                 // {
-                //     "title": "内部通过",
-                //     "data": "order_count_for_accepted_inside",
-                //     "className": "text-center",
+                //     "title": "审核<br>重复量",
+                //     "data": "order_count_for_repeated",
+                //     "className": "bg-inspected",
                 //     "width": "80px",
                 //     "orderable": false,
                 //     render: function(data, type, row, meta) {
+                //
                 //         return data;
                 //     }
                 // },
@@ -192,8 +176,8 @@
                 //     }
                 // },
                 {
-                    "title": "审核<br>通过率",
-                    "data": "order_rate_for_accepted",
+                    "title": "有效率",
+                    "data": "order_rate__for__effective",
                     "className": "bg-inspected",
                     "width": "100px",
                     "orderable": true,

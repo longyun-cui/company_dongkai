@@ -3912,15 +3912,16 @@ class DK_Staff__StatisticRepository {
         // 工单统计
         $query_order = DK_Common__Order::select('creator_id','published_date')
             ->addSelect(DB::raw("
-                    count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
-                    count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
+                    count(IF(is_published = 1, TRUE, NULL)) as order_count__for__all,
+                    count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count__for__inspected,
                     count(IF(inspected_result in ('通过','折扣通过','郊区通过','内部通过'), TRUE, NULL)) as order_count__for__accepted,
-                    count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted_normal,
-                    count(IF(inspected_result = '折扣通过', TRUE, NULL)) as order_count_for_accepted_discount,
-                    count(IF(inspected_result = '郊区通过', TRUE, NULL)) as order_count_for_accepted_suburb,
-                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
-                    count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
-                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_refused
+                    count(IF(inspected_result in ('通过','折扣通过'), TRUE, NULL)) as order_count__for__effective,
+                    count(IF(inspected_result = '通过', TRUE, NULL)) as order_count__for__accepted_normal,
+                    count(IF(inspected_result = '折扣通过', TRUE, NULL)) as order_count__for__accepted_discount,
+                    count(IF(inspected_result = '郊区通过', TRUE, NULL)) as order_count__for__accepted_suburb,
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count__for__accepted_inside,
+                    count(IF(inspected_result = '重复', TRUE, NULL)) as order_count__for__repeated,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count__for__refused
                 "))
             ->groupBy('creator_id');
 
@@ -4077,44 +4078,37 @@ class DK_Staff__StatisticRepository {
         {
             if(isset($query_order[$v->id]))
             {
-                $list[$k]->order_count_for_all = $query_order[$v->id]['order_count_for_all'];
-                $list[$k]->order_count_for_inspected = $query_order[$v->id]['order_count_for_inspected'];
-                $list[$k]->order_count_for_accepted = $query_order[$v->id]['order_count_for_accepted'];
-                $list[$k]->order_count_for_accepted_normal = $query_order[$v->id]['order_count_for_accepted_normal'];
-                $list[$k]->order_count_for_accepted_discount = $query_order[$v->id]['order_count_for_accepted_discount'];
-                $list[$k]->order_count_for_accepted_suburb = $query_order[$v->id]['order_count_for_accepted_suburb'];
-                $list[$k]->order_count_for_accepted_inside = $query_order[$v->id]['order_count_for_accepted_inside'];
-                $list[$k]->order_count_for_refused = $query_order[$v->id]['order_count_for_refused'];
-                $list[$k]->order_count_for_repeated = $query_order[$v->id]['order_count_for_repeated'];
+                $list[$k]->order_count__for__all = $query_order[$v->id]['order_count__for__all'];
+                $list[$k]->order_count__for__inspected = $query_order[$v->id]['order_count__for__inspected'];
+                $list[$k]->order_count__for__effective = $query_order[$v->id]['order_count__for__effective'];
+                $list[$k]->order_count__for__accepted = $query_order[$v->id]['order_count__for__accepted'];
+                $list[$k]->order_count__for__accepted_normal = $query_order[$v->id]['order_count__for__accepted_normal'];
+                $list[$k]->order_count__for__accepted_discount = $query_order[$v->id]['order_count__for__accepted_discount'];
+                $list[$k]->order_count__for__accepted_suburb = $query_order[$v->id]['order_count__for__accepted_suburb'];
+                $list[$k]->order_count__for__accepted_inside = $query_order[$v->id]['order_count__for__accepted_inside'];
+                $list[$k]->order_count__for__repeated = $query_order[$v->id]['order_count__for__repeated'];
+                $list[$k]->order_count__for__refused = $query_order[$v->id]['order_count__for__refused'];
             }
             else
             {
-                $list[$k]->order_count_for_all = 0;
-                $list[$k]->order_count_for_inspected = 0;
-                $list[$k]->order_count_for_accepted = 0;
-                $list[$k]->order_count_for_accepted_normal = 0;
-                $list[$k]->order_count_for_accepted_discount = 0;
-                $list[$k]->order_count_for_accepted_suburb = 0;
-                $list[$k]->order_count_for_accepted_inside = 0;
-                $list[$k]->order_count_for_refused = 0;
-                $list[$k]->order_count_for_repeated = 0;
+                $list[$k]->order_count__for__all = 0;
+                $list[$k]->order_count__for__inspected = 0;
+                $list[$k]->order_count__for__effective = 0;
+                $list[$k]->order_count__for__accepted = 0;
+                $list[$k]->order_count__for__accepted_normal = 0;
+                $list[$k]->order_count__for__accepted_discount = 0;
+                $list[$k]->order_count__for__accepted_suburb = 0;
+                $list[$k]->order_count__for__accepted_inside = 0;
+                $list[$k]->order_count__for__repeated = 0;
+                $list[$k]->order_count__for__refused = 0;
             }
 
-            // 通过率
-            if($v->order_count_for_all > 0)
-            {
-                $list[$k]->order_rate_for_accepted = round(($v->order_count_for_accepted * 100 / $v->order_count_for_all),2);
-            }
-            else $list[$k]->order_rate_for_accepted = 0;
-
-            // 有效单量
-            $v->order_count_for_effective = $v->order_count_for_inspected - $v->order_count_for_refused - $v->order_count_for_repeated;
             // 有效率
-            if($v->order_count_for_all > 0)
+            if($v->order_count__for__all > 0)
             {
-                $list[$k]->order_rate_for_effective = round(($v->order_count_for_effective * 100 / $v->order_count_for_all),2);
+                $list[$k]->order_rate__for__effective = round(($v->order_count__for__effective * 100 / $v->order_count__for__all),2);
             }
-            else $list[$k]->order_rate_for_effective = 0;
+            else $list[$k]->order_rate__for__effective = 0;
         }
 //        dd($list->toArray());
 

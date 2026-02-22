@@ -17,38 +17,28 @@
             @endif
 
             @if(in_array($me->staff_category,[0,1,9,61]))
-                <select class="search-filter form-filter filter-xl select2-box-c" name="statistic-caller-rank-staff-type" style="width:88px;">
-                    <option value="99">客服</option>
-                    @if(in_array($me->user_type,[0,1,9,61]))
-                        <option value="61">小组</option>
-                    @endif
-                    @if(in_array($me->user_type,[0,1,9,11]))
-                        <option value="41">团队</option>
-                    @endif
-                </select>
+            <select class="search-filter form-filter filter-xl select2-box-c"
+                    name="statistic-caller-rank--team"
+                    id="select2--team--for--statistic-caller-rank"
+                    data-target="#select2--group--for--statistic-caller-rank"
+            >
+                <option value="-1">选择团队</option>
+                @if(!empty($team_list))
+                    @foreach($team_list as $v)
+                        <option value="{{ $v->id }}">{{ $v->name }}</option>
+                    @endforeach
+                @endif
+            </select>
             @endif
 
-            @if(in_array($me->staff_category,[0,1,9,61]))
-                <select class="search-filter form-filter filter-xl select2-department-team select2-box-change"
-                        name="statistic-caller-rank-team"
-                        data-target=".select2-department-group"
-                >
-                    <option value="-1">选择团队</option>
-                    @if(!empty($team_list))
-                        @foreach($team_list as $v)
-                            <option value="{{ $v->id }}">{{ $v->name }}</option>
-                        @endforeach
-                    @endif
-                </select>
-            @endif
-
-{{--            @if(in_array($me->user_type,[0,1,9,11,61,81]))--}}
-{{--                <select class="search-filter form-filter filter-xl select2-department-group select2-box-c- select2-district-c-"--}}
-{{--                        name="statistic-caller-rank-group"--}}
-{{--                        data-target=".select2-department-team"--}}
-{{--                >--}}
-{{--                    <option data-id="-1" value="-1">选择小组</option>--}}
-{{--                </select>--}}
+{{--            @if(in_array($me->staff_category,[0,1,9,61]))--}}
+{{--            <select class="search-filter form-filter filter-xl select2-department-group select2-box-c- select2-district-c-"--}}
+{{--                    name="statistic-caller-rank--group"--}}
+{{--                    id="select2--group--for--statistic-caller-rank"--}}
+{{--                    data-target=".select2-department-team"--}}
+{{--            >--}}
+{{--                <option data-id="-1" value="-1">选择小组</option>--}}
+{{--            </select>--}}
 {{--            @endif--}}
 
             {{--按天查看--}}

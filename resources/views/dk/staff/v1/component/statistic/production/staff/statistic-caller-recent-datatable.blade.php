@@ -32,11 +32,9 @@
                     d.time_date = $tableSearch.find('input[name="statistic-caller-recent-date"]').val();
                     d.date_start = $tableSearch.find('input[name="statistic-caller-recent-start"]').val();
                     d.date_ended = $tableSearch.find('input[name="statistic-caller-recent-ended"]').val();
-                    d.project = $tableSearch.find('input[name="statistic-caller-project"]').val();
-                    d.recent_object_type = $tableSearch.find('select[name="statistic-caller-recent-object-type"]').val();
-                    d.recent_staff_type = $tableSearch.find('select[name="statistic-caller-recent-staff-type"]').val();
-                    d.team = $tableSearch.find('select[name="statistic-caller-recent-team"]').val();
-                    d.team_group = $tableSearch.find('select[name="statistic-caller-recent-team-group"]').val();
+                    d.project = $tableSearch.find('input[name="statistic-caller--project"]').val();
+                    d.team = $tableSearch.find('select[name="statistic-caller-recent--team"]').val();
+                    d.group = $tableSearch.find('select[name="statistic-caller-recent--group"]').val();
 
                 },
             },
