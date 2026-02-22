@@ -32,6 +32,9 @@ use App\Repositories\DK\DK_Staff\DK_Staff__RecordRepository;
 use App\Repositories\DK\DK_Staff\DK_Staff__StatisticRepository;
 
 
+use App\Repositories\DK\DK_Staff\DK_Staff__TestRepository;
+
+
 use Response, Auth, Validator, DB, Exception;
 use QrCode, Excel;
 
@@ -40,6 +43,8 @@ class DKStaffController extends Controller
     //
     private $service;
     private $repo;
+
+    private $test_repo;
 
     private $common_repo;
 
@@ -64,6 +69,8 @@ class DKStaffController extends Controller
 
     public function __construct()
     {
+        $this->test_repo = new DK_Staff__TestRepository;
+
         $this->repo = new DK_Staff__IndexRepository;
 
         $this->common_repo = new DK_Staff__CommonRepository;
@@ -87,6 +94,23 @@ class DKStaffController extends Controller
 
         $this->statistic_repo = new DK_Staff__StatisticRepository;
     }
+
+
+    // 测试
+    public function test_index()
+    {
+        return $this->test_repo->view__staff__test_index();
+    }
+
+    // 测试
+    public function test_temp()
+    {
+        return $this->test_repo->view__staff__test__temp(request()->all());
+    }
+
+
+
+
 
     /*
      * 登录 & 退出

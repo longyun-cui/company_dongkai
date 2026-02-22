@@ -8,6 +8,7 @@ Route::get('/', function () {
 
 $controller = "DKStaffController";
 
+
 Route::match(['get','post'], 'login', $controller.'@login');
 Route::match(['get','post'], 'logout', $controller.'@logout');
 Route::match(['get','post'], 'logout_without_token', $controller.'@logout_without_token');
@@ -34,6 +35,9 @@ Route::group(['middleware' => ['dk.staff.user.login']], function () {
 Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_change']], function () {
 
     $controller = 'DKStaffController';
+
+    Route::match(['get','post'], '/test', $controller.'@test_index');
+    Route::match(['get','post'], '/test/temp', $controller.'@test_temp');
 
 
     Route::get('/', $controller.'@view__staff__index');

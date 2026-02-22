@@ -105,6 +105,7 @@
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     render: function(data, type, row, meta) {
+                        if(!data) return '--';
                         return data;
                     }
                 },
@@ -116,6 +117,7 @@
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     render: function(data, type, row, meta) {
+                        if(!data) return '--';
                         return data;
                     }
                 },
@@ -127,6 +129,7 @@
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     render: function(data, type, row, meta) {
+                        if(!data) return '--';
                         return data;
                     }
                 },
@@ -138,6 +141,7 @@
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     render: function(data, type, row, meta) {
+                        if(!data) return '--';
                         return data;
                     }
                 },

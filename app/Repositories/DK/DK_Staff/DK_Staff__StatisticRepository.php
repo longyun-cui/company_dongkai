@@ -3574,7 +3574,7 @@ class DK_Staff__StatisticRepository {
 
 
         // 工单统计（小组）统计
-        $query_order__for__group = DK_Common__Order::select('creator_team_group_id')
+        $query_order__for__team_group = DK_Common__Order::select('creator_team_id','creator_team_group_id')
             ->addSelect(DB::raw("
                     count(IF(is_published = 1, TRUE, NULL)) as order_count__for__all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count__for__inspected,
@@ -3587,7 +3587,7 @@ class DK_Staff__StatisticRepository {
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count__for__repeated,
                     count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count__for__refused
                 "))
-            ->groupBy('creator_team_group_id');
+            ->groupBy('creator_team_id','creator_team_group_id');
 
 
         if($me->staff_category == 41)
@@ -3598,7 +3598,7 @@ class DK_Staff__StatisticRepository {
                 // 根据部门查看
                 $query_order__for__staff->where('creator_department_id', $me->department_id);
                 $query_order__for__team->where('creator_department_id', $me->department_id);
-                $query_order__for__group->where('creator_department_id', $me->department_id);
+                $query_order__for__team_group->where('creator_department_id', $me->department_id);
             }
             // 团队经理
             else if($me->staff_position == 41)
@@ -3606,7 +3606,7 @@ class DK_Staff__StatisticRepository {
                 // 根据团队查看
                 $query_order__for__staff->where('creator_team_id', $me->team_id);
                 $query_order__for__team->where('creator_team_id', $me->team_id);
-                $query_order__for__group->where('creator_team_id', $me->team_id);
+                $query_order__for__team_group->where('creator_team_id', $me->team_id);
             }
             // 小组主管
             else if($me->staff_position == 61)
@@ -3614,7 +3614,7 @@ class DK_Staff__StatisticRepository {
                 // 根据小组查看
                 $query_order__for__staff->where('creator_team_id', $me->team_id)->where('creator_team_group_id', $me->team_group_id);
                 $query_order__for__team->where('creator_team_id', $me->team_id)->where('creator_team_group_id', $me->team_group_id);
-                $query_order__for__group->where('creator_team_id', $me->team_id)->where('creator_team_group_id', $me->team_group_id);
+                $query_order__for__team_group->where('creator_team_id', $me->team_id)->where('creator_team_group_id', $me->team_group_id);
             }
         }
 
@@ -3628,7 +3628,7 @@ class DK_Staff__StatisticRepository {
             {
                 $query_order__for__staff->where('creator_team_id', $team_id_int);
                 $query_order__for__team->where('creator_team_id', $team_id_int);
-                $query_order__for__group->where('creator_team_id', $team_id_int);
+                $query_order__for__team_group->where('creator_team_id', $team_id_int);
             }
         }
 
@@ -3641,7 +3641,7 @@ class DK_Staff__StatisticRepository {
             {
                 $query_order__for__staff->where('project_id', $project_id_int);
                 $query_order__for__team->where('project_id', $project_id_int);
-                $query_order__for__group->where('project_id', $project_id_int);
+                $query_order__for__team_group->where('project_id', $project_id_int);
             }
         }
 
@@ -3653,7 +3653,7 @@ class DK_Staff__StatisticRepository {
 
             $query_order__for__staff->where('published_date',$the_date);
             $query_order__for__team->where('published_date',$the_date);
-            $query_order__for__group->where('published_date',$the_date);
+            $query_order__for__team_group->where('published_date',$the_date);
 
         }
         else if($time_type == 'month')
@@ -3670,7 +3670,7 @@ class DK_Staff__StatisticRepository {
 
             $query_order__for__staff->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date]);
             $query_order__for__team->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date]);
-            $query_order__for__group->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date]);
+            $query_order__for__team_group->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date]);
         }
         else if($time_type == 'period')
         {
@@ -3678,13 +3678,13 @@ class DK_Staff__StatisticRepository {
             {
                 $query_order__for__staff->where('published_date', '>=', $post_data['date_start']);
                 $query_order__for__team->where('published_date', '>=', $post_data['date_start']);
-                $query_order__for__group->where('published_date', '>=', $post_data['date_start']);
+                $query_order__for__team_group->where('published_date', '>=', $post_data['date_start']);
             }
             if(!empty($post_data['date_ended']))
             {
                 $query_order__for__staff->where('published_date', '<=', $post_data['date_ended']);
                 $query_order__for__team->where('published_date', '<=', $post_data['date_ended']);
-                $query_order__for__group->where('published_date', '<=', $post_data['date_ended']);
+                $query_order__for__team_group->where('published_date', '<=', $post_data['date_ended']);
             }
         }
         else
@@ -3693,15 +3693,21 @@ class DK_Staff__StatisticRepository {
 
             $query_order__for__staff->where('published_date',$the_date);
             $query_order__for__team->where('published_date',$the_date);
-            $query_order__for__group->where('published_date',$the_date);
+            $query_order__for__team_group->where('published_date',$the_date);
         }
 
 
         $staff_count = $query_order__for__staff->get()->keyBy('creator_id')->toArray();
         $team_count = $query_order__for__team->get()->keyBy('creator_team_id')->toArray();
-        $group_count = $query_order__for__group->get()->keyBy('creator_team_group_id')->toArray();
-//        dd($query_order);
+//        $group_count = $query_order__for__group->get()->keyBy('creator_team_group_id')->toArray();
 
+
+        $team_group_count = $query_order__for__team_group->get();
+        $team_group_count_array = $team_group_count->groupBy('creator_team_id')
+            ->map(function ($teamGroup) {
+                return $teamGroup->keyBy('creator_team_group_id');
+            })
+            ->toArray();
 
 
         $query = DK_Common__Staff::select(['id','staff_category','staff_position','name','department_id','team_id','team_group_id'])
@@ -3715,7 +3721,7 @@ class DK_Staff__StatisticRepository {
             ->where('team_id','>',0)
 //            ->where('team_group_id','>',0)
             ->whereIn('staff_category',[41])
-            ->whereIn('staff_position',[41,61,99]);
+            ->whereIn('staff_position',[61,99]);
 
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
 
@@ -3768,7 +3774,7 @@ class DK_Staff__StatisticRepository {
         foreach ($list as $k => $v)
         {
             $staff_id = $v->id;
-            if($staff_id && !empty($group_count) && count($group_count) && !empty($staff_count[$v->id]))
+            if($staff_id && !empty($staff_count) && count($staff_count) && !empty($staff_count[$v->id]))
             {
                 $list[$k]->staff_count__for__all = $staff_count[$staff_id]['order_count__for__all'];
                 $list[$k]->staff_count__for__inspected = $staff_count[$staff_id]['order_count__for__inspected'];
@@ -3803,47 +3809,6 @@ class DK_Staff__StatisticRepository {
                 ),2);
             }
             else $list[$k]->staff_rate__for__effective = 0;
-
-
-
-
-            // 小组
-            $team_group_id = $v->team_group_id;
-            if($team_group_id && !empty($group_count) && count($group_count) && isset($group_count[$team_group_id]))
-            {
-                $list[$k]->group_count__for__all = $group_count[$team_group_id]['order_count__for__all'];
-                $list[$k]->group_count__for__inspected = $group_count[$team_group_id]['order_count__for__inspected'];
-                $list[$k]->group_count__for__effective = $group_count[$team_group_id]['order_count__for__effective'];
-                $list[$k]->group_count__for__accepted = $group_count[$team_group_id]['order_count__for__accepted'];
-                $list[$k]->group_count__for__accepted_normal = $group_count[$team_group_id]['order_count__for__accepted_normal'];
-                $list[$k]->group_count__for__accepted_discount = $group_count[$team_group_id]['order_count__for__accepted_discount'];
-                $list[$k]->group_count__for__accepted_suburb = $group_count[$team_group_id]['order_count__for__accepted_suburb'];
-                $list[$k]->group_count__for__accepted_inside = $group_count[$team_group_id]['order_count__for__accepted_inside'];
-                $list[$k]->group_count__for__repeated = $group_count[$team_group_id]['order_count__for__repeated'];
-                $list[$k]->group_count__for__refused = $group_count[$team_group_id]['order_count__for__refused'];
-            }
-            else
-            {
-                $list[$k]->group_count__for__all = 0;
-                $list[$k]->group_count__for__inspected = 0;
-                $list[$k]->group_count__for__effective = 0;
-                $list[$k]->group_count__for__accepted = 0;
-                $list[$k]->group_count__for__accepted_normal = 0;
-                $list[$k]->group_count__for__accepted_discount = 0;
-                $list[$k]->group_count__for__accepted_suburb = 0;
-                $list[$k]->group_count__for__accepted_inside = 0;
-                $list[$k]->group_count__for__repeated = 0;
-                $list[$k]->group_count__for__refused = 0;
-            }
-
-            // 有效率
-            if($list[$k]->group_count__for__all)
-            {
-                $list[$k]->group_rate__for__effective = round((
-                    $list[$k]->group_count__for__effective * 100 / $list[$k]->group_count__for__all
-                ),2);
-            }
-            else $list[$k]->group_rate__for__effective = 0;
 
 
 
@@ -3887,23 +3852,106 @@ class DK_Staff__StatisticRepository {
             else $list[$k]->team_rate__for__effective = 0;
 
 
+
+
+            // 小组
+            $team_id = $v->team_id;
+            $team_group_id = $v->team_group_id;
+            if(
+                !empty($team_group_count_array) &&
+                count($team_group_count_array) &&
+                isset($team_group_count_array[$team_id]) &&
+                isset($team_group_count_array[$team_id][$team_group_id])
+            )
+            {
+                $list[$k]->group_count__for__all = $team_group_count_array[$team_id][$team_group_id]['order_count__for__all'];
+                $list[$k]->group_count__for__inspected = $team_group_count_array[$team_id][$team_group_id]['order_count__for__inspected'];
+                $list[$k]->group_count__for__effective = $team_group_count_array[$team_id][$team_group_id]['order_count__for__effective'];
+                $list[$k]->group_count__for__accepted = $team_group_count_array[$team_id][$team_group_id]['order_count__for__accepted'];
+                $list[$k]->group_count__for__accepted_normal = $team_group_count_array[$team_id][$team_group_id]['order_count__for__accepted_normal'];
+                $list[$k]->group_count__for__accepted_discount = $team_group_count_array[$team_id][$team_group_id]['order_count__for__accepted_discount'];
+                $list[$k]->group_count__for__accepted_suburb = $team_group_count_array[$team_id][$team_group_id]['order_count__for__accepted_suburb'];
+                $list[$k]->group_count__for__accepted_inside = $team_group_count_array[$team_id][$team_group_id]['order_count__for__accepted_inside'];
+                $list[$k]->group_count__for__repeated = $team_group_count_array[$team_id][$team_group_id]['order_count__for__repeated'];
+                $list[$k]->group_count__for__refused = $team_group_count_array[$team_id][$team_group_id]['order_count__for__refused'];
+            }
+            else
+            {
+                $list[$k]->group_count__for__all = 0;
+                $list[$k]->group_count__for__inspected = 0;
+                $list[$k]->group_count__for__effective = 0;
+                $list[$k]->group_count__for__accepted = 0;
+                $list[$k]->group_count__for__accepted_normal = 0;
+                $list[$k]->group_count__for__accepted_discount = 0;
+                $list[$k]->group_count__for__accepted_suburb = 0;
+                $list[$k]->group_count__for__accepted_inside = 0;
+                $list[$k]->group_count__for__repeated = 0;
+                $list[$k]->group_count__for__refused = 0;
+            }
+
+            // 有效率
+            if($list[$k]->group_count__for__all)
+            {
+                $list[$k]->group_rate__for__effective = round((
+                    $list[$k]->group_count__for__effective * 100 / $list[$k]->group_count__for__all
+                ),2);
+            }
+            else $list[$k]->group_rate__for__effective = 0;
+
+
+
+
+//            // 小组
+//            $team_group_id = $v->team_group_id;
+//            if($team_group_id && !empty($group_count) && count($group_count) && isset($group_count[$team_group_id]))
+//            {
+//                $list[$k]->group_count__for__all = $group_count[$team_group_id]['order_count__for__all'];
+//                $list[$k]->group_count__for__inspected = $group_count[$team_group_id]['order_count__for__inspected'];
+//                $list[$k]->group_count__for__effective = $group_count[$team_group_id]['order_count__for__effective'];
+//                $list[$k]->group_count__for__accepted = $group_count[$team_group_id]['order_count__for__accepted'];
+//                $list[$k]->group_count__for__accepted_normal = $group_count[$team_group_id]['order_count__for__accepted_normal'];
+//                $list[$k]->group_count__for__accepted_discount = $group_count[$team_group_id]['order_count__for__accepted_discount'];
+//                $list[$k]->group_count__for__accepted_suburb = $group_count[$team_group_id]['order_count__for__accepted_suburb'];
+//                $list[$k]->group_count__for__accepted_inside = $group_count[$team_group_id]['order_count__for__accepted_inside'];
+//                $list[$k]->group_count__for__repeated = $group_count[$team_group_id]['order_count__for__repeated'];
+//                $list[$k]->group_count__for__refused = $group_count[$team_group_id]['order_count__for__refused'];
+//            }
+//            else
+//            {
+//                $list[$k]->group_count__for__all = 0;
+//                $list[$k]->group_count__for__inspected = 0;
+//                $list[$k]->group_count__for__effective = 0;
+//                $list[$k]->group_count__for__accepted = 0;
+//                $list[$k]->group_count__for__accepted_normal = 0;
+//                $list[$k]->group_count__for__accepted_discount = 0;
+//                $list[$k]->group_count__for__accepted_suburb = 0;
+//                $list[$k]->group_count__for__accepted_inside = 0;
+//                $list[$k]->group_count__for__repeated = 0;
+//                $list[$k]->group_count__for__refused = 0;
+//            }
+//
+//            // 有效率
+//            if($list[$k]->group_count__for__all)
+//            {
+//                $list[$k]->group_rate__for__effective = round((
+//                    $list[$k]->group_count__for__effective * 100 / $list[$k]->group_count__for__all
+//                ),2);
+//            }
+//            else $list[$k]->group_rate__for__effective = 0;
+
+
             $v->team_merge = 0;
             $v->group_merge = 0;
         }
-//        dd($list->toArray());
 
         $grouped_by_team = $list->groupBy('team_id');
-        foreach ($grouped_by_team as $k => $v)
+        foreach ($list as $k => $v)
         {
-            $v[0]->team_merge = count($v);
-
-            $grouped_by_group = $list->groupBy('team_group_id');
-            foreach ($grouped_by_group as $key => $val)
-            {
-                $val[0]->group_merge = count($val);
-            }
+            $list[$k]->team_merge = count($grouped_by_team[$v->team_id]);
+            $grouped_by_group = $grouped_by_team[$v->team_id]->groupBy('team_group_id');
+            $list[$k]->group_merge = count($grouped_by_group[$v->team_group_id]);
         }
-//        dd($list->toArray());
+
 
         return datatable_response($list, $draw, $total);
     }
