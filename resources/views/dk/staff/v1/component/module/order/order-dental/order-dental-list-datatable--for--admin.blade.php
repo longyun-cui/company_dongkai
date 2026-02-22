@@ -1366,7 +1366,7 @@
                         var $html_appeal_handle = '';
 
 
-                        $html_detail = '<a class="btn btn-xs item-modal-show-for-detail" data-id="'+data+'">详情</a>';
+                        $html_detail = '<a class="btn btn-xs modal-show--for--order--item-detail-editing" data-id="'+data+'">详情</a>';
 
                         // 记录
                         if(row.created_type != 9)
@@ -1484,6 +1484,7 @@
                             $html_deliver_fool+
                             $html_deliver+
                             $html_distribute+
+                            $html_detail+
                             $html_record+
                             // $more_html+
                             '';
