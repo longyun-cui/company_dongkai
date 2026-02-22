@@ -16,7 +16,7 @@
                 </select>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11]))
+            @if(in_array($me->user_type,[0,1,9,61]))
                 <select class="search-filter form-filter filter-xl select2-box-c" name="statistic-caller-recent-team">
                     <option value="0">选择团队</option>
                     @if(!empty($team_list))

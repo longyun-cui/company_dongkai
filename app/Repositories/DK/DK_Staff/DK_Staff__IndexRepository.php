@@ -142,6 +142,14 @@ class DK_Staff__IndexRepository {
         $last_month_start_timestamp = strtotime($last_month_start_date); // 上月开始时间戳
         $last_month_ended_timestamp = strtotime($last_month_ended_datetime); // 上月月结束时间戳
 
+
+
+        $team_list = DK_Common__Team::select('id','name')->where('team_type',11)->get();
+        $view_data['team_list'] = $team_list;
+
+
+
+
 //        $project_list
 
         $project_query = DK_Common__Project::select('id','name')->where('active',1)->where('item_status',1);

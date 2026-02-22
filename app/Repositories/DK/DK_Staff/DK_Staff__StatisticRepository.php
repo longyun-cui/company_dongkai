@@ -4182,8 +4182,6 @@ class DK_Staff__StatisticRepository {
 
         foreach($order_list as $k => $v)
         {
-            $v->order_count_for_effective = $v->order_count_for_accepted + $v->order_count_for_repeated + $v->order_count_for_accepted_inside;
-
             $date_day = date_create($v->date_day);
             $today = date_create(date('Y-m-d'));
 
