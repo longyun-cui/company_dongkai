@@ -64,20 +64,20 @@
                     "width": "120px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return row.team_er.name == null ? '未知' : '<a href="javascript:void(0);">' + row.team_er.name + '</a>' + '<br>' + '<a href="javascript:void(0);">' + row.team_er.leader.name + '</a>';
+                        return row.team_er == null ? '未知' : '<a href="javascript:void(0);">' + row.team_er.name + '</a>';
                     }
                 },
                 {
                     "title": "小组",
-                    "data": "department_group_id",
+                    "data": "team_group_id",
                     "className": "vertical-middle",
                     "width": "120px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return row.department_group_er.leader == null ? '未知' : '<a href="javascript:void(0);">' + row.department_group_er.name + '</a>' + '<br>' + '<a href="javascript:void(0);">' + row.department_group_er.leader.username + '</a>';
+                        return row.team_group_er == null ? '未知' : '<a href="javascript:void(0);">' + row.team_group_er.name + '</a>';
                     }
                 },
-                // {s
+                // {
                 //     "title": "ID",
                 //     "data": "id",
                 //     "className": "",

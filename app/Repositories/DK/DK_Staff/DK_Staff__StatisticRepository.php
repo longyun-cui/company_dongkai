@@ -3544,6 +3544,7 @@ class DK_Staff__StatisticRepository {
             ->addSelect(DB::raw("
                     count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count__for__inspected,
+                    count(IF(inspected_result in ('通过','折扣通过'), TRUE, NULL)) as order_count__for__effective,
                     count(IF(inspected_result in ('通过','折扣通过','郊区通过','内部通过'), TRUE, NULL)) as order_count__for__accepted,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count__for__accepted_normal,
                     count(IF(inspected_result = '折扣通过', TRUE, NULL)) as order_count__for__accepted_discount,
@@ -3560,6 +3561,7 @@ class DK_Staff__StatisticRepository {
             ->addSelect(DB::raw("
                     count(IF(is_published = 1, TRUE, NULL)) as order_count__for__all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count__for__inspected,
+                    count(IF(inspected_result in ('通过','折扣通过'), TRUE, NULL)) as order_count__for__effective,
                     count(IF(inspected_result in ('通过','折扣通过','郊区通过','内部通过'), TRUE, NULL)) as order_count__for__accepted,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count__for__accepted_normal,
                     count(IF(inspected_result = '折扣通过', TRUE, NULL)) as order_count__for__accepted_discount,
@@ -3576,6 +3578,7 @@ class DK_Staff__StatisticRepository {
             ->addSelect(DB::raw("
                     count(IF(is_published = 1, TRUE, NULL)) as order_count__for__all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count__for__inspected,
+                    count(IF(inspected_result in ('通过','折扣通过'), TRUE, NULL)) as order_count__for__effective,
                     count(IF(inspected_result in ('通过','折扣通过','郊区通过','内部通过'), TRUE, NULL)) as order_count__for__accepted,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count__for__accepted_normal,
                     count(IF(inspected_result = '折扣通过', TRUE, NULL)) as order_count__for__accepted_discount,
@@ -3601,20 +3604,33 @@ class DK_Staff__StatisticRepository {
             else if($me->staff_position == 41)
             {
                 // 根据团队查看
-                $query_order__for__staff->where('team_id', $me->team_id);
-                $query_order__for__team->where('team_id', $me->team_id);
-                $query_order__for__group->where('team_id', $me->team_id);
+                $query_order__for__staff->where('creator_team_id', $me->team_id);
+                $query_order__for__team->where('creator_team_id', $me->team_id);
+                $query_order__for__group->where('creator_team_id', $me->team_id);
             }
             // 小组主管
-            else if($me->user_type == 61)
+            else if($me->staff_position == 61)
             {
                 // 根据小组查看
-                $query_order__for__staff->where('team_id', $me->team_id)->where('team_group_id', $me->team_group_id);
-                $query_order__for__team->where('team_id', $me->team_id)->where('team_group_id', $me->team_group_id);
-                $query_order__for__group->where('team_id', $me->team_id)->where('team_group_id', $me->team_group_id);
+                $query_order__for__staff->where('creator_team_id', $me->team_id)->where('creator_team_group_id', $me->team_group_id);
+                $query_order__for__team->where('creator_team_id', $me->team_id)->where('creator_team_group_id', $me->team_group_id);
+                $query_order__for__group->where('creator_team_id', $me->team_id)->where('creator_team_group_id', $me->team_group_id);
             }
         }
 
+
+        // 团队
+        $project_id = 0;
+        if(isset($post_data['team']))
+        {
+            $team_id_int = (int)$post_data['team'];
+            if(!in_array($team_id_int,[0,-1]))
+            {
+                $query_order__for__staff->where('creator_team_id', $team_id_int);
+                $query_order__for__team->where('creator_team_id', $team_id_int);
+                $query_order__for__group->where('creator_team_id', $team_id_int);
+            }
+        }
 
         // 项目
         $project_id = 0;
@@ -3623,8 +3639,6 @@ class DK_Staff__StatisticRepository {
             $project_id_int = (int)$post_data['project'];
             if(!in_array($project_id_int,[0,-1]))
             {
-                $project_id = $post_data['project'];
-
                 $query_order__for__staff->where('project_id', $project_id_int);
                 $query_order__for__team->where('project_id', $project_id_int);
                 $query_order__for__group->where('project_id', $project_id_int);
@@ -3721,7 +3735,7 @@ class DK_Staff__StatisticRepository {
                 $query->where('team_id', $me->team_id);
             }
             // 小组主管
-            else if($me->user_type == 61)
+            else if($me->staff_position == 61)
             {
                 // 根据部门查看
                 $query->where('team_id', $me->team_id);
@@ -3757,6 +3771,7 @@ class DK_Staff__StatisticRepository {
             {
                 $list[$k]->staff_count__for__all = $staff_count[$v->id]['order_count__for__all'];
                 $list[$k]->staff_count__for__inspected = $staff_count[$v->id]['order_count__for__inspected'];
+                $list[$k]->staff_count__for__effective = $staff_count[$v->id]['order_count__for__effective'];
                 $list[$k]->staff_count__for__accepted = $staff_count[$v->id]['order_count__for__accepted'];
                 $list[$k]->staff_count__for__accepted_normal = $staff_count[$v->id]['order_count__for__accepted_normal'];
                 $list[$k]->staff_count__for__accepted_discount = $staff_count[$v->id]['order_count__for__accepted_discount'];
@@ -3764,22 +3779,19 @@ class DK_Staff__StatisticRepository {
                 $list[$k]->staff_count__for__accepted_inside = $staff_count[$v->id]['order_count__for__accepted_inside'];
                 $list[$k]->staff_count__for__repeated = $staff_count[$v->id]['order_count__for__repeated'];
                 $list[$k]->staff_count__for__refused = $staff_count[$v->id]['order_count__for__refused'];
-                $list[$k]->staff_count__for__effective = (
-                    $staff_count[$v->id]['order_count__for__accepted_normal'] +
-                    $staff_count[$v->id]['order_count__for__accepted_discount']
-                );
             }
             else
             {
                 $list[$k]->staff_count__for__all = 0;
                 $list[$k]->staff_count__for__inspected = 0;
+                $list[$k]->staff_count__for__effective = 0;
+                $list[$k]->staff_count__for__accepted = 0;
                 $list[$k]->staff_count__for__accepted_normal = 0;
                 $list[$k]->staff_count__for__accepted_discount = 0;
                 $list[$k]->staff_count__for__accepted_suburb = 0;
                 $list[$k]->staff_count__for__accepted_inside = 0;
                 $list[$k]->staff_count__for__repeated = 0;
                 $list[$k]->staff_count__for__refused = 0;
-                $list[$k]->staff_count__for__effective = 0;
             }
 
             // 有效率
@@ -3796,11 +3808,11 @@ class DK_Staff__StatisticRepository {
 
             // 小组
             $team_group_id = $v->team_group_id;
-
             if(isset($group_count[$team_group_id]))
             {
                 $list[$k]->group_count__for__all = $group_count[$team_group_id]['order_count__for__all'];
                 $list[$k]->group_count__for__inspected = $group_count[$team_group_id]['order_count__for__inspected'];
+                $list[$k]->group_count__for__effective = $group_count[$team_group_id]['order_count__for__effective'];
                 $list[$k]->group_count__for__accepted = $group_count[$team_group_id]['order_count__for__accepted'];
                 $list[$k]->group_count__for__accepted_normal = $group_count[$v->id]['order_count__for__accepted_normal'];
                 $list[$k]->group_count__for__accepted_discount = $group_count[$v->id]['order_count__for__accepted_discount'];
@@ -3808,15 +3820,12 @@ class DK_Staff__StatisticRepository {
                 $list[$k]->group_count__for__accepted_inside = $group_count[$v->id]['order_count__for__accepted_inside'];
                 $list[$k]->group_count__for__repeated = $group_count[$team_group_id]['order_count__for__repeated'];
                 $list[$k]->group_count__for__refused = $group_count[$team_group_id]['order_count__for__refused'];
-                $list[$k]->group_count__for__effective = (
-                    $group_count[$v->id]['order_count__for__accepted_normal'] +
-                    $group_count[$v->id]['order_count__for__accepted_discount']
-                );
             }
             else
             {
                 $list[$k]->group_count__for__all = 0;
                 $list[$k]->group_count__for__inspected = 0;
+                $list[$k]->group_count__for__effective = 0;
                 $list[$k]->group_count__for__accepted = 0;
                 $list[$k]->group_count__for__accepted_normal = 0;
                 $list[$k]->group_count__for__accepted_discount = 0;
@@ -3824,7 +3833,6 @@ class DK_Staff__StatisticRepository {
                 $list[$k]->group_count__for__accepted_inside = 0;
                 $list[$k]->group_count__for__repeated = 0;
                 $list[$k]->group_count__for__refused = 0;
-                $list[$k]->group_count__for__effective = 0;
             }
 
             // 有效率
@@ -3834,7 +3842,7 @@ class DK_Staff__StatisticRepository {
                     $list[$k]->group_count__for__effective * 100 / $list[$k]->group_count__for__all
                 ),2);
             }
-            else $list[$k]->staff_rate__for__effective = 0;
+            else $list[$k]->group_rate__for__effective = 0;
 
 
 
@@ -3846,21 +3854,19 @@ class DK_Staff__StatisticRepository {
             {
                 $list[$k]->team_count__for__all = $team_count[$team_id]['order_count_for_all'];
                 $list[$k]->team_count__for__inspected = $team_count[$team_id]['order_count_for_inspected'];
+                $list[$k]->team_count__for__effective = $team_count[$team_id]['order_count_for_effective'];
                 $list[$k]->team_count__for__accepted = $team_count[$team_id]['order_count_for_accepted'];
                 $list[$k]->team_count__for__accepted_normal = $team_count[$team_id]['order_count_for_accepted_normal'];
                 $list[$k]->team_count__for__accepted_discount = $team_count[$team_id]['order_count_for_accepted_discount'];
                 $list[$k]->team_count__for__accepted_suburb = $team_count[$team_id]['order_count_for_accepted_suburb'];
                 $list[$k]->team_count__for__repeated_inside = $team_count[$team_id]['order_count_for_repeated_inside'];
                 $list[$k]->team_count__for__refused = $team_count[$team_id]['order_count_for_refused'];
-                $list[$k]->team_count__for__effective = (
-                    $team_count[$v->id]['order_count__for__accepted_normal'] +
-                    $team_count[$v->id]['order_count__for__accepted_discount']
-                );
             }
             else
             {
                 $list[$k]->team_count__for__all = 0;
                 $list[$k]->team_count__for__inspected = 0;
+                $list[$k]->team_count__for__effective = 0;
                 $list[$k]->team_count__for__accepted = 0;
                 $list[$k]->team_count__for__accepted_normal = 0;
                 $list[$k]->team_count__for__accepted_discount = 0;
@@ -3868,7 +3874,6 @@ class DK_Staff__StatisticRepository {
                 $list[$k]->team_count__for__accepted_inside = 0;
                 $list[$k]->team_count__for__repeated = 0;
                 $list[$k]->team_count__for__refused = 0;
-                $list[$k]->team_count__for__effective = 0;
             }
 
             // 有效率
@@ -3879,8 +3884,6 @@ class DK_Staff__StatisticRepository {
                 ),2);
             }
             else $list[$k]->team_rate__for__effective = 0;
-
-
 
 
             $v->team_merge = 0;
