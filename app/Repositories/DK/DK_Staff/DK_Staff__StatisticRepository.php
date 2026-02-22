@@ -3764,6 +3764,7 @@ class DK_Staff__StatisticRepository {
 
         if($limit == -1) $list = $query->get();
         else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+        dd($list);
 
         foreach ($list as $k => $v)
         {
