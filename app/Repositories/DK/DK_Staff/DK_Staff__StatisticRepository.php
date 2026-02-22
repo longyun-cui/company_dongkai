@@ -3851,15 +3851,15 @@ class DK_Staff__StatisticRepository {
             $team_id = $v->team_id;
             if($team_id && !empty($team_count) && count($team_count) && isset($team_count[$team_id]))
             {
-                $list[$k]->team_count__for__all = $team_count[$team_id]['order_count_for_all'];
-                $list[$k]->team_count__for__inspected = $team_count[$team_id]['order_count_for_inspected'];
-                $list[$k]->team_count__for__effective = $team_count[$team_id]['order_count_for_effective'];
-                $list[$k]->team_count__for__accepted = $team_count[$team_id]['order_count_for_accepted'];
-                $list[$k]->team_count__for__accepted_normal = $team_count[$team_id]['order_count_for_accepted_normal'];
-                $list[$k]->team_count__for__accepted_discount = $team_count[$team_id]['order_count_for_accepted_discount'];
-                $list[$k]->team_count__for__accepted_suburb = $team_count[$team_id]['order_count_for_accepted_suburb'];
-                $list[$k]->team_count__for__repeated_inside = $team_count[$team_id]['order_count_for_repeated_inside'];
-                $list[$k]->team_count__for__refused = $team_count[$team_id]['order_count_for_refused'];
+                $list[$k]->team_count__for__all = $team_count[$team_id]['order_count__for__all'];
+                $list[$k]->team_count__for__inspected = $team_count[$team_id]['order_count__for__inspected'];
+                $list[$k]->team_count__for__effective = $team_count[$team_id]['order_count__for__effective'];
+                $list[$k]->team_count__for__accepted = $team_count[$team_id]['order_count__for__accepted'];
+                $list[$k]->team_count__for__accepted_normal = $team_count[$team_id]['order_count__for__accepted_normal'];
+                $list[$k]->team_count__for__accepted_discount = $team_count[$team_id]['order_count__for__accepted_discount'];
+                $list[$k]->team_count__for__accepted_suburb = $team_count[$team_id]['order_count__for__accepted_suburb'];
+                $list[$k]->team_count__for__repeated_inside = $team_count[$team_id]['order_count__for__repeated_inside'];
+                $list[$k]->team_count__for__refused = $team_count[$team_id]['order_count__for__refused'];
             }
             else
             {
