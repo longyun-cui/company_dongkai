@@ -231,11 +231,11 @@
                         @endif
 
 
-                        @if(in_array($me->staff_category,[0,1,9,41]))
+                        @if(in_array($me->staff_category,[0,1,9,41]) && in_array($me->staff_location,[0,1,9,11,31,41,61]))
                         <li class="header margin-bottom-8px">员工统计</li>
                         @endif
 
-                        @if(in_array($me->staff_category,[0,1,9,41]))
+                        @if(in_array($me->staff_category,[0,1,9,41]) && in_array($me->staff_location,[0,1,9,11,31,41,61]))
                         <li>
                             <a href="javascript:void(0);" class="tab-control datatable-control"
                                data-type="create"
@@ -255,7 +255,7 @@
                         </li>
                         <li class="divider"></li>
                         @endif
-                        @if(in_array($me->staff_category,[0,1,9,41]))
+                        @if(in_array($me->staff_category,[0,1,9,41]) && in_array($me->staff_location,[0,1,9,11,31,41,61]))
                         <li>
                             <a href="javascript:void(0);" class="tab-control datatable-control"
                                data-type="create"
@@ -275,7 +275,7 @@
                         </li>
                         <li class="divider"></li>
                         @endif
-                        @if(in_array($me->staff_category,[0,1,9,41]))
+                        @if(in_array($me->staff_category,[0,1,9,41]) && in_array($me->staff_location,[0,1,9,11,31,41,61]))
                         <li>
                             <a href="javascript:void(0);" class="tab-control datatable-control"
                                data-type="create"
