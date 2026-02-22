@@ -798,6 +798,9 @@
                                 $html_edit = '<a class="btn btn-xs modal-show--for--order-dental--item-edit" data-id="'+data+'">编辑</a>';
                             }
 
+                            // 详情编辑
+                            $html_detail = '<a class="btn btn-xs modal-show--for--order--item-detail-editing" data-id="'+data+'">详情</a>';
+
                             // 申诉
                             if(row.appealed_status == 0 && ['拒绝','拒绝可交付','不合格'].includes(row.inspected_result))
                             {
@@ -812,6 +815,7 @@
                             $html_delete+
                             $html_publish+
                             $html_appeal+
+                            $html_detail+
                             $html_record+
                             '';
                         return $html;

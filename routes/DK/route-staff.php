@@ -209,6 +209,7 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
     Route::post('/o1/order/item-complete', $controller.'@o1__order__item_publish');
     // 【工单】跟进
     Route::post('/o1/order/item-follow-save', $controller.'@o1__order__item_follow_save');
+    Route::post('/o1/order/item-detail-editing-save', $controller.'@o1__order__item_detail_editing_save');
     Route::post('/o1/order/item-inspecting-save', $controller.'@o1__order__item_inspecting_save');
     Route::post('/o1/order/item-appealing-save', $controller.'@o1__order__item_appealing_save');
     Route::post('/o1/order/item-appealed-handling-save', $controller.'@o1__order__item_appealed_handling_save');

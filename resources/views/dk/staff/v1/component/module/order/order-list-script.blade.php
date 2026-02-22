@@ -1201,8 +1201,8 @@
             $row.addClass('operating');
 
 
-            var $delivery_datatable_id = 'datatable--for--order--item-editing--of--operation-record-list';
-            Datatable__for__Order_Item_Delivery_Record_List.init($delivery_datatable_id,$id);
+            var $operation_datatable_id = 'datatable--for--order--item-detail-editing--of--operation-record-list';
+            Datatable__for__Order_Item_Operation_Record_List.init($operation_datatable_id,$id);
 
 
             var $modal_id = 'modal--for--order--item-detail-editing';
@@ -1342,10 +1342,10 @@
             var $table_id = $that.data('datatable-list-id');
             var $row = $('#'+$table_id).find('[data-key="id"][data-value='+$item_id+']').parents('tr');
 
-            var $modal_id = 'modal--for--order--item-editing';
+            var $modal_id = 'modal--for--order--item-detail-editing';
             var $modal = $("#"+$modal_id);
 
-            var $form_id = 'form--for--order--item-editing';
+            var $form_id = 'form--for--order--item-detail-editing';
             var $form = $("#"+$form_id);
 
             var $index = layer.load(1, {
@@ -1364,7 +1364,7 @@
             });
 
             var options = {
-                url: "{{ url('/o1/order/item-editing-save') }}",
+                url: "{{ url('/o1/order/item-detail-editing-save') }}",
                 type: "post",
                 dataType: "json",
                 // target: "#div2",

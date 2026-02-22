@@ -1358,15 +1358,12 @@
                         var $html_delete = '';
                         var $html_publish = '';
                         var $html_inspect = '';
-                        var $html_push = '';
-                        var $html_deliver = '';
-                        var $html_deliver_fool = '';
-                        var $html_distribute = '';
                         var $html_appeal = '';
                         var $html_appeal_handle = '';
+                        var $html_deliver_fool = '';
+                        var $html_deliver = '';
+                        var $html_distribute = '';
 
-
-                        $html_detail = '<a class="btn btn-xs modal-show--for--order--item-detail-editing" data-id="'+data+'">详情</a>';
 
                         // 记录
                         if(row.created_type != 9)
@@ -1400,6 +1397,9 @@
                             {
                                 $html_edit = '<a class="btn btn-xs modal-show--for--order-dental--item-edit" data-id="'+data+'">编辑</a>';
                             }
+
+                            // 详情编辑
+                            $html_detail = '<a class="btn btn-xs modal-show--for--order--item-detail-editing" data-id="'+data+'">详情</a>';
 
                             // 审核
                             if(row.inspector_id == 0)
@@ -1462,23 +1462,22 @@
                         {
                             $html_edit = '';
                             $html_publish = '';
-                            $html_inspect = '';
                             $html_delete = '';
-                            $html_push = '';
+                            $html_inspect = '';
                             $html_appeal = '';
                             $html_appeal_handle = '';
                             $html_deliver_fool = '';
                             $html_deliver = '';
                             $html_distribute = '';
+                            $html_detail = '';
                         }
 
 
                         var $html =
                             $html_edit+
                             $html_publish+
-                            $html_inspect+
                             $html_delete+
-                            $html_push+
+                            $html_inspect+
                             $html_appeal+
                             $html_appeal_handle+
                             $html_deliver_fool+

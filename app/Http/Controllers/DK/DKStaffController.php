@@ -871,6 +871,11 @@ class DKStaffController extends Controller
     {
         return $this->order_repo->o1__order__item_publish(request()->all());
     }
+    // 【工单】详情编辑
+    public function o1__order__item_detail_editing_save()
+    {
+        return $this->order_repo->o1__order__item_detail_editing_save(request()->all());
+    }
     // 【工单】审核
     public function o1__order__item_inspecting_save()
     {

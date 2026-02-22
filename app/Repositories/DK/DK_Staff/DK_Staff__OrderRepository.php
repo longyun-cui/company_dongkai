@@ -2122,50 +2122,251 @@ class DK_Staff__OrderRepository {
             DB::commit();
 
 
-            if(env('APP_ENV') == "production" && $item->order_category == 1)
+            return response_success([],"审核完成!");
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+    }
+
+    // 【工单】审核
+    public function o1__order__item_detail_editing_save($post_data)
+    {
+//        dd($post_data);
+//        return response_success([]);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order--item-detail-editing') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Common__Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->staff_category,[0,1,41,71]))
+        {
+            return response_error([],"你没有操作权限！");
+        }
+
+//        $project_id = $post_data["project_id"];
+        $client_type = $post_data["client_type"];
+        $client_name = $post_data["client_name"];
+        $client_intention = $post_data["client_intention"];
+        $location_city = $post_data["location_city"];
+        $location_district = $post_data["location_district"];
+        $field_1 = $post_data["field_1"];
+        $description = trim($post_data["description"]);
+
+
+
+        $time = time();
+        $date = date("Y-m-d");
+        $datetime = date('Y-m-d H:i:s');
+
+
+
+        $record_data["ip"] = Get_IP();
+        $record_data["record_object"] = 1;
+        $record_data["record_category"] = 1;
+        $record_data["record_type"] = 1;
+        $record_data["creator_id"] = $me->id;
+        $record_data["creator_company_id"] = $me->company_id;
+        $record_data["creator_department_id"] = $me->department_id;
+        $record_data["creator_team_id"] = $me->team_id;
+        $record_data["order_id"] = $id;
+        $record_data["operate_object"] = 1;
+        $record_data["operate_category"] = 1;
+        $record_data["operate_type"] = 2;
+
+
+        $record_content = [];
+
+
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '员工操作';
+            $record_row['field'] = 'item_operation';
+            $record_row['before'] = '';
+            $record_row['after'] = '内容编辑';
+            $record_content[] = $record_row;
+        }
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '操作时间';
+            $record_row['field'] = 'operation_time';
+            $record_row['before'] = '';
+            $record_row['after'] = $datetime;
+            $record_content[] = $record_row;
+        }
+
+        // 项目
+//        if($item->project_id != $project_id)
+//        {
+//            $item->load([
+//                'project_er'=>function($query) { $query->select('id','name'); }
+//            ]);
+//
+//            $project = DK_Common__Project::find($project_id);
+//            if($project)
+//            {
+//                $record_row = [];
+//                $record_row['title'] = '项目修改';
+//                $record_row['field'] = 'project_id';
+//                $record_row['before'] = $item->project_er->name.'('.$item->project_id.')';
+//                $record_row['after'] = $project->name.'('.$project_id.')';
+//                $record_content[] = $record_row;
+//            }
+//            else return response_error([],"选择的【项目】不存在，刷新页面重试！");
+//        }
+        // 客户姓名
+        if($item->client_name != $client_name)
+        {
+            $record_row = [];
+            $record_row['title'] = '客户姓名';
+            $record_row['field'] = 'client_name';
+            $record_row['before'] = $item->client_name;
+            $record_row['after'] = $client_name;
+            $record_content[] = $record_row;
+        }
+        // 患者类型
+        if($item->client_type != $client_type)
+        {
+            $record_row = [];
+            $record_row['title'] = '患者类型';
+            $record_row['field'] = 'client_type';
+            $record_row['before'] = config('dk.common-config.dental_type.'.$item->client_type);
+            $record_row['after'] = config('dk.common-config.dental_type.'.$client_type);
+            $record_content[] = $record_row;
+        }
+        // 客户意愿
+        if($item->client_intention != $client_intention)
+        {
+            $record_row = [];
+            $record_row['title'] = '客户意愿';
+            $record_row['field'] = 'client_intention';
+            $record_row['before'] = $item->client_intention;
+            $record_row['after'] = $client_intention;
+            $record_content[] = $record_row;
+        }
+        // 城市区域
+        if($item->location_city != $location_city || $item->location_district != $location_district)
+        {
+            $record_row = [];
+            $record_row['title'] = '城市区域';
+            $record_row['field'] = 'location_city';
+            $record_row['before'] = $item->location_city.'-'.$item->location_district;
+            $record_row['after'] = $location_city.'-'.$location_district;
+            $record_content[] = $record_row;
+        }
+//        // 城市
+//        if($item->location_city != $location_city)
+//        {
+//            $record_row = [];
+//            $record_row['title'] = '城市';
+//            $record_row['field'] = 'location_city';
+//            $record_row['before'] = $item->location_city;
+//            $record_row['after'] = $location_city;
+//            $record_content[] = $record_row;
+//        }
+//        // 区域
+//        if($item->location_district != $location_district)
+//        {
+//            $record_row = [];
+//            $record_row['title'] = '区域';
+//            $record_row['field'] = 'location_district';
+//            $record_row['before'] = $item->location_district;
+//            $record_row['after'] = $location_district;
+//            $record_content[] = $record_row;
+//        }
+        // 自定义1
+        if($item->field_1 != $field_1)
+        {
+            $record_row = [];
+            if($item->order_category == 1)
             {
-                if(in_array($inspected_result,['通过','重复','内部通过','折扣通过','郊区通过']))
-                {
-                    if($item->api_is_pushed == 0)
-                    {
-                        $push_data["item"] = "补牙";
-                        $push_data["name"] = $item->client_name;
-                        $push_data["phone"] = $item->client_phone;
-                        $push_data["intention"] = $item->client_intention;
-                        $push_data["city"] = $item->location_city;
-                        $push_data["area"] = $item->location_district;
-                        $push_data["toothcount"] = $item->teeth_count;
-                        $push_data["addvx"] = (($item->is_wx) ? '是' : '否');
-                        $push_data["vxaccount"] = (($item->wx_id) ? $item->wx_id : '');
-                        $push_data["source"] = $item->channel_source;
-                        $push_data["description"] = $item->description;
+                $record_row['title'] = '牙齿数量';
+                $record_row['field'] = 'field_1';
+                $record_row['before'] = config('dk.common-config.teeth_count.'.$item->field_1);
+                $record_row['after'] = config('dk.common-config.teeth_count.'.$field_1);
+            }
+            else if($item->order_category == 11)
+            {
+                $record_row['title'] = '品类';
+                $record_row['field'] = 'field_1';
+                $record_row['before'] = config('dk.common-config.aesthetic_type.'.$item->field_1);
+                $record_row['after'] = config('dk.common-config.aesthetic_type.'.$field_1);
+            }
+            else if($item->order_category == 31)
+            {
+                $record_row['title'] = '品类';
+                $record_row['field'] = 'field_1';
+                $record_row['before'] = config('dk.common-config.luxury_type.'.$item->field_1);
+                $record_row['after'] = config('dk.common-config.luxury_type.'.$field_1);
+            }
+            $record_content[] = $record_row;
+        }
+        // 通话小结
+        if($item->description != $description)
+        {
+            $record_row = [];
+            $record_row['title'] = '通话小结';
+            $record_row['field'] = 'project_id';
+            $record_row['before'] = $item->description;
+            $record_row['after'] = $description;
+            $record_content[] = $record_row;
+        }
 
-                        $request_result = $this->operate_api_push_order($push_data);
 
-                        if($request_result['success'])
-                        {
-                            $result = json_decode($request_result['result']);
-                            if($result->code == 0)
-                            {
-                                $item->api_is_pushed = 1;
-                                $item->save();
-                                return response_success([],"审核成功，推送成功!");
-                            }
-                            else
-                            {
-                                return response_error([],"审核成功，推送返回失败!");
-                            }
-                        }
-                        else
-                        {
-                            return response_error([],"审核成功，接口推送失败!");
-                        }
-                    }
-                }
+        $record_data["content"] = json_encode($record_content);
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+//            if($item->project_id != $project_id) $item->project_id = $project_id;
+            if($item->client_name != $client_name) $item->client_name = $client_name;
+            if($item->client_type != $client_type) $item->client_type = $client_type;
+            if($item->client_intention != $client_intention) $item->client_intention = $client_intention;
+            if($item->location_city != $location_city) $item->location_city = $location_city;
+            if($item->location_district != $location_district) $item->location_district = $location_district;
+            if($item->field_1 != $field_1) $item->field_1 = $field_1;
+            if($item->description != $description) $item->description = $description;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("DK_Common__Order--update--fail");
+            else
+            {
+                $record = new DK_Common__Order__Operation_Record;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("DK_Common__Order__Operation_Record--insert--fail");
             }
 
+            DB::commit();
 
-            return response_success([],"审核完成!");
+            return response_success([],"编辑成功!");
         }
         catch (Exception $e)
         {

@@ -36,7 +36,7 @@
                     </div>
                 </div>
 
-                <table class='table table-striped table-bordered' id='datatable--for--order--item-editing--of--operation-record-list'>
+                <table class='table table-striped table-bordered' id='datatable--for--order--item-detail-editing--of--operation-record-list'>
                     <thead>
                     <tr role='row' class='heading'>
                     </tr>
@@ -53,7 +53,7 @@
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border" style="margin:8px 0;">
-                <h3 class="box-title">审核-订单<span class="id-box"></span></h3>
+                <h3 class="box-title">详情编辑-订单<span class="id-box"></span></h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
@@ -62,17 +62,17 @@
                 <div class="box-body  info-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="operate" value="order--item-editing" readonly>
+                    <input type="hidden" name="operate" value="order--item-detail-editing" readonly>
                     <input type="hidden" name="item_id" value="0" readonly>
 
                     {{--项目--}}
                     <div class="form-group item-project-box">
                         <label class="control-label col-md-2">项目</label>
                         <div class="col-md-9 ">
-                            <select class="form-control select2-reset select2--project disabled"
+                            <select class="form-control modal--select2- select2-reset select2--project-" disabled
                                     name="project_id"
-                                    id="select2--project--for--order--item-editing"
-                                    data-modal="#modal--for--order--item-editing"
+                                    id="select2--project--for--order--item-detail-editing"
+                                    data-modal="#modal--for--order--item-detail-editing"
                                     data-item-category="1"
                             >
                                 <option data-id="" value="">选择项目</option>
@@ -98,10 +98,10 @@
                             <div class="col-sm-6 col-md-6 padding-0">
                                 <select class="form-control modal--select2 select2-reset select2--location-city"
                                         name="location_city"
-                                        id="select--location-city--for--order--item-editing"
-                                        data-modal="#modal--for--order--item-editing"
+                                        id="select--location-city--for--order--item-detail-editing"
+                                        data-modal="#modal--for--order--item-detail-editing"
                                         data-item-category="1"
-                                        data-location-district-target="#select2--location-district--for--order--item-editing"
+                                        data-location-district-target="#select2--location-district--for--order--item-detail-editing"
                                 >
                                     <option value="">选择城市</option>
                                     @if(!empty($location_city_list) && count($location_city_list) > 0)
@@ -114,10 +114,10 @@
                             <div class="col-sm-6 col-md-6 padding-0">
                                 <select class="form-control select2-reset select2--location"
                                         name="location_district"
-                                        id="select2--location-district--for--order--item-editing"
-                                        data-modal="#modal--for--order--item-editing"
+                                        id="select2--location-district--for--order--item-detail-editing"
+                                        data-modal="#modal--for--order--item-detail-editing"
                                         data-item-category="11"
-                                        data-target="#select--location-city--for--order--item-editing"
+                                        data-target="#select--location-city--for--order--item-detail-editing"
                                 >
                                     <option value="">选择区域</option>
                                 </select>
@@ -131,7 +131,7 @@
                         <div class="col-md-9 ">
                             <select class="form-control modal--select2 select2-reset"
                                     name="client_type"
-                                    data-modal="#modal--for--order--item-editing"
+                                    data-modal="#modal--for--order--item-detail-editing"
                             >
                                 <option value="">选择患者类型</option>
                                 @if(!empty(config('dk.common-config.dental_type')))
@@ -148,7 +148,7 @@
                         <div class="col-md-9 ">
                             <select class="form-control modal--select2 select2-reset"
                                     name="field_1"
-                                    data-modal="#modal--for--order--item-editing"
+                                    data-modal="#modal--for--order--item-detail-editing"
                             >
                                 <option value="">选择牙齿数量</option>
                                 @if(!empty(config('dk.common-config.teeth_count')))
@@ -165,7 +165,7 @@
                         <div class="col-md-9 ">
                             <select class="form-control modal--select2 select2-reset"
                                     name="client_intention"
-                                    data-modal="#modal--for--order--item-editing"
+                                    data-modal="#modal--for--order--item-detail-editing"
                             >
                                 <option value="">选择客户意向</option>
                                 @if(!empty(config('dk.common-config.client_intention')))
@@ -188,7 +188,7 @@
                         <label class="control-label col-md-2">通话录音</label>
                         <div class="col-md-9 control-label" style="text-align:left;">
                             <span class="item-detail-text"></span>
-                            <a class="btn btn-xs item-recording-list-get--for--order--item-editing">获取录音</a>
+                            <a class="btn btn-xs item-recording-list-get--for--order--item-detail-editing">获取录音</a>
                         </div>
                         <div class="col-md-9 col-md-offset-2">
                             <div class="btn-group">
@@ -228,9 +228,9 @@
                 <div class="row">
                     <div class="col-md-9 col-md-offset-2">
                         <button type="button" class="btn btn-success edit-submit"
-                                id="item-submit--for--order--item-editing"
-                                data-modal-id="modal--for--order--item-editing"
-                                data-form-id="form--for--order--item-editing"
+                                id="item-submit--for--order--item-detail-editing"
+                                data-modal-id="modal--for--order--item-detail-editing"
+                                data-form-id="form--for--order--item-detail-editing"
                         >
                             <i class="fa fa-check"></i> 提交
                         </button>
