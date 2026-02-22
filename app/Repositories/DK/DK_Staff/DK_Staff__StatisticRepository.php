@@ -4049,7 +4049,6 @@ class DK_Staff__StatisticRepository {
         }
         else
         {
-
         }
 
 
@@ -4172,18 +4171,11 @@ class DK_Staff__StatisticRepository {
         }
 
         $query_order->addSelect(DB::raw("
-                    count(IF(inspected_result in ('通过','折扣通过'), TRUE, NULL)) as order_count_for_effective,
-                    count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted_normal,
-                    count(IF(inspected_result = '折扣通过', TRUE, NULL)) as order_count_for_accepted_discount
+                    count(IF(inspected_result in ('通过','折扣通过','郊区通过','内部通过'), TRUE, NULL)) as order_count__for__accepted,
+                    count(IF(inspected_result in ('通过','折扣通过'), TRUE, NULL)) as order_count__for__effective,
+                    count(IF(inspected_result = '通过', TRUE, NULL)) as order_count__for__accepted_normal,
+                    count(IF(inspected_result = '折扣通过', TRUE, NULL)) as order_count__for__accepted_discount
                 "));
-
-
-//        count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
-//                    count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
-//                    count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-//                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_refused,
-//                    count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
-//                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
 
         // 工单统计
         $order_list = $query_order->get();
@@ -4232,7 +4224,7 @@ class DK_Staff__StatisticRepository {
             ->where('active',1)
             ->where('item_status',1)
             ->where('staff_category',41)
-            ->whereIn('staff_position',[61,99]);
+            ->whereIn('staff_position',[41,61,99]);
 
 
         // 客服部
@@ -4306,19 +4298,19 @@ class DK_Staff__StatisticRepository {
             {
 //                if(isset($order_list[$v->id][7])) $list[$k]->order_7 = $order_list[$v->id][7]['order_count_for_effective'];
 //                else $list[$k]->order_7 = 0;
-                if(isset($order_list[$v->id][6])) $list[$k]->order_6 = $order_list[$v->id][6]['order_count_for_effective'];
+                if(isset($order_list[$v->id][6])) $list[$k]->order_6 = $order_list[$v->id][6]['order_count__for__effective'];
                 else $list[$k]->order_6 = 0;
-                if(isset($order_list[$v->id][5])) $list[$k]->order_5 = $order_list[$v->id][5]['order_count_for_effective'];
+                if(isset($order_list[$v->id][5])) $list[$k]->order_5 = $order_list[$v->id][5]['order_count__for__effective'];
                 else $list[$k]->order_5 = 0;
-                if(isset($order_list[$v->id][4])) $list[$k]->order_4 = $order_list[$v->id][4]['order_count_for_effective'];
+                if(isset($order_list[$v->id][4])) $list[$k]->order_4 = $order_list[$v->id][4]['order_count__for__effective'];
                 else $list[$k]->order_4 = 0;
-                if(isset($order_list[$v->id][3])) $list[$k]->order_3 = $order_list[$v->id][3]['order_count_for_effective'];
+                if(isset($order_list[$v->id][3])) $list[$k]->order_3 = $order_list[$v->id][3]['order_count__for__effective'];
                 else $list[$k]->order_3 = 0;
-                if(isset($order_list[$v->id][2])) $list[$k]->order_2 = $order_list[$v->id][2]['order_count_for_effective'];
+                if(isset($order_list[$v->id][2])) $list[$k]->order_2 = $order_list[$v->id][2]['order_count__for__effective'];
                 else $list[$k]->order_2 = 0;
-                if(isset($order_list[$v->id][1])) $list[$k]->order_1 = $order_list[$v->id][1]['order_count_for_effective'];
+                if(isset($order_list[$v->id][1])) $list[$k]->order_1 = $order_list[$v->id][1]['order_count__for__effective'];
                 else $list[$k]->order_1 = 0;
-                if(isset($order_list[$v->id][0])) $list[$k]->order_0 = $order_list[$v->id][0]['order_count_for_effective'];
+                if(isset($order_list[$v->id][0])) $list[$k]->order_0 = $order_list[$v->id][0]['order_count__for__effective'];
                 else $list[$k]->order_0 = 0;
             }
             else
