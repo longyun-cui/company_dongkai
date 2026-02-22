@@ -3767,7 +3767,7 @@ class DK_Staff__StatisticRepository {
 
         foreach ($list as $k => $v)
         {
-            if(!empty($staff_count[$v->id]))
+            if(!empty($group_count) && count($group_count) && !empty($staff_count[$v->id]))
             {
                 $list[$k]->staff_count__for__all = $staff_count[$v->id]['order_count__for__all'];
                 $list[$k]->staff_count__for__inspected = $staff_count[$v->id]['order_count__for__inspected'];
@@ -3808,7 +3808,7 @@ class DK_Staff__StatisticRepository {
 
             // 小组
             $team_group_id = $v->team_group_id;
-            if($v->team_group_id == !empty($group_count[$team_group_id]))
+            if($team_group_id && !empty($group_count) && count($group_count) && isset($group_count[$team_group_id]))
             {
                 $list[$k]->group_count__for__all = $group_count[$team_group_id]['order_count__for__all'];
                 $list[$k]->group_count__for__inspected = $group_count[$team_group_id]['order_count__for__inspected'];
@@ -3849,8 +3849,7 @@ class DK_Staff__StatisticRepository {
 
             // 团队
             $team_id = $v->team_id;
-
-            if($v->team_id && isset($team_count[$team_id]))
+            if($team_id && !empty($team_count) && count($team_count) && isset($team_count[$team_id]))
             {
                 $list[$k]->team_count__for__all = $team_count[$team_id]['order_count_for_all'];
                 $list[$k]->team_count__for__inspected = $team_count[$team_id]['order_count_for_inspected'];
