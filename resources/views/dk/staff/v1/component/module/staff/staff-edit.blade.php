@@ -263,7 +263,7 @@
                                     data-department-type=""
                                     data-team-target="#select2--team--for--staff-item-edit"
                             >
-                                <option data-id="" value="">选择部门</option>
+                                <option data-id="0" value="0">选择部门</option>
                             </select>
                         </div>
                     </div>
@@ -286,7 +286,7 @@
                                     data-team-type="11"
                                     data-team-target="#select2---team-group--for--staff-item-edit"
                             >
-                                <option data-id="" value="">选择团队</option>
+                                <option data-id="0" value="0">选择团队</option>
                             </select>
                         </div>
                         @endif
@@ -298,7 +298,7 @@
                                     data-item-category=""
                                     data-item-type="31"
                             >
-                                <option data-id="" value="">选择小组</option>
+                                <option data-id="0" value="0">选择小组</option>
                             </select>
                         </div>
                     </div>
