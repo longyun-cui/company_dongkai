@@ -1009,7 +1009,7 @@
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
                         {
-                            $(nTd).addClass('modal-show-for-field-set');
+                            $(nTd).addClass('modal-show--for--order--item-detail-editing--by-dbl');
                             $(nTd).attr('data-id',row.id).attr('data-name','通话小结');
                             $(nTd).attr('data-key','description').attr('data-value',data);
 
