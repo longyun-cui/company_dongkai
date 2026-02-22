@@ -9,14 +9,14 @@
 
             <input type="hidden" name="statistic-caller-recent-time-type" class="time-type" value="" readonly>
 
-            @if($me->user_type == 1)
+            @if($me->staff_category == 0)
                 <select class="form-control form-filter" name="statistic-caller-recent-object-type" style="width:88px;">
                     <option value="staff">员工</option>
                     <option value="department">部门</option>
                 </select>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,61]))
+            @if(in_array($me->staff_category,[0,1,9,61]))
                 <select class="search-filter form-filter filter-xl select2-box-c" name="statistic-caller-recent-team">
                     <option value="0">选择团队</option>
                     @if(!empty($team_list))
