@@ -113,7 +113,7 @@
                 <input type="checkbox" class="check-review-all">
             </button>
 
-            <button type="button" onclick="" class="btn btn-default btn-filter bulk-submit-for-delivery-export" id="" data-item-category="11">
+            <button type="button" onclick="" class="btn btn-default btn-filter delivery--bulk-export-summit" data-order-category="11">
                 <i class="fa fa-download"></i> 批量导出Excel
             </button>
 

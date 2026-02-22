@@ -7,50 +7,26 @@
             $('input[name="bulk-id"]').prop('checked',this.checked); // checked为true时为默认显示的状态
         });
         // 【批量操作】
-        $(".main-content").on('click', '#bulk-submit-for-delivery-export', function() {
+        $(".main-content").off('click', '.delivery--bulk-export-summit').on('click', '.delivery--bulk-export-summit', function() {
             // var $checked = [];
             // $('input[name="bulk-id"]:checked').each(function() {
             //     $checked.push($(this).val());
             // });
             // console.log($checked);
 
+            var $that = $(this);
+            var $order_category = $that.data('order-category');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+
+
             var $ids = '';
-            $('input[name="bulk-id"]:checked').each(function() {
+            $datatable_wrapper.find('input[name="bulk-id"]:checked').each(function() {
                 $ids += $(this).attr('data-order-id')+'-';
             });
             $ids = $ids.slice(0, -1);
-            // console.log($ids);
 
-            var $url = url_build('/statistic/statistic-export-for-order-by-ids?ids='+$ids);
+            var $url = url_build('/o1/export/order--export--by-ids?order_category='+$order_category+'&ids='+$ids);
             window.open($url);
-
-            {{--layer.msg('确定"批量审核"么', {--}}
-            {{--    time: 0--}}
-            {{--    ,btn: ['确定', '取消']--}}
-            {{--    ,yes: function(index){--}}
-
-            {{--        $.post(--}}
-            {{--            "{{ url('/admin/business/keyword-review-bulk') }}",--}}
-            {{--            {--}}
-            {{--                _token: $('meta[name="_token"]').attr('content'),--}}
-            {{--                operate: "keyword-review-bulk",--}}
-            {{--                bulk_keyword_id: $checked,--}}
-            {{--                bulk_keyword_status:$('select[name="bulk-review-keyword-status"]').val()--}}
-            {{--            },--}}
-            {{--            function(data){--}}
-            {{--                layer.close(index);--}}
-            {{--                if(!data.success) layer.msg(data.msg);--}}
-            {{--                else--}}
-            {{--                {--}}
-            {{--                    $('#datatable_ajax').DataTable().ajax.reload(null,false);--}}
-            {{--                }--}}
-            {{--            },--}}
-            {{--            'json'--}}
-            {{--        );--}}
-
-            {{--    }--}}
-            {{--});--}}
-
         });
         // 【批量操作】批量-导出
         $(".main-content").on('click', '#bulk-submit-for-exported', function() {

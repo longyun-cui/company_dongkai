@@ -2695,23 +2695,18 @@
             // console.log($checked);
 
             var $that = $(this);
-            var $item_category = $that.data('item-category');
+            var $order_category = $that.data('order-category');
             var $datatable_wrapper = $that.closest('.datatable-wrapper');
 
-            var $that = $(this);
-            var $order_category = $that.data('order-category');
 
             var $ids = '';
             $datatable_wrapper.find('input[name="bulk-id"]:checked').each(function() {
                 $ids += $(this).val()+'-';
             });
             $ids = $ids.slice(0, -1);
-            console.log($ids);
 
             var $url = url_build('/o1/export/order--export--by-ids?order_category='+$order_category+'&ids='+$ids);
             window.open($url);
-
-
         });
 
         // 【批量操作】批量-一键交付
