@@ -230,6 +230,24 @@
                 {
                     Datatable__for__Statistic_Production_Team('#'+$config.id);
                 }
+                else if($id == "caller")
+                {
+                    console.log("caller");
+                    console.log("caller");
+                    console.log("caller");
+                }
+                else if($id == "datatable-statistic-caller-overview")
+                {
+                    Datatable__for__Statistic_Caller_Overview('#'+$config.id);
+                }
+                else if($id == "datatable-statistic-caller-rank")
+                {
+                    Datatable__for__Statistic_Caller_Rank('#'+$config.id);
+                }
+                else if($id == "datatable-statistic-caller-recent")
+                {
+                    Datatable__for__Statistic_Caller_Recent('#'+$config.id);
+                }
                 else if($id == "marketing")
                 {
                     console.log("marketing");

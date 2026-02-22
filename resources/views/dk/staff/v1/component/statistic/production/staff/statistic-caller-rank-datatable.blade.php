@@ -1,5 +1,5 @@
 <script>
-    function Table_Datatable_Ajax_Statistic_Caller_Rank($tableId)
+    function Datatable__for__Statistic_Caller_Rank($tableId)
     {
         let $that = $($tableId);
         let $datatable_wrapper = $that.parents('.datatable-wrapper');
@@ -17,7 +17,7 @@
             "order": [],
             "orderCellsTop": true,
             "ajax": {
-                'url': "{{ url('/v1/operate/statistic/production/caller-rank') }}",
+                'url': "{{ url('/o1/statistic/production/caller-rank') }}",
                 "type": 'POST',
                 "dataType" : 'json',
                 "data": function (d) {
@@ -35,8 +35,8 @@
                     d.project = $tableSearch.find('input[name="statistic-caller-project"]').val();
                     d.rank_object_type = $tableSearch.find('select[name="statistic-caller-rank-object-type"]').val();
                     d.rank_staff_type = $tableSearch.find('select[name="statistic-caller-rank-staff-type"]').val();
-                    d.department_district = $tableSearch.find('select[name="statistic-caller-rank-department-district"]').val();
-                    d.department_group = $tableSearch.find('select[name="statistic-caller-rank-department-group"]').val();
+                    d.team = $tableSearch.find('select[name="statistic-caller-rank-team"]').val();
+                    d.group = $tableSearch.find('select[name="statistic-caller-rank-group"]').val();
 
                 },
             },
@@ -63,7 +63,7 @@
 //                    },
                 {
                     "title": "姓名",
-                    "data": "id",
+                    "data": "name",
                     "className": "text-center",
                     "width": "100px",
                     "orderable": false,
@@ -78,10 +78,9 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(row.username)
+                        if(row.name)
                         {
-                            // return '<a href="/staff-statistic/statistic-customer-service?staff_id=' + data + '" target="_blank">'+row.username+' ('+row.id+')'+'</a>';
-                            return '<a class="caller-control" data-id="'+row.id+'" data-title="'+data+'">'+row.username+' ('+row.id+')'+'</a>';
+                            return '<a class="caller-control" data-id="'+row.id+'" data-title="'+data+'">'+row.name+' ('+row.id+')'+'</a>';
                         }
                     }
                 },
@@ -94,9 +93,9 @@
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                     },
                     render: function(data, type, row, meta) {
-                        var $district_name = row.department_district_er == null ? '' : row.department_district_er.name;
-                        var $group_name = row.department_group_er == null ? '' : (' - ' + row.department_group_er.name);
-                        return $district_name + $group_name;
+                        var $team_name = row.team_er == null ? '' : row.team_er.name;
+                        var $group_name = row.team_group_er == null ? '' : (' - ' + row.team_group_er.name);
+                        return $team_name + $group_name;
 
                     }
                 },

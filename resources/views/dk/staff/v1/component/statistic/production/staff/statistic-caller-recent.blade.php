@@ -16,41 +16,18 @@
                 </select>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11,81]))
-                <select class="search-filter form-filter filter-xl select2-box-c" name="statistic-caller-recent-staff-type" style="width:88px;">
-                    <option value="88">客服</option>
-                    @if(in_array($me->user_type,[0,1,9,11,81]))
-                        <option value="84">主管</option>
-                    @endif
-                    @if(in_array($me->user_type,[0,1,9,11]))
-                        <option value="81">经理</option>
-                    @endif
-                </select>
-            @endif
-
             @if(in_array($me->user_type,[0,1,9,11]))
-                <select class="search-filter form-filter filter-xl select2-box-c" name="statistic-caller-recent-department-district">
-                    <option value="-1">选择大区</option>
-                    @if(!empty($department_district_list))
-                        @foreach($department_district_list as $v)
+                <select class="search-filter form-filter filter-xl select2-box-c" name="statistic-caller-recent-team">
+                    <option value="0">选择团队</option>
+                    @if(!empty($team_list))
+                        @foreach($team_list as $v)
                             <option value="{{ $v->id }}">{{ $v->name }}</option>
                         @endforeach
                     @endif
                 </select>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11,81]))
-{{--                <select class="search-filter form-filter filter-xl select2-box-c" name="statistic-caller-recent-department-group">--}}
-{{--                    <option data-id="-1" value="-1">选择小组</option>--}}
-{{--                    @if(!empty($department_group_list))--}}
-{{--                        @foreach($department_group_list as $v)--}}
-{{--                            <option value="{{ $v->id }}">{{ $v->name }}</option>--}}
-{{--                        @endforeach--}}
-{{--                    @endif--}}
-{{--                </select>--}}
-            @endif
-
-
+s
             <button type="button" class="btn btn-success btn-filter filter-submit">
                 <i class="fa fa-search"></i> 查询
             </button>
@@ -75,15 +52,25 @@
 
 
     <div class="col-md-12 datatable-body">
-        <div class="tableArea full">
-            <table class='table table-striped table-bordered table-hover order-column'>
-                <thead>
-                </thead>
-                <tbody>
-                </tbody>
-                <tfoot>
-                </tfoot>
-            </table>
+        <div class="box box-primary box-solid-" style="box-shadow:0 0;">
+
+            <div class="box-header with-border- margin-top-16px padding-top-8px _none">
+                <h3 class="box-title datatable-title"></h3>
+            </div>
+
+            <div class="box-body no-padding">
+                <div class="tableArea full margin-top-8px">
+                    <table class='table table-striped table-bordered table-hover order-column'>
+                        <thead>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
         </div>
     </div>
 

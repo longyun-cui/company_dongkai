@@ -14,7 +14,7 @@
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre date-pre" data-target="statistic-caller-date">
                 <i class="fa fa-chevron-left"></i>
             </button>
-            <input type="text" class="search-filter form-filter filter-keyup date_picker" name="statistic-caller-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+            <input type="text" class="search-filter form-filter filter-keyup date-picker-c" name="statistic-caller-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next date-next" data-target="statistic-caller-date">
                 <i class="fa fa-chevron-right"></i>
             </button>
@@ -27,7 +27,7 @@
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre month-pre" data-target="statistic-caller-month">
                 <i class="fa fa-chevron-left"></i>
             </button>
-            <input type="text" class="search-filter form-filter filter-keyup month_picker" name="statistic-caller-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
+            <input type="text" class="search-filter form-filter filter-keyup month-picker-c" name="statistic-caller-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next month-next" data-target="statistic-caller-month">
                 <i class="fa fa-chevron-right"></i>
             </button>
@@ -36,8 +36,8 @@
             </button>
 
             {{--按时间段导出--}}
-            <input type="text" class="search-filter filter-keyup date_picker" name="statistic-caller-start" placeholder="起始时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" style="margin-right:-3px;" />
-            <input type="text" class="search-filter filter-keyup date_picker" name="statistic-caller-ended" placeholder="终止时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+            <input type="text" class="search-filter filter-keyup date-picker-c" name="statistic-caller-start" placeholder="起始时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" style="margin-right:-3px;" />
+            <input type="text" class="search-filter filter-keyup date-picker-c" name="statistic-caller-ended" placeholder="终止时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
 
             <button type="button" class="btn btn-success btn-filter filter-submit" data-time-type="period">
                 <i class="fa fa-search"></i> 按时间段搜索
@@ -68,15 +68,25 @@
 
 
     <div class="col-md-12 datatable-body">
-        <div class="tableArea full">
-            <table class='table table-striped table-bordered table-hover order-column'>
-                <thead>
-                </thead>
-                <tbody>
-                </tbody>
-                <tfoot>
-                </tfoot>
-            </table>
+        <div class="box box-primary box-solid-" style="box-shadow:0 0;">
+
+            <div class="box-header with-border- margin-top-16px padding-top-8px _none">
+                <h3 class="box-title datatable-title"></h3>
+            </div>
+
+            <div class="box-body no-padding">
+                <div class="tableArea full margin-top-8px">
+                    <table class='table table-striped table-bordered table-hover order-column'>
+                        <thead>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
         </div>
     </div>
 

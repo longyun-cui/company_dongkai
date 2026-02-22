@@ -1194,17 +1194,17 @@ class DKStaffController extends Controller
     // 【统计】【员工】坐席概览
     public function o1__statistic__production__caller_overview()
     {
-        return $this->statistic_repo->o1__get_statistic_data_of_production_caller_overview(request()->all());
+        return $this->statistic_repo->o1__statistic__production__caller_overview(request()->all());
     }
     // 【统计】【员工】坐席排名
     public function o1__statistic__production__caller_rank()
     {
-        return $this->statistic_repo->o1__get_statistic_data_of_production_caller_rank(request()->all());
+        return $this->statistic_repo->o1__statistic__production__caller_rank(request()->all());
     }
     // 【统计】【员工】坐席近期
     public function o1__statistic__production__caller_recent()
     {
-        return $this->statistic_repo->o1__get_statistic_data_of_production_caller_recent(request()->all());
+        return $this->statistic_repo->o1__statistic__production__caller_recent(request()->all());
     }
     // 【统计】【员工】坐席日报
     public function o1__statistic__production__caller_daily()

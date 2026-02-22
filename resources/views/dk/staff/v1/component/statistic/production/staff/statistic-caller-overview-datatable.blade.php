@@ -1,5 +1,5 @@
 <script>
-    function Table_Datatable_Ajax_Statistic_Caller_Overview($tableId)
+    function Datatable__for__Statistic_Caller_Overview($tableId)
     {
         let $that = $($tableId);
         let $datatable_wrapper = $that.parents('.datatable-wrapper');
@@ -17,7 +17,7 @@
             "order": [],
             "orderCellsTop": true,
             "ajax": {
-                'url': "{{ url('/v1/operate/statistic/production/caller-overview') }}",
+                'url': "{{ url('/o1/statistic/production/caller-overview') }}",
                 "type": 'POST',
                 "dataType" : 'json',
                 "data": function (d) {
@@ -58,17 +58,17 @@
 //                        "orderable": false
 //                    },
                 {
-                    "title": "大区经理",
-                    "data": "department_district_id",
+                    "title": "团队",
+                    "data": "team_id",
                     "className": "vertical-middle",
                     "width": "120px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return row.department_district_er.leader == null ? '未知' : '<a href="javascript:void(0);">' + row.department_district_er.name + '</a>' + '<br>' + '<a href="javascript:void(0);">' + row.department_district_er.leader.username + '</a>';
+                        return row.team_er.name == null ? '未知' : '<a href="javascript:void(0);">' + row.team_er.name + '</a>' + '<br>' + '<a href="javascript:void(0);">' + row.team_er.leader.name + '</a>';
                     }
                 },
                 {
-                    "title": "部门主管",
+                    "title": "小组",
                     "data": "department_group_id",
                     "className": "vertical-middle",
                     "width": "120px",
@@ -89,7 +89,7 @@
                 // },
                 {
                     "title": "姓名",
-                    "data": "username",
+                    "data": "name",
                     "className": "text-center",
                     "width": "160px",
                     "orderable": false,
@@ -100,7 +100,7 @@
                 },
                 {
                     "title": "客服<br>报单量",
-                    "data": "order_count_for_all",
+                    "data": "staff_count__for__all",
                     "className": "bg-inspected",
                     "width": "80px",
                     "orderable": false,
@@ -124,7 +124,17 @@
                 // },
                 {
                     "title": "客服<br>通过量",
-                    "data": "order_count_for_accepted",
+                    "data": "staff_count__for__accepted_normal",
+                    "className": "bg-inspected",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
+                    "title": "审核<br>折扣通过",
+                    "data": "staff_count__for__accepted_discount",
                     "className": "bg-inspected",
                     "width": "80px",
                     "orderable": false,
@@ -133,29 +143,19 @@
                     }
                 },
                 // {
-                //     "title": "审核<br>内部通过",
-                //     "data": "order_count_for_accepted_inside",
+                //     "title": "客服<br>拒绝量",
+                //     "data": "staff_count__for__refused",
                 //     "className": "bg-inspected",
                 //     "width": "80px",
                 //     "orderable": false,
                 //     render: function(data, type, row, meta) {
+                //
                 //         return data;
                 //     }
                 // },
-                {
-                    "title": "客服<br>拒绝量",
-                    "data": "order_count_for_refused",
-                    "className": "bg-inspected",
-                    "width": "80px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-
-                        return data;
-                    }
-                },
                 // {
                 //     "title": "审核<br>重复量",
-                //     "data": "order_count_for_repeated",
+                //     "data": "staff_count__for__repeated",
                 //     "className": "bg-inspected",
                 //     "width": "80px",
                 //     "orderable": false,
@@ -166,7 +166,7 @@
                 // },
                 {
                     "title": "客服<br>通过率",
-                    "data": "order_rate_for_accepted",
+                    "data": "staff_rate__for__effective",
                     "className": "bg-inspected",
                     "width": "100px",
                     "orderable": false,
@@ -179,7 +179,7 @@
 
                 {
                     "title": "小组<br>报单量",
-                    "data": "group_count_for_all",
+                    "data": "group_count__for__all",
                     "className": "text-center vertical-middle bg-group",
                     "width": "80px",
                     "orderable": false,
@@ -187,29 +187,9 @@
                         return data;
                     }
                 },
-                // {
-                //     "title": "主管<br>交付<br>总量",
-                //     "data": "group_count_for_delivered",
-                //     "className": "text-center vertical-middle bg-group",
-                //     "width": "80px",
-                //     "orderable": false,
-                //     render: function(data, type, row, meta) {
-                //         return data
-                //     }
-                // },
-                // {
-                //     "title": "主管<br>审核<br>有效量",
-                //     "data": "group_count_for_effective",
-                //     "className": "text-center vertical-middle bg-group",
-                //     "width": "80px",
-                //     "orderable": false,
-                //     render: function(data, type, row, meta) {
-                //         return data;
-                //     }
-                // },
                 {
                     "title": "小组<br>通过量",
-                    "data": "group_count_for_accepted",
+                    "data": "group_count__for__accepted_normal",
                     "className": "text-center vertical-middle bg-group",
                     "width": "80px",
                     "orderable": false,
@@ -218,8 +198,18 @@
                     }
                 },
                 {
-                    "title": "小组<br>通过率",
-                    "data": "group_rate_for_accepted",
+                    "title": "小组<br>折扣通过",
+                    "data": "group_count__for__accepted_discount",
+                    "className": "text-center vertical-middle bg-group",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
+                    "title": "小组<br>有效率",
+                    "data": "group_rate__for__effective",
                     "className": "text-center vertical-middle bg-group",
                     "width": "100px",
                     "orderable": false,
@@ -231,28 +221,8 @@
 
 
                 {
-                    "title": "大区<br>报单量",
-                    "data": "district_count_for_all",
-                    "className": "text-center vertical-middle bg-district",
-                    "width": "80px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        return data;
-                    }
-                },
-                // {
-                //     "title": "经理<br>审核<br>有效量",
-                //     "data": "district_count_for_effective",
-                //     "className": "text-center vertical-middle bg-district",
-                //     "width": "80px",
-                //     "orderable": false,
-                //     render: function(data, type, row, meta) {
-                //         return data;
-                //     }
-                // },
-                {
-                    "title": "大区<br>通过量",
-                    "data": "district_count_for_accepted",
+                    "title": "团队<br>报单量",
+                    "data": "team_count__for__all",
                     "className": "text-center vertical-middle bg-district",
                     "width": "80px",
                     "orderable": false,
@@ -261,8 +231,28 @@
                     }
                 },
                 {
-                    "title": "大区<br>通过率",
-                    "data": "district_rate_for_accepted",
+                    "title": "团队<br>通过量",
+                    "data": "team_count__for__accepted_normal",
+                    "className": "text-center vertical-middle bg-district",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
+                    "title": "团队<br>折扣通过",
+                    "data": "team_count__for__accepted_discount",
+                    "className": "text-center vertical-middle bg-district",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
+                    "title": "团队<br>有效率",
+                    "data": "team_rate__for__effective",
                     "className": "text-center vertical-middle bg-district",
                     "width": "100px",
                     "orderable": false,
@@ -277,7 +267,7 @@
                     targets: [0], //要合并的列数（第1，2，3列）
                     createdCell: function (td, cellData, rowData, row, col) {
                         //重要的操作可以合并列的代码
-                        var rowspan = rowData.district_merge;
+                        var rowspan = rowData.team_merge;
                         if (rowspan > 1) {
                             $(td).attr('rowspan', rowspan)
                         }
@@ -285,10 +275,10 @@
                             $(td).remove();
                         }
                     },
-                    "data": "department_district_id",
+                    "data": "team_id",
                     "render": function (data, type, full) {
                         // return "<span title='" + data + "'>" + data + "</span>";
-                        return row.department_district_er == null ? '未知' : '<a href="javascript:void(0);">'+row.department_district_er.leader.username+'</a>';
+                        return row.team_er == null ? '未知' : '<a href="javascript:void(0);">'+row.team_er.name+'</a>';
                     }
                 },
                 {
@@ -303,13 +293,13 @@
                             $(td).remove();
                         }
                     },
-                    "data": "department_group_id",
+                    "data": "team_group_id",
                     "render": function (data, type, full) {
-                        return row.department_group_er == null ? '未知' : '<a href="javascript:void(0);">'+row.department_group_er.leader.username+'</a>';
+                        return row.team_group_er == null ? '未知' : '<a href="javascript:void(0);">'+row.team_group_er.name+'</a>';
                     }
                 },
                 {
-                    targets: [7,8,9],
+                    targets: [7,8,9,10],
                     createdCell: function (td, cellData, rowData, row, col) {
                         var rowspan = rowData.group_merge;
                         if (rowspan > 1) {
@@ -321,9 +311,9 @@
                     }
                 },
                 {
-                    targets: [10,11,12],
+                    targets: [11,12,13,14],
                     createdCell: function (td, cellData, rowData, row, col) {
-                        var rowspan = rowData.district_merge;
+                        var rowspan = rowData.team_merge;
                         if (rowspan > 1) {
                             $(td).attr('rowspan', rowspan)
                         }
