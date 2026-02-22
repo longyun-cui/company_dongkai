@@ -3542,7 +3542,7 @@ class DK_Staff__StatisticRepository {
         // 工单统计（员工）统计
         $query_order__for__staff = DK_Common__Order::select('creator_id')
             ->addSelect(DB::raw("
-                    count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
+                    count(IF(is_published = 1, TRUE, NULL)) as order_count__for__all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count__for__inspected,
                     count(IF(inspected_result in ('通过','折扣通过'), TRUE, NULL)) as order_count__for__effective,
                     count(IF(inspected_result in ('通过','折扣通过','郊区通过','内部通过'), TRUE, NULL)) as order_count__for__accepted,
