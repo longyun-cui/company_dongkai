@@ -16,7 +16,7 @@
                 <option value="31">二奢</option>
             </select>
 
-            @if(in_array($me->user_type,[0,1,9,11]))
+            @if(in_array($me->staff_category,[0,1,9,71]))
             <select class="search-filter form-filter filter-lg select2-box-c" name="statistic-production-project-team">
                 <option value="-1">选择团队</option>
                 @if(!empty($team_list))

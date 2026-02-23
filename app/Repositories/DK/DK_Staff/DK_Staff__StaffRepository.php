@@ -169,9 +169,9 @@ class DK_Staff__StaffRepository {
 
 
         // 公司
-        if(!empty($post_data['company_id']))
+        if(!empty($post_data['company']))
         {
-            $company_id_int = intval($post_data['company_id']);
+            $company_id_int = (int)$post_data['company_id'];
             if(!in_array($company_id_int,[-1,0]))
             {
                 $query->where('company_id', $company_id_int);
@@ -179,9 +179,9 @@ class DK_Staff__StaffRepository {
         }
 
         // 部门
-        if(!empty($post_data['department_id']))
+        if(!empty($post_data['department']))
         {
-            $department_id_int = intval($post_data['department_id']);
+            $department_id_int = (int)$post_data['department'];
             if(!in_array($department_id_int,[-1,0]))
             {
                 $query->where('department_id', $department_id_int);
@@ -189,12 +189,12 @@ class DK_Staff__StaffRepository {
         }
 
         // 团队
-        if(!empty($post_data['team_id']))
+        if(!empty($post_data['team']))
         {
-            $team_id_int = intval($post_data['team_id']);
+            $team_id_int = (int)$post_data['team'];
             if(!in_array($team_id_int,[-1,0]))
             {
-                $query->where('team_id', $department_id_int);
+                $query->where('team_id', $team_id_int);
             }
         }
 

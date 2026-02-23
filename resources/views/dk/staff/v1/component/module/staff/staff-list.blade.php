@@ -30,6 +30,18 @@
             <input type="text" class="search-filter form-filter filter-keyup" name="staff-mobile" placeholder="工号" />
             <input type="text" class="search-filter form-filter filter-keyup" name="staff-name" placeholder="名称" />
 
+
+            @if(in_array($me->staff_category,[0,1,9,71]))
+            <select class="search-filter form-filter filter-lg select2-box-c" name="staff-team">
+                <option value="-1">选择团队</option>
+                @if(!empty($team_list))
+                    @foreach($team_list as $v)
+                        <option value="{{ $v->id }}">{{ $v->name }}</option>
+                    @endforeach
+                @endif
+            </select>
+            @endif
+
             @if(in_array($me->staff_category,[0,1,9,11]))
             <select class="search-filter form-filter filter-md select2-box-c" name="staff-category">
                 <option value="-1">全部人员</option>
