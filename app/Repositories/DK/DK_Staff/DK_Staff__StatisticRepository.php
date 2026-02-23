@@ -2484,6 +2484,7 @@ class DK_Staff__StatisticRepository {
 
 
         $project_list = DK_Common__Project::select('id','name','alias_name')
+            ->where('active', 1)
 //            ->where('item_status', 1)
             ->withTrashed()
             ->get();
@@ -2665,8 +2666,9 @@ class DK_Staff__StatisticRepository {
             ->toArray();
 
 
-        $query = DK_Common__Project::select('id','name','alias_name','daily_goal');
-//            ->where('item_status', 1)
+        $query = DK_Common__Project::select('id','name','alias_name','daily_goal')
+            ->where('active', 1);
+//            ->where('item_status', 1);
 
         // 客服部
         if($me->staff_category == 41)
@@ -2858,6 +2860,7 @@ class DK_Staff__StatisticRepository {
 
 
         $query = DK_Common__Project::select('*')
+            ->where('active', 1)
             ->where('item_status', 1)
             ->withTrashed()
             ->with(['creator','inspector_er','pivot__project_staff','pivot__project_team']);
@@ -4911,6 +4914,7 @@ class DK_Staff__StatisticRepository {
 
 
         $query = DK_Common__Project::select('*')
+            ->where('active', 1)
             ->where('item_status', 1)
             ->withTrashed()
             ->with([
@@ -5547,6 +5551,7 @@ class DK_Staff__StatisticRepository {
 
 
         $project_list = DK_Common__Project::select('id','name','alias_name')
+            ->where('active', 1)
 //            ->where('item_status', 1)
             ->withTrashed()
             ->get();
@@ -7243,8 +7248,8 @@ class DK_Staff__StatisticRepository {
         else $view_data['month'] = '';
 
 
-        $staff_list = DK_Common__Staff::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
-        $client_list = DK_Common__Client::select('id','username')->where('user_category',11)->get();
+        $staff_list = DK_Common__Staff::select('id','name')->where('staff_category',11)->whereIn('user_type',[11,81,82,88])->get();
+        $client_list = DK_Common__Client::select('id','name')->where('client_category',11)->get();
         $project_list = DK_Common__Project::select('id','name')->whereIn('item_type',[1,21])->get();
         $department_district_list = DK_Common__Team::select('id','name')->where('department_type',11)->orderby('rank','asc')->get();
 
@@ -8340,6 +8345,7 @@ class DK_Staff__StatisticRepository {
 
 
         $query = DK_Common__Project::select('*')
+            ->where('active', 1)
             ->where('item_status', 1)
             ->withTrashed()
             ->with(['creator','inspector_er','pivot__project_staff','pivot__project_team']);
@@ -8761,6 +8767,7 @@ class DK_Staff__StatisticRepository {
 
 
         $query = DK_Common__Project::select('*')
+            ->where('active', 1)
             ->where('item_status', 1)
             ->withTrashed()
             ->with(['creator','inspector_er','pivot__project_staff','pivot__project_team']);
@@ -9006,6 +9013,7 @@ class DK_Staff__StatisticRepository {
 
 
         $query = DK_Common__Project::select('*')
+            ->where('active', 1)
             ->where('item_status', 1)
             ->withTrashed()
             ->with(['creator','inspector_er','pivot__project_staff','pivot__project_team']);
