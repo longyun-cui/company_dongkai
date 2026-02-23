@@ -2,7 +2,7 @@
 
     // window.dataTableInstances = window.dataTableInstances || {};
 
-    function Datatable__for__Order_Aesthetic_List($tableId)
+    function Datatable__for__Order_Luxury_List($tableId)
     {
         // var table_Id = $tableId;
         // if (window.dataTableInstances[table_Id])
@@ -33,7 +33,7 @@
                 "dataType" : 'json',
                 "data": function (d) {
                     d._token = $('meta[name="_token"]').attr('content');
-                    d.order_category = 11;
+                    d.order_category = 31;
                     d.id = $tableSearch.find('input[name="order-id"]').val();
                     d.remark = $tableSearch.find('input[name="order-remark"]').val();
                     d.description = $tableSearch.find('input[name="order-description"]').val();
@@ -48,7 +48,8 @@
                     d.staff = $tableSearch.find('select[name="order-staff"]').val();
                     d.distribute_type = $tableSearch.find('select[name="order-distribute-type"]').val();
                     d.project = $tableSearch.find('select[name="order-project"]').val();
-                    d.client = $tableSearch.find('select[name="order-client"]').val();
+                    d.delivered_project = $tableSearch.find('select[name="order-delivered-project"]').val();
+                    d.delivered_client = $tableSearch.find('select[name="order-delivered-client"]').val();
                     d.status = $tableSearch.find('select[name="order-status"]').val();
                     d.order_type = $tableSearch.find('select[name="order-type"]').val();
                     d.client_name = $tableSearch.find('input[name="order-client-name"]').val();
@@ -68,24 +69,17 @@
                 },
             },
             "fixedColumns": {
-
-                @if($me->department_district_id == 0)
-                "leftColumns": "@if($is_mobile_equipment) 1 @else 5 @endif",
-                "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
-                @else
-                "leftColumns": "@if($is_mobile_equipment) 1 @else 4 @endif",
-                "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
-                @endif
-
+                "leftColumns": "@if($is_mobile_equipment) 1 @else 3 @endif",
+                "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif",
             },
             "columnDefs": [
-                    {{--@if(!in_array($me->user_type,[0,1,11]))--}}
-                    @if($me->department_district_id != 0)
-                {
-                    "targets": [0,5,6,7,8,9,10,11],
-                    "visible": false,
-                }
-                @endif
+                {{--@if(!in_array($me->user_type,[0,1,11]))--}}
+{{--                @if($me->department_district_id != 0)--}}
+{{--                {--}}
+{{--                    "targets": [0,5,6,7,8,9,10,11],--}}
+{{--                    "visible": false,--}}
+{{--                }--}}
+{{--                @endif--}}
             ],
             "columns": [
                 {
@@ -129,39 +123,6 @@
                     }
                 },
                 {
-                    "title": "来源",
-                    "name": "created_type",
-                    "data": "created_type",
-                    "className": "",
-                    "width": "60px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        var $result_html = '';
-                        if(data == 1)
-                        {
-                            $result_html = '<small class="btn-xs bg-green">人工</small>';
-                        }
-                        else if(data == 91)
-                        {
-                            $result_html = '<small class="btn-xs bg-red">百应AI</small>';
-                        }
-                        else if(data == 99)
-                        {
-                            $result_html = '<small class="btn-xs bg-red">API</small>';
-                        }
-                        else if(data == 9)
-                        {
-                            $result_html = '<small class="btn-xs bg-yellow">导入</small>';
-                        }
-                        else
-                        {
-                            $result_html = '<small class="btn-xs bg-black">有误</small>';
-                        }
-                        return $result_html;
-                    }
-                },
-                {
                     "title": "工单状态",
                     "name": "order_status",
                     "data": "id",
@@ -169,13 +130,29 @@
                     "width": "72px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(row.is_completed != 1)
                         {
                             $(nTd).addClass('order_status');
                             $(nTd).attr('data-id',row.id).attr('data-name','工单状态');
                             $(nTd).attr('data-key','order_status').attr('data-value',row.id);
                             if(data) $(nTd).attr('data-operate-type','edit');
                             else $(nTd).attr('data-operate-type','add');
+
+                            if(row.recording_address_list)
+                            {
+                                var $recording_address = row.recording_address_list;
+                                if($recording_address)
+                                {
+                                    var $recording_list = JSON.parse($recording_address);
+                                    var $recording_list_html = '';
+                                    $.each($recording_list, function(index, value)
+                                    {
+                                        var $audio_html = '<audio controls controlsList="nodownload" style="width:480px;height:40px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
+                                        $recording_list_html += $audio_html;
+                                    });
+                                    $(nTd).attr('data-recording-address',$recording_list_html);
+                                }
+                            }
                         }
                     },
                     render: function(data, type, row, meta) {
@@ -252,6 +229,73 @@
                     }
                 },
                 {
+                    "title": "来源",
+                    "name": "created_type",
+                    "data": "created_type",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(!data) return '--';
+                        var $result_html = '';
+                        if(data == 1)
+                        {
+                            $result_html = '<small class="btn-xs bg-green">人工</small>';
+                        }
+                        else if(data == 91)
+                        {
+                            $result_html = '<small class="btn-xs bg-red">百应AI</small>';
+                        }
+                        else if(data == 99)
+                        {
+                            $result_html = '<small class="btn-xs bg-red">API</small>';
+                        }
+                        else if(data == 9)
+                        {
+                            $result_html = '<small class="btn-xs bg-yellow">导入</small>';
+                        }
+                        else
+                        {
+                            $result_html = '<small class="btn-xs bg-black">有误</small>';
+                        }
+                        return $result_html;
+                    }
+                },
+                {
+                    "title": "审核状态",
+                    "name": "inspected_status",
+                    "data": "inspected_status",
+                    "className": "text-center",
+                    "width": "72px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.created_type == 9) return '--';
+                        // if(!row.inspected_at) return '--';
+                        var $result_html = '';
+                        if(data == 0)
+                        {
+                            $result_html = '<small class="btn-xs bg-teal">待审核</small>';
+                        }
+                        else if(data == 1)
+                        {
+                            $result_html = '<small class="btn-xs bg-blue">已审核</small>';
+                        }
+                        else if(data == 9)
+                        {
+                            $result_html = '<small class="btn-xs bg-purple">不审核</small>';
+                        }
+                        else if(data == 99)
+                        {
+                            $result_html = '<small class="btn-xs bg-red">审核失败</small>';
+                        }
+                        else
+                        {
+                            $result_html = '<small class="btn-xs bg-black">error</small>';
+                        }
+                        return $result_html;
+                    }
+                },
+                {
                     "title": "审核结果",
                     "name": "inspected_result",
                     "data": "inspected_result",
@@ -259,7 +303,7 @@
                     "width": "72px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(row.is_completed != 1)
                         {
                             $(nTd).addClass('modal-show-for-field-set-');
                             $(nTd).attr('data-id',row.id).attr('data-name','审核结果');
@@ -284,27 +328,11 @@
                         }
                         else if(data == "拒绝可交付")
                         {
-                            if("{{ in_array($me->user_type,[0,1,9,11,61,66]) }}" == "1")
-                            {
-                                console.log('x');
-                                $result_html = '<small class="btn-xs bg-red">拒绝可交付</small>';
-                            }
-                            else
-                            {
-                                $result_html = '<small class="btn-xs bg-red">拒绝</small>';
-                            }
+                            $result_html = '<small class="btn-xs bg-red">拒绝可交付</small>';
                         }
                         else if(data == "不合格")
                         {
-                            if("{{ in_array($me->user_type,[0,1,9,11,61,66]) }}" == "1")
-                            {
-                                console.log('x');
-                                $result_html = '<small class="btn-xs bg-red">不合格</small>';
-                            }
-                            else
-                            {
-                                $result_html = '<small class="btn-xs bg-red">拒绝</small>';
-                            }
+                            $result_html = '<small class="btn-xs bg-red">不合格</small>';
                         }
                         else if(data == "重复")
                         {
@@ -312,16 +340,127 @@
                         }
                         else if(data == "重复•可分发")
                         {
-                            console.log('x1');
-                            if("{{ in_array($me->user_type,[0,1,9,11,61,66]) }}" == "1")
-                            {
-                                console.log('x');
-                                $result_html = '<small class="btn-xs bg-yellow">重复•可分发</small>';
-                            }
-                            else
-                            {
-                                $result_html = '<small class="btn-xs bg-yellow">重复</small>';
-                            }
+                            $result_html = '<small class="btn-xs bg-yellow">重复•可分发</small>';
+                        }
+                        else
+                        {
+                            $result_html = '<small class="btn-xs bg-purple">'+data+'</small>';
+                        }
+                        return $result_html;
+                    }
+                },
+                // {
+                //     "title": "是否分发",
+                //     "name": "is_distributive_condition",
+                //     "data": "is_distributive_condition",
+                //     "className": "",
+                //     "width": "72px",
+                //     "orderable": false,
+                //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                //         if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
+                //         {
+                //             $(nTd).attr('data-row-index',iRow);
+                //
+                //             $(nTd).addClass('modal-show-for-field-set');
+                //             $(nTd).attr('data-id',row.id).attr('data-name','是否分发');
+                //             $(nTd).attr('data-key','is_distributive_condition').attr('data-value',data);
+                //
+                //             $(nTd).attr('data-column-type','select');
+                //             $(nTd).attr('data-column-name','是否分发');
+                //
+                //             if(data) $(nTd).attr('data-operate-type','edit');
+                //             else $(nTd).attr('data-operate-type','add');
+                //         }
+                //     },
+                //     render: function(data, type, row, meta) {
+                //         // if(!row.inspected_at) return '--';
+                //         var $result_html = '';
+                //         if(data == 0)
+                //         {
+                //             $result_html = '--';
+                //         }
+                //         else if(data == 1)
+                //         {
+                //             $result_html = '<small class="btn-xs bg-green">允许</small>';
+                //         }
+                //         else if(data == 9)
+                //         {
+                //             $result_html = '<small class="btn-xs bg-red">禁止</small>';
+                //         }
+                //         else
+                //         {
+                //             $result_html = '--';
+                //         }
+                //         return $result_html;
+                //     }
+                // },
+                {
+                    "title": "交付状态",
+                    "name": "delivered_status",
+                    "data": "delivered_status",
+                    "className": "text-center",
+                    "width": "72px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(!row.delivered_at) return '--';
+                        var $result_html = '';
+                        if(data == 0)
+                        {
+                            $result_html = '<small class="btn-xs bg-teal">未操作</small>';
+                        }
+                        else if(data == 1)
+                        {
+                            $result_html = '<small class="btn-xs bg-blue">已交付</small>';
+                        }
+                        else if(data == 9)
+                        {
+                            $result_html = '<small class="btn-xs bg-orange">待交付</small>';
+                        }
+                        else if(data == 91)
+                        {
+                            $result_html = '<small class="btn-xs bg-purple">不交付</small>';
+                        }
+                        else if(data == 99)
+                        {
+                            $result_html = '<small class="btn-xs bg-red">交付失败</small>';
+                        }
+                        else if(data == 101)
+                        {
+                            $result_html = '<small class="btn-xs bg-red">交付撤回</small>';
+                        }
+                        else
+                        {
+                            $result_html = '<small class="btn-xs bg-black">error</small>';
+                        }
+                        return $result_html;
+                    }
+                },
+                {
+                    "title": "交付结果",
+                    "name": "delivered_result",
+                    "data": "delivered_result",
+                    "className": "text-center",
+                    "width": "72px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(!row.delivered_at) return '--';
+                        var $result_html = '';
+                        // if(data == "交付" || data == "正常交付" || data == "折扣交付" || data == "郊区交付" || data == "内部交付")
+                        if(["交付","正常交付","折扣交付","郊区交付","内部交付"].includes(data))
+                        {
+                            $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
+                        }
+                        else if(data == "待交付")
+                        {
+                            $result_html = '<small class="btn-xs bg-blue">'+data+'</small>';
+                        }
+                        else if(data == "等待再审" || data == "隔日交付")
+                        {
+                            $result_html = '<small class="btn-xs bg-yellow">'+data+'</small>';
+                        }
+                        else if(data == "驳回")
+                        {
+                            $result_html = '<small class="btn-xs bg-red">'+data+'</small>';
                         }
                         else
                         {
@@ -331,42 +470,31 @@
                     }
                 },
                 {
-                    "title": "创建人",
-                    "name": "creator_id",
-                    "data": "creator_id",
-                    "className": "",
-                    "width": "80px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        return row.creator == null ? '未知' : '<a class="caller-control" data-id="'+data+'" data-title="'+row.creator.name+'">'+row.creator.username+'</a>';
-                    }
-                },
-                {
-                    "title": "发布时间",
-                    "name": 'published_at',
-                    "data": 'published_at',
+                    "title": "交付时间",
+                    "name": 'delivered_at',
+                    "data": 'delivered_at',
                     "className": "",
                     "width": "120px",
-                    "orderable": true,
+                    "orderable": false,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if("{{ in_array($me->user_type,[0,1,11,19]) }}")
+                        if(row.is_completed != 1 && row.item_status != 97)
                         {
-                            $(nTd).attr('data-row-index',iRow);
+                            $(nTd).addClass('modal-show-for-info-time-set-');
+                            $(nTd).attr('data-id',row.id).attr('data-name','交付时间');
+                            $(nTd).attr('data-key','delivered_at').attr('data-value',data);
 
-                            $(nTd).addClass('modal-show-for-phone-pool-info');
-                            $(nTd).attr('data-id',row.id).attr('data-name','电话池');
-                            $(nTd).attr('data-key','pool').attr('data-value',row.id);
-                            $(nTd).attr('data-phone',row.client_phone);
-                            $(nTd).attr('data-city',row.location_city);
+                            $(nTd).attr('data-column-type','select');
+                            $(nTd).attr('data-column-name','交付时间');
+                            $(nTd).attr('data-time-type','date');
 
-                            $(nTd).attr('data-column-type','info');
-                            $(nTd).attr('data-column-name','电话池');
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
                         }
                     },
                     render: function(data, type, row, meta) {
+                        if(!data) return '--';
 //                            return data;
-                        if(!data) return '';
                         var $date = new Date(data*1000);
                         var $year = $date.getFullYear();
                         var $month = ('00'+($date.getMonth()+1)).slice(-2);
@@ -385,32 +513,91 @@
                     }
                 },
                 {
-                    "title": "班次",
-                    "name": "field_2",
-                    "data": "field_2",
+                    "title": "交付项目",
+                    "name": "delivered_project_id",
+                    "data": "delivered_project_id",
                     "className": "",
-                    "width": "60px",
+                    "width": "120px",
                     "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
-                        {
-                            $(nTd).attr('data-row-index',iRow);
-
-                            $(nTd).addClass('modal-show-for-field-set');
-                            $(nTd).attr('data-id',row.id).attr('data-name','班次');
-                            $(nTd).attr('data-key','field_2').attr('data-value',data);
-
-                            $(nTd).attr('data-column-type','radio');
-                            $(nTd).attr('data-column-name','班次');
-
-                            if(data) $(nTd).attr('data-operate-type','edit');
-                            else $(nTd).attr('data-operate-type','add');
-                        }
-                    },
                     render: function(data, type, row, meta) {
-                        if(data == 1) return '<small class="btn-xs bg-green">白班</small>';
-                        else if(data == 9) return '<small class="btn-xs bg-navy">夜班</small>';
+                        if(row.delivered_project_er) return '<a href="javascript:void(0);">'+row.delivered_project_er.name+'</a>';
                         else return '--';
+                    }
+                },
+                {
+                    "title": "交付客户",
+                    "name": "delivered_client_id",
+                    "data": "delivered_client_id",
+                    "className": "",
+                    "width": "120px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.delivered_client_er) return '<a href="javascript:void(0);">'+row.delivered_client_er.name+'</a>';
+                        else return '--';
+                    }
+                },
+//                     {
+//                         "title": "交付客户日期 ",
+//                         "data": 'delivered_time',
+//                         "className": "",
+//                         "width": "100px",
+//                         "orderable": false,
+//                         "orderSequence": ["desc", "asc"],
+//                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                             if(row.is_completed != 1 && row.item_status != 97)
+//                             {
+//                                 $(nTd).addClass('modal-show-for-info-time-set');
+//                                 $(nTd).attr('data-id',row.id).attr('data-name','交付客户日期');
+//                                 $(nTd).attr('data-key','delivered_time').attr('data-value',data);
+//                                 $(nTd).attr('data-column-name','交付客户日期');
+//                                 $(nTd).attr('data-time-type','date');
+//                                 if(data) $(nTd).attr('data-operate-type','edit');
+//                                 else $(nTd).attr('data-operate-type','add');
+//                             }
+//                         },
+//                         render: function(data, type, row, meta) {
+//                             if(!data) return '--';
+// //                            return data;
+//                             var $date = new Date(data*1000);
+//                             var $year = $date.getFullYear();
+//                             var $month = ('00'+($date.getMonth()+1)).slice(-2);
+//                             var $day = ('00'+($date.getDate())).slice(-2);
+//
+// //                            return $year+'-'+$month+'-'+$day;
+// //                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+// //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+//
+//                             var $currentYear = new Date().getFullYear();
+//                             if($year == $currentYear) return $month+'-'+$day;
+//                             else return $year+'-'+$month+'-'+$day;
+//                         }
+//                     },
+                {
+                    "title": "发布时间",
+                    "name": 'published_at',
+                    "data": 'published_at',
+                    "className": "",
+                    "width": "120px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    render: function(data, type, row, meta) {
+//                            return data;
+                        if(!data) return '';
+                        var $date = new Date(data*1000);
+                        var $year = $date.getFullYear();
+                        var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                        var $day = ('00'+($date.getDate())).slice(-2);
+                        var $hour = ('00'+$date.getHours()).slice(-2);
+                        var $minute = ('00'+$date.getMinutes()).slice(-2);
+                        var $second = ('00'+$date.getSeconds()).slice(-2);
+
+//                            return $year+'-'+$month+'-'+$day;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+
+                        var $currentYear = new Date().getFullYear();
+                        if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute+':'+$second;
+                        else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute+':'+$second;
                     }
                 },
                 {
@@ -448,25 +635,46 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(row.project_er == null)
+                        if("{{ in_array($me->user_type,[0,1,11,61,66]) }}")
                         {
-                            return '未指定';
+                            if(row.project_er == null)
+                            {
+                                return '未指定';
+                            }
+                            else
+                            {
+                                if(row.project_er.alias_name)
+                                {
+                                    return '<a href="javascript:void(0);">'+row.project_er.name+' ('+row.project_er.alias_name+')'+'</a>';
+                                }
+                                else
+                                {
+                                    return '<a href="javascript:void(0);">'+row.project_er.name+'</a>';
+                                }
+                            }
                         }
                         else
                         {
-                            return '<a href="javascript:void(0);">'+row.project_er.name+'</a>';
+                            if(row.project_er == null)
+                            {
+                                return '未指定';
+                            }
+                            else
+                            {
+                                return '<a href="javascript:void(0);">'+row.project_er.name+'</a>';
+                            }
                         }
                     }
                 },
                 {
-                    "title": "是否重复",
+                    "title": "重复",
                     "name": "is_repeat",
                     "data": "is_repeat",
                     "className": "",
                     "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(row.is_completed != 1)
                         {
                             // $(nTd).addClass('modal-show-for-info-radio-set-');
                             // $(nTd).attr('data-id',row.id).attr('data-name','是否重复');
@@ -547,11 +755,11 @@
                             $(nTd).attr('data-row-index',iRow);
 
                             $(nTd).addClass('modal-show-for-field-set');
-                            $(nTd).attr('data-id',row.id).attr('data-name','品类');
-                            $(nTd).attr('data-key','field_1').attr('data-value',data);
+                            $(nTd).attr('data-id',row.id).attr('data-name','患者类型');
+                            $(nTd).attr('data-key','client_type').attr('data-value',data);
 
                             $(nTd).attr('data-column-type','select');
-                            $(nTd).attr('data-column-name','品类');
+                            $(nTd).attr('data-column-name','患者类型');
 
                             if(data) $(nTd).attr('data-operate-type','edit');
                             else $(nTd).attr('data-operate-type','add');
@@ -567,15 +775,19 @@
                         }
                         else if(data == 1)
                         {
-                            $result_html = '<small class="btn-xs bg-blue">脸部</small>';
+                            $result_html = '<small class="btn-xs bg-blue">鞋帽服装</small>';
                         }
-                        else if(data == 21)
+                        else if(data == 2)
                         {
-                            $result_html = '<small class="btn-xs bg-blue">植发</small>';
+                            $result_html = '<small class="btn-xs bg-green">包</small>';
                         }
-                        else if(data == 31)
+                        else if(data == 3)
                         {
-                            $result_html = '<small class="btn-xs bg-blue">身体</small>';
+                            $result_html = '<small class="btn-xs bg-orange">手表</small>';
+                        }
+                        else if(data == 4)
+                        {
+                            $result_html = '<small class="btn-xs bg-red">珠宝</small>';
                         }
                         else if(data == 99)
                         {
@@ -673,28 +885,6 @@
                         }
                     }
                 },
-                    {{--{--}}
-                    {{--    "title": "渠道来源",--}}
-                    {{--    "data": "channel_source",--}}
-                    {{--    "className": "",--}}
-                    {{--    "width": "60px",--}}
-                    {{--    "orderable": false,--}}
-                    {{--    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {--}}
-                    {{--        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))--}}
-                    {{--        {--}}
-                    {{--            $(nTd).addClass('modal-show-for-field-set');--}}
-                    {{--            $(nTd).attr('data-id',row.id).attr('data-name','渠道来源');--}}
-                    {{--            $(nTd).attr('data-key','channel_source').attr('data-value',data);--}}
-                    {{--            $(nTd).attr('data-column-name','渠道来源');--}}
-                    {{--            if(data) $(nTd).attr('data-operate-type','edit');--}}
-                    {{--            else $(nTd).attr('data-operate-type','add');--}}
-                    {{--        }--}}
-                    {{--    },--}}
-                    {{--    render: function(data, type, row, meta) {--}}
-                    {{--        if(!data) return '--';--}}
-                    {{--        return data;--}}
-                    {{--    }--}}
-                    {{--},--}}
                 {
                     "title": "通话小结",
                     "name": "description",
@@ -705,7 +895,7 @@
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
                         {
-                            $(nTd).addClass('modal-show-for-field-set');
+                            $(nTd).addClass('modal-show--for--order--item-detail-editing--by-dbl');
                             $(nTd).attr('data-id',row.id).attr('data-name','通话小结');
                             $(nTd).attr('data-key','description').attr('data-value',data);
 
@@ -739,12 +929,209 @@
                     }
                 },
                 {
+                    "title": "录音质量",
+                    "name": "recording_quality",
+                    "data": "recording_quality",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.is_completed != 1 && row.item_status != 97)
+                        {
+                            $(nTd).addClass('modal-show-for-field-set-');
+                            $(nTd).attr('data-id',row.id).attr('data-name','录音质量');
+                            $(nTd).attr('data-key','recording_quality').attr('data-value',data);
+
+                            $(nTd).attr('data-column-name','录音质量');
+
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        // if(!data) return '--';
+                        var $result_html = '';
+
+                        if(row.inspected_at)
+                        {
+                            if(data == 0)
+                            {
+                                $result_html = '<small class="btn-xs bg-blue">合格</small>';
+                            }
+                            else if(data == 1)
+                            {
+                                $result_html = '<small class="btn-xs bg-green">优秀</small>';
+                            }
+                            else if(data == 9)
+                            {
+                                $result_html = '<small class="btn-xs bg-red">问题</small>';
+                            }
+                            else
+                            {
+                                $result_html = '<small class="btn-xs bg-black">有误</small>';
+                            }
+                        }
+                        return $result_html;
+                    }
+                },
+                {
+                    "title": "录音播放",
+                    "name": "recording_address_list",
+                    "data": "recording_address_list",
+                    "className": "",
+                    "width": "400px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.is_completed != 1)
+                        {
+                            $(nTd).attr('data-id',row.id).attr('data-name','录音播放');
+                            $(nTd).attr('data-key','recording_address_play').attr('data-value',data);
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        // return data;
+                        if($.trim(data))
+                        {
+                            try
+                            {
+                                var $recording_list = JSON.parse(data);
+
+                                var $return_html = '';
+                                $.each($recording_list, function(index, value)
+                                {
+
+                                    var $audio_html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
+                                    $return_html += $audio_html;
+                                });
+                                return $return_html;
+                            }
+                            catch(e)
+                            {
+                                // console.log(e);
+                                return '';
+                            }
+                        }
+                        else
+                        {
+                            if(row.recording_address)
+                            {
+                                return '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+row.recording_address+'" type="audio/mpeg"></audio>';
+                            }
+                            else return '';
+                        }
+                    }
+                },
+                {
+                    "title": "录音下载",
+                    "name": "recording_address_get_download",
+                    "data": "recording_address_list",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.is_completed != 1)
+                        {
+                            $(nTd).attr('data-row-index',iRow);
+
+                            $(nTd).attr('data-id',row.id).attr('data-name','录音下载');
+                            $(nTd).attr('data-key','recording_address_download').attr('data-value',data);
+                            $(nTd).attr('data-address-list',data);
+                            $(nTd).attr('data-address',row.recording_address);
+                            $(nTd).attr('data-call-record-id',row.call_record_id);
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        // return data;
+
+                        if($.trim(data))
+                        {
+                            try
+                            {
+                                var $recording_list = JSON.parse(data);
+                                // return '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+row.id+'">下载录音</a>';
+                                var $recording_download = '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+row.id+'">下载</a>';
+                                var $recording_redirection = '<a class="btn btn-xs item-redirection-recording-list-submit" data-id="'+row.id+'">跳转</a>';
+                                var $recording_get = '<a class="btn btn-xs order--item-recording-list-get-submit" data-id="'+row.id+'">获取</a>';
+                                return $recording_get + $recording_redirection + $recording_download;
+                            }
+                            catch(e)
+                            {
+                                // console.log(e);
+                                return '';
+                            }
+                        }
+                        else
+                        {
+                            if(row.recording_address)
+                            {
+                                return '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+row.id+'">下载录音</a>';
+                            }
+                            else
+                            {
+                                return '<a class="btn btn-xs order--item-recording-list-get-submit" data-id="'+row.id+'">获取录音</a>';
+                            }
+                        }
+
+                        if($.trim(data) || row.recording_address)
+                        {
+                            return '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+row.id+'">下载录音</a>';
+                        }
+                        else
+                        {
+                            return '<a class="btn btn-xs order--item-recording-list-get-submit" data-id="'+row.id+'">获取录音1</a>';
+                        }
+                    }
+                },
+                {
+                    "title": "班次",
+                    "name": "work_shift",
+                    "data": "work_shift",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        {
+                            $(nTd).attr('data-row-index',iRow);
+
+                            $(nTd).addClass('modal-show-for-field-set');
+                            $(nTd).attr('data-id',row.id).attr('data-name','班次');
+                            $(nTd).attr('data-key','work_shift').attr('data-value',data);
+
+                            $(nTd).attr('data-column-type','radio');
+                            $(nTd).attr('data-column-name','班次');
+
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        if(data == 1) return '<small class="btn-xs bg-green">白班</small>';
+                        else if(data == 2) return '<small class="btn-xs bg-navy">夜班</small>';
+                        else return '--';
+                    }
+                },
+                {
                     "title": "团队",
                     "name": "creator_team_id",
                     "data": "creator_team_id",
                     "className": "",
                     "width": "120px",
                     "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(true)
+                        {
+                            $(nTd).attr('data-row-index',iRow);
+
+                            $(nTd).addClass('modal-show-for-phone-pool-info');
+                            $(nTd).attr('data-id',row.id).attr('data-name','电话池');
+                            $(nTd).attr('data-key','pool').attr('data-value',row.id);
+                            $(nTd).attr('data-phone',row.client_phone);
+                            $(nTd).attr('data-city',row.location_city);
+
+                            $(nTd).attr('data-column-type','info');
+                            $(nTd).attr('data-column-name','电话池');
+                        }
+                    },
                     render: function(data, type, row, meta) {
                         if(!data) return '--';
 
@@ -793,6 +1180,29 @@
                     }
                 },
                 {
+                    "title": "是否推送",
+                    "name": "api_is_pushed",
+                    "data": "api_is_pushed",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(data == 1) return '<small class="btn-xs btn-primary">是</small>';
+                        else return '--';
+                    }
+                },
+                {
+                    "title": "创建人",
+                    "name": "creator_id",
+                    "data": "creator_id",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return row.creator == null ? '未知' : '<a class="caller-control" data-id="'+data+'" data-title="'+row.creator.name+'">'+row.creator.name+'</a>';
+                    }
+                },
+                {
                     "title": "创建时间",
                     "name": 'created_at',
                     "data": 'created_at',
@@ -824,17 +1234,22 @@
                     "name": 'operation',
                     "data": 'id',
                     "className": "",
-                    "width": "120px",
+                    "width": "180px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
 
+                        var $html_edit = '';
                         var $html_detail = '';
                         var $html_record = '';
+                        var $html_delete = '';
+                        var $html_publish = '';
                         var $html_inspect = '';
+                        var $html_appeal = '';
                         var $html_appeal_handle = '';
+                        var $html_deliver_fool = '';
+                        var $html_deliver = '';
+                        var $html_distribute = '';
 
-
-                        $html_detail = '<a class="btn btn-xs item-modal-show-for-detail" data-id="'+data+'">详情</a>';
 
                         // 记录
                         if(row.created_type != 9)
@@ -842,9 +1257,36 @@
                             $html_record = '<a class="btn btn-xs modal-show--for--order--item-operation-record" data-id="'+data+'">记录</a>';
                         }
 
+                        // 删除
+                        if(row.is_published == 0)
+                        {
+                            $html_delete = '<a class="btn btn-xs order--item-delete-submit" data-id="'+data+'">删除</a>';
+                        }
+
+                        // 编辑
+                        if(row.is_published == 0)
+                        {
+                            $html_edit = '<a class="btn btn-xs modal-show--for--order-aesthetic--item-edit" data-id="'+data+'">编辑</a>';
+                        }
+
+                        // 发布
+                        if(row.is_published == 0 || (row.inspected_status == 1 && row.inspected_result == '二次待审'))
+                        {
+                            $html_publish = '<a class="btn btn-xs order--item-publish-submit" data-id="'+data+'">发布</a>';
+                        }
+
                         // 已发布
                         if(row.is_published > 0)
                         {
+                            // 编辑
+                            if(row.inspected_status == 1 && row.inspected_result == '二次待审')
+                            {
+                                $html_edit = '<a class="btn btn-xs modal-show--for--order-aesthetic--item-edit" data-id="'+data+'">编辑</a>';
+                            }
+
+                            // 详情编辑
+                            $html_detail = '<a class="btn btn-xs modal-show--for--order--item-detail-editing" data-role="admin" data-id="'+data+'">详情</a>';
+
                             // 审核
                             if(row.inspector_id == 0)
                             {
@@ -855,10 +1297,48 @@
                                 $html_inspect = '<a class="btn btn-xs modal-show--for--order--item-inspecting" data-id="'+data+'">再审</a>';
                             }
 
+                            // 申诉
+                            if(row.appealed_status == 0 && ['拒绝','拒绝可交付','不合格'].includes(row.inspected_result))
+                            {
+                                $html_appeal = '<a class="btn btn-xs modal-show--for--order--item-appealing" data-id="'+data+'">申诉</a>';
+                            }
+
                             // 申诉处理
                             if(row.appealed_status == 1)
                             {
                                 $html_appeal_handle = '<a class="btn btn-xs modal-show--for--order--item-appealed-handling" data-id="'+data+'">处理</a>';
+                            }
+
+                            // 交付
+                            if(row.delivered_status == 0)
+                            {
+                                $html_deliver = '<a class="btn btn-xs modal-show--for--order--item-delivering" data-id="'+data+'">交付</a>';
+                            }
+                            else
+                            {
+                                $html_deliver = '<a class="btn btn-xs modal-show--for--order--item-delivering" data-id="'+data+'">重交</a>';
+                            }
+
+                            if(row.delivered_project_id <= 0 && row.delivered_client_id <= 0 && row.delivered_status == 0)
+                            {
+                                $html_deliver_fool = '<a class="btn btn-xs order--item-delivering-summit--by-fool" data-id="'+data+'">一键交付</a>';
+                            }
+
+                            // 分发
+                            if(row.project_er == null)
+                            {
+                                $html_distribute = '<a class="btn btn-xs bg-default disabled" data-id="'+data+'">分发</a>';
+                            }
+                            else
+                            {
+                                if(row.project_er.is_distributive == 1)
+                                {
+                                    $html_distribute = '<a class="btn btn-xs modal-show--for--order--item-distributing" data-id="'+data+'">分发</a>';
+                                }
+                                else
+                                {
+                                    $html_distribute = '<a class="btn btn-xs bg-default disabled" data-id="'+data+'">分发</a>';
+                                }
                             }
 
                         }
@@ -866,14 +1346,30 @@
 
                         if(row.created_type == 9)
                         {
+                            $html_edit = '';
+                            $html_publish = '';
+                            $html_delete = '';
                             $html_inspect = '';
+                            $html_appeal = '';
                             $html_appeal_handle = '';
+                            $html_deliver_fool = '';
+                            $html_deliver = '';
+                            $html_distribute = '';
+                            $html_detail = '';
                         }
 
 
                         var $html =
-                            // $html_inspect+
+                            $html_edit+
+                            $html_publish+
+                            $html_delete+
+                            $html_inspect+
+                            $html_appeal+
                             $html_appeal_handle+
+                            $html_deliver_fool+
+                            $html_deliver+
+                            $html_distribute+
+                            $html_detail+
                             $html_record+
                             // $more_html+
                             '';
@@ -882,9 +1378,28 @@
                     }
                 }
             ],
+            "initComplete": function() {
+                // var api = this.api();
+                //
+                // // 1. 获取“班次”列的所有数据
+                // var shiftData = api.column('field_2:name').data();
+                // var dayCount = 0;
+                // var nightCount = 0;
+                //
+                // // 2. 统计班次类型
+                // shiftData.each(function(value) {
+                //     if (value == 1) dayCount++;
+                //     if (value == 9) nightCount++;
+                // });
+                //
+                // // 3. 根据统计结果动态设置标题
+                // var column = api.column('field_2:name');
+                // var header = $(column.header());
+                // header.html('班次1');
+            },
             "drawCallback": function (settings) {
 
-                console.log('order-aesthetic-list-datatable--for--AD--execute');
+                console.log('order-aesthetic-list-datatable--for--admin--execute');
 
 //                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
 //                    this.api().column(1).nodes().each(function(cell, i) {

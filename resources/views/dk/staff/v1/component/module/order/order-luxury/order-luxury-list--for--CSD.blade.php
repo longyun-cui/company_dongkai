@@ -1,7 +1,7 @@
-<div class="row datatable-body datatable-wrapper order-dental-list-clone"
-     data-order-category="1"
-     data-datatable-item-category="dental"
-     data-item-name="口腔工单"
+<div class="row datatable-body datatable-wrapper order-luxury-list-clone"
+     data-order-category="31"
+     data-datatable-order-category="luxury"
+     data-item-name="二奢工单"
 >
 
 
@@ -12,9 +12,9 @@
 
             @if(in_array($me->user_type,[0,1,9,11,19]))
                 <button type="button" onclick="" class="btn btn-filter btn-success modal-show--for--order--item-create"
-                        data-form-id="form--for--order-dental--item-edit"
-                        data-modal-id="modal--for--order-dental--item-edit"
-                        data-title="添加【口腔】工单"
+                        data-form-id="form--for--order-luxury--item-edit"
+                        data-modal-id="modal--for--order-luxury--item-edit"
+                        data-title="添加【二奢】工单"
                 >
                     <i class="fa fa-plus"></i> 添加
                 </button>
@@ -44,21 +44,13 @@
 
 
             {{--选择项目--}}
-            <select class="search-filter form-filter filter-lg select2-box-c select2-project-c-" data-item-category="1" name="order-project">
+            <select class="search-filter form-filter filter-lg select2-box-c select2-project-c-" data-item-category="31" name="order-project">
                 <option value="-1">选择项目</option>
-                @if(!empty($project_list__for__dental) && count($project_list__for__dental) > 0)
-                    @foreach($project_list__for__dental as $v)
+                @if(!empty($project_list__for__luxury) && count($project_list__for__luxury) > 0)
+                    @foreach($project_list__for__luxury as $v)
                         <option value="{{ $v->id }}">{{ $v->name }}</option>
                     @endforeach
                 @endif
-            </select>
-
-            {{--客户类型--}}
-            <select class="search-filter form-filter filter-md select2-box-c _none" name="order-client-type">
-                <option value="-1">客户类型</option>
-                @foreach(config('dk.common-config.dental_type') as $k => $v)
-                    <option value="{{ $k }}">{{ $v }}</option>
-                @endforeach
             </select>
 
 

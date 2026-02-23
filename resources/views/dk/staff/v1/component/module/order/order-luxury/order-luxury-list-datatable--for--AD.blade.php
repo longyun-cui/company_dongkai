@@ -2,7 +2,7 @@
 
     // window.dataTableInstances = window.dataTableInstances || {};
 
-    function Datatable__for__Order_Aesthetic_List($tableId)
+    function Datatable__for__Order_Luxury_List($tableId)
     {
         // var table_Id = $tableId;
         // if (window.dataTableInstances[table_Id])
@@ -33,7 +33,7 @@
                 "dataType" : 'json',
                 "data": function (d) {
                     d._token = $('meta[name="_token"]').attr('content');
-                    d.order_category = 11;
+                    d.order_category = 31;
                     d.id = $tableSearch.find('input[name="order-id"]').val();
                     d.remark = $tableSearch.find('input[name="order-remark"]').val();
                     d.description = $tableSearch.find('input[name="order-description"]').val();
@@ -542,16 +542,16 @@
                     "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
+                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
                         {
                             $(nTd).attr('data-row-index',iRow);
 
                             $(nTd).addClass('modal-show-for-field-set');
-                            $(nTd).attr('data-id',row.id).attr('data-name','品类');
-                            $(nTd).attr('data-key','field_1').attr('data-value',data);
+                            $(nTd).attr('data-id',row.id).attr('data-name','患者类型');
+                            $(nTd).attr('data-key','client_type').attr('data-value',data);
 
                             $(nTd).attr('data-column-type','select');
-                            $(nTd).attr('data-column-name','品类');
+                            $(nTd).attr('data-column-name','患者类型');
 
                             if(data) $(nTd).attr('data-operate-type','edit');
                             else $(nTd).attr('data-operate-type','add');
@@ -567,15 +567,19 @@
                         }
                         else if(data == 1)
                         {
-                            $result_html = '<small class="btn-xs bg-blue">脸部</small>';
+                            $result_html = '<small class="btn-xs bg-blue">鞋帽服装</small>';
                         }
-                        else if(data == 21)
+                        else if(data == 2)
                         {
-                            $result_html = '<small class="btn-xs bg-blue">植发</small>';
+                            $result_html = '<small class="btn-xs bg-green">包</small>';
                         }
-                        else if(data == 31)
+                        else if(data == 3)
                         {
-                            $result_html = '<small class="btn-xs bg-blue">身体</small>';
+                            $result_html = '<small class="btn-xs bg-orange">手表</small>';
+                        }
+                        else if(data == 4)
+                        {
+                            $result_html = '<small class="btn-xs bg-red">珠宝</small>';
                         }
                         else if(data == 99)
                         {

@@ -1,4 +1,8 @@
-<div class="row datatable-body datatable-wrapper order-luxury-list-clone" data-datatable-item-category="luxury" data-item-name="奢侈品">
+<div class="row datatable-body datatable-wrapper order-luxury-list-clone"
+     data-order-category="31"
+     data-datatable-order-category="luxury"
+     data-item-name="二奢工单"
+>
 
 
     <div class="col-md-12 datatable-search-row datatable-search-box">
@@ -13,63 +17,115 @@
             <input type="text" class="search-filter form-filter filter-md filter-keyup" name="order-client-phone" placeholder="电话号码" value="" />
 
             {{--发布日期--}}
-            <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="order-assign" placeholder="发布日期" value="" readonly="readonly" />
-
-            {{--交付日期--}}
-            <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="order-delivered_date" placeholder="交付日期" value="" readonly="readonly" />
+            {{--            <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="order-assign" placeholder="发布日期" value="" readonly="readonly" />--}}
+            <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-start" placeholder="开始日期" value="" readonly="readonly" />
+            <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-ended" placeholder="结束日期" value="" readonly="readonly" />
 
             {{--创建方式--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
+            @if(in_array($me->staff_category,[0,1,9,71]))
                 <select class="search-filter form-filter filter-md select2-box-c" name="order-created-type">
                     <option value="-1">创建方式</option>
-                    <option value="99">API</option>
                     <option value="1">人工</option>
                     <option value="9">导入</option>
+                    <option value="91">百应AI</option>
+                    <option value="99">API</option>
                 </select>
             @endif
 
             {{--选择团队--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
-                <select class="search-filter form-filter filter-xl select2-box-c" name="order-department-district[]" id="order-department-district" multiple="multiple">
+            @if(in_array($me->staff_category,[0,1,9,51,71]))
+                <select class="search-filter form-filter filter-xl select2--team-c"
+                        name="order-team-list[]"
+                        data-team-category="41"
+                        data-team-type="11"
+                        id="order-team-list[]" multiple="multiple"
+                >
                     <option value="-1">选择团队</option>
-                    @foreach($department_district_list as $v)
-                        <option value="{{ $v->id }}">{{ $v->name }}</option>
-                    @endforeach
+                    @if(!empty($team_list) && count($team_list) > 0)
+                        @foreach($team_list as $v)
+                            <option value="{{ $v->id }}">{{ $v->name }}</option>
+                        @endforeach
+                    @endif
                 </select>
             @endif
 
             {{--选择员工--}}
-            @if(in_array($me->user_type,[0,1,9,11,41,81,84]))
-                <select class="search-filter form-filter filter-lg select2-box-c select2-staff-c" name="order-staff">
-                    <option value="-1">选择员工</option>
-                    @foreach($staff_list as $v)
-                        <option value="{{ $v->id }}">{{ $v->username }}</option>
-                    @endforeach
-                </select>
-            @endif
-
-            {{--选择客户--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66]))
-                <select class="search-filter form-filter filter-lg select2-box-c- select2-client-c" data-user-category="31" name="order-client">
-                    <option value="-1">选择客户</option>
-                    @foreach($client_list as $v)
-                        <option value="{{ $v->id }}">{{ $v->username }}</option>
-                    @endforeach
-                </select>
-            @endif
+            {{--            @if(in_array($me->user_type,[0,1,9,11,41,81,84]))--}}
+            {{--                <select class="search-filter form-filter filter-lg select2-box-c select2-staff-c" name="order-staff">--}}
+            {{--                    <option value="-1">选择员工</option>--}}
+            {{--                    @if(!empty($staff_list) && count($staff_list) > 0)--}}
+            {{--                        @foreach($staff_list as $v)--}}
+            {{--                            <option value="{{ $v->id }}">{{ $v->username }}</option>--}}
+            {{--                        @endforeach--}}
+            {{--                    @endif--}}
+            {{--                </select>--}}
+            {{--            @endif--}}
 
             {{--选择项目--}}
-            <select class="search-filter form-filter filter-lg select2-box-c- select2-project-c" data-item-category="31" name="order-project">
+            <select class="search-filter form-filter filter-lg select2-box-c select2--project-c-" data-item-category="1" name="order-project">
                 <option value="-1">选择项目</option>
-                @foreach($project_list as $v)
-                    <option value="{{ $v->id }}">{{ $v->name }}</option>
-                @endforeach
+                @if(!empty($project_list__for__aesthetic) && count($project_list__for__aesthetic) > 0)
+                    @foreach($project_list__for__aesthetic as $v)
+                        <option value="{{ $v->id }}">{{ $v->name }}</option>
+                    @endforeach
+                @endif
             </select>
+
+            {{--选择交付项目--}}
+            @if(in_array($me->staff_category,[0,1,9,71]))
+                <select class="search-filter form-filter filter-lg select2-box-c select2--project-c-"
+                        name="order-delivered-project"
+                        data-client-category="1"
+                >
+                    <option value="-1">选择交付项目</option>
+                    @if(!empty($project_list__for__aesthetic) && count($project_list__for__aesthetic) > 0)
+                        @foreach($project_list__for__aesthetic as $v)
+                            <option value="{{ $v->id }}">{{ $v->name }}</option>
+                        @endforeach
+                    @endif
+                </select>
+            @endif
+
+            {{--选择交付客户--}}
+            @if(in_array($me->staff_category,[0,1,9,71]))
+                <select class="search-filter form-filter filter-lg select2-box-c select2--client-c-"
+                        name="order-delivered-client"
+                        data-client-category="1"
+                >
+                    <option value="-1">选择交付客户</option>
+                    @if(!empty($client_list__for__aesthetic) && count($client_list__for__aesthetic) > 0)
+                        @foreach($client_list__for__aesthetic as $v)
+                            <option value="{{ $v->id }}">{{ $v->name }}</option>
+                        @endforeach
+                    @endif
+                </select>
+            @endif
+
+
+            {{--可分发--}}
+            @if(in_array($me->staff_category,[0,1,9,71]))
+                <select class="search-filter form-filter filter-md select2-box-c" name="order-distribute-type">
+                    <option value="">常规筛选</option>
+                    <option value="1">可分发</option>
+                </select>
+            @endif
+
+
+            {{--录音质量--}}
+            @if(in_array($me->staff_category,[0,1,9,51,61,71]))
+                <select class="search-filter form-filter filter-md select2-box-c" name="order-recording-quality">
+                    <option value="-1">录音质量</option>
+                    <option value="0">合格</option>
+                    <option value="1">优秀</option>
+                    <option value="9">问题</option>
+                </select>
+            @endif
+
 
             {{--审核状态--}}
             <select class="search-filter form-filter filter-lg select2-box-c" name="order-inspected-status">
                 <option value="-1">审核状态</option>
-                @if(in_array($me->user_type,[0,1,9,11,81,84,88]))
+                @if(in_array($me->staff_category,[0,1,9,41]))
                     <option value="待发布">待发布</option>
                 @endif
                 <option value="待审核">待审核</option>
@@ -79,54 +135,78 @@
             {{--审核结果--}}
             <select class="search-filter form-filter filter-xl select2-box-c" name="order-inspected-result[]" multiple="multiple">
                 <option value="-1">审核结果</option>
-                @foreach(config('info.inspected_result') as $v)
-                    <option value="{{ $v }}">{{ $v }}</option>
-                @endforeach
+                @if($me->department_district_id <= 0)
+                    @foreach(config('dk.common-config.inspected_result') as $v)
+                        <option value="{{ $v }}">{{ $v }}</option>
+                    @endforeach
+                @else
+                    @foreach(config('dk.common-config.inspected_result_for_team') as $v)
+                        <option value="{{ $v }}">{{ $v }}</option>
+                    @endforeach
+                @endif
             </select>
-            {{--录音质量--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
-                <select class="search-filter form-filter filter-md select2-box-c" name="order-recording-quality">
-                    <option value="-1">录音质量</option>
-                    <option value="0">合格</option>
-                    <option value="1">优秀</option>
-                    <option value="9">问题</option>
+
+
+            {{--申诉状态--}}
+            @if(in_array($me->staff_category,[0,1,9,61]))
+                <select class="search-filter form-filter filter-md select2-box-c" name="order-appealed-status">
+                    <option value="">申诉状态</option>
+                    @foreach(config('dk.common-config.appealed_status') as $v)
+                        <option value="{{ $v }}">{{ $v }}</option>
+                    @endforeach
                 </select>
             @endif
 
-            {{--交付状态--}}
-            <select class="search-filter form-filter filter-lg select2-box-c" name="order-delivered-status">
-                <option value="-1">交付状态</option>
-                <option value="待交付">待交付</option>
-                {{--<option value="已交付" @if("已交付" == $delivered_status) selected="selected" @endif>已交付</option>--}}
-                <option value="已操作">已操作</option>
-            </select>
 
+            {{--交付日期--}}
+            @if(in_array($me->staff_category,[0,1,9,71]))
+                <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="order-delivered_date" placeholder="交付日期" value="" readonly="readonly" />
+            @endif
+            {{--交付状态--}}
+            @if(in_array($me->staff_category,[0,1,9,71]))
+                <select class="search-filter form-filter filter-lg select2-box-c" name="order-delivered-status">
+                    <option value="-1">交付状态</option>
+                    <option value="0">未操作</option>
+                    <option value="1">已交付</option>
+                    <option value="9">待交付</option>
+                    <option value="91">不交付</option>
+                    <option value="99">交付失败</option>
+                    <option value="101">交付撤回</option>
+                </select>
+            @endif
             {{--交付结果--}}
-            <select class="search-filter form-filter filter-xl select2-box-c" name="order-delivered-result[]" multiple="multiple">
-                <option value="-1">交付结果</option>
-                @foreach(config('info.delivered_result') as $v)
-                    <option value="{{ $v }}">{{ $v }}</option>
-                @endforeach
-            </select>
+            @if(in_array($me->staff_category,[0,1,9,71]))
+                <select class="search-filter form-filter filter-xl select2-box-c" name="order-delivered-result[]" multiple="multiple">
+                    <option value="-1">交付结果</option>
+                    @foreach(config('dk.common-config.delivered_result') as $v)
+                        <option value="{{ $v }}">{{ $v }}</option>
+                    @endforeach
+                </select>
+            @endif
+
 
             {{--城市--}}
-            <select class="search-filter form-filter filter-lg select2-box-c select2-district-city" name="order-city" id="order-city" data-target="#order-district">
+            <select class="search-filter form-filter filter-lg select2-box-c select2-location-city"
+                    name="order-city"
+                    id="order-luxury-city"
+                    data-target="#order-luxury-district"
+            >
                 <option value="-1">选择城市</option>
-                @if(!empty($district_city_list) && count($district_city_list) > 0)
-                    @foreach($district_city_list as $v)
-                        <option value="{{ $v->district_city }}">{{ $v->district_city }}</option>
+                @if(!empty($location_city_list) && count($location_city_list) > 0)
+                    @foreach($location_city_list as $v)
+                        <option value="{{ $v->location_city }}">{{ $v->location_city }}</option>
                     @endforeach
                 @endif
             </select>
 
             {{--行政区--}}
-            <select class="search-filter form-filter filter-xxl select2-box-c select2-district-district" name="order-district[]" id="order-district" data-target="order-city" multiple="multiple">
-                <option value="-1">选择区域</option>
-                @if(!empty($district_district_list) && count($district_district_list) > 0)
-                    @foreach($district_district_list as $v)
-                        <option value="{{ $v }}">{{ $v }}</option>
-                    @endforeach
-                @endif
+            <select class="search-filter form-filter filter-xxl select2-box-c select2--location-c"
+                    name="order-district[]"
+                    id="order-luxury-district"
+                    data-target="order-luxury-city"
+                    multiple="multiple"
+            >
+                <option value="">选择区域</option>
             </select>
 
 
@@ -149,13 +229,15 @@
             </button>
 
 
-            <button type="button" onclick="" class="btn btn-filter btn-success  pull-right item-create-modal-show"
-                    data-form-id="form-for-order-luxury-edit"
-                    data-modal-id="modal-for-order-luxury-edit"
-                    data-title="添加【奢侈品】工单"
-            >
-                <i class="fa fa-plus"></i> 添加
-            </button>
+            @if(in_array($me->staff_category,[0,1,9]))
+                <button type="button" onclick="" class="btn btn-filter btn-success modal-show--for--order--item-create"
+                        data-form-id="form--for--order-luxury--item-edit"
+                        data-modal-id="modal--for--order-luxury--item-edit"
+                        data-title="添加【二奢】工单"
+                >
+                    <i class="fa fa-plus"></i> 添加
+                </button>
+            @endif
 
         </div>
 
@@ -171,7 +253,7 @@
             </div>
 
             <div class="box-body no-padding">
-                <div class="tableArea table-order full- margin-top-8px">
+                <div class="tableArea table-order- full- margin-top-8px">
                     <table class='table table-striped table-bordered table-hover order-column'>
                         <thead>
                         </thead>
@@ -188,75 +270,76 @@
 
 
     @if(in_array($me->staff_category,[0,1,9,71]))
-    <div class="col-md-12 datatable-search-row">
+        <div class="col-md-12 datatable-search-row">
 
-        <div class=" pull-left">
+            <div class=" pull-left">
 
-            {{--<button type="button" onclick="" class="btn btn-success btn-filter item-create-show"><i class="fa fa-plus"></i> 添加</button>--}}
-            {{--<button type="button" onclick="" class="btn btn-default btn-filter"><i class="fa fa-play"></i> 启用</button>--}}
-            {{--<button type="button" onclick="" class="btn btn-default btn-filter"><i class="fa fa-stop"></i> 禁用</button>--}}
-
-
-            <button class="btn btn-default btn-filter">
-                <input type="checkbox" class="check-review-all">
-            </button>
+                {{--<button type="button" onclick="" class="btn btn-success btn-filter item-create-show"><i class="fa fa-plus"></i> 添加</button>--}}
+                {{--<button type="button" onclick="" class="btn btn-default btn-filter"><i class="fa fa-play"></i> 启用</button>--}}
+                {{--<button type="button" onclick="" class="btn btn-default btn-filter"><i class="fa fa-stop"></i> 禁用</button>--}}
 
 
-{{--            <button type="button" onclick="" class="btn btn-default btn-filter bulk-submit-for-order-export" id="" data-item-category="31">--}}
-{{--                <i class="fa fa-download"></i> 批量导出--}}
-{{--            </button>--}}
-            {{--<button type="button" onclick="" class="btn btn-default btn-filter"><i class="fa fa-trash-o"></i> 批量删除</button>--}}
+                <button class="btn btn-default btn-filter">
+                    <input type="checkbox" class="check-review-all">
+                </button>
 
 
-{{--            @if(in_array($me->department_district_id,[0]))--}}
-{{--                @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))--}}
-
-{{--                    --}}{{--交付项目--}}
-{{--                    <select class="search-filter form-filter filter-lg select2-box-c- select2-project-c" data-item-category="31" name="bulk-operate-delivered-project">--}}
-{{--                        <option value="-1">选择交付项目</option>--}}
-{{--                        --}}{{--@foreach($project_list as $v)--}}
-{{--                        --}}{{--<option value="{{ $v->id }}">{{ $v->name }}</option>--}}
-{{--                        --}}{{--@endforeach--}}
-{{--                    </select>--}}
-
-{{--                    --}}{{--交付客户--}}
-{{--                    <select class="search-filter form-filter filter-lg select2-box-c- select2-client-c" data-user-category="31" name="bulk-operate-delivered-client">--}}
-{{--                        <option value="-1">交付客户</option>--}}
-{{--                        @foreach($client_list as $v)--}}
-{{--                            <option value="{{ $v->id }}">{{ $v->username }}</option>--}}
-{{--                        @endforeach--}}
-{{--                    </select>--}}
-
-{{--                    --}}{{--交付结果--}}
-{{--                    <select class="search-filter form-filter filter-lg select2-box-c" name="bulk-operate-delivered-result">--}}
-{{--                        <option value="-1">选择交付结果</option>--}}
-{{--                        @foreach(config('info.delivered_result') as $v)--}}
-{{--                            <option value="{{ $v }}">{{ $v }}</option>--}}
-{{--                        @endforeach--}}
-{{--                    </select>--}}
-
-{{--                    --}}{{--交付说明--}}
-{{--                    <input type="text" class="search-filter filter-lg form-filter" name="bulk-operate-delivered-description" placeholder="交付说明">--}}
+                <button type="button" onclick="" class="btn btn-default btn-filter order--bulk-export-summit" data-order-category="31">
+                    <i class="fa fa-download"></i> 批量导出
+                </button>
 
 
-{{--                    <button type="button" class="btn btn-default btn-filter bulk-submit-for-order-delivered" id="">--}}
-{{--                        <i class="fa fa-share"></i> 批量交付--}}
-{{--                    </button>--}}
+                <button type="button" class="btn btn-default btn-filter order--bulk-delivering-summit--by-fool">
+                    <i class="fa fa-share"></i> 批量一键交付
+                </button>
 
-{{--                @endif--}}
-{{--            @endif--}}
 
-            <button type="button" onclick="" class="btn btn-default btn-filter order--bulk-export-summit" data-order-category="31">
-                <i class="fa fa-download"></i> 批量导出
-            </button>
+                {{--交付项目--}}
+                <select class="search-filter form-filter filter-lg select2-box-c select2--project-c-"
+                        name="order--bulk-export--delivered-project"
+                        data-project-category="1"
+                >
+                    <option value="0">选择交付项目</option>
+                    @if(!empty($project_list__for__aesthetic) && count($project_list__for__aesthetic) > 0)
+                        @foreach($project_list__for__aesthetic as $v)
+                            <option value="{{ $v->id }}">{{ $v->name }}</option>
+                        @endforeach
+                    @endif
+                </select>
 
-            <button type="button" class="btn btn-default btn-filter order--bulk-delivering-summit--by-fool">
-                <i class="fa fa-share"></i> 批量一键交付
-            </button>
+                {{--交付客户--}}
+                <select class="search-filter form-filter filter-lg select2-box-c select2--client-c-"
+                        name="order--bulk-export--delivered-client"
+                        data-client-category="1"
+                >
+                    <option value="0">选择交付客户</option>
+                    @if(!empty($client_list__for__aesthetic) && count($client_list__for__aesthetic) > 0)
+                        @foreach($client_list__for__aesthetic as $v)
+                            <option value="{{ $v->id }}">{{ $v->name }}</option>
+                        @endforeach
+                    @endif
+                </select>
+
+                {{--交付结果--}}
+                <select class="search-filter form-filter filter-lg select2-box-c" name="order--bulk-export--delivered-result">
+                    <option value="-1">选择交付结果</option>
+                    @foreach(config('dk.common-config.delivered_result') as $v)
+                        <option value="{{ $v }}">{{ $v }}</option>
+                    @endforeach
+                </select>
+
+                {{--交付说明--}}
+                <input type="text" class="search-filter filter-lg form-filter" name="order--bulk-export--delivered-description" placeholder="交付说明">
+
+
+                <button type="button" class="btn btn-default btn-filter order--bulk-delivering--summit">
+                    <i class="fa fa-share"></i> 批量交付
+                </button>
+
+
+            </div>
 
         </div>
-
-    </div>
     @endif
 
 

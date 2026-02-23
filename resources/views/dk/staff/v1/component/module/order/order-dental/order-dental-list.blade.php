@@ -195,7 +195,11 @@
 
 
             {{--城市--}}
-            <select class="search-filter form-filter filter-lg select2-box-c select2-district-city" name="order-city" id="order-city" data-target="#order-district">
+            <select class="search-filter form-filter filter-lg select2-box-c select2-location-city"
+                    name="order-city"
+                    id="order-dental-city"
+                    data-target="#order-dental-district"
+            >
                 <option value="-1">选择城市</option>
                 @if(!empty($location_city_list) && count($location_city_list) > 0)
                     @foreach($location_city_list as $v)
@@ -205,7 +209,12 @@
             </select>
 
             {{--行政区--}}
-            <select class="search-filter form-filter filter-xxl select2-box-c select2--location-c" name="order-district[]" id="order-district" data-target="order-city" multiple="multiple">
+            <select class="search-filter form-filter filter-xxl select2-box-c select2--location-c"
+                    name="order-district[]"
+                    id="order-dental-district"
+                    data-target="order-dental-city"
+                    multiple="multiple"
+            >
                 <option value="">选择区域</option>
             </select>
 

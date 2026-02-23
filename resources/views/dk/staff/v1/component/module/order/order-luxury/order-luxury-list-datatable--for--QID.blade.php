@@ -2,7 +2,7 @@
 
     // window.dataTableInstances = window.dataTableInstances || {};
 
-    function Datatable__for__Order_Aesthetic_List($tableId)
+    function Datatable__for__Order_Luxury_List($tableId)
     {
         // var table_Id = $tableId;
         // if (window.dataTableInstances[table_Id])
@@ -33,7 +33,7 @@
                 "dataType" : 'json',
                 "data": function (d) {
                     d._token = $('meta[name="_token"]').attr('content');
-                    d.order_category = 11;
+                    d.order_category = 31;
                     d.id = $tableSearch.find('input[name="order-id"]').val();
                     d.remark = $tableSearch.find('input[name="order-remark"]').val();
                     d.description = $tableSearch.find('input[name="order-description"]').val();
@@ -338,7 +338,7 @@
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return row.creator == null ? '未知' : '<a class="caller-control" data-id="'+data+'" data-title="'+row.creator.name+'">'+row.creator.username+'</a>';
+                        return row.creator == null ? '未知' : '<a class="caller-control" data-id="'+data+'" data-title="'+row.creator.name+'">'+row.creator.name+'</a>';
                     }
                 },
                 {
@@ -386,8 +386,8 @@
                 },
                 {
                     "title": "班次",
-                    "name": "field_2",
-                    "data": "field_2",
+                    "name": "work_shift",
+                    "data": "work_shift",
                     "className": "",
                     "width": "60px",
                     "orderable": false,
@@ -398,7 +398,7 @@
 
                             $(nTd).addClass('modal-show-for-field-set');
                             $(nTd).attr('data-id',row.id).attr('data-name','班次');
-                            $(nTd).attr('data-key','field_2').attr('data-value',data);
+                            $(nTd).attr('data-key','work_shift').attr('data-value',data);
 
                             $(nTd).attr('data-column-type','radio');
                             $(nTd).attr('data-column-name','班次');
@@ -542,16 +542,16 @@
                     "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
+                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
                         {
                             $(nTd).attr('data-row-index',iRow);
 
                             $(nTd).addClass('modal-show-for-field-set');
-                            $(nTd).attr('data-id',row.id).attr('data-name','品类');
-                            $(nTd).attr('data-key','field_1').attr('data-value',data);
+                            $(nTd).attr('data-id',row.id).attr('data-name','患者类型');
+                            $(nTd).attr('data-key','client_type').attr('data-value',data);
 
                             $(nTd).attr('data-column-type','select');
-                            $(nTd).attr('data-column-name','品类');
+                            $(nTd).attr('data-column-name','患者类型');
 
                             if(data) $(nTd).attr('data-operate-type','edit');
                             else $(nTd).attr('data-operate-type','add');
@@ -567,15 +567,19 @@
                         }
                         else if(data == 1)
                         {
-                            $result_html = '<small class="btn-xs bg-blue">脸部</small>';
+                            $result_html = '<small class="btn-xs bg-blue">鞋帽服装</small>';
                         }
-                        else if(data == 21)
+                        else if(data == 2)
                         {
-                            $result_html = '<small class="btn-xs bg-blue">植发</small>';
+                            $result_html = '<small class="btn-xs bg-green">包</small>';
                         }
-                        else if(data == 31)
+                        else if(data == 3)
                         {
-                            $result_html = '<small class="btn-xs bg-blue">身体</small>';
+                            $result_html = '<small class="btn-xs bg-orange">手表</small>';
+                        }
+                        else if(data == 4)
+                        {
+                            $result_html = '<small class="btn-xs bg-red">珠宝</small>';
                         }
                         else if(data == 99)
                         {
@@ -673,28 +677,6 @@
                         }
                     }
                 },
-                    {{--{--}}
-                    {{--    "title": "渠道来源",--}}
-                    {{--    "data": "channel_source",--}}
-                    {{--    "className": "",--}}
-                    {{--    "width": "60px",--}}
-                    {{--    "orderable": false,--}}
-                    {{--    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {--}}
-                    {{--        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))--}}
-                    {{--        {--}}
-                    {{--            $(nTd).addClass('modal-show-for-field-set');--}}
-                    {{--            $(nTd).attr('data-id',row.id).attr('data-name','渠道来源');--}}
-                    {{--            $(nTd).attr('data-key','channel_source').attr('data-value',data);--}}
-                    {{--            $(nTd).attr('data-column-name','渠道来源');--}}
-                    {{--            if(data) $(nTd).attr('data-operate-type','edit');--}}
-                    {{--            else $(nTd).attr('data-operate-type','add');--}}
-                    {{--        }--}}
-                    {{--    },--}}
-                    {{--    render: function(data, type, row, meta) {--}}
-                    {{--        if(!data) return '--';--}}
-                    {{--        return data;--}}
-                    {{--    }--}}
-                    {{--},--}}
                 {
                     "title": "通话小结",
                     "name": "description",
@@ -831,20 +813,19 @@
                         var $html_detail = '';
                         var $html_record = '';
                         var $html_inspect = '';
-                        var $html_appeal_handle = '';
-
-
-                        $html_detail = '<a class="btn btn-xs item-modal-show-for-detail" data-id="'+data+'">详情</a>';
 
                         // 记录
                         if(row.created_type != 9)
                         {
                             $html_record = '<a class="btn btn-xs modal-show--for--order--item-operation-record" data-id="'+data+'">记录</a>';
                         }
-
                         // 已发布
                         if(row.is_published > 0)
                         {
+
+                            // 详情编辑
+                            $html_detail = '<a class="btn btn-xs modal-show--for--order--item-detail-editing" data-role="admin" data-id="'+data+'">详情</a>';
+
                             // 审核
                             if(row.inspector_id == 0)
                             {
@@ -855,25 +836,20 @@
                                 $html_inspect = '<a class="btn btn-xs modal-show--for--order--item-inspecting" data-id="'+data+'">再审</a>';
                             }
 
-                            // 申诉处理
-                            if(row.appealed_status == 1)
-                            {
-                                $html_appeal_handle = '<a class="btn btn-xs modal-show--for--order--item-appealed-handling" data-id="'+data+'">处理</a>';
-                            }
-
                         }
 
 
                         if(row.created_type == 9)
                         {
                             $html_inspect = '';
-                            $html_appeal_handle = '';
+                            $html_detail = '';
+                            $html_record = '';
                         }
 
 
                         var $html =
-                            // $html_inspect+
-                            $html_appeal_handle+
+                            $html_inspect+
+                            $html_detail+
                             $html_record+
                             // $more_html+
                             '';
@@ -884,7 +860,7 @@
             ],
             "drawCallback": function (settings) {
 
-                console.log('order-aesthetic-list-datatable--for--AD--execute');
+                console.log('order-aesthetic-list-datatable--for--QID--execute');
 
 //                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
 //                    this.api().column(1).nodes().each(function(cell, i) {

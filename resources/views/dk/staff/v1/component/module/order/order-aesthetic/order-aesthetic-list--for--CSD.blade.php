@@ -44,7 +44,7 @@
 
 
             {{--选择项目--}}
-            <select class="search-filter form-filter filter-lg select2-box-c select2-project-c-" data-item-category="1" name="order-project">
+            <select class="search-filter form-filter filter-lg select2-box-c select2-project-c-" data-item-category="11" name="order-project">
                 <option value="-1">选择项目</option>
                 @if(!empty($project_list__for__aesthetic) && count($project_list__for__aesthetic) > 0)
                     @foreach($project_list__for__aesthetic as $v)
@@ -131,20 +131,6 @@
 
         </div>
     </div>
-
-
-{{--    <div class="col-md-12 datatable-body">--}}
-{{--        <div class="tableArea table-order">--}}
-{{--            <table class='table table-striped table-bordered table-hover order-column'>--}}
-{{--                <thead>--}}
-{{--                </thead>--}}
-{{--                <tbody>--}}
-{{--                </tbody>--}}
-{{--                <tfoot>--}}
-{{--                </tfoot>--}}
-{{--            </table>--}}
-{{--        </div>--}}
-{{--    </div>--}}
 
 
 </div>

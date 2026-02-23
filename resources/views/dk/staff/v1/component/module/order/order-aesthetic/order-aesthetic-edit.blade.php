@@ -32,6 +32,7 @@
                         <input type="text" class="form-control" name="title" placeholder="自定义订单标题" value="">
                     </div>
                 </div>
+
                 {{--班次--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 班次</label>
@@ -46,6 +47,7 @@
                         </select>
                     </div>
                 </div>
+
                 {{--项目--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 项目</label>
@@ -88,7 +90,7 @@
                                     id="select--city--for--order-aesthetic--item-edit"
                                     data-modal="#modal--for--order-aesthetic--item-edit"
                                     data-item-category="1"
-                                    data-location-district-target="#select2--location--for--order-dental--item-edit"
+                                    data-location-district-target="#select2--location--for--order-aesthetic--item-edit"
                             >
                                 <option value="">选择城市</option>
                                 @if(!empty($location_city_list) && count($location_city_list) > 0)
@@ -101,7 +103,7 @@
                         <div class="col-sm-6 col-md-6 padding-0">
                             <select class="form-control select2-reset select2--location"
                                     name="location_district"
-                                    id="select2--location--for--order-dental--item-edit"
+                                    id="select2--location--for--order-aesthetic--item-edit"
                                     data-modal="#modal--for--order-aesthetic--item-edit"
                                     data-item-category="11"
                                     data-target="#select--city--for--order-aesthetic--item-edit"
@@ -111,6 +113,7 @@
                         </div>
                     </div>
                 </div>
+
                 {{--品类--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 品类</label>
@@ -128,19 +131,6 @@
                         </select>
                     </div>
                 </div>
-                {{--客户意向--}}
-                {{--                <div class="form-group _none">--}}
-                {{--                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户意向</label>--}}
-                {{--                    <div class="col-md-9 ">--}}
-                {{--                        <select class="form-control select-select2 select2-box-c" name="client_intention" >--}}
-                {{--                            <option value="">选择客户意向</option>--}}
-                {{--                            @foreach(config('info.client_intention') as $k => $v)--}}
-                {{--                                <option value ="{{ $k }}">{{ $v }}</option>--}}
-                {{--                            @endforeach--}}
-                {{--                        </select>--}}
-                {{--                    </div>--}}
-                {{--                </div>--}}
-
 
                 {{--是否+V--}}
                 <div class="form-group">
@@ -171,18 +161,6 @@
                         <input type="text" class="form-control" name="wx_id" placeholder="微信号" value="" data-default="">
                     </div>
                 </div>
-                {{--渠道来源--}}
-                {{--    <div class="form-group">--}}
-                {{--        <label class="control-label col-md-2"><sup class="text-red">*</sup> 渠道来源</label>--}}
-                {{--        <div class="col-md-9 ">--}}
-                {{--            <select class="form-control" name="channel_source">--}}
-                {{--                <option value="">选择渠道</option>--}}
-                {{--                @foreach(config('info.channel_source') as $v)--}}
-                {{--                    <option value ="{{ $v }}">{{ $v }}</option>--}}
-                {{--                @endforeach--}}
-                {{--            </select>--}}
-                {{--        </div>--}}
-                {{--    </div>--}}
 
                 {{--录音地址--}}
 {{--                <div class="form-group">--}}
@@ -191,6 +169,7 @@
 {{--                        <input type="text" class="form-control" name="recording_address" placeholder="录音地址" value="" data-default="">--}}
 {{--                    </div>--}}
 {{--                </div>--}}
+
                 {{--通话小结--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 通话小结</label>

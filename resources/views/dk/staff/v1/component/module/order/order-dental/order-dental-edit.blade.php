@@ -6,7 +6,7 @@
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px">
-                <h3 class="box-title">添加【口腔】工单</h3>
+                <h3 class="box-title">添加（口腔）工单</h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
@@ -56,8 +56,8 @@
                                 data-project-category="1"
                         >
                             <option data-id="" value="">选择项目</option>
-                            @if(!empty($project_list) && count($project_list) > 0)
-                                @foreach($project_list as $v)
+                            @if(!empty($project_list__for__dental) && count($project_list__for__dental) > 0)
+                                @foreach($project_list__for__dental as $v)
                                     <option value="{{ $v->id }}">{{ $v->name }}</option>
                                 @endforeach
                             @endif
@@ -85,10 +85,10 @@
                         <div class="col-sm-6 col-md-6 padding-0">
                             <select class="form-control modal--select2 select2-reset select2--location-city"
                                     name="location_city"
-                                    id="select-city-1"
+                                    id="select--city--for--order-dental--item-edit"
                                     data-modal="#modal--for--order-dental--item-edit"
                                     data-item-category="1"
-                                    data-location-district-target="#select-district-1"
+                                    data-location-district-target="#select2--location--for--order-dental--item-edit"
                             >
                                 <option value="">选择城市</option>
                                 @if(!empty($location_city_list) && count($location_city_list) > 0)
@@ -101,16 +101,17 @@
                         <div class="col-sm-6 col-md-6 padding-0">
                             <select class="form-control select2-reset select2--location"
                                     name="location_district"
-                                    id="select-district-1"
+                                    id="select2--location--for--order-dental--item-edit"
                                     data-modal="#modal--for--order-dental--item-edit"
                                     data-item-category="11"
-                                    data-target="#select-city-1"
+                                    data-target="#select--city--for--order-dental--item-edit"
                             >
                                 <option value="">选择区域</option>
                             </select>
                         </div>
                     </div>
                 </div>
+
                 {{--患者类型--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 患者类型</label>
@@ -128,6 +129,7 @@
                         </select>
                     </div>
                 </div>
+
                 {{--牙齿数量--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 牙齿数量</label>
@@ -145,6 +147,7 @@
                         </select>
                     </div>
                 </div>
+
                 {{--客户意向--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户意向</label>
@@ -162,7 +165,6 @@
                         </select>
                     </div>
                 </div>
-
 
                 {{--是否+V--}}
                 <div class="form-group">
@@ -186,6 +188,7 @@
                         </div>
                     </div>
                 </div>
+
                 {{--微信号--}}
                 <div class="form-group wx_box">
                     <label class="control-label col-md-2">微信号</label>
@@ -193,6 +196,7 @@
                         <input type="text" class="form-control" name="wx_id" placeholder="微信号" value="" data-default="">
                     </div>
                 </div>
+
                 {{--渠道来源--}}
                 {{--    <div class="form-group">--}}
                 {{--        <label class="control-label col-md-2"><sup class="text-red">*</sup> 渠道来源</label>--}}
@@ -213,6 +217,7 @@
 {{--                        <input type="text" class="form-control" name="recording_address" placeholder="录音地址" value="" data-default="">--}}
 {{--                    </div>--}}
 {{--                </div>--}}
+
                 {{--通话小结--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 通话小结</label>
