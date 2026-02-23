@@ -5441,6 +5441,10 @@ class DK_Staff__OrderRepository {
 
 
 
+
+
+
+
     // 【工单】外呼系统呼叫记录
     public function o1__order__item_call_recording__get__by_api($post_data)
     {
@@ -5478,10 +5482,27 @@ class DK_Staff__OrderRepository {
         if(!$team) return response_error([],"所属【团队】不存在，刷新页面重试！");
 
 
-        $serverFrom_name = $team->serverFrom_name;
-        $API_Customer_Password = $team->api_customer_password;
-        $API_Customer_Account = $team->api_customer_account;
-        $API_customerUserName = $team->api_customer_name;
+        if($item->order_category == 1)
+        {
+            $serverFrom_name = $team->serverFrom_name;
+            $API_Customer_Password = $team->api_customer_password;
+            $API_Customer_Account = $team->api_customer_account;
+            $API_customerUserName = $team->api_customer_name;
+        }
+        else if($item->order_category == 11)
+        {
+            $serverFrom_name = $team->serverFrom_name_2;
+            $API_Customer_Password = $team->api_customer_password_2;
+            $API_Customer_Account = $team->api_customer_account_2;
+            $API_customerUserName = $team->api_customer_name_2;
+        }
+        else
+        {
+            $serverFrom_name = $team->serverFrom_name;
+            $API_Customer_Password = $team->api_customer_password;
+            $API_Customer_Account = $team->api_customer_account;
+            $API_customerUserName = $team->api_customer_name;
+        }
 
 
         $timestamp = time();
