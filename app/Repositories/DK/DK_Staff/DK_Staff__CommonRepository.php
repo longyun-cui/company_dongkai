@@ -74,8 +74,8 @@ class DK_Staff__CommonRepository {
         $me = $this->me;
 
         $query = DK_Common__Company::select(['id','name as text'])
-            ->where(['item_status'=>1])
-            ->where('active',1);
+            ->where('active',1)
+            ->where('item_status',1);
 
         if(!empty($post_data['keyword']))
         {
@@ -137,8 +137,8 @@ class DK_Staff__CommonRepository {
     public function o1__select2__department($post_data)
     {
         $query = DK_Common__Department::select(['id','name as text'])
-            ->where(['item_status'=>1])
-            ->where('active',1);
+            ->where('active',1)
+            ->where('item_status',1);
 
         if(!empty($post_data['keyword']))
         {
@@ -175,8 +175,8 @@ class DK_Staff__CommonRepository {
         $me = $this->me;
 
         $query = DK_Common__Team::select(['id','name as text'])
-            ->where(['item_status'=>1])
-            ->where('active',1);
+            ->where('active',1)
+            ->where('item_status',1);
 
         if(!empty($post_data['keyword']))
         {
@@ -253,8 +253,8 @@ class DK_Staff__CommonRepository {
         $me = $this->me;
 
         $query = DK_Common__Staff::select(['id','name as text'])
-            ->where(['item_status'=>1])
-            ->where('active',1);
+            ->where('active',1)
+            ->where('item_status',1);
 
         if(!empty($post_data['keyword']))
         {
@@ -317,7 +317,8 @@ class DK_Staff__CommonRepository {
         if($item_category == 1)
         {
             $query = DK_Common__Location::select(['id','location_city as text'])
-                ->where(['item_status'=>1]);
+                ->where('active',1)
+                ->where('item_status',1);
 
             if(!empty($post_data['keyword']))
             {
@@ -331,8 +332,9 @@ class DK_Staff__CommonRepository {
         {
             $location_city = !empty($post_data['location_city']) ? $post_data['location_city'] : '';
             $query = DK_Common__Location::select(['id','location_district as text'])
-                ->where('location_city',$location_city)
-                ->where(['item_status'=>1]);
+                ->where('active',1)
+                ->where('item_status',1)
+                ->where('location_city',$location_city);
 
             if(!empty($post_data['keyword']))
             {
@@ -373,8 +375,8 @@ class DK_Staff__CommonRepository {
     public function o1__select2__client($post_data)
     {
         $query = DK_Common__Client::select(['id','name as text'])
-            ->where(['item_status'=>1])
-            ->where('active',1);
+            ->where('active',1)
+            ->where('item_status',1);
 
         if(!empty($post_data['keyword']))
         {
@@ -415,8 +417,8 @@ class DK_Staff__CommonRepository {
         $me = $this->me;
 
         $query = DK_Common__Project::select(['id','name as text','alias_name'])
-            ->where('item_status',1)
-            ->where('active',1);
+            ->where('active',1)
+            ->where('item_status',1);
 
         if(!empty($post_data['keyword']))
         {
