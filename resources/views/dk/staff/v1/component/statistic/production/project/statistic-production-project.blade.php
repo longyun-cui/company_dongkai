@@ -31,7 +31,7 @@
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre date-pre" data-target="statistic-production-project-date">
                 <i class="fa fa-chevron-left"></i>
             </button>
-            <input type="text" class="search-filter form-filter filter-keyup date_picker" name="statistic-production-project-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+            <input type="text" class="search-filter form-filter filter-keyup date-picker-c" name="statistic-production-project-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next date-next" data-target="statistic-production-project-date">
                 <i class="fa fa-chevron-right"></i>
             </button>
