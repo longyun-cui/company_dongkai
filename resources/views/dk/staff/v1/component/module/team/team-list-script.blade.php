@@ -264,6 +264,16 @@
                         $modal.find('input[name="api_customer_name"]').val($response.data.api_customer_name);
                         $modal.find('input[name="api_customer_user_name"]').val($response.data.api_customer_user_name);
                         $modal.find('input[name="api_customer_password"]').val($response.data.api_customer_password);
+
+
+                        $modal.find('input[name="serverFrom_id_2"]').val($response.data.serverFrom_id_2);
+                        $modal.find('input[name="serverFrom_name_2"]').val($response.data.serverFrom_name_2);
+                        $modal.find('input[name="api_customer_account_2"]').val($response.data.api_customer_account_2);
+                        $modal.find('input[name="api_customer_name_2"]').val($response.data.api_customer_name_2);
+                        $modal.find('input[name="api_customer_user_name_2"]').val($response.data.api_customer_user_name_2);
+                        $modal.find('input[name="api_customer_password_2"]').val($response.data.api_customer_password_2);
+
+
                         $modal.find('input[name="rank"]').val($response.data.rank);
 
 
