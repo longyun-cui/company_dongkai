@@ -3951,12 +3951,17 @@ class DK_Staff__StatisticRepository {
         }
 
         $grouped_by_team = $list->groupBy('team_id');
-        foreach ($list as $k => $v)
+        foreach ($grouped_by_team as $k => $v)
         {
-            $list[$k]->team_merge = count($grouped_by_team[$v->team_id]);
-            $grouped_by_group = $grouped_by_team[$v->team_id]->groupBy('team_group_id');
-            $list[$k]->group_merge = count($grouped_by_group[$v->team_group_id]);
+            $v[0]->team_merge = count($v);
+
+            $grouped_by_group = $v->groupBy('department_group_id');
+            foreach ($grouped_by_group as $key => $val)
+            {
+                $val[0]->group_merge = count($val);
+            }
         }
+
 
 
         return datatable_response($list, $draw, $total);

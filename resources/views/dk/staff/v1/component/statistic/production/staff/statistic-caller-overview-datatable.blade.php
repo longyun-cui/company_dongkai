@@ -264,65 +264,65 @@
                 }
             ],
             "columnDefs": [
-                // {
-                //     targets: [0], //要合并的列数（第1，2，3列）
-                //     "data": "team_id",
-                //     createdCell: function (td, cellData, rowData, row, col) {
-                //         //重要的操作可以合并列的代码
-                //         var rowspan = rowData.team_merge;
-                //         if (rowspan > 1) {
-                //             $(td).attr('rowspan', rowspan)
-                //         }
-                //         if (rowspan == 0) {
-                //             // $(td).remove();
-                //             $(td).html('').css('visibility', 'hidden');
-                //         }
-                //     },
-                //     "render": function (data, type, full) {
-                //         return row.team_er == null ? '未知' : '<a href="javascript:void(0);">'+row.team_er.name+'</a>';
-                //     }
-                // },
-                // {
-                //     targets: [1], //要合并的列数（第1，2，3列）
-                //     createdCell: function (td, cellData, rowData, row, col) {
-                //         //重要的操作可以合并列的代码
-                //         var rowspan = rowData.group_merge;
-                //         if (rowspan > 1) {
-                //             $(td).attr('rowspan', rowspan)
-                //         }
-                //         if (rowspan == 0) {
-                //             $(td).remove();
-                //         }
-                //     },
-                //     "data": "team_group_id",
-                //     "render": function (data, type, full) {
-                //         return row.team_group_er == null ? '未知' : '<a href="javascript:void(0);">'+row.team_group_er.name+'</a>';
-                //     }
-                // },
-                // {
-                //     targets: [7,8,9,10],
-                //     createdCell: function (td, cellData, rowData, row, col) {
-                //         var rowspan = rowData.group_merge;
-                //         if (rowspan > 1) {
-                //             $(td).attr('rowspan', rowspan)
-                //         }
-                //         if (rowspan == 0) {
-                //             $(td).remove();
-                //         }
-                //     }
-                // },
-                // {
-                //     targets: [11,12,13,14],
-                //     createdCell: function (td, cellData, rowData, row, col) {
-                //         var rowspan = rowData.team_merge;
-                //         if (rowspan > 1) {
-                //             $(td).attr('rowspan', rowspan)
-                //         }
-                //         if (rowspan == 0) {
-                //             $(td).remove();
-                //         }
-                //     }
-                // }
+                {
+                    targets: [0], //要合并的列数（第1，2，3列）
+                    "data": "team_id",
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        //重要的操作可以合并列的代码
+                        var rowspan = rowData.team_merge;
+                        if (rowspan > 1) {
+                            $(td).attr('rowspan', rowspan)
+                        }
+                        if (rowspan == 0) {
+                            $(td).remove();
+                            // $(td).html('').css('visibility', 'hidden');
+                        }
+                    },
+                    "render": function (data, type, full) {
+                        return row.team_er == null ? '未知' : '<a href="javascript:void(0);">'+row.team_er.name+'</a>';
+                    }
+                },
+                {
+                    targets: [1], //要合并的列数（第1，2，3列）
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        //重要的操作可以合并列的代码
+                        var rowspan = rowData.group_merge;
+                        if (rowspan > 1) {
+                            $(td).attr('rowspan', rowspan)
+                        }
+                        if (rowspan == 0) {
+                            $(td).remove();
+                        }
+                    },
+                    "data": "team_group_id",
+                    "render": function (data, type, full) {
+                        return row.team_group_er == null ? '未知' : '<a href="javascript:void(0);">'+row.team_group_er.name+'</a>';
+                    }
+                },
+                {
+                    targets: [7,8,9,10],
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        var rowspan = rowData.group_merge;
+                        if (rowspan > 1) {
+                            $(td).attr('rowspan', rowspan)
+                        }
+                        if (rowspan == 0) {
+                            $(td).remove();
+                        }
+                    }
+                },
+                {
+                    targets: [11,12,13,14],
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        var rowspan = rowData.team_merge;
+                        if (rowspan > 1) {
+                            $(td).attr('rowspan', rowspan)
+                        }
+                        if (rowspan == 0) {
+                            $(td).remove();
+                        }
+                    }
+                }
             ],
             "drawCallback": function (settings) {
 
