@@ -5257,6 +5257,7 @@ class DK_Staff__StatisticRepository {
             ->where('active',1)
             ->where('team_category',41)
             ->where('team_type',11)
+            ->where('team_type',11)
             ->where(['item_status'=>1]);
 
 
