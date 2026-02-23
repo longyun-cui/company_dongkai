@@ -3950,6 +3950,7 @@ class DK_Staff__StatisticRepository {
             $v->group_merge = 0;
         }
 
+
         $list = $list->reject(function ($item) {
             return $item->staff_count__for__all == 0;
             // 或者：return $item['staff_count__for__all'] === 0;
@@ -4183,6 +4184,11 @@ class DK_Staff__StatisticRepository {
         }
 //        dd($list->toArray());
 
+
+        $list = $list->reject(function ($item) {
+            return $item->order_count__for__all == 0;
+        })->values();
+
         return datatable_response($list, $draw, $total);
     }
     // 【生产-统计】坐席近期
@@ -4392,10 +4398,19 @@ class DK_Staff__StatisticRepository {
                 $list[$k]->order_1 = 0;
                 $list[$k]->order_0 = 0;
             }
-
-
         }
 //        dd($list->toArray());
+
+
+        $list = $list->reject(function ($item) {
+            return ($item->order_0 == 0) &&
+                ($item->order_1 == 0) &&
+                ($item->order_2 == 0) &&
+                ($item->order_3 == 0) &&
+                ($item->order_4 == 0) &&
+                ($item->order_5 == 0) &&
+                ($item->order_6 == 0);
+        })->values();
 
         return datatable_response($list, $draw, $total);
     }
