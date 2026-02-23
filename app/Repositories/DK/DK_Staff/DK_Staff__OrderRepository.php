@@ -1664,18 +1664,18 @@ class DK_Staff__OrderRepository {
             {
                 if($item->creator_id != $me->id) return response_error([],"你没有操作权限！");
             }
-            else if($me->staff_position == 61)
-            {
-                if($item->creator_team_group_id != $me->team_group_id) return response_error([],"你没有操作权限！");
-            }
-            else if($me->staff_position == 41)
-            {
-                if($item->creator_team_id != $me->team_id) return response_error([],"你没有操作权限！");
-            }
-            else if($me->staff_position == 31)
-            {
-                if($item->creator_department_id != $me->department_id) return response_error([],"你没有操作权限！");
-            }
+//            else if($me->staff_position == 61)
+//            {
+//                if($item->creator_team_group_id != $me->team_group_id) return response_error([],"你没有操作权限！");
+//            }
+//            else if($me->staff_position == 41)
+//            {
+//                if($item->creator_team_id != $me->team_id) return response_error([],"你没有操作权限！");
+//            }
+//            else if($me->staff_position == 31)
+//            {
+//                if($item->creator_department_id != $me->department_id) return response_error([],"你没有操作权限！");
+//            }
             else
             {
                 return response_error([],"用户类型错误！");
