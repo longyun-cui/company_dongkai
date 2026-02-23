@@ -4,7 +4,7 @@
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px">
-                <h3 class="box-title">添加团队</h3>
+                <h3 class="box-title">API设置</h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
@@ -22,78 +22,72 @@
 
                 {{--api--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> API_服务器ID</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="serverFrom_id" placeholder="API_服务器ID" value="">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 服务器ID&名称</label>
+                    <div class="col-md-9 ">
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="serverFrom_id" placeholder="API_服务器ID" value="">
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="serverFrom_name" placeholder="API_服务器名称" value="">
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> API_服务器名称</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="serverFrom_name" placeholder="API_服务器名称" value="">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 账户&客户名称</label>
+                    <div class="col-md-9 ">
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="api_customer_account" placeholder="API_对接账户" value="">
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="api_customer_name" placeholder="API_客户名称" value="">
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> API_对接账户</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="api_customer_account" placeholder="API_对接账户" value="">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> API_企业名称</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="api_customer_name" placeholder="API_客户名称" value="">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> API_用户名</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="api_customer_user_name" placeholder="API_用户名" value="">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> API_对接密码</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="api_customer_password" placeholder="API_对接密码" value="">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 用户名&密码</label>
+                    <div class="col-md-9 ">
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="api_customer_user_name" placeholder="API_用户名" value="">
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="api_customer_password" placeholder="API_对接密码" value="">
+                        </div>
                     </div>
                 </div>
 
 
                 {{--api2--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> API_服务器ID_2</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="serverFrom_id_2" placeholder="API_服务器ID" value="">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 服务器ID&名称_2</label>
+                    <div class="col-md-9 ">
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="serverFrom_id_2" placeholder="API_服务器ID" value="">
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="serverFrom_name_2" placeholder="API_服务器名称" value="">
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> API_服务器名称_2</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="serverFrom_name_2" placeholder="API_服务器名称" value="">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 账户&客户名称_2</label>
+                    <div class="col-md-9 ">
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="api_customer_account_2" placeholder="API_对接账户" value="">
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="api_customer_name_2" placeholder="API_客户名称" value="">
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> API_对接账户_2</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="api_customer_account_2" placeholder="API_对接账户" value="">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> API_企业名称_2</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="api_customer_name_2" placeholder="API_客户名称" value="">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> API_用户名_2</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="api_customer_user_name_2" placeholder="API_用户名" value="">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> API_对接密码_2</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="api_customer_password_2" placeholder="API_对接密码" value="">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 用户名&密码_2</label>
+                    <div class="col-md-9 ">
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="api_customer_user_name_2" placeholder="API_用户名" value="">
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="api_customer_password_2" placeholder="API_对接密码" value="">
+                        </div>
                     </div>
                 </div>
 
@@ -101,8 +95,8 @@
                 {{--排序--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 排序</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="rank" placeholder="排序" value="{{ $data->rank or '' }}">
+                    <div class="col-md-9 ">
+                        <input type="text" class="form-control" name="rank" placeholder="排序" value="">
                     </div>
                 </div>
 
@@ -113,7 +107,7 @@
 
             <div class="box-footer">
                 <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
+                    <div class="col-md-9 col-md-offset-2">
                         <button type="button" class="btn btn-success edit-submit" id="submit--for--team-item-edit--by--super">
                             <i class="fa fa-check"></i> 提交
                         </button>
