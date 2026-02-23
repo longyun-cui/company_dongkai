@@ -86,7 +86,7 @@
                         <div class="col-md-9 ">
                             <select class="form-control select2-reset select2--client"
                                     name="client_id"
-                                    id="select2--project--for--order--item-distributing"
+                                    id="select2--client--for--order--item-distributing"
                                     data-modal="#modal--for--order--item-distributing"
                                     data-item-category="1"
                             >
@@ -100,7 +100,6 @@
                         <div class="col-md-9 ">
                             <select class="form-control modal--select2 select2-reset"
                                     name="order-item-distributing--delivered-result"
-                                    id=""
                                     data-modal="#modal--for--order--item-distributing"
                             >
                                 <option value="">交付结果</option>

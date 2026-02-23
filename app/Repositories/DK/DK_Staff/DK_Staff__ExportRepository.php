@@ -158,7 +158,7 @@ class DK_Staff__ExportRepository {
 
             $cellData[$k]['client_name'] = $v['client_name'];
             $cellData[$k]['client_phone'] = $v['client_phone'];
-            if(in_array($me->staff_category,[71,77]))
+            if(in_array($me->staff_category,[41,51,61]))
             {
                 $time = time();
                 // if(($v['inspected_at'] > 0) && (($time - $v['inspected_at']) > 86400))
@@ -425,7 +425,7 @@ class DK_Staff__ExportRepository {
 
             $cellData[$k]['client_name'] = $v['client_name'];
             $cellData[$k]['client_phone'] = $v['client_phone'];
-            if(in_array($me->staff_category,[71,77]))
+            if(in_array($me->staff_category,[41,51,61]))
             {
                 $time = time();
                 // if(($v['inspected_at'] > 0) && (($time - $v['inspected_at']) > 86400))
@@ -690,7 +690,7 @@ class DK_Staff__ExportRepository {
 
             $cellData[$k]['client_name'] = $v['client_name'];
             $cellData[$k]['client_phone'] = $v['client_phone'];
-            if(in_array($me->staff_category,[71,77]))
+            if(in_array($me->staff_category,[41,51,61]))
             {
                 $time = time();
                 // if(($v['inspected_at'] > 0) && (($time - $v['inspected_at']) > 86400))
@@ -928,7 +928,7 @@ class DK_Staff__ExportRepository {
             // ID
             $cellData[$k]['client_phone'] = $v['client_phone'];
             // ID
-            if(in_array($me->staff_category,[71,77]))
+            if(in_array($me->staff_category,[41,51,61]))
             {
                 $time = time();
                 // if(($v['inspected_at'] > 0) && (($time - $v['inspected_at']) > 86400))
@@ -1146,7 +1146,7 @@ class DK_Staff__ExportRepository {
 
             $cellData[$k]['client_name'] = $v['client_name'];
             $cellData[$k]['client_phone'] = $v['client_phone'];
-            if(in_array($me->staff_category,[51]))
+            if(in_array($me->staff_category,[41,51,61]))
             {
                 $time = time();
                 // if(($v['inspected_at'] > 0) && (($time - $v['inspected_at']) > 86400))
@@ -1568,7 +1568,7 @@ class DK_Staff__ExportRepository {
 
             $cellData[$k]['client_name'] = $v['client_name'];
             $cellData[$k]['client_phone'] = $v['client_phone'];
-            if(in_array($me->staff_category,[51]))
+            if(in_array($me->staff_category,[41,51,61]))
             {
                 $time = time();
                 // if(($v['inspected_at'] > 0) && (($time - $v['inspected_at']) > 86400))
@@ -2022,7 +2022,7 @@ class DK_Staff__ExportRepository {
 
             $cellData[$k]['client_name'] = $v['client_name'];
             $cellData[$k]['client_phone'] = $v['client_phone'];
-            if(in_array($me->staff_category,[51]))
+            if(in_array($me->staff_category,[41,51,61]))
             {
                 $time = time();
                 // if(($v['inspected_at'] > 0) && (($time - $v['inspected_at']) > 86400))
@@ -2470,7 +2470,7 @@ class DK_Staff__ExportRepository {
 
             $cellData[$k]['client_name'] = $v['client_name'];
             $cellData[$k]['client_phone'] = $v['client_phone'];
-            if(in_array($me->staff_category,[51]))
+            if(in_array($me->staff_category,[41,51,61]))
             {
                 $time = time();
                 // if(($v['inspected_at'] > 0) && (($time - $v['inspected_at']) > 86400))
@@ -2889,7 +2889,7 @@ class DK_Staff__ExportRepository {
 
             $cellData[$k]['client_name'] = $v['client_name'];
             $cellData[$k]['client_phone'] = $v['client_phone'];
-            if(in_array($me->staff_category,[51]))
+            if(in_array($me->staff_category,[41,51,61]))
             {
                 $time = time();
                 // if(($v['inspected_at'] > 0) && (($time - $v['inspected_at']) > 86400))
@@ -3150,7 +3150,7 @@ class DK_Staff__ExportRepository {
 
             $cellData[$k]['client_name'] = $v['client_name'];
             $cellData[$k]['client_phone'] = $v['client_phone'];
-            if(in_array($me->staff_category,[51]))
+            if(in_array($me->staff_category,[41,51,61]))
             {
                 $time = time();
                 // if(($v['inspected_at'] > 0) && (($time - $v['inspected_at']) > 86400))
@@ -3409,7 +3409,7 @@ class DK_Staff__ExportRepository {
 
             $cellData[$k]['client_name'] = $v['client_name'];
             $cellData[$k]['client_phone'] = $v['client_phone'];
-            if(in_array($me->staff_category,[51]))
+            if(in_array($me->staff_category,[41,51,61]))
             {
                 $time = time();
                 // if(($v['inspected_at'] > 0) && (($time - $v['inspected_at']) > 86400))
@@ -3666,7 +3666,7 @@ class DK_Staff__ExportRepository {
 
             $cellData[$k]['client_name'] = $v['client_name'];
             $cellData[$k]['client_phone'] = $v['client_phone'];
-            if(in_array($me->staff_category,[51]))
+            if(in_array($me->staff_category,[41,51,61]))
             {
                 $time = time();
                 // if(($v['inspected_at'] > 0) && (($time - $v['inspected_at']) > 86400))
@@ -3896,7 +3896,7 @@ class DK_Staff__ExportRepository {
             // ID
             $cellData[$k]['client_phone'] = $v['client_phone'];
             // ID
-            if(in_array($me->staff_category,[51]))
+            if(in_array($me->staff_category,[41,51,61]))
             {
                 $time = time();
                 // if(($v['inspected_at'] > 0) && (($time - $v['inspected_at']) > 86400))
@@ -4245,7 +4245,7 @@ class DK_Staff__ExportRepository {
 
             $cellData[$k]['client_name'] = $v['client_name'];
             $cellData[$k]['client_phone'] = $v['client_phone'];
-            if(in_array($me->staff_category,[51]))
+            if(in_array($me->staff_category,[41,51,61]))
             {
                 $time = time();
                 // if(($v['inspected_at'] > 0) && (($time - $v['inspected_at']) > 86400))
@@ -4655,7 +4655,7 @@ class DK_Staff__ExportRepository {
 
             $cellData[$k]['client_name'] = $v['client_name'];
             $cellData[$k]['client_phone'] = $v['client_phone'];
-            if(in_array($me->staff_category,[61]))
+            if(in_array($me->staff_category,[41,51,61]))
             {
                 $time = time();
                 // if(($v['inspected_at'] > 0) && (($time - $v['inspected_at']) > 86400))
@@ -5083,7 +5083,7 @@ class DK_Staff__ExportRepository {
 
             $cellData[$k]['client_name'] = $v['client_name'];
             $cellData[$k]['client_phone'] = $v['client_phone'];
-            if(in_array($me->staff_category,[51]))
+            if(in_array($me->staff_category,[41,51,61]))
             {
                 $time = time();
                 // if(($v['inspected_at'] > 0) && (($time - $v['inspected_at']) > 86400))
@@ -5484,7 +5484,7 @@ class DK_Staff__ExportRepository {
 
             $cellData[$k]['client_name'] = $v['client_name'];
             $cellData[$k]['client_phone'] = $v['client_phone'];
-            if(in_array($me->staff_category,[51]))
+            if(in_array($me->staff_category,[41,51,61]))
             {
                 $time = time();
                 // if(($v['inspected_at'] > 0) && (($time - $v['inspected_at']) > 86400))

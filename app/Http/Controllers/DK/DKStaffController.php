@@ -923,7 +923,7 @@ class DKStaffController extends Controller
     // 【工单】批量交付
     public function o1__order__bulk_delivering_save()
     {
-        return $this->order_repo->o1__order__item_delivering_save(request()->all());
+        return $this->order_repo->o1__order__bulk_delivering_save(request()->all());
     }
     // 【工单】一件交付
     public function o1__order__item_delivering_save__by_fool()

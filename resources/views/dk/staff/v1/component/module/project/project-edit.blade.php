@@ -119,7 +119,7 @@
                     <div class="col-md-8 ">
                         <select class="form-control select2-multiple-reset select2--department" multiple="multiple"
                                 name="CSD_department_list[]"
-                                id="select2--teams--for--project-item-edit"
+                                id="select2--csd--for--project-item-edit"
                                 data-modal="#modal--for--project-item-edit"
                                 data-department-category="41"
                                 data-department-type=""
@@ -137,7 +137,7 @@
                     <div class="col-md-8 ">
                         <select class="form-control select2-multiple-reset select2--department" multiple="multiple"
                                 name="QID_department_list[]"
-                                id="select2--teams--for--project-item-edit"
+                                id="select2--qid--for--project-item-edit"
                                 data-modal="#modal--for--project-item-edit"
                                 data-department-category="51"
                                 data-department-type=""
@@ -155,7 +155,7 @@
                     <div class="col-md-8 ">
                         <select class="form-control select2-multiple-reset select2--department" multiple="multiple"
                                 name="AD_department_list[]"
-                                id="select2--teams--for--project-item-edit"
+                                id="select2--ad--for--project-item-edit"
                                 data-modal="#modal--for--project-item-edit"
                                 data-department-category="61"
                                 data-department-type=""

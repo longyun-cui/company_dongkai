@@ -145,7 +145,11 @@
                 <div class="form-group _none">
                     <label class="control-label col-md-2">选择负责人</label>
                     <div class="col-md-9 ">
-                        <select class="form-control select2-reset select2--leader" name="leader_id" id="select2-leader" data-type="manager" style="width:100%;">
+                        <select class="form-control select2-reset select2--leader"
+                                name="leader_id"
+                                id="select2--staff--for--department-item-edit"
+                                data-type="manager"
+                        >
                             <option data-id="-1" value="-1">选择负责人</option>
                         </select>
                     </div>

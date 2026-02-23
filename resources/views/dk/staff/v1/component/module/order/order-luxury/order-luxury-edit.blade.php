@@ -34,7 +34,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 班次</label>
                     <div class="col-md-8 ">
-                        <select class="form-control modal-select2 select2-reset" name="field_2" id="" style="width:100%;">
+                        <select class="form-control modal-select2 select2-reset" name="field_2">
                             <option value="">选择班次</option>
                             <option value ="1">白班</option>
                             <option value ="9">夜班</option>
@@ -63,10 +63,10 @@
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户信息</label>
                     <div class="col-md-8 ">
-                        <div class="col-sm-6 col-md-6 padding-0" style="width:50%;">
+                        <div class="col-sm-6 col-md-6 padding-0">
                             <input type="text" class="form-control" name="client_name" placeholder="客户姓名" value="" data-default="">
                         </div>
-                        <div class="col-sm-6 col-md-6 padding-0" style="width:50%;">
+                        <div class="col-sm-6 col-md-6 padding-0">
                             <input type="text" class="form-control" name="client_phone" placeholder="客户电话" value="" data-default="">
                         </div>
                     </div>
@@ -87,7 +87,7 @@
                             </select>
                         </div>
                         <div class="col-sm-6 col-md-6 padding-0">
-                            <select class="form-control select-select2 select2-box-c select2-district-district" name="location_district" id="select-district-2" data-target="#select-city-2" style="width:100%;">
+                            <select class="form-control select-select2 select2-box-c select2-district-district" name="location_district" id="select-district-2" data-target="#select-city-2">
                                 <option value="">选择区域</option>
                             </select>
                         </div>
@@ -97,7 +97,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 品类</label>
                     <div class="col-md-8 ">
-                        <select class="form-control modal-select2 select2-reset" name="field_1" id="" style="width:100%;">
+                        <select class="form-control modal-select2 select2-reset" name="field_1">
                             <option value="">选择品类</option>
                             @foreach(config('info.luxury_type') as $k => $v)
                                 <option value ="{{ $k }}">{{ $v }}</option>
@@ -109,7 +109,7 @@
 {{--                <div class="form-group _none">--}}
 {{--                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户意向</label>--}}
 {{--                    <div class="col-md-8 ">--}}
-{{--                        <select class="form-control select-select2 select2-box-c" name="client_intention" id="" style="width:100%;">--}}
+{{--                        <select class="form-control select-select2 select2-box-c" name="client_intention">--}}
 {{--                            <option value="">选择客户意向</option>--}}
 {{--                            @foreach(config('info.client_intention') as $k => $v)--}}
 {{--                                <option value ="{{ $k }}">{{ $v }}</option>--}}
@@ -152,7 +152,7 @@
                 {{--    <div class="form-group">--}}
                 {{--        <label class="control-label col-md-2"><sup class="text-red">*</sup> 渠道来源</label>--}}
                 {{--        <div class="col-md-8 ">--}}
-                {{--            <select class="form-control" name="channel_source" id="">--}}
+                {{--            <select class="form-control" name="channel_source">--}}
                 {{--                <option value="">选择渠道</option>--}}
                 {{--                @foreach(config('info.channel_source') as $v)--}}
                 {{--                    <option value ="{{ $v }}">{{ $v }}</option>--}}
