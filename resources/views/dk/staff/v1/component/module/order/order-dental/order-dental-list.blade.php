@@ -1,6 +1,6 @@
-<div class="row datatable-body datatable-wrapper order-list-clone"
+<div class="row datatable-body datatable-wrapper order-dental-list-clone"
      data-order-category="1"
-     data-datatable-item-category="order"
+     data-datatable-item-category="dental"
      data-item-name="口腔工单"
 >
 
@@ -287,13 +287,6 @@
             <button type="button" onclick="" class="btn btn-default btn-filter order--bulk-export-summit" data-order-category="1">
                 <i class="fa fa-download"></i> 批量导出
             </button>
-
-
-{{--            <button type="button" onclick="" class="btn btn-default btn-filter bulk-submit-for-order-export" data-item-category="1">--}}
-{{--                <i class="fa fa-download"></i> 批量导出--}}
-{{--            </button>--}}
-            {{--<button type="button" onclick="" class="btn btn-default btn-filter"><i class="fa fa-trash-o"></i> 批量删除</button>--}}
-
 
 
             <button type="button" class="btn btn-default btn-filter order--bulk-delivering-summit--by-fool">

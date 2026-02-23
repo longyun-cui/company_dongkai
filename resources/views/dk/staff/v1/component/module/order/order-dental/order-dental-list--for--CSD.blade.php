@@ -1,6 +1,6 @@
-<div class="row datatable-body datatable-wrapper order-list-clone"
+<div class="row datatable-body datatable-wrapper order-dental-list-clone"
      data-order-category="1"
-     data-datatable-item-category="order"
+     data-datatable-item-category="dental"
      data-item-name="口腔工单"
 >
 

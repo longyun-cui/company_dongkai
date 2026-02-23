@@ -2,7 +2,7 @@
 
     // window.dataTableInstances = window.dataTableInstances || {};
 
-    function Datatable__for__Order_Dental_List($tableId)
+    function Datatable__for__Order_Aesthetic_List($tableId)
     {
         // var table_Id = $tableId;
         // if (window.dataTableInstances[table_Id])
@@ -33,7 +33,7 @@
                 "dataType" : 'json',
                 "data": function (d) {
                     d._token = $('meta[name="_token"]').attr('content');
-                    d.order_category = 1;
+                    d.order_category = 11;
                     d.id = $tableSearch.find('input[name="order-id"]').val();
                     d.remark = $tableSearch.find('input[name="order-remark"]').val();
                     d.description = $tableSearch.find('input[name="order-description"]').val();
@@ -691,9 +691,8 @@
                     }
                 },
                 {
-                    "sTitle": "患者类型",
-                    "name": "client_type",
-                    "data": "client_type",
+                    "title": "品类",
+                    "data": "field_1",
                     "className": "",
                     "width": "60px",
                     "orderable": false,
@@ -703,11 +702,11 @@
                             $(nTd).attr('data-row-index',iRow);
 
                             $(nTd).addClass('modal-show-for-field-set');
-                            $(nTd).attr('data-id',row.id).attr('data-name','患者类型');
-                            $(nTd).attr('data-key','client_type').attr('data-value',data);
+                            $(nTd).attr('data-id',row.id).attr('data-name','品类');
+                            $(nTd).attr('data-key','field_1').attr('data-value',data);
 
                             $(nTd).attr('data-column-type','select');
-                            $(nTd).attr('data-column-name','患者类型');
+                            $(nTd).attr('data-column-name','品类');
 
                             if(data) $(nTd).attr('data-operate-type','edit');
                             else $(nTd).attr('data-operate-type','add');
@@ -719,124 +718,29 @@
                         var $result_html = '';
                         if(data == 0)
                         {
-                            $result_html = '<small class="btn-xs ">未选择</small>';
+                            $result_html = '<small class="btn-xs bg-default"></small>';
                         }
                         else if(data == 1)
                         {
-                            $result_html = '<small class="btn-xs bg-blue">种植牙</small>';
+                            $result_html = '<small class="btn-xs bg-blue">脸部</small>';
                         }
-                        else if(data == 2)
+                        else if(data == 21)
                         {
-                            $result_html = '<small class="btn-xs bg-green">矫正</small>';
+                            $result_html = '<small class="btn-xs bg-blue">植发</small>';
                         }
-                        else if(data == 3)
+                        else if(data == 31)
                         {
-                            $result_html = '<small class="btn-xs bg-red">正畸</small>';
+                            $result_html = '<small class="btn-xs bg-blue">身体</small>';
                         }
                         else if(data == 99)
                         {
-                            $result_html = '<small class="btn-xs bg-black">其他</small>';
+                            $result_html = '<small class="btn-xs bg-navy">其他</small>';
                         }
                         else
                         {
                             $result_html = '未知类型';
                         }
                         return $result_html;
-                    }
-                },
-                {
-                    "title": "客户意向",
-                    "name": "client_intention",
-                    "data": "client_intention",
-                    "className": "",
-                    "width": "60px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
-                        {
-                            $(nTd).attr('data-row-index',iRow);
-
-                            $(nTd).addClass('modal-show-for-field-set');
-                            $(nTd).attr('data-id',row.id).attr('data-name','客户意向');
-                            $(nTd).attr('data-key','client_intention').attr('data-value',data);
-
-                            $(nTd).attr('data-column-type','select');
-                            $(nTd).attr('data-column-name','客户意向');
-
-                            if(data) $(nTd).attr('data-operate-type','edit');
-                            else $(nTd).attr('data-operate-type','add');
-                        }
-                    },
-                    render: function(data, type, row, meta) {
-                        // if(!data) return '--';
-                        // return data;
-                        var $result_html = '';
-                        if(data == "到店")
-                        {
-                            $result_html = '<small class="btn-xs bg-red">'+data+'</small>';
-                        }
-                        else if(data == "A类")
-                        {
-                            $result_html = '<small class="btn-xs bg-red">'+data+'</small>';
-                        }
-                        else if(data == "B类")
-                        {
-                            $result_html = '<small class="btn-xs bg-blue">'+data+'</small>';
-                        }
-                        else if(data == "C类")
-                        {
-                            $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
-                        }
-                        else if(data == "A")
-                        {
-                            $result_html = '<small class="btn-xs bg-red">'+data+'</small>';
-                        }
-                        else if(data == "B")
-                        {
-                            $result_html = '<small class="btn-xs bg-blue">'+data+'</small>';
-                        }
-                        else if(data == "C")
-                        {
-                            $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
-                        }
-                        else
-                        {
-                            $result_html = data;
-                        }
-                        return $result_html;
-                    }
-                },
-                {
-                    "title": "牙齿数量",
-                    "name": "teeth_count",
-                    "data": "field_1",
-                    "className": "",
-                    "width": "80px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
-                        {
-                            $(nTd).attr('data-row-index',iRow);
-
-                            $(nTd).addClass('modal-show-for-field-set');
-                            $(nTd).attr('data-id',row.id).attr('data-name','牙齿数量');
-                            $(nTd).attr('data-key','teeth_count').attr('data-value',data);
-
-                            $(nTd).attr('data-column-type','select');
-                            $(nTd).attr('data-column-name','牙齿数量');
-
-                            if(data) $(nTd).attr('data-operate-type','edit');
-                            else $(nTd).attr('data-operate-type','add');
-                        }
-                    },
-                    render: function(data, type, row, meta) {
-                        if(data == 1) return '1-2颗';
-                        else if(data == 2) return '3-5颗';
-                        else if(data == 3) return '6颗';
-                        else if(data == 11) return '半口';
-                        else if(data == 19) return '全口';
-                        else if(data == 99) return '其他';
-                        else return data;
                     }
                 },
                 {
@@ -1312,7 +1216,7 @@
             },
             "drawCallback": function (settings) {
 
-                console.log('order-dental-list-datatable--for--OD--execute');
+                console.log('order-aesthetic-list-datatable--for--OD--execute');
 
 //                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
 //                    this.api().column(1).nodes().each(function(cell, i) {

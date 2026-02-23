@@ -178,17 +178,17 @@
             <li class="treeview _none-">
                 <a class="tab-control datatable-control"
                    data-type="create"
-                   data-unique="y"
-                   data-id="order-list"
+                   data-unique="n"
+                   data-id="order-dental-list"
                    data-title='口腔•工单'
                    data-content=''
                    data-icon='<i class="fa fa-file-text text-orange"></i>'
 
                    data-datatable-type="create"
-                   data-datatable-unique="y"
-                   data-datatable-id="datatable-order-list"
-                   data-datatable-target="order-list"
-                   data-datatable-clone-object="order-list-clone"
+                   data-datatable-unique="n"
+                   data-datatable-id="datatable-order-dental-list"
+                   data-datatable-target="order-dental-list"
+                   data-datatable-clone-object="order-dental-list-clone"
                 >
                     <i class="fa fa-file-text text-orange"></i>
                     <span>口腔•工单</span>

@@ -1,14 +1,14 @@
 <script>
 
-    window.dataTableInstances = window.dataTableInstances || {};
+    // window.dataTableInstances = window.dataTableInstances || {};
 
-    function Datatable__for__Order_List($tableId)
+    function Datatable__for__Order_Dental_List($tableId)
     {
-        var table_Id = $tableId;
-        if (window.dataTableInstances[table_Id])
-        {
-            return window.dataTableInstances[table_Id];
-        }
+        // var table_Id = $tableId;
+        // if (window.dataTableInstances[table_Id])
+        // {
+        //     return window.dataTableInstances[table_Id];
+        // }
 
         let $that = $('#'+$tableId);
         let $datatable_wrapper = $that.parents('.datatable-wrapper');
@@ -44,7 +44,7 @@
                     d.name = $tableSearch.find('input[name="order-name"]').val();
                     d.title = $tableSearch.find('input[name="order-title"]').val();
                     d.keyword = $tableSearch.find('input[name="order-keyword"]').val();
-                    d.department_district = $tableSearch.find('select[name="order-department-district[]"]').val();
+                    d.team_list = $tableSearch.find('select[name="order-team-list[]"]').val();
                     d.staff = $tableSearch.find('select[name="order-staff"]').val();
                     d.distribute_type = $tableSearch.find('select[name="order-distribute-type"]').val();
                     d.project = $tableSearch.find('select[name="order-project"]').val();
@@ -489,7 +489,7 @@
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -516,7 +516,7 @@
                     "width": "100px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -543,7 +543,7 @@
                     "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -597,7 +597,7 @@
                     "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -692,7 +692,7 @@
                     "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -720,7 +720,7 @@
                     "width": "100px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -747,7 +747,7 @@
                     "width": "120px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
                         {
                             $(nTd).addClass('modal-show-for-field-set');
                             $(nTd).attr('data-id',row.id).attr('data-name','所在城市');
@@ -776,7 +776,7 @@
                     {{--    "width": "60px",--}}
                     {{--    "orderable": false,--}}
                     {{--    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {--}}
-                    {{--        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))--}}
+                    {{--        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))--}}
                     {{--        {--}}
                     {{--            $(nTd).addClass('modal-show-for-field-set');--}}
                     {{--            $(nTd).attr('data-id',row.id).attr('data-name','渠道来源');--}}
@@ -937,6 +937,9 @@
                         if(row.is_published > 0)
                         {
 
+                            // 详情编辑
+                            $html_detail = '<a class="btn btn-xs modal-show--for--order--item-detail-editing" data-role="admin" data-id="'+data+'">详情</a>';
+
                             // 审核
                             if(row.inspector_id == 0)
                             {
@@ -947,22 +950,21 @@
                                 $html_inspect = '<a class="btn btn-xs modal-show--for--order--item-inspecting" data-id="'+data+'">再审</a>';
                             }
 
-                            // 详情编辑
-                            $html_detail = '<a class="btn btn-xs modal-show--for--order--item-detail-editing" data-id="'+data+'">详情</a>';
-
                         }
 
 
                         if(row.created_type == 9)
                         {
                             $html_inspect = '';
+                            $html_detail = '';
+                            $html_record = '';
                         }
 
 
                         var $html =
                             $html_inspect+
-                            $html_record+
                             $html_detail+
+                            $html_record+
                             // $more_html+
                             '';
                         return $html;
@@ -972,7 +974,7 @@
             ],
             "drawCallback": function (settings) {
 
-                console.log('order-list-datatable-execute');
+                console.log('order-dental-list-datatable--for--QID--execute');
 
 //                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
 //                    this.api().column(1).nodes().each(function(cell, i) {
@@ -997,8 +999,8 @@
             "language": { url: '/common/dataTableI18n' },
         });
 
-        window.dataTableInstances[table_Id] = table;
-
-        return table;
+        // window.dataTableInstances[table_Id] = table;
+        //
+        // return table;
     }
 </script>

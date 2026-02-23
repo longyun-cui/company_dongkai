@@ -1,14 +1,14 @@
 <script>
 
-    window.dataTableInstances = window.dataTableInstances || {};
+    // window.dataTableInstances = window.dataTableInstances || {};
 
-    function Datatable__for__Order_List($tableId)
+    function Datatable__for__Order_Dental_List($tableId)
     {
-        var table_Id = $tableId;
-        if (window.dataTableInstances[table_Id])
-        {
-            return window.dataTableInstances[table_Id];
-        }
+        // var table_Id = $tableId;
+        // if (window.dataTableInstances[table_Id])
+        // {
+        //     return window.dataTableInstances[table_Id];
+        // }
 
         let $that = $('#'+$tableId);
         let $datatable_wrapper = $that.parents('.datatable-wrapper');
@@ -44,7 +44,7 @@
                     d.name = $tableSearch.find('input[name="order-name"]').val();
                     d.title = $tableSearch.find('input[name="order-title"]').val();
                     d.keyword = $tableSearch.find('input[name="order-keyword"]').val();
-                    d.department_district = $tableSearch.find('select[name="order-department-district[]"]').val();
+                    d.team_list = $tableSearch.find('select[name="order-team-list[]"]').val();
                     d.staff = $tableSearch.find('select[name="order-staff"]').val();
                     d.distribute_type = $tableSearch.find('select[name="order-distribute-type"]').val();
                     d.project = $tableSearch.find('select[name="order-project"]').val();
@@ -827,7 +827,7 @@
             ],
             "drawCallback": function (settings) {
 
-                console.log('order-list-datatable-execute');
+                console.log('order-dental-list-datatable--for--CSD--execute');
 
 //                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
 //                    this.api().column(1).nodes().each(function(cell, i) {
@@ -852,8 +852,8 @@
             "language": { url: '/common/dataTableI18n' },
         });
 
-        window.dataTableInstances[table_Id] = table;
-
-        return table;
+        // window.dataTableInstances[table_Id] = table;
+        //
+        // return table;
     }
 </script>

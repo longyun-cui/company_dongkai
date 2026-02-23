@@ -43,7 +43,15 @@
             else
             {
                 var $session_unique_id = sessionStorage.getItem('session_unique_id');
-                sessionStorage.setItem('session_unique_id',parseInt($session_unique_id) + 1);
+                if ($session_unique_id === null)
+                {
+                    sessionStorage.setItem('session_unique_id', 1);
+                    $session_unique_id = 1; // 更新变量以保持一致性
+                }
+                else
+                {
+                    sessionStorage.setItem('session_unique_id',parseInt($session_unique_id) + 1);
+                }
                 $session_unique_id = sessionStorage.getItem('session_unique_id');
 
                 var $btn = $(this);
@@ -52,7 +60,8 @@
                     unique: $btn.data('unique'),
                     id: $btn.data('id') + '-' + $session_unique_id,
                     title: $btn.data('title'),
-                    content: $btn.data('content') || '默认内容'
+                    content: $btn.data('content') || '默认内容',
+                    icon: $btn.data('icon') || ''
                 };
 
                 var $tabLink = $('a[href="#'+ $config.id +'"]');
@@ -205,6 +214,10 @@
                 else if($id == "datatable-order-aesthetic-list")
                 {
                     Datatable__for__Order_Aesthetic_List($config.id);
+                }
+                else if($id == "datatable-order-luxury-list")
+                {
+                    Datatable__for__Order_Luxury_List($config.id);
                 }
                 else if($id == "delivery")
                 {

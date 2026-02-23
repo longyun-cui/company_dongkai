@@ -1,14 +1,14 @@
 <script>
 
-    window.dataTableInstances = window.dataTableInstances || {};
+    // window.dataTableInstances = window.dataTableInstances || {};
 
     function Datatable__for__Order_Aesthetic_List($tableId)
     {
-        var table_Id = $tableId;
-        if (window.dataTableInstances[table_Id])
-        {
-            return window.dataTableInstances[table_Id];
-        }
+        // var table_Id = $tableId;
+        // if (window.dataTableInstances[table_Id])
+        // {
+        //     return window.dataTableInstances[table_Id];
+        // }
 
         let $that = $('#'+$tableId);
         let $datatable_wrapper = $that.parents('.datatable-wrapper');
@@ -1365,7 +1365,7 @@
                             }
 
                             // 详情编辑
-                            $html_detail = '<a class="btn btn-xs modal-show--for--order--item-detail-editing" data-id="'+data+'">详情</a>';
+                            $html_detail = '<a class="btn btn-xs modal-show--for--order--item-detail-editing" data-role="admin" data-id="'+data+'">详情</a>';
 
                             // 审核
                             if(row.inspector_id == 0)
@@ -1479,7 +1479,7 @@
             },
             "drawCallback": function (settings) {
 
-                console.log('order-aesthetic-list-datatable-admin-execute');
+                console.log('order-aesthetic-list-datatable--for--admin--execute');
 
 //                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
 //                    this.api().column(1).nodes().each(function(cell, i) {
@@ -1504,8 +1504,8 @@
             "language": { url: '/common/dataTableI18n' },
         });
 
-        window.dataTableInstances[table_Id] = table;
-
-        return table;
+        // window.dataTableInstances[table_Id] = table;
+        //
+        // return table;
     }
 </script>

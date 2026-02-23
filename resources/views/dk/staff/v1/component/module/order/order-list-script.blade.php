@@ -1,4 +1,5 @@
 <script>
+
     $(function() {
 
 
@@ -18,7 +19,7 @@
             $modal.find('input[name="operate[type]"]').val('create');
             $modal.find('input[name="operate[id]"]').val(0);
             $modal.find('.box-title').html($title);
-            $modal.find('.edit-submit').attr('data-datatable-list-id',$table_id);
+            $modal.find('.edit-submit').data('datatable-list-id',$table_id);
             $modal.find('.radio-btn').show();
             $modal.modal('show');
 
@@ -117,7 +118,7 @@
 
                         var $datatable_wrapper = $that.closest('.datatable-wrapper');
                         var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
-                        $modal.find('.edit-submit').attr('data-datatable-list-id',$table_id);
+                        $modal.find('.edit-submit').data('datatable-list-id',$table_id);
 
                         $modal.modal('show');
                     }
@@ -221,7 +222,7 @@
 
                         var $datatable_wrapper = $that.closest('.datatable-wrapper');
                         var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
-                        $modal.find('.edit-submit').attr('data-datatable-list-id',$table_id);
+                        $modal.find('.edit-submit').data('datatable-list-id',$table_id);
 
                         $modal.modal('show');
                     }
@@ -325,7 +326,7 @@
 
                         var $datatable_wrapper = $that.closest('.datatable-wrapper');
                         var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
-                        $modal.find('.edit-submit').attr('data-datatable-list-id',$table_id);
+                        $modal.find('.edit-submit').data('datatable-list-id',$table_id);
 
                         $modal.modal('show');
                     }
@@ -1494,6 +1495,7 @@
             var $that = $(this);
             var $item_id = $that.data('item-id');
             var $table_id = $that.data('datatable-list-id');
+            console.log($table_id);
             var $row = $('#'+$table_id).find('[data-key="id"][data-value='+$item_id+']').parents('tr');
 
             var $modal_id = 'modal--for--order--item-detail-editing';
@@ -1748,9 +1750,54 @@
                         $modal.find('input[name="client_phone"]').val($response.data.client_phone);
 
                         $modal.find('select[name="client_type"]').val($response.data.client_type).trigger('change');
-                        $modal.find('select[name="client_intention"]').val($response.data.client_intention).trigger('change');
-                        $modal.find('select[name="teeth_count"]').val($response.data.teeth_count).trigger('change');
-                        $modal.find('select[name="field_1"]').val($response.data.field_1).trigger('change');
+
+
+                        if($response.data.order_category == 1)
+                        {
+                            $modal.find('select[name="project_id"]').data('project-category',1);
+                            $modal.find('.dental-box').show();
+                            $modal.find('.aesthetic-box').hide();
+                            $modal.find('.luxury-box').hide();
+                            $modal.find('.dental-field-1').attr('name','field_1');
+                            $modal.find('.aesthetic-field-1').attr('name','aesthetic_field_1');
+                            $modal.find('.luxury-field-1').attr('name','luxury_field_1');
+                            $modal.find('select[name="client_intention"]').val($response.data.client_intention).trigger('change');
+                            $modal.find('select[name="teeth_count"]').val($response.data.teeth_count).trigger('change');
+                            $modal.find('select[name="field_1"]').val($response.data.field_1).trigger('change');
+                        }
+                        else if($response.data.order_category == 11)
+                        {
+                            $modal.find('select[name="project_id"]').data('project-category',11);
+                            $modal.find('.dental-box').hide();
+                            $modal.find('.aesthetic-box').show();
+                            $modal.find('.luxury-box').hide();
+                            $modal.find('.dental-field-1').attr('name','dental_field_1');
+                            $modal.find('.aesthetic-field-1').attr('name','field_1');
+                            $modal.find('.luxury-field-1').attr('name','luxury_field_1');
+                            $modal.find('select[name="field_1"]').val($response.data.field_1).trigger('change');
+                        }
+                        else if($response.data.order_category == 31)
+                        {
+                            $modal.find('select[name="project_id"]').data('project-category',31);
+                            $modal.find('.dental-box').hide();
+                            $modal.find('.aesthetic-box').hide();
+                            $modal.find('.luxury-box').show();
+                            $modal.find('.dental-field-1').attr('name','dental_field_1');
+                            $modal.find('.aesthetic-field-1').attr('name','aesthetic_field_1');
+                            $modal.find('.luxury-field-1').attr('name','field_1');
+                            $modal.find('select[name="field_1"]').val($response.data.field_1).trigger('change');
+                        }
+                        else
+                        {
+                            $modal.find('dental-box').hide();
+                            $modal.find('aesthetic-box').hide();
+                            $modal.find('luxury-box').hide();
+                            $modal.find('.dental-field-1').attr('name','dental_field_1');
+                            $modal.find('.aesthetic-field-1').attr('name','aesthetic_field_1');
+                            $modal.find('.luxury-field-1').attr('name','luxury_field_1');
+                        }
+
+
 
                         $modal.find('select[name="location_city"]').val($response.data.location_city).trigger('change');
                         $modal.find('select[name="location_district"]').append(new Option($response.data.location_district, $response.data.location_district, true, true)).trigger('change');
@@ -1797,7 +1844,7 @@
                         $modal.find('textarea[name="description"]').val($response.data.description);
 
 
-                        $modal.find('.edit-submit').attr('data-datatable-list-id',$table_id);
+                        $modal.find('.edit-submit').data('datatable-list-id',$table_id);
 
                         $modal.modal('show');
                     }
@@ -2093,7 +2140,7 @@
                         $modal.find('textarea[name="description"]').val($response.data.description);
 
 
-                        $modal.find('.edit-submit').attr('data-datatable-list-id',$table_id);
+                        $modal.find('.edit-submit').data('datatable-list-id',$table_id);
 
                         $modal.modal('show');
                     }
@@ -2296,7 +2343,7 @@
                         $modal.find('textarea[name="description"]').val($response.data.description);
 
 
-                        $modal.find('.edit-submit').attr('data-datatable-list-id',$table_id);
+                        $modal.find('.edit-submit').data('datatable-list-id',$table_id);
 
                         $modal.modal('show');
                     }
@@ -2431,7 +2478,7 @@
             $modal.find('.id-box').html('【'+$id+'】');
 
 
-            $modal.find('.edit-submit').attr('data-datatable-list-id',$table_id);
+            $modal.find('.edit-submit').data('datatable-list-id',$table_id);
 
             $modal.modal('show');
         });
@@ -2549,7 +2596,7 @@
             $modal.find('.id-box').html('【'+$id+'】');
 
 
-            $modal.find('.edit-submit').attr('data-datatable-list-id',$table_id);
+            $modal.find('.edit-submit').data('datatable-list-id',$table_id);
 
             $modal.modal('show');
         });
@@ -3137,15 +3184,20 @@
 
     });
 
+
+
+
     function modal_show__for__order__item_detail_editing($that)
     {
         // var $that = $(this);
         var $id = $that.data('id');
         var $item_id = $that.data('id');
+        var $role = $that.data('role');
         var $row = $that.parents('tr');
         var $datatable_wrapper = $that.closest('.datatable-wrapper');
         var $item_category = $datatable_wrapper.data('datatable-item-category');
         var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+        console.log($table_id);
 
 
         $('.datatable-wrapper').removeClass('operating');
@@ -3166,6 +3218,17 @@
 
         $modal.find('input[name="operate[id]"]').val($id);
         $modal.find('input[name="item_id"]').val($id);
+
+        if($role == 'admin')
+        {
+            $modal.find('select[name="project_id"]').prop('disabled', false);
+            $modal.find('input[name="client_phone"]').prop('readonly', false);
+        }
+        else
+        {
+            $modal.find('select[name="project_id"]').prop('disabled', true);
+            $modal.find('input[name="client_phone"]').prop('readonly', true);
+        }
 
 
         var $data = new Object();
@@ -3220,15 +3283,58 @@
                     $modal.find('input[name="client_phone"]').val($response.data.client_phone);
 
                     $modal.find('select[name="client_type"]').val($response.data.client_type).trigger('change');
-                    $modal.find('select[name="client_intention"]').val($response.data.client_intention).trigger('change');
-                    $modal.find('select[name="teeth_count"]').val($response.data.teeth_count).trigger('change');
-                    $modal.find('select[name="field_1"]').val($response.data.field_1).trigger('change');
+
+                    if($response.data.order_category == 1)
+                    {
+                        $modal.find('select[name="project_id"]').data('project-category',1);
+                        $modal.find('.dental-box').show();
+                        $modal.find('.aesthetic-box').hide();
+                        $modal.find('.luxury-box').hide();
+                        $modal.find('.dental-field-1').attr('name','field_1');
+                        $modal.find('.aesthetic-field-1').attr('name','aesthetic_field_1');
+                        $modal.find('.luxury-field-1').attr('name','luxury_field_1');
+                        $modal.find('select[name="client_intention"]').val($response.data.client_intention).trigger('change');
+                        $modal.find('select[name="teeth_count"]').val($response.data.teeth_count).trigger('change');
+                        $modal.find('select[name="field_1"]').val($response.data.field_1).trigger('change');
+                    }
+                    else if($response.data.order_category == 11)
+                    {
+                        $modal.find('select[name="project_id"]').data('project-category',11);
+                        $modal.find('.dental-box').hide();
+                        $modal.find('.aesthetic-box').show();
+                        $modal.find('.luxury-box').hide();
+                        $modal.find('.dental-field-1').attr('name','dental_field_1');
+                        $modal.find('.aesthetic-field-1').attr('name','field_1');
+                        $modal.find('.luxury-field-1').attr('name','luxury_field_1');
+                        $modal.find('select[name="field_1"]').val($response.data.field_1).trigger('change');
+                    }
+                    else if($response.data.order_category == 31)
+                    {
+                        $modal.find('select[name="project_id"]').data('project-category',31);
+                        $modal.find('.dental-box').hide();
+                        $modal.find('.aesthetic-box').hide();
+                        $modal.find('.luxury-box').show();
+                        $modal.find('.dental-field-1').attr('name','dental_field_1');
+                        $modal.find('.aesthetic-field-1').attr('name','aesthetic_field_1');
+                        $modal.find('.luxury-field-1').attr('name','field_1');
+                        $modal.find('select[name="field_1"]').val($response.data.field_1).trigger('change');
+                    }
+                    else
+                    {
+                        $modal.find('dental-box').hide();
+                        $modal.find('aesthetic-box').hide();
+                        $modal.find('luxury-box').hide();
+                        $modal.find('.dental-field-1').attr('name','dental_field_1');
+                        $modal.find('.aesthetic-field-1').attr('name','aesthetic_field_1');
+                        $modal.find('.luxury-field-1').attr('name','luxury_field_1');
+                    }
 
                     $modal.find('select[name="location_city"]').val($response.data.location_city).trigger('change');
                     $modal.find('select[name="location_district"]').append(new Option($response.data.location_district, $response.data.location_district, true, true)).trigger('change');
 
                     if($response.data.project_er)
                     {
+                        // $modal.find('select[name="project_id"]').val($response.data.project_id).trigger('change');
                         $modal.find('select[name="project_id"]').append(new Option($response.data.project_er.name, $response.data.project_id, true, true)).trigger('change');
                     }
 
@@ -3269,7 +3375,7 @@
                     $modal.find('textarea[name="description"]').val($response.data.description);
 
 
-                    $modal.find('.edit-submit').attr('data-datatable-list-id',$table_id);
+                    $modal.find('.edit-submit').data('datatable-list-id',$table_id);
 
                     $modal.modal('show');
                 }
