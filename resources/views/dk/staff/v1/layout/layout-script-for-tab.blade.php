@@ -188,6 +188,12 @@
                 {
                     Datatable__for__Project_List('#'+$config.id);
                 }
+                else if($id == "order")
+                {
+                    console.log("order");
+                    console.log("order");
+                    console.log("order");
+                }
                 else if($id == "datatable-order-list")
                 {
                     Datatable__for__Order_List($config.id);
@@ -195,6 +201,16 @@
                 else if($id == "datatable-order-dental-list")
                 {
                     Datatable__for__Order_Dental_List($config.id);
+                }
+                else if($id == "datatable-order-aesthetic-list")
+                {
+                    Datatable__for__Order_Aesthetic_List($config.id);
+                }
+                else if($id == "delivery")
+                {
+                    console.log("delivery");
+                    console.log("delivery");
+                    console.log("delivery");
                 }
                 else if($id == "datatable-delivery-list")
                 {
