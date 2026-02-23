@@ -50,6 +50,14 @@ class DK_Common__Team extends Model
         'api_customer_user_name',
         'api_customer_password',
 
+        'serverFrom_id_2',
+        'serverFrom_name_2',
+        'api_customer_account_2',
+        'api_customer_name_2',
+        'api_customer_user_name_2',
+        'api_customer_password_2',
+
+
         'pre_unit_price',
 
         'visit_num', 'share_num', 'favor_num',  'follow_num', 'fans_num',
