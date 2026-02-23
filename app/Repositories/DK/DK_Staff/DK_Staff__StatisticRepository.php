@@ -2417,190 +2417,6 @@ class DK_Staff__StatisticRepository {
 
 
     // 【统计】【交付统计】项目
-    public function v1_11($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        if(!in_array($me->user_type,[0,1,9,11,61,66])) return response_error([],"你没有操作权限！");
-
-        $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date'] : date('Y-m-d');
-
-        // 工单统计（当日）
-        $query_order_production = DK_Common__Order::select('project_id')
-            ->addSelect(DB::raw("
-                    count(IF(is_published = 1, TRUE, NULL)) as production_published_num,
-                    count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as production_inspected_num,
-                    count(IF(inspected_result = '通过', TRUE, NULL)) as production_accepted_num,
-                    count(IF(inspected_result = '重复', TRUE, NULL)) as production_repeated_num,
-                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as production_refused_num,
-                    count(IF(inspected_result = '郊区通过', TRUE, NULL)) as production_accepted_suburb_num,
-                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as production_accepted_inside_num
-                "))
-            ->addSelect(DB::raw("
-                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_delivered_num,
-                    count(IF(delivered_result = '正常交付', TRUE, NULL)) as marketing_today_num,
-                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as marketing_tomorrow_num,
-                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_delivered_inside_num,
-                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_delivered_repeated_num,
-                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_delivered_rejected_num
-                "))
-            ->where('published_date',$assign_date)
-            ->groupBy('project_id')
-            ->get()
-            ->keyBy('project_id')
-            ->toArray();
-
-
-        // 工单统计（隔日）
-        $query_order_other_day = DK_Common__Order::select('project_id')
-            ->addSelect(DB::raw("
-                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as other_day_delivered_num,
-                    count(IF(delivered_result = '正常交付', TRUE, NULL)) as marketing_yesterday_num,
-                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as other_day_delivered_tomorrow,
-                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as other_day_delivered_inside,
-                    count(IF(delivered_result = '重复', TRUE, NULL)) as other_day_delivered_repeated,
-                    count(IF(delivered_result = '驳回', TRUE, NULL)) as other_day_delivered_rejected
-                "))
-            ->where('published_date','<>',$assign_date)
-            ->where('delivered_date',$assign_date)
-            ->groupBy('project_id')
-            ->get()
-            ->keyBy('project_id')
-            ->toArray();
-
-
-        $query_delivery = DK_Common__Delivery::select('project_id')
-            ->addSelect(DB::raw("
-                    count(IF(order_category = 1, TRUE, NULL)) as marketing_delivered_num,
-                    count(IF(order_category = 1 AND delivery_type = 1, TRUE, NULL)) as marketing_normal_num,
-                    count(IF(order_category = 1 AND delivery_type = 11, TRUE, NULL)) as marketing_distribute_num
-                "))
-            ->where('delivered_date',$assign_date)
-            ->groupBy('project_id')
-            ->get()
-            ->keyBy('project_id')
-            ->toArray();
-
-
-        $project_list = DK_Common__Project::select('id','name','alias_name')
-            ->where('active', 1)
-//            ->where('item_status', 1)
-            ->withTrashed()
-            ->get();
-
-        foreach ($project_list as $k => $v)
-        {
-            $project_list[$k]->production_published_num = 0;
-            $project_list[$k]->production_inspected_num = 0;
-            $project_list[$k]->production_accepted_num = 0;
-            $project_list[$k]->production_repeated_num = 0;
-            $project_list[$k]->production_refused_num = 0;
-            $project_list[$k]->production_accepted_suburb_num = 0;
-            $project_list[$k]->production_accepted_inside_num = 0;
-
-            $project_list[$k]->marketing_delivered_num = 0;
-            $project_list[$k]->marketing_today_num = 0;
-            $project_list[$k]->marketing_tomorrow_num = 0;
-            $project_list[$k]->marketing_yesterday_num = 0;
-            $project_list[$k]->marketing_distribute_num = 0;
-
-            // 当日生产
-            if(isset($query_order_production[$v->id]))
-            {
-                $project_list[$k]->production_published_num = $query_order_production[$v->id]['production_published_num'];
-                $project_list[$k]->production_inspected_num = $query_order_production[$v->id]['production_inspected_num'];
-                $project_list[$k]->production_accepted_num = $query_order_production[$v->id]['production_accepted_num'];
-                $project_list[$k]->production_repeated_num = $query_order_production[$v->id]['production_repeated_num'];
-                $project_list[$k]->production_refused_num = $query_order_production[$v->id]['production_refused_num'];
-                $project_list[$k]->production_accepted_suburb_num = $query_order_production[$v->id]['production_accepted_suburb_num'];
-                $project_list[$k]->production_accepted_inside_num = $query_order_production[$v->id]['production_accepted_inside_num'];
-
-                $project_list[$k]->marketing_today_num = $query_order_production[$v->id]['marketing_today_num'];
-                $project_list[$k]->marketing_tomorrow_num = $query_order_production[$v->id]['marketing_tomorrow_num'];
-            }
-
-            // 隔日交付
-            if(isset($query_order_other_day[$v->id]))
-            {
-                $project_list[$k]->marketing_yesterday_num = $query_order_other_day[$v->id]['marketing_yesterday_num'];
-            }
-
-            // 交付统计
-            if(isset($query_delivery[$v->id]))
-            {
-                $project_list[$k]->marketing_delivered_num = $query_delivery[$v->id]['marketing_delivered_num'];
-                $project_list[$k]->marketing_distribute_num = $query_delivery[$v->id]['marketing_distribute_num'];
-            }
-        }
-
-        $project_list_filtered = $project_list->filter(function ($item) {
-            return ($item->production_published_num > 0 || $item->marketing_yesterday_num > 0 || $item->marketing_delivered_num > 0);
-        });
-//        dd($list_filtered);
-
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-
-            foreach ($project_list_filtered as $k => $v)
-            {
-
-                $daily = DK_Statistic__Project_Daily::select('*')
-                    ->where('project_id',$v->id)
-                    ->where('statistic_date',$assign_date)
-                    ->first();
-
-                if($daily)
-                {
-                    if($daily->is_confirmed = 1)
-                    {
-                        continue;
-                    }
-                }
-                else
-                {
-                    $daily = new DK_Statistic__Project_Daily;
-                    $daily->creator_id = $me->id;
-                }
-
-                $daily->statistic_date = $assign_date;
-                $daily->project_id = $v->id;
-
-                $daily->production_published_num = $v->production_published_num;
-                $daily->production_inspected_num = $v->production_inspected_num;
-                $daily->production_accepted_num = $v->production_accepted_num;
-                $daily->production_accepted_suburb_num = $v->production_accepted_suburb_num;
-                $daily->production_accepted_inside_num = $v->production_accepted_inside_num;
-                $daily->production_repeated_num = $v->production_repeated_num;
-                $daily->production_refused_num = $v->production_refused_num;
-
-                $daily->marketing_delivered_num = $v->marketing_delivered_num;
-                $daily->marketing_today_num = $v->marketing_today_num;
-                $daily->marketing_yesterday_num = $v->marketing_yesterday_num;
-                $daily->marketing_tomorrow_num = $v->marketing_tomorrow_num;
-                $daily->marketing_distribute_num = $v->marketing_distribute_num;
-
-                $bool = $daily->save();
-                if(!$bool) throw new Exception("DK_Statistic__Project_Daily--save--fail");
-
-            }
-
-            DB::commit();
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
     public function o1__statistic__marketing__project($post_data)
     {
         $this->get_me();
@@ -2619,7 +2435,7 @@ class DK_Staff__StatisticRepository {
             }
         }
         // 工单统计（当日）
-        $query_order_today = DK_Common__Order::select('project_id')
+        $query_order_today = DK_Common__Order::select('delivered_project_id')
             ->addSelect(DB::raw("
                     count(IF(delivered_status = 1, TRUE, NULL)) as count__for__order_today_all,
                     count(IF(delivered_result = '正常交付', TRUE, NULL)) as count__for__order_today_normal,
@@ -2638,7 +2454,7 @@ class DK_Staff__StatisticRepository {
 
 
         // 工单统计（前日）
-        $query_order_yesterday = DK_Common__Order::select('project_id')
+        $query_order_yesterday = DK_Common__Order::select('delivered_project_id')
             ->addSelect(DB::raw("
                     count(IF(delivered_result in ('正常交付','折扣交付','郊区交付','内部交付'), TRUE, NULL)) as count__for__order_yesterday_all
                 "))
