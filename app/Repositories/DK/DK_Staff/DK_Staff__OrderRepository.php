@@ -413,7 +413,7 @@ class DK_Staff__OrderRepository {
                 }
                 else
                 {
-                    $query->where('dk_common__order.project_id', $delivered_projectId);
+                    $query->where('dk_common__order.delivered_project_id', $delivered_projectId);
                 }
             }
         }
