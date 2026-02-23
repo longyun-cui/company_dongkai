@@ -144,7 +144,12 @@ class DK_Staff__IndexRepository {
 
 
 
-        $team_list = DK_Common__Team::select('id','name')->where('active',1)->where('team_category',41)->where('team_type',11)->get();
+        $team_list = DK_Common__Team::select('id','name')
+            ->where('active',1)
+            ->where('item_status',1)
+            ->where('team_category',41)
+            ->where('team_type',11)
+            ->get();
         $view_data['team_list'] = $team_list;
 
 
@@ -152,7 +157,9 @@ class DK_Staff__IndexRepository {
 
 //        $project_list
 
-        $project_query = DK_Common__Project::select('id','name')->where('active',1)->where('item_status',1);
+        $project_query = DK_Common__Project::select('id','name')
+            ->where('active',1)
+            ->where('item_status',1);
         // 客服部
         if($me->staff_category == 41)
         {
@@ -236,10 +243,17 @@ class DK_Staff__IndexRepository {
         $project_list = $project_query->get();
         $view_data['project_list'] = $project_list;
 
-        $client_list = DK_Common__Client::select('id','name')->where('active',1)->where('item_status',1)->get();
+        // 客户
+        $client_list = DK_Common__Client::select('id','name')
+            ->where('active',1)
+            ->where('item_status',1)
+            ->get();
         $view_data['client_list'] = $client_list;
 
-        $location_city_list = DK_Common__Location::select('id','location_city')->whereIn('item_status',[1])->get();
+        // 地区-城市
+        $location_city_list = DK_Common__Location::select('id','location_city')
+            ->whereIn('item_status',[1])
+            ->get();
         $view_data['location_city_list'] = $location_city_list;
 
         $view_blade = env('DK_STAFF__TEMPLATE').'index';

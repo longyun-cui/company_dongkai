@@ -18,7 +18,7 @@
 
             @if(in_array($me->user_type,[0,1,9,11]))
             <select class="search-filter form-filter filter-lg select2-box-c" name="statistic-production-project-team">
-                <option value="-1">选择大区</option>
+                <option value="-1">选择团队</option>
                 @if(!empty($team_list))
                     @foreach($team_list as $v)
                         <option value="{{ $v->id }}">{{ $v->name }}</option>
