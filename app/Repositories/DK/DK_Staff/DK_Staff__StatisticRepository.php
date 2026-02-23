@@ -2578,8 +2578,6 @@ class DK_Staff__StatisticRepository {
                 $project_list[$k]->count__for__order_today_refused = $query_order_today[$v->id]['count__for__order_today_refused'];
                 $project_list[$k]->count__for__order_today_tomorrow = $query_order_today[$v->id]['count__for__order_today_tomorrow'];
 
-                $project_list[$k]->marketing_today_num = $query_order_today[$v->id]['marketing_today_num'];
-                $project_list[$k]->marketing_tomorrow_num = $query_order_today[$v->id]['marketing_tomorrow_num'];
             }
 
             // 隔日交付
