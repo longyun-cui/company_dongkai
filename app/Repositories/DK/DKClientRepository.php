@@ -28,6 +28,10 @@ use App\Models\DK_CC\DK_CC_Call_Record;
 use App\Models\DK_CC\DK_CC_Call_Record_Current;
 
 
+use App\Models\DK\DK_Common\DK_Common__Order;
+use App\Models\DK\DK_Common\DK_Common__Delivery;
+
+
 use App\Jobs\DK_Client\AutomaticDispatchingJob;
 
 use App\Repositories\Common\CommonRepository;
@@ -412,7 +416,7 @@ class DKClientRepository {
             return view($view_blade)->with($view_data);
         }
 
-        $order = DK_Order::select(['id','client_name','client_phone','wx_id','location_city','location_district','description','recording_address_list'])->find($order_id);
+        $order = DK_Common__Order::select(['id','client_name','client_phone','wx_id','location_city','location_district','description','recording_address_list'])->find($order_id);
         if($order)
         {
             if($order->client_phone == $phone)
@@ -462,7 +466,7 @@ class DKClientRepository {
             return view($view_blade)->with($view_data);
         }
 
-        $delivery = DK_Pivot_Client_Delivery::with([
+        $delivery = DK_Common__Delivery::with([
             'order_er'=>function($query) {
                 $query->select(['id','client_name','client_phone','wx_id','location_city','location_district','description','recording_address_list']);
         }

@@ -240,15 +240,25 @@ class DK_Staff__IndexRepository {
             }
         }
 
-        $project_list = $project_query->get();
+        $project_list = (clone $project_query)->get();
+        $project_list__for__dental = (clone $project_query)->where('project_category',1)->get();
+        $project_list__for__aesthetic = (clone $project_query)->where('project_category',11)->get();
         $view_data['project_list'] = $project_list;
+        $view_data['project_list__for__dental'] = $project_list__for__dental;
+        $view_data['project_list__for__aesthetic'] = $project_list__for__aesthetic;
+
 
         // 客户
-        $client_list = DK_Common__Client::select('id','name')
+        $client_query = DK_Common__Client::select('id','name')
             ->where('active',1)
-            ->where('item_status',1)
-            ->get();
+            ->where('item_status',1);
+        $client_list = (clone $client_query)->get();
+        $client_list__for__dental = (clone $client_query)->where('client_category',1)->get();
+        $client_list__for__aesthetic = (clone $client_query)->where('client_category',11)->get();
         $view_data['client_list'] = $client_list;
+        $view_data['client_list__for__dental'] = $client_list__for__dental;
+        $view_data['client_list__for__aesthetic'] = $client_list__for__aesthetic;
+
 
         // 地区-城市
         $location_city_list = DK_Common__Location::select('id','location_city')

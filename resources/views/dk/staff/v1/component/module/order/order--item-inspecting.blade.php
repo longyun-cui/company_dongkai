@@ -126,7 +126,7 @@
                         <div class="col-md-2 item-detail-operate" data-operate=""></div>
                     </div>
                     {{--患者类型--}}
-                    <div class="form-group">
+                    <div class="form-group dental-box">
                         <label class="control-label col-md-2">患者类型</label>
                         <div class="col-md-9 ">
                             <select class="form-control modal--select2 select2-reset"
@@ -160,7 +160,7 @@
                         </div>
                     </div>
                     {{--客户意向--}}
-                    <div class="form-group">
+                    <div class="form-group dental-box">
                         <label class="control-label col-md-2">客户意向</label>
                         <div class="col-md-9 ">
                             <select class="form-control modal--select2 select2-reset"

@@ -1,4 +1,8 @@
-<div class="row datatable-body datatable-wrapper order-list-clone" data-datatable-item-category="order" data-item-name="工单">
+<div class="row datatable-body datatable-wrapper order-list-clone"
+     data-order-category="1"
+     data-datatable-item-category="order"
+     data-item-name="口腔工单"
+>
 
 
     <div class="col-md-12 datatable-search-row datatable-search-box">
@@ -42,8 +46,8 @@
             {{--选择项目--}}
             <select class="search-filter form-filter filter-lg select2-box-c select2-project-c-" data-item-category="1" name="order-project">
                 <option value="-1">选择项目</option>
-                @if(!empty($project_list) && count($project_list) > 0)
-                    @foreach($project_list as $v)
+                @if(!empty($project_list__for__dental) && count($project_list__for__dental) > 0)
+                    @foreach($project_list__for__dental as $v)
                         <option value="{{ $v->id }}">{{ $v->name }}</option>
                     @endforeach
                 @endif
@@ -52,7 +56,7 @@
             {{--客户类型--}}
             <select class="search-filter form-filter filter-md select2-box-c _none" name="order-client-type">
                 <option value="-1">客户类型</option>
-                @foreach(config('info.client_type') as $k => $v)
+                @foreach(config('dk.common-config.client_type') as $k => $v)
                     <option value="{{ $k }}">{{ $v }}</option>
                 @endforeach
             </select>
@@ -69,7 +73,7 @@
             {{--审核结果--}}
             <select class="search-filter form-filter filter-xl select2-box-c" name="order-inspected-result[]" multiple="multiple">
                 <option value="-1">审核结果</option>
-                @foreach(config('info.inspected_result_for_team') as $v)
+                @foreach(config('dk.common-config.inspected_result_for_team') as $v)
                     <option value="{{ $v }}">{{ $v }}</option>
                 @endforeach
             </select>
@@ -77,7 +81,7 @@
             @if(in_array($me->user_type,[0,1,9,11,91]))
                 <select class="search-filter form-filter filter-md select2-box-c" name="order-appealed-status">
                     <option value="">申诉状态</option>
-                    @foreach(config('info.appealed_status') as $v)
+                    @foreach(config('dk.common-config.appealed_status') as $v)
                         <option value="{{ $v }}">{{ $v }}</option>
                     @endforeach
                 </select>

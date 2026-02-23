@@ -23,16 +23,14 @@
             <input type="text" class="search-filter form-filter filter-md filter-keyup" name="order-client-phone" placeholder="客户电话" value="" />
 
 
-            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre date-pre" data-target="order-assign">
-                <i class="fa fa-chevron-left"></i>
-            </button>
-            <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="order-assign" placeholder="交付日期" value="" readonly="readonly" />
-            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next date-next" data-target="order-assign">
-                <i class="fa fa-chevron-right"></i>
-            </button>
+            <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-start" placeholder="开始日期" value="" readonly="readonly" />
+            <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-ended" placeholder="结束日期" value="" readonly="readonly" />
 
 
-            <select class="search-filter form-filter filter-lg select2-project-c delivery-project" data-item-category="11" name="delivery-project">
+            <select class="search-filter form-filter filter-lg select2-box-c select2--project-c- delivery-project"
+                    data-item-category="11"
+                    name="delivery-project"
+            >
                 <option value="-1">选择项目</option>
                 @if(!empty($project_list))
                     @foreach($project_list as $v)
@@ -52,10 +50,19 @@
             </select>
 
 
-            <select class="search-filter form-filter filter-md select2-box-c" name="order-delivery-type" style="width:88px;">
+            <select class="search-filter form-filter filter-md select2-box-c" name="order-delivery-type">
                 <option value="-1">交付类型</option>
                 <option value="1">交付</option>
                 <option value="11">分发</option>
+            </select>
+
+
+            <select class="search-filter form-filter filter-md select2-box-c" name="order-delivery-result">
+                <option value="-1">交付结果</option>
+                <option value="正常交付">正常交付</option>
+                <option value="折扣交付">折扣交付</option>
+                <option value="郊区交付">郊区交付</option>
+                <option value="内部交付">内部交付</option>
             </select>
 
 
@@ -123,7 +130,7 @@
                 <option value="0">待导出</option>
             </select>
 
-            <button type="button" class="btn btn-default btn-filter bulk-submit-for-delivery-exported" id="">
+            <button type="button" class="btn btn-default btn-filter bulk-submit-for-delivery-exported">
                 <i class="fa fa-check"></i> 批量更改导出状态
             </button>
 

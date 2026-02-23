@@ -4,7 +4,7 @@
 
     function Datatable__for__Order_List($tableId)
     {
-        var table_Id = $tableId
+        var table_Id = $tableId;
         if (window.dataTableInstances[table_Id])
         {
             return window.dataTableInstances[table_Id];
@@ -1195,9 +1195,6 @@
                         var $html_distribute = '';
                         var $html_appeal = '';
                         var $html_appeal_handle = '';
-
-
-                        $html_detail = '<a class="btn btn-xs item-modal-show-for-detail" data-id="'+data+'">详情</a>';
 
                         // 记录
                         if(row.created_type != 9)

@@ -4,6 +4,7 @@
 
     function Datatable__for__Order_Aesthetic_List($tableId)
     {
+        var table_Id = $tableId;
         if (window.dataTableInstances[table_Id])
         {
             return window.dataTableInstances[table_Id];
@@ -1345,7 +1346,7 @@
                         // 编辑
                         if(row.is_published == 0)
                         {
-                            $html_edit = '<a class="btn btn-xs modal-show--for--order-dental--item-edit" data-id="'+data+'">编辑</a>';
+                            $html_edit = '<a class="btn btn-xs modal-show--for--order-aesthetic--item-edit" data-id="'+data+'">编辑</a>';
                         }
 
                         // 发布
@@ -1360,7 +1361,7 @@
                             // 编辑
                             if(row.inspected_status == 1 && row.inspected_result == '二次待审')
                             {
-                                $html_edit = '<a class="btn btn-xs modal-show--for--order-dental--item-edit" data-id="'+data+'">编辑</a>';
+                                $html_edit = '<a class="btn btn-xs modal-show--for--order-aesthetic--item-edit" data-id="'+data+'">编辑</a>';
                             }
 
                             // 详情编辑

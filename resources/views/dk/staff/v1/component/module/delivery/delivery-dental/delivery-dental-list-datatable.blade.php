@@ -263,7 +263,7 @@
                         {
                             $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
                         }
-                        else if(data == "已交付")
+                        else if(data == "正常交付")
                         {
                             $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
                         }
@@ -484,7 +484,22 @@
                         else return '--';
                     }
                 },
-                @if(in_array($me->user_type,[0,1,9,11]))
+                {
+                    "title": "录音地址",
+                    "data": "order_id",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.order_er)
+                        {
+                            if(row.order_er.recording_address) return '<a target="_blank" href="'+row.order_er.recording_address+'">录音地址</a>';
+                            else return "--";
+                        }
+                        else return "--";
+                    }
+                },
+                @if(in_array($me->staff_category,[0,1,9]))
                 {
                     "title": "所属公司",
                     "data": "company_id",
@@ -535,28 +550,13 @@
                 },
                 @endif
                 {
-                    "title": "录音地址",
-                    "data": "order_id",
-                    "className": "",
-                    "width": "80px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(row.order_er)
-                        {
-                            if(row.order_er.recording_address) return '<a target="_blank" href="'+row.order_er.recording_address+'">录音地址</a>';
-                            else return "--";
-                        }
-                        else return "--";
-                    }
-                },
-                {
                     "className": "text-center",
                     "width": "80px",
                     "title": "创建者",
                     "data": "creator_id",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return row.creator == null ? '未知' : '<a target="_blank" href="/user/'+row.creator.id+'">'+row.creator.name+'</a>';
+                        return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.name+'</a>';
                     }
                 },
                 {

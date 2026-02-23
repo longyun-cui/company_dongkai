@@ -640,7 +640,7 @@ class DK_Staff__OrderRepository {
             }
             else if(in_array($me->staff_cagegory,[51]))
             {
-                if($v->item_category == 1)
+                if($v->order_category == 1)
                 {
                     $time = time();
                     if(($v->published_at > 0) && (($time - $v->published_at) > 86400))
@@ -733,7 +733,7 @@ class DK_Staff__OrderRepository {
             'project_id' => 'required|numeric|min:1',
             'client_name' => 'required',
             'client_phone' => 'required|numeric',
-            'client_intention' => 'required',
+//            'client_intention' => 'required',
 //            'field_1' => 'required',
 //            'location_city' => 'required',
 //            'location_district' => 'required',
@@ -749,7 +749,7 @@ class DK_Staff__OrderRepository {
             'client_phone.required' => '请填写客户电话！',
             'client_phone.numeric' => '客户电话格式有误！',
 //            'client_type.required' => '请选择患者类型！',
-            'client_intention.required' => '请选择客户意向！',
+//            'client_intention.required' => '请选择客户意向！',
 //            'location_city.required' => '请选择城市！',
 //            'location_district.required' => '请选择行政区！',
             'description.required' => '请输入通话小结！',
@@ -759,15 +759,17 @@ class DK_Staff__OrderRepository {
 
         if ($orderCategory == 1)
         {
+            $fields['client_intention'] = 'required';
             $fields['client_type'] = 'required';
             $fields['field_1'] = 'required';
+            $messages['client_intention.required'] = '请选择客户意向！';
             $messages['client_type.required'] = '请选择患者类型！';
             $messages['field_1.required'] = '请选择牙齿数量！';
         }
         else if ($orderCategory == 11)
         {
             $fields['field_1'] = 'required';
-            $messages['field_1.required'] = '请选择类型！';
+            $messages['field_1.required'] = '请选择品类！';
         }
         else if ($orderCategory == 31)
         {
@@ -1990,9 +1992,12 @@ class DK_Staff__OrderRepository {
         $recording_quality = $post_data["order-item-inspecting--recording-quality"];
 
         $project_id = $post_data["project_id"];
-        $client_type = $post_data["client_type"];
         $client_name = $post_data["client_name"];
-        $client_intention = $post_data["client_intention"];
+        if($item->order_category == 1)
+        {
+            $client_type = $post_data["client_type"];
+            $client_intention = $post_data["client_intention"];
+        }
         $location_city = $post_data["location_city"];
         $location_district = $post_data["location_district"];
         $field_1 = $post_data["field_1"];
@@ -2097,18 +2102,20 @@ class DK_Staff__OrderRepository {
             $record_row['after'] = $client_name;
             $record_content[] = $record_row;
         }
-        // 患者类型
-        if($item->client_type != $client_type)
+        if($item->order_category == 1)
         {
-            $record_row = [];
-            $record_row['title'] = '患者类型';
-            $record_row['field'] = 'client_type';
-            $record_row['before'] = config('dk.common-config.dental_type.'.$item->client_type);
-            $record_row['after'] = config('dk.common-config.dental_type.'.$client_type);
-            $record_content[] = $record_row;
-        }
-        // 客户意愿
-        if($item->client_intention != $client_intention)
+            // 患者类型
+            if($item->client_type != $client_type)
+            {
+                $record_row = [];
+                $record_row['title'] = '患者类型';
+                $record_row['field'] = 'client_type';
+                $record_row['before'] = config('dk.common-config.dental_type.'.$item->client_type);
+                $record_row['after'] = config('dk.common-config.dental_type.'.$client_type);
+                $record_content[] = $record_row;
+            }
+            // 客户意愿
+            if($item->client_intention != $client_intention)
         {
             $record_row = [];
             $record_row['title'] = '客户意愿';
@@ -2116,6 +2123,7 @@ class DK_Staff__OrderRepository {
             $record_row['before'] = $item->client_intention;
             $record_row['after'] = $client_intention;
             $record_content[] = $record_row;
+        }
         }
         // 城市区域
         if($item->location_city != $location_city || $item->location_district != $location_district)
@@ -2195,8 +2203,11 @@ class DK_Staff__OrderRepository {
         {
             if($item->project_id != $project_id) $item->project_id = $project_id;
             if($item->client_name != $client_name) $item->client_name = $client_name;
-            if($item->client_type != $client_type) $item->client_type = $client_type;
-            if($item->client_intention != $client_intention) $item->client_intention = $client_intention;
+            if($item->order_category == 1)
+            {
+                if($item->client_type != $client_type) $item->client_type = $client_type;
+                if($item->client_intention != $client_intention) $item->client_intention = $client_intention;
+            }
             if($item->location_city != $location_city) $item->location_city = $location_city;
             if($item->location_district != $location_district) $item->location_district = $location_district;
             if($item->field_1 != $field_1) $item->field_1 = $field_1;
@@ -3302,6 +3313,7 @@ class DK_Staff__OrderRepository {
                 ->where(function ($query) use($delivered_project_id,$delivered_client_id) {
                     $query->where('delivered_project_id',$delivered_project_id)->orWhere('delivered_client_id',$delivered_client_id);
                 })
+                ->where('id','<>',$id)
                 ->get();
             if(count($is_order_list) > 0)
             {
@@ -3312,7 +3324,8 @@ class DK_Staff__OrderRepository {
                     // 判断项目
                     if($o->delivered_project_id == $delivered_project_id)
                     {
-                        $delivered_result = '项目·重复';
+//                        $delivered_result = '项目·重复';
+                        $delivered_result = '重复';
                         $non_delivery_reason = '【项目】重复';
                         break; // 跳出循环
                     }
@@ -3320,7 +3333,8 @@ class DK_Staff__OrderRepository {
                     // 判断客户
                     if($o->delivered_client_id == $delivered_client_id)
                     {
-                        $delivered_result = '客户·重复';
+//                        $delivered_result = '客户·重复';
+                        $delivered_result = '重复';
                         $non_delivery_reason = '【客户】重复';
                         break; // 跳出循环
                     }
@@ -3337,6 +3351,7 @@ class DK_Staff__OrderRepository {
                 ->where(function ($query) use($delivered_project_id,$delivered_client_id) {
                     $query->where('project_id',$delivered_project_id)->orWhere('client_id',$delivered_client_id);
                 })
+                ->where('id','<>',$item->delivery_id)
                 ->get();
             if(count($is_delivered_list) > 0)
             {

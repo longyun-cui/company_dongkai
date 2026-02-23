@@ -1,4 +1,8 @@
-<div class="row datatable-body datatable-wrapper order-aesthetic-list-clone" data-datatable-item-category="aesthetic" data-item-name="工单">
+<div class="row datatable-body datatable-wrapper order-aesthetic-list-clone"
+     data-order-category="11"
+     data-datatable-order-category="aesthetic"
+     data-item-name="医美工单"
+>
 
 
     <div class="col-md-12 datatable-search-row datatable-search-box">
@@ -60,8 +64,8 @@
             {{--选择项目--}}
             <select class="search-filter form-filter filter-lg select2-box-c select2--project-c-" data-item-category="1" name="order-project">
                 <option value="-1">选择项目</option>
-                @if(!empty($project_list) && count($project_list) > 0)
-                    @foreach($project_list as $v)
+                @if(!empty($project_list__for__aesthetic) && count($project_list__for__aesthetic) > 0)
+                    @foreach($project_list__for__aesthetic as $v)
                         <option value="{{ $v->id }}">{{ $v->name }}</option>
                     @endforeach
                 @endif
@@ -74,8 +78,8 @@
                         data-client-category="1"
                 >
                     <option value="-1">选择交付项目</option>
-                    @if(!empty($project_list) && count($project_list) > 0)
-                        @foreach($project_list as $v)
+                    @if(!empty($project_list__for__aesthetic) && count($project_list__for__aesthetic) > 0)
+                        @foreach($project_list__for__aesthetic as $v)
                             <option value="{{ $v->id }}">{{ $v->name }}</option>
                         @endforeach
                     @endif
@@ -89,8 +93,8 @@
                         data-client-category="1"
                 >
                     <option value="-1">选择交付客户</option>
-                    @if(!empty($client_list) && count($client_list) > 0)
-                        @foreach($client_list as $v)
+                    @if(!empty($client_list__for__aesthetic) && count($client_list__for__aesthetic) > 0)
+                        @foreach($client_list__for__aesthetic as $v)
                             <option value="{{ $v->id }}">{{ $v->name }}</option>
                         @endforeach
                     @endif
@@ -105,15 +109,6 @@
                     <option value="1">可分发</option>
                 </select>
             @endif
-
-
-            {{--客户类型--}}
-            <select class="search-filter form-filter filter-md select2-box-c" name="order-client-type">
-                <option value="-1">客户类型</option>
-                @foreach(config('dk.common-config.dental_type') as $k => $v)
-                    <option value="{{ $k }}">{{ $v }}</option>
-                @endforeach
-            </select>
 
 
             {{--录音质量--}}
@@ -280,7 +275,7 @@
                 </button>
 
 
-                <button type="button" onclick="" class="btn btn-default btn-filter order--bulk-export-summit" data-order-category="1">
+                <button type="button" onclick="" class="btn btn-default btn-filter order--bulk-export-summit" data-order-category="11">
                     <i class="fa fa-download"></i> 批量导出
                 </button>
 
@@ -303,9 +298,11 @@
                         data-project-category="1"
                 >
                     <option value="0">选择交付项目</option>
-                    @foreach($project_list as $v)
-                        <option value="{{ $v->id }}">{{ $v->name }}</option>
-                    @endforeach
+                    @if(!empty($project_list__for__aesthetic) && count($project_list__for__aesthetic) > 0)
+                        @foreach($project_list__for__aesthetic as $v)
+                            <option value="{{ $v->id }}">{{ $v->name }}</option>
+                        @endforeach
+                    @endif
                 </select>
 
                 {{--交付客户--}}
@@ -314,8 +311,8 @@
                         data-client-category="1"
                 >
                     <option value="0">选择交付客户</option>
-                    @if(!empty($client_list) && count($client_list) > 0)
-                        @foreach($client_list as $v)
+                    @if(!empty($client_list__for__aesthetic) && count($client_list__for__aesthetic) > 0)
+                        @foreach($client_list__for__aesthetic as $v)
                             <option value="{{ $v->id }}">{{ $v->name }}</option>
                         @endforeach
                     @endif

@@ -239,15 +239,15 @@
                 },
                 {
                     "title": "交付类型",
-                    "data": "pivot_type",
+                    "data": "delivery_type",
                     "className": "",
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         if(!data) return "--";
                         var $result_html = '';
-                        if(data == 95) return '<small class="btn-xs bg-green">交付</small>';
-                        else if(data == 96) return '<small class="btn-xs bg-orange">分发</small>';
+                        if(data == 1) return '<small class="btn-xs bg-green">交付</small>';
+                        else if(data == 11) return '<small class="btn-xs bg-orange">分发</small>';
                         return $result_html;
                     }
                 },
@@ -260,7 +260,23 @@
                     render: function(data, type, row, meta) {
                         if(!data) return "--";
                         var $result_html = '';
-                        if(data == "已交付")
+                        if(data == "交付")
+                        {
+                            $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
+                        }
+                        else if(data == "正常交付")
+                        {
+                            $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
+                        }
+                        else if(data == "折扣交付")
+                        {
+                            $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
+                        }
+                        else if(data == "郊区交付")
+                        {
+                            $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
+                        }
+                        else if(data == "内部交付")
                         {
                             $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
                         }
@@ -327,60 +343,10 @@
                             return '未指定';
                         }
                         else {
-                            return '<a href="javascript:void(0);">'+row.client_er.username+'</a>';
+                            return '<a href="javascript:void(0);">'+row.client_er.name+'</a>';
                         }
                     }
                 },
-                    @if(in_array($me->user_type,[0,1,9,11]))
-                {
-                    "title": "所属公司",
-                    "data": "company_id",
-                    "className": "",
-                    "width": "120px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(row.company_er == null)
-                        {
-                            return '--';
-                        }
-                        else {
-                            return '<a href="javascript:void(0);">'+row.company_er.name+'</a>';
-                        }
-                    }
-                },
-                {
-                    "title": "所属渠道",
-                    "data": "channel_id",
-                    "className": "",
-                    "width": "120px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(row.channel_er == null)
-                        {
-                            return '--';
-                        }
-                        else {
-                            return '<a href="javascript:void(0);">'+row.channel_er.name+'</a>';
-                        }
-                    }
-                },
-                {
-                    "title": "所属商务",
-                    "data": "business_id",
-                    "className": "",
-                    "width": "120px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(row.business_er == null)
-                        {
-                            return '--';
-                        }
-                        else {
-                            return '<a href="javascript:void(0);">'+row.business_er.name+'</a>';
-                        }
-                    }
-                },
-                    @endif
                 {
                     "title": "品类",
                     "data": "order_id",
@@ -475,17 +441,17 @@
                         else return '--';
                     }
                 },
-                {
-                    "title": "渠道来源",
-                    "data": "order_id",
-                    "className": "",
-                    "width": "60px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(row.order_er) return row.order_er.channel_source;
-                        return "--";
-                    }
-                },
+                // {
+                //     "title": "渠道来源",
+                //     "data": "order_id",
+                //     "className": "",
+                //     "width": "60px",
+                //     "orderable": false,
+                //     render: function(data, type, row, meta) {
+                //         if(row.order_er) return row.order_er.channel_source;
+                //         return "--";
+                //     }
+                // },
                 {
                     "title": "通话小结",
                     "data": "order_id",
@@ -516,6 +482,56 @@
                         else return "--";
                     }
                 },
+                @if(in_array($me->staff_category,[0,1,9]))
+                {
+                    "title": "所属公司",
+                    "data": "company_id",
+                    "className": "",
+                    "width": "120px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.company_er == null)
+                        {
+                            return '--';
+                        }
+                        else {
+                            return '<a href="javascript:void(0);">'+row.company_er.name+'</a>';
+                        }
+                    }
+                },
+                {
+                    "title": "所属渠道",
+                    "data": "channel_id",
+                    "className": "",
+                    "width": "120px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.channel_er == null)
+                        {
+                            return '--';
+                        }
+                        else {
+                            return '<a href="javascript:void(0);">'+row.channel_er.name+'</a>';
+                        }
+                    }
+                },
+                {
+                    "title": "所属商务",
+                    "data": "business_id",
+                    "className": "",
+                    "width": "120px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.business_er == null)
+                        {
+                            return '--';
+                        }
+                        else {
+                            return '<a href="javascript:void(0);">'+row.business_er.name+'</a>';
+                        }
+                    }
+                },
+                @endif
                 {
                     "className": "text-center",
                     "width": "80px",
@@ -523,7 +539,7 @@
                     "data": "creator_id",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return row.creator == null ? '未知' : '<a target="_blank" href="/user/'+row.creator.id+'">'+row.creator.username+'</a>';
+                        return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.name+'</a>';
                     }
                 },
                 {

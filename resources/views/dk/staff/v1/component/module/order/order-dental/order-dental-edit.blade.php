@@ -6,7 +6,7 @@
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px">
-                <h3 class="box-title">添加工单</h3>
+                <h3 class="box-title">添加【口腔】工单</h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
@@ -20,6 +20,7 @@
                 <input readonly type="hidden" class="form-control" name="operate[id]" value="0" data-default="0">
                 <input readonly type="hidden" class="form-control" name="operate[item_category]" value="item" data-default="item">
                 <input readonly type="hidden" class="form-control" name="operate[item_type]" value="order" data-default="order">
+                <input readonly type="hidden" class="form-control" name="operate[order_category]" value="dental" data-default="dental">
                 <input readonly type="hidden" class="form-control" name="order_category" value="1" data-default="1">
 
 
@@ -68,10 +69,10 @@
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户信息</label>
                     <div class="col-md-9 ">
-                        <div class="col-sm-6 col-md-6 padding-0" style="width:50%;">
+                        <div class="col-sm-6 col-md-6 padding-0">
                             <input type="text" class="form-control" name="client_name" placeholder="客户姓名" value="" data-default="">
                         </div>
-                        <div class="col-sm-6 col-md-6 padding-0" style="width:50%;">
+                        <div class="col-sm-6 col-md-6 padding-0">
                             <input type="text" class="form-control" name="client_phone" placeholder="客户电话" value="" data-default="">
                         </div>
                     </div>
@@ -229,30 +230,6 @@
                         <p>范本：用户当前3颗后槽牙齿缺失，已经缺失半年，2颗下牙松动，之前没了解过种牙，好说话，要求下午3点前回电，同意医生助理联系</p>
                     </div>
                 </div>
-
-
-                {{--班次--}}
-{{--                <div class="form-group">--}}
-{{--                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 班次</label>--}}
-{{--                    <div class="col-md-9 ">--}}
-{{--                        <div class="col-sm-4 col-md-4 padding-0">--}}
-{{--                            <div class="btn-group">--}}
-
-{{--                                <button type="button" class="btn">--}}
-{{--                                    <span class="radio">--}}
-{{--                                        <label><input type="radio" name="field_2" value="1" checked="checked"> 白班</label>--}}
-{{--                                    </span>--}}
-{{--                                </button>--}}
-{{--                                <button type="button" class="btn">--}}
-{{--                                    <span class="radio">--}}
-{{--                                        <label><input type="radio" name="field_2" value="9"> 夜班</label>--}}
-{{--                                    </span>--}}
-{{--                                </button>--}}
-
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
 
             </div>
             </form>

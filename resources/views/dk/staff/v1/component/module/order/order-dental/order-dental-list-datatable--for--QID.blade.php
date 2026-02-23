@@ -4,8 +4,7 @@
 
     function Datatable__for__Order_List($tableId)
     {
-        console.log($tableId);
-        var table_Id = $tableId
+        var table_Id = $tableId;
         if (window.dataTableInstances[table_Id])
         {
             return window.dataTableInstances[table_Id];
@@ -925,11 +924,9 @@
                     "orderable": false,
                     render: function(data, type, row, meta) {
 
+                        var $html_detail = '';
                         var $html_record = '';
                         var $html_inspect = '';
-
-
-                        $html_detail = '<a class="btn btn-xs item-modal-show-for-detail" data-id="'+data+'">详情</a>';
 
                         // 记录
                         if(row.created_type != 9)
@@ -950,6 +947,9 @@
                                 $html_inspect = '<a class="btn btn-xs modal-show--for--order--item-inspecting" data-id="'+data+'">再审</a>';
                             }
 
+                            // 详情编辑
+                            $html_detail = '<a class="btn btn-xs modal-show--for--order--item-detail-editing" data-id="'+data+'">详情</a>';
+
                         }
 
 
@@ -962,6 +962,7 @@
                         var $html =
                             $html_inspect+
                             $html_record+
+                            $html_detail+
                             // $more_html+
                             '';
                         return $html;

@@ -4,7 +4,7 @@
 
     function Datatable__for__Order_Aesthetic_List($tableId)
     {
-        var table_Id = $tableId
+        var table_Id = $tableId;
         if (window.dataTableInstances[table_Id])
         {
             return window.dataTableInstances[table_Id];
