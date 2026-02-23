@@ -56,7 +56,7 @@
             {{--客户类型--}}
             <select class="search-filter form-filter filter-md select2-box-c _none" name="order-client-type">
                 <option value="-1">客户类型</option>
-                @foreach(config('dk.common-config.client_type') as $k => $v)
+                @foreach(config('dk.common-config.dental_type') as $k => $v)
                     <option value="{{ $k }}">{{ $v }}</option>
                 @endforeach
             </select>

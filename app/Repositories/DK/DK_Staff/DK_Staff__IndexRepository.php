@@ -242,10 +242,13 @@ class DK_Staff__IndexRepository {
 
         $project_list = (clone $project_query)->get();
         $project_list__for__dental = (clone $project_query)->where('project_category',1)->get();
+//        dd($project_list__for__dental);
         $project_list__for__aesthetic = (clone $project_query)->where('project_category',11)->get();
+        $project_list__for__luxury = (clone $project_query)->where('project_category',31)->get();
         $view_data['project_list'] = $project_list;
         $view_data['project_list__for__dental'] = $project_list__for__dental;
         $view_data['project_list__for__aesthetic'] = $project_list__for__aesthetic;
+        $view_data['project_list__for__luxury'] = $project_list__for__luxury;
 
 
         // 客户
@@ -255,9 +258,11 @@ class DK_Staff__IndexRepository {
         $client_list = (clone $client_query)->get();
         $client_list__for__dental = (clone $client_query)->where('client_category',1)->get();
         $client_list__for__aesthetic = (clone $client_query)->where('client_category',11)->get();
+        $client_list__for__luxury = (clone $client_query)->where('client_category',31)->get();
         $view_data['client_list'] = $client_list;
         $view_data['client_list__for__dental'] = $client_list__for__dental;
         $view_data['client_list__for__aesthetic'] = $client_list__for__aesthetic;
+        $view_data['client_list__for__luxury'] = $client_list__for__luxury;
 
 
         // 地区-城市
