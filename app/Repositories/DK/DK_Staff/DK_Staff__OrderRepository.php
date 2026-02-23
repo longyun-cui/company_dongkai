@@ -1625,6 +1625,109 @@ class DK_Staff__OrderRepository {
 
 
 
+    // 【工单】删除
+    public function o1__order__item_delete($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order--item-delete') return response_error([],"参数[operate]有误！");
+        $item_id = $post_data["item_id"];
+        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Common__Order::withTrashed()->find($item_id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        if($item->is_published != 0) return response_error([],"已发布，不能删除！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断操作权限
+        if(!in_array($me->staff_category,[0,1,9,41])) return response_error([],"用户类型错误！");
+//        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
+        if($me->staff_category == 41)
+        {
+            if($me->staff_position == 99)
+            {
+                if($item->creator_id != $me->id) return response_error([],"你没有操作权限！");
+            }
+            else if($me->staff_position == 61)
+            {
+                if($item->creator_team_group_id != $me->team_group_id) return response_error([],"你没有操作权限！");
+            }
+            else if($me->staff_position == 41)
+            {
+                if($item->creator_team_id != $me->team_id) return response_error([],"你没有操作权限！");
+            }
+            else if($me->staff_position == 31)
+            {
+                if($item->creator_department_id != $me->department_id) return response_error([],"你没有操作权限！");
+            }
+            else
+            {
+                return response_error([],"用户类型错误！");
+            }
+        }
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->timestamps = false;
+            $item_copy = $item;
+
+            $item->timestamps = false;
+//                $bool = $item->forceDelete();  // 永久删除
+            $bool = $item->delete();  // 普通删除
+            if(!$bool) throw new Exception("item--delete--fail");
+            else
+            {
+                $record = new DK_Common__Order__Operation_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 1;
+                $record_data["record_category"] = 1;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $item_id;
+                $record_data["operate_object"] = 1;
+                $record_data["operate_category"] = 101;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("DK_Common__Order__Operation_Record--insert--fail");
+            }
+
+            DB::commit();
+            $this->delete_the_item_files($item_copy);
+
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
     // 【工单】发布
     public function o1__order__item_publish($post_data)
     {

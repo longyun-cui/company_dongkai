@@ -778,6 +778,12 @@
                             $html_record = '<a class="btn btn-xs modal-show--for--order--item-operation-record" data-id="'+data+'">记录</a>';
                         }
 
+                        // 删除
+                        if(row.is_published == 0)
+                        {
+                            $html_delete = '<a class="btn btn-xs order--item-delete-submit" data-id="'+data+'">删除</a>';
+                        }
+
                         // 编辑
                         if(row.is_published == 0)
                         {

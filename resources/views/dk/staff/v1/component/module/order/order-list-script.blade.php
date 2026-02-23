@@ -209,12 +209,93 @@
         });
 
 
+        // 【工单】删除
+        $(".main-wrapper").off('click', ".order--item-delete-submit").on('click', ".order--item-delete-submit", function() {
+            var $that = $(this);
+            var $id = $that.attr('data-id');
+            var $row = $that.parents('tr');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $item_category = $datatable_wrapper.data('datatable-item-category');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+
+            $('.datatable-wrapper').removeClass('operating');
+            $datatable_wrapper.addClass('operating');
+            $datatable_wrapper.find('tr').removeClass('operating');
+            $row.addClass('operating');
+
+
+            layer.msg('确定"删除"么?', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index)
+                {
+                    layer.close(index);
+
+                    //
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">正在提交</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
+                    });
+
+                    //
+                    $.post(
+                        "{{ url('/o1/order/item-delete') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "order--item-delete",
+                            item_category: $item_category,
+                            item_id: $that.attr('data-id')
+                        },
+                        'json'
+                    )
+                        .done(function($response, status, jqXHR) {
+                            console.log('done');
+                            $response = JSON.parse($response);
+                            if(!$response.success)
+                            {
+                                if($response.msg) layer.msg($response.msg);
+                            }
+                            else
+                            {
+                                $('#'+$table_id).DataTable().ajax.reload(null,false);
+                            }
+                        })
+                        .fail(function(jqXHR, status, error) {
+                            console.log('fail');
+                            layer.msg('服务器错误！');
+
+                        })
+                        .always(function(jqXHR, status) {
+                            console.log('always');
+                            layer.closeAll('loading');
+                        });
+                }
+                ,btn2: function(index)
+                {
+                    layer.close(index);
+                    $row.removeClass('operating');
+                }
+            });
+        });
+
+
+
+
 
         $(".txt-file-upload").fileinput({
             allowedFileExtensions : [ 'txt' ],
             showUpload: false
         });
-
 
         // 【工单】导入-显示
         $(".main-wrapper").on('click', ".modal-show--for--order--import--by-txt", function() {
@@ -817,6 +898,8 @@
 
 
 
+
+        // 录音
         window.addEventListener('play', function(e) {
             console.log('[全局监听] 播放事件触发:', e.target);
             const audio = e.target;
@@ -865,7 +948,6 @@
                 }
             });
         });
-
 
         // 【获取录音】
         $(".main-wrapper").on('click', ".order--item-recording-list-get-submit", function() {
@@ -964,7 +1046,7 @@
 
 
 
-        // 【强制跳转】
+        // 【获取录音】【强制跳转】
         $(".main-wrapper").on('click', ".item-redirection-recording-list-submit", function() {
             var $that = $(this);
             var $row = $that.parents('tr');
@@ -1029,7 +1111,7 @@
             }
 
         });
-        // 【审核-强制跳转】
+        // 【获取录音】【审核页面-强制跳转】
         $(".main-wrapper").on('click', ".item-inspected-redirection-recording-list-submit", function() {
             var $that = $(this);
             var $modal_wrapper = $that.closest('.modal-wrapper');
@@ -1093,6 +1175,10 @@
             }
 
         });
+
+
+
+
 
 
 
@@ -2339,36 +2425,6 @@
 
 
 
-        // 【删除】
-        $(".main-wrapper").on('click', ".order--item-delete-submit", function() {
-            var $that = $(this);
-            layer.msg('确定"删除"么？', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
-                    $.post(
-                        "{{ url('/item/order-delete') }}",
-                        {
-                            _token: $('meta[name="_token"]').attr('content'),
-                            operate: "order-delete",
-                            item_id: $that.attr('data-id')
-                        },
-                        function(data){
-                            layer.close(index);
-                            if(!data.success)
-                            {
-                                layer.msg(data.msg);
-                            }
-                            else
-                            {
-                                $('#datatable--for--order-list').DataTable().ajax.reload(null,false);
-                            }
-                        },
-                        'json'
-                    );
-                }
-            });
-        });
 
 
 
