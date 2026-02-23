@@ -164,6 +164,26 @@
                                 <a href="javascript:void(0);" class="tab-control datatable-control"
                                    data-type="create"
                                    data-unique="y"
+                                   data-id="statistic-marketing-project-team"
+                                   data-title='<i class="fa fa-area-chart text-green"></i> (项目)交付-团队贡献'
+                                   data-content=''
+
+                                   data-datatable-type="create"
+                                   data-datatable-unique="y"
+                                   data-datatable-id="datatable-statistic-marketing-project-team"
+                                   data-datatable-target="statistic-marketing-project-team"
+                                   data-datatable-clone-object="statistic-marketing-project-team-clone"
+                                >
+                                    <i class="fa fa-area-chart text-green"></i> <span>(项目)交付-团队贡献</span>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                        @endif
+                        @if(in_array($me->staff_category,[0,1,9,71]))
+                            <li>
+                                <a href="javascript:void(0);" class="tab-control datatable-control"
+                                   data-type="create"
+                                   data-unique="y"
                                    data-id="statistic-marketing-client"
                                    data-title='<i class="fa fa-area-chart text-green"></i> (客户)交付看板'
                                    data-content=''

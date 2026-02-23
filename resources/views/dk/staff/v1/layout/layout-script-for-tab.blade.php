@@ -287,6 +287,10 @@
                 {
                     Datatable__for__Statistic_Marketing_Project('#'+$config.id);
                 }
+                else if($id == "datatable-statistic-marketing-project-team")
+                {
+                    Datatable__for__Statistic_Marketing_Project_Team('#'+$config.id);
+                }
                 else if($id == "datatable-statistic-marketing-client")
                 {
                     Datatable__for__Statistic_Marketing_Client('#'+$config.id);

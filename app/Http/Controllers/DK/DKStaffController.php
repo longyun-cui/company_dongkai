@@ -1249,6 +1249,11 @@ class DKStaffController extends Controller
     {
         return $this->statistic_repo->o1__statistic__marketing__project(request()->all());
     }
+    // 【统计】【交付】项目
+    public function o1__statistic__marketing__project_team()
+    {
+        return $this->statistic_repo->o1__statistic__marketing__project_team(request()->all());
+    }
     // 【统计】【交付】客户
     public function o1__statistic__marketing__client()
     {

@@ -128,6 +128,7 @@
 
     {{--交付--}}
     @include(env('DK_STAFF__TEMPLATE').'component.statistic.marketing.project.statistic-marketing-project')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.marketing.project-team.statistic-marketing-project-team')
     @include(env('DK_STAFF__TEMPLATE').'component.statistic.marketing.client.statistic-marketing-client')
 
     {{--销售--}}
@@ -350,6 +351,7 @@
 
     {{--交付--}}
     @include(env('DK_STAFF__TEMPLATE').'component.statistic.marketing.project.statistic-marketing-project-datatable')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.marketing.project-team.statistic-marketing-project-team-datatable')
     @include(env('DK_STAFF__TEMPLATE').'component.statistic.marketing.client.statistic-marketing-client-datatable')
 
     {{--销售--}}

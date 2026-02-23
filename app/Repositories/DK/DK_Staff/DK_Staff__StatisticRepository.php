@@ -2577,7 +2577,6 @@ class DK_Staff__StatisticRepository {
                 $project_list[$k]->count__for__order_today_inside = $query_order_today[$v->id]['count__for__order_today_inside'];
                 $project_list[$k]->count__for__order_today_refused = $query_order_today[$v->id]['count__for__order_today_refused'];
                 $project_list[$k]->count__for__order_today_tomorrow = $query_order_today[$v->id]['count__for__order_today_tomorrow'];
-
             }
 
             // 隔日交付
@@ -2599,8 +2598,6 @@ class DK_Staff__StatisticRepository {
                 $project_list[$k]->rate__for__completed = round(($v->count__for__delivered_normal * 100 / $v->daily_goal),2);
             }
             else $project_list[$k]->rate__for__completed = 0;
-
-
         }
 
 //        $project_list_filtered = $project_list->filter(function ($item) {
@@ -2635,6 +2632,168 @@ class DK_Staff__StatisticRepository {
         }
 
         return datatable_response($project_list, $draw, $total);
+
+    }
+    // 【统计】【交付统计】项目
+    public function o1__statistic__marketing__project_team($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $assign_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+
+
+        // 客服部
+        if($me->staff_category == 41)
+        {
+            $team_id = $me->team_id;
+            if($me->staff_position == 61)
+            {
+                $team_group_id = $me->team_group_id;
+            }
+        }
+        // 工单统计（当日）
+        $project_team_order_list = DK_Common__Order::select('delivered_project_id','creator_team_id')
+            ->addSelect(DB::raw("
+                    count(IF(delivered_status = 1, TRUE, NULL)) as count__for__order_today_all,
+                    count(IF(delivered_result = '正常交付', TRUE, NULL)) as count__for__order_today_normal,
+                    count(IF(delivered_result = '折扣交付', TRUE, NULL)) as count__for__order_today_discount,
+                    count(IF(delivered_result = '郊区交付', TRUE, NULL)) as count__for__order_today_suburb,
+                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as count__for__order_today_inside,
+                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as count__for__order_today_tomorrow,
+                    count(IF(inspected_result = '不合格' AND delivered_status = 1, TRUE, NULL)) as count__for__order_today_refused
+                "))
+            ->with([
+                'delivered_project_er'=>function($query) { $query->select('id','name'); },
+                'creator_team_er'=>function($query) { $query->select('id','name'); }
+            ])
+            ->where('active',1)
+            ->where('order_category',1)
+            ->where('delivered_project_id','>',0)
+            ->where('creator_team_id','>',0)
+            ->where('published_date',$assign_date)
+            ->groupBy('delivered_project_id','creator_team_id')
+            ->orderBy('delivered_project_id','asc')
+            ->orderBy('creator_team_id','asc')
+            ->get();
+
+
+        $query = DK_Common__Project::select('id','name','alias_name','daily_goal')
+            ->where('active', 1);
+//            ->where('item_status', 1);
+
+        // 客服部
+        if($me->staff_category == 41)
+        {
+            $team_id = $me->team_id;
+            $project_list = DK_Pivot__Team_Project::select('project_id')->where('team_id',$team_id)->get();
+            $query->whereIn('id',$project_list);
+        }
+
+        // 团队
+        if(!empty($post_data['team']))
+        {
+            $team = (int)$post_data['team'];
+            if(!in_array($team,[-1,0]))
+            {
+                $query->whereHas('pivot__project_team',  function ($query) use($team) {
+                    $query->where('team_id', $team);
+                });
+            }
+        }
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : -1;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("name", "asc");
+
+        if($limit == -1) $project_list = $query->get();
+        else $project_list = $query->skip($skip)->take($limit)->get();
+//        $project_list = $query_project->withTrashed()->get();
+
+
+//        $total_data = [];
+//        $total_data['id'] = '统计';
+//        $total_data['name'] = '所有项目';
+//        $total_data['pivot__project_team'] = [];
+//        $total_data['daily_goal'] = 0;
+//
+//        $total_data['count__for__order_today_all'] = 0;
+//        $total_data['count__for__order_today_normal'] = 0;
+//        $total_data['count__for__order_today_discount'] = 0;
+//        $total_data['count__for__order_today_suburb'] = 0;
+//        $total_data['count__for__order_today_inside'] = 0;
+//        $total_data['count__for__order_today_tomorrow'] = 0;
+//        $total_data['count__for__order_today_refused'] = 0;
+//
+//
+//        foreach ($project_list as $k => $v)
+//        {
+//            $project_list[$k]->count__for__order_today_all = 0;
+//            $project_list[$k]->count__for__order_today_normal = 0;
+//            $project_list[$k]->count__for__order_today_discount = 0;
+//            $project_list[$k]->count__for__order_today_suburb = 0;
+//            $project_list[$k]->count__for__order_today_inside = 0;
+//            $project_list[$k]->count__for__order_today_refused = 0;
+//            $project_list[$k]->count__for__order_today_tomorrow = 0;
+//
+//            // 当日生产
+//            if(isset($query_order_today[$v->id]))
+//            {
+//                $project_list[$k]->count__for__order_today_all = $query_order_today[$v->id]['count__for__order_today_all'];
+//                $project_list[$k]->count__for__order_today_normal = $query_order_today[$v->id]['count__for__order_today_normal'];
+//                $project_list[$k]->count__for__order_today_discount = $query_order_today[$v->id]['count__for__order_today_discount'];
+//                $project_list[$k]->count__for__order_today_suburb = $query_order_today[$v->id]['count__for__order_today_suburb'];
+//                $project_list[$k]->count__for__order_today_inside = $query_order_today[$v->id]['count__for__order_today_inside'];
+//                $project_list[$k]->count__for__order_today_refused = $query_order_today[$v->id]['count__for__order_today_refused'];
+//                $project_list[$k]->count__for__order_today_tomorrow = $query_order_today[$v->id]['count__for__order_today_tomorrow'];
+//
+//            }
+//
+//            $v->project_merge = 0;
+//        }
+
+//        $project_team_order_list = $project_team_order_list->filter(function ($item) {
+//            return ($item->count__for__order_today_all > 0);
+//        });
+//
+        foreach ($project_team_order_list as $k => $v)
+        {
+            $v->project_merge = 0;
+            $v->sum__for__order_today_all = 0;
+        }
+
+//        $project_team_order_list = $project_team_order_list->reject(function ($item) {
+//            return $item->count__for__order_today_all == 0;
+//            // 或者：return $item['staff_count__for__all'] === 0;
+//        })->values();
+
+        $grouped_by_project = $project_team_order_list->groupBy('delivered_project_id');
+        foreach ($grouped_by_project as $k => $v)
+        {
+            $v[0]->project_merge = count($v);
+            foreach ($v as $val)
+            {
+                $v[0]->sum__for__order_today_all += $val->count__for__order_today_all;
+            }
+        }
+
+        $total = $project_team_order_list->count();
+
+        return datatable_response($project_team_order_list, $draw, $total);
 
     }
     // 【统计】【交付统计】客户

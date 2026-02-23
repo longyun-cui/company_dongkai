@@ -284,6 +284,7 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
     Route::post('/o1/statistic/production/caller-daily', $controller.'@o1__statistic__production__caller_daily');
     // 【交付统计】
     Route::post('/o1/statistic/marketing/project', $controller.'@o1__statistic__marketing__project');
+    Route::post('/o1/statistic/marketing/project-team', $controller.'@o1__statistic__marketing__project_team');
     Route::post('/o1/statistic/marketing/client', $controller.'@o1__statistic__marketing__client');
     // 【销售统计】
     Route::post('/o1/statistic/marketing/company-overview', $controller.'@o1__statistic__marketing____company_overview');
