@@ -3756,7 +3756,7 @@ class DK_Staff__StatisticRepository {
         }
 
 
-        $total = $query->count();
+//        $total = $query->count();
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
@@ -3950,6 +3950,11 @@ class DK_Staff__StatisticRepository {
             $v->group_merge = 0;
         }
 
+        $list = $list->reject(function ($item) {
+            return $item->staff_count__for__all == 0;
+            // 或者：return $item['staff_count__for__all'] === 0;
+        })->values();
+
         $grouped_by_team = $list->groupBy('team_id');
         foreach ($grouped_by_team as $k => $v)
         {
@@ -3962,7 +3967,7 @@ class DK_Staff__StatisticRepository {
             }
         }
 
-
+        $total = $list->count();
 
         return datatable_response($list, $draw, $total);
     }
