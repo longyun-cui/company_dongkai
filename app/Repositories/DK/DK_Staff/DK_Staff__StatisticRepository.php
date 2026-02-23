@@ -2160,7 +2160,7 @@ class DK_Staff__StatisticRepository {
 
         $query = DK_Company::select('id','name','user_status','company_category','company_type','superior_company_id')
             ->with([
-//                'superior' => function($query) { $query->select(['id','username','true_name']); },
+//                'superior' => function($query) { $query->select(['id','name']); },
 //                'team_er' => function($query) { $query->select(['id','name','leader_id'])->with(['leader']); },
 //                'team_group_er' => function($query) { $query->select(['id','name','leader_id'])->with(['leader']); }
             ])
@@ -2888,7 +2888,6 @@ class DK_Staff__StatisticRepository {
             $query->whereIn('id',$project_list);
         }
 
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
 
@@ -3074,7 +3073,6 @@ class DK_Staff__StatisticRepository {
             ->with(['creator']);
 
 
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
 
@@ -3384,7 +3382,6 @@ class DK_Staff__StatisticRepository {
             ->with(['creator']);
 
 
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
 
@@ -3750,6 +3747,12 @@ class DK_Staff__StatisticRepository {
                 $query->where('team_id', $me->team_id);
                 $query->where('team_group_id', $me->team_group_id);
             }
+            // 职员
+            else if($me->staff_position == 99)
+            {
+                // 根据部门查看
+                $query->where('id', $me->id);
+            }
         }
 
 
@@ -4102,9 +4105,12 @@ class DK_Staff__StatisticRepository {
                 $query->where('team_id', $me->team_id);
                 $query->where('team_group_id', $me->team_group_id);
             }
-        }
-        else
-        {
+            // 职员
+            else if($me->staff_position == 99)
+            {
+                // 根据部门查看
+                $query->where('id', $me->id);
+            }
         }
 
 
@@ -4174,7 +4180,6 @@ class DK_Staff__StatisticRepository {
     {
         $this->get_me();
         $me = $this->me;
-
 
 
         // 工单统计
@@ -4289,11 +4294,17 @@ class DK_Staff__StatisticRepository {
                 $query->where('team_id', $me->team_id);
             }
             // 小组主管
-            else if($me->user_type == 61)
+            else if($me->staff_position == 61)
             {
                 // 根据部门查看
                 $query->where('team_id', $me->team_id);
                 $query->where('team_group_id', $me->team_group_id);
+            }
+            // 职员
+            else if($me->staff_position == 99)
+            {
+                // 根据部门查看
+                $query->where('id', $me->id);
             }
         }
 
@@ -4574,9 +4585,9 @@ class DK_Staff__StatisticRepository {
 
 
 
-        $query = DK_Common__Staff::select(['id','mobile','user_status','user_type','username','true_name','team_id','team_group_id','superior_id'])
+        $query = DK_Common__Staff::select(['id','mobile','user_status','user_type','name','team_id','team_group_id','superior_id'])
             ->with([
-                'superior' => function($query) { $query->select(['id','username','true_name']); },
+                'superior' => function($query) { $query->select(['id','name']); },
                 'team_er' => function($query) { $query->select(['id','name','leader_id']); },
             ])
             ->where('user_status',1)
@@ -4648,7 +4659,7 @@ class DK_Staff__StatisticRepository {
             {
                 $v->superior_id = $v->id;
                 $v->superior = $v->id;
-                $superior = ['id'=>$v->id,'username'=>$v->username,'true_name'=>$v->true_name];
+                $superior = ['id'=>$v->id,'name'=>$v->name];
                 $v->superior = json_decode(json_encode($superior));
                 $list[$k]->superior =  json_decode(json_encode($superior));
             }
@@ -4741,16 +4752,16 @@ class DK_Staff__StatisticRepository {
         $query_order = $query_delivery->get()->keyBy('creator_id')->toArray();
 
 
-        $query = DK_Common__Staff::select(['id','mobile','user_status','user_type','username','true_name','team_id','team_group_id','superior_id'])
+        $query = DK_Common__Staff::select(['id','mobile','user_status','user_type','name','team_id','team_group_id','superior_id'])
             ->with([
-                'superior' => function($query) { $query->select(['id','username','true_name']); },
+                'superior' => function($query) { $query->select(['id','name']); },
                 'team_er' => function($query) { $query->select(['id','name','leader_id']); },
             ])
             ->where('user_status',1)
             ->whereIn('user_category',[11])
             ->whereIn('user_type',[61,66]);
 
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
 
         // 审核经理
 //        if($me->user_type == 71)
@@ -4811,7 +4822,7 @@ class DK_Staff__StatisticRepository {
             {
                 $v->superior_id = $v->id;
                 $v->superior = $v->id;
-                $superior = ['id'=>$v->id,'username'=>$v->username,'true_name'=>$v->true_name];
+                $superior = ['id'=>$v->id,'name'=>$v->name,];
                 $v->superior = json_decode(json_encode($superior));
                 $list[$k]->superior =  json_decode(json_encode($superior));
             }
@@ -5442,8 +5453,8 @@ class DK_Staff__StatisticRepository {
         $query = DK_Statistic__Project_Daily::select('*')
             ->with([
                 'project_er'=>function ($query) { $query->select('id','name','alias_name'); },
-                'creator'=>function ($query) { $query->select('id','username','true_name'); },
-                'completer'=>function ($query) { $query->select('id','username','true_name'); }
+                'creator'=>function ($query) { $query->select('id','name'); },
+                'completer'=>function ($query) { $query->select('id','name'); }
             ]);
 
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
@@ -6852,7 +6863,7 @@ class DK_Staff__StatisticRepository {
                     sum(marketing_special_num) as marketing_special_total
                 "))
             ->with([
-                'client_er'=>function ($query) { $query->select('id','username'); }
+                'client_er'=>function ($query) { $query->select('id','name'); }
             ])
             ->groupBy('client_id');
 
@@ -6998,7 +7009,7 @@ class DK_Staff__StatisticRepository {
 
         $query = DK_Statistic__Client_Daily::select('*')
             ->with([
-                'client_er'=>function ($query) { $query->select('id','username'); }
+                'client_er'=>function ($query) { $query->select('id','name'); }
             ])
             ->where('client_id',$client_id);
 
@@ -7350,7 +7361,7 @@ class DK_Staff__StatisticRepository {
         }
 
 
-        $view_data["head_title"] = '【'.$user->true_name.'】的工作统计';
+        $view_data["head_title"] = '【'.$user->name.'】的工作统计';
         $view_data["all"] = $all;
         $view_data["dialog"] = $dialog;
         $view_data["plus_wx"] = $plus_wx;
