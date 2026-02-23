@@ -327,60 +327,10 @@
                             return '未指定';
                         }
                         else {
-                            return '<a href="javascript:void(0);">'+row.client_er.username+'</a>';
+                            return '<a href="javascript:void(0);">'+row.client_er.name+'</a>';
                         }
                     }
                 },
-                    @if(in_array($me->user_type,[0,1,9,11]))
-                {
-                    "title": "所属公司",
-                    "data": "company_id",
-                    "className": "",
-                    "width": "120px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(row.company_er == null)
-                        {
-                            return '--';
-                        }
-                        else {
-                            return '<a href="javascript:void(0);">'+row.company_er.name+'</a>';
-                        }
-                    }
-                },
-                {
-                    "title": "所属渠道",
-                    "data": "channel_id",
-                    "className": "",
-                    "width": "120px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(row.channel_er == null)
-                        {
-                            return '--';
-                        }
-                        else {
-                            return '<a href="javascript:void(0);">'+row.channel_er.name+'</a>';
-                        }
-                    }
-                },
-                {
-                    "title": "所属商务",
-                    "data": "business_id",
-                    "className": "",
-                    "width": "120px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(row.business_er == null)
-                        {
-                            return '--';
-                        }
-                        else {
-                            return '<a href="javascript:void(0);">'+row.business_er.name+'</a>';
-                        }
-                    }
-                },
-                    @endif
                 {
                     "title": "品类",
                     "data": "order_id",
@@ -505,21 +455,56 @@
                         else return "--";
                     }
                 },
+                @if(in_array($me->staff_category,[0,1,9]))
                 {
-                    "title": "录音地址",
-                    "data": "order_id",
+                    "title": "所属公司",
+                    "data": "company_id",
                     "className": "",
-                    "width": "80px",
+                    "width": "120px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        if(row.order_er)
+                        if(row.company_er == null)
                         {
-                            if(row.order_er.recording_address) return '<a target="_blank" href="'+row.order_er.recording_address+'">录音地址</a>';
-                            else return "--";
+                            return '--';
                         }
-                        else return "--";
+                        else {
+                            return '<a href="javascript:void(0);">'+row.company_er.name+'</a>';
+                        }
                     }
                 },
+                {
+                    "title": "所属渠道",
+                    "data": "channel_id",
+                    "className": "",
+                    "width": "120px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.channel_er == null)
+                        {
+                            return '--';
+                        }
+                        else {
+                            return '<a href="javascript:void(0);">'+row.channel_er.name+'</a>';
+                        }
+                    }
+                },
+                {
+                    "title": "所属商务",
+                    "data": "business_id",
+                    "className": "",
+                    "width": "120px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.business_er == null)
+                        {
+                            return '--';
+                        }
+                        else {
+                            return '<a href="javascript:void(0);">'+row.business_er.name+'</a>';
+                        }
+                    }
+                },
+                @endif
                 {
                     "className": "text-center",
                     "width": "80px",
@@ -527,7 +512,7 @@
                     "data": "creator_id",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return row.creator == null ? '未知' : '<a target="_blank" href="/user/'+row.creator.id+'">'+row.creator.username+'</a>';
+                        return row.creator == null ? '未知' : '<a target="_blank" href="/user/'+row.creator.id+'">'+row.creator.name+'</a>';
                     }
                 },
                 {
