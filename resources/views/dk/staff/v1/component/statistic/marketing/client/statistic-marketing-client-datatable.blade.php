@@ -139,6 +139,7 @@
                         }
                     },
                     render: function(data, type, row, meta) {
+                        if(!data) return '--';
                         return data;
                     }
                 },
@@ -156,11 +157,12 @@
                         }
                     },
                     render: function(data, type, row, meta) {
+                        if(!data) return '--';
                         return data;
                     }
                 },
                 {
-                    "title": "已交付",
+                    "title": "正常交付",
                     "data": "order_count_for_delivered_completed",
                     "className": "bg-delivered",
                     "width": "80px",
@@ -173,6 +175,7 @@
                         }
                     },
                     render: function(data, type, row, meta) {
+                        if(!data) return '--';
                         return data;
                     }
                 },
@@ -190,7 +193,7 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-
+                        if(!data) return '--';
                         return data;
                     }
                 },
@@ -208,7 +211,7 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-
+                        if(!data) return '--';
                         return data;
                     }
                 },
@@ -226,7 +229,7 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-
+                        if(!data) return '--';
                         return data;
                     }
                 },
@@ -244,6 +247,7 @@
                         }
                     },
                     render: function(data, type, row, meta) {
+                        if(!data) return '--';
                         return data;
                     }
                 },
