@@ -20,7 +20,7 @@
             </select>
             @endif
 
-s
+
             <button type="button" class="btn btn-success btn-filter filter-submit">
                 <i class="fa fa-search"></i> 查询
             </button>
