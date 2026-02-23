@@ -178,14 +178,14 @@
             <li class="treeview _none-">
                 <a class="tab-control datatable-control"
                    data-type="create"
-                   data-unique="n"
+                   data-unique="y"
                    data-id="order-dental-list"
                    data-title='口腔•工单'
                    data-content=''
                    data-icon='<i class="fa fa-file-text text-orange"></i>'
 
                    data-datatable-type="create"
-                   data-datatable-unique="n"
+                   data-datatable-unique="y"
                    data-datatable-id="datatable-order-dental-list"
                    data-datatable-target="order-dental-list"
                    data-datatable-clone-object="order-dental-list-clone"
