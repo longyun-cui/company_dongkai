@@ -2290,7 +2290,7 @@ class DK_Staff__OrderRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->staff_category,[0,1,41,71]))
+        if(!in_array($me->staff_category,[0,1,41,51,61,71]))
         {
             return response_error([],"你没有操作权限！");
         }
