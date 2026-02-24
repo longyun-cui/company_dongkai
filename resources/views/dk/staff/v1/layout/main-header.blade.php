@@ -404,7 +404,7 @@
 
 
                 {{--销售统计--}}
-                @if(in_array($me->staff_category,[0,1,9,11,71]))
+                @if(in_array($me->staff_category,[0,1,9,11,71]) || ($me->staff_category == 41 && $me->staff_position ==31))
                 <li class="dropdown tasks-menu add-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                         统计日报 <span class="caret"></span>
@@ -414,6 +414,7 @@
 
                         <li class="divider"></li>
 
+                        @if(in_array($me->staff_category,[0,1,9,11,71]))
                         <li>
                             <a href="javascript:void(0);" class="tab-control datatable-control"
                                data-type="create"
@@ -489,8 +490,10 @@
                             </a>
                         </li>
                         <li class="divider"></li>
+                        @endif
 
 
+                        @if(in_array($me->staff_category,[0,1,9,11,71]) || ($me->staff_category == 41 && $me->staff_position ==31))
                         <li>
                             <a href="javascript:void(0);" class="tab-control datatable-control"
                                data-type="create"
@@ -509,6 +512,7 @@
                             </a>
                         </li>
                         <li class="divider"></li>
+                        @endif
 
 
                     </ul>
