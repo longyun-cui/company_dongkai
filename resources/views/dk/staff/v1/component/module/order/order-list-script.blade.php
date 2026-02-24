@@ -1120,7 +1120,8 @@
             // console.log('音频开始播放:', audioSrc);
 
             // 2. 设置播放速度 (1.5倍速)
-            var $speed = $('input[name="recording-speed"]:checked').val();
+            // var $speed = $('input[name="recording-speed"]:checked').val();
+            var $speed = $('input[name="recording-speed"]').val();
             audio.playbackRate = $speed; // 默认值1.0，范围0.5-4.0
             console.log('播放速率已设置:', audio.playbackRate);
 
@@ -1149,10 +1150,28 @@
         }, true);
 
         // 【录音】播放速度
-        $(".main-wrapper").on('click', 'input[name="recording-speed"]', function() {
-            var $speed = $('input[name="recording-speed"]:checked').val();
+        $(".main-wrapper").on('click', 'input[name="inspecting--recording-speed"]', function() {
+            var $speed = $('input[name="inspecting--recording-speed"]:checked').val();
+            console.log($speed);
+
+            $('input[name="recording-speed"]').val($speed);
 
             $('#modal--for--order--item-inspecting audio').each(function() {
+                if (this.played)
+                {
+                    this.playbackRate = $speed; // 默认值1.0，范围0.5-4.0
+                }
+            });
+        });
+
+        // 【录音】播放速度
+        $(".main-wrapper").on('click', 'input[name="handling--recording-speed"]', function() {
+            var $speed = $('input[name="handling--recording-speed"]:checked').val();
+            console.log($speed);
+
+            $('input[name="recording-speed"]').val($speed);
+
+            $('#modal--for--order--item-appealed-handling audio').each(function() {
                 if (this.played)
                 {
                     this.playbackRate = $speed; // 默认值1.0，范围0.5-4.0
@@ -1817,12 +1836,12 @@
                         $modal.find('input[name="recording_address"]').val($response.data.recording_address);
 
 
-                        if($response.data.recording_address)
+                        if($response.data.recording_address_list)
                         {
                             // var $html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+$item.recording_address+'" type="audio/mpeg"></audio>'
                             // $row.find('[data-key="recording_address_play"]').html($html);
 
-                            var $recording_list = JSON.parse($response.data.recording_address);
+                            var $recording_list = JSON.parse($response.data.recording_address_list);
                             var $recording_list_html = '';
                             $.each($recording_list, function(index, value)
                             {
@@ -1835,7 +1854,7 @@
                             $row.find('[data-key="recording_address_play"]').html($recording_list_html);
                             $row.find('[data-key="order_status"]').attr('data-recording-address',$recording_list_html);
 
-                            $row.find('[data-key=recording_address_download]').attr('data-address-list',$item.recording_address_list);
+                            $row.find('[data-key=recording_address_download]').attr('data-address-list',$response.data.recording_address_list);
                             // var $recording_redirection = '<a class="btn btn-xs item-inspected-redirection-recording-list-submit" data-id="'+$id+'">跳转</a>';
                             // $that.after($recording_redirection);
                         }
@@ -2340,6 +2359,30 @@
                         $modal.find('input[name="field_2"][value="'+$response.data.field_2+'"]').prop('checked', true).trigger('change');
 
                         $modal.find('input[name="recording_address"]').val($response.data.recording_address);
+
+                        if($response.data.recording_address_list)
+                        {
+                            // var $html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+$item.recording_address+'" type="audio/mpeg"></audio>'
+                            // $row.find('[data-key="recording_address_play"]').html($html);
+
+                            var $recording_list = JSON.parse($response.data.recording_address_list);
+                            var $recording_list_html = '';
+                            $.each($recording_list, function(index, value)
+                            {
+
+                                var $audio_html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
+                                $recording_list_html += $audio_html;
+                            });
+                            $modal.find('.item-recording-box .item-detail-text').html($recording_list_html);
+
+                            $row.find('[data-key="recording_address_play"]').html($recording_list_html);
+                            $row.find('[data-key="order_status"]').attr('data-recording-address',$recording_list_html);
+
+                            $row.find('[data-key=recording_address_download]').attr('data-address-list',$response.data.recording_address_list);
+                            // var $recording_redirection = '<a class="btn btn-xs item-inspected-redirection-recording-list-submit" data-id="'+$id+'">跳转</a>';
+                            // $that.after($recording_redirection);
+                        }
+
                         $modal.find('textarea[name="description"]').val($response.data.description);
 
 

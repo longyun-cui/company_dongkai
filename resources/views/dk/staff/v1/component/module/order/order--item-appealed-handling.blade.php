@@ -194,27 +194,27 @@
                             <div class="btn-group">
                                 <button type="button" class="btn">
                                     <span class="radio">
-                                        <label><input type="radio" name="recording-speed" value="0.75"> x0.75</label>
+                                        <label><input type="radio" name="handling--recording-speed" value="0.75"> x0.75</label>
                                     </span>
                                 </button>
                                 <button type="button" class="btn">
                                     <span class="radio">
-                                        <label><input type="radio" name="recording-speed" value="1" checked="checked"> x1</label>
+                                        <label><input type="radio" name="handling--recording-speed" value="1"> x1</label>
                                     </span>
                                 </button>
                                 <button type="button" class="btn">
                                     <span class="radio">
-                                        <label><input type="radio" name="recording-speed" value="1.25"> x1.25</label>
+                                        <label><input type="radio" name="handling--recording-speed" value="1.25" checked="checked"> x1.25</label>
                                     </span>
                                 </button>
                                 <button type="button" class="btn">
                                     <span class="radio">
-                                        <label><input type="radio" name="recording-speed" value="1.5"> x1.5</label>
+                                        <label><input type="radio" name="handling--recording-speed" value="1.5"> x1.5</label>
                                     </span>
                                 </button>
                                 <button type="button" class="btn">
                                     <span class="radio">
-                                        <label><input type="radio" name="recording-speed" value="2"> x2</label>
+                                        <label><input type="radio" name="handling--recording-speed" value="2"> x2</label>
                                     </span>
                                 </button>
                             </div>

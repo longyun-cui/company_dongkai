@@ -1,6 +1,9 @@
 <!-- Main Header -->
 <header class="main-header">
 
+
+    <input type="hidden" name="recording-speed" value="1.25" readonly>
+
     <!-- Logo -->
     <a href="{{url('/')}}" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
