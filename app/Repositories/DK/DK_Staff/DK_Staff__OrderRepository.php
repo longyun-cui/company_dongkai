@@ -1784,11 +1784,10 @@ class DK_Staff__OrderRepository {
             return response_error([],"该号码今日已经提交过，不能重复提交！");
         }
 
-        $is_repeat = DK_Common__Order::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])
+        $is_repeat = DK_Common__Order::where(['delivered_project_id'=>$project_id,'client_phone'=>(int)$client_phone])
             ->where('id','<>',$id)
             ->where('is_published','>',0)
             ->where('order_category',$item->order_category)
-            ->whereIn('inspected_result',['通过','内部通过','郊区通过','折扣通过'])
             ->count("*");
         if($is_repeat == 0)
         {

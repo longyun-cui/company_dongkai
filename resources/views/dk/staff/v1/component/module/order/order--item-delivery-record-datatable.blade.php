@@ -163,8 +163,8 @@
                             {
                                 if(row.delivered_project_er)
                                 {
-                                    if(row.project_er.alias_name) $return_html = row.project_er.name + ' ('+row.project_er.alias_name+')';
-                                    else $return_html = row.project_er.name;
+                                    if(row.delivered_project_er.alias_name) $return_html = row.delivered_project_er.name + ' ('+row.delivered_project_er.alias_name+')';
+                                    else $return_html = row.delivered_project_er.name;
                                 }
                             }
                             else if(row.item_type == 'delivery')
@@ -190,7 +190,7 @@
                             {
                                 if(row.delivered_client_er)
                                 {
-                                    $return_html = row.client_er.name;
+                                    $return_html = row.delivered_client_er.name;
                                 }
                             }
                             else if(row.item_type == 'delivery')
