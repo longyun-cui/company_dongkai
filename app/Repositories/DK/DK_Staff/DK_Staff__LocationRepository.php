@@ -314,9 +314,9 @@ class DK_Staff__LocationRepository {
             if(!$bool) throw new Exception("DK_Common__Location--delete--fail");
             else
             {
-                $staff_operation_record = new WL_Staff_Record_Operation;
+                $staff_operation_record = new DK_Common__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("WL_Staff_Record_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -399,9 +399,9 @@ class DK_Staff__LocationRepository {
             if(!$bool) throw new Exception("DK_Common__Location--restore--fail");
             else
             {
-                $staff_operation_record = new WL_Staff_Record_Operation;
+                $staff_operation_record = new DK_Common__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("WL_Staff_Record_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -484,9 +484,9 @@ class DK_Staff__LocationRepository {
             if(!$bool) throw new Exception("DK_Common__Location--delete--fail");
             else
             {
-                $staff_operation_record = new WL_Staff_Record_Operation;
+                $staff_operation_record = new DK_Common__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("WL_Staff_Record_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -573,9 +573,9 @@ class DK_Staff__LocationRepository {
             if(!$bool) throw new Exception("DK_Common__Location--update--fail");
             else
             {
-                $staff_operation_record = new WL_Staff_Record_Operation;
+                $staff_operation_record = new DK_Common__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("WL_Staff_Record_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -660,9 +660,9 @@ class DK_Staff__LocationRepository {
             if(!$bool) throw new Exception("DK_Common__Location--update--fail");
             else
             {
-                $staff_operation_record = new WL_Staff_Record_Operation;
+                $staff_operation_record = new DK_Common__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("WL_Staff_Record_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -687,7 +687,7 @@ class DK_Staff__LocationRepository {
         $me = $this->me;
 
         $id  = $post_data["id"];
-        $query = WL_Staff_Record_Operation::select('*')
+        $query = DK_Common__Record__by_Operation::select('*')
             ->with([
                 'creator'=>function($query) { $query->select(['id','name']); },
             ])
