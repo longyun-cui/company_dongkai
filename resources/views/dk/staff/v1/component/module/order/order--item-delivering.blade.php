@@ -123,7 +123,7 @@
                             <textarea class="form-control" name="order-item-delivering--description" rows="4" cols="100%"></textarea>
                         </div>
                     </div>
-s
+
                 </div>
             </form>
 
