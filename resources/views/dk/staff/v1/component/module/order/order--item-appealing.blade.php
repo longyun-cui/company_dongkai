@@ -74,12 +74,12 @@
                         </div>
                     </div>
                     {{--录音地址--}}
-{{--                    <div class="form-group">--}}
-{{--                        <label class="control-label col-md-2">录音地址</label>--}}
-{{--                        <div class="col-md-8 ">--}}
-{{--                            <input type="text" class="form-control" name="order--item-appealing--url" placeholder="录音地址 带http">--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
+                    <div class="form-group _none">
+                        <label class="control-label col-md-2">录音地址</label>
+                        <div class="col-md-8 ">
+                            <input type="text" class="form-control" name="order--item-appealing--url" placeholder="录音地址 带http">
+                        </div>
+                    </div>
 
                 </div>
             </form>
