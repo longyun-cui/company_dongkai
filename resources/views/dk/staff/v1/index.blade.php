@@ -82,17 +82,17 @@
     @elseif($me->staff_category == 51)
 {{--        @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list--for--QID')--}}
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list')
-        @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-aesthetic-list')
+        @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-aesthetic.order-aesthetic-list')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-luxury.order-luxury-list')
     @elseif($me->staff_category == 61)
 {{--        @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list--for--CSD')--}}
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list')
-        @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-aesthetic-list')
+        @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-aesthetic.order-aesthetic-list')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-luxury.order-luxury-list')
     @elseif($me->staff_category == 71)
 {{--        @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list--for--OD')--}}
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list')
-        @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-aesthetic-list')
+        @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-aesthetic.order-aesthetic-list')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-luxury.order-luxury-list')
     @else
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list--for--CSD')
