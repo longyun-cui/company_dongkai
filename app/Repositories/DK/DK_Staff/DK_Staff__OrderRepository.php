@@ -2214,7 +2214,7 @@ class DK_Staff__OrderRepository {
         {
             if($item->project_id != $project_id) $item->project_id = $project_id;
             if($item->client_name != $client_name) $item->client_name = $client_name;
-            if($item->client_name != $client_phone) $item->client_name = $client_phone;
+            if($item->client_phone != $client_phone) $item->client_phone = $client_phone;
             if($item->order_category == 1)
             {
                 if($item->client_type != $client_type) $item->client_type = $client_type;
