@@ -109,7 +109,7 @@
                         }
                         else
                         {
-                            return '<a href="javascript:void(0);">'+row.client_er.username+'</a>';
+                            return '<a href="javascript:void(0);">'+row.client_er.name+'</a>';
                         }
                     }
                 },
