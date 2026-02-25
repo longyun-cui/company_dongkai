@@ -107,8 +107,11 @@
                     createdCell: function (td, cellData, rowData, row, col) {
                         //重要的操作可以合并列的代码
                         var rowspan = rowData.project_merge;
-                        if (rowspan > 1) {
-                            $(td).attr('rowspan', rowspan)
+                        if (rowspan >= 1) {
+                            $(td).attr('rowspan', rowspan);
+                            // 添加一个数据属性标记这是合并块的起始行
+                            $(td).closest('tr').attr('data-merge-start', 'true')
+                                .attr('data-merge-size', rowspan);
                         }
                         if (rowspan == 0) {
                             $(td).remove();
@@ -139,11 +142,19 @@
             ],
             "drawCallback": function (settings) {
 
+                // reApplyStripes($tableId);
+                reApplyMergeStripes($tableId);
+
 //                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
 //                    this.api().column(1).nodes().each(function(cell, i) {
 //                        cell.innerHTML =  startIndex + i + 1;
 //                    });
 
+            },
+            "initComplete": function(settings, json) {
+                // 初始化完成后，重新计算条纹
+                // reApplyStripes($tableId);
+                reApplyMergeStripes($tableId);
             },
             "language": { url: '/common/dataTableI18n' },
         });

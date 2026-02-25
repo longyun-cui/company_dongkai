@@ -77,15 +77,25 @@
 
 
     <div class="col-md-12 datatable-body">
-        <div class="tableArea full">
-            <table class='table table-striped table-bordered table-hover order-column'>
-                <thead>
-                </thead>
-                <tbody>
-                </tbody>
-                <tfoot>
-                </tfoot>
-            </table>
+        <div class="box box-primary box-solid-" style="box-shadow:0 0;">
+
+            <div class="box-header with-border- margin-top-16px padding-top-8px _none">
+                <h3 class="box-title datatable-title"></h3>
+            </div>
+
+            <div class="box-body no-padding">
+                <div class="tableArea full margin-top-8px">
+                    <table class='table table-striped- table-bordered table-hover order-column'>
+                        <thead>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
         </div>
     </div>
 

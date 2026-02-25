@@ -865,4 +865,125 @@
 
 
     });
+
+    function reApplyStripes($TableId)
+    {
+        console.log('reApplyStripes.excute.');
+
+        var table = $($TableId);
+        // 1. 清除所有行自带的条纹类
+        table.find('tbody tr').removeClass('odd even');
+
+        // 2. 获取所有“可见”的行
+        // 注意：我们只处理 tbody 中第一个 td 未被移除的行（即合并块的第一行或独立行）
+        var visibleRows = [];
+        table.find('tbody tr').each(function(index) {
+            var $firstTd = $(this).find('td:first-child');
+            // 如果第一个td存在（没有被remove()），则认为它是视觉上的一行
+            if ($firstTd.length > 0) {
+                visibleRows.push($(this));
+            }
+        });
+
+        // 3. 为这些“视觉行”交替添加类
+        // 这里使用 Bootstrap 的类，如果使用DataTables默认主题，可改为 'odd' 和 'even'
+        $.each(visibleRows, function(i, $row) {
+            if (i % 2 === 0) {
+                $row.addClass('even').removeClass('odd'); // 对应 table-striped 的较浅色行
+            } else {
+                $row.addClass('odd').removeClass('even'); // 对应默认背景行
+            }
+        });
+    }
+
+
+    /**
+     * 重新应用合并块的条纹样式
+     * 每个合并块内的所有行颜色相同，合并块之间交替颜色
+     */
+    function reApplyMergeStripes($TableId)
+    {
+        var table = $($TableId);
+        var tbody = table.find('tbody');
+
+        // 1. 清除所有行的条纹类
+        tbody.find('tr').removeClass('merge-odd merge-even');
+
+        // 2. 获取所有合并块的起始行
+        var mergeStartRows = tbody.find('tr[data-merge-start="true"]');
+
+        // 3. 为每个合并块分配交替颜色
+        $.each(mergeStartRows, function(index, startRow) {
+            var $startRow = $(startRow);
+            var mergeSize = parseInt($startRow.attr('data-merge-size')) || 1;
+
+            // 确定当前合并块的颜色（基于合并块的索引）
+            var isEvenBlock = index % 2 === 0;
+            var colorClass = isEvenBlock ? 'merge-even' : 'merge-odd';
+
+            // 获取属于这个合并块的所有行
+            var blockRows = [];
+            var currentRow = $startRow;
+
+            // 收集合并块内的所有行
+            for (var i = 0; i < mergeSize; i++) {
+                if (currentRow.length) {
+                    blockRows.push(currentRow);
+                    currentRow = currentRow.next('tr');
+                }
+            }
+
+            // 为合并块内的所有行应用相同的颜色
+            $.each(blockRows, function(i, $row) {
+                $row.removeClass('merge-even merge-odd').addClass(colorClass);
+            });
+        });
+
+        // 4. 处理独立的行（没有被合并的行）
+        tbody.find('tr').each(function() {
+            var $row = $(this);
+            // 如果这行既不是合并块的起始行，也不在已有的合并块颜色中
+            if (!$row.attr('data-merge-start') &&
+                !$row.hasClass('merge-odd') &&
+                !$row.hasClass('merge-even')) {
+
+                // 计算这个独立行在视觉上是第几行
+                var visualRowIndex = countVisualRowsBefore($row);
+                var colorClass = visualRowIndex % 2 === 0 ? 'merge-even' : 'merge-odd';
+                $row.addClass(colorClass);
+            }
+        });
+    }
+
+    /**
+     * 计算某一行前面的"视觉行"数量（考虑合并块）
+     */
+    function countVisualRowsBefore($row)
+    {
+        var table = $('#yourTableId');
+        var tbody = table.find('tbody');
+        var allRows = tbody.find('tr');
+        var currentIndex = allRows.index($row);
+        var visualRowCount = 0;
+
+        for (var i = 0; i < currentIndex; i++) {
+            var $currentRow = $(allRows[i]);
+            // 如果是合并块的起始行，只算作一行
+            if ($currentRow.attr('data-merge-start')) {
+                visualRowCount++;
+            }
+            // 如果是合并块的其他行，已经被算在起始行中，不计入
+            else if (!$currentRow.hasClass('merge-odd') && !$currentRow.hasClass('merge-even')) {
+                // 独立的行，算作一行
+                visualRowCount++;
+            }
+        }
+
+        return visualRowCount;
+    }
+
+
+
 </script>
+
+
