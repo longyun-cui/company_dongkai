@@ -1,5 +1,5 @@
 <?php
-namespace App\Repositories\DK\DK_Staff;
+namespace App\Repositories\DK\DK_Super;
 
 use App\Models\DK\DK_Common\DK_Common__Company;
 use App\Models\DK\DK_Common\DK_Common__Department;
@@ -27,7 +27,7 @@ use App\Repositories\Common\CommonRepository;
 use Response, Auth, Validator, DB, Exception, Cache, Blade, Carbon, DateTime;
 use QrCode, Excel;
 
-class DK_Staff__TestRepository {
+class DK_Super__TestRepository {
 
     private $env;
     private $auth_check;
@@ -38,8 +38,8 @@ class DK_Staff__TestRepository {
 
     public function __construct()
     {
-        $this->view_blade_403 = env('DK_STAFF__TEMPLATE').'403';
-        $this->view_blade_404 = env('DK_STAFF__TEMPLATE').'404';
+        $this->view_blade_403 = env('DK_SUPER__TEMPLATE').'403';
+        $this->view_blade_404 = env('DK_SUPER__TEMPLATE').'404';
 
         Blade::setEchoFormat('%s');
         Blade::setEchoFormat('e(%s)');

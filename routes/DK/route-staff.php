@@ -36,9 +36,6 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
 
     $controller = 'DKStaffController';
 
-    Route::match(['get','post'], '/test', $controller.'@test_index');
-    Route::match(['get','post'], '/test/temp', $controller.'@test_temp');
-
 
     Route::get('/', $controller.'@view__staff__index');
     Route::get('/301', $controller.'@view__staff__301');

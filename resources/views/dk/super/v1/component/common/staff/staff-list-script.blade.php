@@ -813,7 +813,8 @@
                     }
                     else
                     {
-                        location.reload();
+                        // location.reload();
+                        window.open("{{ url(env('DK_STAFF__DOMAIN')) }}");
                     }
                 })
                 .fail(function(jqXHR, status, error) {
