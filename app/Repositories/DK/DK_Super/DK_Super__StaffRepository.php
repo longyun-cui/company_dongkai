@@ -77,7 +77,7 @@ class DK_Super__StaffRepository {
                 'team_group_er'=>function($query) { $query->select(['id','name']); },
                 'leader'=>function($query) { $query->select(['id','name']); }
             ])
-//            ->where('active',1)
+            ->where('active',1)
 //            ->when(in_array($me->staff_category, [0]), function ($query) {
 //                return $query->whereIn('staff_category',[1,11,21,31,41,51,61,71,81,99]);
 //            })
