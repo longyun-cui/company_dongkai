@@ -945,8 +945,8 @@
     function select2MultipleOptionClear(dom)
     {
         var $dom = $(dom);
-        $dom.val([]).trigger('change');
         $dom.val(null).trigger('change');
+        $dom.val([]).trigger('change');
         $dom.empty().trigger('change');
     }
 

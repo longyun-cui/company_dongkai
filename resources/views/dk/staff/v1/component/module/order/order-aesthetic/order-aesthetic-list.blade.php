@@ -202,10 +202,8 @@
 
 
             {{--城市--}}
-            <select class="search-filter form-filter filter-lg select2-box-c select2-location-city"
+            <select class="search-filter form-filter filter-lg select2-box-c select--location-city-c"
                     name="order-city"
-                    id="order-aesthetic-city"
-                    data-target="#order-aesthetic-district"
             >
                 <option value="-1">选择城市</option>
                 @if(!empty($location_city_list) && count($location_city_list) > 0)
@@ -216,10 +214,9 @@
             </select>
 
             {{--行政区--}}
-            <select class="search-filter form-filter filter-xxl select2-box-c select2--location-c"
+            <select class="search-filter form-filter filter-xxl select2-box-c- select2--location-district-c"
                     name="order-district[]"
-                    id="order-aesthetic-district"
-                    data-target="order-aesthetic-city"
+                    data-item-category="11"
                     multiple="multiple"
             >
                 <option value="">选择区域</option>

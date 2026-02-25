@@ -1034,7 +1034,7 @@
         });
         $('#'+$config.target).find('.select2-client-c').select2({
             ajax: {
-                url: "{{ url('/v1/operate/select2/select2-client') }}",
+                url: "{{ url('/o1/select2/select2-client') }}",
                 type: 'post',
                 dataType: 'json',
                 delay: 250,
@@ -1065,7 +1065,7 @@
         });
         $('#'+$config.target).find('.select2-project-c').select2({
             ajax: {
-                url: "{{ url('/v1/operate/select2/select2-project') }}",
+                url: "{{ url('/o1/select2/select2-project') }}",
                 type: 'post',
                 dataType: 'json',
                 delay: 250,
@@ -1253,6 +1253,82 @@
                 theme: 'classic'
             });
         });
+
+
+
+        // 选择城市
+        $('#'+$config.target).on('change', ".select--location-city-c", function() {
+            var $that = $(this);
+            var $city_value = $that.val();
+            var $datatable_search_row = $that.closest('.datatable-search-row');
+
+            $datatable_search_row.find('.select2--location-district-c').val(null).trigger('change');
+            $datatable_search_row.find('.select2--location-district-c').val([]).trigger('change');
+            $datatable_search_row.find('.select2--location-district-c').empty().trigger('change');
+
+            $datatable_search_row.find('.select2--location-district-c').data('location-city',$city_value);
+
+        });
+        // 地区
+        $('#'+$config.target).find('.select2--location-district-c').each(function() {
+            var $that = $(this);
+            var $datatable_search_row = $that.closest('.datatable-search-row');
+
+            // var $dropdownParent = $(document.body);
+            // var $modalSelector = $that.data('modal');
+            // if ($modalSelector)
+            // {
+            //     $dropdownParent = $($modalSelector);
+            // }
+
+            $that.select2({
+                ajax: {
+                    url: "{{ url('/o1/select2/select2--location') }}",
+                    type: 'post',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            item_category: this.data('item-category'),
+                            item_type: this.data('item-type'),
+                            location_city: this.data('location-city'),
+                            keyword: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function (markup) { return markup; },
+                // dropdownParent: $dropdownParent.find('.modal-content'),
+                minimumInputLength: 0,
+                theme: 'classic'
+            });
+
+
+            $that.change(function() {
+
+                if($that.data('item-category') == 1)
+                {
+                    var $city_value = $(this).val();
+
+                    var $location_district_target = $(this).data('location-district-target');
+                    $($location_district_target).val(null).trigger('change');
+                    $($location_district_target).data('location-city',$city_value);
+                }
+            });
+        });
+
+
     }
 
 
