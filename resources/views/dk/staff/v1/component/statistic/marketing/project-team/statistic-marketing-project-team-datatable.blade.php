@@ -142,7 +142,9 @@
             ],
             "drawCallback": function (settings) {
 
+                // 每次表格绘制后，重新计算条纹
                 // reApplyStripes($tableId);
+                // 每次表格绘制后，重新计算合并块的条纹
                 reApplyMergeStripes($tableId);
 
 //                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数

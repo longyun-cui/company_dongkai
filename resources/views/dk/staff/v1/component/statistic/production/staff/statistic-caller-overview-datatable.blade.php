@@ -270,8 +270,11 @@
                     createdCell: function (td, cellData, rowData, row, col) {
                         //重要的操作可以合并列的代码
                         var rowspan = rowData.team_merge;
-                        if (rowspan > 1) {
-                            $(td).attr('rowspan', rowspan)
+                        if (rowspan >= 1) {
+                            $(td).attr('rowspan', rowspan);
+                            // 添加一个数据属性标记这是合并块的起始行
+                            $(td).closest('tr').attr('data-merge-start', 'true')
+                                .attr('data-merge-size', rowspan);
                         }
                         if (rowspan == 0) {
                             $(td).remove();
@@ -288,7 +291,7 @@
                         //重要的操作可以合并列的代码
                         var rowspan = rowData.group_merge;
                         if (rowspan > 1) {
-                            $(td).attr('rowspan', rowspan)
+                            $(td).attr('rowspan', rowspan);
                         }
                         if (rowspan == 0) {
                             $(td).remove();
@@ -303,7 +306,7 @@
                     targets: [7,8,9,10],
                     createdCell: function (td, cellData, rowData, row, col) {
                         var rowspan = rowData.group_merge;
-                        if (rowspan > 1) {
+                        if (rowspan >= 1) {
                             $(td).attr('rowspan', rowspan)
                         }
                         if (rowspan == 0) {
@@ -326,11 +329,21 @@
             ],
             "drawCallback": function (settings) {
 
+                // 每次表格绘制后，重新计算条纹
+                // reApplyStripes($tableId);
+                // 每次表格绘制后，重新计算合并块的条纹
+                reApplyMergeStripes($tableId);
+
 //                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
 //                    this.api().column(1).nodes().each(function(cell, i) {
 //                        cell.innerHTML =  startIndex + i + 1;
 //                    });
 
+            },
+            "initComplete": function(settings, json) {
+                // 初始化完成后，重新计算条纹
+                // reApplyStripes($tableId);
+                reApplyMergeStripes($tableId);
             },
             "language": { url: '/common/dataTableI18n' },
         });
