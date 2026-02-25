@@ -128,6 +128,7 @@ class DK_Staff__StaffRepository {
 
 
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
+        if(!empty($post_data['login_number'])) $query->where('login_number', 'like', "%{$post_data['login_number']}%");
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
         if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");

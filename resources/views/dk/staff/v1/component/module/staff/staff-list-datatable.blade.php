@@ -24,7 +24,7 @@
                 "data": function (d) {
                     d._token = $('meta[name="_token"]').attr('content');
                     d.id = $('input[name="staff-id"]').val();
-                    d.mobile = $('input[name="staff-mobile"]').val();
+                    d.login_number = $('input[name="staff-number"]').val();
                     d.name = $('input[name="staff-name"]').val();
                     d.department = $tableSearch.find('select[name="staff-department"]').val();
                     d.team = $tableSearch.find('select[name="staff-team"]').val();

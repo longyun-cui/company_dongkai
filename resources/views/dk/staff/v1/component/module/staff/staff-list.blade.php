@@ -27,7 +27,7 @@
 
 
             <input type="text" class="search-filter form-filter filter-keyup" name="staff-id" placeholder="ID" />
-            <input type="text" class="search-filter form-filter filter-keyup" name="staff-mobile" placeholder="工号" />
+            <input type="text" class="search-filter form-filter filter-keyup" name="staff-number" placeholder="工号" />
             <input type="text" class="search-filter form-filter filter-keyup" name="staff-name" placeholder="名称" />
 
 

@@ -41,7 +41,17 @@
 {{--            <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-ended" placeholder="结束日期" value="" readonly="readonly" />--}}
 
 
-
+            {{--选择员工--}}
+            @if(in_array($me->staff_position,[0,1,9,11,31,41,61]))
+            <select class="search-filter form-filter filter-lg select2-box-c select2-staff-c-" name="order-staff">
+                <option value="-1">选择员工</option>
+                @if(!empty($staff_list) && count($staff_list) > 0)
+                    @foreach($staff_list as $v)
+                        <option value="{{ $v->id }}">{{ $v->name }}</option>
+                    @endforeach
+                @endif
+            </select>
+            @endif
 
             {{--选择项目--}}
             <select class="search-filter form-filter filter-lg select2-box-c select2-project-c-" data-item-category="31" name="order-project">

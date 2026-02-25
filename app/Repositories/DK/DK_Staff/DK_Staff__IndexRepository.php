@@ -144,6 +144,7 @@ class DK_Staff__IndexRepository {
 
 
 
+        // 【客服】部门
         $department_list = DK_Common__Department::select('id','name')
             ->where('active',1)
             ->where('item_status',1)
@@ -153,6 +154,7 @@ class DK_Staff__IndexRepository {
         $view_data['department_list'] = $department_list;
 
 
+        // 【客服】团队
         $team_list = DK_Common__Team::select('id','name')
             ->where('active',1)
             ->where('item_status',1)
@@ -162,10 +164,44 @@ class DK_Staff__IndexRepository {
         $view_data['team_list'] = $team_list;
 
 
+        // 【客服】人员
+        $staff_query = DK_Common__Staff::select('id','name')
+            ->where('active',1)
+            ->where('item_status',1)
+            ->where('staff_category',41)
+            ->whereIn('staff_position',[61,99]);
+
+        // 客服部
+        if($me->staff_category == 41)
+        {
+            if($me->staff_position == 31)
+            {
+                // 部门总监
+                $staff_query->where('department_id',$me->department_id);
+            }
+            else if($me->staff_position == 41)
+            {
+                // 团队经理
+                $staff_query->where('team_id',$me->team_id);
+            }
+            else if($me->staff_position == 61)
+            {
+                // 小组主管
+                $staff_query->where('team_id',$me->team_id);
+                $staff_query->where('team_group_id',$me->team_group_id);
+            }
+            else
+            {
+                $staff_query->where('team_id',-1);
+            }
+        }
+        $staff_list = $staff_query->get();
+        $view_data['staff_list'] = $staff_list;
 
 
-//        $project_list
 
+
+        // 项目
         $project_query = DK_Common__Project::select('id','name')
             ->where('active',1)
             ->where('item_status',1);

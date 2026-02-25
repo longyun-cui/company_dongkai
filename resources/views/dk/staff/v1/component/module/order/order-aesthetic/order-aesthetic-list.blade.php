@@ -32,6 +32,22 @@
                 </select>
             @endif
 
+            {{--选择部门--}}
+            @if(in_array($me->staff_category,[0,1,9,51,71]))
+                <select class="search-filter form-filter filter-xl select2-box-c"
+                        name="order-department"
+                        data-team-category=""
+                        data-team-type=""
+                >
+                    <option value="-1">选择部门</option>
+                    @if(!empty($department_list) && count($department_list) > 0)
+                        @foreach($department_list as $v)
+                            <option value="{{ $v->id }}">{{ $v->name }}</option>
+                        @endforeach
+                    @endif
+                </select>
+            @endif
+
             {{--选择团队--}}
             @if(in_array($me->staff_category,[0,1,9,51,71]))
                 <select class="search-filter form-filter filter-xl select2--team-c"
@@ -50,16 +66,16 @@
             @endif
 
             {{--选择员工--}}
-            {{--            @if(in_array($me->user_type,[0,1,9,11,41,81,84]))--}}
-            {{--                <select class="search-filter form-filter filter-lg select2-box-c select2-staff-c" name="order-staff">--}}
-            {{--                    <option value="-1">选择员工</option>--}}
-            {{--                    @if(!empty($staff_list) && count($staff_list) > 0)--}}
-            {{--                        @foreach($staff_list as $v)--}}
-            {{--                            <option value="{{ $v->id }}">{{ $v->username }}</option>--}}
-            {{--                        @endforeach--}}
-            {{--                    @endif--}}
-            {{--                </select>--}}
-            {{--            @endif--}}
+{{--            @if(in_array($me->staff_category,[0,1,9,41]))--}}
+{{--                <select class="search-filter form-filter filter-lg select2-box-c select2-staff-c-" name="order-staff">--}}
+{{--                    <option value="-1">选择员工</option>--}}
+{{--                    @if(!empty($staff_list) && count($staff_list) > 0)--}}
+{{--                        @foreach($staff_list as $v)--}}
+{{--                            <option value="{{ $v->id }}">{{ $v->name }}</option>--}}
+{{--                        @endforeach--}}
+{{--                    @endif--}}
+{{--                </select>--}}
+{{--            @endif--}}
 
             {{--选择项目--}}
             <select class="search-filter form-filter filter-lg select2-box-c select2--project-c-" data-item-category="1" name="order-project">
