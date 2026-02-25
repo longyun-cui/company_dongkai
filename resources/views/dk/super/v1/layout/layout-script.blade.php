@@ -32,7 +32,7 @@
                     // layer.msg('该账户在其他设备登录或退出，即将跳转登录页面！');
                     layer.msg('登录失效，请重新登录！');
                     setTimeout(function(){
-                        location.href = "{{ url('/logout_without_token') }}";
+                        {{--location.href = "{{ url('/logout_without_token') }}";--}}
                     }, 600);
                 }
             }

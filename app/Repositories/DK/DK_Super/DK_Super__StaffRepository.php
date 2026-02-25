@@ -39,10 +39,10 @@ class DK_Super__StaffRepository {
     // 登录情况
     public function get_me()
     {
-        if(Auth::guard("yh_super")->check())
+        if(Auth::guard("dk_super_user")->check())
         {
             $this->auth_check = 1;
-            $this->me = Auth::guard("yh_super")->user();
+            $this->me = Auth::guard("dk_super_user")->user();
             view()->share('me',$this->me);
         }
         else $this->auth_check = 0;
@@ -65,6 +65,7 @@ class DK_Super__StaffRepository {
     {
         $this->get_me();
         $me = $this->me;
+//        dd($me->staff_category);
 
         $query = DK_Common__Staff::withTrashed()->select('*')
             ->with([
@@ -76,12 +77,12 @@ class DK_Super__StaffRepository {
                 'team_group_er'=>function($query) { $query->select(['id','name']); },
                 'leader'=>function($query) { $query->select(['id','name']); }
             ])
+//            ->where('active',1)
 //            ->when(in_array($me->staff_category, [0]), function ($query) {
 //                return $query->whereIn('staff_category',[1,11,21,31,41,51,61,71,81,99]);
 //            })
-            ->where('id','<>',$me->id)
             ->when($me->staff_category == 0, function ($query) use($me) {
-                return $query->whereIn('staff_category',[1,9,11,21,31,41,51,61,71,81,99]);
+                return $query->whereIn('staff_category',[0,1,9,11,21,31,41,51,61,71,81,99]);
             })
             ->when($me->staff_category == 1, function ($query) use($me) {
                 return $query->whereIn('staff_category',[9,11,21,31,41,51,61,71,81,99]);
@@ -103,8 +104,7 @@ class DK_Super__StaffRepository {
             })
             ->when($me->staff_category == 88, function ($query) use($me) {
                 return $query->whereIn('staff_category',[88]);
-            })
-            ->where('active',1);
+            });
 
         if(in_array($me->staff_category,[11,21,31,41,51,61,71,81,88]))
         {

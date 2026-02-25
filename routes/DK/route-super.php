@@ -18,7 +18,7 @@ Route::match(['get','post'], 'logout_without_token', $controller.'@logout_withou
  * 员工系统
  * 需要密码
  */
-Route::group(['middleware' => ['yh.super.login']], function () {
+Route::group(['middleware' => ['dk.super.user.login']], function () {
 
     $controller = 'DKSuperController';
 
@@ -32,7 +32,7 @@ Route::group(['middleware' => ['yh.super.login']], function () {
  * 员工系统
  * 需要登录
  */
-Route::group(['middleware' => ['yh.super.login']], function () {
+Route::group(['middleware' => ['dk.super.user.login']], function () {
 
     $controller = 'DKSuperController';
 

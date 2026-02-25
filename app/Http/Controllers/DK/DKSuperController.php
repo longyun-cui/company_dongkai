@@ -145,8 +145,8 @@ class DKSuperController extends Controller
                         if(password_check($password,$user->password))
                         {
                             $remember = request()->get('remember');
-                            if($remember) Auth::guard('yh_super')->login($user,true);
-                            else Auth::guard('yh_super')->login($user,true);
+                            if($remember) Auth::guard('dk_super_user')->login($user,true);
+                            else Auth::guard('dk_super_user')->login($user,true);
                             return response_success();
                         }
                         else return response_error([],'账户or密码不正确！');
@@ -163,14 +163,14 @@ class DKSuperController extends Controller
     {
         if(request()->isMethod('get'))
         {
-            $record["record_category"] = 99; // record_category=1 browse/search/share/login
-            $record["record_type"] = 0; // record_type=1 browse
-            $record["page_type"] = 1; // page_type=1 login
-            $record["page_module"] = 1; // page_module=1 login page
-            $record["page_num"] = 0;
-            $record["open"] = "login";
-            $record["from"] = request('from',NULL);
-            $this->record_for_user_visit($record);
+//            $record["record_category"] = 99; // record_category=1 browse/search/share/login
+//            $record["record_type"] = 0; // record_type=1 browse
+//            $record["page_type"] = 1; // page_type=1 login
+//            $record["page_module"] = 1; // page_module=1 login page
+//            $record["page_num"] = 0;
+//            $record["open"] = "login";
+//            $record["from"] = request('from',NULL);
+//            $this->record_for_user_visit($record);
 
             $view_blade = env('DK_SUPER__TEMPLATE').'login';
             return view($view_blade);
@@ -203,24 +203,11 @@ class DKSuperController extends Controller
                     if(password_check($password,$staff->password))
                     {
                         $remember = request()->get('remember');
-                        if($remember) Auth::guard('yh_super')->login($staff,true);
-                        else Auth::guard('yh_super')->login($staff);
-                        Auth::guard('yh_super')->user()->login_error_num = 0;
-                        Auth::guard('yh_super')->user()->only_token = $token;
-                        Auth::guard('yh_super')->user()->save();
-
-                        if(Auth::guard('dk_staff_user')->user()->id > 10000)
-                        {
-                            $record["creator_id"] = Auth::guard('yh_super')->user()->id;
-                            $record["record_category"] = 99; // record_category=99 browse/search/share/login
-                            $record["record_type"] = 1; // record_type=1 browse
-                            $record["page_type"] = 1; // page_type=9 login
-                            $record["page_module"] = 1; // page_module=9 login success
-                            $record["page_num"] = 0;
-                            $record["open"] = "login";
-                            $record["from"] = request('from',NULL);
-                            $this->record_for_user_visit($record);
-                        }
+                        if($remember) Auth::guard('dk_super_user')->login($staff,true);
+                        else Auth::guard('dk_super_user')->login($staff);
+                        Auth::guard('dk_super_user')->user()->login_error_num = 0;
+                        Auth::guard('dk_super_user')->user()->only_token = $token;
+                        Auth::guard('dk_super_user')->user()->save();
 
                         return response_success();
                     }
@@ -270,14 +257,14 @@ class DKSuperController extends Controller
     // 退出
     public function logout()
     {
-        Auth::guard('dk_staff_user')->logout();
+        Auth::guard('dk_super_user')->logout();
         return redirect('/login');
     }
 
     // 退出
     public function logout_without_token()
     {
-        Auth::guard('dk_staff_user')->logout();
+        Auth::guard('dk_super_user')->logout();
         return redirect('/login');
     }
 
@@ -313,10 +300,11 @@ class DKSuperController extends Controller
         $result['message'] = 'failed';
         $result['result'] = 'denied';
 
-        if(Auth::guard('dk_staff_user')->check())
+        if(Auth::guard('dk_super_user')->check())
         {
+            dd(Auth::guard('dk_super_user')->user());
             $token = request('_token');
-            if(Auth::guard('dk_staff_user')->user()->only_token == $token)
+            if(Auth::guard('dk_super_user')->user()->only_token == $token)
             {
                 $result['message'] = 'success';
                 $result['result'] = 'access';

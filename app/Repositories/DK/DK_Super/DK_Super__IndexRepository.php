@@ -50,9 +50,9 @@ class DK_Super__IndexRepository {
     // 登录情况
     public function get_me()
     {
-        if(Auth::guard("dk_staff_user")->check())
+        if(Auth::guard("dk_super_user")->check())
         {
-            $admin = Auth::guard("dk_staff_user")->user();
+            $admin = Auth::guard("dk_super_user")->user();
 
 //            $department_district_id = $admin->department_district_id;
 //            $department_group_id = $admin->department_group_id;
@@ -84,7 +84,7 @@ class DK_Super__IndexRepository {
 //            }
 
             $this->auth_check = 1;
-            $this->me = Auth::guard("dk_staff_user")->user();
+            $this->me = Auth::guard("dk_super_user")->user();
 
             view()->share('me',$this->me);
         }

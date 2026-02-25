@@ -80,6 +80,12 @@ return [
         ],
 
 
+        'dk_super_user' => [
+            'driver' => 'session',
+            'provider' => 'dk_super_users',
+        ],
+
+
         'dk_admin' => [
             'driver' => 'session',
             'provider' => 'dk_admins',
@@ -203,6 +209,12 @@ return [
         ],
 
 
+
+
+        'dk_super_users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\DK\DK_Common\DK_Common__Staff::class,
+        ],
 
 
         'dk_admins' => [

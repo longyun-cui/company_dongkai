@@ -50,12 +50,12 @@ class DK_Super__TestRepository {
     // 登录情况
     public function get_me()
     {
-        if(Auth::guard("dk_staff_user")->check())
+        if(Auth::guard("dk_super_user")->check())
         {
-            $admin = Auth::guard("dk_staff_user")->user();
+            $admin = Auth::guard("dk_super_user")->user();
 
             $this->auth_check = 1;
-            $this->me = Auth::guard("dk_staff_user")->user();
+            $this->me = Auth::guard("dk_super_user")->user();
 
             view()->share('me',$this->me);
         }
