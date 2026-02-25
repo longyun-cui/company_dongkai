@@ -144,6 +144,15 @@ class DK_Staff__IndexRepository {
 
 
 
+        $department_list = DK_Common__Department::select('id','name')
+            ->where('active',1)
+            ->where('item_status',1)
+            ->where('department_category',41)
+//            ->where('team_type',11)
+            ->get();
+        $view_data['department_list'] = $department_list;
+
+
         $team_list = DK_Common__Team::select('id','name')
             ->where('active',1)
             ->where('item_status',1)

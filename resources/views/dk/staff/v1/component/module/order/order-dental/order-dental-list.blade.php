@@ -32,13 +32,29 @@
                 </select>
             @endif
 
+            {{--选择部门--}}
+            @if(in_array($me->staff_category,[0,1,9,51,71]))
+                <select class="search-filter form-filter filter-xl select2-box-c"
+                        name="order-department"
+                        data-team-category=""
+                        data-team-type=""
+                >
+                    <option value="-1">选择部门</option>
+                    @if(!empty($department_list) && count($department_list) > 0)
+                        @foreach($department_list as $v)
+                            <option value="{{ $v->id }}">{{ $v->name }}</option>
+                        @endforeach
+                    @endif
+                </select>
+            @endif
+
             {{--选择团队--}}
             @if(in_array($me->staff_category,[0,1,9,51,71]))
-                <select class="search-filter form-filter filter-xl select2--team-c"
+                <select class="search-filter form-filter filter-xl select2-box-c select2--team-c-"
                         name="order-team-list[]"
                         data-team-category="41"
                         data-team-type="11"
-                        id="order-team-list[]" multiple="multiple"
+                        multiple="multiple"
                 >
                     <option value="-1">选择团队</option>
                     @if(!empty($team_list) && count($team_list) > 0)

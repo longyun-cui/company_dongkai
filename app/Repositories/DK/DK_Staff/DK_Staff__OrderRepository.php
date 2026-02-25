@@ -308,6 +308,16 @@ class DK_Staff__OrderRepository {
         }
 
 
+        // 部门
+        if(!empty($post_data['department']))
+        {
+            $department_id_int = intval($post_data['department']);
+            if(!in_array($department_id_int,[-1,0]))
+            {
+                $query->where('dk_common__order.creator_department_id', $department_id_int);
+            }
+        }
+
         // 团队-单选
 //        if(!empty($post_data['team']))
 //        {
@@ -327,10 +337,10 @@ class DK_Staff__OrderRepository {
         // 员工
         if(!empty($post_data['staff']))
         {
-            $staff = intval($post_data['staff']);
-            if(!in_array($staff,[-1,0]))
+            $staff_id_int = intval($post_data['staff']);
+            if(!in_array($staff_id_int,[-1,0]))
             {
-                $query->where('dk_common__order.creator_id', $staff);
+                $query->where('dk_common__order.creator_id', $staff_id_int);
             }
         }
 
@@ -2112,6 +2122,28 @@ class DK_Staff__OrderRepository {
             $record_row['after'] = $client_phone;
             $record_content[] = $record_row;
         }
+
+        // 是否重复
+        if($item->project_id != $project_id || $item->client_phone != $client_phone)
+        {
+            $is_repeat = DK_Common__Order::where(['delivered_project_id'=>$project_id,'client_phone'=>(int)$client_phone])
+                ->where('is_published','>',0)
+                ->where('order_category',$item->order_category)
+                ->count("*");
+            if($is_repeat == 0)
+            {
+                $is_repeat = DK_Common__Delivery::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])->count("*");
+            }
+            if($is_repeat > 0) $is_repeat += 1;
+
+            $record_row = [];
+            $record_row['title'] = '是否重复';
+            $record_row['field'] = 'is_repeat';
+            $record_row['before'] = (($item->is_repeat) ? '是' : '否');
+            $record_row['after'] = (($is_repeat) ? '是' : '否');
+            $record_content[] = $record_row;
+        }
+
         if($item->order_category == 1)
         {
             // 患者类型
@@ -2135,6 +2167,7 @@ class DK_Staff__OrderRepository {
             $record_content[] = $record_row;
         }
         }
+
         // 城市区域
         if($item->location_city != $location_city || $item->location_district != $location_district)
         {
@@ -2192,6 +2225,7 @@ class DK_Staff__OrderRepository {
             }
             $record_content[] = $record_row;
         }
+
         // 通话小结
         if($item->description != $description)
         {
@@ -2211,6 +2245,10 @@ class DK_Staff__OrderRepository {
         DB::beginTransaction();
         try
         {
+            if($item->project_id != $project_id || $item->client_phone != $client_phone)
+            {
+                $item->is_repeat = $is_repeat;
+            }
             if($item->project_id != $project_id) $item->project_id = $project_id;
             if($item->client_name != $client_name) $item->client_name = $client_name;
             if($item->client_phone != $client_phone) $item->client_phone = $client_phone;
@@ -2390,6 +2428,28 @@ class DK_Staff__OrderRepository {
             $record_row['after'] = $client_phone;
             $record_content[] = $record_row;
         }
+
+        // 是否重复
+        if($item->project_id != $project_id || $item->client_phone != $client_phone)
+        {
+            $is_repeat = DK_Common__Order::where(['delivered_project_id'=>$project_id,'client_phone'=>(int)$client_phone])
+                ->where('is_published','>',0)
+                ->where('order_category',$item->order_category)
+                ->count("*");
+            if($is_repeat == 0)
+            {
+                $is_repeat = DK_Common__Delivery::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])->count("*");
+            }
+            if($is_repeat > 0) $is_repeat += 1;
+
+            $record_row = [];
+            $record_row['title'] = '是否重复';
+            $record_row['field'] = 'is_repeat';
+            $record_row['before'] = (($item->is_repeat) ? '是' : '否');
+            $record_row['after'] = (($is_repeat) ? '是' : '否');
+            $record_content[] = $record_row;
+        }
+
         if($item->order_category == 1)
         {
             // 患者类型
@@ -2413,6 +2473,7 @@ class DK_Staff__OrderRepository {
                 $record_content[] = $record_row;
             }
         }
+
         // 城市区域
         if($item->location_city != $location_city || $item->location_district != $location_district)
         {
@@ -2470,6 +2531,7 @@ class DK_Staff__OrderRepository {
             }
             $record_content[] = $record_row;
         }
+
         // 通话小结
         if($item->description != $description)
         {
@@ -2489,6 +2551,10 @@ class DK_Staff__OrderRepository {
         DB::beginTransaction();
         try
         {
+            if($item->project_id != $project_id || $item->client_phone != $client_phone)
+            {
+                $item->is_repeat = $is_repeat;
+            }
             if($item->project_id != $project_id) $item->project_id = $project_id;
             if($item->client_name != $client_name) $item->client_name = $client_name;
             if($item->client_phone != $client_phone) $item->client_phone = $client_phone;

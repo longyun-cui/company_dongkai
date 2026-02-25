@@ -44,6 +44,7 @@
                     d.name = $tableSearch.find('input[name="order-name"]').val();
                     d.title = $tableSearch.find('input[name="order-title"]').val();
                     d.keyword = $tableSearch.find('input[name="order-keyword"]').val();
+                    d.department = $tableSearch.find('select[name="order-department"]').val();
                     d.team_list = $tableSearch.find('select[name="order-team-list[]"]').val();
                     d.staff = $tableSearch.find('select[name="order-staff"]').val();
                     d.distribute_type = $tableSearch.find('select[name="order-distribute-type"]').val();
@@ -1212,6 +1213,9 @@
                         if(row.is_published > 0)
                         {
 
+                            // 详情编辑
+                            $html_detail = '<a class="btn btn-xs modal-show--for--order--item-detail-editing" data-role="admin" data-id="'+data+'">详情</a>';
+
                             // 审核
                             if(row.inspector_id == 0)
                             {
@@ -1283,6 +1287,7 @@
                             $html_deliver_fool+
                             $html_deliver+
                             $html_distribute+
+                            $html_detail+
                             $html_record+
                             // $more_html+
                             '';

@@ -87,7 +87,7 @@
                                 <input type="text" class="form-control" name="client_name" placeholder="客户姓名" value="" data-default="">
                             </div>
                             <div class="col-sm-6 col-md-6 padding-0" style="width:50%;">
-                                <input type="text" class="form-control" name="client_phone" placeholder="客户电话" value="" data-default="" readonly>
+                                <input type="text" class="form-control" name="client_phone" placeholder="客户电话" value="" data-default="">
                             </div>
                         </div>
                     </div>
