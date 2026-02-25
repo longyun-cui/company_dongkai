@@ -21,8 +21,9 @@ Route::group(['middleware' => ['yh.super.login']], function () {
     $controller = 'DKSuperController';
 
 
-    Route::get('/', $controller.'@view_super_index');
-    Route::get('/404', $controller.'@view_super_404');
+    Route::get('/', $controller.'@view_super__index');
+    Route::get('/403', $controller.'@view_super__403');
+    Route::get('/404', $controller.'@view_super__404');
 
 
     /*
