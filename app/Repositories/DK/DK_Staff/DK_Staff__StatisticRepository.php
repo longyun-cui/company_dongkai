@@ -2445,7 +2445,7 @@ class DK_Staff__StatisticRepository {
                     count(IF(delivered_result = '隔日交付', TRUE, NULL)) as count__for__order_today_tomorrow,
                     count(IF(inspected_result = '不合格' AND delivered_status = 1, TRUE, NULL)) as count__for__order_today_refused
                 "))
-            ->where('order_category',1)
+//            ->where('order_category',1)
             ->where('published_date',$assign_date)
             ->groupBy('delivered_project_id')
             ->get()
@@ -2458,7 +2458,7 @@ class DK_Staff__StatisticRepository {
             ->addSelect(DB::raw("
                     count(IF(delivered_result in ('正常交付','折扣交付','郊区交付','内部交付'), TRUE, NULL)) as count__for__order_yesterday_all
                 "))
-            ->where('order_category',1)
+//            ->where('order_category',1)
             ->where('published_date','<>',$assign_date)
             ->where('delivered_date',$assign_date)
             ->groupBy('delivered_project_id')
