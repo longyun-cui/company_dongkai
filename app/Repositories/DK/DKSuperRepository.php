@@ -60,6 +60,10 @@ class DKSuperRepository {
         else $this->auth_check = 0;
 
         view()->share('auth_check',$this->auth_check);
+
+        if(isMobileEquipment()) $is_mobile_equipment = 1;
+        else $is_mobile_equipment = 0;
+        view()->share('is_mobile_equipment',$is_mobile_equipment);
     }
 
 
@@ -69,7 +73,7 @@ class DKSuperRepository {
     public function view_super_index()
     {
         $this->get_me();
-        $view_blade = env('TEMPLATE_DK_SUPER').'entrance.index';
+        $view_blade = env('DK_SUPER__TEMPLATE').'index';
         return view($view_blade);
     }
 

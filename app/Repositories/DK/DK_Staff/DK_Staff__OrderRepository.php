@@ -2198,6 +2198,7 @@ class DK_Staff__OrderRepository {
 //            $record_row['after'] = $location_district;
 //            $record_content[] = $record_row;
 //        }
+
         // 自定义1
         if($item->field_1 != $field_1)
         {
@@ -2772,9 +2773,13 @@ class DK_Staff__OrderRepository {
         $appealed_handled_description = $post_data["order--item-appealed-handling--description"];
 
         $project_id = $post_data["project_id"];
-        $client_type = $post_data["client_type"];
         $client_name = $post_data["client_name"];
-        $client_intention = $post_data["client_intention"];
+        $client_phone = $post_data["client_phone"];
+        if($item->order_category == 1)
+        {
+            $client_type = $post_data["client_type"];
+            $client_intention = $post_data["client_intention"];
+        }
         $location_city = $post_data["location_city"];
         $location_district = $post_data["location_district"];
         $field_1 = $post_data["field_1"];
@@ -2830,7 +2835,9 @@ class DK_Staff__OrderRepository {
             $record_row['code'] = $appealed_handled_result;
 
             $record_row['before'] = '';
-            $record_row['after'] = $appealed_handled_result;
+            if($appealed_handled_result == 1) $record_row['after'] = '申诉·成功';
+            else if($appealed_handled_result == 9) $record_row['after'] = '申诉·失败';
+            else $record_row['after'] = '复核结果有误！';
 
             $record_content[] = $record_row;
         }
@@ -2873,26 +2880,62 @@ class DK_Staff__OrderRepository {
             $record_row['after'] = $client_name;
             $record_content[] = $record_row;
         }
-        // 患者类型
-        if($item->client_type != $client_type)
+        // 客户电话
+        if($item->client_phone != $client_phone)
         {
             $record_row = [];
-            $record_row['title'] = '患者类型';
-            $record_row['field'] = 'client_type';
-            $record_row['before'] = config('dk.common-config.dental_type.'.$item->client_type);
-            $record_row['after'] = config('dk.common-config.dental_type.'.$client_type);
+            $record_row['title'] = '电话';
+            $record_row['field'] = 'client_phone';
+            $record_row['before'] = $item->client_phone;
+            $record_row['after'] = $client_phone;
             $record_content[] = $record_row;
         }
-        // 客户意愿
-        if($item->client_intention != $client_intention)
+
+        // 是否重复
+        if($item->project_id != $project_id || $item->client_phone != $client_phone)
         {
+            $is_repeat = DK_Common__Order::where(['delivered_project_id'=>$project_id,'client_phone'=>(int)$client_phone])
+                ->where('is_published','>',0)
+                ->where('order_category',$item->order_category)
+                ->count("*");
+            if($is_repeat == 0)
+            {
+                $is_repeat = DK_Common__Delivery::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])->count("*");
+            }
+            if($is_repeat > 0) $is_repeat += 1;
+
             $record_row = [];
-            $record_row['title'] = '客户意愿';
-            $record_row['field'] = 'client_intention';
-            $record_row['before'] = $item->client_intention;
-            $record_row['after'] = $client_intention;
+            $record_row['title'] = '是否重复';
+            $record_row['field'] = 'is_repeat';
+            $record_row['before'] = (($item->is_repeat) ? '是' : '否');
+            $record_row['after'] = (($is_repeat) ? '是' : '否');
             $record_content[] = $record_row;
         }
+
+        if($item->order_category == 1)
+        {
+            // 患者类型
+            if($item->client_type != $client_type)
+            {
+                $record_row = [];
+                $record_row['title'] = '患者类型';
+                $record_row['field'] = 'client_type';
+                $record_row['before'] = config('dk.common-config.dental_type.'.$item->client_type);
+                $record_row['after'] = config('dk.common-config.dental_type.'.$client_type);
+                $record_content[] = $record_row;
+            }
+            // 客户意愿
+            if($item->client_intention != $client_intention)
+            {
+                $record_row = [];
+                $record_row['title'] = '客户意愿';
+                $record_row['field'] = 'client_intention';
+                $record_row['before'] = $item->client_intention;
+                $record_row['after'] = $client_intention;
+                $record_content[] = $record_row;
+            }
+        }
+
         // 城市区域
         if($item->location_city != $location_city || $item->location_district != $location_district)
         {
@@ -2924,6 +2967,8 @@ class DK_Staff__OrderRepository {
 //            $record_content[] = $record_row;
 //        }
         // 自定义1
+
+        // 自定义1
         if($item->field_1 != $field_1)
         {
             $record_row = [];
@@ -2950,6 +2995,7 @@ class DK_Staff__OrderRepository {
             }
             $record_content[] = $record_row;
         }
+
         // 通话小结
         if($item->description != $description)
         {
@@ -2969,10 +3015,18 @@ class DK_Staff__OrderRepository {
         DB::beginTransaction();
         try
         {
+            if($item->project_id != $project_id || $item->client_phone != $client_phone)
+            {
+                $item->is_repeat = $is_repeat;
+            }
             if($item->project_id != $project_id) $item->project_id = $project_id;
             if($item->client_name != $client_name) $item->client_name = $client_name;
-            if($item->client_type != $client_type) $item->client_type = $client_type;
-            if($item->client_intention != $client_intention) $item->client_intention = $client_intention;
+            if($item->client_phone != $client_phone) $item->client_phone = $client_phone;
+            if($item->order_category == 1)
+            {
+                if($item->client_type != $client_type) $item->client_type = $client_type;
+                if($item->client_intention != $client_intention) $item->client_intention = $client_intention;
+            }
             if($item->location_city != $location_city) $item->location_city = $location_city;
             if($item->location_district != $location_district) $item->location_district = $location_district;
             if($item->field_1 != $field_1) $item->field_1 = $field_1;

@@ -126,7 +126,7 @@
                         <div class="col-md-2 item-detail-operate" data-operate=""></div>
                     </div>
                     {{--患者类型--}}
-                    <div class="form-group">
+                    <div class="form-group dental-box">
                         <label class="control-label col-md-2">患者类型</label>
                         <div class="col-md-9 ">
                             <select class="form-control modal--select2 select2-reset"
@@ -143,10 +143,10 @@
                         </div>
                     </div>
                     {{--牙齿数量--}}
-                    <div class="form-group">
+                    <div class="form-group dental-box">
                         <label class="control-label col-md-2">牙齿数量</label>
                         <div class="col-md-9 ">
-                            <select class="form-control modal--select2 select2-reset"
+                            <select class="form-control modal--select2 select2-reset dental-field-1"
                                     name="field_1"
                                     data-modal="#modal--for--order--item-appealed-handling"
                             >
@@ -160,7 +160,7 @@
                         </div>
                     </div>
                     {{--客户意向--}}
-                    <div class="form-group">
+                    <div class="form-group dental-box">
                         <label class="control-label col-md-2">客户意向</label>
                         <div class="col-md-9 ">
                             <select class="form-control modal--select2 select2-reset"
@@ -172,6 +172,40 @@
                                 @foreach(config('dk.common-config.client_intention') as $k => $v)
                                     <option value ="{{ $k }}">{{ $v }}</option>
                                 @endforeach
+                                @endif
+                            </select>
+                        </div>
+                    </div>
+                    {{--医美品类--}}
+                    <div class="form-group aesthetic-box">
+                        <label class="control-label col-md-2">品类</label>
+                        <div class="col-md-9 ">
+                            <select class="form-control modal--select2 select2-reset aesthetic-field-1"
+                                    name="field_1"
+                                    data-modal="#modal--for--order--item-appealed-handling"
+                            >
+                                <option value="">选择品类</option>
+                                @if(!empty(config('dk.common-config.aesthetic_type')))
+                                    @foreach(config('dk.common-config.aesthetic_type') as $k => $v)
+                                        <option value ="{{ $k }}">{{ $v }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
+                    </div>
+                    {{--二奢品类--}}
+                    <div class="form-group luxury-box">
+                        <label class="control-label col-md-2">品类</label>
+                        <div class="col-md-9 ">
+                            <select class="form-control modal--select2 select2-reset luxury-field-1"
+                                    name="field_1"
+                                    data-modal="#modal--for--order--item-appealed-handling"
+                            >
+                                <option value="">选择品类</option>
+                                @if(!empty(config('dk.common-config.luxury_type')))
+                                    @foreach(config('dk.common-config.luxury_type') as $k => $v)
+                                        <option value ="{{ $k }}">{{ $v }}</option>
+                                    @endforeach
                                 @endif
                             </select>
                         </div>
