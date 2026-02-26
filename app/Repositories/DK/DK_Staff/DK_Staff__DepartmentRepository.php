@@ -2,6 +2,7 @@
 namespace App\Repositories\DK\DK_Staff;
 
 use App\Models\DK\DK_Common\DK_Common__Department;
+use App\Models\DK\DK_Common\DK_Common__Staff;
 use App\Models\DK\DK_Common\DK_Common__Record__by_Operation;
 
 use App\Repositories\Common\CommonRepository;
@@ -609,6 +610,8 @@ class DK_Staff__DepartmentRepository {
             if(!$bool) throw new Exception("DK_Common__Department--update--fail");
             else
             {
+                $bool_staff = DK_Common__Staff::where('department_id', $mine->id)->update(['owner_status__for__department' => 1]);
+
                 $staff_operation_record = new DK_Common__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
                 if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
@@ -696,6 +699,8 @@ class DK_Staff__DepartmentRepository {
             if(!$bool) throw new Exception("DK_Common__Department--update--fail");
             else
             {
+                $bool_staff = DK_Common__Staff::where('department_id', $mine->id)->update(['owner_status__for__departments' => 9]);
+
                 $staff_operation_record = new DK_Common__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
                 if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");

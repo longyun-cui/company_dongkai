@@ -184,6 +184,23 @@ class DKStaffController extends Controller
 
             if($staff)
             {
+                if($staff->owner_status__for__company != 1)
+                {
+                    return response_error([],'公司已禁用！');
+                }
+                if($staff->owner_status__for__department != 1)
+                {
+                    return response_error([],'部门已禁用！');
+                }
+                if($staff->owner_status__for__team != 1)
+                {
+                    return response_error([],'团队已禁用！');
+                }
+                if($staff->owner_status__for__team_group != 1)
+                {
+                    return response_error([],'小组已禁用！');
+                }
+
                 if($staff->item_status == 1)
                 {
                     if($staff->login_error_num >= 3)
@@ -252,7 +269,7 @@ class DKStaffController extends Controller
                     $this->record_for_user_visit($record);
 
                     $staff->increment('login_error_num');
-                    return response_error([],'账户or密码不正确啊！');
+                    return response_error([],'账户or密码不正确呀！');
                 }
                 else return response_error([],'账户已禁用！');
             }

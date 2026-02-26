@@ -25,6 +25,12 @@ class DK_Common__Staff extends Authenticatable
 
         'staff_position',
 
+        'owner_status',
+        'owner_status__for__company',
+        'owner_status__for__department',
+        'owner_status__for__team',
+        'owner_status__for__team_group',
+
         'login_number', 'password', 'wx_union_id',
 
         'owner_id', 'creator_id', 'updater_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',

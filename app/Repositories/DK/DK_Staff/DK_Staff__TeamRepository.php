@@ -4,6 +4,7 @@ namespace App\Repositories\DK\DK_Staff;
 use App\Models\DK\DK_Common\DK_Common__Company;
 use App\Models\DK\DK_Common\DK_Common__Department;
 use App\Models\DK\DK_Common\DK_Common__Team;
+use App\Models\DK\DK_Common\DK_Common__Staff;
 use App\Models\DK\DK_Common\DK_Common__Record__by_Operation;
 
 use App\Repositories\Common\CommonRepository;
@@ -756,6 +757,15 @@ class DK_Staff__TeamRepository {
             if(!$bool) throw new Exception("DK_Common__Team--update--fail");
             else
             {
+                if($mine->team_type == 11)
+                {
+                    $bool_staff = DK_Common__Staff::where('team_id', $mine->id)->update(['owner_status__for__team' => 1]);
+                }
+                else if($mine->team_type == 31)
+                {
+                    $bool_staff = DK_Common__Staff::where('team_id', $mine->id)->update(['owner_status__for__team_group' => 1]);
+                }
+
                 $staff_operation_record = new DK_Common__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
                 if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
@@ -843,6 +853,15 @@ class DK_Staff__TeamRepository {
             if(!$bool) throw new Exception("DK_Common__Team--update--fail");
             else
             {
+                if($mine->team_type == 11)
+                {
+                    $bool_staff = DK_Common__Staff::where('team_id', $mine->id)->update(['owner_status__for__team' => 9]);
+                }
+                else if($mine->team_type == 31)
+                {
+                    $bool_staff = DK_Common__Staff::where('team_id', $mine->id)->update(['owner_status__for__team_group' => 9]);
+                }
+
                 $staff_operation_record = new DK_Common__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
                 if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");

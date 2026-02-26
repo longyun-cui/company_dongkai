@@ -69,6 +69,26 @@
                             return '<i class="fa fa-times-circle text-black"></i> 已删除';
                         }
 
+                        if(row.owner_status__for__company != 1)
+                        {
+                            return '<i class="fa fa-ban text-red"></i> 公司·禁用';
+                        }
+
+                        if(row.owner_status__for__department != 1)
+                        {
+                            return '<i class="fa fa-ban text-red"></i> 部门·禁用';
+                        }
+
+                        if(row.owner_status__for__team != 1)
+                        {
+                            return '<i class="fa fa-ban text-red"></i> 团队·禁用';
+                        }
+
+                        if(row.owner_status__for__team_group != 1)
+                        {
+                            return '<i class="fa fa-ban text-red"></i> 小组·禁用';
+                        }
+
                         if(row.item_status == 1)
                         {
                             return '<i class="fa fa-circle-o text-green"></i> 正常';

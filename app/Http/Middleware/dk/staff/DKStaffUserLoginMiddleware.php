@@ -31,6 +31,17 @@ class DKStaffUserLoginMiddleware
         {
             $me_user = Auth::guard('dk_staff_user')->user();
             // 判断用户是否被封禁
+            if(
+                $me_user->owner_status__for__company != 1 ||
+                $me_user->owner_status__for__department != 1 ||
+                $me_user->owner_status__for__team != 1 ||
+                $me_user->owner_status__for__team_group != 1
+            )
+            {
+                Auth::guard('dk_staff_user')->logout();
+                return redirect('/login');
+            }
+            // 判断用户是否被封禁
             if($me_user->item_status != 1)
             {
                 Auth::guard('dk_staff_user')->logout();
