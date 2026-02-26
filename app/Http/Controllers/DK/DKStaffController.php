@@ -232,7 +232,7 @@ class DKStaffController extends Controller
                         $staff->increment('login_error_num');
                         if($staff->login_error_num >= 3)
                         {
-                            $staff->staff_status = 99;
+                            $staff->item_status = 99;
                             $staff->only_token = '';
                             $staff->save();
                         }
