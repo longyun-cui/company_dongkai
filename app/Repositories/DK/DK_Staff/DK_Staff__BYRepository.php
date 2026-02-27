@@ -662,10 +662,10 @@ class DK_Staff__BYRepository {
             if(!$bool) throw new Exception("item--update--fail");
             else
             {
-                $record = new DK_Common__Order__Operation_Record;
-
-                $bool_1 = $record->fill($record_data)->save();
-                if(!$bool_1) throw new Exception("insert--record--fail");
+//                $record = new DK_Common__Order__Operation_Record;
+//
+//                $bool_1 = $record->fill($record_data)->save();
+//                if(!$bool_1) throw new Exception("insert--record--fail");
             }
 
 
