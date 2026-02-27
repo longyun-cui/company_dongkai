@@ -654,7 +654,8 @@ class DK_Staff__OrderRepository {
                 if($v->order_category == 1)
                 {
                     $time = time();
-                    if(($v->published_at > 0) && (($time - $v->published_at) > 86400))
+//                    if(($v->published_at > 0) && (($time - $v->published_at) > 86400))
+                    if( ($v->published_at > 0) && ($v->published_at < strtotime("yesterday")) )
                     {
                         $client_phone = $v->client_phone;
                         $v->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
@@ -664,7 +665,8 @@ class DK_Staff__OrderRepository {
             else if(in_array($me->staff_category,[41]))
             {
                 $time = time();
-                if(!$v->is_me || (($v->published_at > 0) && (($time - $v->published_at) > 86400)))
+//                if(!$v->is_me || (($v->published_at > 0) && (($time - $v->published_at) > 86400)))
+                if(!$v->is_me || (($v->published_at > 0) && ($v->published_at < strtotime("yesterday"))))
                 {
 //                    $len = strlen($client_phone);  // 字符串长度
                     $client_phone = $v->client_phone;
