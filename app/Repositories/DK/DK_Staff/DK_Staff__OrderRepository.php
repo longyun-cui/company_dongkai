@@ -663,12 +663,15 @@ class DK_Staff__OrderRepository {
             {
 //                $time = time();
 //                if(!$v->is_me || (($v->published_at > 0) && (($time - $v->published_at) > 86400)))
-                if(!$v->is_me || (($v->published_at > 0) && ($v->published_at < strtotime("yesterday"))))
+                if($me->staff_position != 31)
                 {
-                    $client_phone = $v->client_phone;
-                    if(is_numeric($client_phone))
+                    if(!$v->is_me || (($v->published_at > 0) && ($v->published_at < strtotime("yesterday"))))
                     {
-                        $v->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
+                        $client_phone = $v->client_phone;
+                        if(is_numeric($client_phone))
+                        {
+                            $v->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
+                        }
                     }
                 }
             }
@@ -743,12 +746,15 @@ class DK_Staff__OrderRepository {
         }
         else if(in_array($me->staff_category,[41]))
         {
-            if(!($item->creator_id == $me->id) || (($item->published_at > 0) && ($item->published_at < strtotime("yesterday"))))
+            if($me->staff_position != 31)
             {
-                $client_phone = $item->client_phone;
-                if(is_numeric($client_phone))
+                if(!($item->creator_id == $me->id) || (($item->published_at > 0) && ($item->published_at < strtotime("yesterday"))))
                 {
-                    $item->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
+                    $client_phone = $item->client_phone;
+                    if(is_numeric($client_phone))
+                    {
+                        $item->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
+                    }
                 }
             }
         }
