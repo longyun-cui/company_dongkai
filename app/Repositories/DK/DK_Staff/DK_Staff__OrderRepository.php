@@ -651,24 +651,20 @@ class DK_Staff__OrderRepository {
             }
             else if(in_array($me->staff_category,[51]))
             {
-                if($v->order_category == 1)
+//                $time = time();
+//                if(($v->published_at > 0) && (($time - $v->published_at) > 86400))
+                if( ($v->published_at > 0) && ($v->published_at < strtotime("yesterday")) )
                 {
-                    $time = time();
-//                    if(($v->published_at > 0) && (($time - $v->published_at) > 86400))
-                    if( ($v->published_at > 0) && ($v->published_at < strtotime("yesterday")) )
-                    {
-                        $client_phone = $v->client_phone;
-                        $v->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
-                    }
+                    $client_phone = $v->client_phone;
+                    $v->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
                 }
             }
             else if(in_array($me->staff_category,[41]))
             {
-                $time = time();
+//                $time = time();
 //                if(!$v->is_me || (($v->published_at > 0) && (($time - $v->published_at) > 86400)))
                 if(!$v->is_me || (($v->published_at > 0) && ($v->published_at < strtotime("yesterday"))))
                 {
-//                    $len = strlen($client_phone);  // 字符串长度
                     $client_phone = $v->client_phone;
                     if(is_numeric($client_phone))
                     {
@@ -718,7 +714,7 @@ class DK_Staff__OrderRepository {
         $me = $this->me;
 
         // 判断用户操作权限
-        if(!in_array($me->user_type,[0,1,9,11,41,61,66,71,77,81,84,88])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->staff_category,[0,1,9,41,51,61,71])) return response_error([],"你没有操作权限！");
 
         $operate = $post_data["operate"];
         if($operate != 'item-get') return response_error([],"参数[operate]有误！");
@@ -733,6 +729,30 @@ class DK_Staff__OrderRepository {
             ])
             ->find($id);
         if(!$item) return response_error([],"不存在警告，请刷新页面重试！");
+
+        if(in_array($me->staff_category,[0,1,9]))
+        {
+        }
+        else if(in_array($me->staff_category,[51]))
+        {
+            if( ($item->published_at > 0) && ($item->published_at < strtotime("yesterday")) )
+            {
+                $client_phone = $item->client_phone;
+                $item->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
+            }
+        }
+        else if(in_array($me->staff_category,[41]))
+        {
+            if(!($item->creator_id == $me->id) || (($item->published_at > 0) && ($item->published_at < strtotime("yesterday"))))
+            {
+                $client_phone = $item->client_phone;
+                if(is_numeric($client_phone))
+                {
+                    $item->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
+                }
+            }
+        }
+
 
         return response_success($item,"");
     }
