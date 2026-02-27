@@ -25,6 +25,8 @@ use App\Repositories\DK\DK_Staff\DK_Staff__ProjectRepository;
 use App\Repositories\DK\DK_Staff\DK_Staff__OrderRepository;
 use App\Repositories\DK\DK_Staff\DK_Staff__DeliveryRepository;
 
+use App\Repositories\DK\DK_Staff\DK_Staff__BYRepository;
+
 use App\Repositories\DK\DK_Staff\DK_Staff__ExportRepository;
 
 use App\Repositories\DK\DK_Staff\DK_Staff__RecordRepository;
@@ -56,6 +58,8 @@ class DKStaffController extends Controller
     private $order_repo;
     private $delivery_repo;
 
+    private $by_repo;
+
     private $export_repo;
 
     private $record_repo;
@@ -80,6 +84,8 @@ class DKStaffController extends Controller
 
         $this->order_repo = new DK_Staff__OrderRepository;
         $this->delivery_repo = new DK_Staff__DeliveryRepository;
+
+        $this->by_repo = new DK_Staff__BYRepository;
 
         $this->export_repo = new DK_Staff__ExportRepository;
 
@@ -1018,6 +1024,65 @@ class DKStaffController extends Controller
     public function o1__delivery__item_delete()
     {
         return $this->delivery_repo->o1__delivery__item_delete(request()->all());
+    }
+
+
+
+
+
+
+
+
+    // 【API】【百应】接收
+    public function operate_api_by_receiving_call_instance_result()
+    {
+        $post_data = request()->all();
+        return $this->repo->operate_api_by_receiving_call_instance_result(request()->all());
+    }
+    // 【API】【百应】datatable
+    public function o1__by__list__datatable_query()
+    {
+        return $this->by_repo->o1__by__list__datatable_query(request()->all());
+    }
+    // 【API】【百应】操作记录
+    public function v1_operate_for_by_item_operation_record_datatable_query()
+    {
+        return $this->repo->v1_operate_for_order_item_operation_record_datatable_query(request()->all());
+    }
+    // 【API】【百应】获取
+    public function o1__by__item_get()
+    {
+        return $this->by_repo->o1__by__item_get(request()->all());
+    }
+    // 【API】【百应】编辑-保存
+    public function o1__by__item_save()
+    {
+        return $this->by_repo->o1__by__item_save(request()->all());
+    }
+    // 【API】【百应】预处理
+    public function o1__by__item_preprocess()
+    {
+        return $this->by_repo->v1_operate_for_by_item_preprocess(request()->all());
+    }
+    // 【API】【百应】
+    public function o1__by__item_publish()
+    {
+        return $this->by_repo->v1_operate_for_by_item_publish(request()->all());
+    }
+    // 【API】【百应】
+    public function o1__by__item_inspecting()
+    {
+        return $this->by_repo->o1__by__item_inspecting(request()->all());
+    }
+    // 【API】【百应】
+    public function o1__by__item_deliver()
+    {
+        return $this->by_repo->v1_operate_for_by_item_deliver(request()->all());
+    }
+    // 【API】【百应】批量-交付
+    public function o1__by__bulk_deliver()
+    {
+        return $this->by_repo->v1_operate_for_order_bulk_deliver(request()->all());
     }
 
 

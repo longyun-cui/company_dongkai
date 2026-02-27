@@ -1,9 +1,10 @@
 <?php
-namespace App\Models\DK;
+namespace App\Models\DK\DK_API;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DK_API_BY_Received extends Model
+class DK_API__BY_Received extends Model
 {
     use SoftDeletes;
     //
@@ -21,8 +22,10 @@ class DK_API_BY_Received extends Model
         'creator_id',
         'team_api_id',
 
-        'username', 'nickname', 'true_name', 'short_name',
-        'name', 'title', 'subtitle', 'content', 'description', 'tag', 'remark', 'label', 'custom',
+        'order_id',
+
+        'name', 'username', 'nickname', 'true_name', 'short_name',
+        'title', 'subtitle', 'content', 'description', 'tag', 'remark', 'label', 'custom',
 
         'is_repeat',
 
@@ -65,36 +68,33 @@ class DK_API_BY_Received extends Model
     // 拥有者
     function owner()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','owner_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','owner_id','id');
     }
     // 创建者
     function creator()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','creator_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','creator_id','id');
     }
     // 更新者
     function updater()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','updater_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','updater_id','id');
     }
     // 完成者
     function completer()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','completer_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','completer_id','id');
     }
     // 审核者
     function inspector()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','inspector_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','inspector_id','id');
     }
     // 用户
     function user()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','user_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','user_id','id');
     }
-
-
-
 
 
 }

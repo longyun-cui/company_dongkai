@@ -241,6 +241,16 @@
                 {
                     Datatable__for__Delivery_Luxury_List('#'+$config.id);
                 }
+                else if($id == "by")
+                {
+                    console.log("by");
+                    console.log("by");
+                    console.log("by");
+                }
+                else if($id == "datatable-by-list")
+                {
+                    Datatable__for__BY_List('#'+$config.id);
+                }
                 else if($id == "production")
                 {
                     console.log("production");

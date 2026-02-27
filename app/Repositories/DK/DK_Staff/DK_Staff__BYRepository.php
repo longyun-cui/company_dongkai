@@ -12,7 +12,7 @@ use App\Models\DK\DK_Common\DK_Common__Client;
 use App\Models\DK\DK_Common\DK_Common__Project;
 
 use App\Models\DK\DK_Common\DK_Common__Order;
-use App\Models\DK\DK_Common\DK_Common__Order_Operation_Record;
+use App\Models\DK\DK_Common\DK_Common__Order__Operation_Record;
 use App\Models\DK\DK_Common\DK_Common__Delivery;
 
 use App\Models\DK\DK_Common\DK_Pivot__Staff_Project;
@@ -22,7 +22,8 @@ use App\Models\DK\DK_Common\DK_Pivot__Team_Project;
 use App\Models\DK_CC\DK_CC_Call_Record;
 use App\Models\DK_CC\DK_CC_Call_Statistic;
 
-use App\Models\DK\DK_API_BY_Received;
+
+use App\Models\DK\DK_API\DK_API__BY_Received;
 
 
 use App\Jobs\DK_Client\AutomaticDispatchingJob;
@@ -81,14 +82,14 @@ class DK_Staff__BYRepository {
      * 项目-管理 Project
      */
     // 【API】返回-列表-数据
-    public function v1_operate_for__BY__datatable_list_query($post_data)
+    public function o1__by__list__datatable_query($post_data)
     {
         $this->get_me();
         $me = $this->me;
 
-        if(!in_array($me->user_type,[0,1,9,11,61,66,71,77])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->staff_category,[0,1,9,71])) return response_error([],"你没有操作权限！");
 
-        $query = DK_API_BY_Received::select('*')
+        $query = DK_API__BY_Received::select('*')
             ->withTrashed()
             ->with([
                 'inspector'=>function($query) { $query->select(['id','name']); }
@@ -127,7 +128,7 @@ class DK_Staff__BYRepository {
         }
         else
         {
-            if(in_array($me->user_type,[11,61,66,71,77])) $query->where('api_status', '>=', 1);
+            if(in_array($me->staff_category,[71])) $query->where('api_status', '>=', 1);
         }
 
 
@@ -157,7 +158,7 @@ class DK_Staff__BYRepository {
         return datatable_response($list, $draw, $total);
     }
     // 【API】获取 GET
-    public function v1_operate_for__BY__item_get($post_data)
+    public function o1__by__item_get($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -197,17 +198,17 @@ class DK_Staff__BYRepository {
         return response_success($item,"");
     }
     // 【API】保存 SAVE
-    public function v1_operate_for__BY__item_save($post_data)
+    public function o1__by__item_save($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
-            'item_category.required' => '请选择项目种类！',
+            'order_category.required' => '请选择项目种类！',
             'name.required' => '请输入项目名称！',
 //            'name.unique' => '该项目已存在！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
-            'item_category' => 'required',
+            'order_category' => 'required',
             'name' => 'required',
 //            'name' => 'required|unique:dk_project,name',
         ], $messages);
@@ -315,7 +316,7 @@ class DK_Staff__BYRepository {
     }
 
     // 【API】预处理
-    public function v1_operate_for__BY__item_preprocess($post_data)
+    public function o1__by__item_preprocess($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -339,7 +340,7 @@ class DK_Staff__BYRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = DK_API_BY_Received::withTrashed()->find($id);
+        $item = DK_API__BY_Received::withTrashed()->find($id);
         if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
 
         if($item->api_status > 0)
@@ -352,7 +353,7 @@ class DK_Staff__BYRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,9,11,61,66,71,77])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->staff_category,[0,1,9,71])) return response_error([],"你没有操作权限！");
 
 
         $item_content = $item->content;
@@ -384,7 +385,7 @@ class DK_Staff__BYRepository {
         if(isset($item_para->dialog_content)) $update["dialog_content"] = json_encode($item_para->dialog_content);
 
 
-        $is_repeat = DK_API_BY_Received::where(['client_phone'=>(int)$client_phone])
+        $is_repeat = DK_API__BY_Received::where(['client_phone'=>(int)$client_phone])
             ->where('id','<',$id)
             ->count("*");
 //        dd($is_repeat);
@@ -400,7 +401,7 @@ class DK_Staff__BYRepository {
 //            $item->client_phone = $client_phone;
 //            $item->client_intention = $client_intention;
 //            $item->is_wx = $is_wx;
-//            $item->teeth_count = $teeth_count;
+//            $item->field_1 = $teeth_count;
 //            $item->location_city = $location_city;
 //            $item->location_district = $location_district;
 //            $item->recording_address = $recording_address;
@@ -412,10 +413,10 @@ class DK_Staff__BYRepository {
 
             $update["api_status"] = 1;
             $bool = $item->fill($update)->save();
-            if(!$bool) throw new Exception("DK_API_BY_Received--update--fail");
+            if(!$bool) throw new Exception("DK_API__BY_Received--update--fail");
             else
             {
-//                $record = new DK_Common__Order_Operation_Record;
+//                $record = new DK_Common__Order__Operation_Record;
 //
 //                $record_data["ip"] = Get_IP();
 //                $record_data["record_object"] = 21;
@@ -447,7 +448,7 @@ class DK_Staff__BYRepository {
 
     }
     // 【API】审核
-    public function v1_operate_for__BY__item_inspect($post_data)
+    public function o1__by__item_inspecting($post_data)
     {
 //        dd($post_data);
 //        return response_success([]);
@@ -470,7 +471,7 @@ class DK_Staff__BYRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = DK_API_BY_Received::withTrashed()->find($id);
+        $item = DK_API__BY_Received::withTrashed()->find($id);
         if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
 
         $this->get_me();
@@ -514,7 +515,7 @@ class DK_Staff__BYRepository {
                 })
 //                ->where('id','<>',$id)
 //                ->where('is_published','>',0)
-//                ->where('item_category',1)
+//                ->where('order_category',1)
                 ->count("*");
             if($is_repeat > 0)
             {
@@ -550,7 +551,7 @@ class DK_Staff__BYRepository {
                     {
                         $order = new DK_Common__Order;
 
-                        $order->item_category = 1;
+                        $order->order_category = 1;
                         $order->created_type = 91;
                         $order->creator_id = $me->id;
                         $order->inspector_id = $me->id;
@@ -562,7 +563,7 @@ class DK_Staff__BYRepository {
                         $order->published_date = $date;
 
                         $recording_file[0] = $item->recording_address;
-                        $order->recording_address = $item->recording_address;
+//                        $order->recording_address = $item->recording_address;
                         $order->recording_address_list = json_encode($recording_file);
 
                     }
@@ -571,7 +572,7 @@ class DK_Staff__BYRepository {
                 {
                     $order = new DK_Common__Order;
 
-                    $order->item_category = 1;
+                    $order->order_category = 1;
                     $order->created_type = 91;
                     $order->creator_id = $me->id;
                     $order->inspector_id = $me->id;
@@ -583,7 +584,7 @@ class DK_Staff__BYRepository {
                     $order->published_date = $date;
 
                     $recording_file[0] = $item->recording_address;
-                    $order->recording_address = $item->recording_address;
+//                    $order->recording_address = $item->recording_address;
                     $order->recording_address_list = json_encode($recording_file);
                 }
 
@@ -593,7 +594,7 @@ class DK_Staff__BYRepository {
                 $order->client_name = $client_name;
                 $order->client_phone = $client_phone;
                 $order->client_intention = $client_intention;
-                $order->teeth_count = $teeth_count;
+                $order->field_1 = $teeth_count;
                 $order->description = $description;
                 $order->recording_quality = $recording_quality;
                 $order->is_published = 1;
@@ -618,7 +619,7 @@ class DK_Staff__BYRepository {
             if(!$bool) throw new Exception("item--update--fail");
             else
             {
-                $record = new DK_Common__Order_Operation_Record;
+                $record = new DK_Common__Order__Operation_Record;
 
                 $record_data["ip"] = Get_IP();
                 $record_data["record_object"] = 21;

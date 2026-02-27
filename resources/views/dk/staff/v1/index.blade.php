@@ -109,6 +109,12 @@
     @endif
 
 
+    {{--百应--}}
+    @if(in_array($me->staff_category,[0,1,9,71]))
+    @include(env('DK_STAFF__TEMPLATE').'component.module.by.by-list')
+    @endif
+
+
 
 
     {{--交付--}}
@@ -196,6 +202,10 @@
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-appealed-handling')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-delivering')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-distributing')
+
+
+    {{--百应--}}
+    @include(env('DK_STAFF__TEMPLATE').'component.module.by.by--item-inspecting')
 
 
 @endsection
@@ -329,6 +339,13 @@
         @include(env('DK_STAFF__TEMPLATE').'component.module.delivery.delivery-dental.delivery-dental-list-datatable')
         @include(env('DK_STAFF__TEMPLATE').'component.module.delivery.delivery-aesthetic.delivery-aesthetic-list-datatable')
         @include(env('DK_STAFF__TEMPLATE').'component.module.delivery.delivery-luxury.delivery-luxury-list-datatable')
+    @endif
+
+
+    {{--百应--}}
+    @if(in_array($me->staff_category,[0,1,9,71]))
+        @include(env('DK_STAFF__TEMPLATE').'component.module.by.by-list-script')
+        @include(env('DK_STAFF__TEMPLATE').'component.module.by.by-list-datatable')
     @endif
 
 

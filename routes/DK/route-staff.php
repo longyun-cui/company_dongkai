@@ -240,6 +240,23 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
 
 
 
+    // 【API】【百应】
+    Route::post('/o1/by/by-list/datatable-query', $controller.'@o1__by__list__datatable_query');
+    Route::post('/o1/by/item-operation-record-list/datatable-query', $controller.'@v1_operate_for_by_item_operation_record_datatable_query');
+    Route::post('/o1/by/item-get', $controller.'@o1__by__item_get');
+    Route::post('/o1/by/item-save', $controller.'@o1__by__item_save');
+    Route::post('/o1/by/item-preprocess', $controller.'@o1__by__item_preprocess');
+    Route::post('/o1/by/item-publish', $controller.'@o1__by__item_publish');
+    Route::post('/o1/by/item-inspecting', $controller.'@o1__by__item_inspecting');
+    Route::post('/o1/by/item-deliver', $controller.'@o1__by__item_deliver');
+
+
+
+
+
+
+
+
     // 【导出】列表
     Route::post('/o1/export/export-list/datatable-query', $controller.'@o1__export__list__datatable_query');
     Route::get('/o1/export/order--export--by-ids', $controller.'@o1__export__order__export__by_ids');
