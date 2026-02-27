@@ -582,7 +582,7 @@
                         {
                             if(row.inspector_id == 0)
                             {
-                                $html_detail_inspected = '<a class="btn btn-xs bg-teal by-modal-show-for-item-inspected" data-id="'+data+'">审核</a>';
+                                $html_detail_inspected = '<a class="btn btn-xs bg-teal modal-show--for--by--item-inspecting" data-id="'+data+'">审核</a>';
                             }
                             else
                             {
