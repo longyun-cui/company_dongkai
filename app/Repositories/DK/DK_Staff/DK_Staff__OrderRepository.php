@@ -646,10 +646,10 @@ class DK_Staff__OrderRepository {
                 $v->is_me = 0;
             }
 
-            if(in_array($me->staff_cagegory,[0,1,9]))
+            if(in_array($me->staff_category,[0,1,9]))
             {
             }
-            else if(in_array($me->staff_cagegory,[51]))
+            else if(in_array($me->staff_category,[51]))
             {
                 if($v->order_category == 1)
                 {
@@ -661,7 +661,7 @@ class DK_Staff__OrderRepository {
                     }
                 }
             }
-            else if(in_array($me->staff_cagegory,[41]))
+            else if(in_array($me->staff_category,[41]))
             {
                 $time = time();
                 if(!$v->is_me || (($v->published_at > 0) && (($time - $v->published_at) > 86400)))
