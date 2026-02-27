@@ -538,6 +538,47 @@ class DK_Staff__BYRepository {
         }
 //        dd($inspected_result);
 
+
+        $record_data["ip"] = Get_IP();
+        $record_data["record_object"] = 1;
+        $record_data["record_category"] = 1;
+        $record_data["record_type"] = 1;
+        $record_data["creator_id"] = $me->id;
+        $record_data["order_id"] = $id;
+        $record_data["operate_object"] = 101;
+        $record_data["operate_category"] = 92;
+        $record_data["operate_type"] = 1;
+        $record_data["process_category"] = 1;
+        $record_data["description"] = $inspected_description;
+
+        $record_content = [];
+
+        $record_row['title'] = '结果';
+        $record_row['field'] = 'inspected_result';
+//                $record_row['code'] = $inspected_result;
+        $record_row['before'] = $before;
+        $record_row['after'] = $inspected_result;
+        $record_content[] = $record_row;
+
+        $record_row['field'] = 'inspected_description';
+        $record_row['title'] = '说明';
+        $record_row['before'] = '';
+        $record_row['after'] = $inspected_description;
+        $record_content[] = $record_row;
+
+        $record_row['field'] = 'inspected_time';
+        $record_row['title'] = '时间';
+        $record_row['before'] = '';
+        $record_row['after'] = $datetime;
+        $record_content[] = $record_row;
+
+        $record_data["content"] = json_encode($record_content);
+
+        $record_data["before"] = $before;
+        $record_data["after"] = $inspected_result;
+
+
+
         // 启动数据库事务
         DB::beginTransaction();
         try
@@ -595,6 +636,8 @@ class DK_Staff__BYRepository {
                 $order->client_phone = $client_phone;
                 $order->client_intention = $client_intention;
                 $order->field_1 = $teeth_count;
+                $order->location_city = $location_city;
+                $order->location_district = $location_district;
                 $order->description = $description;
                 $order->recording_quality = $recording_quality;
                 $order->is_published = 1;
@@ -620,44 +663,6 @@ class DK_Staff__BYRepository {
             else
             {
                 $record = new DK_Common__Order__Operation_Record;
-
-                $record_data["ip"] = Get_IP();
-                $record_data["record_object"] = 21;
-                $record_data["record_category"] = 11;
-                $record_data["record_type"] = 1;
-                $record_data["creator_id"] = $me->id;
-                $record_data["order_id"] = $id;
-                $record_data["operate_object"] = 101;
-                $record_data["operate_category"] = 92;
-                $record_data["operate_type"] = 1;
-                $record_data["process_category"] = 1;
-                $record_data["description"] = $inspected_description;
-
-                $record_content = [];
-
-                $record_row['title'] = '结果';
-                $record_row['field'] = 'inspected_result';
-//                $record_row['code'] = $inspected_result;
-                $record_row['before'] = $before;
-                $record_row['after'] = $inspected_result;
-                $record_content[] = $record_row;
-
-                $record_row['field'] = 'inspected_description';
-                $record_row['title'] = '说明';
-                $record_row['before'] = '';
-                $record_row['after'] = $inspected_description;
-                $record_content[] = $record_row;
-
-                $record_row['field'] = 'appeal_handle_time';
-                $record_row['title'] = '时间';
-                $record_row['before'] = '';
-                $record_row['after'] = $datetime;
-                $record_content[] = $record_row;
-
-                $record_data["content"] = json_encode($record_content);
-
-                $record_data["before"] = $before;
-                $record_data["after"] = $inspected_result;
 
                 $bool_1 = $record->fill($record_data)->save();
                 if(!$bool_1) throw new Exception("insert--record--fail");
