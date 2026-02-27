@@ -1,5 +1,42 @@
 <script>
 
+    {{--window.staffRole = '{{ $me->staff_category == 41 && $me->staff_position == 31 ? 'director' : 'cs' }}';--}}
+
+    @if($me->staff_category == 0)
+        window.staffDepartment = 'SUPER';
+    @elseif($me->staff_category == 1)
+        window.staffDepartment = 'ADMIN';
+    @elseif($me->staff_category == 9)
+        window.staffDepartment = 'BOSS';
+    @elseif($me->staff_category == 41)
+        window.staffDepartment = 'CSD';
+    @elseif($me->staff_category == 51)
+        window.staffDepartment = 'QID';
+    @elseif($me->staff_category == 61)
+        window.staffDepartment = 'AD';
+    @elseif($me->staff_category == 71)
+        window.staffDepartment = 'OD';
+    @else
+        window.staffDepartment = 'error';
+    @endif
+
+    @if($me->staff_position == 0)
+        window.staffRole = 'super';
+    @elseif($me->staff_position == 1)
+        window.staffRole = 'admin';
+    @elseif($me->staff_position == 11)
+        window.staffRole = 'boss';
+    @elseif($me->staff_position == 31)
+        window.staffRole = 'director';
+    @elseif($me->staff_position == 41)
+        window.staffRole = 'manager';
+    @elseif($me->staff_position == 61)
+        window.staffRole = 'supervisor';
+    @elseif($me->staff_position == 99)
+        window.staffRole = 'staff';
+    @else
+        window.staffRole = 'error';
+    @endif
 
     if(sessionStorage.getItem('session_unique_id'))
     {

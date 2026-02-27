@@ -736,7 +736,7 @@ class DK_Staff__OrderRepository {
         if(in_array($me->staff_category,[0,1,9]))
         {
         }
-        else if(in_array($me->staff_category,[51]))
+        else if(in_array($me->staff_category,[51,61]))
         {
             if( ($item->published_at > 0) && ($item->published_at < strtotime("yesterday")) )
             {
@@ -2021,9 +2021,27 @@ class DK_Staff__OrderRepository {
             return response_error([],"你没有操作权限！");
         }
 
-        $project_id = (int)$post_data["project_id"];
+        if($me->staff_category == 41 && $me->staff_position != 31 && $item->published_at < strtotime("yesterday"))
+        {
+            return response_error([],"超过修改时效，请联系部门总监！");
+        }
+        if(in_array($me->staff_category,[51,61]) && $item->published_at < strtotime("yesterday"))
+        {
+            return response_error([],"超过修改时效，请联系运营部！");
+        }
+
+
+        if($me->staff_category == 41 && in_array($me->staff_position,[41,51,61,71,99]))
+        {
+            // 客服团队不可编辑
+        }
+        else
+        {
+            $project_id = (int)$post_data["project_id"];
+            $client_phone = (int)$post_data["client_phone"];
+        }
+
         $client_name = trim($post_data["client_name"]);
-        $client_phone = (int)$post_data["client_phone"];
         if($item->order_category == 1)
         {
             $client_type = $post_data["client_type"];
@@ -2078,25 +2096,33 @@ class DK_Staff__OrderRepository {
             $record_content[] = $record_row;
         }
 
-        // 项目
-        if($item->project_id != $project_id)
+        if($me->staff_category == 41 && in_array($me->staff_position,[41,51,61,71,99]))
         {
-            $item->load([
-                'project_er'=>function($query) { $query->select('id','name'); }
-            ]);
-
-            $project = DK_Common__Project::find($project_id);
-            if($project)
-            {
-                $record_row = [];
-                $record_row['title'] = '项目';
-                $record_row['field'] = 'project_id';
-                $record_row['before'] = $item->project_er->name.'('.$item->project_id.')';
-                $record_row['after'] = $project->name.'('.$project_id.')';
-                $record_content[] = $record_row;
-            }
-            else return response_error([],"选择的【项目】不存在，刷新页面重试！");
+            // 客服团队不可编辑
         }
+        else
+        {
+            // 项目
+            if($item->project_id != $project_id)
+            {
+                $item->load([
+                    'project_er'=>function($query) { $query->select('id','name'); }
+                ]);
+
+                $project = DK_Common__Project::find($project_id);
+                if($project)
+                {
+                    $record_row = [];
+                    $record_row['title'] = '项目';
+                    $record_row['field'] = 'project_id';
+                    $record_row['before'] = $item->project_er->name.'('.$item->project_id.')';
+                    $record_row['after'] = $project->name.'('.$project_id.')';
+                    $record_content[] = $record_row;
+                }
+                else return response_error([],"选择的【项目】不存在，刷新页面重试！");
+            }
+        }
+
         // 客户姓名
         if($item->client_name != $client_name)
         {
@@ -2107,36 +2133,53 @@ class DK_Staff__OrderRepository {
             $record_row['after'] = $client_name;
             $record_content[] = $record_row;
         }
+
         // 客户电话
-        if($item->client_phone != $client_phone)
+        if($me->staff_category == 41 && in_array($me->staff_position,[41,51,61,71,99]))
         {
-            $record_row = [];
-            $record_row['title'] = '电话';
-            $record_row['field'] = 'client_phone';
-            $record_row['before'] = $item->client_phone;
-            $record_row['after'] = $client_phone;
-            $record_content[] = $record_row;
+            // 客服团队不可编辑
+        }
+        else
+        {
+            // 客户电话
+            if($item->client_phone != $client_phone)
+            {
+                $record_row = [];
+                $record_row['title'] = '电话';
+                $record_row['field'] = 'client_phone';
+                $record_row['before'] = $item->client_phone;
+                $record_row['after'] = $client_phone;
+                $record_content[] = $record_row;
+            }
         }
 
         // 是否重复
-        if($item->project_id != $project_id || $item->client_phone != $client_phone)
+        if($me->staff_category == 41 && in_array($me->staff_position,[41,51,61,71,99]))
         {
-            $is_repeat = DK_Common__Order::where(['delivered_project_id'=>$project_id,'client_phone'=>(int)$client_phone])
-                ->where('is_published','>',0)
-                ->where('order_category',$item->order_category)
-                ->count("*");
-            if($is_repeat == 0)
+            // 客服团队不可编辑
+        }
+        else
+        {
+            // 是否重复
+            if($item->project_id != $project_id || $item->client_phone != $client_phone)
             {
-                $is_repeat = DK_Common__Delivery::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])->count("*");
-            }
-            if($is_repeat > 0) $is_repeat += 1;
+                $is_repeat = DK_Common__Order::where(['delivered_project_id'=>$project_id,'client_phone'=>(int)$client_phone])
+                    ->where('is_published','>',0)
+                    ->where('order_category',$item->order_category)
+                    ->count("*");
+                if($is_repeat == 0)
+                {
+                    $is_repeat = DK_Common__Delivery::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])->count("*");
+                }
+                if($is_repeat > 0) $is_repeat += 1;
 
-            $record_row = [];
-            $record_row['title'] = '是否重复';
-            $record_row['field'] = 'is_repeat';
-            $record_row['before'] = (($item->is_repeat) ? '是' : '否');
-            $record_row['after'] = (($is_repeat) ? '是' : '否');
-            $record_content[] = $record_row;
+                $record_row = [];
+                $record_row['title'] = '是否重复';
+                $record_row['field'] = 'is_repeat';
+                $record_row['before'] = (($item->is_repeat) ? '是' : '否');
+                $record_row['after'] = (($is_repeat) ? '是' : '否');
+                $record_content[] = $record_row;
+            }
         }
 
         if($item->order_category == 1)
@@ -2240,13 +2283,20 @@ class DK_Staff__OrderRepository {
         DB::beginTransaction();
         try
         {
-            if($item->project_id != $project_id || $item->client_phone != $client_phone)
+            if($me->staff_category == 41 && in_array($me->staff_position,[41,51,61,71,99]))
             {
-                $item->is_repeat = $is_repeat;
+                // 客服团队不可编辑
             }
-            if($item->project_id != $project_id) $item->project_id = $project_id;
+            else
+            {
+                if($item->project_id != $project_id || $item->client_phone != $client_phone)
+                {
+                    $item->is_repeat = $is_repeat;
+                }
+                if($item->project_id != $project_id) $item->project_id = $project_id;
+                if($item->client_phone != $client_phone) $item->client_phone = $client_phone;
+            }
             if($item->client_name != $client_name) $item->client_name = $client_name;
-            if($item->client_phone != $client_phone) $item->client_phone = $client_phone;
             if($item->order_category == 1)
             {
                 if($item->client_type != $client_type) $item->client_type = $client_type;
@@ -2312,6 +2362,11 @@ class DK_Staff__OrderRepository {
         if(!in_array($me->staff_category,[0,1,51,61,71]))
         {
             return response_error([],"你没有操作权限！");
+        }
+
+        if(in_array($me->staff_category,[51,61]) && $item->published_at < strtotime("yesterday"))
+        {
+            return response_error([],"超过审核时效，请联系运营部！");
         }
 
         $inspected_result = $post_data["order-item-inspecting--inspected-result"];
@@ -2655,6 +2710,11 @@ class DK_Staff__OrderRepository {
             return response_error([],"你没有操作权限！");
         }
 
+        if($me->staff_category == 41 && $me->staff_position != 31 && $item->published_at < strtotime("yesterday"))
+        {
+            return response_error([],"超过申诉时效，请联系部门总监！");
+        }
+
         $appealed_url = $post_data["order--item-appealing--url"];
         $appealed_description = $post_data["order--item-appealing--description"];
 
@@ -2792,6 +2852,11 @@ class DK_Staff__OrderRepository {
         if(!in_array($me->staff_category,[0,1,51,61,71]))
         {
             return response_error([],"你没有操作权限！");
+        }
+
+        if(in_array($me->staff_category,[51,61]) && $item->published_at < strtotime("yesterday"))
+        {
+            return response_error([],"超过处理时效，请联系运营部！");
         }
 
         $appealed_handled_result = $post_data["order--item-appealed-handling--result"];

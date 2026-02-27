@@ -686,11 +686,15 @@
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(row.is_completed != 1)
                         {
-                            $(nTd).addClass('modal-show-for-field-set');
-                            $(nTd).attr('data-id',row.id).attr('data-name','通话小结');
-                            $(nTd).attr('data-key','description').attr('data-value',data);
+                            $(nTd).addClass('modal-show--for--order--item-detail-editing--by-dbl');
+
+                            $(nTd).attr('data-id',row.id);
+                            $(nTd).attr('data-name','通话小结');
+                            $(nTd).attr('data-key','description');
+                            $(nTd).attr('data-value',data);
+                            $(nTd).attr('data-role','admin');
 
                             $(nTd).attr('data-column-type','textarea');
                             $(nTd).attr('data-column-name','通话小结');

@@ -551,8 +551,14 @@
                         if(row.is_completed != 1)
                         {
                             $(nTd).addClass('modal-show--for--order--item-detail-editing--by-dbl');
-                            $(nTd).attr('data-id',row.id).attr('data-name','通话小结');
-                            $(nTd).attr('data-key','description').attr('data-value',data);
+
+                            $(nTd).attr('data-id',row.id);
+                            $(nTd).attr('data-name','通话小结');
+                            $(nTd).attr('data-key','description');
+                            $(nTd).attr('data-value',data);
+                            @if($me->staff_category == 41 && $me->staff_position == 31)
+                            $(nTd).attr('data-role','admin');
+                            @endif
 
                             $(nTd).attr('data-column-type','textarea');
                             $(nTd).attr('data-column-name','通话小结');
@@ -687,6 +693,8 @@
                             }
 
                             // 详情编辑
+                            var $role = '';
+                            if(window.staffRole == 'director') $role = 'admin';
                             $html_detail = '<a class="btn btn-xs modal-show--for--order--item-detail-editing" data-id="'+data+'">详情</a>';
 
                             // 申诉

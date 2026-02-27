@@ -1098,6 +1098,8 @@
                         // 已发布
                         if(row.is_published > 0)
                         {
+                            // 详情编辑
+                            $html_detail = '<a class="btn btn-xs modal-show--for--order--item-detail-editing" data-role="admin" data-id="'+data+'">详情</a>';
 
                             // 审核
                             if(row.inspector_id == 0)
