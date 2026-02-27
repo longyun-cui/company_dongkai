@@ -311,7 +311,7 @@
 
         });
 
-        // 【选择用户类型】
+        // 【选择】审核结果
         $(".main-content").on('change', "#modal--for--by--item-inspecting select[name=by-inspected-result]", function() {
 
             var $modal = $('#modal--for--by--item-inspecting');
@@ -326,6 +326,21 @@
                 $modal.find('.by-inspected-accepted-box').hide();
             }
         });
+        // 【设置】【录音】播放速度
+        $(".main-wrapper").on('click', 'input[name="by--recording-speed"]', function() {
+            var $speed = $('input[name="by--recording-speed"]:checked').val();
+            console.log($speed);
+
+            $('input[name="recording-speed"]').val($speed);
+
+            $('#modal--for--by--item-appealed-handling audio').each(function() {
+                if (this.played)
+                {
+                    this.playbackRate = $speed; // 默认值1.0，范围0.5-4.0
+                }
+            });
+        });
+
         // 【取消】内容详情-审核
         $(".main-content").on('click', ".by-modal-cancel-for-item-inspected", function() {
             var that = $(this);
@@ -416,78 +431,6 @@
 
 
 
-
-        // select2 项目
-        {{--$('.select2-project').select2({--}}
-        {{--    ajax: {--}}
-        {{--        url: "{{ url('/v1/operate/select2/select2_project') }}",--}}
-        {{--        type: 'post',--}}
-        {{--        dataType: 'json',--}}
-        {{--        delay: 250,--}}
-        {{--        data: function (params) {--}}
-        {{--            return {--}}
-        {{--                _token: $('meta[name="_token"]').attr('content'),--}}
-        {{--                item_category: this.data('item-category'),--}}
-        {{--                keyword: params.term, // search term--}}
-        {{--                page: params.page--}}
-        {{--            };--}}
-        {{--        },--}}
-        {{--        processResults: function (data, params) {--}}
-
-        {{--            params.page = params.page || 1;--}}
-        {{--            return {--}}
-        {{--                results: data,--}}
-        {{--                pagination: {--}}
-        {{--                    more: (params.page * 30) < data.total_count--}}
-        {{--                }--}}
-        {{--            };--}}
-        {{--        },--}}
-        {{--        cache: true--}}
-        {{--    },--}}
-        {{--    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work--}}
-        {{--    minimumInputLength: 0,--}}
-        {{--    theme: 'classic'--}}
-        {{--});--}}
-
-        $('.select2-project-').each(function() {
-            // 获取当前 Select2 元素的 jQuery 对象
-            const $select = $(this);
-
-            // 动态查找最近的模态框父容器
-            const $modalWrapper = $select.closest('.modal-wrapper');
-
-            // 初始化 Select2
-            $select.select2({
-                ajax: {
-                    url: "{{ url('/v1/operate/select2/select2_project') }}",
-                    type: 'post',
-                    dataType: 'json',
-                    delay: 250,
-                    data: function(params) {
-                        return {
-                            _token: $('meta[name="_token"]').attr('content'),
-                            item_category: $select.data('item-category'), // 使用 $select 获取 data 属性
-                            keyword: params.term,
-                            page: params.page
-                        };
-                    },
-                    processResults: function(data, params) {
-                        params.page = params.page || 1;
-                        return {
-                            results: data,
-                            pagination: {
-                                more: (params.page * 30) < data.total_count
-                            }
-                        };
-                    },
-                    cache: true
-                },
-                escapeMarkup: function(markup) { return markup; },
-                dropdownParent: $modalWrapper, // 直接使用找到的模态框元素
-                minimumInputLength: 0,
-                theme: 'classic'
-            });
-        });
 
 
 

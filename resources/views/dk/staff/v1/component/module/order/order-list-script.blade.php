@@ -1110,7 +1110,7 @@
 
 
 
-        // 录音
+        // 【监听】录音播放速率
         window.addEventListener('play', function(e) {
             console.log('[全局监听] 播放事件触发:', e.target);
             const audio = e.target;
@@ -1149,7 +1149,7 @@
             // 4. 业务逻辑可在此处添加
         }, true);
 
-        // 【录音】播放速度
+        // 【设置】【录音】播放速度
         $(".main-wrapper").on('click', 'input[name="inspecting--recording-speed"]', function() {
             var $speed = $('input[name="inspecting--recording-speed"]:checked').val();
             console.log($speed);
@@ -1163,8 +1163,7 @@
                 }
             });
         });
-
-        // 【录音】播放速度
+        // 【设置】【录音】播放速度
         $(".main-wrapper").on('click', 'input[name="handling--recording-speed"]', function() {
             var $speed = $('input[name="handling--recording-speed"]:checked').val();
             console.log($speed);

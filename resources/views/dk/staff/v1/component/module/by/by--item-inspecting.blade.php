@@ -63,27 +63,27 @@
                             <div class="btn-group">
                                 <button type="button" class="btn">
                                     <span class="radio">
-                                        <label><input type="radio" name="recording-speed" value="0.75"> x0.75</label>
+                                        <label><input type="radio" name="by-recording-speed" value="0.75"> x0.75</label>
                                     </span>
                                 </button>
                                 <button type="button" class="btn">
                                     <span class="radio">
-                                        <label><input type="radio" name="recording-speed" value="1" checked="checked"> x1</label>
+                                        <label><input type="radio" name="by-recording-speed" value="1" checked="checked"> x1</label>
                                     </span>
                                 </button>
                                 <button type="button" class="btn">
                                     <span class="radio">
-                                        <label><input type="radio" name="recording-speed" value="1.25"> x1.25</label>
+                                        <label><input type="radio" name="by-recording-speed" value="1.25"> x1.25</label>
                                     </span>
                                 </button>
                                 <button type="button" class="btn">
                                     <span class="radio">
-                                        <label><input type="radio" name="recording-speed" value="1.5"> x1.5</label>
+                                        <label><input type="radio" name="by-recording-speed" value="1.5"> x1.5</label>
                                     </span>
                                 </button>
                                 <button type="button" class="btn">
                                     <span class="radio">
-                                        <label><input type="radio" name="recording-speed" value="2"> x2</label>
+                                        <label><input type="radio" name="by-recording-speed" value="2"> x2</label>
                                     </span>
                                 </button>
                             </div>
@@ -93,7 +93,10 @@
                     <div class="form-group">
                         <label class="control-label col-md-2"><sup class="text-red">*</sup> 审核结果</label>
                         <div class="col-md-9 ">
-                            <select class="form-control modal-select2-" name="by-inspected-result" id="" style="width:100%;">
+                            <select class="form-control modal--select2 select2-reset"
+                                    name="by-inspected-result"
+                                    data-modal="#modal--for--by--item-inspecting"
+                            >
                                 <option value="-1">选择审核结果</option>
                                 @foreach(config('dk.common-config.by_inspected_result') as $k => $v)
                                     <option value ="{{ $k }}">{{ $v }}</option>
