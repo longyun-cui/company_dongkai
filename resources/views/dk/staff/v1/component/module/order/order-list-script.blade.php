@@ -2406,6 +2406,7 @@
 
                         $modal.find('input[name="recording_address"]').val($response.data.recording_address);
 
+                        $modal.find('.item-recording-box .item-detail-text').html('');
                         if($response.data.recording_address_list)
                         {
                             // var $html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+$item.recording_address+'" type="audio/mpeg"></audio>'
