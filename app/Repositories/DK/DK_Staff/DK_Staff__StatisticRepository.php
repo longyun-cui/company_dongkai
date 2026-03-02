@@ -4598,13 +4598,28 @@ class DK_Staff__StatisticRepository {
 
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
 
-        // 审核经理
-//        if($me->user_type == 71)
-//        {
-//            $query->where(function ($query) use($me) {
-//                $query->where('id',$me->id)->orWhereHas('superior', function($query) use($me) { $query->where('id',$me->id); } );
-//            });
-//        }
+        // 审核部
+        if($me->staff_category == 51)
+        {
+            // 部门总监
+            if($me->staff_position == 31)
+            {
+                // 根据部门查看
+                $query->where('department_id', $me->department_id);
+            }
+            // 团队经理
+            else if($me->staff_position == 41)
+            {
+                // 根据团队查看
+                $query->where('team_id', $me->team_id);
+            }
+            // 小组主管
+            else if($me->staff_position == 61)
+            {
+                // 根据小组查看
+                $query->where('team_id', $me->team_id)->where('team_group_id', $me->team_group_id);
+            }
+        }
 
         // 根据部门查看
         if($me->team_id > 0)
