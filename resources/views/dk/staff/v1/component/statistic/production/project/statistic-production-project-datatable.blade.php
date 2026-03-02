@@ -106,8 +106,22 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
 
@@ -142,8 +156,22 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
@@ -159,8 +187,22 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
@@ -177,8 +219,22 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
@@ -195,8 +251,22 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
@@ -213,8 +283,22 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 // {
@@ -248,8 +332,22 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
@@ -266,8 +364,22 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
@@ -289,9 +401,24 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        var $waiting_count = row.order_count_for_all - data;
-                        if($waiting_count > 0) return $waiting_count;
-                        else return '--';
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            var $waiting_count = row.order_count_for_all - data;
+                            if($waiting_count > 0) return $waiting_count;
+                            else return '--';
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            var $waiting_count = row.order_count_for_all - data;
+                            return $waiting_count;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 // {
@@ -327,8 +454,22 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
@@ -345,8 +486,22 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
@@ -580,7 +735,7 @@
                     render: function(data, type, row, meta) {
                         return data;
                     }
-                },
+                }
             ],
             "columnDefs": [
             ],
