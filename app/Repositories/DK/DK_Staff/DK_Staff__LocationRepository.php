@@ -64,7 +64,8 @@ class DK_Staff__LocationRepository {
         $query = DK_Common__Location::withTrashed()->select('*')
             ->with([
                 'creator'=>function ($query) { $query->select('id','name'); },
-            ]);
+            ])
+        ->where('active',1);
 
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
@@ -72,6 +73,8 @@ class DK_Staff__LocationRepository {
         if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
         if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
         if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
+
+        if(!empty($post_data['city'])) $query->where('location_city', 'like', "%{$post_data['city']}%");
 
         // 状态 [|]
         if(!empty($post_data['item_status']))

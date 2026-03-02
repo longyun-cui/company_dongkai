@@ -28,6 +28,8 @@
                     d.name = $tableSearch.find('input[name="location-name"]').val();
                     d.title = $tableSearch.find('input[name="location-title"]').val();
                     d.keyword = $tableSearch.find('input[name="location-keyword"]').val();
+                    d.city = $tableSearch.find('input[name="location-city"]').val();
+                    d.district = $tableSearch.find('input[name="location-district"]').val();
                     d.item_status = $tableSearch.find('select[name="location-status"]').val();
                     d.location_category = $tableSearch.find('select[name="location-category"]').val();
                     d.location_type = $tableSearch.find('select[name="location-type"]').val();
