@@ -3,38 +3,37 @@
     <div class="modal-content col-md-8 col-md-offset-2 margin-top-16px margin-bottom-64px bg-white">
 
 
-        <div class="box- box-info- form-container _none">
+        <div class="box- box-info- form-container delivery-record-box" style="display:none;">
+
+
+            <div class="box-header with-border margin-top-16px margin-bottom-4px">
+                <h3 class="box-title">交付记录 <span class="id-box"></span></h3>
+            </div>
+
+            <div class="box-body datatable-body">
+
+                <table class='table table-striped table-bordered' id='datatable--for--order--item-detail-editing--of--delivery-record-list'>
+                    <thead>
+                    <tr role='row' class='heading'>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <div class="box- box-info- form-container operation-record-box" style="display:none;">
 
 
             <div class="box-header with-border margin-top-16px margin-bottom-4px">
                 <h3 class="box-title">操作记录 <span class="id-box"></span></h3>
-                <div class="box-tools pull-right caption _none">
-                    <a href="javascript:void(0);">
-                        <button type="button" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加记录</button>
-                    </a>
-                </div>
             </div>
 
-            <div class="box-body datatable-body" id="">
-
-                <div class="row col-md-12 datatable-search-row _none">
-                    <div class="input-group">
-
-                        <input type="text" class="form-control form-filter filter-keyup" name="order-inspect-keyword" placeholder="关键词" />
-
-                        <select class="form-control form-filter" name="order-inspect-attribute">
-                            <option value="-1">选择属性</option>
-                        </select>
-
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="">
-                            <i class="fa fa-search"></i> 搜索
-                        </button>
-                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="">
-                            <i class="fa fa-circle-o-notch"></i> 重置
-                        </button>
-
-                    </div>
-                </div>
+            <div class="box-body datatable-body">
 
                 <table class='table table-striped table-bordered' id='datatable--for--order--item-detail-editing--of--operation-record-list'>
                     <thead>

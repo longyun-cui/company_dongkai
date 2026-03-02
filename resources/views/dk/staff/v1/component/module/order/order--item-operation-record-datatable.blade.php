@@ -20,7 +20,7 @@
                 "retrieve": true,
                 "destroy": true,
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[50], ["50"]],
+                "aLengthMenu": [[-1], ["全部"]],
                 "bAutoWidth": false,
                 "processing": true,
                 "serverSide": true,
@@ -39,7 +39,7 @@
                     },
                 },
                 "pagingType": "simple_numbers",
-                "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t> <"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p>',
+                "sDom": '<t>',
                 "order": [],
                 "orderCellsTop": true,
                 "columns": [

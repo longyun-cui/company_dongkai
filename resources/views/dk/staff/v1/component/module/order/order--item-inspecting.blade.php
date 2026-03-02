@@ -52,6 +52,34 @@
 
         <div class="box- box-info- form-container">
 
+
+            <div class="box-header with-border margin-top-16px margin-bottom-4px">
+                <h3 class="box-title">操作记录 <span class="id-box"></span></h3>
+                <div class="box-tools pull-right caption _none">
+                    <a href="javascript:void(0);">
+                        <button type="button" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加记录</button>
+                    </a>
+                </div>
+            </div>
+
+            <div class="box-body datatable-body" id="">
+
+                <table class='table table-striped table-bordered' id='datatable--for--order--item-inspecting--of--operation-record-list'>
+                    <thead>
+                    <tr role='row' class='heading'>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <div class="box- box-info- form-container">
+
             <div class="box-header with-border" style="margin:8px 0;">
                 <h3 class="box-title">审核-订单<span class="id-box"></span></h3>
                 <div class="box-tools pull-right">

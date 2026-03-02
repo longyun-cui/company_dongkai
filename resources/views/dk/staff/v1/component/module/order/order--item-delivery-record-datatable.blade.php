@@ -77,7 +77,7 @@
                         "title": "来源",
                         "data": "id",
                         "className": "",
-                        "width": "100px",
+                        "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             var $result_html = '';
@@ -116,7 +116,7 @@
                         "title": "类型",
                         "data": "item_type",
                         "className": "",
-                        "width": "100px",
+                        "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(data == 'order') return '<small class="btn-xs bg-green">工单</small>';
@@ -128,7 +128,7 @@
                         "title": "项目",
                         "data": "id",
                         "className": "",
-                        "width": "120px",
+                        "width": "160px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             var $return_html = '';
@@ -155,7 +155,7 @@
                         "title": "交付项目",
                         "data": "id",
                         "className": "",
-                        "width": "120px",
+                        "width": "160px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             var $return_html = '';
@@ -205,7 +205,7 @@
                     },
                     {
                         "className": "",
-                        "width": "160px",
+                        "width": "120px",
                         "title": "记录时间",
                         "data": "created_at",
                         "orderable": false,

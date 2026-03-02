@@ -1706,6 +1706,10 @@
             Datatable__for__Order_Item_Delivery_Record_List.init($delivery_datatable_id,$id);
 
 
+            var $operation_datatable_id = 'datatable--for--order--item-inspecting--of--operation-record-list';
+            Datatable__for__Order_Item_Operation_Record_List.init($operation_datatable_id,$id);
+
+
             var $modal_id = 'modal--for--order--item-inspecting';
             var $modal = $("#"+$modal_id);
 
@@ -3320,6 +3324,25 @@
             $modal.find('input[name="client_phone"]').prop('readonly', true);
         }
 
+        if(['SUPER','ADMIN','BOSS','QID','OD'].includes(window.staffDepartment))
+        {
+            $modal.find('.delivery-record-box').show();
+            $modal.find('.operation-record-box').show();
+
+
+            var $delivery_datatable_id = 'datatable--for--order--item-detail-editing--of--delivery-record-list';
+            Datatable__for__Order_Item_Delivery_Record_List.init($delivery_datatable_id,$id);
+
+
+            var $operation_datatable_id = 'datatable--for--order--item-detail-editing--of--operation-record-list';
+            Datatable__for__Order_Item_Operation_Record_List.init($operation_datatable_id,$id);
+        }
+        else
+        {
+            $modal.find('.delivery-record-box').hide();
+            $modal.find('.operation-record-box').hide();
+        }
+
 
         var $data = new Object();
 
@@ -3438,12 +3461,13 @@
                     $modal.find('input[name="recording_address"]').val($response.data.recording_address);
 
 
-                    if($response.data.recording_address)
+                    $modal.find('.item-recording-box .item-detail-text').html('');
+                    if($response.data.recording_address_list)
                     {
                         // var $html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+$item.recording_address+'" type="audio/mpeg"></audio>'
                         // $row.find('[data-key="recording_address_play"]').html($html);
 
-                        var $recording_list = JSON.parse($response.data.recording_address);
+                        var $recording_list = JSON.parse($response.data.recording_address_list);
                         var $recording_list_html = '';
                         $.each($recording_list, function(index, value)
                         {
@@ -3456,7 +3480,7 @@
                         $row.find('[data-key="recording_address_play"]').html($recording_list_html);
                         $row.find('[data-key="order_status"]').attr('data-recording-address',$recording_list_html);
 
-                        $row.find('[data-key=recording_address_download]').attr('data-address-list',$item.recording_address_list);
+                        $row.find('[data-key=recording_address_download]').attr('data-address-list',$response.data.recording_address_list);
                         // var $recording_redirection = '<a class="btn btn-xs item-inspected-redirection-recording-list-submit" data-id="'+$id+'">跳转</a>';
                         // $that.after($recording_redirection);
                     }
@@ -3482,6 +3506,7 @@
 
         $modal.modal('show');
     }
+
 
     function update_order_row($row,$order)
     {
