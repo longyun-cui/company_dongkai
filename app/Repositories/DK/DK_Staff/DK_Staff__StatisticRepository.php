@@ -4541,12 +4541,12 @@ class DK_Staff__StatisticRepository {
         // 员工统计
         $query_order = DK_Common__Order::select('inspector_id','inspected_date')
             ->addSelect(DB::raw("
-                    count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
-                    count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted_normal,
-                    count(IF(inspected_result = '折扣通过', TRUE, NULL)) as order_count_for_accepted_discount,
-                    count(IF(inspected_result = '郊区通过', TRUE, NULL)) as order_count_for_accepted_suburb,
-                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
-                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_refused
+                    count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as count__for__order_inspected,
+                    count(IF(inspected_result = '通过', TRUE, NULL)) as count__for__order_accepted_normal,
+                    count(IF(inspected_result = '折扣通过', TRUE, NULL)) as count__for__order_accepted_discount,
+                    count(IF(inspected_result = '郊区通过', TRUE, NULL)) as count__for__order_accepted_suburb,
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as count__for__order_accepted_inside,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as count__for__order_refused
                 "))
             ->groupBy('inspector_id');
 
@@ -4641,67 +4641,56 @@ class DK_Staff__StatisticRepository {
         {
             if(isset($query_order[$v->id]))
             {
-                $list[$k]->order_count_for_inspected = $query_order[$v->id]['order_count_for_inspected'];
-                $list[$k]->order_count_for_accepted = $query_order[$v->id]['order_count_for_accepted'];
-                $list[$k]->order_count_for_refused = $query_order[$v->id]['order_count_for_refused'];
+                $list[$k]->count__for__order_inspected = $query_order[$v->id]['count__for__order_inspected'];
+                $list[$k]->count__for__order_accepted_normal = $query_order[$v->id]['count__for__order_accepted_normal'];
+                $list[$k]->count__for__order_accepted_discount = $query_order[$v->id]['count__for__order_accepted_discount'];
+                $list[$k]->count__for__order_accepted_suburb = $query_order[$v->id]['count__for__order_accepted_suburb'];
+                $list[$k]->count__for__order_accepted_inside = $query_order[$v->id]['count__for__order_accepted_inside'];
+                $list[$k]->count__for__order_refused = $query_order[$v->id]['count__for__order_refused'];
             }
             else
             {
-                $list[$k]->order_count_for_inspected = 0;
-                $list[$k]->order_count_for_accepted = 0;
-                $list[$k]->order_count_for_refused = 0;
+                $list[$k]->count__for__order_inspected = 0;
+                $list[$k]->count__for__order_accepted_normal = 0;
+                $list[$k]->count__for__order_accepted_discount = 0;
+                $list[$k]->count__for__order_accepted_suburb = 0;
+                $list[$k]->count__for__order_accepted_inside = 0;
+                $list[$k]->count__for__order_refused = 0;
             }
         }
 
+        return datatable_response($list, $draw, $total);
 
 
-        foreach ($list as $k => $v)
-        {
-            if($v->user_type == 71)
-            {
-                $v->superior_id = $v->id;
-                $v->superior = $v->id;
-                $superior = ['id'=>$v->id,'name'=>$v->name];
-                $v->superior = json_decode(json_encode($superior));
-                $list[$k]->superior =  json_decode(json_encode($superior));
-            }
-        }
-//        dd($list->toArray());
 
-        $a = [];
-//        $list = $list->sortBy('team_id');
-//        $grouped = $list->sortBy('team_id')->groupBy('team_id');
-        $grouped = $list->groupBy('team_id');
-        foreach ($grouped as $k => $v)
-        {
-            $order_sum_for_all = 0;
-            $order_sum_for_inspected = 0;
-
-            foreach ($v as $key => $val)
-            {
-//                $order_sum_for_all += $val->order_count_for_all;
-                $order_sum_for_inspected += $val->order_count_for_inspected;
-            }
-
-
-            foreach ($v as $key => $val)
-            {
-                $v[$key]->merge = 0;
-//                $v[$key]->order_sum_for_all = $order_sum_for_all;
-                $v[$key]->order_sum_for_inspected = $order_sum_for_inspected;
-
-//                if($order_sum_for_all > 0)
-//                {
-//                    $v[$key]->order_average_rate_for_inspected = round(($order_sum_for_inspected * 100 / $order_sum_for_all),2);
-//                }
-//                else $v[$key]->order_average_rate_for_inspected = 0;
-            }
-
-            $v[0]->merge = count($v);
-        }
-        $collapsed = $grouped->collapse();
-
-        return datatable_response($collapsed, $draw, $total);
+//        $a = [];
+////        $list = $list->sortBy('team_id');
+////        $grouped = $list->sortBy('team_id')->groupBy('team_id');
+//        $grouped = $list->groupBy('team_id');
+//        foreach ($grouped as $k => $v)
+//        {
+//            $sum__for__order_all = 0;
+//            $sum__for__order_inspected = 0;
+//
+//            foreach ($v as $key => $val)
+//            {
+////                $sum__for__order_all += $val->count__for__order_all;
+//                $sum__for__order_inspected += $val->count__for__order_inspected;
+//            }
+//
+//
+//            foreach ($v as $key => $val)
+//            {
+//                $v[$key]->merge = 0;
+////                $v[$key]->sum__for__order_all = $sum__for__order_all;
+//                $v[$key]->sum__for__order_inspected = $sum__for__order_inspected;
+//            }
+//
+//            $v[0]->merge = count($v);
+//        }
+//        $collapsed = $grouped->collapse();
+//
+//        return datatable_response($collapsed, $draw, $total);
     }
     // 【生产-统计】运营看板
     public function o1__get_statistic_data_of_production_deliverer_overview($post_data)

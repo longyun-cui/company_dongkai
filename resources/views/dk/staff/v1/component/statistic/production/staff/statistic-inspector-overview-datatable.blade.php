@@ -124,7 +124,7 @@
                 },
                 {
                     "title": "审核量",
-                    "data": "order_count_for_inspected",
+                    "data": "count__for__order_inspected",
                     "className": "font-12px",
                     "width": "100px",
                     "orderable": false,
@@ -149,7 +149,7 @@
                 },
                 {
                     "title": "通过量",
-                    "data": "order_count_for_accepted_normal",
+                    "data": "count__for__order_accepted_normal",
                     "className": "font-12px",
                     "width": "100px",
                     "orderable": false,
@@ -174,7 +174,7 @@
                 },
                 {
                     "title": "折扣通过",
-                    "data": "order_count_for_accepted_discount",
+                    "data": "count__for__order_accepted_discount",
                     "className": "font-12px",
                     "width": "100px",
                     "orderable": false,
@@ -199,7 +199,7 @@
                 },
                 {
                     "title": "郊区通过",
-                    "data": "order_count_for_accepted_suburb",
+                    "data": "count__for__order_accepted_suburb",
                     "className": "font-12px",
                     "width": "100px",
                     "orderable": false,
@@ -224,7 +224,7 @@
                 },
                 {
                     "title": "郊区通过",
-                    "data": "order_count_for_accepted_inside",
+                    "data": "count__for__order_accepted_inside",
                     "className": "font-12px",
                     "width": "100px",
                     "orderable": false,
@@ -249,7 +249,7 @@
                 },
                 {
                     "title": "拒绝量",
-                    "data": "order_count_for_refused",
+                    "data": "count__for__order_refused",
                     "className": "text-center vertical-middle",
                     "width": "100px",
                     "orderable": false,

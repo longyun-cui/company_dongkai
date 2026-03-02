@@ -14,7 +14,7 @@
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre date-pre" data-target="statistic-inspector-date">
                 <i class="fa fa-chevron-left"></i>
             </button>
-            <input type="text" class="search-filter form-filter filter-keyup date_picker" name="statistic-inspector-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+            <input type="text" class="search-filter form-filter filter-keyup date-picker-c" name="statistic-inspector-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next date-next" data-target="statistic-inspector-date">
                 <i class="fa fa-chevron-right"></i>
             </button>
@@ -27,7 +27,7 @@
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre month-pre" data-target="statistic-inspector-month">
                 <i class="fa fa-chevron-left"></i>
             </button>
-            <input type="text" class="search-filter form-filter filter-keyup month_picker" name="statistic-inspector-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
+            <input type="text" class="search-filter form-filter filter-keyup month-picker-c" name="statistic-inspector-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next month-next" data-target="statistic-inspector-month">
                 <i class="fa fa-chevron-right"></i>
             </button>
@@ -36,8 +36,8 @@
             </button>
 
             {{--按时间段导出--}}
-            <input type="text" class="search-filter filter-keyup date_picker" name="statistic-inspector-start" placeholder="起始时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" style="margin-right:-3px;" />
-            <input type="text" class="search-filter filter-keyup date_picker" name="statistic-inspector-ended" placeholder="终止时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+            <input type="text" class="search-filter filter-keyup date-picker-c" name="statistic-inspector-start" placeholder="起始时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" style="margin-right:-3px;" />
+            <input type="text" class="search-filter filter-keyup date-picker-c" name="statistic-inspector-ended" placeholder="终止时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
 
             <button type="button" class="btn btn-success btn-filter filter-submit" data-time-type="period">
                 <i class="fa fa-search"></i> 按时间段搜索
