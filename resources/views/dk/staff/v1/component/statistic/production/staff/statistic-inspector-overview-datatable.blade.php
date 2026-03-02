@@ -1,5 +1,5 @@
 <script>
-    function Table_Datatable_Ajax_Statistic_Inspector_Overview($tableId)
+    function Datatable__for__Statistic_Inspector_Overview($tableId)
     {
         let $that = $($tableId);
         let $datatable_wrapper = $that.parents('.datatable-wrapper');
@@ -17,7 +17,7 @@
             "order": [],
             "orderCellsTop": true,
             "ajax": {
-                'url': "{{ url('/v1/operate/statistic/production/inspector-overview') }}",
+                'url': "{{ url('/o1/statistic/production/inspector-overview') }}",
                 "type": 'POST',
                 "dataType" : 'json',
                 "data": function (d) {
@@ -74,7 +74,17 @@
                     "width": "100px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return row.department_district_er == null ? '<a href="javascript:void(0);">总部</a>' : '<a href="javascript:void(0);">'+row.department_district_er.name+'</a>';
+                        return row.team_er == null ? '未知' : '<a href="javascript:void(0);">' + row.team_er.name + '</a>';
+                    }
+                },
+                {
+                    "title": "小组",
+                    "data": "team_group_id",
+                    "className": "vertical-middle",
+                    "width": "120px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return row.team_group_er == null ? '未知' : '<a href="javascript:void(0);">' + row.team_group_er.name + '</a>';
                     }
                 },
                 // {
@@ -89,36 +99,27 @@
                 // },
                 {
                     "title": "员工类型",
-                    "data": 'user_type',
+                    "data": 'staff_position',
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         if(data == 1) return '<small class="btn-xs bg-black">BOSS</small>';
-                        else if(data == 11) return '<small class="btn-xs btn-danger">总经理</small>';
-                        else if(data == 21) return '<small class="btn-xs bg-purple">人事经理</small>';
-                        else if(data == 22) return '<small class="btn-xs bg-purple">人事</small>';
-                        else if(data == 31) return '<small class="btn-xs bg-orange">财务经理</small>';
-                        else if(data == 33) return '<small class="btn-xs bg-orange">财务</small>';
-                        else if(data == 41) return '<small class="btn-xs bg-purple">团队·总经理</small>';
-                        else if(data == 71) return '<small class="btn-xs bg-purple">质检</small><small class="btn-xs btn-danger">经理</small>';
-                        else if(data == 77) return '<small class="btn-xs bg-purple">质检员</small>';
-                        else if(data == 81) return '<small class="btn-xs bg-olive">客服</small><small class="btn-xs btn-danger">经理</small>';
-                        else if(data == 84) return '<small class="btn-xs bg-olive">客服</small><small class="btn-xs bg-olive">主管</small>';
-                        else if(data == 88) return '<small class="btn-xs bg-olive">客服</small>';
-                        else if(data == 61) return '<small class="btn-xs bg-blue">运营</small><small class="btn-xs btn-danger">经理</small>';
-                        else if(data == 66) return '<small class="btn-xs bg-blue">运营人员</small>';
+                        else if(data == 31) return '<small class="btn-xs btn-danger">部门总监</small>';
+                        else if(data == 41) return '<small class="btn-xs bg-purple">团队</small><small class="btn-xs btn-danger">经理</small>';
+                        else if(data == 61) return '<small class="btn-xs bg-olive">小组</small><small class="btn-xs bg-olive">主管</small>';
+                        else if(data == 99) return '<small class="btn-xs bg-blue">质检员</small>';
                         else return "有误";
                     }
                 },
                 {
                     "title": "姓名",
-                    "data": "username",
+                    "data": "name",
                     "className": "text-center",
                     "width": "100px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         // return data + ' (' + row.mobile + ')';
-                        return '<a href="javascript:void(0);">' + data + ' (' + row.mobile + ')' + '</a>';
+                        return '<a href="javascript:void(0);">' + data + ' (' + row.login_number + ')' + '</a>';
                     }
                 },
                 {
@@ -128,46 +129,176 @@
                     "width": "100px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
-                    "title": "总审核量",
-                    "data": "order_sum_for_inspected",
+                    "title": "通过量",
+                    "data": "order_count_for_accepted_normal",
+                    "className": "font-12px",
+                    "width": "100px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
+                    }
+                },
+                {
+                    "title": "折扣通过",
+                    "data": "order_count_for_accepted_discount",
+                    "className": "font-12px",
+                    "width": "100px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
+                    }
+                },
+                {
+                    "title": "郊区通过",
+                    "data": "order_count_for_accepted_suburb",
+                    "className": "font-12px",
+                    "width": "100px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
+                    }
+                },
+                {
+                    "title": "郊区通过",
+                    "data": "order_count_for_accepted_inside",
+                    "className": "font-12px",
+                    "width": "100px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
+                    }
+                },
+                {
+                    "title": "拒绝量",
+                    "data": "order_count_for_refused",
                     "className": "text-center vertical-middle",
                     "width": "100px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 }
             ],
             "columnDefs": [
-                {
-                    targets: [0], //要合并的列数（第1，2，3列）
-                    createdCell: function (td, cellData, rowData, row, col) {
-                        //重要的操作可以合并列的代码
-                        var rowspan = rowData.merge;
-                        if (rowspan > 1) {
-                            $(td).attr('rowspan', rowspan)
-                        }
-                        if (rowspan == 0) {
-                            $(td).remove();
-                        }
-                    }
-                },
-                {
-                    targets: [4],
-                    createdCell: function (td, cellData, rowData, row, col) {
-                        var rowspan = rowData.merge;
-                        if (rowspan > 1) {
-                            $(td).attr('rowspan', rowspan)
-                        }
-                        if (rowspan == 0) {
-                            $(td).remove();
-                        }
-                    }
-                }
+                // {
+                //     targets: [0], //要合并的列数（第1，2，3列）
+                //     createdCell: function (td, cellData, rowData, row, col) {
+                //         //重要的操作可以合并列的代码
+                //         var rowspan = rowData.merge;
+                //         if (rowspan > 1) {
+                //             $(td).attr('rowspan', rowspan)
+                //         }
+                //         if (rowspan == 0) {
+                //             $(td).remove();
+                //         }
+                //     }
+                // },
+                // {
+                //     targets: [4],
+                //     createdCell: function (td, cellData, rowData, row, col) {
+                //         var rowspan = rowData.merge;
+                //         if (rowspan > 1) {
+                //             $(td).attr('rowspan', rowspan)
+                //         }
+                //         if (rowspan == 0) {
+                //             $(td).remove();
+                //         }
+                //     }
+                // }
             ],
             "drawCallback": function (settings) {
 

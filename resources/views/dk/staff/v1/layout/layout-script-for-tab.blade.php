@@ -287,6 +287,10 @@
                 {
                     Datatable__for__Statistic_Caller_Recent('#'+$config.id);
                 }
+                else if($id == "datatable-statistic-inspector-overview")
+                {
+                    Datatable__for__Statistic_Inspector_Overview('#'+$config.id);
+                }
                 else if($id == "marketing")
                 {
                     console.log("marketing");

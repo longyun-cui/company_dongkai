@@ -318,26 +318,26 @@
                         </li>
                         <li class="divider"></li>
                         @endif
-{{--                        @if(in_array($me->staff_category,[0,1,9,11,61,71]))--}}
-{{--                        <li>--}}
-{{--                            <a href="javascript:void(0);" class="tab-control datatable-control"--}}
-{{--                               data-type="create"--}}
-{{--                               data-unique="y"--}}
-{{--                               data-id="statistic-inspector-overview"--}}
-{{--                               data-title='<i class="fa fa-pie-chart text-orange"></i> 质检统计'--}}
-{{--                               data-content=''--}}
+                        @if(in_array($me->staff_category,[0,1,9,11,51]) && in_array($me->staff_position,[0,1,9,11,31,41,61]))
+                        <li>
+                            <a href="javascript:void(0);" class="tab-control datatable-control"
+                               data-type="create"
+                               data-unique="y"
+                               data-id="statistic-inspector-overview"
+                               data-title='<i class="fa fa-pie-chart text-orange"></i> 质检统计'
+                               data-content=''
 
-{{--                               data-datatable-type="create"--}}
-{{--                               data-datatable-unique="y"--}}
-{{--                               data-datatable-id="datatable-statistic-inspector-overview"--}}
-{{--                               data-datatable-target="statistic-inspector-overview"--}}
-{{--                               data-datatable-clone-object="statistic-inspector-overview-clone"--}}
-{{--                            >--}}
-{{--                                <i class="fa fa-pie-chart text-purple"></i> <span>质检统计</span>--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
-{{--                        <li class="divider"></li>--}}
-{{--                        @endif--}}
+                               data-datatable-type="create"
+                               data-datatable-unique="y"
+                               data-datatable-id="datatable-statistic-inspector-overview"
+                               data-datatable-target="statistic-inspector-overview"
+                               data-datatable-clone-object="statistic-inspector-overview-clone"
+                            >
+                                <i class="fa fa-pie-chart text-purple"></i> <span>质检统计</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        @endif
 
 {{--                        @if(in_array($me->staff_category,[0,1,9,11,61]))--}}
 {{--                        <li>--}}

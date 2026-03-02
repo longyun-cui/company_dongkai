@@ -1297,26 +1297,40 @@ class DKStaffController extends Controller
     }
 
 
-    // 【统计】【员工】坐席概览
+
+
+    // 【统计】【员工】【坐席】概览
     public function o1__statistic__production__caller_overview()
     {
         return $this->statistic_repo->o1__statistic__production__caller_overview(request()->all());
     }
-    // 【统计】【员工】坐席排名
+    // 【统计】【员工】【坐席】排名
     public function o1__statistic__production__caller_rank()
     {
         return $this->statistic_repo->o1__statistic__production__caller_rank(request()->all());
     }
-    // 【统计】【员工】坐席近期
+    // 【统计】【员工】【坐席】近期
     public function o1__statistic__production__caller_recent()
     {
         return $this->statistic_repo->o1__statistic__production__caller_recent(request()->all());
     }
-    // 【统计】【员工】坐席日报
+    // 【统计】【员工】【坐席】日报
     public function o1__statistic__production__caller_daily()
     {
         return $this->statistic_repo->o1__get_statistic_data_of_production_caller_daily(request()->all());
     }
+    // 【统计】【员工】【质检员】概览
+    public function o1__statistic__production__inspector_overview()
+    {
+        return $this->statistic_repo->o1__statistic__production__inspector_overview(request()->all());
+    }
+    // 【统计】【员工】【运营】概览
+    public function o1__statistic__production__operator_overview()
+    {
+        return $this->statistic_repo->o1__statistic__production__operator_overview(request()->all());
+    }
+
+
 
 
     // 【统计】【交付】项目

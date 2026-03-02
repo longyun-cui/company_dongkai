@@ -4533,7 +4533,7 @@ class DK_Staff__StatisticRepository {
 
 
     // 【生产-统计】质检看板
-    public function o1__get_statistic_data_of_production_inspector_overview($post_data)
+    public function o1__statistic__production__inspector_overview($post_data)
     {
         $this->get_me();
         $me = $this->me;
@@ -4542,7 +4542,10 @@ class DK_Staff__StatisticRepository {
         $query_order = DK_Common__Order::select('inspector_id','inspected_date')
             ->addSelect(DB::raw("
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
-                    count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
+                    count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted_normal,
+                    count(IF(inspected_result = '折扣通过', TRUE, NULL)) as order_count_for_accepted_discount,
+                    count(IF(inspected_result = '郊区通过', TRUE, NULL)) as order_count_for_accepted_suburb,
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
                     count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count_for_refused
                 "))
             ->groupBy('inspector_id');
@@ -4583,16 +4586,17 @@ class DK_Staff__StatisticRepository {
 
 
 
-        $query = DK_Common__Staff::select(['id','mobile','user_status','user_type','name','team_id','team_group_id','superior_id'])
+        $query = DK_Common__Staff::select(['id','item_status','staff_category','staff_position','login_number','name','team_id','team_group_id'])
             ->with([
-                'superior' => function($query) { $query->select(['id','name']); },
-                'team_er' => function($query) { $query->select(['id','name','leader_id']); },
+                'team_er' => function($query) { $query->select(['id','name']); },
+                'team_group_er' => function($query) { $query->select(['id','name']); },
             ])
-            ->where('user_status',1)
-            ->whereIn('user_category',[11])
-            ->whereIn('user_type',[61,66,71,77]);
+            ->where('active',1)
+            ->where('item_status',1)
+            ->whereIn('staff_category',[51])
+            ->whereIn('staff_position',[41,61,99]);
 
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
 
         // 审核经理
 //        if($me->user_type == 71)
