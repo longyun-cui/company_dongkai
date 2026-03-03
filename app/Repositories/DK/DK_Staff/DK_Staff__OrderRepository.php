@@ -5575,16 +5575,16 @@ class DK_Staff__OrderRepository {
                 $bool_delivery = $delivery->fill($delivery_data)->save();
                 if(!$bool_delivery) throw new Exception("DK_Common__Delivery--insert--fail");
 
-                $item->delivered_project_id = $project_id;
-                $item->delivered_client_id = $client_id;
-                $item->deliverer_id = $me->id;
-                $item->delivered_status = 1;
-                $item->delivered_result = $delivered_result;
-//                $item->delivered_description = $delivered_description;
-                $item->delivered_date = $date;
-                $item->delivered_at = $time;
-                $bool = $item->save();
-                if(!$bool) throw new Exception("DK_Common__Order--update--fail");
+//                $item->delivered_project_id = $project_id;
+//                $item->delivered_client_id = $client_id;
+//                $item->deliverer_id = $me->id;
+//                $item->delivered_status = 1;
+//                $item->delivered_result = $delivered_result;
+////                $item->delivered_description = $delivered_description;
+//                $item->delivered_date = $date;
+//                $item->delivered_at = $time;
+//                $bool = $item->save();
+//                if(!$bool) throw new Exception("DK_Common__Order--update--fail");
 
             }
 
