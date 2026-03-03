@@ -5528,7 +5528,7 @@ class DK_Staff__OrderRepository {
             $record_row['title'] = '结果';
             $record_row['field'] = 'delivered_result';
             $record_row['code'] = '';
-            $record_row['before'] = $before;
+            $record_row['before'] = '';
             $record_row['after'] = $delivered_result;
             $record_content[] = $record_row;
         }
