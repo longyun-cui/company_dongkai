@@ -5546,78 +5546,46 @@ class DK_Staff__OrderRepository {
         $record_data["content"] = json_encode($record_content);
 
 
+//        dd($is_delivery);
         // 启动数据库事务
         DB::beginTransaction();
         try
         {
-            if($is_delivery > 0)
+            if($is_delivery == 1)
             {
-                if($is_delivery == 1)
+                $delivery = new DK_Common__Delivery;
+                if($client)
                 {
-                    $delivery = DK_Common__Delivery::where(['delivery_type'=>1,'order_id'=>$item->id])->first();
-                    if($delivery)
-                    {
-                        if($client)
-                        {
-                            $delivery->company_id = $client->company_id;
-                            $delivery->channel_id = $client->channel_id;
-                            $delivery->business_id = $client->business_id;
-                        }
-                        $delivery->project_id = $project_id;
-                        $delivery->client_id = $client_id;
-                        $delivery->delivered_result = $delivered_result;
-                        $delivery->delivered_date = $date;
-                        $bool_delivery = $delivery->save();
-                        if(!$bool_delivery) throw new Exception("DK_Common__Delivery--update--fail");
-                    }
-                    else
-                    {
-                        $delivery = new DK_Common__Delivery;
-                        if($client)
-                        {
-                            $delivery_data["company_id"] = $client->company_id;
-                            $delivery_data["channel_id"] = $client->channel_id;
-                            $delivery_data["business_id"] = $client->business_id;
-                        }
-                        $delivery_data["order_category"] = $item->order_category;
-                        $delivery_data["delivery_type"] = 1;
-                        $delivery_data["project_id"] = $project_id;
-                        $delivery_data["client_id"] = $client_id;
-                        $delivery_data["original_project_id"] = $item->project_id;
-                        $delivery_data["order_id"] = $item->id;
-                        $delivery_data["client_type"] = $item->client_type;
-                        $delivery_data["client_phone"] = $item->client_phone;
-                        $delivery_data["delivered_result"] = $delivered_result;
-                        $delivery_data["delivered_date"] = $date;
-                        $delivery_data["creator_id"] = $me->id;
+                    $delivery_data["company_id"] = $client->company_id;
+                    $delivery_data["channel_id"] = $client->channel_id;
+                    $delivery_data["business_id"] = $client->business_id;
+                }
+                $delivery_data["order_category"] = $item->order_category;
+                $delivery_data["delivery_type"] = 11;
+                $delivery_data["project_id"] = $project_id;
+                $delivery_data["client_id"] = $client_id;
+                $delivery_data["original_project_id"] = $item->project_id;
+                $delivery_data["order_id"] = $item->id;
+                $delivery_data["client_type"] = $item->client_type;
+                $delivery_data["client_phone"] = $item->client_phone;
+                $delivery_data["delivered_result"] = $delivered_result;
+                $delivery_data["delivered_date"] = $date;
+                $delivery_data["creator_id"] = $me->id;
 
-                        $bool_delivery = $delivery->fill($delivery_data)->save();
-                        if(!$bool_delivery) throw new Exception("DK_Common__Delivery--insert--fail");
-                    }
+                $bool_delivery = $delivery->fill($delivery_data)->save();
+                if(!$bool_delivery) throw new Exception("DK_Common__Delivery--insert--fail");
 
-                    $item->delivered_project_id = $project_id;
-                    $item->delivered_client_id = $client_id;
-                    $item->deliverer_id = $me->id;
-                    $item->delivered_status = 1;
-                    $item->delivered_result = $delivered_result;
+                $item->delivered_project_id = $project_id;
+                $item->delivered_client_id = $client_id;
+                $item->deliverer_id = $me->id;
+                $item->delivered_status = 1;
+                $item->delivered_result = $delivered_result;
 //                $item->delivered_description = $delivered_description;
-                    $item->delivered_date = $date;
-                    $item->delivered_at = $time;
-                    $bool = $item->save();
-                    if(!$bool) throw new Exception("DK_Common__Order--update--fail");
-                }
-                else
-                {
+                $item->delivered_date = $date;
+                $item->delivered_at = $time;
+                $bool = $item->save();
+                if(!$bool) throw new Exception("DK_Common__Order--update--fail");
 
-                    $item->deliverer_id = $me->id;
-                    $item->delivered_status = $is_delivery;
-                    $item->delivered_result = $delivered_result;
-//                $item->delivered_description = $non_delivery_reason;
-                    $item->delivered_date = $date;
-                    $item->delivered_at = $time;
-                    $bool = $item->save();
-                    if(!$bool) throw new Exception("DK_Common__Order--update--fail");
-                }
             }
 
             $record = new DK_Common__Order__Operation_Record;
