@@ -880,7 +880,7 @@ class DK_Staff__OrderRepository {
 
         if(!empty($post_data['project_id']))
         {
-            $project = DK_Common__Project::find($post_data['project_id']);
+            $project = DK_Common__Project::where(['active'=>1,'item_status'=>1])->find($post_data['project_id']);
             if(!$project) return response_error([],"选择【项目】不存在，刷新页面重试！");
         }
 
@@ -1035,7 +1035,7 @@ class DK_Staff__OrderRepository {
 
         if(!empty($post_data['project_id']))
         {
-            $project = DK_Common__Project::find($post_data['project_id']);
+            $project = DK_Common__Project::where(['active'=>1,'item_status'=>1])->find($post_data['project_id']);
             if(!$project) return response_error([],"选择【项目】不存在，刷新页面重试！");
         }
 
@@ -1173,7 +1173,7 @@ class DK_Staff__OrderRepository {
 
         if(!empty($post_data['project_id']))
         {
-            $project = DK_Common__Project::find($post_data['project_id']);
+            $project = DK_Common__Project::where(['active'=>1,'item_status'=>1])->find($post_data['project_id']);
             if(!$project) return response_error([],"选择【项目】不存在，刷新页面重试！");
         }
 
@@ -1341,7 +1341,7 @@ class DK_Staff__OrderRepository {
 
         if(!empty($post_data['project_id']))
         {
-            $project = DK_Common__Project::find($post_data['project_id']);
+            $project = DK_Common__Project::where(['active'=>1,'item_status'=>1])->find($post_data['project_id']);
             if(!$project) return response_error([],"选择【项目】不存在，刷新页面重试！");
         }
 
