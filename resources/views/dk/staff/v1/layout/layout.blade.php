@@ -137,7 +137,7 @@ desired effect
 {{--    @include(env('DK_STAFF__TEMPLATE').'layout.main-footer')--}}
 
     {{--control-sidebar--}}
-    @include(env('DK_STAFF__TEMPLATE').'layout.control-sidebar')
+{{--    @include(env('DK_STAFF__TEMPLATE').'layout.control-sidebar')--}}
 
 
 </div>
