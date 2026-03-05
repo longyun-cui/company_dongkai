@@ -102,7 +102,8 @@
 
                         if($response.data.project_er)
                         {
-                            $modal.find('select[name="project_id"]').append(new Option($response.data.project_er.name, $response.data.project_id, true, true)).trigger('change');
+                            // $modal.find('select[name="project_id"]').append(new Option($response.data.project_er.name, $response.data.project_id, true, true)).trigger('change');
+                            $modal.find('select[name="project_id"]').val($response.data.project_id).trigger('change');
                         }
 
                         $modal.find('input[name="is_wx"]').prop('checked', false);
@@ -206,7 +207,8 @@
 
                         if($response.data.project_er)
                         {
-                            $modal.find('select[name="project_id"]').append(new Option($response.data.project_er.name, $response.data.project_id, true, true)).trigger('change');
+                            // $modal.find('select[name="project_id"]').append(new Option($response.data.project_er.name, $response.data.project_id, true, true)).trigger('change');
+                            $modal.find('select[name="project_id"]').val($response.data.project_id).trigger('change');
                         }
 
                         $modal.find('input[name="is_wx"]').prop('checked', false);
@@ -310,7 +312,8 @@
 
                         if($response.data.project_er)
                         {
-                            $modal.find('select[name="project_id"]').append(new Option($response.data.project_er.name, $response.data.project_id, true, true)).trigger('change');
+                            // $modal.find('select[name="project_id"]').append(new Option($response.data.project_er.name, $response.data.project_id, true, true)).trigger('change');
+                            $modal.find('select[name="project_id"]').val($response.data.project_id).trigger('change');
                         }
 
                         $modal.find('input[name="is_wx"]').prop('checked', false);

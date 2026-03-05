@@ -872,7 +872,9 @@ class DK_Staff__OrderRepository {
             $mine = DK_Common__Order::find($operate_id);
             if(!$mine) return response_error([],"该【工单】不存在，刷新页面重试！");
 
-            if(in_array($me->user_type,[84,88]) && $mine->creator_id != $me->id) return response_error([],"该【工单】不是你的，你不能操作！");
+            if(in_array($me->staff_category,[41]) && in_array($me->staff_position,[99]) && $mine->creator_id != $me->id) return response_error([],"该【工单】不是你的，你不能操作！");
+            if(in_array($me->staff_category,[41]) && in_array($me->staff_position,[61]) && $mine->creator_team_group_id != $me->team_group_id) return response_error([],"该【工单】不是你们小组的，你不能操作！");
+            if(in_array($me->staff_category,[41]) && in_array($me->staff_position,[41]) && $mine->creator_team_id != $me->team_id) return response_error([],"该【工单】不是你们团队的，你不能操作！");
         }
         else return response_error([],"参数有误！");
 
@@ -882,6 +884,12 @@ class DK_Staff__OrderRepository {
         {
             $project = DK_Common__Project::where(['active'=>1,'item_status'=>1])->find($post_data['project_id']);
             if(!$project) return response_error([],"选择【项目】不存在，刷新页面重试！");
+
+            $team_project = DK_Pivot__Team_Project::where(['project_id'=>$post_data['project_id'],'team_id'=>$me->team_id])->first();
+            if(!$team_project) return response_error([],"未分配该团队【项目】权限，刷新页面重试！");
+
+            $team_project = DK_Pivot__Department_Project::where(['project_id'=>$post_data['project_id'],'department_id'=>$me->department_id])->first();
+            if(!$team_project) return response_error([],"部门没有【项目】权限，刷新页面重试！");
         }
 
 
