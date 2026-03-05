@@ -14,7 +14,7 @@
             "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t>',
             "order": [],
             "orderCellsTop": true,
-            "scrollX": false,
+            "scrollX": true,
 //                "scrollY": true,
             "scrollCollapse": true,
             "ajax": {
