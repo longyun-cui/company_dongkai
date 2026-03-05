@@ -120,17 +120,18 @@
                 <input type="checkbox" class="check-review-all">
             </button>
 
-            <button type="button" onclick="" class="btn btn-default btn-filter delivery--bulk-export-summit" data-order-category="1">
+            <button type="button" onclick="" class="btn btn-default btn-filter delivery--bulk-export--summit" data-order-category="1">
                 <i class="fa fa-download"></i> 批量导出Excel
             </button>
 
             <select class="search-filter form-filter filter-lg select2-box-c" name="bulk-operate-status">
                 <option value="-1">请选导出状态</option>
+                <option value="0">未导出</option>
                 <option value="1">已导出</option>
-                <option value="0">待导出</option>
+                <option value="9">待导出</option>
             </select>
 
-            <button type="button" class="btn btn-default btn-filter bulk-submit-for-delivery-exported">
+            <button type="button" class="btn btn-default btn-filter delivery--bulk-exported-status-change--submit">
                 <i class="fa fa-check"></i> 批量更改导出状态
             </button>
 

@@ -1030,6 +1030,11 @@ class DKStaffController extends Controller
     {
         return $this->delivery_repo->o1__delivery__item_delete(request()->all());
     }
+    // 【交付】批量更改导出状态
+    public function o1__delivery__bulk_exported_status_change()
+    {
+        return $this->delivery_repo->o1__delivery__bulk_exported_status_change(request()->all());
+    }
 
 
 

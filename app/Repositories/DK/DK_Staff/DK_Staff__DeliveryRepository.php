@@ -435,7 +435,7 @@ class DK_Staff__DeliveryRepository {
 
     }
     // 【交付-管理】批量-导出状态
-    public function v1_operate_for_delivery_bulk_exported($post_data)
+    public function o1__delivery__bulk_exported_status_change($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -454,17 +454,27 @@ class DK_Staff__DeliveryRepository {
         }
 
         $operate = $post_data["operate"];
-        if($operate != 'delivery-exported-bulk') return response_error([],"参数[operate]有误！");
+        if($operate != 'delivery--bulk-exported-status-change') return response_error([],"参数[operate]有误！");
         $ids = $post_data['ids'];
         $ids_array = explode("-", $ids);
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,9,11,61,66])) return response_error([],"你没有操作权限！");
-//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+        if(!in_array($me->staff_category,[0,1,9,71])) return response_error([],"你没有操作权限！");
 
         $operate_result = $post_data["operate_result"];
-//        if(!in_array($operate_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
+
+
+
+        $record_data["ip"] = Get_IP();
+        $record_data["record_object"] = 1;
+        $record_data["record_category"] = 1;
+        $record_data["record_type"] = 1;
+        $record_data["creator_id"] = $me->id;
+        $record_data["operate_object"] = 91;
+        $record_data["operate_category"] = 99;
+        $record_data["operate_type"] = 1;
+        $record_data["column_name"] = "is_exported";
 
         // 启动数据库事务
         DB::beginTransaction();
@@ -483,35 +493,22 @@ class DK_Staff__DeliveryRepository {
                 $item = DK_Common__Delivery::withTrashed()->find($id);
                 if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
 
-
                 $before = $item->is_exported;
 
                 $item->is_exported = $operate_result;
                 $bool = $item->save();
-                if(!$bool) throw new Exception("item--update--fail");
+                if(!$bool) throw new Exception("DK_Common__Delivery--update--fail");
                 else
                 {
-                    $record = new DK_Common__Order_Operation_Record;
+                    $record = new DK_Common__Order__Operation_Record;
 
-                    $record_data["ip"] = Get_IP();
-                    $record_data["record_object"] = 21;
-                    $record_data["record_category"] = 11;
-                    $record_data["record_type"] = 1;
-                    $record_data["creator_id"] = $me->id;
-                    $record_data["order_id"] = $id;
-                    $record_data["operate_object"] = 91;
-                    $record_data["operate_category"] = 99;
-                    $record_data["operate_type"] = 1;
-                    $record_data["column_name"] = "is_exported";
+                    $record_data["delivery_id"] = $id;
 
                     $record_data["before"] = $before;
                     $record_data["after"] = $operate_result;
 
-//                $record_data["before_client_id"] = $before;
-//                $record_data["after_client_id"] = $client_id;
-
                     $bool_1 = $record->fill($record_data)->save();
-                    if(!$bool_1) throw new Exception("insert--record--fail");
+                    if(!$bool_1) throw new Exception("DK_Common__Order_Operation_Record--record--fail");
                 }
 
             }

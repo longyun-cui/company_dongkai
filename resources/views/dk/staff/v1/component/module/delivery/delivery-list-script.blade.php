@@ -7,7 +7,7 @@
             $('input[name="bulk-id"]').prop('checked',this.checked); // checked为true时为默认显示的状态
         });
         // 【批量操作】
-        $(".main-content").off('click', '.delivery--bulk-export-summit').on('click', '.delivery--bulk-export-summit', function() {
+        $(".main-content").off('click', '.delivery--bulk-export--summit').on('click', '.delivery--bulk-export--summit', function() {
             // var $checked = [];
             // $('input[name="bulk-id"]:checked').each(function() {
             //     $checked.push($(this).val());
@@ -29,7 +29,7 @@
             window.open($url);
         });
         // 【批量操作】批量-导出
-        $(".main-content").on('click', '#bulk-submit-for-exported', function() {
+        $(".main-content").on('click', '.delivery--bulk-exported-status-change--submit', function() {
             // var $checked = [];
             // $('input[name="bulk-id"]:checked').each(function() {
             //     $checked.push($(this).val());
@@ -49,10 +49,10 @@
                 ,yes: function(index){
 
                     $.post(
-                        "{{ url('/item/delivery-bulk-exported') }}",
+                        "{{ url('/o1/delivery/bulk-exported-status-change') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "delivery-exported-bulk",
+                            operate: "delivery--bulk-exported-status-change",
                             ids: $ids,
                             operate_result:$('select[name="bulk-operate-status"]').val()
                         },
@@ -76,12 +76,15 @@
                                     }
                                     else if($operate_result == "0")
                                     {
-                                        $row.find('td[data-key=is_exported]').html('<small class="btn-xs btn-primary">未导出</small>');
+                                        $row.find('td[data-key=is_exported]').html('<small class="btn-xs btn-info">未导出</small>');
+                                    }
+                                    else if($operate_result == "9")
+                                    {
+                                        $row.find('td[data-key=is_exported]').html('<small class="btn-xs btn-primary">待导出</small>');
                                     }
                                     else
                                     {
                                     }
-
 
                                 });
                             }

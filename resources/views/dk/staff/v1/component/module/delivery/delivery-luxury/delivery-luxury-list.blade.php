@@ -114,7 +114,7 @@
                 <input type="checkbox" class="check-review-all">
             </button>
 
-            <button type="button" onclick="" class="btn btn-default btn-filter delivery--bulk-export-summit" data-order-category="31">
+            <button type="button" onclick="" class="btn btn-default btn-filter delivery--bulk-export--summit" data-order-category="31">
                 <i class="fa fa-download"></i> 批量导出Excel
             </button>
 
@@ -124,7 +124,7 @@
                 <option value="0">待导出</option>
             </select>
 
-            <button type="button" class="btn btn-default btn-filter bulk-submit-for-delivery-exported" id="">
+            <button type="button" class="btn btn-default btn-filter delivery--bulk-exported-status-change--submit">
                 <i class="fa fa-check"></i> 批量更改导出状态
             </button>
 

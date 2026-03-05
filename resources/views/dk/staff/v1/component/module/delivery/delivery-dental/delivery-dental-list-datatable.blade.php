@@ -150,9 +150,9 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(data == 0) return '<small class="btn-xs btn-primary">未导出</small>';
+                        if(data == 0) return '<small class="btn-xs btn-info">未导出</small>';
                         else if(data == 1) return '<small class="btn-xs btn-success">已导出</small>';
-                        else if(data == -1) return '<small class="btn-xs btn-warning">未选择</small>';
+                        else if(data == 9) return '<small class="btn-xs btn-primary">待导出</small>';
                         return data;
                     }
                 },
