@@ -102,6 +102,7 @@
                                 else if(row.operate_type == 9) $category_html = '<small class="btn-xs bg-green">一键交付</small>';
                                 else if(row.operate_type == 19) $category_html = '<small class="btn-xs bg-green">批量·一键交付</small>';
                                 else if(row.operate_type == 3) $category_html = '<small class="btn-xs bg-orange">分发交付</small>';
+                                else if(row.operate_type == 13) $category_html = '<small class="btn-xs bg-orange">批量·分发交付</small>';
                                 else if(row.operate_type == 101) $category_html = '<small class="btn-xs bg-red">交付删除</small>';
                             }
                             else if(data == 81)

@@ -943,7 +943,7 @@ class DKStaffController extends Controller
     {
         return $this->order_repo->o1__order__item_delivering_save(request()->all());
     }
-    // 【工单】批量交付
+    // 【工单】批量·交付
     public function o1__order__bulk_delivering_save()
     {
         return $this->order_repo->o1__order__bulk_delivering_save(request()->all());
@@ -953,7 +953,7 @@ class DKStaffController extends Controller
     {
         return $this->order_repo->o1__order__item_delivering_save__by_fool(request()->all());
     }
-    // 【工单】一件批量交付
+    // 【工单】批量·一件交付
     public function o1__order__bulk_delivering_save__by_fool()
     {
         return $this->order_repo->o1__order__bulk_delivering_save__by_fool(request()->all());
@@ -962,6 +962,11 @@ class DKStaffController extends Controller
     public function o1__order__item_distributing_save()
     {
         return $this->order_repo->o1__order__item_distributing_save(request()->all());
+    }
+    // 【工单】批量·分发
+    public function o1__order__bulk_distributing_save()
+    {
+        return $this->order_repo->o1__order__bulk_distributing_save(request()->all());
     }
 
 
