@@ -140,7 +140,7 @@
                     "title": "真实名称",
                     "data": "alias_name",
                     "className": "text-center",
-                    "width": "100px",
+                    "width": "160px",
                     "orderable": true,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
@@ -225,7 +225,7 @@
                     "title": "客服部门",
                     "data": "pivot__project_department__csd",
                     "className": "text-center white-space-normal",
-                    "width": "160px",
+                    "width": "120px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                     },
@@ -242,7 +242,7 @@
                     "title": "质检部门",
                     "data": "pivot__project_department__qid",
                     "className": "text-center white-space-normal",
-                    "width": "160px",
+                    "width": "120px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                     },
