@@ -298,12 +298,12 @@
 
 
                 <button type="button" onclick="" class="btn btn-default btn-filter order--bulk-export-summit" data-order-category="31">
-                    <i class="fa fa-download"></i> 批量导出
+                    <i class="fa fa-download"></i> 批量·导出
                 </button>
 
 
                 <button type="button" class="btn btn-default btn-filter order--bulk-delivering-summit--by-fool">
-                    <i class="fa fa-share"></i> 批量一键交付
+                    <i class="fa fa-share"></i> 批量·一键交付
                 </button>
 
 
@@ -346,7 +346,11 @@
 
 
                 <button type="button" class="btn btn-default btn-filter order--bulk-delivering--summit">
-                    <i class="fa fa-share"></i> 批量交付
+                    <i class="fa fa-share"></i> 批量·交付
+                </button>
+
+                <button type="button" class="btn btn-default btn-filter order--bulk-distributing--summit">
+                    <i class="fa fa-share"></i> 批量·分发
                 </button>
 
 
