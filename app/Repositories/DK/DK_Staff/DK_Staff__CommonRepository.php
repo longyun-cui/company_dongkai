@@ -381,7 +381,7 @@ class DK_Staff__CommonRepository {
         if(!empty($post_data['keyword']))
         {
             $keyword = "%{$post_data['keyword']}%";
-            $query->where('username','like',"%$keyword%");
+            $query->where('name','like',"%$keyword%");
         }
 
         if(!empty($post_data['client_category']))
