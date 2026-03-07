@@ -400,10 +400,11 @@ class DK_Staff__OrderRepository {
             $delivered_projectId = intval($post_data['delivered_project']);
             if(!in_array($delivered_projectId,[-1,0]))
             {
-                if(isset($post_data['distribute_type']) && $post_data['distribute_type'] == 1)
+                if(isset($post_data['distribute_type']) && (int)$post_data['distribute_type'] == 1)
                 {
-                    $project = DK_Common__Project::find($post_data['project']);
+                    $project = DK_Common__Project::find($delivered_projectId);
                     $project_ids = DK_Common__Project::select('id')
+                        ->where('active',1)
                         ->where('item_status',1)
                         ->where('location_city',$project->location_city)
                         ->pluck('id');

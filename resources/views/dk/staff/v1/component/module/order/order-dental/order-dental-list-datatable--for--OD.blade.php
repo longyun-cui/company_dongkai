@@ -49,6 +49,8 @@
                     d.staff = $tableSearch.find('select[name="order-staff"]').val();
                     d.distribute_type = $tableSearch.find('select[name="order-distribute-type"]').val();
                     d.project = $tableSearch.find('select[name="order-project"]').val();
+                    d.delivered_project = $tableSearch.find('select[name="order-delivered-project"]').val();
+                    d.delivered_client = $tableSearch.find('select[name="order-delivered-client"]').val();
                     d.client = $tableSearch.find('select[name="order-client"]').val();
                     d.status = $tableSearch.find('select[name="order-status"]').val();
                     d.order_type = $tableSearch.find('select[name="order-type"]').val();
