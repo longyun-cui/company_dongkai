@@ -410,7 +410,7 @@ class DK_Staff__OrderRepository {
                         ->pluck('id');
 
                     $query
-                        ->leftJoin('dk_common__delivery as d', function($join) use ($post_data,$project_ids) {
+                        ->leftJoin('dk_common__delivery as d', function($join) use ($post_data,$delivered_projectId,$project_ids) {
                             $join->on('d.client_phone', '=', 'dk_common__order.client_phone')
                                 ->where('d.project_id', '=', $delivered_projectId);
                         })
