@@ -1588,7 +1588,7 @@ class DK_Staff__OrderRepository {
 
         if(in_array($me->staff_category,[41,51,61]))
         {
-            $query->whereIn('operate_category',[1,41]);
+            $query->whereIn('operate_category',[1,11,41]);
             $query->whereIn('operate_type',[1,2,3,9,11,12,51,61,69]);
         }
 
@@ -1928,12 +1928,12 @@ class DK_Staff__OrderRepository {
                 $record = new DK_Common__Order__Operation_Record;
 
                 $record_data["ip"] = Get_IP();
-                $record_data["record_object"] = 21;
-                $record_data["record_category"] = 11;
+                $record_data["record_object"] = 1;
+                $record_data["record_category"] = 1;
                 $record_data["record_type"] = 1;
                 $record_data["creator_id"] = $me->id;
                 $record_data["order_id"] = $id;
-                $record_data["operate_object"] = 71;
+                $record_data["operate_object"] = 1;
                 $record_data["operate_category"] = 11;
                 $record_data["operate_type"] = 1;
                 $record_data["process_category"] = 1;

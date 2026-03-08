@@ -88,6 +88,11 @@
                                 if(row.operate_type == 1) $html_type = '<small class="btn-xs bg-blue">编辑</small>';
                                 if(row.operate_type == 9) $html_type = '<small class="btn-xs bg-blue">发布</small>';
                             }
+                            if(data == 11)
+                            {
+                                $category_html = '<small class="btn-xs bg-blue">发布</small>';
+                                // $html_type = '<small class="btn-xs bg-blue">发布</small>';
+                            }
                             else if(data == 41)
                             {
                                 // $category_html = '<small class="btn-xs bg-blue">生产</small>';
@@ -201,7 +206,21 @@
                         "data": "creator_id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.name+'</a>';
+                            if(window.staffDepartment == 'CSD' && window.staffRole != 'director')
+                            {
+                                if([1,11].includes(row.operate_category))
+                                {
+                                    return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.name+'</a>';
+                                }
+                                else
+                                {
+                                    return row.creator == null ? '--' : '****';
+                                }
+                            }
+                            else
+                            {
+                                return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.name+'</a>';
+                            }
                         }
                     },
                     {
