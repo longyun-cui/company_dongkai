@@ -3913,6 +3913,8 @@ class DK_Staff__OrderRepository {
 
             foreach($sorted as $key => $id)
             {
+                $delivered_result = $post_data["delivered_result"];
+
                 $is_next = 0;
                 $is_delivery = 0;
                 $non_delivered_result = '';
@@ -3960,6 +3962,8 @@ class DK_Staff__OrderRepository {
                             {
                                 $is_next = 0;
                                 $is_delivery = 9;
+                                $non_delivered_result = '';
+                                $non_delivery_reason = '';
                             }
                         }
                         else
@@ -3997,6 +4001,7 @@ class DK_Staff__OrderRepository {
                             {
                                 $delivered_result = '重复';
 //                        $delivered_result = '项目·重复';
+                                $non_delivered_result = '交付失败';
                                 $non_delivery_reason = '【项目】重复';
                                 break; // 跳出循环
                             }
@@ -4005,6 +4010,7 @@ class DK_Staff__OrderRepository {
                             if($o->delivered_client_id == $client_id)
                             {
                                 $delivered_result = '重复';
+                                $non_delivered_result = '交付失败';
 //                        $delivered_result = '客户·重复';
                                 $non_delivery_reason = '【客户】重复';
                                 break; // 跳出循环
@@ -4254,7 +4260,17 @@ class DK_Staff__OrderRepository {
 //                AutomaticDispatchingJob::dispatch($client->id);
 //            }
 
-            return response_success(['ids'=>$ids],$msg);
+
+
+            $item_list = DK_Common__Order::with([
+                'project_er'=>function($query) { $query->select('id','name','alias_name','is_distributive'); },
+                'delivered_project_er'=>function($query) { $query->select('id','name','alias_name'); },
+                'delivered_client_er'=>function($query) { $query->select('id','name'); },
+            ])
+                ->whereIn('id',$ids)
+                ->get();
+
+            return response_success(['ids'=>$ids,'item_list'=>$item_list],$msg);
         }
         catch (Exception $e)
         {
@@ -4840,6 +4856,8 @@ class DK_Staff__OrderRepository {
         $date = date("Y-m-d");
         $datetime = date('Y-m-d H:i:s');
 
+        $item_list = [];
+
 
         $sorted = collect($ids_array)->sort();
 
@@ -5224,6 +5242,12 @@ class DK_Staff__OrderRepository {
 
                 $count += 1;
                 $ids[] = $id;
+//                $item->load([
+//                    'project_er'=>function($query) { $query->select('id','name','alias_name','is_distributive'); },
+//                    'delivered_project_er'=>function($query) { $query->select('id','name','alias_name'); },
+//                    'delivered_client_er'=>function($query) { $query->select('id','name'); },
+//                    ]);
+//                $item_list[] = $item;
 
             }
 
@@ -5237,7 +5261,15 @@ class DK_Staff__OrderRepository {
 //                AutomaticDispatchingJob::dispatch($client->id);
 //            }
 
-            return response_success(['ids'=>$ids],$msg);
+            $item_list = DK_Common__Order::with([
+                    'project_er'=>function($query) { $query->select('id','name','alias_name','is_distributive'); },
+                    'delivered_project_er'=>function($query) { $query->select('id','name','alias_name'); },
+                    'delivered_client_er'=>function($query) { $query->select('id','name'); },
+                ])
+                ->whereIn('id',$ids)
+                ->get();
+
+            return response_success(['ids'=>$ids,'item_list'=>$item_list],$msg);
         }
         catch (Exception $e)
         {

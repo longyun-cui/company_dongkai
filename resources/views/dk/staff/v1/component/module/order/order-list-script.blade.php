@@ -3180,7 +3180,18 @@
                             else
                             {
                                 layer.closeAll('loading');
-                                $('#'+$table_id).DataTable().ajax.reload(null,false);
+                                // $('#'+$table_id).DataTable().ajax.reload(null,false);
+
+                                if (!!$response.data.item_list)
+                                {
+                                    var $item_list = $response.data.item_list;
+                                    $.each($item_list, function(index, $item)
+                                    {
+                                        var $td = $datatable_wrapper.find('td[data-key=order_id][data-value='+$item.id+']');
+                                        var $row = $td.parents('tr');
+                                        update_order_row_status($row,$item);
+                                    });
+                                }
                             }
                         })
                         .fail(function(jqXHR, textStatus, errorThrown) {
@@ -3253,7 +3264,18 @@
                             else
                             {
                                 layer.closeAll('loading');
-                                $('#'+$table_id).DataTable().ajax.reload(null,false);
+                                // $('#'+$table_id).DataTable().ajax.reload(null,false);
+
+                                if (!!$response.data.item_list)
+                                {
+                                    var $item_list = $response.data.item_list;
+                                    $.each($item_list, function(index, $item)
+                                    {
+                                        var $td = $datatable_wrapper.find('td[data-key=order_id][data-value='+$item.id+']');
+                                        var $row = $td.parents('tr');
+                                        update_order_row_status($row,$item);
+                                    });
+                                }
 
                             }
                         })
@@ -3646,5 +3668,280 @@
         $row.find('[data-key="financial_profit"]').attr('data-value',$financial_profit).html($financial_profit);
 
     }
+
+
+    function update_order_row_status($row,$order)
+    {
+        // 工单状态
+        if(true)
+        {
+            var $order_status_html = '';
+
+            if($order.deleted_at != null)
+            {
+                $order_status_html = '<small class="btn-xs bg-black">已删除</small>';
+            }
+
+            if($order.item_status == 97)
+            {
+                $order_status_html = '<small class="btn-xs bg-navy">已弃用</small>';
+            }
+
+            if($order.is_published == 0)
+            {
+                $order_status_html = '<small class="btn-xs bg-teal">未发布</small>';
+            }
+            else
+            {
+                if($order.is_completed == 1)
+                {
+                    $order_status_html = '<small class="btn-xs bg-olive">已结束</small>';
+                }
+            }
+
+            if($order.inspected_at)
+            {
+                if($order.inspected_status == 1)
+                {
+                    if($order.appealed_status == 0)
+                    {
+                        $order_status_html = '<small class="btn-xs bg-blue">已审核</small>';
+                    }
+                    else if($order.appealed_status == 1)
+                    {
+                        $order_status_html = '<small class="btn-xs bg-red">申诉中</small>';
+                    }
+                    else if($order.appealed_status == 9)
+                    {
+                        $order_status_html = '<small class="btn-xs bg-green">申诉·结束</small>';
+                    }
+                    else
+                    {
+                        $order_status_html = '<small class="btn-xs bg-blue">已审核</small>';
+                    }
+                }
+                else if($order.inspected_status == 9)
+                {
+                    $order_status_html = '<small class="btn-xs bg-aqua">等待再审</small>';
+                }
+                else $order_status_html = '--';
+            }
+            else
+            {
+                if($order.created_type == 9)
+                {
+                    $order_status_html = '<small class="btn-xs bg-blue">导入</small>';
+                }
+                else
+                {
+                    $order_status_html = '<small class="btn-xs bg-aqua">待审核</small>';
+                }
+            }
+
+            $row.find('td[data-key=order_status]').html($order_status_html);
+        }
+
+        // 审核状态
+        if(true)
+        {
+            var $inspected_status_html = '';
+
+            if($order.inspected_status == 0)
+            {
+                $inspected_status_html = '<small class="btn-xs bg-teal">待审核</small>';
+            }
+            else if($order.inspected_status == 1)
+            {
+                $inspected_status_html = '<small class="btn-xs bg-blue">已审核</small>';
+            }
+            else if($order.inspected_status == 9)
+            {
+                $inspected_status_html = '<small class="btn-xs bg-purple">不审核</small>';
+            }
+            else if($order.inspected_status == 99)
+            {
+                $inspected_status_html = '<small class="btn-xs bg-red">审核失败</small>';
+            }
+            else
+            {
+                $inspected_status_html = '<small class="btn-xs bg-black">error</small>';
+            }
+
+            $row.find('td[data-key=inspected_status]').html($inspected_status_html);
+        }
+
+        // 审核结果
+        if(true)
+        {
+            var $inspected_result_html = '';
+
+            if(!$order.inspected_at)
+            {
+                $inspected_result_html = '--';
+            }
+            else
+            {
+                if(["通过","折扣通过","郊区通过","内部通过"].includes($order.inspected_result))
+                {
+                    $inspected_result_html = '<small class="btn-xs bg-green">'+$order.inspected_result+'</small>';
+                }
+                else if($order.inspected_result == "拒绝")
+                {
+                    $inspected_result_html = '<small class="btn-xs bg-red">拒绝</small>';
+                }
+                else if($order.inspected_result == "拒绝可交付")
+                {
+                    $inspected_result_html = '<small class="btn-xs bg-red">拒绝可交付</small>';
+                }
+                else if($order.inspected_result == "不合格")
+                {
+                    $inspected_result_html = '<small class="btn-xs bg-red">不合格</small>';
+                }
+                else if($order.inspected_result == "重复")
+                {
+                    $inspected_result_html = '<small class="btn-xs bg-yellow">重复</small>';
+                }
+                else if($order.inspected_result == "重复•可分发")
+                {
+                    $inspected_result_html = '<small class="btn-xs bg-yellow">重复•可分发</small>';
+                }
+                else
+                {
+                    $inspected_result_html = '<small class="btn-xs bg-purple">'+data+'</small>';
+                }
+            }
+
+            $row.find('td[data-key=inspected_result]').html($inspected_result_html);
+        }
+
+        // 交付状态
+        if(true)
+        {
+            var $delivered_status_html = '';
+
+            if(!$order.delivered_at)
+            {
+                $delivered_status_html = '--';
+            }
+            else
+            {
+                if($order.delivered_status == 0)
+                {
+                    $delivered_status_html = '<small class="btn-xs bg-teal">未操作</small>';
+                }
+                else if($order.delivered_status == 1)
+                {
+                    $delivered_status_html = '<small class="btn-xs bg-blue">已交付</small>';
+                }
+                else if($order.delivered_status == 9)
+                {
+                    $delivered_status_html = '<small class="btn-xs bg-orange">待交付</small>';
+                }
+                else if($order.delivered_status == 91)
+                {
+                    $delivered_status_html = '<small class="btn-xs bg-purple">不交付</small>';
+                }
+                else if($order.delivered_status == 99)
+                {
+                    $delivered_status_html = '<small class="btn-xs bg-red">交付失败</small>';
+                }
+                else if($order.delivered_status == 101)
+                {
+                    $delivered_status_html = '<small class="btn-xs bg-red">交付撤回</small>';
+                }
+                else
+                {
+                    $delivered_status_html = '<small class="btn-xs bg-black">error</small>';
+                }
+            }
+
+
+            $row.find('td[data-key=delivered_status]').html($delivered_status_html);
+        }
+
+        // 交付结果
+        if(true)
+        {
+            var $delivered_result_html = '';
+
+            if(!$order.delivered_at)
+            {
+                $delivered_result_html = '--';
+            }
+            else
+            {
+                if(["交付","正常交付","折扣交付","郊区交付","内部交付"].includes($order.delivered_result))
+                {
+                    $delivered_result_html = '<small class="btn-xs bg-green">'+$order.delivered_result+'</small>';
+                }
+                else if($order.delivered_result == "待交付")
+                {
+                    $delivered_result_html = '<small class="btn-xs bg-blue">'+$order.delivered_result+'</small>';
+                }
+                else if($order.delivered_result == "等待再审" || $order.delivered_result == "隔日交付")
+                {
+                    $delivered_result_html = '<small class="btn-xs bg-yellow">'+$order.delivered_result+'</small>';
+                }
+                else if($order.delivered_result == "驳回")
+                {
+                    $delivered_result_html = '<small class="btn-xs bg-red">'+$order.delivered_result+'</small>';
+                }
+                else
+                {
+                    $delivered_result_html = '<small class="btn-xs bg-purple">'+$order.delivered_result+'</small>';
+                }
+            }
+
+            $row.find('td[data-key=delivered_result]').html($delivered_result_html);
+        }
+
+        // 交付时间
+        if(true)
+        {
+            var $delivered_at_html = '';
+
+            if(!$order.delivered_at)
+            {
+                $delivered_at_html = '--';
+            }
+            else
+            {
+                var $date = new Date($order.delivered_at*1000);
+                var $year = $date.getFullYear();
+                var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                var $day = ('00'+($date.getDate())).slice(-2);
+                var $hour = ('00'+$date.getHours()).slice(-2);
+                var $minute = ('00'+$date.getMinutes()).slice(-2);
+                var $second = ('00'+$date.getSeconds()).slice(-2);
+
+                var $currentYear = new Date().getFullYear();
+                if($year == $currentYear) $delivered_at_html = $month+'-'+$day+'&nbsp;'+$hour+':'+$minute+':'+$second;
+                else $delivered_at_html = $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute+':'+$second;
+            }
+
+            $row.find('td[data-key=delivered_at]').html($delivered_at_html);
+
+        }
+
+        // 交付项目
+        if(true)
+        {
+            var $delivered_project_html = '--';
+            if($order.delivered_project_er) $delivered_project_html = '<a href="javascript:void(0);">'+$order.delivered_project_er.name+'</a>';
+
+            $row.find('td[data-key=delivered_project_id]').html($delivered_project_html);
+        }
+
+        // 交付客户
+        if(true)
+        {
+            var $delivered_client_html = '--';
+            if($order.delivered_client_er) $delivered_client_html = '<a href="javascript:void(0);">'+$order.delivered_client_er.name+'</a>';
+
+            $row.find('td[data-key=delivered_client_id]').html($delivered_client_html);
+        }
+
+    }
+
 
 </script>
