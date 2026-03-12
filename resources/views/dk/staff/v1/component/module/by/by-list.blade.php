@@ -32,40 +32,17 @@
             {{--审核状态--}}
             <select class="search-filter form-filter filter-lg select2-box-c" name="by-inspected-status">
                 <option value="-1">审核状态</option>
-                <option value="0">待审核</option>
-                <option value="1">已审核</option>
+                <option value="1">待审核</option>
+                <option value="9">已审核</option>
             </select>
 
             {{--审核结果--}}
             <select class="search-filter form-filter filter-xl select2-box-c" name="by-inspected-result[]" multiple="multiple">
                 <option value="-1">审核结果</option>
-                @foreach(config('info.inspected_result') as $v)
-                    <option value="{{ $v }}">{{ $v }}</option>
+                @foreach(config('dk.common-config.by_inspected_result') as $k => $v)
+                    <option value ="{{ $k }}">{{ $v }}</option>
                 @endforeach
             </select>
-
-
-            {{--城市--}}
-            <select class="search-filter form-filter filter-lg select2-box-c select2-district-city" name="by-city" id="by-city" data-target="#by-district">
-                <option value="-1">选择城市</option>
-                @if(!empty($district_city_list) && count($district_city_list) > 0)
-                    @foreach($district_city_list as $v)
-                        <option value="{{ $v->district_city }}">{{ $v->district_city }}</option>
-                    @endforeach
-                @endif
-            </select>
-
-            {{--行政区--}}
-            <select class="search-filter form-filter filter-xxl select2-box-c select2-district-district" name="by-district[]" id="by-district" data-target="by-city" multiple="multiple">
-                <option value="-1">选择区域</option>
-                @if(!empty($district_district_list) && count($district_district_list) > 0)
-                    @foreach($district_district_list as $v)
-                        <option value="{{ $v }}">{{ $v }}</option>
-                    @endforeach
-                @endif
-            </select>
-
-
 
 
             <button type="button" class="btn btn-default btn-filter filter-submit">

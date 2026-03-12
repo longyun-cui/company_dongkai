@@ -118,17 +118,48 @@ class DK_Staff__BYRepository {
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
         if(!empty($post_data['mobile'])) $query->where('mobile', $post_data['mobile']);
 
+
+        // 发布日期
+        if(!empty($post_data['assign'])) $query->where('received_date', $post_data['assign']);
+//        if(!empty($post_data['assign_start'])) $query->where('published_date', '>=', $post_data['assign_start']);
+//        if(!empty($post_data['assign_ended'])) $query->where('published_date', '<=', $post_data['assign_ended']);
+        if(!empty($post_data['assign_start']) && !empty($post_data['assign_ended']))
+        {
+            $query->whereDate('received_date', '>=', $post_data['assign_start']);
+            $query->whereDate('received_date', '<=', $post_data['assign_ended']);
+        }
+        else if(!empty($post_data['assign_start']))
+        {
+            $query->where('received_date', $post_data['assign_start']);
+        }
+        else if(!empty($post_data['assign_ended']))
+        {
+            $query->where('received_date', $post_data['assign_ended']);
+        }
+
+
         // 状态 [|]
         if(!empty($post_data['api_status']))
         {
-            if(!in_array($post_data['api_status'],[-1,0,'-1','0']))
+            $api_status_int = (int)$post_data['api_status'];
+            if(!in_array($api_status_int,[-1,0]))
             {
-                $query->where('api_status', $post_data['item_status']);
+                $query->where('api_status', $api_status_int);
             }
         }
         else
         {
             if(in_array($me->staff_category,[71])) $query->where('api_status', '>=', 1);
+        }
+
+        // 状态 [|]
+        if(isset($post_data['inspected_status']))
+        {
+            $inspected_status_int = (int)$post_data['inspected_status'];
+            if(!in_array($inspected_status_int,[-1]))
+            {
+                $query->where('inspected_status', $inspected_status_int);
+            }
         }
 
 
