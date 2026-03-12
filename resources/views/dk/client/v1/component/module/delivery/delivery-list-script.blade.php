@@ -103,7 +103,7 @@
 
 
         // 【质量评估】
-        $(".main-content").on('click', ".item-quality-evaluate-submit", function() {
+        $(".main-content").on('click', ".delivery--item--quality-evaluate--submit", function() {
             var $that = $(this);
             var $id = $(this).data('id');
             var $row = $that.parents('tr');
@@ -125,10 +125,10 @@
                 ,yes: function(index){
                     $.post(
                             {{--"{{ url('/item/delivery-quality-evaluate') }}",--}}
-                                "{{ url('/v1/operate/delivery/item-quality-evaluate') }}",
+                                "{{ url('/o1/delivery/item--quality-evaluate--save') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "delivery-quality-evaluate",
+                            operate: "delivery--item--quality-evaluate",
                             item_id: $that.attr('data-id'),
                             order_quality: $('select[name="order-quality"]').val()
                         },
@@ -154,7 +154,7 @@
 
 
         // 【交付】【客户信息】编辑-显示
-        $(".main-content").off('click', ".item-modal-show-for-customer-update").on('click', ".item-modal-show-for-customer-update", function() {
+        $(".main-content").off('click', ".modal-show--for--customer-update").on('click', ".modal-show--for--customer-update", function() {
             var $that = $(this);
             var $id = $(this).data('id');
             var $row = $that.parents('tr');
@@ -241,9 +241,15 @@
 
         });
         // 【交付】【客户信息】编辑-提交
-        $(".main-content").off('click', "#form-submit-for-delivery-customer-update").on('click', "#form-submit-for-delivery-customer-update", function() {
+        $(".main-content").off('click', "#item-submit--for--delivery--item-operating--customer-update").on('click', "#item-submit--for--delivery--item-operating--customer-update", function() {
             var $that = $(this);
             var $table_id = $that.data('datatable-list-id');
+
+            var $modal_id = $that.data('modal-id');
+            var $modal = $('#'+$modal_id);
+
+            var $form_id = $that.data('form-id');
+            var $form = $('#'+$form_id);
 
             var $index = layer.load(1, {
                 shade: [0.3, '#fff'],
@@ -308,7 +314,7 @@
 
 
         // 【交付】【回访】编辑-显示
-        $(".main-content").off('click', ".item-modal-show-for-callback-update").on('click', ".item-modal-show-for-callback-update", function() {
+        $(".main-content").off('click', ".modal-show--for--callback-update").on('click', ".modal-show--for--callback-update", function() {
             var $that = $(this);
             var $id = $(this).data('id');
             var $row = $that.parents('tr');
@@ -389,9 +395,15 @@
 
         });
         // 【交付】【回访】编辑-提交
-        $(".main-content").off('click', "#form-submit-for-delivery-callback-update").on('click', "#form-submit-for-delivery-callback-update", function() {
+        $(".main-content").off('click', "#item-submit--for--delivery--item-operating--callback-update").on('click', "#item-submit--for--delivery--item-operating--callback-update", function() {
             var $that = $(this);
             var $table_id = $that.data('datatable-list-id');
+
+            var $modal_id = $that.data('modal-id');
+            var $modal = $('#'+$modal_id);
+
+            var $form_id = $that.data('form-id');
+            var $form = $('#'+$form_id);
 
             var $index = layer.load(1, {
                 shade: [0.3, '#fff'],
@@ -456,7 +468,7 @@
 
 
         // 【交付】【上门状态】编辑-显示
-        $(".main-content").off('click', ".item-modal-show-for-come-update").on('click', ".item-modal-show-for-come-update", function() {
+        $(".main-content").off('click', ".modal-show--for--come-update").on('click', ".modal-show--for--come-update", function() {
             var $that = $(this);
             var $id = $(this).data('id');
             var $row = $that.parents('tr');
@@ -537,9 +549,15 @@
 
         });
         // 【交付】【上门状态】编辑-提交
-        $(".main-content").off('click', "#form-submit-for-delivery-come-update").on('click', "#form-submit-for-delivery-come-update", function() {
+        $(".main-content").off('click', "#item-submit--for--delivery--item-operating--come-update").on('click', "#item-submit--for--delivery--item-operating--come-update", function() {
             var $that = $(this);
             var $table_id = $that.data('datatable-list-id');
+
+            var $modal_id = $that.data('modal-id');
+            var $modal = $('#'+$modal_id);
+
+            var $form_id = $that.data('form-id');
+            var $form = $('#'+$form_id);
 
             var $index = layer.load(1, {
                 shade: [0.3, '#fff'],
@@ -604,7 +622,7 @@
 
 
         // 【交付】【添加跟进记录】添加-显示
-        $(".main-content").off('click', ".item-modal-show-for-follow-create").on('click', ".item-modal-show-for-follow-create", function() {
+        $(".main-content").off('click', ".modal-show--for--follow-create").on('click', ".modal-show--for--follow-create", function() {
             var $that = $(this);
             var $id = $(this).data('id');
             var $row = $that.parents('tr');
@@ -631,8 +649,15 @@
             // });
         });
         // 【交付】【添加跟进记录】编辑-提交
-        $(".main-content").off('click', "#form-submit-for-delivery-follow-create").on('click', "#form-submit-for-delivery-follow-create", function() {
+        $(".main-content").off('click', "#item-submit--for--delivery--item-operating--follow-create").on('click', "#item-submit--for--delivery--item-operating--follow-create", function() {
             var $that = $(this);
+            var $table_id = $that.data('datatable-list-id');
+
+            var $modal_id = $that.data('modal-id');
+            var $modal = $('#'+$modal_id);
+
+            var $form_id = $that.data('form-id');
+            var $form = $('#'+$form_id);
 
             var $index = layer.load(1, {
                 shade: [0.3, '#fff'],
@@ -698,7 +723,7 @@
 
 
         // 【交付】【添加成交记录】添加-显示
-        $(".main-content").off('click', ".item-modal-show-for-trade-create").on('click', ".item-modal-show-for-trade-create", function() {
+        $(".main-content").off('click', ".modal-show--for--trade-create").on('click', ".modal-show--for--trade-create", function() {
             var $that = $(this);
             var $id = $(this).data('id');
             var $row = $that.parents('tr');
@@ -722,9 +747,15 @@
             $modal.modal('show');
         });
         // 【交付】【添加成交记录】编辑-提交
-        $(".main-content").off('click', "#item-submit-for-delivery-trade-create").on('click', "#item-submit-for-delivery-trade-create", function() {
+        $(".main-content").off('click', "#item-submit--for--delivery--item-operating--trade-create").on('click', "#item-submit--for--delivery--item-operating--trade-create", function() {
             var $that = $(this);
             var $table_id = $that.data('datatable-list-id');
+
+            var $modal_id = $that.data('modal-id');
+            var $modal = $('#'+$modal_id);
+
+            var $form_id = $that.data('form-id');
+            var $form = $('#'+$form_id);
 
             var $index = layer.load(1, {
                 shade: [0.3, '#fff'],
@@ -742,7 +773,7 @@
             });
 
             var options = {
-                url: "{{ url('/v1/operate/delivery/item-trade-save') }}",
+                url: "{{ url('/o1/delivery/item--trade-create--save') }}",
                 type: "post",
                 dataType: "json",
                 // target: "#div2",
@@ -759,10 +790,10 @@
                         layer.msg(response.msg);
 
                         // 重置输入框
-                        form_reset('#form-for-delivery-trade-create');
+                        form_reset('#'+$form_id);
 
-                        $('#modal-for-delivery-trade-create').modal('hide');
-                        // $('#modal-for-delivery-trade-create').modal('hide').on("hidden.bs.modal", function () {
+                        $modal.modal('hide');
+                        // $modal.modal('hide').on("hidden.bs.modal", function () {
                         //     $("body").addClass("modal-open");
                         // });
 
@@ -782,7 +813,7 @@
 
 
             };
-            $("#form-for-delivery-trade-create").ajaxSubmit(options);
+            $form.ajaxSubmit(options);
         });
 
 

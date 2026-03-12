@@ -37,7 +37,8 @@
             </select>
 
             {{--审核结果--}}
-            <select class="search-filter form-filter filter-xl select2-box-c" name="by-inspected-result[]" multiple="multiple">
+{{--            <select class="search-filter form-filter filter-xl select2-box-c" name="by-inspected-result[]" multiple="multiple">--}}
+            <select class="search-filter form-filter filter-xl select2-box-c" name="by-inspected-result">
                 <option value="-1">审核结果</option>
                 @foreach(config('dk.common-config.by_inspected_result') as $k => $v)
                     <option value ="{{ $k }}">{{ $v }}</option>

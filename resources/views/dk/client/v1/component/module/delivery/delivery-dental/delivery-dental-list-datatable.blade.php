@@ -96,12 +96,12 @@
                     render: function(data, type, row, meta) {
 
                         var $html_edit = '';
-                        var $html_quality = '<a class="btn btn-xs bg-default item-quality-evaluate-submit" data-id="'+data+'">质量评价</a>';
-                        var $html_update = '<a class="btn btn-xs bg-default item-modal-show-for-customer-update" data-id="'+data+'">更新</a>';
-                        var $html_come = '<a class="btn btn-xs bg-default item-modal-show-for-come-update" data-id="'+data+'">上门</a>';
-                        var $html_trade = '<a class="btn btn-xs bg-default item-modal-show-for-trade-create" data-id="'+data+'">成交</a>';
-                        var $html_follow = '<a class="btn btn-xs bg-default item-modal-show-for-follow-create" data-id="'+data+'">跟进</a>';
-                        var $html_follow_record = '<a class="btn btn-xs bg-default item-modal-show-for-follow-record" data-id="'+data+'">记录</a>';
+                        var $html_quality = '<a class="btn btn-xs bg-default delivery--item--quality-evaluate--submit" data-id="'+data+'">质量评价</a>';
+                        var $html_update = '<a class="btn btn-xs bg-default modal-show--for--customer-update" data-id="'+data+'">更新</a>';
+                        var $html_come = '<a class="btn btn-xs bg-default modal-show--for--come-update" data-id="'+data+'">上门</a>';
+                        var $html_trade = '<a class="btn btn-xs bg-default modal-show--for--trade-create" data-id="'+data+'">成交</a>';
+                        var $html_follow = '<a class="btn btn-xs bg-default modal-show--for--follow-create" data-id="'+data+'">跟进</a>';
+                        var $html_follow_record = '<a class="btn btn-xs bg-default modal-show--for--operation-record" data-id="'+data+'">记录</a>';
 
                         var $html =
                             $html_quality+

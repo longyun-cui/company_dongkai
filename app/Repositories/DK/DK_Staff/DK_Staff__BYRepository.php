@@ -161,6 +161,15 @@ class DK_Staff__BYRepository {
                 $query->where('inspected_status', $inspected_status_int);
             }
         }
+        // 结果 [|]
+        if(isset($post_data['inspected_result']))
+        {
+            $inspected_result_int = (int)$post_data['inspected_result'];
+            if(!in_array($inspected_result_int,[-1]))
+            {
+                $query->where('inspected_result', $inspected_result_int);
+            }
+        }
 
 
         $total = $query->count();

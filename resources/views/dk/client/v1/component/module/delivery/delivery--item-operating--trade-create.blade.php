@@ -127,7 +127,13 @@
             <div class="box-footer">
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-submit-for-delivery-trade-create"><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-success edit-submit"
+                                id="item-submit--for--delivery--item-operating--trade-create"
+                                data-modal-id="modal--for--delivery--item-operating--trade-create"
+                                data-form-id="form--for--delivery--item-operating--trade-create"
+                        >
+                            <i class="fa fa-check"></i> 提交
+                        </button>
                         <button type="button" class="btn btn-default modal-cancel">取消</button>
                     </div>
                 </div>

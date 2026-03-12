@@ -61,7 +61,11 @@
             <div class="box-footer">
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="form-submit-for-delivery-follow-create">
+                        <button type="button" class="btn btn-success edit-submit"
+                                id="item-submit--for--delivery--item-operating--follow-create"
+                                data-modal-id="modal--for--delivery--item-operating--follow-create"
+                                data-form-id="form--for--delivery--item-operating--follow-create"
+                        >
                             <i class="fa fa-check"></i> 提交
                         </button>
                         <button type="button" class="btn btn-default modal-cancel">取消</button>

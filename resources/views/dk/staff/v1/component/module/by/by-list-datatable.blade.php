@@ -49,7 +49,7 @@
                     d.recording_quality = $tableSearch.find('select[name="by-recording-quality"]').val();
                     d.api_status = $tableSearch.find('select[name="by-api-status"]').val();
                     d.inspected_status = $tableSearch.find('select[name="by-inspected-status"]').val();
-                    d.inspected_result = $tableSearch.find('select[name="by-inspected-result[]"]').val();
+                    d.inspected_result = $tableSearch.find('select[name="by-inspected-result"]').val();
                     d.location_city = $tableSearch.find('select[name="by-city"]').val();
                     d.location_district = $tableSearch.find('select[name="by-district[]"]').val();
                 },
