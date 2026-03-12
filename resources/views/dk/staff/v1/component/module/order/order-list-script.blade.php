@@ -1303,8 +1303,20 @@
                     var $hostname = myUrl.hostname;
                     var $port = myUrl.port ? ':'+myUrl.port : '';
                     var $path = myUrl.pathname;
-                    // var $url = 'http://8.142.7.121:9091/res/rs1/recordFile/listen?file='+$path;
-                    var $url = $protocol + '//' + $hostname + $port + '/recordFile/listen?file=' + $path;
+
+                    var $url = '';
+                    if($hostname == 'call01.zlyx.jjccyun.cn')
+                    {
+                        $url = 'http://8.142.7.121:9091/res/rs1/recordFile/listen?file='+$path;
+                    }
+                    else if($hostname == 'call02.zlyx.jjccyun.cn')
+                    {
+                        $url = $protocol + '//' + $hostname + $port + '/recordFile/listen?file=' + $path;
+                    }
+                    else
+                    {
+                        $url = $protocol + '//' + $hostname + $port + '/recordFile/listen?file=' + $path;
+                    }
                     window.open($url);
 
                     // var $obj = new Object();
