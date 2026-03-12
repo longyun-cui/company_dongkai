@@ -1298,8 +1298,13 @@
                     console.log($index);
                     console.log($value);
 
-                    var $path = new URL($value).pathname;
-                    var $url = 'http://8.142.7.121:9091/res/rs1/recordFile/listen?file='+$path;
+                    var myUrl = new URL(url);
+                    var $protocol = myUrl.protocol;
+                    var $hostname = myUrl.hostname;
+                    var $port = myUrl.port ? ':'+myUrl.port : '';
+                    var $path = myUrl.pathname;
+                    // var $url = 'http://8.142.7.121:9091/res/rs1/recordFile/listen?file='+$path;
+                    var $url = $protocol + '//' + $hostname + $port + '/recordFile/listen?file=' + $path;
                     window.open($url);
 
                     // var $obj = new Object();
@@ -1324,22 +1329,6 @@
 
 
                 });
-            }
-            else
-            {
-                $call_record_id = $row.find('td[data-key=recording_address_download]').attr('data-call-record-id');
-                if($call_record_id && $call_record_id > 0)
-                {
-                    console.log('else');
-                    console.log($call_record_id);
-
-                    // var $obj = new Object();
-                    // $obj.call_record_id = $call_record_id;
-                    //
-                    // var $url = url_build('/download/call-recording-download',$obj);
-                    // window.open($url);
-                }
-
             }
 
         });
