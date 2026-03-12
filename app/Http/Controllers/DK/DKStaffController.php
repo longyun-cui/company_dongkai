@@ -1072,7 +1072,7 @@ class DKStaffController extends Controller
     // 【API】【百应】预处理
     public function o1__by__item_preprocess()
     {
-        return $this->by_repo->v1_operate_for_by_item_preprocess(request()->all());
+        return $this->by_repo->o1__by__item_preprocess(request()->all());
     }
     // 【API】【百应】
     public function o1__by__item_publish()

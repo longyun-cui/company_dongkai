@@ -58,7 +58,7 @@
 
             //
             $.post(
-                "{{ url('/v1/operate/by/item-preprocess') }}",
+                "{{ url('/o1/by/item-preprocess') }}",
                 {
                     _token: $('meta[name="_token"]').attr('content'),
                     operate: "item-preprocess",
