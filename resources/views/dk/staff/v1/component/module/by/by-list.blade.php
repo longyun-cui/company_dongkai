@@ -19,14 +19,14 @@
 
 
             {{--选择项目--}}
-            <select class="search-filter form-filter filter-lg select2-box-c- select2-project-c" data-item-category="1" name="by-project">
-                <option value="-1">选择项目</option>
-                @if(!empty($project_list__for__dental) && count($project_list__for__dental) > 0)
-                    @foreach($project_list__for__dental as $v)
-                        <option value="{{ $v->id }}">{{ $v->name }}</option>
-                    @endforeach
-                @endif
-            </select>
+{{--            <select class="search-filter form-filter filter-lg select2-box-c- select2-project-c" data-item-category="1" name="by-project">--}}
+{{--                <option value="-1">选择项目</option>--}}
+{{--                @if(!empty($project_list__for__dental) && count($project_list__for__dental) > 0)--}}
+{{--                    @foreach($project_list__for__dental as $v)--}}
+{{--                        <option value="{{ $v->id }}">{{ $v->name }}</option>--}}
+{{--                    @endforeach--}}
+{{--                @endif--}}
+{{--            </select>--}}
 
 
             {{--审核状态--}}
