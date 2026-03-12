@@ -86,6 +86,7 @@ Route::group(['middleware' => ['dk.client.user.login']], function () {
 
     // 【交付】列表
     Route::post('/o1/delivery/delivery-list/datatable-query', $controller.'@o1__delivery__list__datatable_query');
+    Route::post('/o1/delivery/item-get', $controller.'@o1__delivery__item_get');
     Route::post('/o1/delivery/delivery-daily', $controller.'@o1__statistic__delivery_daily');
 
 

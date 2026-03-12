@@ -374,6 +374,12 @@ class DKClientController extends Controller
         return $this->delivery_repo->o1__delivery__list__datatable_query(request()->all());
     }
 
+    // 【团队】编辑-保存
+    public function o1__delivery__item_get()
+    {
+        return $this->delivery_repo->o1__delivery__item_get(request()->all());
+    }
+
     // 【交付】交付日报
     public function o1__statistic__delivery_daily()
     {

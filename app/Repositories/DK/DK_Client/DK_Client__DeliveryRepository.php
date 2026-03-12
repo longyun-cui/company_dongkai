@@ -278,6 +278,41 @@ class DK_Client__DeliveryRepository {
         return datatable_response($list, $draw, $total);
     }
 
+    // 【员工】获取 GET
+    public function o1__delivery__item_get($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-get') return response_error([],"参数[operate]有误！");
+        $item_id = $post_data["item_id"];
+        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Common__Delivery::withTrashed()
+            ->with([
+                'order_er'=>function($query) { $query->select('*'); }
+            ])
+            ->find($item_id);
+        if(!$item) return response_error([],"不存在警告，请刷新页面重试！");
+
+        return response_success($item,"");
+    }
+
 
     // 【交付-管理】交付日报
     public function o1__statistic__delivery_daily($post_data)

@@ -1208,7 +1208,7 @@
             });
 
             $.post(
-                "{{ url('order--item-recording-list-get-submit') }}",
+                "{{ url('/o1/order/item-call-recording--get--by-api') }}",
                 {
                     _token: $('meta[name="_token"]').attr('content'),
                     operate: "order--item-call-recording--get--by-api",

@@ -187,7 +187,7 @@
 
             //
             $.post(
-                "{{ url('/v1/operate/delivery/item-get') }}",
+                "{{ url('/o1/delivery/item-get') }}",
                 {
                     _token: $('meta[name="_token"]').attr('content'),
                     operate: "item-get",
@@ -304,8 +304,6 @@
                     console.log('always');
                     layer.closeAll('loading');
                 }
-
-
             };
             $("#form-for-delivery-customer-update").ajaxSubmit(options);
         });
@@ -501,7 +499,7 @@
 
             //
             $.post(
-                "{{ url('/v1/operate/delivery/item-get') }}",
+                "{{ url('/o1/delivery/item-get') }}",
                 {
                     _token: $('meta[name="_token"]').attr('content'),
                     operate: "item-get",
@@ -519,7 +517,7 @@
                     }
                     else
                     {
-                        var $modal = $('#modal-for-delivery-come-update');
+                        var $modal = $('#modal--for--delivery--item-operating--come-update');
 
                         // $modal.find('.box-title').html('更新上门状态【'+$that.attr('data-id')+'】');
                         $modal.find('.id-title').html('【'+$id+'】');
@@ -575,7 +573,7 @@
             });
 
             var options = {
-                url: "{{ url('/v1/operate/delivery/item-come-save') }}",
+                url: "{{ url('/o1/delivery/item-come-save') }}",
                 type: "post",
                 dataType: "json",
                 // target: "#div2",
@@ -592,9 +590,9 @@
                         layer.msg(response.msg);
 
                         // 重置输入框
-                        form_reset('#form-for-delivery-come-update');
+                        form_reset('#'+$form_id);
 
-                        $('#modal-for-delivery-come-update').modal('hide');
+                        $modal.modal('hide');
                         // $('#modal-for-delivery-trade-create').modal('hide').on("hidden.bs.modal", function () {
                         //     $("body").addClass("modal-open");
                         // });
@@ -615,13 +613,13 @@
 
 
             };
-            $("#form-for-delivery-come-update").ajaxSubmit(options);
+            $form.ajaxSubmit(options);
         });
 
 
 
 
-        // 【交付】【添加跟进记录】添加-显示
+        // 【交付】【跟进】添加-显示
         $(".main-content").off('click', ".modal-show--for--follow-create").on('click', ".modal-show--for--follow-create", function() {
             var $that = $(this);
             var $id = $(this).data('id');
@@ -648,7 +646,7 @@
             //     $(this).attr('id', 'id_' + Math.random());
             // });
         });
-        // 【交付】【添加跟进记录】编辑-提交
+        // 【交付】【跟进】编辑-提交
         $(".main-content").off('click', "#item-submit--for--delivery--item-operating--follow-create").on('click', "#item-submit--for--delivery--item-operating--follow-create", function() {
             var $that = $(this);
             var $table_id = $that.data('datatable-list-id');
@@ -722,7 +720,7 @@
 
 
 
-        // 【交付】【添加成交记录】添加-显示
+        // 【交付】【成交】添加-显示
         $(".main-content").off('click', ".modal-show--for--trade-create").on('click', ".modal-show--for--trade-create", function() {
             var $that = $(this);
             var $id = $(this).data('id');
@@ -746,7 +744,7 @@
 
             $modal.modal('show');
         });
-        // 【交付】【添加成交记录】编辑-提交
+        // 【交付】【成交】编辑-提交
         $(".main-content").off('click', "#item-submit--for--delivery--item-operating--trade-create").on('click', "#item-submit--for--delivery--item-operating--trade-create", function() {
             var $that = $(this);
             var $table_id = $that.data('datatable-list-id');

@@ -63,9 +63,7 @@
         @include(env('DK_CLIENT__TEMPLATE').'component.module.delivery.delivery-luxury.delivery-luxury-list')
     @endif
 
-    @include(env('DK_CLIENT__TEMPLATE').'component.module.delivery.delivery-daily')
-
-
+    @include(env('DK_CLIENT__TEMPLATE').'component.module.delivery-statistic.delivery-daily')
 
 
 </div>
@@ -106,8 +104,6 @@
     @include(env('DK_CLIENT__TEMPLATE').'component.module.staff.staff--item-operation-record-datatable')
 
 
-
-
     {{--交付--}}
     @if($me->client_er->client_category == 1)
         @include(env('DK_CLIENT__TEMPLATE').'component.module.delivery.delivery-dental.delivery-dental-list-datatable')
@@ -116,10 +112,9 @@
     @elseif($me->client_er->client_category == 31)
         @include(env('DK_CLIENT__TEMPLATE').'component.module.delivery.delivery-luxury.delivery-luxury-list-datatable')
     @endif
-
-    @include(env('DK_CLIENT__TEMPLATE').'component.module.delivery.delivery-daily-datatable')
-
     @include(env('DK_CLIENT__TEMPLATE').'component.module.delivery.delivery-list-script')
+
+    @include(env('DK_CLIENT__TEMPLATE').'component.module.delivery-statistic.delivery-daily-datatable')
 
 
 @endsection
