@@ -1298,7 +1298,7 @@
                     console.log($index);
                     console.log($value);
 
-                    var myUrl = new URL(url);
+                    var myUrl = new URL($value);
                     var $protocol = myUrl.protocol;
                     var $hostname = myUrl.hostname;
                     var $port = myUrl.port ? ':'+myUrl.port : '';
