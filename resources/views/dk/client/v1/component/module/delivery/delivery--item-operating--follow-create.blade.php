@@ -1,5 +1,5 @@
 {{--添加-跟进记录--}}
-<div class="modal fade modal-wrapper" id="modal-for-delivery-follow-create">
+<div class="modal fade modal-wrapper" id="modal--for--delivery--item-operating--vfollow-create">
     <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
 
         <div class="box- box-info- form-container">
@@ -13,7 +13,7 @@
                 </div>
             </div>
 
-            <form action="" method="post" class="form-horizontal form-bordered " id="form-for-delivery-follow-create">
+            <form action="" method="post" class="form-horizontal form-bordered " id="form--for--delivery--item-operating--follow-create">
                 <div class="box-body">
 
                     {{ csrf_field() }}

@@ -281,6 +281,20 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
 
 
 
+
+    /*
+     * download 下载
+     */
+    Route::get('/download/file-download', $controller.'@operate_download_file_download');
+    Route::get('/download/call-recording-download', $controller.'@operate_download_call_recording_download');
+    Route::get('/download/item-recording-download', $controller.'@operate_download_item_recording_download');
+    Route::get('/download/phone-recording-download', $controller.'@operate_download_phone_recording_download');
+
+
+
+
+
+
     // 【记录】列表
     Route::post('/o1/record/record-list/datatable-query', $controller.'@o1__record__list__datatable_query');
 

@@ -9,6 +9,7 @@ use App\Models\DK\DK_Common\DK_Common__Staff;
 use App\Models\DK\DK_Staff\DK_Staff__Record__by_Visit;
 
 use App\Repositories\DK\DK_Staff\DK_Staff__CommonRepository;
+use App\Repositories\DK\DK_Staff\DK_Staff__DownloadRepository;
 
 use App\Repositories\DK\DK_Staff\DK_Staff__IndexRepository;
 
@@ -44,6 +45,7 @@ class DKStaffController extends Controller
     private $repo;
 
     private $common_repo;
+    private $down_repo;
 
     private $company_repo;
     private $department_repo;
@@ -71,6 +73,7 @@ class DKStaffController extends Controller
         $this->repo = new DK_Staff__IndexRepository;
 
         $this->common_repo = new DK_Staff__CommonRepository;
+        $this->down_repo = new DK_Staff__DownloadRepository;
 
         $this->company_repo = new DK_Staff__CompanyRepository;
         $this->department_repo = new DK_Staff__DepartmentRepository;
@@ -1276,6 +1279,34 @@ class DKStaffController extends Controller
     public function o1__record__list__datatable_query()
     {
         return $this->record_repo->o1__record__list__datatable_query(request()->all());
+    }
+
+
+
+
+
+
+
+
+    // 【down】
+    public function operate_download_file_download()
+    {
+        return $this->down_repo->operate_download_file_download(request()->all());
+    }
+    //
+    public function operate_download_call_recording_download()
+    {
+        return $this->down_repo->operate_download_call_recording_download(request()->all());
+    }
+    //
+    public function operate_download_item_recording_download()
+    {
+        return $this->down_repo->operate_download_item_recording_download(request()->all());
+    }
+    //
+    public function operate_download_phone_recording_download()
+    {
+        return $this->down_repo->operate_download_phone_recording_download(request()->all());
     }
 
 
