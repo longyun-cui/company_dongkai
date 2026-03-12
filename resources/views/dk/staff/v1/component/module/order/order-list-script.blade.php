@@ -1351,6 +1351,9 @@
             var $row = $('tr.operating');
             console.log($id);
 
+            var $modal_id = 'modal--for--order--item-inspecting';
+            var $modal = $("#"+$modal_id);
+
             $recording_list_str = $row.find('td[data-key=recording_address_download]').attr('data-address-list');
             if($recording_list_str)
             {
@@ -1389,21 +1392,6 @@
 
 
                 });
-            }
-            else
-            {
-                $call_record_id = $row.find('td[data-key=recording_address_download]').attr('data-call-record-id');
-                if($call_record_id && $call_record_id > 0)
-                {
-                    console.log('else');
-                    console.log($call_record_id);
-
-                    // var $obj = new Object();
-                    // $obj.call_record_id = $call_record_id;
-                    //
-                    // var $url = url_build('/download/call-recording-download',$obj);
-                    // window.open($url);
-                }
             }
 
         });

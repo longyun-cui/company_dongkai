@@ -23,75 +23,20 @@ Route::match(['get','post'], '/data/delivery-detail', $controller.'@view_data_of
  * 超级管理员系统（后台）
  * 需要登录
  */
-Route::group(['middleware' => ['dk.client.user.login']], function () {
+Route::group(['middleware' => ['dk.client.staff.login']], function () {
 
     $controller = 'DKClientController';
 
 
     Route::post('/is_only_me', $controller.'@check_is_only_me');
     Route::post('/is_ip_login', $controller.'@check_is_ip_login');
-    Route::get('/', $controller.'@view_client__index');
+    Route::get('/', $controller.'@view_admin_index');
     Route::get('/404', $controller.'@view_admin_404');
 
 
 
 
     Route::post('/query_last_delivery', $controller.'@query_last_delivery');
-
-
-
-
-
-
-
-
-
-
-
-    // 【团队】
-    Route::post('/o1/team/team-list/datatable-query', $controller.'@o1__team__list__datatable_query');
-    Route::post('/o1/team/item-get', $controller.'@o1__team__item_get');
-    Route::post('/o1/team/item-save', $controller.'@o1__team__item_save');
-    Route::post('/o1/team/item-save--by--super', $controller.'@o1__team__item_save__by__super');
-    // 【团队】删除 & 恢复 & 永久删除
-    Route::post('/o1/team/item-delete', $controller.'@o1__team__item_delete');
-    Route::post('/o1/team/item-restore', $controller.'@o1__team__item_restore');
-    Route::post('/o1/team/item-delete-permanently', $controller.'@o1__team__item_delete_permanently');
-    // 【团队】启用 & 禁用
-    Route::post('/o1/team/item-enable', $controller.'@o1__team__item_enable');
-    Route::post('/o1/team/item-disable', $controller.'@o1__team__item_disable');
-    // 【团队】操作记录
-    Route::post('/o1/team/item-operation-record-list/datatable-query', $controller.'@o1__team__item_operation_record_list__datatable_query');
-
-
-
-    // 【员工】
-    Route::post('/o1/staff/staff-list/datatable-query', $controller.'@o1__staff__list__datatable_query');
-    Route::post('/o1/staff/item-get', $controller.'@o1__staff__item_get');
-    Route::post('/o1/staff/item-save', $controller.'@o1__staff__item_save');
-    // 【员工】删除 & 恢复 & 永久删除
-    Route::post('/o1/staff/item-delete', $controller.'@o1__staff__item_delete');
-    Route::post('/o1/staff/item-restore', $controller.'@o1__staff__item_restore');
-    Route::post('/o1/staff/item-delete-permanently', $controller.'@o1__staff__item_delete_permanently');
-    // 【员工】启用 & 禁用
-    Route::post('/o1/staff/item-enable', $controller.'@o1__staff__item_enable');
-    Route::post('/o1/staff/item-disable', $controller.'@o1__staff__item_disable');
-    // 【员工】登录
-    Route::post('/o1/staff/item-password-reset', $controller.'@o1__staff__item_password_reset');
-    Route::post('/o1/staff/item-login', $controller.'@o1__staff__item_login');
-    // 【员工】操作记录
-    Route::post('/o1/staff/item-operation-record-list/datatable-query', $controller.'@o1__staff__item_operation_record_list__datatable_query');
-
-
-
-    // 【交付】列表
-    Route::post('/o1/delivery/delivery-list/datatable-query', $controller.'@o1__delivery__list__datatable_query');
-    Route::post('/o1/delivery/delivery-daily', $controller.'@o1__statistic__delivery_daily');
-
-
-
-
-
 
 
 

@@ -1,4 +1,4 @@
-<div class="row datatable-body datatable-wrapper client-list-clone" data-datatable-item-category="client" data-item-name="客户">
+<div class="row datatable-body datatable-wrapper team-list-clone" data-datatable-item-category="team" data-item-name="部门">
 
 
     <div class="col-md-12 datatable-search-row  datatable-search-box">
@@ -6,11 +6,11 @@
 
         <div class=" pull-left">
 
-            @if(in_array($me->user_type,[0,1,9,11,19,61]))
-            <button type="button" onclick="" class="btn btn-filter modal-show--for--client-item-create"
-                    data-form-id="form--for--client-item-edit"
-                    data-modal-id="modal--for--client-item-edit"
-                    data-title="添加客户"
+            @if(in_array($me->user_type,[0,1,9,11,19]))
+            <button type="button" onclick="" class="btn btn-filter modal-show--for--team-item-create"
+                    data-form-id="form--for--team-item-edit"
+                    data-modal-id="modal--for--team-item-edit"
+                    data-title="添加团队"
             >
                 <i class="fa fa-plus"></i> 添加
             </button>
@@ -26,31 +26,26 @@
         <div class="pull-right">
 
 
-            <input type="text" class="search-filter form-filter filter-keyup" name="client-id" placeholder="ID" />
-            <input type="text" class="search-filter form-filter filter-keyup" name="client-name" placeholder="用户名" />
+            <input type="text" class="search-filter form-filter filter-keyup" name="team-id" placeholder="ID" />
 
-            <select class="search-filter form-filter filter-lg select2-box-c select2-company" name="client-company">
-                <option value="-1">选择公司</option>
-{{--                @foreach($company_list as $v)--}}
-{{--                    <option value="{{ $v->id }}">{{ $v->name }}</option>--}}
-{{--                @endforeach--}}
+            <input type="text" class="search-filter form-filter filter-keyup" name="team-name" placeholder="名称" />
+
+            <select class="search-filter form-filter select2-box-c" name="team-category">
+                <option value ="-1">全部</option>
+                <option value ="41">客服</option>
+                <option value ="51">质检</option>
+                <option value ="61">复核</option>
+                <option value ="71">运营</option>
+                <option value ="88">销售</option>
             </select>
 
-            <select class="search-filter form-filter filter-lg select2-box-c select2-channel" name="client-channel">
-                <option value="-1">选择渠道</option>
-{{--                @foreach($channel_list as $v)--}}
-{{--                    <option value="{{ $v->id }}">{{ $v->name }}</option>--}}
-{{--                @endforeach--}}
+            <select class="search-filter form-filter select2-box-c" name="team-type">
+                <option value ="-1">全部</option>
+                <option value ="11">团队</option>
+                <option value ="31">小组</option>
             </select>
 
-            <select class="search-filter form-filter filter-lg select2-box-c select2-business" name="client-business">
-                <option value="-1">选择商务</option>
-{{--                @foreach($business_list as $v)--}}
-{{--                    <option value="{{ $v->id }}">{{ $v->name }}</option>--}}
-{{--                @endforeach--}}
-            </select>
-
-            <select class="search-filter form-filter form-filter select2-box-c" name="client-item-status">
+            <select class="search-filter form-filter select2-box-c" name="team-status">
                 <option value ="-1">全部</option>
                 <option value ="1">启用</option>
                 <option value ="9">禁用</option>

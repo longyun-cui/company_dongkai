@@ -1,68 +1,26 @@
 <?php
 namespace App\Http\Controllers\DK;
 
+use App\Models\DK\DK_Client;
+use App\Models\DK_Client\DK_Client_User;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Models\DK\DK_User;
 
-use App\Models\DK\DK_Common\DK_Common__Client;
-use App\Models\DK\DK_Client\DK_Client__Staff;
-
 use App\Repositories\DK\DKClientRepository;
-
-use App\Repositories\DK\DK_Client\DK_Client__CommonRepository;
-
-use App\Repositories\DK\DK_Client\DK_Client__IndexRepository;
-
-use App\Repositories\DK\DK_Client\DK_Client__StaffRepository;
-
-use App\Repositories\DK\DK_Client\DK_Client__DeliveryRepository;
-
-//use App\Repositories\DK\DK_Client\DK_Client__ExportRepository;
-//
-//use App\Repositories\DK\DK_Client\DK_Client__RecordRepository;
-//
-//use App\Repositories\DK\DK_Client\DK_Client__StatisticRepository;
 
 use Response, Auth, Validator, DB, Exception;
 use QrCode, Excel;
 
-class DKClientController extends Controller
+class DKClientController_old extends Controller
 {
     //
     private $repo;
-
-    private $common_repo;
-
-    private $staff_repo;
-
-    private $delivery_repo;
-
-    private $export_repo;
-
-    private $record_repo;
-
-    private $statistic_repo;
-
     public function __construct()
     {
-//        $this->repo = new DKClientRepository;
-
-        $this->repo = new DK_Client__IndexRepository;
-
-        $this->common_repo = new DK_Client__CommonRepository;
-
-        $this->staff_repo = new DK_Client__StaffRepository;
-
-        $this->delivery_repo = new DK_Client__DeliveryRepository;
-
-//        $this->export_repo = new DK_Client__ExportRepository;
-//
-//        $this->record_repo = new DK_Client__RecordRepository;
-//
-//        $this->statistic_repo = new DK_Client__StatisticRepository;
+        $this->repo = new DKClientRepository;
     }
 
 
@@ -75,9 +33,9 @@ class DKClientController extends Controller
         $result['message'] = 'failed';
         $result['result'] = 'denied';
 
-        if(Auth::guard('dk_client__user')->check())
+        if(Auth::guard('dk_client_staff')->check())
         {
-            $me = Auth::guard('dk_client__user')->user();
+            $me = Auth::guard('dk_client_staff')->user();
             $token = request('_token');
 
             if($me->admin_token == $token)
@@ -97,9 +55,9 @@ class DKClientController extends Controller
         $result['message'] = 'failed';
         $result['result'] = 'denied';
 
-        if(Auth::guard('dk_client__user')->check())
+        if(Auth::guard('dk_client_staff')->check())
         {
-            $me = Auth::guard('dk_client__user')->user();
+            $me = Auth::guard('dk_client_staff')->user();
 
             // 判断用户是否开启ip登录
             if($me->is_ip == 1)
@@ -128,39 +86,34 @@ class DKClientController extends Controller
     {
         if(request()->isMethod('get'))
         {
-            $view_blade = env('DK_CLIENT__TEMPLATE').'login';
+            $view_blade = env('TEMPLATE_DK_CLIENT').'entrance.login';
             return view($view_blade);
         }
         else if(request()->isMethod('post'))
         {
-            $client_name = request()->get('client_name');
-            $client = DK_Common__Client::where('name',$client_name)->first();
-            if(!$client) return response_error([],'客户不存在！');
-//            dd($client->id);
+            $where['email'] = request()->get('email');
+            $where['mobile'] = request()->get('mobile');
+            $where['password'] = request()->get('password');
 
+//            $email = request()->get('email');
+//            $admin = SuperAdministrator::whereEmail($email)->first();
 
-            $login_number = request()->get('login_number');
-//            $staff = DK_Client__Staff::whereName($login_number)->first();
+            $mobile = request()->get('mobile');
+            $admin = DK_Client_User::whereMobile($mobile)->first();
 
-            $staff = DK_Client__Staff::select('*')
-                ->where(['active'=>1,'item_status'=>1])
-                ->where('client_id',$client->id)
-                ->where('name',$login_number)
-                ->first();
-
-            if($staff)
+            if($admin)
             {
-                if($staff->item_status == 1)
+                if($admin->user_status == 1)
                 {
                     $token = request()->get('_token');
                     $password = request()->get('password');
-                    if(password_check($password,$staff->password))
+                    if(password_check($password,$admin->password))
                     {
                         $remember = request()->get('remember');
-                        if($remember) Auth::guard('dk_client__user')->login($staff,true);
-                        else Auth::guard('dk_client__user')->login($staff);
-                        Auth::guard('dk_client__user')->user()->admin_token = $token;
-                        Auth::guard('dk_client__user')->user()->save();
+                        if($remember) Auth::guard('dk_client_staff')->login($admin,true);
+                        else Auth::guard('dk_client_staff')->login($admin);
+                        Auth::guard('dk_client_staff')->user()->admin_token = $token;
+                        Auth::guard('dk_client_staff')->user()->save();
                         return response_success();
                     }
                     else return response_error([],'账户or密码不正确！');
@@ -174,16 +127,16 @@ class DKClientController extends Controller
     // 退出
     public function logout()
     {
-        Auth::guard('dk_client__user')->user()->admin_token = '';
-        Auth::guard('dk_client__user')->user()->save();
-        Auth::guard('dk_client__user')->logout();
+        Auth::guard('dk_client_staff')->user()->admin_token = '';
+        Auth::guard('dk_client_staff')->user()->save();
+        Auth::guard('dk_client_staff')->logout();
         return redirect('/login');
     }
 
     // 退出
     public function logout_without_token()
     {
-        Auth::guard('dk_client__user')->logout();
+        Auth::guard('dk_client_staff')->logout();
         return redirect('/login');
     }
 
@@ -209,9 +162,9 @@ class DKClientController extends Controller
 
 
     // 返回主页视图
-    public function view_client__index()
+    public function view_admin_index()
     {
-        return $this->repo->view_client__index();
+        return $this->repo->view_admin_index1();
     }
 
 
@@ -237,58 +190,17 @@ class DKClientController extends Controller
 
 
 
-
-
-
-    // 【团队】datatable
-    public function o1__team__list__datatable_query()
+    public function v1_operate_for_select2_department()
     {
-        return $this->team_repo->o1__team__list__datatable_query(request()->all());
+        return $this->repo->v1_operate_for_select2_department(request()->all());
     }
-    // 【团队】获取
-    public function o1__team__item_get()
+    public function v1_operate_for_select2_staff()
     {
-        return $this->team_repo->o1__team__item_get(request()->all());
+        return $this->repo->v1_operate_for_select2_staff(request()->all());
     }
-    // 【团队】编辑-保存
-    public function o1__team__item_save()
+    public function v1_operate_for_select2_contact()
     {
-        return $this->team_repo->o1__team__item_save(request()->all());
-    }
-    // 【团队】编辑-保存
-    public function o1__team__item_save__by__super()
-    {
-        return $this->team_repo->o1__team__item_save__by__super(request()->all());
-    }
-    // 【团队】删除
-    public function o1__team__item_delete()
-    {
-        return $this->team_repo->o1__team__item_delete(request()->all());
-    }
-    // 【团队】恢复
-    public function o1__team__item_restore()
-    {
-        return $this->team_repo->o1__team__item_restore(request()->all());
-    }
-    // 【团队】彻底删除
-    public function o1__team__item_delete_permanently()
-    {
-        return $this->team_repo->o1__team__item_delete_permanently(request()->all());
-    }
-    // 【团队】启用
-    public function o1__team__item_enable()
-    {
-        return $this->team_repo->o1__team__item_enable(request()->all());
-    }
-    // 【团队】禁用
-    public function o1__team__item_disable()
-    {
-        return $this->team_repo->o1__team__item_disable(request()->all());
-    }
-    // 【团队】操作记录
-    public function o1__team__item_operation_record_list__datatable_query()
-    {
-        return $this->team_repo->o1__team__item_operation_record_list__datatable_query(request()->all());
+        return $this->repo->v1_operate_for_select2_contact(request()->all());
     }
 
 
@@ -298,86 +210,20 @@ class DKClientController extends Controller
 
 
 
-    // 【员工】datatable
-    public function o1__staff__list__datatable_query()
+    // 【联系渠道-管理】datatable
+    public function v1_operate_for_department_datatable_list_query()
     {
-        return $this->staff_repo->o1__staff__list__datatable_query(request()->all());
+        return $this->repo->v1_operate_for_department_datatable_list_query(request()->all());
     }
-    // 【员工】获取
-    public function o1__staff__item_get()
+    // 【联系渠道-管理】获取
+    public function v1_operate_for_department_item_get()
     {
-        return $this->staff_repo->o1__staff__item_get(request()->all());
+        return $this->repo->v1_operate_for_department_item_get(request()->all());
     }
-    // 【员工】编辑-保存
-    public function o1__staff__item_save()
+    // 【联系渠道-管理】编辑-保存
+    public function v1_operate_for_department_item_save()
     {
-        return $this->staff_repo->o1__staff__item_save(request()->all());
-    }
-    // 【员工】删除
-    public function o1__staff__item_delete()
-    {
-        return $this->staff_repo->o1__staff__item_delete(request()->all());
-    }
-    // 【员工】恢复
-    public function o1__staff__item_restore()
-    {
-        return $this->staff_repo->o1__staff__item_restore(request()->all());
-    }
-    // 【员工】彻底删除
-    public function o1__staff__item_delete_permanently()
-    {
-        return $this->staff_repo->o1__staff__item_delete_permanently(request()->all());
-    }
-    // 【员工】启用
-    public function o1__staff__item_enable()
-    {
-        return $this->staff_repo->o1__staff__item_enable(request()->all());
-    }
-    // 【员工】禁用
-    public function o1__staff__item_disable()
-    {
-        return $this->staff_repo->o1__staff__item_disable(request()->all());
-    }
-    // 【员工】登录
-    public function o1__staff__item_password_reset()
-    {
-        return $this->staff_repo->o1__staff__item_password_reset(request()->all());
-    }
-    // 【员工】登录
-    public function o1__staff__item_password_change()
-    {
-        return $this->staff_repo->o1__staff__item_password_change(request()->all());
-    }
-    // 【员工】登录
-    public function o1__staff__item_login()
-    {
-        return $this->staff_repo->o1__staff__item_login(request()->all());
-    }
-    // 【员工】操作记录
-    public function o1__staff__item_operation_record_list__datatable_query()
-    {
-        return $this->staff_repo->o1__staff__item_operation_record_list__datatable_query(request()->all());
-    }
-
-
-
-
-
-
-
-    /*
-     * DELIVERY - 交付
-     */
-    // 【交付】datatable
-    public function o1__delivery__list__datatable_query()
-    {
-        return $this->delivery_repo->o1__delivery__list__datatable_query(request()->all());
-    }
-
-    // 【交付】交付日报
-    public function o1__statistic__delivery_daily()
-    {
-        return $this->delivery_repo->o1__statistic__delivery_daily(request()->all());
+        return $this->repo->v1_operate_for_department_item_save(request()->all());
     }
 
 
