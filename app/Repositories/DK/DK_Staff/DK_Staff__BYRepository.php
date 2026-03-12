@@ -139,10 +139,10 @@ class DK_Staff__BYRepository {
 
 
         // 状态 [|]
-        if(!empty($post_data['api_status']))
+        if(isset($post_data['api_status']))
         {
             $api_status_int = (int)$post_data['api_status'];
-            if(!in_array($api_status_int,[-1,0]))
+            if(!in_array($api_status_int,[-1]))
             {
                 $query->where('api_status', $api_status_int);
             }

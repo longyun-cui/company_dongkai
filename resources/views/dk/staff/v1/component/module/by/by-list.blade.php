@@ -30,8 +30,8 @@
 
 
             {{--审核状态--}}
-            <select class="search-filter form-filter filter-lg select2-box-c" name="by-inspected-status">
-                <option value="-1">审核状态</option>
+            <select class="search-filter form-filter filter-lg select2-box-c" name="by-api-status">
+                <option value="-1">状态</option>
                 <option value="1">待审核</option>
                 <option value="9">已审核</option>
             </select>
