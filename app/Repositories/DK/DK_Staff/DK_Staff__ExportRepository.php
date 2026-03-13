@@ -1928,6 +1928,7 @@ class DK_Staff__ExportRepository {
         $query = DK_Common__Order::select('*')
             ->with([
                 'client_er'=>function($query) { $query->select('id','name'); },
+                'delivered_client_er'=>function($query) { $query->select('id','name'); },
                 'creator'=>function($query) { $query->select('id','name'); },
                 'inspector'=>function($query) { $query->select('id','name'); },
                 'project_er'=>function($query) { $query->select('id','name','alias_name'); },
@@ -1988,10 +1989,12 @@ class DK_Staff__ExportRepository {
         {
             $cellData[$k]['id'] = $v['id'];
 
-            $cellData[$k]['client_er_name'] = $v['client_er']['name'];
+            $cellData[$k]['client_er_name'] = $v['delivered_client_er']['name'];
 
             if($v['delivered_at']) $cellData[$k]['delivered_at'] = date('Y-m-d H:i:s', $v['delivered_at']);
             else $cellData[$k]['delivered_at'] = '';
+
+            $cellData[$k]['delivered_result'] = $v['delivered_result'];
 
             $cellData[$k]['creator_name'] = $v['creator']['name'];
 
@@ -2106,6 +2109,7 @@ class DK_Staff__ExportRepository {
                 'id'=>'ID',
                 'client_er_name'=>'客户',
                 'delivered_at'=>'交付时间',
+                'delivered_result'=>'交付结果',
                 'creator_name'=>'创建人',
                 'team'=>'团队',
                 'work_shift'=>'班次',
@@ -2135,6 +2139,7 @@ class DK_Staff__ExportRepository {
                 'id'=>'ID',
                 'client_er_name'=>'客户',
                 'delivered_at'=>'交付时间',
+                'delivered_result'=>'交付结果',
                 'creator_name'=>'创建人',
                 'team'=>'团队',
                 'work_shift'=>'班次',
@@ -2221,7 +2226,7 @@ class DK_Staff__ExportRepository {
                 $sheet->setWidth(array(
                     'A'=>10, 'B'=>20, 'C'=>20, 'D'=>20, 'E'=>20, 'F'=>20, 'G'=>20,
                     'H'=>20, 'I'=>20, 'J'=>20, 'K'=>20, 'L'=>20, 'M'=>20, 'N'=>20,
-                    'O'=>20, 'P'=>20, 'Q'=>60, 'R'=>60, 'S'=>60, 'T'=>20,
+                    'O'=>20, 'P'=>20, 'Q'=>20, 'R'=>20, 'S'=>60, 'T'=>60,
                     'U'=>20, 'V'=>20, 'W'=>20, 'X'=>60, 'Y'=>60, 'Z'=>20
                 ));
                 $sheet->setAutoSize(false);
@@ -2382,6 +2387,7 @@ class DK_Staff__ExportRepository {
         $query = DK_Common__Order::select('*')
             ->with([
                 'client_er'=>function($query) { $query->select('id','name'); },
+                'delivered_client_er'=>function($query) { $query->select('id','name'); },
                 'creator'=>function($query) { $query->select('id','name'); },
                 'inspector'=>function($query) { $query->select('id','name'); },
                 'project_er'=>function($query) { $query->select('id','name','alias_name'); },
@@ -2438,9 +2444,11 @@ class DK_Staff__ExportRepository {
         {
             $cellData[$k]['id'] = $v['id'];
 
-            $cellData[$k]['client_er_name'] = $v['client_er']['name'];
+            $cellData[$k]['client_er_name'] = $v['delivered_client_er']['name'];
             if($v['delivered_at']) $cellData[$k]['delivered_at'] = date('Y-m-d H:i:s', $v['delivered_at']);
             else $cellData[$k]['delivered_at'] = '';
+
+            $cellData[$k]['delivered_result'] = $v['delivered_result'];
 
             $cellData[$k]['creator_name'] = $v['creator']['name'];
 
@@ -2549,6 +2557,7 @@ class DK_Staff__ExportRepository {
             'id'=>'ID',
             'client_er_name'=>'客户',
             'delivered_at'=>'交付时间',
+            'delivered_result'=>'交付结果',
             'creator_name'=>'创建人',
             'team'=>'团队',
             'work_shift'=>'班次',
@@ -2801,6 +2810,7 @@ class DK_Staff__ExportRepository {
         $query = DK_Common__Order::select('*')
             ->with([
                 'client_er'=>function($query) { $query->select('id','name'); },
+                'delivered_client_er'=>function($query) { $query->select('id','name'); },
                 'creator'=>function($query) { $query->select('id','name'); },
                 'inspector'=>function($query) { $query->select('id','name'); },
                 'project_er'=>function($query) { $query->select('id','name','alias_name'); },
@@ -2857,9 +2867,11 @@ class DK_Staff__ExportRepository {
         {
             $cellData[$k]['id'] = $v['id'];
 
-            $cellData[$k]['client_er_name'] = $v['client_er']['name'];
+            $cellData[$k]['client_er_name'] = $v['delivered_client_er']['name'];
             if($v['delivered_at']) $cellData[$k]['delivered_at'] = date('Y-m-d H:i:s', $v['delivered_at']);
             else $cellData[$k]['delivered_at'] = '';
+
+            $cellData[$k]['delivered_result'] = $v['delivered_result'];
 
             $cellData[$k]['creator_name'] = $v['creator']['name'];
 
@@ -2968,6 +2980,7 @@ class DK_Staff__ExportRepository {
             'id'=>'ID',
             'client_er_name'=>'客户',
             'delivered_at'=>'交付时间',
+            'delivered_result'=>'交付结果',
             'creator_name'=>'创建人',
             'team'=>'团队',
             'work_shift'=>'班次',
@@ -4633,6 +4646,8 @@ class DK_Staff__ExportRepository {
             if($v['delivered_at']) $cellData[$k]['delivered_at'] = date('Y-m-d H:i:s', $v['delivered_at']);
             else $cellData[$k]['delivered_at'] = '';
 
+            $cellData[$k]['delivered_result'] = $v['delivered_result'];
+
             $cellData[$k]['creator_name'] = $v['creator']['name'];
 
             $cellData[$k]['team'] = $v['creator_team_er']['name'].' - '.$v['creator_team_group_er']['name'];
@@ -4738,6 +4753,7 @@ class DK_Staff__ExportRepository {
                 'id'=>'ID',
                 'client_er_name'=>'客户',
                 'delivered_at'=>'交付时间',
+                'delivered_result'=>'交付结果',
                 'creator_name'=>'创建人',
                 'team'=>'团队',
                 'published_time'=>'提交时间',
@@ -4766,6 +4782,7 @@ class DK_Staff__ExportRepository {
                 'id'=>'ID',
                 'client_er_name'=>'客户',
                 'delivered_at'=>'交付时间',
+                'delivered_result'=>'交付结果',
                 'creator_name'=>'创建人',
                 'team'=>'团队',
                 'published_time'=>'提交时间',
@@ -4851,7 +4868,7 @@ class DK_Staff__ExportRepository {
                 $sheet->setWidth(array(
                     'A'=>10, 'B'=>20, 'C'=>20, 'D'=>20, 'E'=>20, 'F'=>20, 'G'=>20,
                     'H'=>20, 'I'=>20, 'J'=>20, 'K'=>20, 'L'=>20, 'M'=>20, 'N'=>20,
-                    'O'=>20, 'P'=>20, 'Q'=>60, 'R'=>60, 'S'=>60, 'T'=>20,
+                    'O'=>20, 'P'=>20, 'Q'=>20, 'R'=>60, 'S'=>60, 'T'=>20,
                     'U'=>20, 'V'=>20, 'W'=>20, 'X'=>60, 'Y'=>60, 'Z'=>20
                 ));
                 $sheet->setAutoSize(false);
@@ -5062,6 +5079,8 @@ class DK_Staff__ExportRepository {
             if($v['delivered_at']) $cellData[$k]['delivered_at'] = date('Y-m-d H:i:s', $v['delivered_at']);
             else $cellData[$k]['delivered_at'] = '';
 
+            $cellData[$k]['delivered_result'] = $v['delivered_result'];
+
             $cellData[$k]['creator_name'] = $v['creator']['name'];
 
             $cellData[$k]['team'] = $v['creator_team_er']['name'].' - '.$v['creator_team_group_er']['name'];
@@ -5162,6 +5181,7 @@ class DK_Staff__ExportRepository {
             'id'=>'ID',
             'client_er_name'=>'客户',
             'delivered_at'=>'交付时间',
+            'delivered_result'=>'交付结果',
             'creator_name'=>'创建人',
             'team'=>'团队',
             'published_time'=>'提交时间',
@@ -5463,6 +5483,8 @@ class DK_Staff__ExportRepository {
             if($v['delivered_at']) $cellData[$k]['delivered_at'] = date('Y-m-d H:i:s', $v['delivered_at']);
             else $cellData[$k]['delivered_at'] = '';
 
+            $cellData[$k]['delivered_result'] = $v['delivered_result'];
+
             $cellData[$k]['creator_name'] = $v['creator']['name'];
 
             $cellData[$k]['team'] = $v['creator_team_er']['name'].' - '.$v['creator_team_group_er']['name'];
@@ -5563,6 +5585,7 @@ class DK_Staff__ExportRepository {
             'id'=>'ID',
             'client_er_name'=>'客户',
             'delivered_at'=>'交付时间',
+            'delivered_result'=>'交付结果',
             'creator_name'=>'创建人',
             'team'=>'团队',
             'published_time'=>'提交时间',
