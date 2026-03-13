@@ -38,6 +38,8 @@
         window.staffRole = 'error';
     @endif
 
+    c = '{{ $me->team_id }}';
+
     if(sessionStorage.getItem('session_unique_id'))
     {
         sessionStorage.setItem('session_unique_id',1);

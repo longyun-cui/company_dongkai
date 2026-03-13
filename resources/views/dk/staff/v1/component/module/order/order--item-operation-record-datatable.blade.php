@@ -86,6 +86,7 @@
                                 $category_html = '<small class="btn-xs bg-blue">操作</small>';
 
                                 if(row.operate_type == 1) $html_type = '<small class="btn-xs bg-blue">编辑</small>';
+                                if(row.operate_type == 2) $html_type = '<small class="btn-xs bg-aqua">编辑</small>';
                                 if(row.operate_type == 9) $html_type = '<small class="btn-xs bg-blue">发布</small>';
                             }
                             if(data == 11)
@@ -208,6 +209,11 @@
                         render: function(data, type, row, meta) {
                             if(window.staffDepartment == 'CSD' && window.staffRole != 'director')
                             {
+                                if(row.creator_team_id != window.teamId)
+                                {
+                                    return row.creator == null ? '--' : '****';
+                                }
+
                                 if([1,11].includes(row.operate_category))
                                 {
                                     return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.name+'</a>';
