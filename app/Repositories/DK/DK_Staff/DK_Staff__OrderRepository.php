@@ -138,19 +138,19 @@ class DK_Staff__OrderRepository {
         // 质检部
         if($me->staff_category == 51)
         {
-            $query->where('dk_common__order.is_published','<>',0);
+            $query->where('dk_common__order.is_published','>',0);
 
             if($me->staff_position == 31)
             {
                 // 部门总监
                 $project_list = DK_Pivot__Department_Project::select('project_id')->where('department_id',$me->department_id)->get()->pluck('project_id')->toArray();
-                $query->where('is_published','<>',0)->whereIn('dk_common__order.project_id', $project_list);
+                $query->where('is_published','>',0)->whereIn('dk_common__order.project_id', $project_list);
             }
             else if($me->staff_position == 41)
             {
                 // 团队经理（多对对）
                 $project_list = DK_Pivot__Team_Project::select('project_id')->where('team_id',$me->team_id)->get()->pluck('project_id')->toArray();
-                $query->where('is_published','<>',0)->whereIn('dk_common__order.project_id', $project_list);
+                $query->where('is_published','>',0)->whereIn('dk_common__order.project_id', $project_list);
             }
             else if($me->staff_position == 61)
             {
@@ -176,13 +176,13 @@ class DK_Staff__OrderRepository {
             {
                 // 部门总监（多对对）
                 $project_list = DK_Pivot__Department_Project::select('project_id')->where('department_id',$me->department_id)->get()->pluck('project_id')->toArray();
-                $query->where('is_published','<>',0)->whereIn('dk_common__order.project_id', $project_list);
+                $query->where('is_published','>',0)->whereIn('dk_common__order.project_id', $project_list);
             }
             else if($me->staff_position == 41)
             {
                 // 团队经理（多对对）
                 $project_list = DK_Pivot__Team_Project::select('project_id')->where('team_id',$me->team_id)->get()->pluck('project_id')->toArray();
-                $query->where('is_published','<>',0)->whereIn('dk_common__order.project_id', $project_list);
+                $query->where('is_published','>',0)->whereIn('dk_common__order.project_id', $project_list);
             }
             else if($me->staff_position == 61)
             {
@@ -202,7 +202,7 @@ class DK_Staff__OrderRepository {
         // 运营部
         if($me->staff_category == 71)
         {
-            $query->where('dk_common__order.is_published','<>',0);
+            $query->where('dk_common__order.is_published','>',0);
 
             if($me->staff_position == 31)
             {

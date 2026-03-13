@@ -193,7 +193,7 @@ class DK_Staff__StatisticRepository {
                     count(IF(is_published = 0, TRUE, NULL)) as order_count_for_unpublished,
                     count(IF(is_published = 1, TRUE, NULL)) as order_count_for_published,
                     
-                    count(IF(is_published = 1 AND inspected_status <> 0, TRUE, NULL)) as order_count_for_inspected_all,
+                    count(IF(is_published = 1 AND inspected_status > 0, TRUE, NULL)) as order_count_for_inspected_all,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_inspected_accepted,
                     count(IF(inspected_result = '折扣通过', TRUE, NULL)) as order_count_for_inspected_accepted_discount,
                     count(IF(inspected_result = '郊区通过', TRUE, NULL)) as order_count_for_inspected_accepted_suburb,
@@ -327,7 +327,7 @@ class DK_Staff__StatisticRepository {
                     count(IF(is_published = 0, TRUE, NULL)) as order_count_for_unpublished,
                     count(IF(is_published = 1, TRUE, NULL)) as order_count_for_published,
                     
-                    count(IF(is_published = 1 AND inspected_status <> 0, TRUE, NULL)) as order_count_for_inspected_all,
+                    count(IF(is_published = 1 AND inspected_status > 0, TRUE, NULL)) as order_count_for_inspected_all,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_inspected_accepted,
                     count(IF(inspected_result = '折扣通过', TRUE, NULL)) as order_count_for_inspected_accepted_discount,
                     count(IF(inspected_result = '郊区通过', TRUE, NULL)) as order_count_for_inspected_accepted_suburb,
@@ -524,7 +524,7 @@ class DK_Staff__StatisticRepository {
                     count(IF(is_published = 0, TRUE, NULL)) as order_count_for_unpublished,
                     count(IF(is_published = 1, TRUE, NULL)) as order_count_for_published,
                     
-                    count(IF(is_published = 1 AND inspected_status <> 0, TRUE, NULL)) as order_count_for_inspected_all,
+                    count(IF(is_published = 1 AND inspected_status > 0, TRUE, NULL)) as order_count_for_inspected_all,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_inspected_accepted,
                     count(IF(inspected_result = '折扣通过', TRUE, NULL)) as order_count_for_inspected_accepted_discount,
                     count(IF(inspected_result = '郊区通过', TRUE, NULL)) as order_count_for_inspected_accepted_suburb,
@@ -828,7 +828,7 @@ class DK_Staff__StatisticRepository {
                     
                     count(IF(item_category = 1, TRUE, NULL)) as order_dental_for_published,
                     
-                    count(IF(item_category = 1 and inspected_status <> 0, TRUE, NULL)) as order_dental_for_inspected_all,
+                    count(IF(item_category = 1 and inspected_status > 0, TRUE, NULL)) as order_dental_for_inspected_all,
                     count(IF(item_category = 1 and inspected_result = '通过', TRUE, NULL)) as order_dental_for_inspected_accepted,
                     count(IF(item_category = 1 and inspected_result = '郊区通过', TRUE, NULL)) as order_dental_for_inspected_accepted_suburb,
                     count(IF(item_category = 1 and inspected_result = '内部通过', TRUE, NULL)) as order_dental_for_inspected_accepted_inside,
@@ -849,7 +849,7 @@ class DK_Staff__StatisticRepository {
                     
                     count(IF(item_category = 31, TRUE, NULL)) as order_luxury_for_published,
                     
-                    count(IF(item_category = 31 and inspected_status <> 0, TRUE, NULL)) as order_luxury_for_inspected_all,
+                    count(IF(item_category = 31 and inspected_status > 0, TRUE, NULL)) as order_luxury_for_inspected_all,
                     count(IF(item_category = 31 and inspected_result = '通过', TRUE, NULL)) as order_luxury_for_inspected_accepted,
                     count(IF(item_category = 31 and inspected_result = '内部通过', TRUE, NULL)) as order_luxury_for_inspected_accepted_inside,
                     count(IF(item_category = 31 and inspected_result = '重复', TRUE, NULL)) as order_luxury_for_inspected_repeated,
@@ -890,7 +890,7 @@ class DK_Staff__StatisticRepository {
                     
                     count(IF(item_category = 1, TRUE, NULL)) as order_dental_for_inspected,
                     
-                    count(IF(item_category = 1 and inspected_status <> 0, TRUE, NULL)) as order_dental_for_inspected_all,
+                    count(IF(item_category = 1 and inspected_status > 0, TRUE, NULL)) as order_dental_for_inspected_all,
                     count(IF(item_category = 1 and inspected_result = '通过', TRUE, NULL)) as order_dental_for_inspected_accepted,
                     count(IF(item_category = 1 and inspected_result = '郊区通过', TRUE, NULL)) as order_dental_for_inspected_accepted_suburb,
                     count(IF(item_category = 1 and inspected_result = '内部通过', TRUE, NULL)) as order_dental_for_inspected_accepted_inside,
@@ -900,7 +900,7 @@ class DK_Staff__StatisticRepository {
                     
                     count(IF(item_category = 31, TRUE, NULL)) as order_luxury_for_inspected,
                     
-                    count(IF(item_category = 31 and inspected_status <> 0, TRUE, NULL)) as order_luxury_for_inspected_all,
+                    count(IF(item_category = 31 and inspected_status > 0, TRUE, NULL)) as order_luxury_for_inspected_all,
                     count(IF(item_category = 31 and inspected_result = '通过', TRUE, NULL)) as order_luxury_for_inspected_accepted,
                     count(IF(item_category = 31 and inspected_result = '内部通过', TRUE, NULL)) as order_luxury_for_inspected_accepted_inside,
                     count(IF(item_category = 31 and inspected_result = '重复', TRUE, NULL)) as order_luxury_for_inspected_repeated,
@@ -1487,7 +1487,7 @@ class DK_Staff__StatisticRepository {
                     count(*) as order_for_all,
                     
                     count(IF(item_category = 1, TRUE, NULL)) as dental_for_all,
-                    count(IF(item_category = 1 and inspected_status <> 0, TRUE, NULL)) as dental_for_inspected_all,
+                    count(IF(item_category = 1 and inspected_status > 0, TRUE, NULL)) as dental_for_inspected_all,
                     count(IF(item_category = 1 and inspected_result = '通过', TRUE, NULL)) as dental_for_inspected_accepted
                 "))
 //            ->groupBy('item_category')
@@ -7607,7 +7607,7 @@ class DK_Staff__StatisticRepository {
         $order_count_for_unpublished = DK_Common__Order::where('is_published', 0)->count("*");
         $order_count_for_published = DK_Common__Order::where('is_published', 1)->count("*");
         $order_count_for_waiting_for_inspect = DK_Common__Order::where('is_published', 1)->where('inspected_status', 0)->count("*");
-        $order_count_for_inspected = DK_Common__Order::where('is_published', 1)->where('inspected_status', '<>', 0);
+        $order_count_for_inspected = DK_Common__Order::where('is_published', 1)->where('inspected_status', '>', 0);
         $order_count_for_accepted = DK_Common__Order::where('is_published', 1)->where('inspected_result','通过');
         $order_count_for_refused = DK_Common__Order::where('is_published', 1)->where('inspected_result','拒绝');
         $order_count_for_accepted_inside = DK_Common__Order::where('is_published', 1)->where('inspected_result','内部通过');
@@ -7785,7 +7785,7 @@ class DK_Staff__StatisticRepository {
                     count(IF(is_published = 0, TRUE, NULL)) as order_count_for_unpublished,
                     count(IF(is_published = 1, TRUE, NULL)) as order_count_for_published,
                     
-                    count(IF(is_published = 1 AND inspected_status <> 0, TRUE, NULL)) as order_count_for_inspected_all,
+                    count(IF(is_published = 1 AND inspected_status > 0, TRUE, NULL)) as order_count_for_inspected_all,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_inspected_accepted,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_inspected_accepted_inside,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_inspected_repeated,
@@ -7900,7 +7900,7 @@ class DK_Staff__StatisticRepository {
                     count(IF(is_published = 0, TRUE, NULL)) as order_count_for_unpublished,
                     count(IF(is_published = 1, TRUE, NULL)) as order_count_for_published,
                     
-                    count(IF(is_published = 1 AND inspected_status <> 0, TRUE, NULL)) as order_count_for_inspected_all,
+                    count(IF(is_published = 1 AND inspected_status > 0, TRUE, NULL)) as order_count_for_inspected_all,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_inspected_accepted,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_inspected_accepted_inside,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_inspected_repeated,
@@ -8063,7 +8063,7 @@ class DK_Staff__StatisticRepository {
                     count(IF(is_published = 0, TRUE, NULL)) as order_count_for_unpublished,
                     count(IF(is_published = 1, TRUE, NULL)) as order_count_for_published,
                     
-                    count(IF(is_published = 1 AND inspected_status <> 0, TRUE, NULL)) as order_count_for_inspected_all,
+                    count(IF(is_published = 1 AND inspected_status > 0, TRUE, NULL)) as order_count_for_inspected_all,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_inspected_accepted,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_inspected_accepted_inside,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_inspected_repeated,
