@@ -380,6 +380,37 @@ class DKClientController extends Controller
         return $this->delivery_repo->o1__delivery__item_get(request()->all());
     }
 
+    // 【交付】质量评价
+    public function o1__delivery__item__quality_evaluate__save()
+    {
+        return $this->delivery_repo->o1__delivery__item__quality_evaluate__save(request()->all());
+    }
+    // 【交付】客户信息
+    public function o1__delivery__item__customer_update__save()
+    {
+        return $this->delivery_repo->o1__delivery__item__customer_update__save(request()->all());
+    }
+    // 【交付】回访信息
+    public function o1__delivery__item__callback_update__save()
+    {
+        return $this->delivery_repo->o1__delivery__item__callback_update__save(request()->all());
+    }
+    // 【交付】上门信息
+    public function o1__delivery__item__come_update__save()
+    {
+        return $this->delivery_repo->o1__delivery__item__come_update__save(request()->all());
+    }
+    // 【交付】跟进
+    public function o1__delivery__item__follow_create__save()
+    {
+        return $this->delivery_repo->o1__delivery__item__follow_create__save(request()->all());
+    }
+    // 【交付】成交
+    public function o1__delivery__item__trade_create__save()
+    {
+        return $this->delivery_repo->o1__delivery__item__trade_create__save(request()->all());
+    }
+
     // 【交付】交付日报
     public function o1__statistic__delivery_daily()
     {

@@ -839,6 +839,52 @@
                     }
                 },
                 {
+                    "title": "录音质量",
+                    "name": "recording_quality",
+                    "data": "recording_quality",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.is_completed != 1)
+                        {
+                            $(nTd).addClass('modal-show-for-field-set-');
+                            $(nTd).attr('data-id',row.id).attr('data-name','录音质量');
+                            $(nTd).attr('data-key','recording_quality').attr('data-value',data);
+
+                            $(nTd).attr('data-column-name','录音质量');
+
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        // if(!data) return '--';
+                        var $result_html = '';
+
+                        if(row.inspected_at)
+                        {
+                            if(data == 0)
+                            {
+                                $result_html = '<small class="btn-xs bg-blue">合格</small>';
+                            }
+                            else if(data == 1)
+                            {
+                                $result_html = '<small class="btn-xs bg-green">优秀</small>';
+                            }
+                            else if(data == 9)
+                            {
+                                $result_html = '<small class="btn-xs bg-red">问题</small>';
+                            }
+                            else
+                            {
+                                $result_html = '<small class="btn-xs bg-black">有误</small>';
+                            }
+                        }
+                        return $result_html;
+                    }
+                },
+                {
                     "title": "录音播放",
                     "name": "recording_address_list",
                     "data": "recording_address_list",

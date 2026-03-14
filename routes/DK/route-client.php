@@ -65,6 +65,11 @@ Route::group(['middleware' => ['dk.client.user.login']], function () {
 
 
 
+
+
+
+
+
     // 【员工】
     Route::post('/o1/staff/staff-list/datatable-query', $controller.'@o1__staff__list__datatable_query');
     Route::post('/o1/staff/item-get', $controller.'@o1__staff__item_get');
@@ -84,9 +89,20 @@ Route::group(['middleware' => ['dk.client.user.login']], function () {
 
 
 
+
+
+
+
+
     // 【交付】列表
     Route::post('/o1/delivery/delivery-list/datatable-query', $controller.'@o1__delivery__list__datatable_query');
     Route::post('/o1/delivery/item-get', $controller.'@o1__delivery__item_get');
+    Route::post('/o1/delivery/item--quality-evaluate--save', $controller.'@o1__delivery__item__quality_evaluate__save');
+    Route::post('/o1/delivery/item--customer-update--save', $controller.'@o1__delivery__item__customer_update__save');
+    Route::post('/o1/delivery/item--callback-update--save', $controller.'@o1__delivery__item__callback_update__save');
+    Route::post('/o1/delivery/item--come-update--save', $controller.'@o1__delivery__item__come_update__save');
+    Route::post('/o1/delivery/item--follow-create--save', $controller.'@o1__delivery__item__follow_create__save');
+    Route::post('/o1/delivery/item--trade-create--save', $controller.'@o1__delivery__item__trade_create__save');
     Route::post('/o1/delivery/delivery-daily', $controller.'@o1__statistic__delivery_daily');
 
 

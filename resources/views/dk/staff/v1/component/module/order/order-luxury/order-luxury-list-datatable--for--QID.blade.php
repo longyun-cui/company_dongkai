@@ -726,6 +726,160 @@
                     }
                 },
                 {
+                    "title": "录音质量",
+                    "name": "recording_quality",
+                    "data": "recording_quality",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.is_completed != 1)
+                        {
+                            $(nTd).addClass('modal-show-for-field-set-');
+                            $(nTd).attr('data-id',row.id).attr('data-name','录音质量');
+                            $(nTd).attr('data-key','recording_quality').attr('data-value',data);
+
+                            $(nTd).attr('data-column-name','录音质量');
+
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        // if(!data) return '--';
+                        var $result_html = '';
+
+                        if(row.inspected_at)
+                        {
+                            if(data == 0)
+                            {
+                                $result_html = '<small class="btn-xs bg-blue">合格</small>';
+                            }
+                            else if(data == 1)
+                            {
+                                $result_html = '<small class="btn-xs bg-green">优秀</small>';
+                            }
+                            else if(data == 9)
+                            {
+                                $result_html = '<small class="btn-xs bg-red">问题</small>';
+                            }
+                            else
+                            {
+                                $result_html = '<small class="btn-xs bg-black">有误</small>';
+                            }
+                        }
+                        return $result_html;
+                    }
+                },
+                {
+                    "title": "录音播放",
+                    "name": "recording_address_list",
+                    "data": "recording_address_list",
+                    "className": "",
+                    "width": "400px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.is_completed != 1)
+                        {
+                            $(nTd).attr('data-id',row.id).attr('data-name','录音播放');
+                            $(nTd).attr('data-key','recording_address_play').attr('data-value',data);
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        // return data;
+                        if($.trim(data))
+                        {
+                            try
+                            {
+                                var $recording_list = JSON.parse(data);
+
+                                var $return_html = '';
+                                $.each($recording_list, function(index, value)
+                                {
+
+                                    var $audio_html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
+                                    $return_html += $audio_html;
+                                });
+                                return $return_html;
+                            }
+                            catch(e)
+                            {
+                                // console.log(e);
+                                return '';
+                            }
+                        }
+                        else
+                        {
+                            if(row.recording_address)
+                            {
+                                return '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+row.recording_address+'" type="audio/mpeg"></audio>';
+                            }
+                            else return '';
+                        }
+                    }
+                },
+                {
+                    "title": "录音下载",
+                    "name": "recording_address_get_download",
+                    "data": "recording_address_list",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.is_completed != 1)
+                        {
+                            $(nTd).attr('data-row-index',iRow);
+
+                            $(nTd).attr('data-id',row.id).attr('data-name','录音下载');
+                            $(nTd).attr('data-key','recording_address_download').attr('data-value',data);
+                            $(nTd).attr('data-address-list',data);
+                            $(nTd).attr('data-address',row.recording_address);
+                            $(nTd).attr('data-call-record-id',row.call_record_id);
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        // return data;
+
+                        if($.trim(data))
+                        {
+                            try
+                            {
+                                var $recording_list = JSON.parse(data);
+                                // return '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+row.id+'">下载录音</a>';
+                                var $recording_download = '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+row.id+'">下载</a>';
+                                var $recording_redirection = '<a class="btn btn-xs item-redirection-recording-list-submit" data-id="'+row.id+'">跳转</a>';
+                                var $recording_get = '<a class="btn btn-xs order--item-recording-list-get-submit" data-id="'+row.id+'">获取</a>';
+                                return $recording_get + $recording_redirection + $recording_download;
+                            }
+                            catch(e)
+                            {
+                                // console.log(e);
+                                return '';
+                            }
+                        }
+                        else
+                        {
+                            if(row.recording_address)
+                            {
+                                return '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+row.id+'">下载录音</a>';
+                            }
+                            else
+                            {
+                                return '<a class="btn btn-xs order--item-recording-list-get-submit" data-id="'+row.id+'">获取录音</a>';
+                            }
+                        }
+
+                        if($.trim(data) || row.recording_address)
+                        {
+                            return '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+row.id+'">下载录音</a>';
+                        }
+                        else
+                        {
+                            return '<a class="btn btn-xs order--item-recording-list-get-submit" data-id="'+row.id+'">获取录音1</a>';
+                        }
+                    }
+                },
+                {
                     "title": "团队",
                     "name": "creator_team_id",
                     "data": "creator_team_id",

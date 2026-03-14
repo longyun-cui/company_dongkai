@@ -205,7 +205,8 @@
                     }
                     else
                     {
-                        var $modal = $('#modal-for-delivery-customer-update');
+                        var $modal = $('#modal--for--delivery--item-operating--customer-update');
+
                         // $modal.find('.box-title').html('更新客户信息【'+$that.attr('data-id')+'】');
                         $modal.find('.id-title').html('【'+$id+'】');
                         $modal.find('input[name="operate[type]"]').val('edit');
@@ -267,7 +268,7 @@
             });
 
             var options = {
-                url: "{{ url('/v1/operate/delivery/item-customer-save') }}",
+                url: "{{ url('/o1/delivery/item--customer-update--save') }}",
                 type: "post",
                 dataType: "json",
                 // target: "#div2",
@@ -284,10 +285,10 @@
                         layer.msg(response.msg);
 
                         // 重置输入框
-                        form_reset('#form-for-delivery-customer-update');
+                        form_reset('#'+$form_id);
 
-                        $('#modal-for-delivery-customer-update').modal('hide');
-                        // $('#modal-for-delivery-trade-create').modal('hide').on("hidden.bs.modal", function () {
+                        $modal.modal('hide');
+                        // $modal.modal('hide').on("hidden.bs.modal", function () {
                         //     $("body").addClass("modal-open");
                         // });
 
@@ -305,7 +306,7 @@
                     layer.closeAll('loading');
                 }
             };
-            $("#form-for-delivery-customer-update").ajaxSubmit(options);
+            $form.ajaxSubmit(options);
         });
 
 
@@ -345,7 +346,7 @@
 
             //
             $.post(
-                "{{ url('/v1/operate/delivery/item-get') }}",
+                "{{ url('/o1/delivery/item-get') }}",
                 {
                     _token: $('meta[name="_token"]').attr('content'),
                     operate: "item-get",
@@ -363,7 +364,7 @@
                     }
                     else
                     {
-                        var $modal = $('#modal-for-delivery-callback-update');
+                        var $modal = $('#modal--for--delivery--item-operating--callback-update');
 
                         // $modal.find('.box-title').html('更新上门状态【'+$that.attr('data-id')+'】');
                         $modal.find('.id-title').html('【'+$id+'】');
@@ -374,7 +375,7 @@
                         $modal.find('input[name="callback_datetime"]').val($response.data.callback_datetime);
 
 
-                        var $datatable_wrapper = $that.closest('.datatable-wrapper');
+                        var $datatable_wrapper = $that.closest('.datatable-wrapper');s
                         var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
                         $modal.find('.edit-submit').attr('data-datatable-list-id',$table_id);
 
@@ -419,7 +420,7 @@
             });
 
             var options = {
-                url: "{{ url('/v1/operate/delivery/item-callback-save') }}",
+                url: "{{ url('/o1/delivery/item--callback-update--save') }}",
                 type: "post",
                 dataType: "json",
                 // target: "#div2",
@@ -436,10 +437,10 @@
                         layer.msg(response.msg);
 
                         // 重置输入框
-                        form_reset('#form-for-delivery-callback-update');
+                        form_reset('#'+$form_id);
 
-                        $('#modal-for-delivery-callback-update').modal('hide');
-                        // $('#modal-for-delivery-trade-create').modal('hide').on("hidden.bs.modal", function () {
+                        $modal.modal('hide');
+                        // $modal.modal('hide').on("hidden.bs.modal", function () {
                         //     $("body").addClass("modal-open");
                         // });
 
@@ -459,7 +460,7 @@
 
 
             };
-            $("#form-for-delivery-callback-update").ajaxSubmit(options);
+            $form.ajaxSubmit(options);
         });
 
 
@@ -593,7 +594,7 @@
                         form_reset('#'+$form_id);
 
                         $modal.modal('hide');
-                        // $('#modal-for-delivery-trade-create').modal('hide').on("hidden.bs.modal", function () {
+                        // $modal.modal('hide').on("hidden.bs.modal", function () {
                         //     $("body").addClass("modal-open");
                         // });
 
@@ -633,9 +634,9 @@
             $datatable_wrapper.find('tr').removeClass('operating');
             $row.addClass('operating');
 
-            form_reset('#form-for-delivery-follow-create');
+            form_reset('#form--for--delivery--item-operating--follow-create');
 
-            var $modal = $('#modal-for-delivery-follow-create');
+            var $modal = $('#modal--for--delivery--item-operating--follow-create');
 
             $modal.find('input[name="operate[id]"]').val($that.attr('data-id'));
             $modal.find('.id-title').html('【'+$id+'】');
@@ -673,7 +674,7 @@
             });
 
             var options = {
-                url: "{{ url('/v1/operate/delivery/item-follow-save') }}",
+                url: "{{ url('/o1/delivery/item--follow-create--save') }}",
                 type: "post",
                 dataType: "json",
                 // data: { _token: $('meta[name="_token"]').attr('content') },
@@ -691,10 +692,10 @@
                         layer.msg(response.msg);
 
                         // 重置输入框
-                        form_reset('#form-for-delivery-follow-create');
+                        form_reset('#'+$form_id);
 
-                        $('#modal-for-delivery-follow-create').modal('hide');
-                        // $('#modal-for-delivery-trade-create').modal('hide').on("hidden.bs.modal", function () {
+                        $modal.modal('hide');
+                        // $modal.modal('hide').on("hidden.bs.modal", function () {
                         //     $("body").addClass("modal-open");
                         // });
 
@@ -704,11 +705,9 @@
                 error: function(xhr, status, error, $form) {
                     // 请求失败时的回调
                     console.log('error');
-                    layer.closeAll('loading');
                 },
                 complete: function(xhr, status, $form) {
                     // 无论成功或失败都会执行的回调
-                    console.log('always');
                     layer.closeAll('loading');
                 }
 
@@ -734,9 +733,9 @@
             $datatable_wrapper.find('tr').removeClass('operating');
             $row.addClass('operating');
 
-            form_reset('#form-for-delivery-trade-create');
+            form_reset('#form--for--delivery--item-operating--trade-create');
 
-            var $modal = $('#modal-for-delivery-trade-create');
+            var $modal = $('#modal--for--delivery--item-operating--trade-create');
             $modal.find('.id-title').html('【'+$id+'】');
 
             $modal.find('input[name="operate[id]"]').val($that.attr('data-id'));
@@ -801,11 +800,9 @@
                 error: function(xhr, status, error, $form) {
                     // 请求失败时的回调
                     console.log('error');
-                    layer.closeAll('loading');
                 },
                 complete: function(xhr, status, $form) {
                     // 无论成功或失败都会执行的回调
-                    console.log('always');
                     layer.closeAll('loading');
                 }
 

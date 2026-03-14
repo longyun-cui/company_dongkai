@@ -73,6 +73,12 @@
     @include(env('DK_CLIENT__TEMPLATE').'component.module.staff.staff-edit')
     @include(env('DK_CLIENT__TEMPLATE').'component.module.staff.staff--item-operation-record')
 
+    @include(env('DK_CLIENT__TEMPLATE').'component.module.delivery.delivery--item-operating--customer-update')
+    @include(env('DK_CLIENT__TEMPLATE').'component.module.delivery.delivery--item-operating--callback-update')
+    @include(env('DK_CLIENT__TEMPLATE').'component.module.delivery.delivery--item-operating--come-update')
+    @include(env('DK_CLIENT__TEMPLATE').'component.module.delivery.delivery--item-operating--follow-create')
+    @include(env('DK_CLIENT__TEMPLATE').'component.module.delivery.delivery--item-operating--trade-create')
+
 
 @endsection
 

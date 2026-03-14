@@ -47,9 +47,9 @@
                     </div>
                     {{--品牌--}}
                     <div class="form-group">
-                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 品牌</label>
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 产品/品牌</label>
                         <div class="col-md-8 ">
-                            <input type="text" class="form-control" name="transaction-title" placeholder="输入品牌" value="" list="_transaction_title">
+                            <input type="text" class="form-control" name="transaction-title" placeholder="输入产品/品牌" value="" list="_transaction_title">
                         </div>
                     </div>
 {{--                    <datalist id="_transaction_title">--}}

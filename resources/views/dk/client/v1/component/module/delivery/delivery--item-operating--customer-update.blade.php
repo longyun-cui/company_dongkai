@@ -1,5 +1,5 @@
 {{--更新-客户状态--}}
-<div class="modal fade modal-wrapper" id="modal--for--delivery--item-operating--vcustomer-update">
+<div class="modal fade modal-wrapper" id="modal--for--delivery--item-operating--customer-update">
     <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
 
         <div class="box- box-info- form-container">
