@@ -6279,8 +6279,7 @@ class DK_Staff__OrderRepository {
         }
         else
         {
-            $server = "http://feiniji.cn";
-            $url = "http://feiniji.cn/openapi/V2.0.6/getCdrList";
+            return response_error([],"请先配置API！");
         }
 
 
