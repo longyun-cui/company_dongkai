@@ -881,7 +881,7 @@ class DK_Staff__OrderRepository {
 
 //        $post_data['is_repeat'] = $is_repeat;
 
-        if(!in_array($me->staff_catgory,[0,1,9]))
+        if(!in_array($me->staff_category,[0,1,9]))
         {
             if(!empty($post_data['project_id']))
             {

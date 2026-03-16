@@ -598,14 +598,9 @@ class DK_Client__DeliveryRepository {
             return response_error([],$messages->first());
         }
 
-
-
-
-
-
         // 判断参数是否合法
         $operate = $post_data["operate"];
-        if($operate != 'delivery-quality-evaluate') return response_error([],"参数[operate]有误！");
+        if($operate != 'delivery--item--quality-evaluate') return response_error([],"参数[operate]有误！");
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
@@ -617,7 +612,7 @@ class DK_Client__DeliveryRepository {
         $me = $this->me;
 
         // 判断用户操作权限
-        if(!in_array($me->user_type,[0,1,9,11,19,81,84,88])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->staff_category,[0,1,9,11,19,81,84,88])) return response_error([],"你没有操作权限！");
 
         // 判断对象是否合法
         $item = DK_Common__Delivery::withTrashed()->find($id);
