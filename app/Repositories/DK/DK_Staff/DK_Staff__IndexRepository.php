@@ -199,6 +199,40 @@ class DK_Staff__IndexRepository {
         $view_data['staff_list'] = $staff_list;
 
 
+        // 【质检】人员
+        $inspector_query = DK_Common__Staff::select('id','name')
+            ->where('active',1)
+            ->where('item_status',1)
+            ->where('staff_category',51)
+            ->whereIn('staff_position',[41,61,99]);
+        // 质检部
+        if($me->staff_category == 51)
+        {
+            if($me->staff_position == 31)
+            {
+                // 部门总监
+                $inspector_query->where('department_id',$me->department_id);
+            }
+            else if($me->staff_position == 41)
+            {
+                // 团队经理
+                $inspector_query->where('team_id',$me->team_id);
+            }
+            else if($me->staff_position == 61)
+            {
+                // 小组主管
+                $inspector_query->where('team_id',$me->team_id);
+                $inspector_query->where('team_group_id',$me->team_group_id);
+            }
+            else
+            {
+                $inspector_query->where('team_id',-1);
+            }
+        }
+        $inspector_list = $inspector_query->get();
+        $view_data['inspector_list'] = $inspector_list;
+
+
 
 
         // 项目
@@ -208,7 +242,11 @@ class DK_Staff__IndexRepository {
         // 客服部
         if($me->staff_category == 41)
         {
-            $project_ids = DK_Pivot__Department_Project::select('project_id')->where('department_id',$me->department_id)->get()->pluck('project_id')->toArray();
+            $project_ids = DK_Pivot__Department_Project::select('project_id')
+                ->where('department_id',$me->department_id)
+                ->get()
+                ->pluck('project_id')
+                ->toArray();
             $project_query->whereIn('id',$project_ids)->get();
 
             if($me->staff_position == 31)

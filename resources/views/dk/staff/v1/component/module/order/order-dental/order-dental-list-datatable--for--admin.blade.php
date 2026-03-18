@@ -47,6 +47,7 @@
                     d.department = $tableSearch.find('select[name="order-department"]').val();
                     d.team_list = $tableSearch.find('select[name="order-team-list[]"]').val();
                     d.staff = $tableSearch.find('select[name="order-staff"]').val();
+                    d.inspector = $tableSearch.find('select[name="order-inspector"]').val();
                     d.distribute_type = $tableSearch.find('select[name="order-distribute-type"]').val();
                     d.project = $tableSearch.find('select[name="order-project"]').val();
                     d.delivered_project = $tableSearch.find('select[name="order-delivered-project"]').val();

@@ -345,6 +345,16 @@ class DK_Staff__OrderRepository {
             }
         }
 
+        // 质检员
+        if(!empty($post_data['inspector']))
+        {
+            $inspector_id_int = intval($post_data['inspector']);
+            if(!in_array($inspector_id_int,[-1,0]))
+            {
+                $query->where('dk_common__order.inspector_id', $inspector_id_int);
+            }
+        }
+
 
 
         // 项目

@@ -32,18 +32,6 @@
                 </select>
             @endif
 
-            {{--选择质检员--}}
-            @if(in_array($me->staff_category,[0,1,9,51]))
-                <select class="search-filter form-filter filter-lg select2-box-c select2-staff-c-" name="order-inspector">
-                    <option value="-1">选择质检员</option>
-                    @if(!empty($inspector_list) && count($inspector_list) > 0)
-                        @foreach($inspector_list as $v)
-                            <option value="{{ $v->id }}">{{ $v->name }}</option>
-                        @endforeach
-                    @endif
-                </select>
-            @endif
-
             {{--选择部门--}}
             @if(in_array($me->staff_category,[0,1,9,51,71]))
                 <select class="search-filter form-filter filter-xl select2-box-c"
@@ -75,6 +63,18 @@
                         @endforeach
                     @endif
                 </select>
+            @endif
+
+            {{--选择员工--}}
+            @if(in_array($me->staff_category,[0,1,9,51,71]))
+            <select class="search-filter form-filter filter-lg select2-box-c select2-staff-c-" name="order-inspector">
+                <option value="-1">选择质检</option>
+                @if(!empty($inspector_list) && count($inspector_list) > 0)
+                    @foreach($inspector_list as $v)
+                        <option value="{{ $v->id }}">{{ $v->name }}</option>
+                    @endforeach
+                @endif
+            </select>
             @endif
 
             {{--选择项目--}}
