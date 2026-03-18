@@ -41,7 +41,7 @@
                     </div>
                     {{--跟进时间--}}
                     <div class="form-group">
-                        <label class="control-label col-md-2">跟进时间</label>
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 跟进时间</label>
                         <div class="col-md-8 ">
                             <input type="text" class="form-control form-filter time_picker" name="follow-datetime" readonly="readonly" />
                         </div>
@@ -75,7 +75,7 @@
                     </div>
                     {{--上门时间--}}
                     <div class="form-group">
-                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 上门时间</label>
+                        <label class="control-label col-md-2">上门时间</label>
                         <div class="col-md-8 ">
                             <input type="text" class="form-control form-filter time_picker" name="come-datetime" readonly="readonly" />
                         </div>

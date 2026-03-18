@@ -100,6 +100,23 @@
 
 
 
+        // 【工单】操作记录
+        $(".main-content").off('click', ".modal-show--for--delivery--item-operation-record").on('click', ".modal-show--for--delivery--item-operation-record", function() {
+            var $that = $(this);
+            var $id = $(this).data('id');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $item_category = $datatable_wrapper.data('datatable-item-category');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+
+            var $datatable_id = 'datatable--for--delivery--item-operation-record-list';
+
+            Datatable__for__Delivery__Item_Operation_Record_List.init($datatable_id,$id);
+
+            $('#modal--for--delivery--item-operation-record-list').modal('show');
+        });
+
+
+
 
 
         // 【质量评估】
@@ -154,7 +171,7 @@
 
 
         // 【交付】【客户信息】编辑-显示
-        $(".main-content").off('click', ".modal-show--for--customer-update").on('click', ".modal-show--for--customer-update", function() {
+        $(".main-content").off('click', ".modal-show--for--delivery--item-customer-update").on('click', ".modal-show--for--delivery--item-customer-update", function() {
             var $that = $(this);
             var $id = $(this).data('id');
             var $row = $that.parents('tr');
@@ -313,7 +330,7 @@
 
 
         // 【交付】【回访】编辑-显示
-        $(".main-content").off('click', ".modal-show--for--callback-update").on('click', ".modal-show--for--callback-update", function() {
+        $(".main-content").off('click', ".modal-show--for--delivery--item-callback-update").on('click', ".modal-show--for--delivery--item-callback-update", function() {
             var $that = $(this);
             var $id = $(this).data('id');
             var $row = $that.parents('tr');
@@ -375,7 +392,7 @@
                         $modal.find('input[name="callback_datetime"]').val($response.data.callback_datetime);
 
 
-                        var $datatable_wrapper = $that.closest('.datatable-wrapper');s
+                        var $datatable_wrapper = $that.closest('.datatable-wrapper');
                         var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
                         $modal.find('.edit-submit').attr('data-datatable-list-id',$table_id);
 
@@ -467,7 +484,7 @@
 
 
         // 【交付】【上门状态】编辑-显示
-        $(".main-content").off('click', ".modal-show--for--come-update").on('click', ".modal-show--for--come-update", function() {
+        $(".main-content").off('click', ".modal-show--for--delivery--item-come-update").on('click', ".modal-show--for--delivery--item-come-update", function() {
             var $that = $(this);
             var $id = $(this).data('id');
             var $row = $that.parents('tr');
@@ -574,7 +591,7 @@
             });
 
             var options = {
-                url: "{{ url('/o1/delivery/item-come-save') }}",
+                url: "{{ url('/o1/delivery/item--come-update--save') }}",
                 type: "post",
                 dataType: "json",
                 // target: "#div2",
@@ -621,7 +638,7 @@
 
 
         // 【交付】【跟进】添加-显示
-        $(".main-content").off('click', ".modal-show--for--follow-create").on('click', ".modal-show--for--follow-create", function() {
+        $(".main-content").off('click', ".modal-show--for--delivery--item-follow-create").on('click', ".modal-show--for--delivery--item-follow-create", function() {
             var $that = $(this);
             var $id = $(this).data('id');
             var $row = $that.parents('tr');
@@ -713,14 +730,14 @@
 
 
             };
-            $("#form-for-delivery-follow-create").ajaxSubmit(options);
+            $form.ajaxSubmit(options);
         });
 
 
 
 
         // 【交付】【成交】添加-显示
-        $(".main-content").off('click', ".modal-show--for--trade-create").on('click', ".modal-show--for--trade-create", function() {
+        $(".main-content").off('click', ".modal-show--for--delivery--item-trade-create").on('click', ".modal-show--for--delivery--item-trade-create", function() {
             var $that = $(this);
             var $id = $(this).data('id');
             var $row = $that.parents('tr');

@@ -1,9 +1,11 @@
 <?php
 namespace App\Repositories\DK\DK_Client;
 
+use App\Models\DK\DK_Common\DK_Common__Delivery;
 use App\Models\DK\DK_Client\DK_Client__Staff;
+use App\Models\DK\DK_Client\DK_Client__Delivery__Operation_Record;
+use App\Models\DK\DK_Client\DK_Client__Trade_Record;
 
-use App\Models\DK_Client\DK_Client_Department;
 use App\Models\DK_Client\DK_Client_User;
 use App\Models\DK_Client\DK_Client_Contact;
 
@@ -11,22 +13,7 @@ use App\Models\DK_Client\DK_Client_Follow_Record;
 use App\Models\DK_Client\DK_Client_Trade_Record;
 
 
-use App\Models\DK_Client\DK_Client_Project;
-use App\Models\DK_Client\DK_Client_Record;
-use App\Models\DK_Client\DK_Client_Finance_Daily;
-
-use App\Models\DK\DK_Pivot_User_Project;
-
-use App\Models\DK\DK_Order;
 use App\Models\DK\DK_Client;
-use App\Models\DK\DK_District;
-
-use App\Models\DK_CC\DK_CC_Call_Record;
-use App\Models\DK_CC\DK_CC_Call_Record_Current;
-
-
-use App\Models\DK\DK_Common\DK_Common__Order;
-use App\Models\DK\DK_Common\DK_Common__Delivery;
 
 
 use App\Jobs\DK_Client\AutomaticDispatchingJob;
@@ -114,20 +101,13 @@ class DK_Client__DeliveryRepository {
         $this->get_me();
         $me = $this->me;
 
-        if(!in_array($me->staff_category,[0,1,9,71])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->staff_category,[0,1,9,99])) return response_error([],"你没有操作权限！");
 
         $query = DK_Common__Delivery::select('*')
             ->with([
-                'inspector_er',
-                'original_project_er'=>function($query) { $query->select('id','name','alias_name'); },
-                'project_er'=>function($query) { $query->select('id','name','alias_name'); },
-                'client_er'=>function($query) { $query->select('id','name'); },
-                'company_er'=>function($query) { $query->select('id','name'); },
-                'channel_er'=>function($query) { $query->select('id','name'); },
-                'business_er'=>function($query) { $query->select('id','name'); },
                 'order_er',
-                'creator'=>function($query) { $query->select('id','name'); }
-            ]);
+            ])
+            ->where('client_id',$me->client_id);
 
 
         if(in_array($me->staff_position,[99]))
@@ -164,45 +144,6 @@ class DK_Client__DeliveryRepository {
             $query->where("delivered_date", $post_data['assign_ended']);
         }
 
-        // 工单种类 []
-        if(isset($post_data['order_category']))
-        {
-            $order_category = (int)$post_data['order_category'];
-            if(!in_array($order_category,[-1,0]))
-            {
-                $query->where('order_category', $order_category);
-            }
-        }
-
-        // 客户
-        if(isset($post_data['client']))
-        {
-            $client = (int)$post_data['client'];
-            if(!in_array($client,[-1]))
-            {
-                $query->where('client_id', $client);
-            }
-        }
-
-        // 项目
-        if(isset($post_data['project']))
-        {
-            $project = (int)$post_data['project'];
-            if(!in_array($project,[-1]))
-            {
-                $query->where('project_id', $project);
-            }
-        }
-
-        // 交付类型
-        if(!empty($post_data['delivery_type']))
-        {
-            $delivery_type = (int)$post_data['delivery_type'];
-            if(!in_array($delivery_type,[-1]))
-            {
-                $query->where('delivery_type', $delivery_type);
-            }
-        }
 
         // 交付结果
         if(!empty($post_data['delivered_result']))
@@ -228,6 +169,56 @@ class DK_Client__DeliveryRepository {
                 $query->where('client_type', $client_type);
             }
         }
+
+        // 导出状态
+        if(isset($post_data['exported_status']))
+        {
+            if(!in_array($post_data['exported_status'],[-1,'-1']))
+            {
+                $query->where('exported_status', $post_data['exported_status']);
+            }
+        }
+
+        // 分配状态
+        if(isset($post_data['assign_status']))
+        {
+            if(!in_array($post_data['assign_status'],[-1,'-1']))
+            {
+//                $query->where('assign_status', $post_data['assign_status']);
+                if($post_data['assign_status'] == 0)
+                {
+                    $query->where('client_staff_id', 0);
+                }
+                else if($post_data['assign_status'] == 1)
+                {
+                    $query->where('client_staff_id', '>', 0);
+                }
+            }
+        }
+
+
+        // 回访状态
+        if(isset($post_data['is_callback']))
+        {
+            if(!in_array($post_data['is_callback'],[-1,'-1']))
+            {
+                $query->where('is_callback', $post_data['is_callback']);
+            }
+        }
+        // 回访时间
+        if(!empty($post_data['callback_date'])) $query->where('callback_date', $post_data['callback_date']);
+
+
+        // 上门状态
+        if(isset($post_data['is_come']))
+        {
+            if(!in_array($post_data['is_come'],[-1,'-1']))
+            {
+                $query->where('is_come', $post_data['is_come']);
+            }
+        }
+        // 上门时间
+        if(!empty($post_data['come_date'])) $query->where('come_date', $post_data['come_date']);
 
 
         $total = $query->count();
@@ -259,20 +250,6 @@ class DK_Client__DeliveryRepository {
             $list[$k]->content_decode = json_decode($v->content);
         }
 //        dd($list->toArray());
-
-
-//        if($me->id > 10000)
-//        {
-//            $record["creator_id"] = $me->id;
-//            $record["record_category"] = 1; // record_category=1 browse/share
-//            $record["record_type"] = 1; // record_type=1 browse
-//            $record["page_type"] = 1; // page_type=1 default platform
-//            $record["page_module"] = 2; // page_module=2 other
-//            $record["page_num"] = ($skip / $limit) + 1;
-//            $record["open"] = "delivery-list";
-//            $record["from"] = request('from',NULL);
-//            $this->record_for_user_visit($record);
-//        }
 
 
         return datatable_response($list, $draw, $total);
@@ -579,11 +556,105 @@ class DK_Client__DeliveryRepository {
     }
 
 
+
+    // 【工单】【操作记录】返回-列表-数据
+    public function o1__delivery__item_operation_record_list__datatable_query($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = DK_Client__Delivery__Operation_Record::select('*')
+            ->with([
+                'creator'=>function($query) { $query->select(['id','name']); },
+            ])
+            ->where(['delivery_id'=>$id]);
+//            ->where(['record_object'=>21,'operate_object'=>61,'item_id'=>$id]);
+
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+    // 【工单-管理】【操作记录】返回-列表-数据
+    public function v1_operate_for_delivery_item_follow_record_datatable_query($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = DK_Client_Follow_Record::select('*')
+            ->with([
+                'creator'=>function($query) { $query->select(['id','username','true_name']); },
+            ])
+            ->where(['delivery_id'=>$id]);
+//            ->where(['record_object'=>21,'operate_object'=>61,'item_id'=>$id]);
+
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
     // 【交付】编辑-质量评价
     public function o1__delivery__item__quality_evaluate__save($post_data)
     {
-//        dd($post_data);
-//        return response_success([]);
         $messages = [
             'operate.required' => 'operate.required.',
             'item_id.required' => 'item_id.required.',
@@ -612,17 +683,75 @@ class DK_Client__DeliveryRepository {
         $me = $this->me;
 
         // 判断用户操作权限
-        if(!in_array($me->staff_category,[0,1,9,11,19,81,84,88])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->staff_category,[0,1,9,11,19,99])) return response_error([],"你没有操作权限！");
 
         // 判断对象是否合法
         $item = DK_Common__Delivery::withTrashed()->find($id);
         if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+//        dd($me->client_id);
 
         if($item->client_id != $me->client_id) return response_error([],"该【工单】不是你的，你不能操作！");
-        if(in_array($me->user_type,[88]) && $item->client_staff_id != $me->id) return response_error([],"该【工单】不是你的，你不能操作！");
+//        if(in_array($me->staff_category,[99]) && $item->client_staff_id != $me->id) return response_error([],"该【工单】不是你的啊，你不能操作！");
+
+
+
+        $time = time();
+        $date = date("Y-m-d");
+        $datetime = date('Y-m-d H:i:s');
 
 
         $before = $item->order_quality;
+
+
+
+
+        $record_content = [];
+
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '操作';
+            $record_row['field'] = 'item_operation';
+            $record_row['before'] = '';
+            $record_row['after'] = '质量评价';
+            $record_content[] = $record_row;
+        }
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '时间';
+            $record_row['field'] = 'quality_evaluate_time';
+            $record_row['before'] = '';
+            $record_row['after'] = $datetime;
+            $record_content[] = $record_row;
+        }
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '结果';
+            $record_row['field'] = 'quality_evaluate_result';
+
+            $record_row['before'] = $item->order_quality;;
+            $record_row['after'] = $order_quality;
+
+            $record_content[] = $record_row;
+        }
+
+
+        $record_data["ip"] = Get_IP();
+        $record_data["record_object"] = 1;
+        $record_data["record_category"] = 1;
+        $record_data["record_type"] = 1;
+        $record_data["creator_id"] = $me->id;
+        $record_data["delivery_id"] = $id;
+        $record_data["order_id"] = $item->order_id;
+        $record_data["operate_object"] = 1;
+        $record_data["operate_category"] = 1;
+        $record_data["operate_type"] = 91;
+        $record_data["content"] = json_encode($record_content);
+
+        $record_data["before"] = $before;
+        $record_data["after"] = $order_quality;
 
         // 启动数据库事务
         DB::beginTransaction();
@@ -633,20 +762,7 @@ class DK_Client__DeliveryRepository {
             if(!$bool) throw new Exception("DK_Common__Delivery--update--fail");
             else
             {
-                $record = new DK_Client_Record;
-
-                $record_data["ip"] = Get_IP();
-                $record_data["record_object"] = 31;
-                $record_data["record_category"] = 11;
-                $record_data["record_type"] = 1;
-                $record_data["creator_id"] = $me->id;
-                $record_data["order_id"] = $id;
-                $record_data["operate_object"] = 71;
-                $record_data["operate_category"] = 93;
-                $record_data["operate_type"] = 1;
-
-                $record_data["before"] = $before;
-                $record_data["after"] = $order_quality;
+                $record = new DK_Client__Delivery__Operation_Record;
 
                 $bool_1 = $record->fill($record_data)->save();
                 if(!$bool_1) throw new Exception("DK_Client_Record--record--fail");
@@ -829,71 +945,82 @@ class DK_Client__DeliveryRepository {
         if(!$mine) return response_error([],"不存在警告，请刷新页面重试！");
 
 
+        $time = time();
+        $date = date("Y-m-d");
         $datetime = date('Y-m-d H:i:s');
 
 
-        $follow_update = [];
+        $record_content = [];
 
-        // 回访状态
-//        $is_callback = $post_data["is_callback"];
-//        if($is_callback != $mine->is_callback)
-//        {
-//            $update['field'] = 'is_callback';
-//            $update['before'] = $mine->is_callback;
-//            $update['after'] = $is_callback;
-//            $follow_update[] = $update;
-//
-//            $mine->is_callback = $is_callback;
-//        }
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '操作';
+            $record_row['field'] = 'item_operation';
+            $record_row['before'] = '';
+            $record_row['after'] = '回访';
+
+            $record_content[] = $record_row;
+        }
         // 回访时间
         $callback_datetime = $post_data['callback-datetime'];
         if(!empty($callback_datetime))
         {
-            $update['field'] = 'callback_datetime';
-            $update['before'] = '';
-            $update['after'] = $callback_datetime;
-            $follow_update[] = $update;
+            $record_row = [];
+            $record_row['title'] = '回访时间';
+            $record_row['field'] = 'callback_description';
+            $record_row['before'] = '';
+            $record_row['after'] = $callback_datetime;
+
+            $record_content[] = $record_row;
 
             $mine->callback_datetime = $callback_datetime;
             $mine->callback_date = $callback_datetime;
         }
-        // 回访备注
-        $trade_data["description"] = $post_data['callback-description'];
-        if(!empty($trade_data["description"]))
+        // 回访详情
+        $callback_description = $post_data['callback-description'];
+        if(!empty($callback_description))
         {
-            $update['field'] = 'callback_description';
-            $update['before'] = '';
-            $update['after'] = $trade_data["description"];
-            $follow_update[] = $update;
+            $record_row = [];
+            $record_row['title'] = '回访详情';
+            $record_row['field'] = 'callback_description';
+            $record_row['before'] = '';
+            $record_row['after'] = $callback_description;
+
+            $record_content[] = $record_row;
         }
 
-
-
-        $follow = new DK_Client_Follow_Record;
-
-        $follow_data["follow_category"] = 1;
-        $follow_data["follow_type"] = 21;
-        $follow_data["client_id"] = $me->client_id;
-        $follow_data["delivery_id"] = $operate_id;
-        $follow_data["creator_id"] = $me->id;
-        $follow_data["custom_text_1"] = json_encode($follow_update);
-//        $follow_data["follow_datetime"] = $post_data['follow-datetime'];
-//        $follow_data["follow_date"] = $post_data['follow-datetime'];
+        $record_data["ip"] = Get_IP();
+        $record_data["record_object"] = 1;
+        $record_data["record_category"] = 1;
+        $record_data["record_type"] = 1;
+        $record_data["creator_id"] = $me->id;
+        $record_data["delivery_id"] = $operate_id;
+        $record_data["order_id"] = $mine->order_id;
+        $record_data["operate_object"] = 1;
+        $record_data["operate_category"] = 1;
+        $record_data["operate_type"] = 96;
+//        $record_data["follow_datetime"] = $post_data['follow-datetime'];
+//        $record_data["follow_date"] = $post_data['follow-datetime'];
+        $record_data["content"] = json_encode($record_content);
 
 
         // 启动数据库事务
         DB::beginTransaction();
         try
         {
-            $bool = $follow->fill($follow_data)->save();
-            if($bool)
+//            $mine->timestamps = false;
+            $mine->last_operation_datetime = $datetime;
+            $mine->last_operation_date = $datetime;
+            $bool_d = $mine->save();
+            if($bool_d)
             {
-//                $mine->timestamps = false;
-                $mine->last_operation_datetime = $datetime;
-                $mine->last_operation_date = $datetime;
-                $bool_d = $mine->save();
+                $record = new DK_Client__Delivery__Operation_Record;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("DK_Client__Delivery__Operation_Record--record--fail");
             }
-            else throw new Exception("DK_Client_Follow_Record--insert--fail");
+            else throw new Exception("DK_Common__Delivery--insert--fail");
 
             DB::commit();
             return response_success(['id'=>$mine->id]);
@@ -946,19 +1073,55 @@ class DK_Client__DeliveryRepository {
         if(!$mine) return response_error([],"不存在警告，请刷新页面重试！");
 
 
+        $time = time();
+        $date = date("Y-m-d");
         $datetime = date('Y-m-d H:i:s');
 
 
-        $follow_update = [];
+        $record_content = [];
 
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '操作';
+            $record_row['field'] = 'item_operation';
+            $record_row['before'] = '';
+            $record_row['after'] = '编辑上门状态';
+
+            $record_content[] = $record_row;
+        }
+        // 跟进时间
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '跟进时间';
+            $record_row['field'] = 'follow_time';
+            $record_row['before'] = '';
+            $record_row['after'] = $post_data['follow-datetime'];
+
+            $record_content[] = $record_row;
+        }
         // 上门状态
         $is_come = $post_data["is_come"];
-        if($is_come != $mine->is_come)
+//        if($is_come != $mine->is_come)
+        if(true)
         {
-            $update['field'] = 'is_come';
-            $update['before'] = $mine->is_come;
-            $update['after'] = $is_come;
-            $follow_update[] = $update;
+            $record_row = [];
+            $record_row['title'] = '上门状态';
+            $record_row['field'] = 'is_come';
+            $record_row['code'] = $is_come;
+
+            if($mine->is_come == 0) $record_row['before'] = '否';
+            else if($mine->is_come == 9) $record_row['before'] = '预约上门';
+            else if($mine->is_come == 11) $record_row['before'] = '已上门';
+            else $record_row['before'] = $mine->is_come;
+
+            if($is_come == 0) $record_row['after'] = '否';
+            else if($is_come == 9) $record_row['after'] = '预约上门';
+            else if($is_come == 11) $record_row['after'] = '已上门';
+            else $record_row['after'] = $is_come;
+
+            $record_content[] = $record_row;
 
             $mine->is_come = $is_come;
         }
@@ -966,51 +1129,60 @@ class DK_Client__DeliveryRepository {
         $come_datetime = $post_data['come-datetime'];
         if(!empty($come_datetime))
         {
-            $update['field'] = 'come_datetime';
-            $update['before'] = '';
-            $update['after'] = $come_datetime;
-            $follow_update[] = $update;
+            $record_row = [];
+            $record_row['title'] = '上门时间';
+            $record_row['field'] = 'come_datetime';
+            $record_row['before'] = '';
+            $record_row['after'] = $come_datetime;
 
-            $mine->come_datetime = $come_datetime;
+            $record_content[] = $record_row;
+
             $mine->come_date = $come_datetime;
+            $mine->come_datetime = $come_datetime;
         }
         // 上门备注
-        $trade_data["description"] = $post_data['come-description'];
-        if(!empty($trade_data["description"]))
+        $come_description = $post_data['come-description'];
+        if(!empty($come_description))
         {
-            $update['field'] = 'come_description';
-            $update['before'] = '';
-            $update['after'] = $trade_data["description"];
-            $follow_update[] = $update;
+            $record_row = [];
+            $record_row['title'] = '上门详情';
+            $record_row['field'] = 'come_description';
+            $record_row['before'] = '';
+            $record_row['after'] = $come_description;
+
+            $record_content[] = $record_row;
         }
 
-
-
-        $follow = new DK_Client_Follow_Record;
-
-        $follow_data["follow_category"] = 1;
-        $follow_data["follow_type"] = 31;
-        $follow_data["client_id"] = $me->client_id;
-        $follow_data["delivery_id"] = $operate_id;
-        $follow_data["creator_id"] = $me->id;
-        $follow_data["custom_text_1"] = json_encode($follow_update);
-        $follow_data["follow_datetime"] = $post_data['follow-datetime'];
-        $follow_data["follow_date"] = $post_data['follow-datetime'];
+        $record_data["ip"] = Get_IP();
+        $record_data["record_object"] = 1;
+        $record_data["record_category"] = 1;
+        $record_data["record_type"] = 1;
+        $record_data["creator_id"] = $me->id;
+        $record_data["delivery_id"] = $operate_id;
+        $record_data["order_id"] = $mine->order_id;
+        $record_data["operate_object"] = 1;
+        $record_data["operate_category"] = 1;
+        $record_data["operate_type"] = 98;
+        $record_data["follow_datetime"] = $post_data['follow-datetime'];
+        $record_data["follow_date"] = $post_data['follow-datetime'];
+        $record_data["content"] = json_encode($record_content);
 
 
         // 启动数据库事务
         DB::beginTransaction();
         try
         {
-            $bool = $follow->fill($follow_data)->save();
-            if($bool)
+            $mine->last_operation_datetime = $datetime;
+            $mine->last_operation_date = $datetime;
+            $bool_d = $mine->save();
+            if($bool_d)
             {
-//                $mine->timestamps = false;
-                $mine->last_operation_datetime = $datetime;
-                $mine->last_operation_date = $datetime;
-                $bool_d = $mine->save();
+                $record = new DK_Client__Delivery__Operation_Record;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("DK_Client__Delivery__Operation_Record--record--fail");
             }
-            else throw new Exception("DK_Client_Follow_Record--insert--fail");
+            else throw new Exception("DK_Common__Delivery--update--fail");
 
             DB::commit();
             return response_success(['id'=>$mine->id]);
@@ -1059,38 +1231,80 @@ class DK_Client__DeliveryRepository {
         if(!$mine) return response_error([],"不存在警告，请刷新页面重试！");
 
 
+        $time = time();
+        $date = date("Y-m-d");
         $datetime = date('Y-m-d H:i:s');
 
 
-        $follow = new DK_Client_Follow_Record;
+        $record_content = [];
 
-        $follow_data["follow_category"] = 1;
-        $follow_data["follow_type"] = 1;
-        $follow_data["client_id"] = $me->client_id;
-        $follow_data["delivery_id"] = $operate_id;
-        $follow_data["creator_id"] = $me->id;
-        $follow_data["custom_text_1"] = $post_data['follow-description'];
-        $follow_data["follow_datetime"] = $post_data['follow-datetime'];
-        $follow_data["follow_date"] = $post_data['follow-datetime'];
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '操作';
+            $record_row['field'] = 'item_operation';
+            $record_row['before'] = '';
+            $record_row['after'] = '跟进记录';
+            $record_content[] = $record_row;
+        }
+        // 跟进时间
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '跟进时间';
+            $record_row['field'] = 'follow_time';
+            $record_row['before'] = '';
+            $record_row['after'] = $post_data['follow-datetime'];
+            $record_content[] = $record_row;
+        }
+        // 跟进说明
+        if(!empty($post_data['follow-description']))
+        {
+            $record_row = [];
+            $record_row['title'] = '跟进详情';
+            $record_row['field'] = 'follow_description';
+
+            $record_row['before'] = '';
+            $record_row['after'] = $post_data['follow-description'];
+
+            $record_content[] = $record_row;
+        }
+
+        $record_data["ip"] = Get_IP();
+        $record_data["record_object"] = 1;
+        $record_data["record_category"] = 1;
+        $record_data["record_type"] = 1;
+        $record_data["creator_id"] = $me->id;
+        $record_data["delivery_id"] = $operate_id;
+        $record_data["order_id"] = $mine->order_id;
+        $record_data["operate_object"] = 1;
+        $record_data["operate_category"] = 91;
+        $record_data["operate_type"] = 1;
+        $record_data["follow_datetime"] = $post_data['follow-datetime'];
+        $record_data["follow_date"] = $post_data['follow-datetime'];
+        $record_data["content"] = json_encode($record_content);
 
 
         // 启动数据库事务
         DB::beginTransaction();
         try
         {
-            $bool = $follow->fill($follow_data)->save();
-            if($bool)
+//            $mine->timestamps = false;
+            $mine->follow_latest_description = $post_data['follow-description'];
+            $mine->follow_datetime = $post_data['follow-datetime'];
+            $mine->follow_date = $post_data['follow-datetime'];
+            $mine->last_operation_datetime = $datetime;
+            $mine->last_operation_date = $datetime;
+            $bool_d = $mine->save();
+            if(!$bool_d) throw new Exception("DK_Common__Delivery--update--fail");
+            if($bool_d)
             {
-//                $mine->timestamps = false;
-                $mine->follow_latest_description = $post_data['follow-description'];
-                $mine->follow_datetime = $post_data['follow-datetime'];
-                $mine->follow_date = $post_data['follow-datetime'];
-                $mine->last_operation_datetime = $datetime;
-                $mine->last_operation_date = $datetime;
-                $bool_d = $mine->save();
-                if(!$bool_d) throw new Exception("DK_Common__Delivery--update--fail");
+                $record = new DK_Client__Delivery__Operation_Record;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("DK_Client__Delivery__Operation_Record--record--fail");
             }
-            else throw new Exception("DK_Client_Follow_Record--insert--fail");
+            else throw new Exception("DK_Common__Delivery--update--fail");
 
             DB::commit();
             return response_success(['id'=>$mine->id]);
@@ -1142,105 +1356,214 @@ class DK_Client__DeliveryRepository {
         if(!$mine) return response_error([],"不存在警告，请刷新页面重试！");
 
 
+        $time = time();
+        $date = date("Y-m-d");
         $datetime = date('Y-m-d H:i:s');
 
-        $follow_update = [];
 
-
-        $trade = new DK_Client_Trade_Record;
-
+        $trade_data = [];
         $trade_data["trade_category"] = 1;
         $trade_data["trade_type"] = 1;
         $trade_data["client_id"] = $me->client_id;
         $trade_data["delivery_id"] = $operate_id;
+        $trade_data["order_id"] = $mine->order_id;
         $trade_data["creator_id"] = $me->id;
 
-        $trade_data["title"] = $post_data['transaction-title'];
+        $record_content = [];
 
-        $trade_data["transaction_datetime"] = $post_data['transaction-datetime'];
-        if(!empty($trade_data["transaction_datetime"]))
+        if(true)
         {
-            $update['field'] = 'transaction_datetime';
-            $update['before'] = '';
-            $update['after'] = $trade_data["transaction_datetime"];
-            $follow_update[] = $update;
-        }
-        $trade_data["transaction_date"] = $post_data['transaction-datetime'];
-
-        $trade_data["transaction_count"] = $post_data['transaction-count'];
-        if(!empty($trade_data["transaction_count"]))
-        {
-            $update['field'] = 'transaction_count';
-            $update['before'] = '';
-            $update['after'] = $trade_data["transaction_count"];
-            $follow_update[] = $update;
-        }
-        $trade_data["transaction_amount"] = $post_data['transaction-amount'];
-        if(!empty($trade_data["transaction_amount"]))
-        {
-            $update['field'] = 'transaction_amount';
-            $update['before'] = '';
-            $update['after'] = $trade_data["transaction_amount"];
-            $follow_update[] = $update;
-        }
-
-        $trade_data["transaction_pay_account"] = $post_data['transaction-pay-account'];
-        $trade_data["transaction_receipt_account"] = $post_data['transaction-receipt-account'];
-        $trade_data["transaction_order_number"] = $post_data['transaction-order-number'];
-
-        $trade_data["description"] = $post_data['transaction-description'];
-        if(!empty($trade_data["description"]))
-        {
-            $update['field'] = 'transaction_description';
-            $update['before'] = '';
-            $update['after'] = $trade_data["description"];
-            $follow_update[] = $update;
+            $record_row = [];
+            $record_row['title'] = '操作';
+            $record_row['field'] = 'item_operation';
+            $record_row['before'] = '';
+            $record_row['after'] = '添加成交记录';
+            $record_content[] = $record_row;
         }
 
 
-        $follow = new DK_Client_Follow_Record;
+        // 交易名目
+        $transaction_title = $post_data['transaction-title'];
+        $trade_data["title"] = $transaction_title;
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '交易名目';
+            $record_row['field'] = 'transaction_title';
+            $record_row['before'] = '';
+            $record_row['after'] = $transaction_title;
 
-        $follow_data["follow_category"] = 1;
-        $follow_data["follow_type"] = 88;
-        $follow_data["client_id"] = $me->client_id;
-        $follow_data["delivery_id"] = $operate_id;
-        $follow_data["creator_id"] = $me->id;
-        $follow_data["custom_text_1"] = json_encode($follow_update);
-//        $follow_data["follow_datetime"] = $datetime;
-//        $follow_data["follow_date"] = $datetime;
+            $record_content[] = $record_row;
+        }
 
+        // 交易时间
+        $transaction_datetime = $post_data['transaction-datetime'];
+        $trade_data["transaction_date"] = $transaction_datetime;
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '成交时间';
+            $record_row['field'] = 'transaction_datetime';
+            $record_row['before'] = '';
+            $record_row['after'] = $transaction_datetime;
+
+            $record_content[] = $record_row;
+        }
+
+        // 交易数量
+        $transaction_count = $post_data['transaction-count'];
+        $trade_data["transaction_count"] = $transaction_count;
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '成交数量';
+            $record_row['field'] = 'transaction_count';
+            $record_row['before'] = '';
+            $record_row['after'] = $transaction_count;
+
+            $record_content[] = $record_row;
+        }
+
+        // 交易金额
+        $transaction_amount = $post_data['transaction-amount'];
+        $trade_data["transaction_amount"] = $transaction_amount;
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '成交金额';
+            $record_row['field'] = 'transaction_amount';
+            $record_row['before'] = '';
+            $record_row['after'] = $transaction_amount;
+
+            $record_content[] = $record_row;
+        }
+
+        // 交易方式
+        $transaction_payment_type = $post_data['transaction-payment-type'];
+        $trade_data["transaction_payment_type"] = $transaction_payment_type;
+        if(!empty($transaction_payment_type))
+        {
+            $record_row = [];
+            $record_row['title'] = '交易方式';
+            $record_row['field'] = 'transaction_payment_type';
+
+            $record_row['before'] = '';
+            $record_row['after'] = $transaction_payment_type;
+
+            $record_content[] = $record_row;
+        }
+
+        // 付款账号
+        $transaction_payer_account = isset($post_data['transaction-payer-account']) ? $post_data['transaction-payer-account'] : NULL;
+        $trade_data["transaction_payer_account"] = $transaction_payer_account;
+        if(!empty($transaction_payer_account))
+        {
+            $record_row = [];
+            $record_row['title'] = '付款账号';
+            $record_row['field'] = 'transaction_payer_account';
+
+            $record_row['before'] = '';
+            $record_row['after'] = $transaction_payer_account;
+
+            $record_content[] = $record_row;
+        }
+
+        // 收款账号
+        $transaction_payee_account = isset($post_data['transaction-payee-account']) ? $post_data['transaction-payee-account'] : NULL;
+        $trade_data["transaction_payee_account"] = $transaction_payee_account;
+        if(!empty($transaction_payee_account))
+        {
+            $record_row = [];
+            $record_row['title'] = '收款账号';
+            $record_row['field'] = 'transaction_payee_account';
+
+            $record_row['before'] = '';
+            $record_row['after'] = $transaction_payee_account;
+
+            $record_content[] = $record_row;
+        }
+
+        // 交易单号
+        $transaction_order_number = isset($post_data['transaction-order-number']) ? $post_data['transaction-order-number'] : NULL;
+        $trade_data["transaction_order_number"] = $transaction_order_number;
+        if(!empty($transaction_order_number))
+        {
+            $record_row = [];
+            $record_row['title'] = '交易单号';
+            $record_row['field'] = 'transaction_order_number';
+
+            $record_row['before'] = '';
+            $record_row['after'] = $transaction_order_number;
+
+            $record_content[] = $record_row;
+        }
+
+        // 交易说明
+        $transaction_description = $post_data['transaction-description'];
+        $trade_data["description"] = $transaction_description;
+        if(!empty($transaction_description))
+        {
+            $record_row = [];
+            $record_row['title'] = '交易说明';
+            $record_row['field'] = 'transaction_description';
+
+            $record_row['before'] = '';
+            $record_row['after'] = $transaction_description;
+
+            $record_content[] = $record_row;
+        }
+
+        $record_data["ip"] = Get_IP();
+        $record_data["record_object"] = 1;
+        $record_data["record_category"] = 1;
+        $record_data["record_type"] = 1;
+        $record_data["creator_id"] = $me->id;
+        $record_data["delivery_id"] = $operate_id;
+        $record_data["order_id"] = $mine->order_id;
+        $record_data["operate_object"] = 1;
+        $record_data["operate_category"] = 81;
+        $record_data["operate_type"] = 1;
+//        $record_data["follow_datetime"] = $post_data['follow-datetime'];
+//        $record_data["follow_date"] = $post_data['follow-datetime'];
+        $record_data["content"] = json_encode($record_content);
 
         // 启动数据库事务
         DB::beginTransaction();
         try
         {
+            $trade = new DK_Client__Trade_Record;
             $bool_t = $trade->fill($trade_data)->save();
             if($bool_t)
             {
-                $follow_data['custom_id'] = $trade->id;
-                $bool_f = $follow->fill($follow_data)->save();
-                if($bool_f)
-                {
-                    $trade->follow_id = $follow->id;
-                    $bool_t_2 = $trade->save();
-                    if(!$bool_t_2) throw new Exception("DK_Client_Trade_Record--update--fail");
-
-//                    $mine = DK_Common__Delivery::lockForUpdate()->withTrashed()->find($operate_id);
+                $mine = DK_Common__Delivery::lockForUpdate()->withTrashed()->find($operate_id);
 //
 ////                $mine->timestamps = false;
-//                    $mine->transaction_num += 1;
-//                    $mine->transaction_count += $post_data['transaction-count'];
-//                    $mine->transaction_amount += $post_data['transaction-amount'];
-//                    $mine->transaction_datetime = $post_data['transaction-datetime'];
-//                    $mine->transaction_date = $post_data['transaction-datetime'];
-                    $mine->last_operation_datetime = $datetime;
-                    $mine->last_operation_date = $datetime;
-                    $bool_d = $mine->save();
-                    if(!$bool_d) throw new Exception("DK_Common__Delivery--update--fail");
+                $mine->transaction_num += 1;
+                $mine->transaction_count += $post_data['transaction-count'];
+                $mine->transaction_amount += $post_data['transaction-amount'];
+                $mine->transaction_date = $post_data['transaction-datetime'];
+                $mine->transaction_datetime = $post_data['transaction-datetime'];
+
+//                $mine->last_operation_date = $datetime;
+//                $mine->last_operation_datetime = $datetime;
+                $bool_d = $mine->save();
+                if(!$bool_d) throw new Exception("DK_Common__Delivery--update--fail");
+
+
+                $record_data['trade_id'] = $trade->id;
+                $record = new DK_Client__Delivery__Operation_Record;
+
+                $bool_r = $record->fill($record_data)->save();
+                if($bool_r)
+                {
+                    $trade->operation_id = $record->id;
+                    $bool_t_2 = $trade->save();
+                    if(!$bool_t_2) throw new Exception("DK_Client__Trade_Record--update--fail");
                 }
-                else throw new Exception("DK_Client_Follow_Record--insert--fail");
+                else throw new Exception("DK_Client__Delivery__Operation_Record--record--fail");
+
             }
-            else throw new Exception("DK_Client_Trade_Record--insert--fail");
+            else throw new Exception("DK_Client__Trade_Record--insert--fail");
 
             DB::commit();
             return response_success(['id'=>$mine->id]);
@@ -1787,55 +2110,6 @@ class DK_Client__DeliveryRepository {
 
 
 
-
-    // 【工单-管理】【操作记录】返回-列表-数据
-    public function v1_operate_for_delivery_item_follow_record_datatable_query($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $id  = $post_data["id"];
-        $query = DK_Client_Follow_Record::select('*')
-            ->with([
-                'creator'=>function($query) { $query->select(['id','username','true_name']); },
-            ])
-            ->where(['delivery_id'=>$id]);
-//            ->where(['record_object'=>21,'operate_object'=>61,'item_id'=>$id]);
-
-        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
-
-
-        $total = $query->count();
-
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
-
-        if(isset($post_data['order']))
-        {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
-
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
-        }
-        else $query->orderBy("id", "desc");
-
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
-
-        foreach ($list as $k => $v)
-        {
-            $list[$k]->encode_id = encode($v->id);
-
-            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
-            else $list[$k]->is_me = 0;
-        }
-//        dd($list->toArray());
-        return datatable_response($list, $draw, $total);
-    }
 
 
 

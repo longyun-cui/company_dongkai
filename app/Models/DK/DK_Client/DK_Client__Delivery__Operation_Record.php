@@ -51,10 +51,13 @@ class DK_Client__Delivery__Operation_Record extends Model
         'client_id',
         'project_id',
 
+        'delivery_id',
         'order_id',
 
         'fee_id',
         'finance_id',
+
+        'trade_id',
 
         'item_id',
         'custom_id',
@@ -72,6 +75,9 @@ class DK_Client__Delivery__Operation_Record extends Model
         'custom_date',
         'custom_datetime',
 
+        'operation_date',
+        'operation_datetime',
+
         'follow_date',
         'follow_datetime',
         'last_operation_date',
@@ -79,7 +85,9 @@ class DK_Client__Delivery__Operation_Record extends Model
 
 
         'name', 'username', 'nickname', 'true_name', 'short_name',
-        'title', 'subtitle', 'description', 'content', 'remark', 'tag', 'custom', 'custom2', 'custom3', 'attachment', 'portrait_img', 'cover_pic',
+        'title', 'subtitle', 'description', 'content', 'remark', 'tag', 'custom', 'custom2', 'custom3', 'attachment',
+        'portrait_img',
+        'cover_pic',
 
         'ip',
 
@@ -103,12 +111,12 @@ class DK_Client__Delivery__Operation_Record extends Model
     // 拥有者
     function owner()
     {
-        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','owner_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Client\DK_Client__Staff','owner_id','id');
     }
     // 创作者
     function creator()
     {
-        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','creator_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Client\DK_Client__Staff','creator_id','id');
     }
     // 创作者（客户）
     function client_creator()
@@ -118,17 +126,17 @@ class DK_Client__Delivery__Operation_Record extends Model
     // 创作者
     function updater()
     {
-        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','updater_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Client\DK_Client__Staff','updater_id','id');
     }
     // 创作者
     function completer()
     {
-        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','completer_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Client\DK_Client__Staff','completer_id','id');
     }
     // 用户
     function user()
     {
-        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','user_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Client\DK_Client__Staff','user_id','id');
     }
 
 

@@ -97,6 +97,9 @@ Route::group(['middleware' => ['dk.client.user.login']], function () {
     // 【交付】列表
     Route::post('/o1/delivery/delivery-list/datatable-query', $controller.'@o1__delivery__list__datatable_query');
     Route::post('/o1/delivery/item-get', $controller.'@o1__delivery__item_get');
+    // 【交付】操作记录
+    Route::post('/o1/delivery/item-operation-record-list/datatable-query', $controller.'@o1__delivery__item_operation_record_list__datatable_query');
+    // 【交付】用户操作
     Route::post('/o1/delivery/item--quality-evaluate--save', $controller.'@o1__delivery__item__quality_evaluate__save');
     Route::post('/o1/delivery/item--customer-update--save', $controller.'@o1__delivery__item__customer_update__save');
     Route::post('/o1/delivery/item--callback-update--save', $controller.'@o1__delivery__item__callback_update__save');

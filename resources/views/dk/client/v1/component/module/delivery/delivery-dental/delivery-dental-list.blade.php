@@ -18,42 +18,49 @@
 
 
             <input type="text" class="search-filter form-filter filter-keyup" name="delivery-id" placeholder="ID" value="" />
-            <input type="text" class="search-filter form-filter filter-keyup" name="delivery-order-id" placeholder="工单ID" value="" />
 
             <input type="text" class="search-filter form-filter filter-md filter-keyup" name="order-client-phone" placeholder="客户电话" value="" />
 
 
-            <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-start" placeholder="开始日期" value="" readonly="readonly" />
-            <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-ended" placeholder="结束日期" value="" readonly="readonly" />
+            @if($me->client_er->is_api_scrm == 1)
+            <select class="search-filter form-filter filter-md select2-box-c" name="delivery-is-api-pushed">
+                <option value="-1">API推送</option>
+                <option value="0">未推送</option>
+                <option value="1">已推送</option>
+            </select>
+            @endif
 
 
-            <select class="search-filter form-filter filter-lg select2-box-c select2--project-c- delivery-project"
-                    data-item-category="1"
-                    name="delivery-project"
-            >
-                <option value="-1">选择项目</option>
-                @if(!empty($project_list))
-                    @foreach($project_list as $v)
-                        <option value="{{ $v->id }}">{{ $v->name }}</option>
-                    @endforeach
-                @endif
+            <select class="search-filter form-filter filter-md select2-box-c" name="delivery-quality">
+                <option value="">选择质量</option>
+                <option value="有效">有效</option>
+                <option value="无效">无效</option>
+                <option value="重单">重单</option>
+                <option value="待联系">待联系</option>
+                <option value="无法联系">无法联系</option>
             </select>
 
 
-            <select class="search-filter form-filter filter-lg select2-box-c select2--client-c- delivery-client" name="delivery-client">
-                <option value="-1">选择客户</option>
-                @if(!empty($client_list))
-                    @foreach($client_list as $v)
-                        <option value="{{ $v->id }}">{{ $v->name }}</option>
-                    @endforeach
-                @endif
+            <select class="search-filter form-filter filter-md select2-box-c" name="delivery-assign-status">
+                <option value="-1">分配状态</option>
+                <option value="0">待分配</option>
+                <option value="1">已分配</option>
             </select>
 
 
-            <select class="search-filter form-filter filter-md select2-box-c" name="order-delivery-type">
-                <option value="-1">交付类型</option>
-                <option value="1">交付</option>
-                <option value="11">分发</option>
+            <select class="search-filter form-filter filter-lg select2-box-c" name="delivery-staff">
+                <option value="-1">选择员工</option>
+                @foreach($staff_list as $v)
+                    <option value="{{ $v->id }}">{{ $v->username }}</option>
+                @endforeach
+            </select>
+
+
+            <select class="search-filter form-filter filter-md select2-box-c" name="delivery-client-type">
+                <option value="-1">患者类型</option>
+                @foreach(config('info.client_type') as $k => $v)
+                    <option value="{{ $k }}">{{ $v }}</option>
+                @endforeach
             </select>
 
 
@@ -62,8 +69,44 @@
                 <option value="正常交付">正常交付</option>
                 <option value="折扣交付">折扣交付</option>
                 <option value="郊区交付">郊区交付</option>
-                <option value="内部交付">内部交付</option>
             </select>
+
+
+            {{--按天查看--}}
+            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre date-pre" data-target="delivery-date">
+                <i class="fa fa-chevron-left"></i>
+            </button>
+            <input type="text" class="search-filter form-filter date_picker-c search-date" name="delivery-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next date-next" data-target="delivery-date">
+                <i class="fa fa-chevron-right"></i>
+            </button>
+            <button type="button" class="btn btn-success btn-filter filter-submit" data-time-type="date">
+                <i class="fa fa-search"></i> 按日查询
+            </button>
+
+
+            {{--按月查看--}}
+            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre month-pre" data-target="delivery-month">
+                <i class="fa fa-chevron-left"></i>
+            </button>
+            <input type="text" class="search-filter form-filter filter-keyup month_picker-c search-month" name="delivery-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
+            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next month-next" data-target="delivery-month">
+                <i class="fa fa-chevron-right"></i>
+            </button>
+            <button type="button" class="btn btn-success btn-filter filter-submit" data-time-type="month">
+                <i class="fa fa-search"></i> 按月查询
+            </button>
+
+
+            {{--按时间段导出--}}
+            <input type="text" class="search-filter form-filter date_picker-c search-start" name="delivery-start" placeholder="起始时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" style="margin-right:-3px;" />
+            <input type="text" class="search-filter form-filter date_picker-c search-ended" name="delivery-ended" placeholder="终止时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+
+            <button type="button" class="btn btn-success btn-filter filter-submit" data-time-type="period">
+                <i class="fa fa-search"></i> 按时间段搜索
+            </button>
+
+
 
 
             <button type="button" class="btn btn-default btn-filter filter-submit">

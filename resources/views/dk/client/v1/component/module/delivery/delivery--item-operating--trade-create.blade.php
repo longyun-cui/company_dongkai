@@ -77,10 +77,10 @@
                     <div class="form-group">
                         <label class="control-label col-md-2">支付方式</label>
                         <div class="col-md-8 ">
-                            <input type="text" class="form-control" name="transaction-pay-type" placeholder="支付方式" value="" list="_transaction_pay_type">
+                            <input type="text" class="form-control" name="transaction-payment-type" placeholder="支付方式" value="" list="_transaction_payment_type">
                         </div>
                     </div>
-                    <datalist id="_transaction_pay_type">
+                    <datalist id="_transaction_payment_type">
                         <option value="微信" />
                         <option value="支付宝" />
                         <option value="银行卡" />
@@ -91,19 +91,19 @@
                     <div class="form-group income-show- _none">
                         <label class="control-label col-md-2">付款账号</label>
                         <div class="col-md-8 ">
-                            <input type="text" class="form-control search-input" id="keyword" name="transaction-pay-account" placeholder="付款账号" value="" list="_transaction_pay_account" autocomplete="on">
+                            <input type="text" class="form-control search-input" id="keyword" name="transaction-payer-account" placeholder="付款账号" value="" list="_transaction_payer_account" autocomplete="on">
                         </div>
                     </div>
-                    <datalist id="_transaction_pay_account">
+                    <datalist id="_transaction_payer_account">
                     </datalist>
                     {{--收款账号--}}
                     <div class="form-group income-show- _none">
                         <label class="control-label col-md-2">收款账号</label>
                         <div class="col-md-8 ">
-                            <input type="text" class="form-control search-input" id="keyword" name="transaction-receipt-account" placeholder="收款账号" value="" list="_transaction_receipt_account" autocomplete="on">
+                            <input type="text" class="form-control search-input" id="keyword" name="transaction-payee-account" placeholder="收款账号" value="" list="_transaction_payee_account" autocomplete="on">
                         </div>
                     </div>
-                    <datalist id="_transaction_receipt_account">
+                    <datalist id="_transaction_payee_account">
                     </datalist>
                     {{--交易单号--}}
                     <div class="form-group  _none">

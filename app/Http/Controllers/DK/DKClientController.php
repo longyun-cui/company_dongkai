@@ -374,10 +374,15 @@ class DKClientController extends Controller
         return $this->delivery_repo->o1__delivery__list__datatable_query(request()->all());
     }
 
-    // 【团队】编辑-保存
+    // 【交付】编辑-保存
     public function o1__delivery__item_get()
     {
         return $this->delivery_repo->o1__delivery__item_get(request()->all());
+    }
+    // 【交付】操作记录
+    public function o1__delivery__item_operation_record_list__datatable_query()
+    {
+        return $this->delivery_repo->o1__delivery__item_operation_record_list__datatable_query(request()->all());
     }
 
     // 【交付】质量评价

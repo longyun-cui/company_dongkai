@@ -1,15 +1,15 @@
 {{--跟进记录--}}
-<div class="modal fade- modal-main-body modal-wrapper" id="modal-for-delivery-follow-record-list">
+<div class="modal fade- modal-main-body modal-wrapper" id="modal--for--delivery--item-operation-record-list">
     <div class="col-md-10 col-md-offset-1 margin-top-32px margin-bottom-64px bg-white">
 
         <div class="box- box-info- form-container">
 
 
             <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">跟进记录</h3>
+                <h3 class="box-title">操作记录</h3>
                 <div class="box-tools pull-right caption _none">
                     <a href="javascript:void(0);" class="item-modal-show-for-follow-create">
-                        <button type="button" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加跟进记录</button>
+                        <button type="button" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加记录</button>
                     </a>
                 </div>
             </div>
@@ -35,36 +35,14 @@
                     </div>
                 </div>
 
-                <table class='table table-striped table-bordered' id='datatable-delivery-follow-record'>
+                <table class='table table-striped table-bordered' id='datatable--for--delivery--item-operation-record-list'>
                     <thead>
                     <tr role='row' class='heading'>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
                     </tbody>
                 </table>
-                <!-- datatable end -->
-            </div>
-
-            <div class="box-footer _none">
-                <div class="row" style="margin:16px 0;">
-                    <div class="col-md-offset-0 col-md-4 col-sm-8 col-xs-12">
-                        {{--<button type="button" class="btn btn-primary"><i class="fa fa-check"></i> 提交</button>--}}
-                        {{--<button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>--}}
-                        <div class="input-group">
-                            <span class="input-group-addon"><input type="checkbox" id="check-all"></span>
-                            <input type="text" class="form-control" name="bulk-detect-rank" id="bulk-detect-rank" placeholder="指定排名">
-                            <span class="input-group-addon btn btn-default" id="set-rank-bulk-submit"><i class="fa fa-check"></i>提交</span>
-                        </div>
-                    </div>
-                </div>
             </div>
 
         </div>
