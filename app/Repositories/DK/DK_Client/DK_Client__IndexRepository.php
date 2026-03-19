@@ -1,9 +1,10 @@
 <?php
 namespace App\Repositories\DK\DK_Client;
 
-
-
 use App\Models\DK\DK_Order;
+
+use App\Models\DK\DK_Client\DK_Client__Team;
+use App\Models\DK\DK_Client\DK_Client__Staff;
 
 use App\Models\DK_CC\DK_CC_Call_Record;
 use App\Models\DK_CC\DK_CC_Call_Record_Current;
@@ -12,7 +13,6 @@ use App\Models\DK_CC\DK_CC_Call_Record_Current;
 use App\Models\DK\DK_Common\DK_Common__Order;
 use App\Models\DK\DK_Common\DK_Common__Delivery;
 
-use App\Models\DK\DK_Client\DK_Client__Staff;
 
 
 use App\Jobs\DK_Client\AutomaticDispatchingJob;
@@ -82,9 +82,18 @@ class DK_Client__IndexRepository {
 //        $parameter_result = http_build_query($condition);
 //        return redirect('/?'.$parameter_result);
 
-        $staff_list = DK_Client__Staff::select('id','name')
+        $team_list = DK_Client__Team::select('id','name')
+            ->where('active',1)
+            ->where('item_status',1)
             ->where('client_id',$me->client_id)
-            ->whereNotIn('staff_type',[0,1,9,11])
+            ->get();
+        $return['team_list'] = $team_list;
+
+        $staff_list = DK_Client__Staff::select('id','name')
+            ->where('active',1)
+            ->where('item_status',1)
+            ->where('client_id',$me->client_id)
+            ->whereNotIn('staff_position',[0,1,9])
             ->get();
         $return['staff_list'] = $staff_list;
 

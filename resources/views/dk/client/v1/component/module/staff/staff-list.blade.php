@@ -31,7 +31,7 @@
             <input type="text" class="search-filter form-filter filter-keyup" name="staff-name" placeholder="名称" />
 
 
-            @if(in_array($me->staff_category,[0,1,9,71]))
+            @if(in_array($me->staff_category,[0,1,9]))
             <select class="search-filter form-filter filter-lg select2-box-c" name="staff-team">
                 <option value="-1">选择团队</option>
                 @if(!empty($team_list))
@@ -42,24 +42,24 @@
             </select>
             @endif
 
-            @if(in_array($me->staff_category,[0,1,9,11]))
-            <select class="search-filter form-filter filter-md select2-box-c" name="staff-category">
-                <option value="-1">全部人员</option>
-                <option value="41">客服</option>
-                <option value="51">质检</option>
-                <option value="61">复核</option>
-                <option value="71">运营</option>
-                <option value="88">销售</option>
-            </select>
-            <select class="search-filter form-filter filter-md select2-box-c" name="staff-position">
-                <option value="-1">全部职位</option>
-                <option value="99">职员</option>
-                <option value="61">小组主管</option>
-                <option value="41">团队经理</option>
-                <option value="31">部门总监</option>
-                <option value="11">公司老总</option>
-            </select>
-            @endif
+{{--            @if(in_array($me->staff_category,[0,1,9,11]))--}}
+{{--            <select class="search-filter form-filter filter-md select2-box-c" name="staff-category">--}}
+{{--                <option value="-1">全部人员</option>--}}
+{{--                <option value="41">客服</option>--}}
+{{--                <option value="51">质检</option>--}}
+{{--                <option value="61">复核</option>--}}
+{{--                <option value="71">运营</option>--}}
+{{--                <option value="88">销售</option>--}}
+{{--            </select>--}}
+{{--            <select class="search-filter form-filter filter-md select2-box-c" name="staff-position">--}}
+{{--                <option value="-1">全部职位</option>--}}
+{{--                <option value="99">职员</option>--}}
+{{--                <option value="61">小组主管</option>--}}
+{{--                <option value="41">团队经理</option>--}}
+{{--                <option value="31">部门总监</option>--}}
+{{--                <option value="11">公司老总</option>--}}
+{{--            </select>--}}
+{{--            @endif--}}
 
 {{--            @if(in_array($me->user_type,[0,1,9,11]))--}}
 {{--            <select class="search-filter form-filter filter-md select2-box-c" name="staff-department-district">--}}

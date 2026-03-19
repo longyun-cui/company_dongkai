@@ -102,33 +102,6 @@
                         }
                     },
                     {
-                        "className": "",
-                        "width": "120px",
-                        "title": "时间",
-                        "data": "custom_datetime",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(row.operate_type == 11)
-                            {
-                                return '';
-                            }
-
-                            if(data)
-                            {
-                                let d = new Date(data);
-                                let year = d.getFullYear();
-                                let month = ('0' + (d.getMonth() + 1)).slice(-2); // 月份是从0开始的
-                                let day = ('0' + d.getDate()).slice(-2);
-                                let hours = ('0' + d.getHours()).slice(-2);
-                                let minutes = ('0' + d.getMinutes()).slice(-2);
-                                let seconds = ('0' + d.getSeconds()).slice(-2);
-
-                                return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes;
-                            }
-                            return data;
-                        }
-                    },
-                    {
                         "className": "text-left",
                         "width": "480px",
                         "title": "详情",
@@ -165,7 +138,7 @@
                         "data": "creator_id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.username+'</a>';
+                            return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.name+'</a>';
                         }
                     },
                     {

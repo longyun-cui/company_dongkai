@@ -106,13 +106,14 @@ class DK_Client__DeliveryRepository {
         $query = DK_Common__Delivery::select('*')
             ->with([
                 'order_er',
+                'client_staff_er'=>function($query) { $query->select('id','name'); },
             ])
             ->where('client_id',$me->client_id);
 
 
         if(in_array($me->staff_position,[99]))
         {
-            $query->where('creator_id',$me->id);
+            $query->where('client_staff_id',$me->id);
         }
 
 
@@ -765,7 +766,7 @@ class DK_Client__DeliveryRepository {
                 $record = new DK_Client__Delivery__Operation_Record;
 
                 $bool_1 = $record->fill($record_data)->save();
-                if(!$bool_1) throw new Exception("DK_Client_Record--record--fail");
+                if(!$bool_1) throw new Exception("DK_Client__Delivery__Operation_Record--record--fail");
             }
 
             DB::commit();
@@ -1378,6 +1379,7 @@ class DK_Client__DeliveryRepository {
             $record_row['field'] = 'item_operation';
             $record_row['before'] = '';
             $record_row['after'] = '添加成交记录';
+
             $record_content[] = $record_row;
         }
 
@@ -1580,6 +1582,559 @@ class DK_Client__DeliveryRepository {
     }
 
 
+
+
+
+
+
+
+
+    // 【交付】批量-分配状态
+    public function o1__delivery__bulk__assign_status($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'ids.required' => 'ids.required.',
+            'assign_status.required' => 'assign_status.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'ids' => 'required',
+            'assign_status' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'delivery--bulk--assign-status') return response_error([],"参数[operate]有误！");
+        $ids = $post_data['ids'];
+        $ids_array = explode("-", $ids);
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->staff_position,[0,1,9])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        // 判断操作参数是否合法
+        $assign_status = $post_data["assign_status"];
+//        if(!in_array($operate_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
+
+
+        $time = time();
+        $date = date("Y-m-d");
+        $datetime = date('Y-m-d H:i:s');
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+//            $delivered_para['assign_status'] = $assign_status;
+//            $bool = DK_Order::whereIn('id',$ids_array)->update($delivered_para);
+//            if(!$bool) throw new Exception("item--update--fail");
+//            else
+//            {
+//            }
+
+            foreach($ids_array as $key => $id)
+            {
+                $mine = DK_Common__Delivery::withTrashed()->find($id);
+                if(!$mine) throw new Exception("该【交付】不存在，刷新页面重试！");
+                if($mine->client_id != $me->client_id) throw new Exception("归属错误，刷新页面重试！");
+
+
+                $before = $mine->assign_status;
+
+                $mine->assign_status = $assign_status;
+                $bool = $mine->save();
+                if(!$bool) throw new Exception("DK_Common__Delivery--update--fail");
+                else
+                {
+                    $record = new DK_Client__Delivery__Operation_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 1;
+                    $record_data["record_category"] = 1;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["delivery_id"] = $id;
+                    $record_data["order_id"] = $mine->order_id;
+                    $record_data["operate_object"] = 1;
+                    $record_data["operate_category"] = 99;
+                    $record_data["operate_type"] = 1;
+                    $record_data["column_name"] = "assign_status";
+
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $assign_status;
+
+                    $record_content = [];
+
+                    if(true)
+                    {
+                        $record_row = [];
+                        $record_row['title'] = '操作';
+                        $record_row['field'] = 'item_operation';
+                        $record_row['before'] = '';
+                        $record_row['after'] = '更改分配状态';
+
+                        $record_content[] = $record_row;
+                    }
+                    // 跟进时间
+                    if(true)
+                    {
+                        $record_row = [];
+                        $record_row['title'] = '时间';
+                        $record_row['field'] = 'operation_time';
+                        $record_row['before'] = '';
+                        $record_row['after'] = $datetime;
+
+                        $record_content[] = $record_row;
+                    }
+                    // 分配状态
+                    if(true)
+                    {
+                        $record_row = [];
+                        $record_row['title'] = '分配状态';
+                        $record_row['field'] = 'assign_status';
+                        $record_row['code'] = $assign_status;
+
+                        if($before == 0) $record_row['before'] = '待分配';
+                        else if($before == 1) $record_row['before'] = '已分配';
+                        else $record_row['before'] = $assign_status;
+
+                        if($assign_status == 0) $record_row['after'] = '待分配';
+                        else if($assign_status == 1) $record_row['after'] = '已分配';
+                        else $record_row['after'] = $assign_status;
+
+                        $record_content[] = $record_row;
+                    }
+
+                    $record_data["content"] = json_encode($record_content);
+
+                    $bool_record = $record->fill($record_data)->save();
+                    if(!$bool_record) throw new Exception("DK_Client__Delivery__Operation_Record--insert--fail");
+                }
+
+            }
+
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【交付】批量-指派员工
+    public function o1__delivery__bulk__assign_staff($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'ids.required' => 'ids.required.',
+            'staff_id.required' => 'staff_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'ids' => 'required',
+            'staff_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'delivery--bulk--assign-staff') return response_error([],"参数[operate]有误！");
+        $ids = $post_data['ids'];
+        $ids_array = explode("-", $ids);
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->staff_position,[0,1,9,31,41,51,61,71])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        // 判断操作参数是否合法
+        $client_staff_id = (int)$post_data["staff_id"];
+        if($client_staff_id <= 0) return response_error([],"请选择员工！");
+
+        $client_staff_er = DK_Client__Staff::where('active',1)->find($client_staff_id);
+        if($client_staff_er)
+        {
+            if($client_staff_er->item_status != 1) return response_error([],"该员工已被禁用！");
+            if($client_staff_er->owner_status__for__team != 1) return response_error([],"该员工所在团队已被禁用！");
+            if($client_staff_er->owner_status__for__team_group != 1) return response_error([],"该员工所在小组已被禁用！");
+        }
+        else return response_error([],"选择员工不存在！");
+
+
+
+        $time = time();
+        $date = date("Y-m-d");
+        $datetime = date('Y-m-d H:i:s');
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+//            $delivered_para['client_staff_id'] = $client_staff_id;
+//            $bool = DK_Order::whereIn('id',$ids_array)->update($delivered_para);
+//            if(!$bool) throw new Exception("item--update--fail");
+//            else
+//            {
+//            }
+
+            foreach($ids_array as $key => $id)
+            {
+                $mine = DK_Common__Delivery::withTrashed()->find($id);
+                if(!$mine) throw new Exception("该【交付】不存在，刷新页面重试！");
+                if($mine->client_id != $me->client_id) throw new Exception("归属错误，刷新页面重试！");
+
+                $before = $mine->client_staff_id;
+
+                $mine->client_staff_id = $client_staff_id;
+                $mine->assign_status = 1;
+                $bool = $mine->save();
+                if(!$bool) throw new Exception("DK_Common__Delivery--update--fail");
+                else
+                {
+                    $record = new DK_Client__Delivery__Operation_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 1;
+                    $record_data["record_category"] = 1;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["delivery_id"] = $id;
+                    $record_data["order_id"] = $mine->order_id;
+                    $record_data["operate_object"] = 1;
+                    $record_data["operate_category"] = 98;
+                    $record_data["operate_type"] = 1;
+                    $record_data["column_name"] = "client_staff_id";
+
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $client_staff_id;
+                    $record_content = [];
+
+                    if(true)
+                    {
+                        $record_row = [];
+                        $record_row['title'] = '操作';
+                        $record_row['field'] = 'item_operation';
+                        $record_row['before'] = '';
+                        $record_row['after'] = '指派员工';
+
+                        $record_content[] = $record_row;
+                    }
+                    // 跟进时间
+                    if(true)
+                    {
+                        $record_row = [];
+                        $record_row['title'] = '时间';
+                        $record_row['field'] = 'operation_time';
+                        $record_row['before'] = '';
+                        $record_row['after'] = $datetime;
+
+                        $record_content[] = $record_row;
+                    }
+                    // 分配状态
+                    if(true)
+                    {
+                        $record_row = [];
+                        $record_row['title'] = '员工';
+                        $record_row['field'] = 'assign_status';
+                        $record_row['code'] = $before;
+
+                        if($before == 0) $record_row['before'] = '';
+                        else
+                        {
+                            $before_staff_er = DK_Client__Staff::withTrashed()->find($before);
+                            if($before_staff_er) $record_row['before'] = $before_staff_er->name.'('.$before.')';
+                            else $record_row['before'] = '('.$before.')';
+                        }
+
+                        $record_row['after'] = $client_staff_er->name.'('.$client_staff_id.')';
+
+                        $record_content[] = $record_row;
+                    }
+
+                    $record_data["content"] = json_encode($record_content);
+
+                    $bool_record = $record->fill($record_data)->save();
+                    if(!$bool_record) throw new Exception("DK_Client__Delivery__Operation_Record--insert--fail");
+                }
+
+            }
+
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【交付】批量-API-推送
+    public function o1__delivery__bulk__api_push($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'ids.required' => 'ids.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'ids' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'bulk-api-push') return response_error([],"参数[operate]有误！");
+        $ids = $post_data['ids'];
+        $ids_array = explode("-", $ids);
+
+
+        $this->get_me();
+        $me = $this->me;
+
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+
+        $url = "https://qw-openapi-tx.dustess.com/auth/v1/access_token/token";
+
+        $curl_data['ClientID'] = env('API_SCRM_ClientID');
+        $curl_data['ClientSecret'] = env('API_SCRM_ClientSecret');
+        $curl_data = json_encode($curl_data);
+
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Accept: application/json"));
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true); // post数据
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $curl_data); // post的变量
+        $result = curl_exec($ch);
+        if(curl_errno($ch))
+        {
+            return response_fail([],'token请求失败');
+        }
+        else
+        {
+            $result = json_decode($result);
+            if($result->success)
+            {
+                $token = $result->data->accessToken;
+            }
+        }
+        curl_close($ch);
+
+
+        if(!empty($token))
+        {
+            $delivery_list = DK_Common__Delivery::withTrashed()
+                ->with('order_er')
+                ->whereIn('id',$ids_array)->get();
+//        dd($delivery_list->toArray());
+
+            $customer_list = [];
+            foreach($delivery_list as $key => $item)
+            {
+                if($item->is_api_pushed == 0)
+                {
+                    $customer = [];
+
+                    $customer['source'] = "2r4";
+
+                    $customer['pool'] = env('API_SCRM_Pool');
+                    $customer['remark'] = $item->order_er->client_name;
+                    $customer['prov_city'] = $item->order_er->location_city.'-'.$item->order_er->location_district;
+
+
+                    $mobile['type'] = "mobile";
+                    $mobile['display'] = "手机号";
+                    $mobile['tel'] = $item->order_er->client_phone;
+                    $customer['mobiles'][] = $mobile;
+
+                    if(!empty($item->order_er->wx_id))
+                    {
+                        $wx['type'] = "wx_id";
+                        $wx['display'] = "微信号";
+                        $wx['tel'] = $item->order_er->wx_id;
+                        $customer['mobiles'][] = $wx;
+                    }
+
+                    $customer['description'] = $item->order_er->description;
+
+                    // 自定义字段
+                    $custom_fields = [];
+
+                    $delivery_time['id'] = 'delivery_time';
+                    $delivery_time['type'] = 'text';
+                    $delivery_time['string_value'] = $item->created_at->format('Y-m-d');
+                    $custom_fields[] = $delivery_time;
+
+                    $teeth_count['id'] = 'teeth_count';
+                    $teeth_count['type'] = 'text';
+                    $teeth_count['string_value'] = $item->order_er->teeth_count;
+                    $custom_fields[] = $teeth_count;
+
+                    $teeth_count['id'] = 'field1';
+                    $teeth_count['type'] = 'text';
+                    $teeth_count['string_value'] = $item->order_er->teeth_count;
+                    $custom_fields[] = $teeth_count;
+
+                    $customer['custom_fields'] = $custom_fields;
+
+                    $customer['description'] = $item->order_er->description;
+
+                    $customer_list[] = $customer;
+                }
+            }
+
+
+            if(count($customer_list) > 0)
+            {
+                $api_push_data['customer_list'] = $customer_list;
+                $api_push_data_json = json_encode($api_push_data);
+
+                $push_url = "https://qw-openapi-tx.dustess.com/customer/v1/batchAddCustomer?accessToken=".$token;
+
+                $push_ch = curl_init();
+                curl_setopt($push_ch, CURLOPT_URL, $push_url);
+                curl_setopt($push_ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Accept: application/json"));
+                curl_setopt($push_ch, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_setopt($push_ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($push_ch, CURLOPT_POST, true); // post数据
+                curl_setopt($push_ch, CURLOPT_POSTFIELDS, $api_push_data_json); // post的变量
+                $push_result = curl_exec($push_ch);
+                if(curl_errno($push_ch))
+                {
+                    return response_fail([],'api推送请求失败！');
+                }
+                else
+                {
+                    $push_result_decode = json_decode($push_result);
+                    if($push_result_decode->success)
+                    {
+                    }
+                    else
+                    {
+                        return response_fail(['data'=>$push_result],'推送数据失败！');
+                    }
+                }
+                curl_close($push_ch);
+            }
+            else return response_fail(['count'=>count($customer_list)],'工单已推送过，本次未推送数据！');
+
+        }
+        else return response_fail([],'token不存在！');
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $delivered_update['is_api_pushed'] = 1;
+            $delivered_update['is_api_pusher_id'] = $me->id;
+            $delivered_update['is_api_pushed_at'] = time();
+            $bool = DK_Common__Delivery::withTrashed()->whereIn('id',$ids_array)
+                ->update($delivered_update);
+            if(!$bool) throw new Exception("DK_Common__Delivery--update--fail");
+            else
+            {
+                $record = new DK_Client__Delivery__Operation_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["operate_object"] = 91;
+                $record_data["operate_category"] = 111;
+                $record_data["operate_type"] = 1;
+                $record_data["column_name"] = "ids";
+
+                $record_data["title"] = $ids;
+                $record_data["content"] = $push_result;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+
+//            foreach($ids_array as $key => $id)
+//            {
+//                $item = DK_Common__Delivery::withTrashed()->find($id);
+//                if(!$item) return response_error([],"该【交付】不存在，刷新页面重试！");
+//
+//
+////                $before = $item->client_staff_id;
+//
+//                $item->is_api_pushed = 1;
+//                $bool = $item->save();
+//                if(!$bool) throw new Exception("item--update--fail");
+//                else
+//                {
+////                    $record = new DK_Client__Delivery__Operation_Record;
+////
+////                    $record_data["ip"] = Get_IP();
+////                    $record_data["record_object"] = 21;
+////                    $record_data["record_category"] = 11;
+////                    $record_data["record_type"] = 1;
+////                    $record_data["creator_id"] = $me->id;
+////                    $record_data["order_id"] = $id;
+////                    $record_data["operate_object"] = 91;
+////                    $record_data["operate_category"] = 99;
+////                    $record_data["operate_type"] = 1;
+////                    $record_data["column_name"] = "client_staff_id";
+////
+////                    $record_data["before"] = $before;
+////                    $record_data["after"] = $client_staff_id;
+////
+////                    $bool_1 = $record->fill($record_data)->save();
+////                    if(!$bool_1) throw new Exception("insert--record--fail");
+//                }
+//
+//            }
+
+
+            DB::commit();
+            return response_success(['count'=>count($customer_list)]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
 
 
 
@@ -2054,7 +2609,7 @@ class DK_Client__DeliveryRepository {
         array_unshift($cellData, $title_row);
 
 
-        $record = new DK_Client_Record;
+        $record = new DK_Client__Delivery__Operation_Record;
 
         $record_data["ip"] = Get_IP();
         $record_data["record_object"] = 31;
@@ -2115,446 +2670,6 @@ class DK_Client__DeliveryRepository {
 
 
 
-
-
-
-
-    // 【交付】批量-分配状态
-    public function operate_bulk_assign_status($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'ids.required' => 'ids.required.',
-            'assign_status.required' => 'assign_status.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'ids' => 'required',
-            'assign_status' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'bulk-assign-status') return response_error([],"参数[operate]有误！");
-        $ids = $post_data['ids'];
-        $ids_array = explode("-", $ids);
-
-        $this->get_me();
-        $me = $this->me;
-
-        // 判断用户操作权限
-        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
-//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-        // 判断操作参数是否合法
-        $assign_status = $post_data["assign_status"];
-//        if(!in_array($operate_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
-
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $delivered_para['assign_status'] = $assign_status;
-
-//            $bool = DK_Order::whereIn('id',$ids_array)->update($delivered_para);
-//            if(!$bool) throw new Exception("item--update--fail");
-//            else
-//            {
-//            }
-
-            foreach($ids_array as $key => $id)
-            {
-                $mine = DK_Common__Delivery::withTrashed()->find($id);
-                if(!$mine) throw new Exception("该【交付】不存在，刷新页面重试！");
-                if($mine->client_id != $me->client_id) throw new Exception("归属错误，刷新页面重试！");
-
-
-                $before = $mine->$assign_status;
-
-                $mine->assign_status = $assign_status;
-                $bool = $mine->save();
-                if(!$bool) throw new Exception("DK_Common__Delivery--update--fail");
-                else
-                {
-                    $record = new DK_Client_Record;
-
-                    $record_data["ip"] = Get_IP();
-                    $record_data["record_object"] = 21;
-                    $record_data["record_category"] = 11;
-                    $record_data["record_type"] = 1;
-                    $record_data["creator_id"] = $me->id;
-                    $record_data["order_id"] = $id;
-                    $record_data["operate_object"] = 91;
-                    $record_data["operate_category"] = 99;
-                    $record_data["operate_type"] = 1;
-                    $record_data["column_name"] = "assign_status";
-
-                    $record_data["before"] = $before;
-                    $record_data["after"] = $assign_status;
-
-                    $bool_1 = $record->fill($record_data)->save();
-                    if(!$bool_1) throw new Exception("DK_Client_Record--record--fail");
-                }
-
-            }
-
-
-            DB::commit();
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-    // 【交付】批量-分配
-    public function operate_bulk_assign_staff($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'ids.required' => 'ids.required.',
-            'staff_id.required' => 'staff_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'ids' => 'required',
-            'staff_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'bulk-assign-staff') return response_error([],"参数[operate]有误！");
-        $ids = $post_data['ids'];
-        $ids_array = explode("-", $ids);
-
-        $this->get_me();
-        $me = $this->me;
-
-        // 判断用户操作权限
-        if(!in_array($me->user_type,[0,1,9,11,84])) return response_error([],"你没有操作权限！");
-//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-        // 判断操作参数是否合法
-        $client_staff_id = $post_data["staff_id"];
-//        if(!in_array($operate_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
-
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $delivered_para['client_staff_id'] = $client_staff_id;
-
-//            $bool = DK_Order::whereIn('id',$ids_array)->update($delivered_para);
-//            if(!$bool) throw new Exception("item--update--fail");
-//            else
-//            {
-//            }
-
-            foreach($ids_array as $key => $id)
-            {
-                $mine = DK_Common__Delivery::withTrashed()->find($id);
-                if(!$mine) throw new Exception("该【交付】不存在，刷新页面重试！");
-                if($mine->client_id != $me->client_id) throw new Exception("归属错误，刷新页面重试！");
-
-                $before = $mine->client_staff_id;
-
-                $mine->client_staff_id = $client_staff_id;
-                $bool = $mine->save();
-                if(!$bool) throw new Exception("DK_Common__Delivery--update--fail");
-                else
-                {
-                    $record = new DK_Client_Record;
-
-                    $record_data["ip"] = Get_IP();
-                    $record_data["record_object"] = 21;
-                    $record_data["record_category"] = 11;
-                    $record_data["record_type"] = 1;
-                    $record_data["creator_id"] = $me->id;
-                    $record_data["order_id"] = $id;
-                    $record_data["operate_object"] = 91;
-                    $record_data["operate_category"] = 99;
-                    $record_data["operate_type"] = 1;
-                    $record_data["column_name"] = "client_staff_id";
-
-                    $record_data["before"] = $before;
-                    $record_data["after"] = $client_staff_id;
-
-                    $bool_1 = $record->fill($record_data)->save();
-                    if(!$bool_1) throw new Exception("insert--record--fail");
-                }
-
-            }
-
-
-            DB::commit();
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-    // 【交付】批量-API-推送
-    public function operate_bulk_api_push($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'ids.required' => 'ids.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'ids' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'bulk-api-push') return response_error([],"参数[operate]有误！");
-        $ids = $post_data['ids'];
-        $ids_array = explode("-", $ids);
-
-
-        $this->get_me();
-        $me = $this->me;
-
-        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
-//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-
-        $url = "https://qw-openapi-tx.dustess.com/auth/v1/access_token/token";
-
-        $curl_data['ClientID'] = env('API_SCRM_ClientID');
-        $curl_data['ClientSecret'] = env('API_SCRM_ClientSecret');
-        $curl_data = json_encode($curl_data);
-
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Accept: application/json"));
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true); // post数据
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $curl_data); // post的变量
-        $result = curl_exec($ch);
-        if(curl_errno($ch))
-        {
-            return response_fail([],'token请求失败');
-        }
-        else
-        {
-            $result = json_decode($result);
-            if($result->success)
-            {
-                $token = $result->data->accessToken;
-            }
-        }
-        curl_close($ch);
-
-
-        if(!empty($token))
-        {
-            $delivery_list = DK_Common__Delivery::withTrashed()
-                ->with('order_er')
-                ->whereIn('id',$ids_array)->get();
-//        dd($delivery_list->toArray());
-
-            $customer_list = [];
-            foreach($delivery_list as $key => $item)
-            {
-                if($item->is_api_pushed == 0)
-                {
-                    $customer = [];
-
-                    $customer['source'] = "2r4";
-
-                    $customer['pool'] = env('API_SCRM_Pool');
-                    $customer['remark'] = $item->order_er->client_name;
-                    $customer['prov_city'] = $item->order_er->location_city.'-'.$item->order_er->location_district;
-
-
-                    $mobile['type'] = "mobile";
-                    $mobile['display'] = "手机号";
-                    $mobile['tel'] = $item->order_er->client_phone;
-                    $customer['mobiles'][] = $mobile;
-
-                    if(!empty($item->order_er->wx_id))
-                    {
-                        $wx['type'] = "wx_id";
-                        $wx['display'] = "微信号";
-                        $wx['tel'] = $item->order_er->wx_id;
-                        $customer['mobiles'][] = $wx;
-                    }
-
-                    $customer['description'] = $item->order_er->description;
-
-                    // 自定义字段
-                    $custom_fields = [];
-
-                    $delivery_time['id'] = 'delivery_time';
-                    $delivery_time['type'] = 'text';
-                    $delivery_time['string_value'] = $item->created_at->format('Y-m-d');
-                    $custom_fields[] = $delivery_time;
-
-                    $teeth_count['id'] = 'teeth_count';
-                    $teeth_count['type'] = 'text';
-                    $teeth_count['string_value'] = $item->order_er->teeth_count;
-                    $custom_fields[] = $teeth_count;
-
-                    $teeth_count['id'] = 'field1';
-                    $teeth_count['type'] = 'text';
-                    $teeth_count['string_value'] = $item->order_er->teeth_count;
-                    $custom_fields[] = $teeth_count;
-
-                    $customer['custom_fields'] = $custom_fields;
-
-                    $customer['description'] = $item->order_er->description;
-
-                    $customer_list[] = $customer;
-                }
-            }
-
-
-            if(count($customer_list) > 0)
-            {
-                $api_push_data['customer_list'] = $customer_list;
-                $api_push_data_json = json_encode($api_push_data);
-
-                $push_url = "https://qw-openapi-tx.dustess.com/customer/v1/batchAddCustomer?accessToken=".$token;
-
-                $push_ch = curl_init();
-                curl_setopt($push_ch, CURLOPT_URL, $push_url);
-                curl_setopt($push_ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Accept: application/json"));
-                curl_setopt($push_ch, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_setopt($push_ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($push_ch, CURLOPT_POST, true); // post数据
-                curl_setopt($push_ch, CURLOPT_POSTFIELDS, $api_push_data_json); // post的变量
-                $push_result = curl_exec($push_ch);
-                if(curl_errno($push_ch))
-                {
-                    return response_fail([],'api推送请求失败！');
-                }
-                else
-                {
-                    $push_result_decode = json_decode($push_result);
-                    if($push_result_decode->success)
-                    {
-                    }
-                    else
-                    {
-                        return response_fail(['data'=>$push_result],'推送数据失败！');
-                    }
-                }
-                curl_close($push_ch);
-            }
-            else return response_fail(['count'=>count($customer_list)],'工单已推送过，本次未推送数据！');
-
-        }
-        else return response_fail([],'token不存在！');
-
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $delivered_update['is_api_pushed'] = 1;
-            $delivered_update['is_api_pusher_id'] = $me->id;
-            $delivered_update['is_api_pushed_at'] = time();
-            $bool = DK_Common__Delivery::withTrashed()->whereIn('id',$ids_array)
-                ->update($delivered_update);
-            if(!$bool) throw new Exception("DK_Common__Delivery--update--fail");
-            else
-            {
-                $record = new DK_Client_Record;
-
-                $record_data["ip"] = Get_IP();
-                $record_data["record_object"] = 21;
-                $record_data["record_category"] = 11;
-                $record_data["record_type"] = 1;
-                $record_data["creator_id"] = $me->id;
-                $record_data["operate_object"] = 91;
-                $record_data["operate_category"] = 111;
-                $record_data["operate_type"] = 1;
-                $record_data["column_name"] = "ids";
-
-                $record_data["title"] = $ids;
-                $record_data["content"] = $push_result;
-
-                $bool_1 = $record->fill($record_data)->save();
-                if(!$bool_1) throw new Exception("insert--record--fail");
-            }
-
-//            foreach($ids_array as $key => $id)
-//            {
-//                $item = DK_Common__Delivery::withTrashed()->find($id);
-//                if(!$item) return response_error([],"该【交付】不存在，刷新页面重试！");
-//
-//
-////                $before = $item->client_staff_id;
-//
-//                $item->is_api_pushed = 1;
-//                $bool = $item->save();
-//                if(!$bool) throw new Exception("item--update--fail");
-//                else
-//                {
-////                    $record = new DK_Client_Record;
-////
-////                    $record_data["ip"] = Get_IP();
-////                    $record_data["record_object"] = 21;
-////                    $record_data["record_category"] = 11;
-////                    $record_data["record_type"] = 1;
-////                    $record_data["creator_id"] = $me->id;
-////                    $record_data["order_id"] = $id;
-////                    $record_data["operate_object"] = 91;
-////                    $record_data["operate_category"] = 99;
-////                    $record_data["operate_type"] = 1;
-////                    $record_data["column_name"] = "client_staff_id";
-////
-////                    $record_data["before"] = $before;
-////                    $record_data["after"] = $client_staff_id;
-////
-////                    $bool_1 = $record->fill($record_data)->save();
-////                    if(!$bool_1) throw new Exception("insert--record--fail");
-//                }
-//
-//            }
-
-
-            DB::commit();
-            return response_success(['count'=>count($customer_list)]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
 
 
 
@@ -2816,7 +2931,7 @@ class DK_Client__DeliveryRepository {
 //                if(!$bool) throw new Exception("DK_Common__Delivery--update--fail");
 //                else
 //                {
-//                    $record = new DK_Client_Record;
+//                    $record = new DK_Client__Delivery__Operation_Record;
 //
 //                    $record_data["ip"] = Get_IP();
 //                    $record_data["record_object"] = 21;
@@ -2833,7 +2948,7 @@ class DK_Client__DeliveryRepository {
 //                    $record_data["after"] = $client_staff_id;
 //
 //                    $bool_1 = $record->fill($record_data)->save();
-//                    if(!$bool_1) throw new Exception("DK_Client_Record--insert--fail");
+//                    if(!$bool_1) throw new Exception("DK_Client__Delivery__Operation_Record--insert--fail");
 //                }
 //            }
 
@@ -3402,7 +3517,7 @@ class DK_Client__DeliveryRepository {
         array_unshift($cellData, $title_row);
 
 
-        $record = new DK_Client_Record;
+        $record = new DK_Client__Delivery__Operation_Record;
 
         $record_data["ip"] = Get_IP();
         $record_data["record_object"] = 31;
@@ -3582,7 +3697,7 @@ class DK_Client__DeliveryRepository {
         array_unshift($cellData, $title_row);
 
 
-        $record = new DK_Client_Record;
+        $record = new DK_Client__Delivery__Operation_Record;
 
         $record_data["ip"] = Get_IP();
         $record_data["record_object"] = 31;
@@ -3761,7 +3876,7 @@ class DK_Client__DeliveryRepository {
         array_unshift($cellData, $title_row);
 
 
-        $record = new DK_Client_Record;
+        $record = new DK_Client__Delivery__Operation_Record;
 
         $record_data["ip"] = Get_IP();
         $record_data["record_object"] = 31;

@@ -21,9 +21,9 @@
 
                    data-datatable-type="create"
                    data-datatable-unique="y"
-                   data-datatable-id="datatable-department-list"
-                   data-datatable-target="department-list"
-                   data-datatable-clone-object="department-list-clone"
+                   data-datatable-id="datatable-team-list"
+                   data-datatable-target="team-list"
+                   data-datatable-clone-object="team-list-clone"
                 >
                     <i class="fa fa-sitemap text-white"></i>
                     <span>团队列表</span>

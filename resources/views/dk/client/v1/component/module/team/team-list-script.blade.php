@@ -86,6 +86,7 @@
                         $modal.find('input[name="operate[id]"]').val($that.attr('data-id'));
 
                         $modal.find('input[name="name"]').val($response.data.name);
+                        $modal.find('textarea[name="description"]').val($response.data.description);
 
                         // 团队种类
                         $modal.find('input[name="team_category"]').prop('checked', false);
@@ -99,11 +100,6 @@
                         $modal.find('.radio-team-type').hide();
                         $modal.find('input[name="team_type"][value="'+$response.data.team_type+'"]').parents('.radio-team-type').show();
 
-                        // 部门
-                        if($response.data.department_er)
-                        {
-                            $modal.find('select[name="department_id"]').append(new Option($response.data.department_er.name, $response.data.department_id, true, true)).trigger('change');
-                        }
                         if($response.data.leader)
                         {
                             // $modal.find('#select2-leader option[value="'+$response.data.leader_id+'"]').prop('selected', true);

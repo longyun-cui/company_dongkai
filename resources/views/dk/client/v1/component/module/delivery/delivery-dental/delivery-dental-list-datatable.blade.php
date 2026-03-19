@@ -199,7 +199,7 @@
                     "width": "120px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(row.is_completed != 1)
                         {
                             $(nTd).addClass('client_staff');
                             $(nTd).attr('data-id',row.id).attr('data-name','分派员工');
@@ -215,7 +215,7 @@
                         }
                         else
                         {
-                            return '<a href="javascript:void(0);">'+row.client_staff_er.username+'</a>';
+                            return '<a href="javascript:void(0);">'+row.client_staff_er.name+'</a>';
                         }
                     }
                 },

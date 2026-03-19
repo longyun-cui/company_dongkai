@@ -1,9 +1,9 @@
 <?php
-namespace App\Repositories\DK\DK_Staff;
+namespace App\Repositories\DK\DK_Client;
 
+use App\Models\DK\DK_Client\DK_Client__Team;
 use App\Models\DK\DK_Client\DK_Client__Staff;
-use App\Models\DK\DK_Common\DK_Common__Client;
-use App\Models\DK\DK_Common\DK_Common__Record__by_Operation;
+use App\Models\DK\DK_Client\DK_Client__Record__by_Operation;
 
 use App\Repositories\Common\CommonRepository;
 
@@ -11,7 +11,7 @@ use Response, Auth, Validator, DB, Exception, Cache, Blade, Carbon;
 use QrCode, Excel;
 
 
-class DK_Staff__ClientRepository {
+class DK_Client__TeamRepository {
 
     private $env;
     private $auth_check;
@@ -37,10 +37,11 @@ class DK_Staff__ClientRepository {
     // 登录情况
     public function get_me()
     {
-        if(Auth::guard("dk_staff_user")->check())
+        if(Auth::guard("dk_client__user")->check())
         {
             $this->auth_check = 1;
-            $this->me = Auth::guard("dk_staff_user")->user();
+            $this->me = Auth::guard("dk_client__user")->user();
+            $this->me->load('client_er');
             view()->share('me',$this->me);
         }
         else $this->auth_check = 0;
@@ -56,21 +57,47 @@ class DK_Staff__ClientRepository {
 
 
     /*
-     * 客户-管理 Client
+     * 团队-管理 Department
      */
-    // 【客户】返回-列表-数据
-    public function o1__client__list__datatable_query($post_data)
+    // 【团队】返回-列表-数据
+    public function o1__team__list__datatable_query($post_data)
     {
         $this->get_me();
         $me = $this->me;
 
-        $query = DK_Common__Client::select('*')
+
+        $query = DK_Client__Team::select(['id','item_status','name','team_category','team_type','leader_id','description','creator_id','created_at','updated_at','deleted_at'])
+            ->withTrashed()
             ->with([
-                'creator'=>function($query) { $query->select(['id','username']); }
+                'creator'=>function($query) { $query->select(['id','name']); },
+                'superior_team_er'=>function($query) { $query->select(['id','name']); },
+                'leader'=>function($query) { $query->select(['id','name']); }
             ])
-            ->whereIn('client_category',[1,11,31])
-            ->whereIn('client_type',[0,1,9,11,19,21,22,41,61])
-            ->where('active',1);
+            ->where('active',1)
+            ->where('client_id',$me->client_id);
+
+        if(in_array($me->staff_category,[11,21,31,41,51,61,71,81]))
+        {
+            if($me->staff_position == 31)
+            {
+            }
+            else if($me->staff_position == 41)
+            {
+                $query->whereIn('team_type',[21,31,41]);
+                $query->where('superior_team_id',$me->team_id);
+            }
+            else if($me->staff_position == 51)
+            {
+                $query->whereIn('team_type',[31,41]);
+                $query->where('superior_team_sub_id',$me->team_sub_id);
+            }
+            else if($me->staff_position == 61)
+            {
+                $query->whereIn('team_type',[41]);
+                $query->where('superior_team_group_id',$me->team_group_id);
+            }
+        }
+
 
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
@@ -78,7 +105,6 @@ class DK_Staff__ClientRepository {
         if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
         if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
         if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
-
 
         // 状态 [|]
         if(!empty($post_data['item_status']))
@@ -94,14 +120,31 @@ class DK_Staff__ClientRepository {
             $query->where('item_status', 1);
         }
 
+        // 团队种类 [客服|质检|复核|运营]
+        if(!empty($post_data['team_category']))
+        {
+            $team_category_int = intval($post_data['team_category']);
+            if(!in_array($team_category_int,[-1,0]))
+            {
+                $query->where('team_category', $team_category_int);
+            }
+        }
 
-
+        // 团队类型 [团队|分部|小组|小队]
+        if(!empty($post_data['team_type']))
+        {
+            $team_type_int = intval($post_data['team_type']);
+            if(!in_array($team_type_int,[-1,0]))
+            {
+                $query->where('team_type', $team_type_int);
+            }
+        }
 
         $total = $query->count();
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 10;
 
         if(isset($post_data['order']))
         {
@@ -116,19 +159,34 @@ class DK_Staff__ClientRepository {
         else $query->orderBy("id", "desc");
 
         if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
-
-        foreach ($list as $k => $v)
-        {
-            $list[$k]->encode_id = encode($v->id);
-        }
+        else $list = $query->skip($skip)->take($limit)->get();
 //        dd($list->toArray());
+
+        foreach($list as $k => $v)
+        {
+            if($v->department_type == 11)
+            {
+                $v->district_id = $v->id;
+            }
+            else if($v->department_type == 21)
+            {
+                $v->district_id = $v->superior_department_id;
+            }
+
+            $v->district_group_id = $v->district_id.'.'.$v->id;
+        }
+//        $list = $list->sortBy(['rank'=>'asc'])->values();
+//        $list = $list->sortBy(function ($item, $key) {
+//            return $item['district_group_id'];
+//        })->values();
+//        dd($list->toArray());
+
         return datatable_response($list, $draw, $total);
     }
 
 
-    // 【客户】获取 GET
-    public function o1__client__item_get($post_data)
+    // 【团队】获取 GET
+    public function o1__team__item_get($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -152,31 +210,32 @@ class DK_Staff__ClientRepository {
         $item_id = $post_data["item_id"];
         if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数[ID]有误！");
 
-        $item = DK_Common__Client::withTrashed()
+        $item = DK_Client__Team::withTrashed()
             ->with([
-//                'client_er'=>function($query) { $query->select('id','name'); },
-//                'channel_er'=>function($query) { $query->select('id','name'); },
-//                'business_er'=>function($query) { $query->select('id','name'); }
+                'leader'=>function($query) { $query->select('id','name'); },
+                'superior_team_er'=>function($query) { $query->select(['id','name']); }
             ])
             ->find($item_id);
         if(!$item) return response_error([],"不存在警告，请刷新页面重试！");
 
         return response_success($item,"");
     }
-    // 【客户】保存 SAVE
-    public function o1__client__item_save($post_data)
+    // 【团队】保存 SAVE
+    public function o1__team__item_save($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
-            'client_category.required' => '请选择项目种类！',
-            'name.required' => '请输入项目名称！',
-//            'name.unique' => '该项目已存在！',
+            'name.required' => '请输入团队名称！',
+//            'name.unique' => '该团队号已存在！',
+//            'department_id.required' => '请先选择部门！',
+//            'department_id.numeric' => '请先选择部门！',
+//            'department_id.min' => '请先选择部门！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
-            'client_category' => 'required',
             'name' => 'required',
-//            'name' => 'required|unique:dk_project,name',
+//            'name' => 'required|unique:DK_Client__Team,name',
+//            'department_id' => 'required|numeric|min:1',
         ], $messages);
         if ($v->fails())
         {
@@ -189,28 +248,142 @@ class DK_Staff__ClientRepository {
         $operate_type = $operate["type"];
         $operate_id = $operate['id'];
 
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->staff_type,[0,1,11,19,41])) return response_error([],"你没有操作权限！");
+
+
+        if($operate_type == 'create') // 添加 ( $id==0，添加一个新用户 )
+        {
+            $is_exist = DK_Client__Team::select('id')
+                ->where('client_id',$me->client_id)
+                ->where('name',$post_data["name"])
+                ->count();
+            if($is_exist) return response_error([],"该【团队】已存在，请勿重复添加！");
+
+            $mine = new DK_Client__Team;
+            $post_data["active"] = 1;
+            $post_data["client_id"] = $me->client_id;
+            $post_data["creator_id"] = $me->id;
+        }
+        else if($operate_type == 'edit') // 编辑
+        {
+            $mine = DK_Client__Team::find($operate_id);
+            if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
+        }
+        else return response_error([],"参数有误！");
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if(!empty($post_data['custom']))
+            {
+                $post_data['custom'] = json_encode($post_data['custom']);
+            }
+
+            $mine_data = $post_data;
+            unset($mine_data['operate']);
+
+
+
+            if(in_array($me->staff_position,[0,1,9,11]))
+            {
+            }
+            if($me->staff_position == 31)
+            {
+            }
+            if($me->staff_position == 41)
+            {
+                $mine_data['superior_team_id'] = $me->team_id;
+            }
+            if($me->staff_position == 61)
+            {
+                $mine_data['superior_team_id'] = $me->team_id;
+                $mine_data['superior_team_group_id'] = $me->team_group_id;
+            }
+
+            if($mine_data['team_type'] == 11)
+            {
+                unset($mine_data['superior_team_id']);  // 如果层级是团队，没有上级团队
+            }
+
+
+//            if(in_array($me->staff_type,[41,61,71,81]))
+//            {
+//                $mine_data['superior_department_id'] = $me->department_district_id;
+//            }
+
+            $bool = $mine->fill($mine_data)->save();
+            if($bool)
+            {
+            }
+            else throw new Exception("DK_Client__Team--insert--fail");
+
+            DB::commit();
+            return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【团队】保存 SAVE
+    public function o1__team__item_save__by__super($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+//            'name.required' => '请输入团队名称！',
+//            'name.unique' => '该团队号已存在！',
+//            'department_id.required' => '请先选择部门！',
+//            'department_id.numeric' => '请先选择部门！',
+//            'department_id.min' => '请先选择部门！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+//            'name' => 'required',
+//            'name' => 'required|unique:DK_Client__Team,name',
+//            'department_id' => 'required|numeric|min:1',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+
+        $operate = $post_data["operate"];
+        $operate_type = $operate["type"];
+        $operate_id = $operate['id'];
 
         $this->get_me();
         $me = $this->me;
 
         // 判断用户操作权限
-        if(!in_array($me->staff_type,[0,1,11])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->staff_category,[0])) return response_error([],"你没有操作权限！");
 
-        if($operate_type == 'create')
+
+        if($operate_type == 'create') // 添加 ( $id==0，添加一个新用户 )
         {
-            // 添加 ( $id==0，添加一个项目 )
-            $is_exist = DK_Common__Client::select('id')->where('name',$post_data["name"])->count();
-            if($is_exist) return response_error([],"该【客户名称】已存在，请勿重复添加！");
+            $is_exist = DK_Client__Team::select('id')->where('name',$post_data["name"])->count();
+            if($is_exist) return response_error([],"该【团队】已存在，请勿重复添加！");
 
-            $mine = new DK_Common__Client;
+            $mine = new DK_Client__Team;
             $post_data["active"] = 1;
             $post_data["creator_id"] = $me->id;
         }
-        else if($operate_type == 'edit')
+        else if($operate_type == 'edit') // 编辑
         {
-            // 编辑
-            $mine = DK_Common__Client::find($operate_id);
-            if(!$mine) return response_error([],"该【客户】不存在，刷新页面重试！");
+            $mine = DK_Client__Team::find($operate_id);
+            if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
         }
         else return response_error([],"参数有误！");
 
@@ -231,30 +404,8 @@ class DK_Staff__ClientRepository {
             $bool = $mine->fill($mine_data)->save();
             if($bool)
             {
-                if($operate_type == 'create')
-                {
-                    $client_staff_er = new DK_Client__Staff;
-
-                    $client_staff__insert["active"] = 1;
-                    $client_staff__insert["item_status"] = 1;
-                    $client_staff__insert["client_id"] = $mine->id;
-                    $client_staff__insert["password"] = password_encode("12345678");
-                    $client_staff__insert["staff_position"] = 1;
-                    $client_staff__insert["name"] = 'admin';
-                    $client_staff__insert["creator_id"] = 0;
-
-                    $bool__client_staff = $client_staff_er->fill($client_staff__insert)->save();
-                    if($bool__client_staff)
-                    {
-
-                        $mine->client_admin_id = $client_staff_er->id;
-                        $bool_1 = $mine->save();
-                        if(!$bool_1) throw new Exception("DK_Common__Client--update--fail");
-                    }
-                    else throw new Exception("DK_Client__Staff--insert--fail");
-                }
             }
-            else throw new Exception("DK_Common__Client--insert--fail");
+            else throw new Exception("DK_Client__Team--update--fail");
 
             DB::commit();
             return response_success(['id'=>$mine->id]);
@@ -269,209 +420,10 @@ class DK_Staff__ClientRepository {
         }
 
     }
-    // 【客户】保存 SAVE
-    public function o1__client__item_save_1($post_data)
-    {
-//        dd($post_data);
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'client_category.required' => '请选择客户类型！',
-            'name.required' => '请输入客户名称！',
-//            'name.unique' => '该客户已存在！',
-            'client_admin_name.required' => '请输入管理员名称！',
-            'client_admin_mobile.required' => '请输入管理员登录电话！',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'client_category' => 'required',
-            'name' => 'required',
-//            'name' => 'required|unique:dk_client,username',
-            'client_admin_name' => 'required',
-            'client_admin_mobile' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
 
 
-        $operate = $post_data["operate"];
-        $operate_type = $operate["type"];
-        $operate_id = $operate['id'];
-
-
-        $this->get_me();
-        $me = $this->me;
-
-        // 判断用户操作权限
-        if(!in_array($me->staff_type,[0,1,11,19,61])) return response_error([],"你没有操作权限！");
-
-        $channel_id = $post_data["channel_id"];
-        if($channel_id > 0)
-        {
-            $channel = DK_Company::find($channel_id);
-            if($channel)
-            {
-                $client_data["client_id"] = $channel->superior_client_id;
-                $client_data["channel_id"] = $channel_id;
-
-                $business_id = $post_data["business_id"];
-                if($business_id > 0)
-                {
-                    $business = DK_Company::find($business_id);
-                    if($business)
-                    {
-                        if($business->superior_client_id == $channel_id)
-                        {
-                            $client_data["business_id"] = $business_id;
-                        }
-                        else return response_error([],"选择的【商务】不属于选择的【渠道】，请重新选择！");
-                    }
-                    else return response_error([],"选择的【商务】不存在，刷新页面重试！");
-                }
-                else
-                {
-                    $client_data["business_id"] = 0;
-                }
-            }
-            else return response_error([],"选择的【渠道】不存在，刷新页面重试！");
-        }
-
-
-        if($operate_type == 'create') // 添加 ( $id==0，添加一个新用户 )
-        {
-            $is_name_exist = DK_Common__Client::select('id')->where('name',$post_data["name"])->count();
-            if($is_name_exist) return response_error([],"该【客户名】已存在，请勿重复添加！");
-
-//            $is_mobile_exist = DK_Common__Client::select('id')->where('mobile',$post_data["client_admin_mobile"])->count();
-//            if($is_mobile_exist) return response_error([],"该电话已存在，请勿重复添加！");
-
-//            $is_mobile_exist = WL_Client_Staff::select('id')->where('mobile',$post_data["client_admin_mobile"])->count();
-//            if($is_mobile_exist) return response_error([],"该电话已存在，请勿重复添加！");
-
-            $client = new DK_Common__Client;
-            $client_data["user_category"] = $post_data["user_category"];
-            $client_staff_data["user_type"] = 1;
-            $client_data["active"] = 1;
-            $client_data["creator_id"] = $me->id;
-            $client_data["name"] = $post_data["name"];
-            $client_data["mobile"] = $post_data["client_admin_mobile"];
-            $client_data["client_admin_name"] = $post_data["client_admin_name"];
-            $client_data["client_admin_mobile"] = $post_data["client_admin_mobile"];
-            $client_data["is_ip"] = $post_data["is_ip"];
-            $client_data["ip_whitelist"] = $post_data["ip_whitelist"];
-            $client_data["password"] = password_encode("12345678");
-
-//            $client_staff = new WL_Client_Staff;
-//            $client_staff_data["user_category"] = 11;
-//            $client_staff_data["user_type"] = 11;
-//            $client_staff_data["active"] = 1;
-//            $client_staff_data["name"] = $post_data["client_admin_name"];
-//            $client_staff_data["mobile"] = $post_data["client_admin_mobile"];
-//            $client_staff_data["creator_id"] = 0;
-//            $client_staff_data["password"] = password_encode("12345678");
-        }
-        else if($operate_type == 'edit') // 编辑
-        {
-            // 该客户是否存在
-            $client = DK_Common__Client::find($operate_id);
-            if(!$client) return response_error([],"该客户不存在，刷新页面重试！");
-
-            $client_data["name"] = $post_data["name"];
-            $client_data["mobile"] = $post_data["client_admin_mobile"];
-            $client_data["client_admin_name"] = $post_data["client_admin_name"];
-            $client_data["client_admin_mobile"] = $post_data["client_admin_mobile"];
-            $client_data["is_ip"] = $post_data["is_ip"];
-            $client_data["ip_whitelist"] = $post_data["ip_whitelist"];
-
-            // 客户名是否存在
-            $is_name_exist = DK_Common__Client::select('id')->where('id','<>',$operate_id)->where('name',$post_data["name"])->count();
-            if($is_name_exist) return response_error([],"该客户名已存在，不能修改成此客户名！");
-
-            // 客户管理员是否存在
-            $client_staff = WL_Client_Staff::where('id', $client->client_admin_id)->first();
-            if($client_staff)
-            {
-                // 客户管理员存在
-
-                // 判断电话是否重复
-                if($post_data["client_admin_mobile"] != $client_staff->mobile)
-                {
-                    $is_mobile_exist = WL_Client_Staff::select('id')->where('id','<>',$client->client_admin_id)->where('mobile',$post_data["client_admin_mobile"])->count();
-                    if($is_mobile_exist) return response_error([],"该电话已存在，不能修改成此电话！");
-
-                    $client_staff_data["mobile"] = $post_data["client_admin_mobile"];
-                }
-                $client_staff_data["name"] = $post_data["client_admin_name"];
-            }
-            else
-            {
-                // 客户管理员不存在
-
-//                $client_staff = new WL_Client_Staff;
-//                $client_staff_data["user_category"] = 11;
-//                $client_staff_data["user_type"] = 11;
-//                $client_staff_data["active"] = 1;
-//                $client_staff_data["client_id"] = $client->id;
-//                $client_staff_data["name"] = $post_data["client_admin_name"];
-//                $client_staff_data["mobile"] = $post_data["client_admin_mobile"];
-//                $client_staff_data["creator_id"] = 0;
-//                $client_staff_data["password"] = password_encode("12345678");
-            }
-
-        }
-        else return response_error([],"参数有误！");
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            if(!empty($post_data['custom']))
-            {
-                $post_data['custom'] = json_encode($post_data['custom']);
-            }
-
-
-            $bool = $client->fill($client_data)->save();
-            if($bool)
-            {
-                if($operate_type == 'create')
-                {
-                    $client_staff_data["client_id"] = $client->id;
-                }
-
-                $bool_1 = $client_staff->fill($client_staff_data)->save();
-                if($bool_1)
-                {
-                    if($operate_type == 'create')
-                    {
-                        $client->client_admin_id = $client_staff->id;
-                        $bool = $client->save();
-                        if(!$bool) throw new Exception("update--client--fail");
-                    }
-                }
-                else throw new Exception("insert--client-staff--fail");
-            }
-            else throw new Exception("insert--client--fail");
-
-            DB::commit();
-            return response_success(['id'=>$client->id]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-
-
-    // 【客户】删除
-    public function o1__client__item_delete($post_data)
+    // 【团队】删除
+    public function o1__team__item_delete($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -489,7 +441,7 @@ class DK_Staff__ClientRepository {
 
 
         $operate = $post_data["operate"];
-        if($operate != 'client--item-delete') return response_error([],"参数【operate】有误！");
+        if($operate != 'team--item-delete') return response_error([],"参数【operate】有误！");
         $item_id = $post_data["item_id"];
         if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
 
@@ -500,22 +452,22 @@ class DK_Staff__ClientRepository {
         if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
 
         // 判断对象是否合法
-        $mine = DK_Common__Client::withTrashed()->find($item_id);
-        if(!$mine) return response_error([],"该【客户】不存在，刷新页面重试！");
+        $mine = DK_Client__Team::withTrashed()->find($item_id);
+        if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
 
 
         // 记录
         $operation_record_data = [];
 
         $record_data["operate_object"] = 'staff';
-        $record_data["operate_module"] = 'client';
+        $record_data["operate_module"] = 'team';
         $record_data["operate_category"] = 1;
         $record_data["operate_type"] = 11;
         $record_data["item_id"] = $item_id;
-        $record_data["client_id"] = $item_id;
+        $record_data["team_id"] = $item_id;
         $record_data["creator_id"] = $me->id;
-        $record_data["creator_company_id"] = $me->company_id;
-        $record_data["creator_department_id"] = $me->department_id;
+//        $record_data["creator_company_id"] = $me->company_id;
+//        $record_data["creator_department_id"] = $me->department_id;
         $record_data["creator_team_id"] = $me->team_id;
 
         $operation = [];
@@ -535,12 +487,12 @@ class DK_Staff__ClientRepository {
         {
             $mine->timestamps = false;
             $bool = $mine->delete();  // 普通删除
-            if(!$bool) throw new Exception("DK_Common__Client--delete--fail");
+            if(!$bool) throw new Exception("DK_Client__Team--delete--fail");
             else
             {
-                $staff_operation_record = new DK_Common__Record__by_Operation;
+                $staff_operation_record = new DK_Client__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Client__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -556,8 +508,8 @@ class DK_Staff__ClientRepository {
         }
 
     }
-    // 【客户】恢复
-    public function o1__client__item_restore($post_data)
+    // 【团队】恢复
+    public function o1__team__item_restore($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -574,7 +526,7 @@ class DK_Staff__ClientRepository {
         }
 
         $operate = $post_data["operate"];
-        if($operate != 'client--item-restore') return response_error([],"参数【operate】有误！");
+        if($operate != 'team--item-restore') return response_error([],"参数【operate】有误！");
         $item_id = $post_data["item_id"];
         if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
 
@@ -585,22 +537,22 @@ class DK_Staff__ClientRepository {
         if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"你没有操作权限！");
 
         // 判断对象是否合法
-        $mine = DK_Common__Client::withTrashed()->find($item_id);
-        if(!$mine) return response_error([],"该【客户】不存在，刷新页面重试！");
+        $mine = DK_Client__Team::withTrashed()->find($item_id);
+        if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
 
 
         // 记录
         $operation_record_data = [];
 
         $record_data["operate_object"] = 'staff';
-        $record_data["operate_module"] = 'client';
+        $record_data["operate_module"] = 'team';
         $record_data["operate_category"] = 1;
         $record_data["operate_type"] = 12;
         $record_data["item_id"] = $item_id;
-        $record_data["client_id"] = $item_id;
+        $record_data["team_id"] = $item_id;
         $record_data["creator_id"] = $me->id;
-        $record_data["creator_company_id"] = $me->company_id;
-        $record_data["creator_department_id"] = $me->department_id;
+//        $record_data["creator_company_id"] = $me->company_id;
+//        $record_data["creator_department_id"] = $me->department_id;
         $record_data["creator_team_id"] = $me->team_id;
 
         $operation = [];
@@ -620,12 +572,12 @@ class DK_Staff__ClientRepository {
         {
             $mine->timestamps = false;
             $bool = $mine->restore();
-            if(!$bool) throw new Exception("DK_Common__Client--restore--fail");
+            if(!$bool) throw new Exception("DK_Client__Team--restore--fail");
             else
             {
-                $staff_operation_record = new DK_Common__Record__by_Operation;
+                $staff_operation_record = new DK_Client__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Client__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -641,8 +593,8 @@ class DK_Staff__ClientRepository {
         }
 
     }
-    // 【客户】彻底删除
-    public function o1__client__item_delete_permanently($post_data)
+    // 【团队】彻底删除
+    public function o1__team__item_delete_permanently($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -659,7 +611,7 @@ class DK_Staff__ClientRepository {
         }
 
         $operate = $post_data["operate"];
-        if($operate != 'client--item-delete-permanently') return response_error([],"参数【operate】有误！");
+        if($operate != 'team--item-delete-permanently') return response_error([],"参数【operate】有误！");
         $item_id = $post_data["item_id"];
         if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
 
@@ -670,22 +622,22 @@ class DK_Staff__ClientRepository {
         if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"你没有操作权限！");
 
         // 判断对象是否合法
-        $mine = DK_Common__Client::withTrashed()->find($item_id);
-        if(!$mine) return response_error([],"该【客户】不存在，刷新页面重试！");
+        $mine = DK_Client__Team::withTrashed()->find($item_id);
+        if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
 
 
         // 记录
         $operation_record_data = [];
 
         $record_data["operate_object"] = 'staff';
-        $record_data["operate_module"] = 'client';
+        $record_data["operate_module"] = 'team';
         $record_data["operate_category"] = 1;
         $record_data["operate_type"] = 13;
         $record_data["item_id"] = $item_id;
-        $record_data["client_id"] = $item_id;
+        $record_data["team_id"] = $item_id;
         $record_data["creator_id"] = $me->id;
-        $record_data["creator_company_id"] = $me->company_id;
-        $record_data["creator_department_id"] = $me->department_id;
+//        $record_data["creator_company_id"] = $me->company_id;
+//        $record_data["creator_department_id"] = $me->department_id;
         $record_data["creator_team_id"] = $me->team_id;
 
         $operation = [];
@@ -705,12 +657,12 @@ class DK_Staff__ClientRepository {
         {
             $mine_copy = $mine;
             $bool = $mine->forceDelete();
-            if(!$bool) throw new Exception("DK_Common__Client--delete--fail");
+            if(!$bool) throw new Exception("DK_Client__Team--delete--fail");
             else
             {
-                $staff_operation_record = new DK_Common__Record__by_Operation;
+                $staff_operation_record = new DK_Client__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Client__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -728,8 +680,8 @@ class DK_Staff__ClientRepository {
     }
 
 
-    // 【客户】启用
-    public function o1__client__item_enable($post_data)
+    // 【团队】管理员-启用
+    public function o1__team__item_enable($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -747,7 +699,7 @@ class DK_Staff__ClientRepository {
 
 
         $operate = $post_data["operate"];
-        if($operate != 'client--item-enable') return response_error([],"参数【operate】有误！");
+        if($operate != 'team--item-enable') return response_error([],"参数【operate】有误！");
         $item_id = $post_data["item_id"];
         if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
 
@@ -758,28 +710,27 @@ class DK_Staff__ClientRepository {
         if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
 
         // 判断对象是否合法
-        $mine = DK_Common__Client::find($item_id);
-        if(!$mine) return response_error([],"该【客户】不存在，刷新页面重试！");
-        if($mine->client_id != $me->client_id) return response_error([],"归属错误，刷新页面重试！");
+        $mine = DK_Client__Team::find($item_id);
+        if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
 
 
         // 记录
         $operation_record_data = [];
 
         $record_data["operate_object"] = 'staff';
-        $record_data["operate_module"] = 'client';
+        $record_data["operate_module"] = 'team';
         $record_data["operate_category"] = 1;
         $record_data["operate_type"] = 21;
         $record_data["item_id"] = $item_id;
-        $record_data["client_id"] = $item_id;
+        $record_data["team_id"] = $item_id;
         $record_data["creator_id"] = $me->id;
-        $record_data["creator_company_id"] = $me->company_id;
-        $record_data["creator_department_id"] = $me->department_id;
+//        $record_data["creator_company_id"] = $me->company_id;
+//        $record_data["creator_department_id"] = $me->department_id;
         $record_data["creator_team_id"] = $me->team_id;
 
         $operation = [];
         $operation['operation'] = $operate;
-        $operation['field'] = 'item_status';
+        $operation['field'] = 'deleted_at';
         $operation['title'] = '操作';
         $operation['before'] = '';
         $operation['after'] = '启用';
@@ -795,12 +746,21 @@ class DK_Staff__ClientRepository {
             $mine->item_status = 1;
             $mine->timestamps = false;
             $bool = $mine->save();
-            if(!$bool) throw new Exception("DK_Common__Client--update--fail");
+            if(!$bool) throw new Exception("DK_Client__Team--update--fail");
             else
             {
-                $staff_operation_record = new DK_Common__Record__by_Operation;
+                if($mine->team_type == 11)
+                {
+                    $bool_staff = DK_Client__Staff::where('team_id', $mine->id)->update(['owner_status__for__team' => 1]);
+                }
+                else if($mine->team_type == 31)
+                {
+                    $bool_staff = DK_Client__Staff::where('team_id', $mine->id)->update(['owner_status__for__team_group' => 1]);
+                }
+
+                $staff_operation_record = new DK_Client__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Client__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -816,8 +776,8 @@ class DK_Staff__ClientRepository {
         }
 
     }
-    // 【客户】禁用
-    public function o1__client__item_disable($post_data)
+    // 【团队】管理员-禁用
+    public function o1__team__item_disable($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -835,7 +795,7 @@ class DK_Staff__ClientRepository {
 
 
         $operate = $post_data["operate"];
-        if($operate != 'client--item-disable') return response_error([],"参数【operate】有误！");
+        if($operate != 'team--item-disable') return response_error([],"参数【operate】有误！");
         $item_id = $post_data["item_id"];
         if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
 
@@ -846,28 +806,27 @@ class DK_Staff__ClientRepository {
         if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
 
         // 判断对象是否合法
-        $mine = DK_Common__Client::find($item_id);
-        if(!$mine) return response_error([],"该【客户】不存在，刷新页面重试！");
-        if($mine->client_id != $me->client_id) return response_error([],"归属错误，刷新页面重试！");
+        $mine = DK_Client__Team::find($item_id);
+        if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
 
 
         // 记录
         $operation_record_data = [];
 
         $record_data["operate_object"] = 'staff';
-        $record_data["operate_module"] = 'client';
+        $record_data["operate_module"] = 'team';
         $record_data["operate_category"] = 1;
         $record_data["operate_type"] = 22;
         $record_data["item_id"] = $item_id;
-        $record_data["client_id"] = $item_id;
+        $record_data["team_id"] = $item_id;
         $record_data["creator_id"] = $me->id;
-        $record_data["creator_company_id"] = $me->company_id;
-        $record_data["creator_department_id"] = $me->department_id;
+//        $record_data["creator_company_id"] = $me->company_id;
+//        $record_data["creator_department_id"] = $me->department_id;
         $record_data["creator_team_id"] = $me->team_id;
 
         $operation = [];
         $operation['operation'] = $operate;
-        $operation['field'] = 'item_status';
+        $operation['field'] = 'deleted_at';
         $operation['title'] = '操作';
         $operation['before'] = '';
         $operation['after'] = '禁用';
@@ -883,12 +842,21 @@ class DK_Staff__ClientRepository {
             $mine->item_status = 9;
             $mine->timestamps = false;
             $bool = $mine->save();
-            if(!$bool) throw new Exception("DK_Common__Client--update--fail");
+            if(!$bool) throw new Exception("DK_Client__Team--update--fail");
             else
             {
-                $staff_operation_record = new DK_Common__Record__by_Operation;
+                if($mine->team_type == 11)
+                {
+                    $bool_staff = DK_Client__Staff::where('team_id', $mine->id)->update(['owner_status__for__team' => 9]);
+                }
+                else if($mine->team_type == 31)
+                {
+                    $bool_staff = DK_Client__Staff::where('team_id', $mine->id)->update(['owner_status__for__team_group' => 9]);
+                }
+
+                $staff_operation_record = new DK_Client__Record__by_Operation;
                 $bool_sop = $staff_operation_record->fill($record_data)->save();
-                if(!$bool_sop) throw new Exception("DK_Common__Record__by_Operation--insert--fail");
+                if(!$bool_sop) throw new Exception("DK_Client__Record__by_Operation--insert--fail");
             }
 
             DB::commit();
@@ -906,18 +874,18 @@ class DK_Staff__ClientRepository {
     }
 
 
-    // 【客户】【操作记录】返回-列表-数据
-    public function o1__client__item_operation_record_list__datatable_query($post_data)
+    // 【团队】【操作记录】返回-列表-数据
+    public function o1__team__item_operation_record_list__datatable_query($post_data)
     {
         $this->get_me();
         $me = $this->me;
 
         $id  = $post_data["id"];
-        $query = DK_Common__Record__by_Operation::select('*')
+        $query = DK_Client__Record__by_Operation::select('*')
             ->with([
                 'creator'=>function($query) { $query->select(['id','name']); },
             ])
-            ->where(['client_id'=>$id]);
+            ->where(['team_id'=>$id]);
 
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
 
@@ -953,6 +921,7 @@ class DK_Staff__ClientRepository {
 //        dd($list->toArray());
         return datatable_response($list, $draw, $total);
     }
+
 
 
 }

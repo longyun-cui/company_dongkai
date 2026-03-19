@@ -38,15 +38,15 @@
                 "rightColumns": "0"
             },
             "columns": [
-                {
-                    "title": '<input type="checkbox" class="check-review-all">',
-                    "width": "60px",
-                    "data": "id",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+data+'"></label>';
-                    }
-                },
+                // {
+                //     "title": '<input type="checkbox" class="check-review-all">',
+                //     "width": "60px",
+                //     "data": "id",
+                //     "orderable": false,
+                //     render: function(data, type, row, meta) {
+                //         return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+data+'"></label>';
+                //     }
+                // },
                 {
                     "title": "ID",
                     "data": "id",
@@ -67,16 +67,6 @@
                         if(row.deleted_at != null)
                         {
                             return '<i class="fa fa-times-circle text-black"></i> 已删除';
-                        }
-
-                        if(row.owner_status__for__company != 1)
-                        {
-                            return '<i class="fa fa-ban text-red"></i> 公司·禁用';
-                        }
-
-                        if(row.owner_status__for__department != 1)
-                        {
-                            return '<i class="fa fa-ban text-red"></i> 部门·禁用';
                         }
 
                         if(row.owner_status__for__team != 1)
@@ -104,15 +94,33 @@
                     }
                 },
                 {
-                    "title": "登录工号",
-                    "data": "login_number",
-                    "className": "",
+                    "title": "员工职位",
+                    "data": 'staff_position',
                     "width": "100px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return data;
+                        if(data == 1) return '<small class="btn-xs bg-black">Admin</small>';
+                        else if(data == 11) return '<i class="fa fa-gear text-red"></i> 公司老总';
+                        else if(data == 31) return '<i class="fa fa-diamond text-red"></i> 部门总监';
+                        else if(data == 41) return '<i class="fa fa-star text-red"></i> 团队经理';
+                        else if(data == 51) return '<i class="fa fa-star-half-o text-red"></i> 分部主管';
+                        else if(data == 61) return '<i class="fa fa-star-o text-red"></i> 小组组长';
+                        else if(data == 71) return '<i class="fa fa-star-o text-red"></i> 小队队长';
+                        else if(data == 88) return '<i class="fa fa-genderless text-red"></i> 业务员';
+                        else if(data == 99) return '<i class="fa fa-genderless text-red"></i> 职员';
+                        else return "有误";
                     }
                 },
+                // {
+                //     "title": "登录工号",
+                //     "data": "login_number",
+                //     "className": "",
+                //     "width": "100px",
+                //     "orderable": false,
+                //     render: function(data, type, row, meta) {
+                //         return data;
+                //     }
+                // },
                 {
                     "title": "姓名",
                     "data": "name",
@@ -145,71 +153,6 @@
 //                     }
 //                 },
                 {
-                    "title": "员工类型",
-                    "data": 'staff_category',
-                    "width": "100px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(data == 0) return '<small class="btn-xs bg-black">Admin</small>';
-                        else if(data == 1) return '<i class="fa fa-genderless text-black"></i> Admin';
-                        else if(data == 9) return '<i class="fa fa-genderless text-red"></i> 总裁';
-                        else if(data == 11) return '<i class="fa fa-genderless text-blue"></i> 人事';
-                        else if(data == 21) return '<i class="fa fa-genderless text-blue"></i> 行政';
-                        else if(data == 31) return '<i class="fa fa-genderless text-blue"></i> 财务';
-                        else if(data == 41) return '<i class="fa fa-genderless text-green"></i> 客服';
-                        else if(data == 51) return '<i class="fa fa-genderless text-blue"></i> 质检';
-                        else if(data == 61) return '<i class="fa fa-genderless text-red"></i> 复核';
-                        else if(data == 71) return '<i class="fa fa-genderless text-orange"></i> 运营';
-                        else if(data == 81) return '<i class="fa fa-genderless text-blue"></i> 业务';
-                        else if(data == 88) return '<i class="fa fa-genderless text-blue"></i> 销售商务';
-                        else return "有误";
-                    }
-                },
-                {
-                    "title": "员工职位",
-                    "data": 'staff_position',
-                    "width": "100px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(data == 1) return '<small class="btn-xs bg-black">BOSS</small>';
-                        else if(data == 11) return '<i class="fa fa-gear text-red"></i> 公司老总';
-                        else if(data == 31) return '<i class="fa fa-diamond text-red"></i> 部门总监';
-                        else if(data == 41) return '<i class="fa fa-star text-red"></i> 团队经理';
-                        else if(data == 51) return '<i class="fa fa-star-half-o text-red"></i> 分部主管';
-                        else if(data == 61) return '<i class="fa fa-star-o text-red"></i> 小组组长';
-                        else if(data == 71) return '<i class="fa fa-star-o text-red"></i> 小队队长';
-                        else if(data == 88) return '<i class="fa fa-genderless text-red"></i> 业务员';
-                        else if(data == 99) return '<i class="fa fa-genderless text-red"></i> 职员';
-                        else return "有误";
-                    }
-                },
-                {
-                    "title": "公司",
-                    "data": "company_id",
-                    "className": "",
-                    "width": "120px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(row.company_er) {
-                            return '<a href="javascript:void(0);" class="text-black">'+row.company_er.name+'</a>';
-                        }
-                        else return '--';
-                    }
-                },
-                {
-                    "title": "部门",
-                    "data": "department_id",
-                    "className": "",
-                    "width": "120px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(row.department_er) {
-                            return '<a href="javascript:void(0);" class="text-black">'+row.department_er.name+'</a>';
-                        }
-                        else return '--';
-                    }
-                },
-                {
                     "title": "团队",
                     "data": "team_id",
                     "className": "",
@@ -240,13 +183,17 @@
                     }
                 },
                 {
-                    "title": "API坐席ID",
-                    "data": "api_staffNo",
-                    "className": "",
-                    "width": "100px",
+                    "title": "备注",
+                    "data": "description",
+                    "className": "text-center",
+                    "width": "360px",
                     "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    },
                     render: function(data, type, row, meta) {
-                        return '<a href="javascript:void(0);">'+data+'</a>';
+                        return data;
+                        // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
+                        // else return '';
                     }
                 },
                 {
@@ -352,7 +299,7 @@
                             $html_able+
                             $html_delete+
                             $html_operation_record+
-                            $html_login+
+                            // $html_login+
                             // '<a class="btn btn-xs staff--item-statistic" data-id="'+data+'">统计</a>'+
                             // '<a class="btn btn-xs staff--item-login-submit" data-id="'+data+'">登录</a>'+
                             '';

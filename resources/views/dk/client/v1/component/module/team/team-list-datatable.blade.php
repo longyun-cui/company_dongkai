@@ -39,15 +39,15 @@
                 "rightColumns": "0"
             },
             "columns": [
-                {
-                    "title": '<input type="checkbox" class="check-review-all">',
-                    "width": "60px",
-                    "data": "id",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+data+'"></label>';
-                    }
-                },
+                // {
+                //     "title": '<input type="checkbox" class="check-review-all">',
+                //     "width": "60px",
+                //     "data": "id",
+                //     "orderable": false,
+                //     render: function(data, type, row, meta) {
+                //         return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+data+'"></label>';
+                //     }
+                // },
 //                    {
 //                        "width": "40px",
 //                        "title": "序号",
@@ -98,39 +98,39 @@
                         }
                     }
                 },
-                {
-                    "title": "类别",
-                    "data": 'team_category',
-                    "width": "80px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(data == 0) return "未选择";
-                        else if(data == 1) return '<i class="fa fa-star text-black"></i> BOSS';
-                        else if(data == 11) return '<i class="fa fa-star text-blue"></i> 人事部';
-                        else if(data == 21) return '<i class="fa fa-star text-blue"></i> 行政部';
-                        else if(data == 31) return '<i class="fa fa-star text-red"></i> 财务部';
-                        else if(data == 41) return '<i class="fa fa-star text-green"></i> 客服部';
-                        else if(data == 51) return '<i class="fa fa-star text-blue"></i> 质检部';
-                        else if(data == 61) return '<i class="fa fa-star text-red"></i> 复核部';
-                        else if(data == 71) return '<i class="fa fa-star text-orange"></i> 运营部';
-                        else if(data == 81) return '<i class="fa fa-star text-red"></i> 业务部';
-                        else if(data == 88) return '<i class="fa fa-star text-red"></i> 销售部';
-                        else return "有误";
-                    }
-                },
-                {
-                    "title": "层级",
-                    "data": 'team_type',
-                    "width": "80px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(data == 1) return '<small class="btn-xs bg-black">BOSS</small>';
-                        else if(data == 11) return '<i class="fa fa-bullseye text-blue"></i> 团队';
-                        else if(data == 21) return '<i class="fa fa-dot-circle-o text-blue"></i> 分部';
-                        else if(data == 31) return '<i class="fa fa-circle-o text-blue"></i> 小组';
-                        else return "有误";
-                    }
-                },
+                // {
+                //     "title": "类别",
+                //     "data": 'team_category',
+                //     "width": "80px",
+                //     "orderable": false,
+                //     render: function(data, type, row, meta) {
+                //         if(data == 0) return "未选择";
+                //         else if(data == 1) return '<i class="fa fa-star text-black"></i> BOSS';
+                //         else if(data == 11) return '<i class="fa fa-star text-blue"></i> 人事部';
+                //         else if(data == 21) return '<i class="fa fa-star text-blue"></i> 行政部';
+                //         else if(data == 31) return '<i class="fa fa-star text-red"></i> 财务部';
+                //         else if(data == 41) return '<i class="fa fa-star text-green"></i> 客服部';
+                //         else if(data == 51) return '<i class="fa fa-star text-blue"></i> 质检部';
+                //         else if(data == 61) return '<i class="fa fa-star text-red"></i> 复核部';
+                //         else if(data == 71) return '<i class="fa fa-star text-orange"></i> 运营部';
+                //         else if(data == 81) return '<i class="fa fa-star text-red"></i> 业务部';
+                //         else if(data == 88) return '<i class="fa fa-star text-red"></i> 销售部';
+                //         else return "有误";
+                //     }
+                // },
+                // {
+                //     "title": "层级",
+                //     "data": 'team_type',
+                //     "width": "80px",
+                //     "orderable": false,
+                //     render: function(data, type, row, meta) {
+                //         if(data == 1) return '<small class="btn-xs bg-black">BOSS</small>';
+                //         else if(data == 11) return '<i class="fa fa-bullseye text-blue"></i> 团队';
+                //         else if(data == 21) return '<i class="fa fa-dot-circle-o text-blue"></i> 分部';
+                //         else if(data == 31) return '<i class="fa fa-circle-o text-blue"></i> 小组';
+                //         else return "有误";
+                //     }
+                // },
                 {
                     "title": "团队名称",
                     "data": 'superior_team_er',
@@ -151,94 +151,49 @@
                         // else return row.team_er.name+' ('+row.team_er.id+')';
                     }
                 },
-                {
-                    "title": "小组名称",
-                    "data": "name",
-                    "className": "",
-                    "width":"120px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(row.team_type == 1) return '--';
-                        else if(row.team_type == 11) return '--';
-                        else if(row.team_type == 31) return row.name;
-                        return '';
-                    }
-                },
-                {
-                    "title": "所属部门",
-                    "data": 'department_id',
-                    "width": "120px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(row.department_er == null) return '--';
-                        else return '<a href="javascript:void(0);" class="text-black">' + row.department_er.name + '</a>';
-                        // else return row.department_er.name+' ('+row.department_er.id+')';
-                    }
-                },
-                {
-                    "title": "所属公司",
-                    "data": 'company_id',
-                    "width": "120px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(row.company_er == null) return '--';
-                        else return '<a href="javascript:void(0);" class="text-black">' + row.company_er.name + '</a>';
-                        // else return row.department_er.name+' ('+row.department_er.id+')';
-                    }
-                },
-                {
-                    "title": "负责人",
-                    "data": "leader_id",
-                    "className": "text-center",
-                    "width": "120px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
-                        {
-                            $(nTd).addClass('modal-show-for-info-select2-set');
-                            $(nTd).attr('data-id',row.id).attr('data-name','负责人');
-                            $(nTd).attr('data-key','leader_id').attr('data-value',data);
-                            if(row.leader == null) $(nTd).attr('data-option-name','未指定');
-                            else {
-                                $(nTd).attr('data-option-name',row.leader.username);
-                            }
-                            $(nTd).attr('data-column-name','负责人');
-                            if(row.leader_id) $(nTd).attr('data-operate-type','edit');
-                            else $(nTd).attr('data-operate-type','add');
-
-                            if(row.team_type == 11)
-                            {
-                                $(nTd).attr('data-team-type','manager');
-                            }
-                            else if(row.team_type == 21)
-                            {
-                                $(nTd).attr('data-team-type','supervisor');
-                            }
-                        }
-                    },
-                    render: function(data, type, row, meta) {
-                        if(row.leader == null) return '--';
-                        else return row.leader.username+' ('+row.leader.id+')';
-                        // else return '<a href="javascript:void(0);">'+row.creator.username+'</a>';
-                    }
-                },
+                // {
+                //     "title": "负责人",
+                //     "data": "leader_id",
+                //     "className": "text-center",
+                //     "width": "120px",
+                //     "orderable": false,
+                //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                //         if(row.is_completed != 1)
+                //         {
+                //             $(nTd).addClass('modal-show-for-info-select2-set');
+                //             $(nTd).attr('data-id',row.id).attr('data-name','负责人');
+                //             $(nTd).attr('data-key','leader_id').attr('data-value',data);
+                //             if(row.leader == null) $(nTd).attr('data-option-name','未指定');
+                //             else {
+                //                 $(nTd).attr('data-option-name',row.leader.username);
+                //             }
+                //             $(nTd).attr('data-column-name','负责人');
+                //             if(row.leader_id) $(nTd).attr('data-operate-type','edit');
+                //             else $(nTd).attr('data-operate-type','add');
+                //
+                //             if(row.team_type == 11)
+                //             {
+                //                 $(nTd).attr('data-team-type','manager');
+                //             }
+                //             else if(row.team_type == 21)
+                //             {
+                //                 $(nTd).attr('data-team-type','supervisor');
+                //             }
+                //         }
+                //     },
+                //     render: function(data, type, row, meta) {
+                //         if(row.leader == null) return '--';
+                //         else return row.leader.username+' ('+row.leader.id+')';
+                //         // else return '<a href="javascript:void(0);">'+row.creator.username+'</a>';
+                //     }
+                // },
                 {
                     "title": "备注",
-                    "data": "remark",
+                    "data": "description",
                     "className": "text-center",
-                    "width": "240px",
+                    "width": "360px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
-                        {
-                            $(nTd).addClass('modal-show-for-info-text-set');
-                            $(nTd).attr('data-id',row.id).attr('data-name','备注');
-                            $(nTd).attr('data-key','remark').attr('data-value',data);
-                            $(nTd).attr('data-column-name','备注');
-                            $(nTd).attr('data-text-type','textarea');
-                            if(data) $(nTd).attr('data-operate-type','edit');
-                            else $(nTd).attr('data-operate-type','add');
-                        }
                     },
                     render: function(data, type, row, meta) {
                         return data;
@@ -250,7 +205,7 @@
                     "title": "创建者",
                     "data": "creator_id",
                     "className": "text-center",
-                    "width": "80px",
+                    "width": "100px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         return row.creator == null ? '未知' : row.creator.name;

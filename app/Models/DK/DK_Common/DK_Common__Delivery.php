@@ -132,14 +132,14 @@ class DK_Common__Delivery extends Model
     // 客户员工
     function client_staff_er()
     {
-        return $this->belongsTo('App\Models\DK_Client\DK_Client_User','client_staff_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Client\DK_Client__Staff','client_staff_id','id');
     }
 
 
     // 客户联系人
     function client_contact_er()
     {
-        return $this->belongsTo('App\Models\DK_Client\DK_Client_Contact','client_contact_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Client\DK_Client__Contact','client_contact_id','id');
     }
 
     // 订单

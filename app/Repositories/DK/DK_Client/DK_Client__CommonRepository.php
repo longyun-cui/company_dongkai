@@ -1,15 +1,12 @@
 <?php
 namespace App\Repositories\DK\DK_Client;
 
-use App\Models\DK_Client\DK_Client_Department;
-use App\Models\DK_Client\DK_Client_User;
+use App\Models\DK\DK_Client\DK_Client__Team;
+use App\Models\DK\DK_Client\DK_Client__Staff;
+
+
 use App\Models\DK_Client\DK_Client_Contact;
 
-use App\Models\DK_Client\DK_Client_Follow_Record;
-use App\Models\DK_Client\DK_Client_Trade_Record;
-
-
-use App\Models\DK_Client\DK_Client_Project;
 use App\Models\DK_Client\DK_Client_Record;
 use App\Models\DK_Client\DK_Client_Finance_Daily;
 
@@ -23,7 +20,6 @@ use App\Models\DK_CC\DK_CC_Call_Record_Current;
 use App\Models\DK\DK_Common\DK_Common__Order;
 use App\Models\DK\DK_Common\DK_Common__Delivery;
 
-use App\Models\DK\DK_Client\DK_Client__Staff;
 
 
 use App\Jobs\DK_Client\AutomaticDispatchingJob;
@@ -39,11 +35,11 @@ class DK_Client__CommonRepository {
     private $env;
     private $auth_check;
     private $me;
-    private $me_admin;
     private $modelUser;
     private $modelItem;
     private $view_blade_403;
     private $view_blade_404;
+
 
     public function __construct()
     {
@@ -182,7 +178,7 @@ class DK_Client__CommonRepository {
             ->get();
         $return['department_list'] = $department_list;
 
-        $staff_list = DK_Client_User::select('id','username')
+        $staff_list = DK_Client__Staff::select('id','username')
             ->where('client_id',$me->client_id)
             ->get();
         $return['staff_list'] = $staff_list;
@@ -207,7 +203,7 @@ class DK_Client__CommonRepository {
             ->get();
         $return['department_list'] = $department_list;
 
-        $staff_list = DK_Client_User::select('id','username')
+        $staff_list = DK_Client__Staff::select('id','username')
             ->where('client_id',$me->client_id)
             ->whereNotIn('user_type',[0,1,9,11])
             ->get();
@@ -530,14 +526,14 @@ class DK_Client__CommonRepository {
      * select2
      */
     // 【部门】
-    public function v1_operate_for_select2_department($post_data)
+    public function o1__select2__team($post_data)
     {
         $this->get_me();
         $me = $this->me;
 
-        $query =DK_Client_Department::select(['id','name as text'])
+        $query =DK_Client__Team::select(['id','name as text'])
             ->where('client_id',$me->client_id)
-            ->where(['item_status'=>1]);
+            ->where(['active'=>1,'item_status'=>1]);
 
         if(!empty($post_data['keyword']))
         {
@@ -560,33 +556,33 @@ class DK_Client__CommonRepository {
 //        }
 
         $list = $query->orderBy('id','desc')->get()->toArray();
-        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
-        array_unshift($list,$unSpecified);
-        $unSpecified = ['id'=>'-1','text'=>'选择部门'];
-        array_unshift($list,$unSpecified);
+//        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
+//        array_unshift($list,$unSpecified);
+//        $unSpecified = ['id'=>'-1','text'=>'选择部门'];
+//        array_unshift($list,$unSpecified);
         return $list;
     }
     // 【员工】
-    public function v1_operate_for_select2_staff($post_data)
+    public function o1__select2__staff($post_data)
     {
         $this->get_me();
         $me = $this->me;
 
-        $query =DK_Client_User::select(['id','username as text'])
+        $query =DK_Client__Staff::select(['id','name as text'])
+            ->where(['active'=>1,'item_status'=>1])
             ->where('client_id',$me->client_id)
-            ->where('user_type','!=',11)
-            ->where(['user_status'=>1])
-            ->when(in_array($me->user_type,[81,84]), function ($query) use ($me) {
-                return $query->where('department_id', $me->department_id);
+            ->whereNotIn('staff_position',[0,1,9])
+            ->when(in_array($me->staff_position,[41]), function ($query) use ($me) {
+                return $query->where('team_id', $me->team_id);
             })
-            ->when(in_array($me->user_type,[88]), function ($query) use ($me) {
-                return $query->where('client_staff_id', $me->id);
+            ->when(in_array($me->staff_position,[61]), function ($query) use ($me) {
+                return $query->where('team_group_id', $me->team_group_id);
             });
 
         if(!empty($post_data['keyword']))
         {
             $keyword = "%{$post_data['keyword']}%";
-            $query->where('username','like',"%$keyword%");
+            $query->where('name','like',"%$keyword%");
         }
 
 //        if(in_array($me->user_type,[41,71,77,81,84,88]))
@@ -602,10 +598,10 @@ class DK_Client__CommonRepository {
 //        }
 
         $list = $query->orderBy('id','desc')->get()->toArray();
-        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
-        array_unshift($list,$unSpecified);
-        $unSpecified = ['id'=>'-1','text'=>'选择员工'];
-        array_unshift($list,$unSpecified);
+//        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
+//        array_unshift($list,$unSpecified);
+//        $unSpecified = ['id'=>'-1','text'=>'选择员工'];
+//        array_unshift($list,$unSpecified);
         return $list;
     }
     // 【联系渠道】
@@ -618,7 +614,7 @@ class DK_Client__CommonRepository {
             ->where('client_id',$me->client_id)
             ->where(['item_status'=>1])
             ->when(in_array($me->user_type,[81,84]), function ($query) use ($me) {
-                $staff_list = DK_Client_User::where('department_id',$me->department_id)->get()->pluck('id')->toArray();
+                $staff_list = DK_Client__Staff::where('department_id',$me->department_id)->get()->pluck('id')->toArray();
                 return $query->whereIn('client_staff_id', $staff_list);
             })
             ->when(in_array($me->user_type,[88]), function ($query) use ($me) {
@@ -676,7 +672,7 @@ class DK_Client__CommonRepository {
                 return $query->where('business_id', $me->id);
             })
             ->when(in_array($me->user_type,[81,84]), function ($query) use ($me) {
-                $staff_list = DK_Client_User::select('id')->where('department_id',$me->department_id)->get()->pluck('id')->toArray();
+                $staff_list = DK_Client__Staff::select('id')->where('department_id',$me->department_id)->get()->pluck('id')->toArray();
                 return $query->whereIn('client_staff_id', $staff_list);
             })
             ->when(in_array($me->user_type,[88]), function ($query) use ($me) {
@@ -1606,7 +1602,7 @@ class DK_Client__CommonRepository {
             }
             $me->$column_key = $column_value;
             $bool = $me->save();
-            if(!$bool) throw new Exception("DK_Client_User--update--fail");
+            if(!$bool) throw new Exception("DK_Client__Staff--update--fail");
             else
             {
             }
@@ -1731,7 +1727,7 @@ class DK_Client__CommonRepository {
 //        $client_staff_id = $post_data["staff_id"];
 //        if(!in_array($operate_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
 
-        $staff_list = DK_Client_User::select('id','client_id','is_take_order','is_take_order_date','is_take_order_datetime')
+        $staff_list = DK_Client__Staff::select('id','client_id','is_take_order','is_take_order_date','is_take_order_datetime')
             ->where('client_id',$me->client_id)
             ->where('is_take_order',1)
             ->where('is_take_order_date',date('Y-m-d'))

@@ -102,17 +102,17 @@ class DK_Client__Staff extends Authenticatable
     // 拥有者
     function owner()
     {
-        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','owner_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Client\DK_Client__Staff','owner_id','id');
     }
     // 创作者
     function creator()
     {
-        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','creator_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Client\DK_Client__Staff','creator_id','id');
     }
     // 用户
     function user()
     {
-        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','user_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Client\DK_Client__Staff','user_id','id');
     }
 
 
@@ -121,13 +121,13 @@ class DK_Client__Staff extends Authenticatable
     // 所属代理商
     function parent()
     {
-        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','parent_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Client\DK_Client__Staff','parent_id','id');
     }
 
     // 名下代理商
     function children()
     {
-        return $this->hasMany('App\Models\DK\DK_Common\DK_Common__Staff','parent_id','id');
+        return $this->hasMany('App\Models\DK\DK_Client\DK_Client__Staff','parent_id','id');
     }
 
 
@@ -145,42 +145,42 @@ class DK_Client__Staff extends Authenticatable
     // 公司
     function company_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Company','company_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Client\DK_Client__Company','company_id','id');
     }
 
     // 部门
     function department_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Department','department_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Client\DK_Client__Department','department_id','id');
     }
 
 
     // 团队-团队
     function team_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Team','team_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Client\DK_Client__Team','team_id','id');
     }
     // 团队-分部
     function team_sub_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Team','team_sub_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Client\DK_Client__Team','team_sub_id','id');
     }
     // 团队-小组
     function team_group_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Team','team_group_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Client\DK_Client__Team','team_group_id','id');
     }
     // 团队-小组
     function team_unit_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Team','team_unit_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Client\DK_Client__Team','team_unit_id','id');
     }
 
 
     // 【一对一】负责人
     function leader()
     {
-        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','leader_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Client\DK_Client__Staff','leader_id','id');
     }
 
 

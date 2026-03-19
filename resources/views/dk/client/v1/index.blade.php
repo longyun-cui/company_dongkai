@@ -50,6 +50,9 @@
 
 <div class="component-container _none">
 
+
+    {{--团队--}}
+    @include(env('DK_CLIENT__TEMPLATE').'component.module.team.team-list')
     {{--员工--}}
     @include(env('DK_CLIENT__TEMPLATE').'component.module.staff.staff-list')
 
@@ -69,9 +72,13 @@
 </div>
 
 
+    {{--团队--}}
+    @include(env('DK_CLIENT__TEMPLATE').'component.module.team.team-edit')
+    @include(env('DK_CLIENT__TEMPLATE').'component.module.team.team--item-operation-record')
     {{--员工--}}
     @include(env('DK_CLIENT__TEMPLATE').'component.module.staff.staff-edit')
     @include(env('DK_CLIENT__TEMPLATE').'component.module.staff.staff--item-operation-record')
+
 
     @include(env('DK_CLIENT__TEMPLATE').'component.module.delivery.delivery--item--operation-record')
     @include(env('DK_CLIENT__TEMPLATE').'component.module.delivery.delivery--item-operating--customer-update')
@@ -105,7 +112,13 @@
 @section('custom-script')
 
 
+    {{--团队--}}
+    @include(env('DK_CLIENT__TEMPLATE').'component.module.team.team-edit-script')
+    @include(env('DK_CLIENT__TEMPLATE').'component.module.team.team-list-datatable')
+    @include(env('DK_CLIENT__TEMPLATE').'component.module.team.team-list-script')
+    @include(env('DK_CLIENT__TEMPLATE').'component.module.team.team--item-operation-record-datatable')
     {{--员工--}}
+    @include(env('DK_CLIENT__TEMPLATE').'component.module.staff.staff-edit-script')
     @include(env('DK_CLIENT__TEMPLATE').'component.module.staff.staff-list-datatable')
     @include(env('DK_CLIENT__TEMPLATE').'component.module.staff.staff-list-script')
     @include(env('DK_CLIENT__TEMPLATE').'component.module.staff.staff--item-operation-record-datatable')

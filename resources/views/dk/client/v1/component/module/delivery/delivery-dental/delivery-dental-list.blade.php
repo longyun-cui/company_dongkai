@@ -41,19 +41,25 @@
             </select>
 
 
+            @if(in_array($me->staff_position,[0,1,9]))
             <select class="search-filter form-filter filter-md select2-box-c" name="delivery-assign-status">
                 <option value="-1">分配状态</option>
                 <option value="0">待分配</option>
                 <option value="1">已分配</option>
             </select>
+            @endif
 
 
+            @if(in_array($me->staff_position,[0,1,9]))
             <select class="search-filter form-filter filter-lg select2-box-c" name="delivery-staff">
                 <option value="-1">选择员工</option>
+                @if(!empty($staff_list) && count($staff_list) > 0)
                 @foreach($staff_list as $v)
-                    <option value="{{ $v->id }}">{{ $v->username }}</option>
+                    <option value="{{ $v->id }}">{{ $v->name }}</option>
                 @endforeach
+                @endif
             </select>
+            @endif
 
 
             <select class="search-filter form-filter filter-md select2-box-c" name="delivery-client-type">
@@ -64,12 +70,12 @@
             </select>
 
 
-            <select class="search-filter form-filter filter-md select2-box-c" name="order-delivery-result">
-                <option value="-1">交付结果</option>
-                <option value="正常交付">正常交付</option>
-                <option value="折扣交付">折扣交付</option>
-                <option value="郊区交付">郊区交付</option>
-            </select>
+{{--            <select class="search-filter form-filter filter-md select2-box-c" name="order-delivery-result">--}}
+{{--                <option value="-1">交付结果</option>--}}
+{{--                <option value="正常交付">正常交付</option>--}}
+{{--                <option value="折扣交付">折扣交付</option>--}}
+{{--                <option value="郊区交付">郊区交付</option>--}}
+{{--            </select>--}}
 
 
             {{--按天查看--}}
@@ -109,8 +115,8 @@
 
 
 
-            <button type="button" class="btn btn-default btn-filter filter-submit">
-                <i class="fa fa-search"></i> 搜索
+            <button type="button" class="btn btn-default btn-filter filter-submit" data-time-type="all">
+                <i class="fa fa-search"></i> 全部搜索
             </button>
 
             <button type="button" class="btn btn-default btn-filter filter-empty">
@@ -159,24 +165,56 @@
     <div class="col-md-12 datatable-search-row">
         <div class="pull-left">
 
+
             <button class="btn btn-default btn-filter">
                 <input type="checkbox" class="check-review-all">
             </button>
 
-            <button type="button" onclick="" class="btn btn-default btn-filter delivery--bulk-export--summit" data-order-category="1">
-                <i class="fa fa-download"></i> 批量导出Excel
+
+            <button class="btn btn-default btn-filter bulk-submit--for--delivery--export" data-order-category="1">
+                <i class="fa fa-download"></i> 批量导出
             </button>
 
-            <select class="search-filter form-filter filter-lg select2-box-c" name="bulk-operate-status">
-                <option value="-1">请选导出状态</option>
-                <option value="0">未导出</option>
-                <option value="1">已导出</option>
-                <option value="9">待导出</option>
+
+            @if($me->client_er->is_api_scrm == 1)
+                <button class="btn btn-default btn-filter bulk-submit-for-api-push">
+                    <i class="fa fa-share-square"></i> 批量API推送
+                </button>
+            @endif
+
+
+            @if(in_array($me->staff_position,[0,1,9]))
+            <select class="search-filter form-filter filter-lg select2-box-c" name="bulk-select--for--delivery--assign-status">
+                <option value="-1">请选分配状态</option>
+                <option value="1">已分配</option>
+                <option value="0">待分配</option>
             </select>
+            @endif
 
-            <button type="button" class="btn btn-default btn-filter delivery--bulk-exported-status-change--submit">
-                <i class="fa fa-check"></i> 批量更改导出状态
+            @if(in_array($me->staff_position,[0,1,9]))
+            <button class="btn btn-default btn-filter bulk-submit--for--delivery--assign-status">
+                <i class="fa fa-check"></i> 批量更改分配状态
             </button>
+            @endif
+
+
+            @if(in_array($me->staff_position,[0,1,9]))
+            <select class="search-filter form-filter filter-lg select2-box-c select2-staff-c-" name="bulk-select--for--delivery--staff-id">
+                <option value="-1">选择员工</option>
+                @if(!empty($staff_list) && count($staff_list) > 0)
+                @foreach($staff_list as $v)
+                    <option value="{{ $v->id }}">{{ $v->name }}</option>
+                @endforeach
+                @endif
+            </select>
+            @endif
+
+            @if(in_array($me->staff_position,[0,1,9]))
+            <button class="btn btn-default btn-filter bulk-submit--for--delivery--assign-staff">
+                <i class="fa fa-check"></i> 批量指派员工
+            </button>
+            @endif
+
 
         </div>
     </div>

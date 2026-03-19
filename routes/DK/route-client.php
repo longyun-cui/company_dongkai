@@ -42,6 +42,8 @@ Route::group(['middleware' => ['dk.client.user.login']], function () {
 
 
 
+    Route::post('/o1/select2/select2--team', $controller.'@o1__select2__team');
+    Route::post('/o1/select2/select2--staff', $controller.'@o1__select2__staff');
 
 
 
@@ -106,11 +108,14 @@ Route::group(['middleware' => ['dk.client.user.login']], function () {
     Route::post('/o1/delivery/item--come-update--save', $controller.'@o1__delivery__item__come_update__save');
     Route::post('/o1/delivery/item--follow-create--save', $controller.'@o1__delivery__item__follow_create__save');
     Route::post('/o1/delivery/item--trade-create--save', $controller.'@o1__delivery__item__trade_create__save');
+    // 【交付】批量-操作
+    Route::post('/o1/delivery/bulk--assign-status', $controller.'@o1__delivery__bulk__assign_status');
+    Route::post('/o1/delivery/bulk--assign-staff', $controller.'@o1__delivery__bulk__assign_staff');
+    Route::post('/o1/delivery/bulk--api-push', $controller.'@o1__delivery__bulk__api_push');
+
+
+
     Route::post('/o1/delivery/delivery-daily', $controller.'@o1__statistic__delivery_daily');
-
-
-
-
 
 
 
@@ -242,12 +247,6 @@ Route::group(['middleware' => ['dk.client.user.login']], function () {
     // 【通用】晋升 & 降职
     Route::post('/item/item-promote-by-admin', $controller.'@operate_item_promote_by_admin');
     Route::post('/item/item-demote-by-admin', $controller.'@operate_item_demote_by_admin');
-
-
-    // 【通用】批量-指派状态
-    Route::post('/item/bulk-assign-status', $controller.'@operate_bulk_assign_status');
-    Route::post('/item/bulk-assign-staff', $controller.'@operate_bulk_assign_staff');
-    Route::post('/item/bulk-api-push', $controller.'@operate_bulk_api_push');
 
 
 

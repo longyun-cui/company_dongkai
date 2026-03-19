@@ -804,7 +804,7 @@
         // select2
         $('#'+$config.target).find('.select2-department-c').select2({
             ajax: {
-                url: "{{ url('/o1/select2/select2-department') }}",
+                url: "{{ url('/o1/select2/select2--department') }}",
                 type: 'post',
                 dataType: 'json',
                 delay: 250,
@@ -835,7 +835,7 @@
         });
         $('#'+$config.target).find('.select2-team-c').select2({
             ajax: {
-                url: "{{ url('/o1/select2/select2-team') }}",
+                url: "{{ url('/o1/select2/select2--team') }}",
                 type: 'post',
                 dataType: 'json',
                 delay: 250,
@@ -867,7 +867,7 @@
         });
         $('#'+$config.target).find('.select2-staff-c').select2({
             ajax: {
-                url: "{{ url('/o1/select2/select2-staff') }}",
+                url: "{{ url('/o1/select2/select2--staff') }}",
                 type: 'post',
                 dataType: 'json',
                 delay: 250,
@@ -898,7 +898,7 @@
         });
         $('#'+$config.target).find('.select2-client-c').select2({
             ajax: {
-                url: "{{ url('/o1/select2/select2-client') }}",
+                url: "{{ url('/o1/select2/select2--client') }}",
                 type: 'post',
                 dataType: 'json',
                 delay: 250,
@@ -929,7 +929,7 @@
         });
         $('#'+$config.target).find('.select2-project-c').select2({
             ajax: {
-                url: "{{ url('/o1/select2/select2-project') }}",
+                url: "{{ url('/o1/select2/select2--project') }}",
                 type: 'post',
                 dataType: 'json',
                 delay: 250,

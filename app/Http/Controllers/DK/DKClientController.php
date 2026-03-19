@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\DK;
 
+use App\Repositories\DK\DK_Client\DK_Client__TeamRepository;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -36,6 +37,7 @@ class DKClientController extends Controller
 
     private $common_repo;
 
+    private $team_repo;
     private $staff_repo;
 
     private $delivery_repo;
@@ -46,14 +48,17 @@ class DKClientController extends Controller
 
     private $statistic_repo;
 
+
     public function __construct()
     {
 //        $this->repo = new DKClientRepository;
 
+        $this->common_repo = new DK_Client__CommonRepository;
         $this->repo = new DK_Client__IndexRepository;
 
         $this->common_repo = new DK_Client__CommonRepository;
 
+        $this->team_repo = new DK_Client__TeamRepository;
         $this->staff_repo = new DK_Client__StaffRepository;
 
         $this->delivery_repo = new DK_Client__DeliveryRepository;
@@ -63,6 +68,7 @@ class DKClientController extends Controller
 //        $this->record_repo = new DK_Client__RecordRepository;
 //
 //        $this->statistic_repo = new DK_Client__StatisticRepository;
+
     }
 
 
@@ -141,12 +147,14 @@ class DKClientController extends Controller
 
             $login_number = request()->get('login_number');
 //            $staff = DK_Client__Staff::whereName($login_number)->first();
+//            dd($client->id);
 
             $staff = DK_Client__Staff::select('*')
                 ->where(['active'=>1,'item_status'=>1])
                 ->where('client_id',$client->id)
                 ->where('name',$login_number)
                 ->first();
+//            dd();
 
             if($staff)
             {
@@ -235,6 +243,16 @@ class DKClientController extends Controller
 
 
 
+    // 团队
+    public function o1__select2__team()
+    {
+        return $this->common_repo->o1__select2__team(request()->all());
+    }
+    // 员工
+    public function o1__select2__staff()
+    {
+        return $this->common_repo->o1__select2__staff(request()->all());
+    }
 
 
 
@@ -416,11 +434,45 @@ class DKClientController extends Controller
         return $this->delivery_repo->o1__delivery__item__trade_create__save(request()->all());
     }
 
+
+
+
+    // 【交付】批量-更改分配状态
+    public function o1__delivery__bulk__assign_status()
+    {
+        return $this->delivery_repo->o1__delivery__bulk__assign_status(request()->all());
+    }
+    // 【交付】批量-指派员工
+    public function o1__delivery__bulk__assign_staff()
+    {
+        return $this->delivery_repo->o1__delivery__bulk__assign_staff(request()->all());
+    }
+    // 【交付】批量-api-推送
+    public function o1__delivery__bulk__api_push()
+    {
+        return $this->delivery_repo->o1__delivery__bulk__api_push(request()->all());
+    }
+
+
+
+
+
+
     // 【交付】交付日报
     public function o1__statistic__delivery_daily()
     {
         return $this->delivery_repo->o1__statistic__delivery_daily(request()->all());
     }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -849,21 +901,6 @@ class DKClientController extends Controller
 
 
 
-    // 【订单管理】批量-更改分配状态
-    public function operate_bulk_assign_status()
-    {
-        return $this->repo->operate_bulk_assign_status(request()->all());
-    }
-    // 【订单管理】批量-分派
-    public function operate_bulk_assign_staff()
-    {
-        return $this->repo->operate_bulk_assign_staff(request()->all());
-    }
-    // 【订单管理】批量-api-推送
-    public function operate_bulk_api_push()
-    {
-        return $this->repo->operate_bulk_api_push(request()->all());
-    }
 
 
 
