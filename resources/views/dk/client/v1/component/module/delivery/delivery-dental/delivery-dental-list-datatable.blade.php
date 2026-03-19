@@ -29,21 +29,42 @@
                     d.order_id = $tableSearch.find('input[name="delivery-order-id"]').val();
                     d.remark = $tableSearch.find('input[name="order-remark"]').val();
                     d.description = $tableSearch.find('input[name="order-description"]').val();
-                    d.assign = $tableSearch.find('input[name="order-assign"]').val();
-                    d.assign_start = $tableSearch.find('input[name="order-start"]').val();
-                    d.assign_ended = $tableSearch.find('input[name="order-ended"]').val();
-                    d.name = $tableSearch.find('input[name="order-name"]').val();
-                    d.title = $tableSearch.find('input[name="order-title"]').val();
-                    d.keyword = $tableSearch.find('input[name="order-keyword"]').val();
+
+                    d.staff = $tableSearch.find('select[name="delivery-staff"]').val();
                     d.client = $tableSearch.find('select[name="delivery-client"]').val();
                     d.project = $tableSearch.find('select[name="delivery-project"]').val();
-                    d.status = $tableSearch.find('select[name="order-status"]').val();
-                    d.order_type = $tableSearch.find('select[name="order-type"]').val();
-                    d.client_name = $tableSearch.find('input[name="order-client-name"]').val();
-                    d.client_phone = $tableSearch.find('input[name="order-client-phone"]').val();
-                    d.delivery_type = $tableSearch.find('select[name="order-delivery-type"]').val();
-                    d.delivered_status = $tableSearch.find('select[name="order-delivery-status"]').val();
-                    d.delivered_result = $tableSearch.find('select[name="order-delivery-result"]').val();
+
+                    d.status = $tableSearch.find('select[name="delivery-status"]').val();
+                    d.delivery_type = $tableSearch.find('select[name="delivery-delivery-type"]').val();
+                    d.order_type = $tableSearch.find('select[name="delivery-type"]').val();
+                    d.client_type = $tableSearch.find('select[name="delivery-client-type"]').val();
+                    d.client_name = $tableSearch.find('input[name="delivery-client-name"]').val();
+                    d.client_phone = $tableSearch.find('input[name="delivery-client-phone"]').val();
+                    d.is_wx = $tableSearch.find('select[name="delivery-is-wx"]').val();
+
+                    d.city = $('select[name="delivery-city[]"]').val();
+                    d.district = $('select[name="delivery-district[]"]').val();
+
+                    d.exported_status = $('select[name="delivery-exported-status"]').val();
+                    d.assign_status = $('select[name="delivery-assign-status"]').val();
+                    d.is_api_pushed = $('select[name="delivery-is-api-pushed"]').val();
+
+                    d.quality = $('select[name="delivery-quality"]').val();
+
+                    d.delivered_status = $tableSearch.find('select[name="delivery-delivered-status"]').val();
+                    d.delivered_result = $tableSearch.find('select[name="delivery-delivered-result[]"]').val();
+                    d.time_type = $tableSearch.find('input[name="delivery-time-type"]').val();
+                    d.time_month = $tableSearch.find('input[name="delivery-month"]').val();
+                    d.time_date = $tableSearch.find('input[name="delivery-date"]').val();
+                    d.date_start = $tableSearch.find('input[name="delivery-start"]').val();
+                    d.date_ended = $tableSearch.find('input[name="delivery-ended"]').val();
+
+                    d.callback_date = $tableSearch.find('input[name="delivery-callback-date"]').val();
+
+                    d.is_come = $tableSearch.find('select[name="delivery-is-come"]').val();
+                    d.come_date = $tableSearch.find('input[name="delivery-come-date"]').val();
+
+                    d.contact = $tableSearch.find('select[name="delivery-contact[]"]').val();
                 },
             },
             "fixedColumns": {
