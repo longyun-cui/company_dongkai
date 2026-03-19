@@ -3952,7 +3952,7 @@ class DK_Staff__StatisticRepository {
         $me = $this->me;
 
         // 工单统计
-        $query_order = DK_Common__Order::select('creator_id','published_date')
+        $query_order = DK_Common__Order::select('creator_id')
             ->addSelect(DB::raw("
                     count(IF(is_published = 1, TRUE, NULL)) as order_count__for__all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count__for__inspected,
