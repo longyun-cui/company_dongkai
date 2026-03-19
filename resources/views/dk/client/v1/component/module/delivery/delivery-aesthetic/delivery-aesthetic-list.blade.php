@@ -112,7 +112,7 @@
 
 
             {{--按时间段导出--}}
-            <input type="text" class="search-filter form-filter date-picker-c search-start" name="delivery-start" placeholder="起始时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" style="margin-right:-3px;" />
+            <input type="text" class="search-filter form-filter date-picker-c search-start" name="delivery-start" placeholder="起始时间" readonly="readonly" value="{{ date('Y-m-01') }}" data-default="{{ date('Y-m-01') }}" style="margin-right:-3px;" />
             <input type="text" class="search-filter form-filter date-picker-c search-ended" name="delivery-ended" placeholder="终止时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
 
             <button type="button" class="btn btn-success btn-filter filter-submit" data-time-type="period">
