@@ -6,6 +6,8 @@
 
         <div class=" pull-left">
 
+            <input type="hidden" class="time-type" name="delivery-time-type" value="" readonly>
+
             <button type="button" onclick="" class="btn btn-default btn-filter _none"><i class="fa fa-play"></i> 启用</button>
             <button type="button" onclick="" class="btn btn-default btn-filter _none"><i class="fa fa-stop"></i> 禁用</button>
             <button type="button" onclick="" class="btn btn-default btn-filter _none"><i class="fa fa-download"></i> 导出</button>
@@ -77,12 +79,24 @@
 {{--                <option value="郊区交付">郊区交付</option>--}}
 {{--            </select>--}}
 
+            <input type="text" class="search-filter form-filter date-picker-c search-date" name="delivery-callback-date" placeholder="回访日期" readonly="readonly" value="" data-default="" />
+
+
+            <select class="search-filter form-filter filter-md select2-box-c" name="delivery-is-come">
+                <option value="-1">上门状态</option>
+                <option value="0">不上门</option>
+                <option value="9">预约中</option>
+                <option value="11">已上门</option>
+            </select>
+
+            <input type="text" class="search-filter form-filter date-picker-c search-date" name="delivery-come-date" placeholder="上门日期" readonly="readonly" value="" data-default="" />
+
 
             {{--按天查看--}}
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre date-pre" data-target="delivery-date">
                 <i class="fa fa-chevron-left"></i>
             </button>
-            <input type="text" class="search-filter form-filter date_picker-c search-date" name="delivery-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+            <input type="text" class="search-filter form-filter date-picker-c search-date" name="delivery-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next date-next" data-target="delivery-date">
                 <i class="fa fa-chevron-right"></i>
             </button>
@@ -95,7 +109,7 @@
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre month-pre" data-target="delivery-month">
                 <i class="fa fa-chevron-left"></i>
             </button>
-            <input type="text" class="search-filter form-filter filter-keyup month_picker-c search-month" name="delivery-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
+            <input type="text" class="search-filter form-filter filter-keyup month-picker-c search-month" name="delivery-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next month-next" data-target="delivery-month">
                 <i class="fa fa-chevron-right"></i>
             </button>
@@ -105,8 +119,8 @@
 
 
             {{--按时间段导出--}}
-            <input type="text" class="search-filter form-filter date_picker-c search-start" name="delivery-start" placeholder="起始时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" style="margin-right:-3px;" />
-            <input type="text" class="search-filter form-filter date_picker-c search-ended" name="delivery-ended" placeholder="终止时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+            <input type="text" class="search-filter form-filter date-picker-c search-start" name="delivery-start" placeholder="起始时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" style="margin-right:-3px;" />
+            <input type="text" class="search-filter form-filter date-picker-c search-ended" name="delivery-ended" placeholder="终止时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
 
             <button type="button" class="btn btn-success btn-filter filter-submit" data-time-type="period">
                 <i class="fa fa-search"></i> 按时间段搜索
