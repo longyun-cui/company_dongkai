@@ -506,19 +506,19 @@ class DK_Staff__OrderRepository {
         // 质检部
         if($me->staff_category == 51)
         {
-            $query->where('dk_common__order.is_published','>',0);
+            $query->where('dk_common__order.is_published','=',1);
 
             if($me->staff_position == 31)
             {
                 // 部门总监
                 $project_list = DK_Pivot__Department_Project::select('project_id')->where('department_id',$me->department_id)->get()->pluck('project_id')->toArray();
-                $query->where('is_published','>',0)->whereIn('dk_common__order.project_id', $project_list);
+                $query->where('is_published','=',1)->whereIn('dk_common__order.project_id', $project_list);
             }
             else if($me->staff_position == 41)
             {
                 // 团队经理（多对对）
                 $project_list = DK_Pivot__Team_Project::select('project_id')->where('team_id',$me->team_id)->get()->pluck('project_id')->toArray();
-                $query->where('is_published','>',0)->whereIn('dk_common__order.project_id', $project_list);
+                $query->where('is_published','=',1)->whereIn('dk_common__order.project_id', $project_list);
             }
             else if($me->staff_position == 61)
             {
@@ -544,13 +544,13 @@ class DK_Staff__OrderRepository {
             {
                 // 部门总监（多对对）
                 $project_list = DK_Pivot__Department_Project::select('project_id')->where('department_id',$me->department_id)->get()->pluck('project_id')->toArray();
-                $query->where('is_published','>',0)->whereIn('dk_common__order.project_id', $project_list);
+                $query->where('is_published','=',1)->whereIn('dk_common__order.project_id', $project_list);
             }
             else if($me->staff_position == 41)
             {
                 // 团队经理（多对对）
                 $project_list = DK_Pivot__Team_Project::select('project_id')->where('team_id',$me->team_id)->get()->pluck('project_id')->toArray();
-                $query->where('is_published','>',0)->whereIn('dk_common__order.project_id', $project_list);
+                $query->where('is_published','=',1)->whereIn('dk_common__order.project_id', $project_list);
             }
             else if($me->staff_position == 61)
             {
@@ -570,7 +570,7 @@ class DK_Staff__OrderRepository {
         // 运营部
         if($me->staff_category == 71)
         {
-            $query->where('dk_common__order.is_published','>',0);
+            $query->where('dk_common__order.is_published','=',1);
 
             if($me->staff_position == 31)
             {
@@ -1655,7 +1655,7 @@ class DK_Staff__OrderRepository {
             ])
             ->where('client_phone',$order->client_phone)
             ->where('id','<>',$id)
-            ->where('is_published','>',0)
+            ->where('is_published','=',1)
             ->where('order_category',$order->order_category)
             ->get();
 
@@ -1839,7 +1839,7 @@ class DK_Staff__OrderRepository {
 
         $is_today_repeat = DK_Common__Order::where(['client_phone'=>(int)$client_phone])
             ->where('id','<>',$id)
-            ->where('is_published','>',0)
+            ->where('is_published','=',1)
             ->where('published_date',$date)
             ->where('order_category',$item->order_category)
             ->count("*");
@@ -1850,7 +1850,7 @@ class DK_Staff__OrderRepository {
 
         $is_repeat = DK_Common__Order::where(['delivered_project_id'=>$project_id,'client_phone'=>(int)$client_phone])
             ->where('id','<>',$id)
-            ->where('is_published','>',0)
+            ->where('is_published','=',1)
             ->where('order_category',$item->order_category)
             ->count("*");
         if($is_repeat == 0)
@@ -2189,7 +2189,7 @@ class DK_Staff__OrderRepository {
             if($item->project_id != $project_id || $item->client_phone != $client_phone)
             {
                 $is_repeat = DK_Common__Order::where(['delivered_project_id'=>$project_id,'client_phone'=>(int)$client_phone])
-                    ->where('is_published','>',0)
+                    ->where('is_published','=',1)
                     ->where('order_category',$item->order_category)
                     ->count("*");
                 if($is_repeat == 0)
@@ -2529,7 +2529,7 @@ class DK_Staff__OrderRepository {
         if($item->project_id != $project_id || $item->client_phone != $client_phone)
         {
             $is_repeat = DK_Common__Order::where(['delivered_project_id'=>$project_id,'client_phone'=>(int)$client_phone])
-                ->where('is_published','>',0)
+                ->where('is_published','=',1)
                 ->where('order_category',$item->order_category)
                 ->count("*");
             if($is_repeat == 0)
@@ -3014,7 +3014,7 @@ class DK_Staff__OrderRepository {
         if($item->project_id != $project_id || $item->client_phone != $client_phone)
         {
             $is_repeat = DK_Common__Order::where(['delivered_project_id'=>$project_id,'client_phone'=>(int)$client_phone])
-                ->where('is_published','>',0)
+                ->where('is_published','=',1)
                 ->where('order_category',$item->order_category)
                 ->count("*");
             if($is_repeat == 0)
@@ -6759,7 +6759,7 @@ class DK_Staff__OrderRepository {
                 $column_value = (int)$column_value;
 
                 $is_repeat = DK_Common__Order::where(['project_id'=>$project_id,'client_phone'=>(int)$column_value])
-                    ->where('id','<>',$id)->where('is_published','>',0)->count("*");
+                    ->where('id','<>',$id)->where('is_published','=',1)->count("*");
                 if($is_repeat == 0)
                 {
                     $is_repeat = DK_Common__Delivery::where(['project_id'=>$project_id,'client_phone'=>(int)$column_value])->count("*");
@@ -6781,7 +6781,7 @@ class DK_Staff__OrderRepository {
                     $client_phone = $item->client_phone;
 
                     $is_repeat = DK_Common__Order::where(['project_id'=>$column_value,'client_phone'=>(int)$client_phone])
-                        ->where('id','<>',$id)->where('is_published','>',0)->count("*");
+                        ->where('id','<>',$id)->where('is_published','=',1)->count("*");
                     if($is_repeat == 0)
                     {
                         $is_repeat = DK_Common__Delivery::where(['project_id'=>$column_value,'client_phone'=>(int)$client_phone])->count("*");
@@ -6950,7 +6950,7 @@ class DK_Staff__OrderRepository {
                 $client_phone = $item->client_phone;
 
                 $is_repeat = DK_Common__Order::where(['project_id'=>$project_id,'client_phone'=>$column_value])
-                    ->where('id','<>',$id)->where('is_published','>',0)->count("*");
+                    ->where('id','<>',$id)->where('is_published','=',1)->count("*");
 //
 
                 $item->is_repeat = $is_repeat;
@@ -7240,7 +7240,7 @@ class DK_Staff__OrderRepository {
                     $client_phone = $item->client_phone;
 
                     $is_repeat = DK_Common__Order::where(['project_id'=>$column_value,'client_phone'=>$client_phone])
-                        ->where('id','<>',$id)->where('is_published','>',0)->count("*");
+                        ->where('id','<>',$id)->where('is_published','=',1)->count("*");
                     $item->is_repeat = $is_repeat;
                 }
             }
@@ -8051,7 +8051,7 @@ class DK_Staff__OrderRepository {
                 $query->where('id','<>',$id)
                     ->orWhere(function($query) use($id) { $query->where('id',$id)->where('delivered_status',1); } );
             })
-            ->where('is_published','>',0)
+            ->where('is_published','=',1)
             ->get();
         $return['order_repeat'] = $order_repeat;
 

@@ -1014,9 +1014,7 @@ class DK_Staff__StatisticRepository {
         $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
 
 
-        $query_order = DK_Common__Order::select('creator_id','published_at','published_date')
-//            ->whereBetween('published_at',[$this_month_start_timestamp,$this_month_ended_timestamp])  // 当月
-//            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
+        $query_order = DK_Common__Order::select('creator_id','published_date')
             ->whereIn('created_type',[1,91,99])
             ->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date])
             ->groupBy('published_date')
@@ -1043,8 +1041,6 @@ class DK_Staff__StatisticRepository {
 
 
         $query_delivery = DK_Common__Delivery::select('creator_id','delivered_date')
-//            ->whereBetween('published_at',[$this_month_start_timestamp,$this_month_ended_timestamp])  // 当月
-//            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
             ->whereBetween('delivered_date',[$the_month_start_date,$the_month_ended_date])
             ->groupBy('delivered_date')
             ->addSelect(DB::raw("
@@ -1584,9 +1580,7 @@ class DK_Staff__StatisticRepository {
         $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
 
 
-        $query_order = DK_Common__Order::select('creator_id','published_at','published_date')
-//            ->whereBetween('published_at',[$this_month_start_timestamp,$this_month_ended_timestamp])  // 当月
-//            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
+        $query_order = DK_Common__Order::select('creator_id','published_date')
             ->whereIn('created_type',[1,91,99])
             ->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date])
             ->groupBy('published_date')
@@ -1809,8 +1803,6 @@ class DK_Staff__StatisticRepository {
         }
 
         $query_order = DK_A_Order::select('order_date')
-//            ->whereBetween('published_at',[$this_month_start_timestamp,$this_month_ended_timestamp])  // 当月
-//            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
             ->whereBetween('order_date',[$the_month_start_date,$the_month_ended_date])
             ->when($city, function ($query) use ($city) {
                 return $query->where('region_name', $city);
@@ -1982,8 +1974,6 @@ class DK_Staff__StatisticRepository {
         }
 
         $query_order = DK_A_Order::select('region_name')
-//            ->whereBetween('published_at',[$this_month_start_timestamp,$this_month_ended_timestamp])  // 当月
-//            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
 //            ->whereBetween('order_date',[$the_month_start_date,$the_month_ended_date])
 //            ->when($city, function ($query) use ($city) {
 //                return $query->where('region_name', $city);
@@ -4017,7 +4007,6 @@ class DK_Staff__StatisticRepository {
             $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
             $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
 
-//            $query_order->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
             $query_order->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date]);
         }
         else if($time_type == 'period')
@@ -4172,7 +4161,7 @@ class DK_Staff__StatisticRepository {
 
 
         // 工单统计
-        $query_order = DK_Common__Order::select('creator_id','published_at')
+        $query_order = DK_Common__Order::select('creator_id')
             ->groupBy('creator_id');
 
 
@@ -4194,7 +4183,6 @@ class DK_Staff__StatisticRepository {
             $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
             $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
 
-//            $query_order->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
             $query_order->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date]);
         }
         else if($time_type == 'period')
@@ -4428,10 +4416,8 @@ class DK_Staff__StatisticRepository {
         $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
 
 
-        $query_this_month = DK_Common__Order::select('creator_id','published_at','published_date')
+        $query_this_month = DK_Common__Order::select('creator_id','published_date')
             ->where('creator_id',$staff_id)
-//            ->whereBetween('published_at',[$this_month_start_timestamp,$this_month_ended_timestamp])  // 当月
-//            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
             ->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date])
             ->groupBy('published_date')
             ->addSelect(DB::raw("
@@ -5255,7 +5241,6 @@ class DK_Staff__StatisticRepository {
             $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
             $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
 
-//            $query_order->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
             $query_order->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date]);
         }
         else if($time_type == 'period')
