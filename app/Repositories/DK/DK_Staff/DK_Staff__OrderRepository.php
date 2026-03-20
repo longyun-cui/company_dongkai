@@ -506,6 +506,7 @@ class DK_Staff__OrderRepository {
         // 质检部
         if($me->staff_category == 51)
         {
+            $query->where('dk_common__order.created_type','=',1);
             $query->where('dk_common__order.is_published','=',1);
 
 //            if($me->staff_position == 31)
