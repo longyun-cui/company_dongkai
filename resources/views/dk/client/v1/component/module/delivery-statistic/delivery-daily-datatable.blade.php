@@ -35,6 +35,7 @@
                     d.assign = $tableSearch.find('input[name="delivery-project-assign"]').val();
                     d.assign_start = $tableSearch.find('input[name="delivery-daily-start"]').val();
                     d.assign_ended = $tableSearch.find('input[name="delivery-daily-ended"]').val();
+                    d.time_month = $tableSearch.find('input[name="delivery-daily-month"]').val();
                     d.client = $tableSearch.find('select[name="delivery-daily-client"]').val();
                     d.project = $tableSearch.find('select[name="delivery-daily-project"]').val();
                     d.status = $tableSearch.find('select[name="delivery-daily-status"]').val();
