@@ -122,7 +122,7 @@
                 //     }
                 // },
                 {
-                    "title": "姓名",
+                    "title": "用户名",
                     "data": "name",
                     "className": "",
                     "width": "100px",

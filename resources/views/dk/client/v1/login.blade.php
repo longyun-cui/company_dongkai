@@ -28,7 +28,7 @@
                 <span class="glyphicon glyphicon-phone form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
-                <input type="text" class="form-control" name="login_number" placeholder="用户名">
+                <input type="text" class="form-control" name="name" placeholder="用户名">
                 <span class="glyphicon glyphicon-phone form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">

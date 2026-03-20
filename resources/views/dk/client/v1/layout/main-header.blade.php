@@ -23,7 +23,7 @@
                 <li class="active-">
                     <a href="javascript:void(0);" style="color:#fff;">
                         <b>
-                            {{ $me->client_er->name or '' }}
+                            {{ $me->client_er->login_number or '' }}
 {{--                            <span class="sr-only">@yield('title')</span>--}}
                         </b>
                         @yield('title-2')
@@ -62,18 +62,18 @@
                             <p>
                                 {{ $me->name or '' }}
                                 <br>
-                                <br>
-
-                                {{ $me->client_er->name or '' }}
-                                <br>
 
                                 @if($me->staff_position == 0)
                                     <small>Super</small>
                                 @elseif($me->staff_position == 1)
-                                    <small>Admin</small>
+                                    <small>管理员</small>
                                 @elseif($me->staff_position == 99)
                                     <small>员工</small>
                                 @endif
+
+                                <br>
+
+                                {{ $me->client_er->login_number or '' }}
                             </p>
                         </li>
                         <!-- Menu Body -->

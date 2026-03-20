@@ -143,19 +143,19 @@ class DKClientController extends Controller
         else if(request()->isMethod('post'))
         {
             $client_name = request()->get('client_name');
-            $client = DK_Common__Client::where('name',$client_name)->first();
+            $client = DK_Common__Client::where('login_number',$client_name)->first();
             if(!$client) return response_error([],'客户不存在！');
 //            dd($client->id);
 
 
-            $login_number = request()->get('login_number');
+            $name = request()->get('name');
 //            $staff = DK_Client__Staff::whereName($login_number)->first();
 //            dd($client->id);
 
             $staff = DK_Client__Staff::select('*')
                 ->where(['active'=>1,'item_status'=>1])
                 ->where('client_id',$client->id)
-                ->where('name',$login_number)
+                ->where('name',$name)
                 ->first();
 //            dd();
 
