@@ -3516,6 +3516,7 @@ class DK_Staff__StatisticRepository {
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count__for__repeated,
                     count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count__for__refused
                 "))
+            ->where('created_type',1)
             ->groupBy('creator_id');
 
 
@@ -3533,6 +3534,7 @@ class DK_Staff__StatisticRepository {
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count__for__repeated,
                     count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count__for__refused
                 "))
+            ->where('created_type',1)
             ->groupBy('creator_team_id');
 
 
@@ -3550,6 +3552,7 @@ class DK_Staff__StatisticRepository {
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count__for__repeated,
                     count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count__for__refused
                 "))
+            ->where('created_type',1)
             ->groupBy('creator_team_id','creator_team_group_id');
 
 
@@ -3955,6 +3958,7 @@ class DK_Staff__StatisticRepository {
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count__for__repeated,
                     count(IF(inspected_result = '拒绝' or inspected_result = '不合格', TRUE, NULL)) as order_count__for__refused
                 "))
+            ->where('created_type',1)
             ->groupBy('creator_id');
 
         // 项目
@@ -4162,6 +4166,7 @@ class DK_Staff__StatisticRepository {
 
         // 工单统计
         $query_order = DK_Common__Order::select('creator_id')
+            ->where('created_type',1)
             ->groupBy('creator_id');
 
 
