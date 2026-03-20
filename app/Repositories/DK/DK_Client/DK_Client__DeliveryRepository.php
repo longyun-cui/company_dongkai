@@ -105,7 +105,9 @@ class DK_Client__DeliveryRepository {
 
         $query = DK_Common__Delivery::select('*')
             ->with([
-                'order_er',
+                'order_er'=>function($query) {
+                    $query->with(['creator'=>function($query) { $query->select('id','name'); }]);
+                },
                 'client_staff_er'=>function($query) { $query->select('id','name'); },
             ])
             ->where('client_id',$me->client_id);

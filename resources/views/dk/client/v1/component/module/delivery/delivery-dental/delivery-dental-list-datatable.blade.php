@@ -124,6 +124,7 @@
                         var $html_trade = '<a class="btn btn-xs bg-default modal-show--for--delivery--item-trade-create" data-id="'+data+'">成交</a>';
                         var $html_follow = '<a class="btn btn-xs bg-default modal-show--for--delivery--item-follow-create" data-id="'+data+'">跟进</a>';
                         var $html_follow_record = '<a class="btn btn-xs bg-default modal-show--for--delivery--item-operation-record" data-id="'+data+'">记录</a>';
+                        var $html_detail = '<a class="btn btn-xs bg-default modal-show--for--delivery--item-detail" data-id="'+data+'">详情</a>';
 
                         var $html =
                             $html_quality+
@@ -133,6 +134,7 @@
                             $html_follow+
                             $html_follow_record+
                             // $html_record+
+                            $html_detail+
                             '';
                         return $html;
                     }
@@ -145,11 +147,15 @@
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(row.is_completed != 1)
                         {
                             $(nTd).addClass('is_api_pushed');
-                            $(nTd).attr('data-id',row.id).attr('data-name','分配状态');
-                            $(nTd).attr('data-key','is_api_pushed').attr('data-value',data);
+
+                            $(nTd).attr('data-id',row.id);
+                            $(nTd).attr('data-name','分配状态');
+                            $(nTd).attr('data-key','is_api_pushed');
+                            $(nTd).attr('data-value',data);
+
                             if(data) $(nTd).attr('data-operate-type','edit');
                             else $(nTd).attr('data-operate-type','add');
                         }
@@ -168,11 +174,15 @@
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(row.is_completed != 1)
                         {
                             $(nTd).addClass('order_quality');
-                            $(nTd).attr('data-id',row.id).attr('data-name','工单质量');
-                            $(nTd).attr('data-key','order_quality').attr('data-value',data);
+
+                            $(nTd).attr('data-id',row.id);
+                            $(nTd).attr('data-name','工单质量');
+                            $(nTd).attr('data-key','order_quality');
+                            $(nTd).attr('data-value',data);
+
                             if(data) $(nTd).attr('data-operate-type','edit');
                             else $(nTd).attr('data-operate-type','add');
                         }
@@ -192,11 +202,15 @@
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(row.is_completed != 1)
                         {
                             $(nTd).addClass('assign_status');
-                            $(nTd).attr('data-id',row.id).attr('data-name','分配状态');
-                            $(nTd).attr('data-key','assign_status').attr('data-value',row.id);
+
+                            $(nTd).attr('data-id',row.id);
+                            $(nTd).attr('data-name','分配状态');
+                            $(nTd).attr('data-key','assign_status');
+                            $(nTd).attr('data-value',row.id);
+
                             if(data) $(nTd).attr('data-operate-type','edit');
                             else $(nTd).attr('data-operate-type','add');
                         }
@@ -223,8 +237,12 @@
                         if(row.is_completed != 1)
                         {
                             $(nTd).addClass('client_staff');
-                            $(nTd).attr('data-id',row.id).attr('data-name','分派员工');
-                            $(nTd).attr('data-key','client_staff_id').attr('data-value',row.id);
+
+                            $(nTd).attr('data-id',row.id);
+                            $(nTd).attr('data-name','分派员工');
+                            $(nTd).attr('data-key','client_staff_id');
+                            $(nTd).attr('data-value',row.id);
+
                             if(data) $(nTd).attr('data-operate-type','edit');
                             else $(nTd).attr('data-operate-type','add');
                         }
@@ -310,8 +328,10 @@
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        $(nTd).attr('data-id',row.id).attr('data-name','客户姓名');
-                        $(nTd).attr('data-key','client_name').attr('data-value',data);
+                        $(nTd).attr('data-id',row.id);
+                        $(nTd).attr('data-name','客户姓名');
+                        $(nTd).attr('data-key','client_name');
+                        $(nTd).attr('data-value',data);
                     },
                     render: function(data, type, row, meta) {
                         if(row.order_er) return row.order_er.client_name;
@@ -325,8 +345,10 @@
                     "width": "100px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        $(nTd).attr('data-id',row.id).attr('data-name','客户电话');
-                        $(nTd).attr('data-key','client_phone').attr('data-value',data);
+                        $(nTd).attr('data-id',row.id);
+                        $(nTd).attr('data-name','客户电话');
+                        $(nTd).attr('data-key','client_phone');
+                        $(nTd).attr('data-value',data);
                     },
                     render: function(data, type, row, meta) {
                         return data;
@@ -339,8 +361,10 @@
                     "width": "100px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        $(nTd).attr('data-id',row.id).attr('data-name','微信号');
-                        $(nTd).attr('data-key','client_wx').attr('data-value',data);
+                        $(nTd).attr('data-id',row.id);
+                        $(nTd).attr('data-name','微信号');
+                        $(nTd).attr('data-key','client_wx');
+                        $(nTd).attr('data-value',data);
                     },
                     render: function(data, type, row, meta) {
                         if(row.order_er) return row.order_er.wx_id;
@@ -354,8 +378,10 @@
                     "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        $(nTd).attr('data-id',row.id).attr('data-name','客户意向');
-                        $(nTd).attr('data-key','client_intention').attr('data-value',data);
+                        $(nTd).attr('data-id',row.id);
+                        $(nTd).attr('data-name','客户意向');
+                        $(nTd).attr('data-key','client_intention');
+                        $(nTd).attr('data-value',data);
                     },
                     render: function(data, type, row, meta) {
                         // if(!data) return '--';
@@ -391,11 +417,24 @@
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        $(nTd).attr('data-id',row.id).attr('data-name','牙齿数量');
-                        $(nTd).attr('data-key','teeth_count').attr('data-value',data);
+                        $(nTd).attr('data-id',row.id);
+                        $(nTd).attr('data-name','牙齿数量');
+                        $(nTd).attr('data-key','teeth_count');
+                        $(nTd).attr('data-value',data);
                     },
                     render: function(data, type, row, meta) {
-                        if(row.order_er) return row.order_er.teeth_count;
+                        if(row.order_er)
+                        {
+                            var $teeth_count = row.order_er.field_1;
+
+                            if($teeth_count == 1) return '1-2颗';
+                            else if($teeth_count == 2) return '3-5颗';
+                            else if($teeth_count == 3) return '6颗';
+                            else if($teeth_count == 11) return '半口';
+                            else if($teeth_count == 19) return '全口';
+                            else if($teeth_count == 99) return '其他';
+                            else return '';
+                        }
                         return "--";
                     }
                 },
@@ -406,8 +445,10 @@
                     "width": "120px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        $(nTd).attr('data-id',row.id).attr('data-name','所在城市');
-                        $(nTd).attr('data-key','location').attr('data-value','');
+                        $(nTd).attr('data-id',row.id);
+                        $(nTd).attr('data-name','所在城市');
+                        $(nTd).attr('data-key','location');
+                        $(nTd).attr('data-value','');
                     },
                     render: function(data, type, row, meta) {
                         if(row.order_er)
@@ -494,7 +535,7 @@
                     "title": "最新跟进说明",
                     "data": "follow_latest_description",
                     "className": "",
-                    "width": "",
+                    "width": "240px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         return data;

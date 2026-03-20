@@ -119,6 +119,12 @@ Route::group(['middleware' => ['dk.client.user.login']], function () {
 
 
 
+    Route::get('/o1/export/delivery--export--by-ids', $controller.'@o1__export__delivery__export__by_ids');
+
+
+
+
+    Route::match(['get','post'], '/v1/operate/export/statistic-export-for-delivery-by-ids', $controller.'@v1_operate_statistic_export_for_delivery_by_ids');
 
 
 

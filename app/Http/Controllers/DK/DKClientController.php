@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Controllers\DK;
 
-use App\Repositories\DK\DK_Client\DK_Client__TeamRepository;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -17,9 +16,12 @@ use App\Repositories\DK\DK_Client\DK_Client__CommonRepository;
 
 use App\Repositories\DK\DK_Client\DK_Client__IndexRepository;
 
+use App\Repositories\DK\DK_Client\DK_Client__TeamRepository;
 use App\Repositories\DK\DK_Client\DK_Client__StaffRepository;
 
 use App\Repositories\DK\DK_Client\DK_Client__DeliveryRepository;
+
+use App\Repositories\DK\DK_Client\DK_Client__ExportRepository;
 
 //use App\Repositories\DK\DK_Client\DK_Client__ExportRepository;
 //
@@ -62,6 +64,8 @@ class DKClientController extends Controller
         $this->staff_repo = new DK_Client__StaffRepository;
 
         $this->delivery_repo = new DK_Client__DeliveryRepository;
+
+        $this->export_repo = new DK_Client__ExportRepository;
 
 //        $this->export_repo = new DK_Client__ExportRepository;
 //
@@ -469,6 +473,30 @@ class DKClientController extends Controller
 
 
 
+
+
+    // 【导出】订单-导出
+    public function o1__export__delivery__export__by_ids()
+    {
+        $order_category = request('order_category',0);
+
+        if($order_category == 1)
+        {
+            return $this->export_repo->o1__export__delivery_dental__export__by_ids(request()->all());
+        }
+        else if($order_category == 11)
+        {
+            return $this->export_repo->o1__export__delivery_aesthetic__export__by_ids(request()->all());
+        }
+        else if($order_category == 31)
+        {
+            return $this->export_repo->o1__export__delivery_luxury__export__by_ids(request()->all());
+        }
+        else
+        {
+            return $this->export_repo->o1__export__delivery_dental__export__by_ids(request()->all());
+        }
+    }
 
 
 
@@ -930,31 +958,6 @@ class DKClientController extends Controller
 
 
 
-
-
-    // 【统计】订单-导出
-    public function v1_operate_statistic_export_for_delivery_by_ids()
-    {
-        $item_category = request('item_category',0);
-
-        if($item_category == 1)
-        {
-            return $this->repo->v1_operate_statistic_export_for_delivery_dental_by_ids(request()->all());
-        }
-        else if($item_category == 11)
-        {
-            return $this->repo->v1_operate_statistic_export_for_delivery_aesthetic_by_ids(request()->all());
-        }
-        else if($item_category == 31)
-        {
-            return $this->repo->v1_operate_statistic_export_for_delivery_luxury_by_ids(request()->all());
-        }
-        else
-        {
-            return $this->repo->v1_operate_statistic_export_for_delivery_dental_by_ids(request()->all());
-        }
-
-    }
 
 
 
