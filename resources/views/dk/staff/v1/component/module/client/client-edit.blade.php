@@ -66,6 +66,14 @@
                     </div>
                 </div>
 
+                {{--客户登录名--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户系统登录名</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="login_number" placeholder="客户系统登录名" value="">
+                    </div>
+                </div>
+
 
                 {{--渠道--}}
 {{--                <div class="form-group">--}}

@@ -66,7 +66,7 @@ class DK_Staff__ClientRepository {
 
         $query = DK_Common__Client::select('*')
             ->with([
-                'creator'=>function($query) { $query->select(['id','username']); }
+                'creator'=>function($query) { $query->select(['id','name']); }
             ])
             ->whereIn('client_category',[1,11,31])
             ->whereIn('client_type',[0,1,9,11,19,21,22,41,61])
@@ -202,6 +202,9 @@ class DK_Staff__ClientRepository {
             $is_exist = DK_Common__Client::select('id')->where('name',$post_data["name"])->count();
             if($is_exist) return response_error([],"该【客户名称】已存在，请勿重复添加！");
 
+            $is_exist = DK_Common__Client::select('id')->where('login_number',$post_data["login_number"])->count();
+            if($is_exist) return response_error([],"该【客户系统登录名】已存在，请勿重复添加！");
+
             $mine = new DK_Common__Client;
             $post_data["active"] = 1;
             $post_data["creator_id"] = $me->id;
@@ -211,6 +214,24 @@ class DK_Staff__ClientRepository {
             // 编辑
             $mine = DK_Common__Client::find($operate_id);
             if(!$mine) return response_error([],"该【客户】不存在，刷新页面重试！");
+
+            if($mine->name != $post_data['name'])
+            {
+                $is_exist = DK_Common__Client::select('*')
+                    ->where('name',$post_data['name'])
+                    ->where('id','!=',$operate_id)
+                    ->first();
+                if($is_exist) return response_error([],"【客户名称】重复，请更换再试一次！");
+            }
+
+            if($mine->login_number != $post_data['login_number'])
+            {
+                $is_exist = DK_Common__Client::select('*')
+                    ->where('login_number',$post_data['login_number'])
+                    ->where('id','!=',$operate_id)
+                    ->first();
+                if($is_exist) return response_error([],"【客户系统登录名】重复，请更换再试一次！");
+            }
         }
         else return response_error([],"参数有误！");
 
@@ -285,7 +306,7 @@ class DK_Staff__ClientRepository {
             'operate' => 'required',
             'client_category' => 'required',
             'name' => 'required',
-//            'name' => 'required|unique:dk_client,username',
+//            'name' => 'required|unique:dk_client,name',
             'client_admin_name' => 'required',
             'client_admin_mobile' => 'required',
         ], $messages);

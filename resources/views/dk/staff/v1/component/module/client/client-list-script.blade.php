@@ -87,6 +87,7 @@
                         $modal.find('input[name="client_category"][value="'+$response.data.client_category+'"]').parents('.radio-client-category').show();
 
                         $modal.find('input[name="name"]').val($response.data.name);
+                        $modal.find('input[name="login_number"]').val($response.data.login_number);
                         $modal.find('input[name="client_admin_name"]').val($response.data.client_admin_name);
                         $modal.find('input[name="client_admin_mobile"]').val($response.data.client_admin_mobile);
                         $modal.find('input[name="ip_whitelist"]').val($response.data.ip_whitelist);
@@ -180,7 +181,7 @@
                 error: function(xhr, status, error, $form) {
                     // 请求失败时的回调
                     console.log('error');
-                    layer.closeAll('loading');
+                    layer.msg('服务器错误！');
                 },
                 complete: function(xhr, status, $form) {
                     // 无论成功或失败都会执行的回调

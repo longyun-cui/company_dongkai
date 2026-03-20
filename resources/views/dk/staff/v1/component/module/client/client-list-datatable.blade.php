@@ -115,6 +115,17 @@
                         return '<a href="javascript:void(0);" class="text-black">'+data+'</a>';
                     }
                 },
+                {
+                    "title": "登录名",
+                    "data": "login_number",
+                    "className": "client-name",
+                    "width": "160px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(data) return '<a href="javascript:void(0);" class="text-black">'+data+'</a>';
+                        else return "--";
+                    }
+                },
 {{--                @if(in_array($me->staff_type,[0,1,11,19]))--}}
 {{--                {--}}
 {{--                    "title": "合作单价",--}}
@@ -164,13 +175,17 @@
                     "width": "",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(row.is_completed != 1)
                         {
                             $(nTd).addClass('modal-show-for-info-text-set');
-                            $(nTd).attr('data-id',row.id).attr('data-name','备注');
-                            $(nTd).attr('data-key','remark').attr('data-value',data);
+
+                            $(nTd).attr('data-id',row.id);
+                            $(nTd).attr('data-name','备注');
+                            $(nTd).attr('data-key','remark');
+                            $(nTd).attr('data-value',data);
                             $(nTd).attr('data-column-name','备注');
                             $(nTd).attr('data-text-type','textarea');
+
                             if(data) $(nTd).attr('data-operate-type','edit');
                             else $(nTd).attr('data-operate-type','add');
                         }
@@ -188,7 +203,7 @@
                     "data": "creator_id",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        if(row.creator) return row.creator.username;
+                        if(row.creator) return row.creator.name;
                         else return "--";
                     }
                 },
