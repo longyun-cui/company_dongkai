@@ -508,31 +508,31 @@ class DK_Staff__OrderRepository {
         {
             $query->where('dk_common__order.is_published','=',1);
 
-            if($me->staff_position == 31)
-            {
-                // 部门总监
-                $project_list = DK_Pivot__Department_Project::select('project_id')->where('department_id',$me->department_id)->get()->pluck('project_id')->toArray();
-                $query->where('is_published','=',1)->whereIn('dk_common__order.project_id', $project_list);
-            }
-            else if($me->staff_position == 41)
-            {
-                // 团队经理（多对对）
-                $project_list = DK_Pivot__Team_Project::select('project_id')->where('team_id',$me->team_id)->get()->pluck('project_id')->toArray();
-                $query->where('is_published','=',1)->whereIn('dk_common__order.project_id', $project_list);
-            }
-            else if($me->staff_position == 61)
-            {
-                // 小组主管（多对对）
-                $staff_ids = DK_Common__Staff::select('id')->where('team_group_id',$me->id)->get()->pluck('id')->toArray();
-                $project_list = DK_Pivot__Staff_Project::select('project_id')->whereIn('staff_id',$staff_ids)->get()->pluck('project_id')->toArray();
-                $query->whereIn('dk_common__order.project_id', $project_list);
-            }
-            else if($me->staff_position == 99)
-            {
-                // 职员（多对多）
-                $project_list = DK_Pivot__Staff_Project::select('project_id')->where('staff_id',$me->id)->get()->pluck('project_id')->toArray();
-                $query->whereIn('dk_common__order.project_id', $project_list);
-            }
+//            if($me->staff_position == 31)
+//            {
+//                // 部门总监
+//                $project_list = DK_Pivot__Department_Project::select('project_id')->where('department_id',$me->department_id)->get()->pluck('project_id')->toArray();
+//                $query->where('is_published','=',1)->whereIn('dk_common__order.project_id', $project_list);
+//            }
+//            else if($me->staff_position == 41)
+//            {
+//                // 团队经理（多对对）
+//                $project_list = DK_Pivot__Team_Project::select('project_id')->where('team_id',$me->team_id)->get()->pluck('project_id')->toArray();
+//                $query->where('is_published','=',1)->whereIn('dk_common__order.project_id', $project_list);
+//            }
+//            else if($me->staff_position == 61)
+//            {
+//                // 小组主管（多对对）
+//                $staff_ids = DK_Common__Staff::select('id')->where('team_group_id',$me->id)->get()->pluck('id')->toArray();
+//                $project_list = DK_Pivot__Staff_Project::select('project_id')->whereIn('staff_id',$staff_ids)->get()->pluck('project_id')->toArray();
+//                $query->whereIn('dk_common__order.project_id', $project_list);
+//            }
+//            else if($me->staff_position == 99)
+//            {
+//                // 职员（多对多）
+//                $project_list = DK_Pivot__Staff_Project::select('project_id')->where('staff_id',$me->id)->get()->pluck('project_id')->toArray();
+//                $query->whereIn('dk_common__order.project_id', $project_list);
+//            }
         }
 
         // 复核部
@@ -540,31 +540,31 @@ class DK_Staff__OrderRepository {
         {
             $query->where('dk_common__order.appealed_status','>',0);
 
-            if($me->staff_position == 31)
-            {
-                // 部门总监（多对对）
-                $project_list = DK_Pivot__Department_Project::select('project_id')->where('department_id',$me->department_id)->get()->pluck('project_id')->toArray();
-                $query->where('is_published','=',1)->whereIn('dk_common__order.project_id', $project_list);
-            }
-            else if($me->staff_position == 41)
-            {
-                // 团队经理（多对对）
-                $project_list = DK_Pivot__Team_Project::select('project_id')->where('team_id',$me->team_id)->get()->pluck('project_id')->toArray();
-                $query->where('is_published','=',1)->whereIn('dk_common__order.project_id', $project_list);
-            }
-            else if($me->staff_position == 61)
-            {
-                // 小组主管（多对对）
-                $staff_ids = DK_Common__Staff::select('id')->where('team_group_id',$me->id)->get()->pluck('id')->toArray();
-                $project_list = DK_Pivot__Staff_Project::select('project_id')->whereIn('staff_id',$staff_ids)->get()->pluck('project_id')->toArray();
-                $query->whereIn('dk_common__order.project_id', $project_list);
-            }
-            else if($me->staff_position == 99)
-            {
-                // 职员（多对多）
-                $project_list = DK_Pivot__Staff_Project::select('project_id')->where('staff_id',$me->id)->get()->pluck('project_id')->toArray();
-                $query->whereIn('dk_common__order.project_id', $project_list);
-            }
+//            if($me->staff_position == 31)
+//            {
+//                // 部门总监（多对对）
+//                $project_list = DK_Pivot__Department_Project::select('project_id')->where('department_id',$me->department_id)->get()->pluck('project_id')->toArray();
+//                $query->where('is_published','=',1)->whereIn('dk_common__order.project_id', $project_list);
+//            }
+//            else if($me->staff_position == 41)
+//            {
+//                // 团队经理（多对对）
+//                $project_list = DK_Pivot__Team_Project::select('project_id')->where('team_id',$me->team_id)->get()->pluck('project_id')->toArray();
+//                $query->where('is_published','=',1)->whereIn('dk_common__order.project_id', $project_list);
+//            }
+//            else if($me->staff_position == 61)
+//            {
+//                // 小组主管（多对对）
+//                $staff_ids = DK_Common__Staff::select('id')->where('team_group_id',$me->id)->get()->pluck('id')->toArray();
+//                $project_list = DK_Pivot__Staff_Project::select('project_id')->whereIn('staff_id',$staff_ids)->get()->pluck('project_id')->toArray();
+//                $query->whereIn('dk_common__order.project_id', $project_list);
+//            }
+//            else if($me->staff_position == 99)
+//            {
+//                // 职员（多对多）
+//                $project_list = DK_Pivot__Staff_Project::select('project_id')->where('staff_id',$me->id)->get()->pluck('project_id')->toArray();
+//                $query->whereIn('dk_common__order.project_id', $project_list);
+//            }
         }
 
         // 运营部
