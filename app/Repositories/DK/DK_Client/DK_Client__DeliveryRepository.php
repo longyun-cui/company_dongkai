@@ -2232,7 +2232,6 @@ class DK_Client__DeliveryRepository {
 
         if($limit == -1) $list = $query->get();
         else $list = $query->skip($skip)->take($limit)->get();
-        dd($list->toArray());
 
 
         foreach($list as $k => $v)
