@@ -59,6 +59,20 @@
                             <span class="delivery-teeth-count-box"></span>
                         </div>
                     </div>
+                    {{--医美品类--}}
+                    <div class="form-group aesthetic-show">
+                        <label class="control-label col-md-2">医美品类</label>
+                        <div class="col-md-9 ">
+                            <span class="delivery-aesthetic-category-box"></span>
+                        </div>
+                    </div>
+                    {{--二奢品类--}}
+                    <div class="form-group luxury-show">
+                        <label class="control-label col-md-2">二奢品类</label>
+                        <div class="col-md-9 ">
+                            <span class="delivery-luxury-category-box"></span>
+                        </div>
+                    </div>
                     {{--城市--}}
                     <div class="form-group">
                         <label class="control-label col-md-2">所在城市</label>

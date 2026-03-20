@@ -142,6 +142,8 @@
             $modal.find('.delivery-client-wx-box').html($row.find('[data-key="client_wx"]').html());
             $modal.find('.delivery-client-intention-box').html($row.find('[data-key="client_intention"]').html());
             $modal.find('.delivery-teeth-count-box').html($row.find('[data-key="teeth_count"]').html());
+            $modal.find('.delivery-aesthetic-category-box').html($row.find('[data-key="aesthetic_category"]').html());
+            $modal.find('.delivery-luxury-category-box').html($row.find('[data-key="luxury_category"]').html());
             $modal.find('.delivery-description-box').html($row.find('[data-key="description"]').data('value'));
             $modal.find('.delivery-recording-address-box').html('');
             $modal.find('.delivery-recording-address-box').html($row.find('[data-key="description"]').data('recording-address'));
