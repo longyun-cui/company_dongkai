@@ -60,26 +60,19 @@
                             @endif
 
                             <p>
-                                {{ $me->name or '' }} <br><br>
+                                {{ $me->name or '' }}
+                                <br>
+                                <br>
+
+                                {{ $me->client_er->name or '' }}
+                                <br>
 
                                 @if($me->staff_position == 0)
-                                @elseif($me->staff_position == 31) 部门总监
-                                @elseif($me->staff_position == 41) 团队经理
-                                @elseif($me->staff_position == 61) 小组主管
-                                @endif
-
-                                @if($me->staff_category == 0)
                                     <small>Super</small>
-                                @elseif($me->staff_category == 1)
-                                    <small>Boss</small>
-                                @elseif($me->staff_category == 41)
-                                    <small>客服部</small>
-                                @elseif($me->staff_category == 51)
-                                    <small>质检部</small>
-                                @elseif($me->staff_category == 61)
-                                    <small>复核部</small>
-                                @elseif($me->staff_category == 71)
-                                    <small>运营部</small>
+                                @elseif($me->staff_position == 1)
+                                    <small>Admin</small>
+                                @elseif($me->staff_position == 99)
+                                    <small>员工</small>
                                 @endif
                             </p>
                         </li>
@@ -103,7 +96,15 @@
                             <div class="pull-left">
 
                                 {{--<a href="{{ url('/my-account/my-profile-info-index') }}" class="btn btn-default btn-flat">个人资料</a>--}}
-                                <a href="{{ url('/my-account/my-password-change') }}" class="btn btn-default btn-flat">修改密码</a>
+{{--                                <a href="{{ url('/my-account/my-password-change') }}" class="btn btn-default btn-flat">修改密码</a>--}}
+
+                                <a type="button" onclick="" class="btn btn-default modal-show--for--my-account--password-change"
+                                        data-form-id="form--for--my-account--password-change"
+                                        data-modal-id="modal--for--my-account--password-change"
+                                        data-title="修改密码"
+                                >
+                                    <i class="fa- fa-plus--"></i> 修改密码
+                                </a>
 
 {{--                                <a class="btn btn-default btn-flat tab-control"--}}
 {{--                                   data-type="create"--}}

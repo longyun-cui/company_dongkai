@@ -72,6 +72,10 @@
 </div>
 
 
+    {{--账号--}}
+    @include(env('DK_CLIENT__TEMPLATE').'component.my-account.my-account--password-change')
+
+
     {{--团队--}}
     @include(env('DK_CLIENT__TEMPLATE').'component.module.team.team-edit')
     @include(env('DK_CLIENT__TEMPLATE').'component.module.team.team--item-operation-record')
@@ -111,6 +115,10 @@
 @section('custom-js')
 @endsection
 @section('custom-script')
+
+
+    {{--账号--}}
+    @include(env('DK_CLIENT__TEMPLATE').'component.my-account.my-account-script')
 
 
     {{--团队--}}

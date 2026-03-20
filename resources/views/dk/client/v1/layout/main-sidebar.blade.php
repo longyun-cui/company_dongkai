@@ -120,7 +120,7 @@
             @endif
             {{--成交记录--}}
             @if(in_array($me->staff_position,[0,1,9]))
-            <li class="treeview">
+            <li class="treeview _none">
                 <a class="tab-control datatable-control"
                    data-type="create"
                    data-unique="y"

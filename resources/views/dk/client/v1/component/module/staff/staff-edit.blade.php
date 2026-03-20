@@ -161,7 +161,7 @@
                         <div id="titleImageError" style="color: #a94442"></div>
 
                     </div>
-                </div>s
+                </div>
 
                 {{--启用--}}
 {{--                <div class="form-group form-type _none">--}}

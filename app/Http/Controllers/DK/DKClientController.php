@@ -55,7 +55,6 @@ class DKClientController extends Controller
     {
 //        $this->repo = new DKClientRepository;
 
-        $this->common_repo = new DK_Client__CommonRepository;
         $this->repo = new DK_Client__IndexRepository;
 
         $this->common_repo = new DK_Client__CommonRepository;
@@ -257,6 +256,18 @@ class DKClientController extends Controller
     {
         return $this->common_repo->o1__select2__staff(request()->all());
     }
+
+
+
+
+
+
+    // 【个人账号】修改密码
+    public function o1__my_account__password_change__save()
+    {
+        return $this->common_repo->o1__my_account__password_change__save(request()->all());
+    }
+
 
 
 
