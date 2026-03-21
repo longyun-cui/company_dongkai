@@ -539,6 +539,7 @@ class DK_Staff__OrderRepository {
         // 复核部
         if($me->staff_category == 61)
         {
+            $query->where('dk_common__order.created_type','=',1);
             $query->where('dk_common__order.appealed_status','>',0);
 
 //            if($me->staff_position == 31)
