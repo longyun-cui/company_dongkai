@@ -439,7 +439,7 @@
                 // },
 
 
-                @if(in_array($me->staff_category,[0,1,9,71]))
+                @if(in_array($me->staff_category,[0,1,9,51,71]))
                 {
                     "title": "不合格",
                     "data": "order_count_for_accepted_non",
@@ -472,6 +472,8 @@
                         }
                     }
                 },
+                @endif
+                @if(in_array($me->staff_category,[0,1,9,71]))
                 {
                     "title": "交付量",
                     "data": "order_count_for_delivered",
