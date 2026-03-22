@@ -266,34 +266,34 @@ class DK_Staff__IndexRepository {
         // 质检部 & 复核部
         if(in_array($me->staff_category,[51,61]))
         {
-            $project_ids = DK_Pivot__Department_Project::select('project_id')->where('department_id',$me->department_id)->get()->pluck('project_id')->toArray();
-            $project_query->whereIn('id',$project_ids)->get();
-
-            if($me->staff_position == 31)
-            {
-                // 部门总监
-//                $project_ids = DK_Pivot__Department_Project::select('project_id')->where('department_id',$me->department_id)->get()->pluck('project_id')->toArray();
+//            $project_ids = DK_Pivot__Department_Project::select('project_id')->where('department_id',$me->department_id)->get()->pluck('project_id')->toArray();
+//            $project_query->whereIn('id',$project_ids)->get();
+//
+//            if($me->staff_position == 31)
+//            {
+//                // 部门总监
+////                $project_ids = DK_Pivot__Department_Project::select('project_id')->where('department_id',$me->department_id)->get()->pluck('project_id')->toArray();
+////                $project_query->whereIn('id',$project_ids)->get();
+//            }
+//            else if($me->staff_position == 41)
+//            {
+//                // 团队经理（多对对）
+//                $project_ids = DK_Pivot__Team_Project::select('project_id')->where('team_id',$me->team_id)->get()->pluck('project_id')->toArray();
 //                $project_query->whereIn('id',$project_ids)->get();
-            }
-            else if($me->staff_position == 41)
-            {
-                // 团队经理（多对对）
-                $project_ids = DK_Pivot__Team_Project::select('project_id')->where('team_id',$me->team_id)->get()->pluck('project_id')->toArray();
-                $project_query->whereIn('id',$project_ids)->get();
-            }
-            else if($me->staff_position == 61)
-            {
-                // 小组主管（多对对）
-                $staff_ids = DK_Common__Staff::select('id')->where('team_group_id',$me->id)->get()->pluck('id')->toArray();
-                $project_ids = DK_Pivot__Staff_Project::select('project_id')->whereIn('staff_id',$staff_ids)->get()->pluck('project_id')->toArray();
-                $project_query->whereIn('id',$project_ids)->get();
-            }
-            else if($me->staff_position == 99)
-            {
-                // 职员（多对多）
-                $project_ids = DK_Pivot__Staff_Project::select('project_id')->where('staff_id',$me->id)->get()->pluck('project_id')->toArray();
-                $project_query->whereIn('id',$project_ids)->get();
-            }
+//            }
+//            else if($me->staff_position == 61)
+//            {
+//                // 小组主管（多对对）
+//                $staff_ids = DK_Common__Staff::select('id')->where('team_group_id',$me->id)->get()->pluck('id')->toArray();
+//                $project_ids = DK_Pivot__Staff_Project::select('project_id')->whereIn('staff_id',$staff_ids)->get()->pluck('project_id')->toArray();
+//                $project_query->whereIn('id',$project_ids)->get();
+//            }
+//            else if($me->staff_position == 99)
+//            {
+//                // 职员（多对多）
+//                $project_ids = DK_Pivot__Staff_Project::select('project_id')->where('staff_id',$me->id)->get()->pluck('project_id')->toArray();
+//                $project_query->whereIn('id',$project_ids)->get();
+//            }
         }
 
         // 运营部
