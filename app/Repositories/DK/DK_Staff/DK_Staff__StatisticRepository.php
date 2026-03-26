@@ -4948,6 +4948,12 @@ class DK_Staff__StatisticRepository {
                 $project_list = DK_Pivot__Team_Project::select('project_id')->where('team_id',$team_id)->get();
                 $query->whereIn('id',$project_list);
             }
+            else if($me->staff_position == 61)
+            {
+                $team_id = $me->team_id;
+                $project_list = DK_Pivot__Team_Project::select('project_id')->where('team_id',$team_id)->get();
+                $query->whereIn('id',$project_list);
+            }
             else if($me->staff_position == 99)
             {
                 $project_list = DK_Pivot__Staff_Project::select('project_id')->where('staff_id',$me->id)->get();
