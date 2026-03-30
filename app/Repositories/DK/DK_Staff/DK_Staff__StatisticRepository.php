@@ -7170,7 +7170,7 @@ class DK_Staff__StatisticRepository {
             "))
             ->leftJoin('dk_common__order as o', function($join) use ($assign_date) {
                 $join->on('dk_cc_call_record_of_current.callee', '=', 'o.client_phone')
-                    ->whereRaw('DATE(o.published_date) = DATE(dk_cc_call_record_of_current.call_date)')
+                    ->where('o.published_date = dk_cc_call_record_of_current.call_date')
 //                    ->whereDate('o.published_date', '=', DB::raw('DATE(dk_cc_call_record_of_current.call_date)'))
                     ->whereIn('o.delivered_result', ['正常交付', '折扣交付', '郊区交付', '内部交付','隔日交付']);
             })
