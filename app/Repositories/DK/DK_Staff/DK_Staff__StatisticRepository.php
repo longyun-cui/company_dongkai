@@ -7166,13 +7166,17 @@ class DK_Staff__StatisticRepository {
             ->addSelect(DB::raw("
                 count(*) as call_count,
                 sum(ceil(timeLength / 60)) as call_time_sum,
-                COUNT(DISTINCT o.id) as order_count
+                COUNT(DISTINCT o.id) as order_count,
+                COUNT(DISTINCT 
+                CASE 
+                    WHEN o.delivered_result IN ('正常交付', '折扣交付', '郊区交付', '内部交付', '隔日交付') 
+                    THEN o.id 
+                 END) as order_accepted_count
             "))
             ->leftJoin('dk_common__order as o', function($join) use ($assign_date) {
                 $join->on('dk_cc_call_record_of_current.callee', '=', 'o.client_phone')
-                    ->whereRaw('o.published_date = dk_cc_call_record_of_current.call_date')
 //                    ->whereDate('o.published_date', '=', DB::raw('DATE(dk_cc_call_record_of_current.call_date)'))
-                    ->whereIn('o.delivered_result', ['正常交付', '折扣交付', '郊区交付', '内部交付','隔日交付']);
+                    ->where('o.published_date',$assign_date);
             })
             ->where('call_date', $assign_date)
             ->groupBy('taskID');
