@@ -213,8 +213,124 @@
                     }
                 },
                 {
-                    "title": "成单数",
+                    "title": "录单数",
                     "data": "order_count",
+                    "type": "num",
+                    "className": "bg-published",
+                    "width": "80px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.taskId == "统计")
+                        {
+                            $(nTd).addClass('text-red').addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
+                    }
+                },
+                {
+                    "title": "录单率",
+                    "data": null,
+                    "type": "num",
+                    "className": "bg-published",
+                    "width": "80px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.taskId == "统计")
+                        {
+                            $(nTd).addClass('text-red').addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        // if(!row.order_count) return '--';
+                        // return data;
+
+                        // return parseFloat(row.order_count / row.call_count * 1000).toFixed(1) + "‰";
+                        // return parseFloat(row.order_count / row.call_count).toFixed(4);
+
+                        // 计算成单率（千分比）
+                        var $rate = parseFloat(row.order_count / row.call_count * 1000);
+
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!row.order_count) return '--';
+                            else return $rate.toFixed(1) + " ‰";
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return $rate;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return $rate;
+                        }
+                    }
+                },
+                {
+                    "title": "单均话费",
+                    "data": "order_count",
+                    "type": "num",
+                    "className": "bg-published",
+                    "width": "80px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.taskId == "统计")
+                        {
+                            $(nTd).addClass('text-red').addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(data > 0) return parseFloat((parseInt(row.call_time_sum) * 0.13) / data).toFixed(2);
+                            else return '--';
+                            // if(!data) return '--';
+                            // return parseFloat((parseInt(row.call_time_sum) * 0.13) / data).toFixed(2);
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            if(data > 0) return parseFloat((parseInt(row.call_time_sum) * 0.13) / data).toFixed(2);
+                            else return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            if(data > 0) return parseFloat((parseInt(row.call_time_sum) * 0.13) / data).toFixed(2);
+                            else return data;
+                        }
+                    }
+                },
+                {
+                    "title": "成单数",
+                    "data": "order_accepted_count",
                     "type": "num",
                     "className": "bg-published",
                     "width": "80px",
@@ -262,19 +378,19 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        // if(!row.order_count) return '--';
+                        // if(!row.order_accepted_count) return '--';
                         // return data;
 
-                        // return parseFloat(row.order_count / row.call_count * 1000).toFixed(1) + "‰";
-                        // return parseFloat(row.order_count / row.call_count).toFixed(4);
+                        // return parseFloat(row.order_accepted_count / row.call_count * 1000).toFixed(1) + "‰";
+                        // return parseFloat(row.order_accepted_count / row.call_count).toFixed(4);
 
                         // 计算成单率（千分比）
-                        var $rate = parseFloat(row.order_count / row.call_count * 1000);
+                        var $rate = parseFloat(row.order_accepted_count / row.call_count * 1000);
 
                         if (type === 'display')
                         {
                             // 显示时返回格式化字符串
-                            if(!row.order_count) return '--';
+                            if(!row.order_accepted_count) return '--';
                             else return $rate.toFixed(1) + " ‰";
                         }
                         else if (type === 'sort')
@@ -290,8 +406,8 @@
                     }
                 },
                 {
-                    "title": "单均话费",
-                    "data": "order_count",
+                    "title": "成单均话费",
+                    "data": "order_accepted_count",
                     "type": "num",
                     "className": "bg-published",
                     "width": "80px",
