@@ -7216,6 +7216,7 @@ class DK_Staff__StatisticRepository {
         $total_data['taskName'] = '统计';
         $total_data['call_date'] = $assign_date;
         $total_data['call_count'] = 0;
+        $total_data['order_accepted_count'] = 0;
         $total_data['call_time_sum'] = 0;
         $total_data['order_count'] = 0;
 
@@ -7224,6 +7225,7 @@ class DK_Staff__StatisticRepository {
             $total_data['call_count'] += $v->call_count;
             $total_data['call_time_sum'] += $v->call_time_sum;
             $total_data['order_count'] += $v->order_count;
+            $total_data['order_accepted_count'] += $v->order_accepted_count;
         }
 //        dd($list->toArray());
 
