@@ -7157,7 +7157,7 @@ class DK_Staff__StatisticRepository {
 
         $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date'] : date('Y-m-d');
 
-        $query = DK_CC_Call_Record_Current::select('taskId','taskName','call_date')
+        $query = DK_CC_Call_Record_Current::withTrashed()->select('taskId','taskName','call_date')
 //            ->addSelectRaw("
 //                count(*) as call_count,
 //                sum(ceil(timeLength / 60)) as call_time_sum,
