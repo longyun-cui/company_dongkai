@@ -84,7 +84,8 @@ class DK_Staff__OrderRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = DK_Common__Order::withTrashed()->select('dk_common__order.*');
+//        $query = DK_Common__Order::withTrashed()->select('dk_common__order.*');
+        $query = DK_Common__Order::select('dk_common__order.*');
 
 
         if(in_array($me->staff_category,[41,51,61]))
