@@ -23363,7 +23363,6 @@ EOF;
         try
         {
 
-            $call_insert_data['api_type'] = $notify['type'];
             $call_insert_data['session'] = $notify['session'];
             $call_insert_data['callee'] = $notify['callee'];
             $call_insert_data['call_date'] = $notify['startTime'];

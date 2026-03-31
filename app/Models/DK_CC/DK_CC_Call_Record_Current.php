@@ -7,7 +7,7 @@ use DB;
 
 class DK_CC_Call_Record_Current extends Model
 {
-    use SoftDeletes;
+//    use SoftDeletes;
     //
     protected $table = "dk_cc_call_record_of_current";
     protected $fillable = [
