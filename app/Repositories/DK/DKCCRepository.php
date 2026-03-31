@@ -23294,6 +23294,10 @@ EOF;
 //        $call_data['serverFrom_name'] = $serverFrom;
 //        $call_data['api_customer_account'] = $post_data['customerAccount'];
 //        $call_data['api_customer_name'] = $post_data['customerName'];
+        $call_data['api_type'] = $post_data['notify']['type'];
+        $call_data['content'] = json_encode($post_data);
+
+        unset($call_data['type']);
 
 //        // 判断是否重复
 //        $session = $call_data['session'];
@@ -23359,10 +23363,10 @@ EOF;
         try
         {
 
-            $insert_data['api_customer_account'] = $post_data['customerAccount'];
-            $insert_data['api_customer_name'] = $post_data['customerName'];
-            $insert_data['api_type'] = $post_data['notify']['type'];
-            $insert_data['content'] = json_encode($post_data);
+//            $insert_data['api_customer_account'] = $post_data['customerAccount'];
+//            $insert_data['api_customer_name'] = $post_data['customerName'];
+//            $insert_data['api_type'] = $post_data['notify']['type'];
+//            $insert_data['content'] = json_encode($post_data);
 
 //            $mine = new DK_CC_API_Received_From_OKCC;
 //            $bool_c = $mine->fill($insert_data)->save();
