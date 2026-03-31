@@ -23363,6 +23363,14 @@ EOF;
         try
         {
 
+            $call_insert_data['api_type'] = $notify['type'];
+            $call_insert_data['session'] = $notify['session'];
+            $call_insert_data['callee'] = $notify['callee'];
+            $call_insert_data['call_date'] = $notify['startTime'];
+            $call_insert_data['timeLength'] = $notify['timeLength'];
+            $call_insert_data['taskID'] = $notify['taskID'];
+            $call_insert_data['taskName'] = $notify['taskName'];
+
 //            $insert_data['api_customer_account'] = $post_data['customerAccount'];
 //            $insert_data['api_customer_name'] = $post_data['customerName'];
 //            $insert_data['api_type'] = $post_data['notify']['type'];
@@ -23385,7 +23393,8 @@ EOF;
 
 //            $call_data['call_record_id'] = $call->id;
             $call_current = new DK_CC_Call_Record_Current;
-            $bool_crc = $call_current->fill($call_data)->save();
+//            $bool_crc = $call_current->fill($call_data)->save();
+            $bool_crc = $call_current->fill($call_insert_data)->save();
             if(!$bool_crc) throw new Exception("DK_CC_Call_Record_Current--insert--fail");
 
 
