@@ -23294,8 +23294,8 @@ EOF;
 //        $call_data['serverFrom_name'] = $serverFrom;
 //        $call_data['api_customer_account'] = $post_data['customerAccount'];
 //        $call_data['api_customer_name'] = $post_data['customerName'];
-        $call_data['api_type'] = $post_data['notify']['type'];
-        $call_data['content'] = json_encode($post_data);
+//        $call_data['api_type'] = $post_data['notify']['type'];
+//        $call_data['content'] = json_encode($post_data);
 
         unset($call_data['type']);
 
