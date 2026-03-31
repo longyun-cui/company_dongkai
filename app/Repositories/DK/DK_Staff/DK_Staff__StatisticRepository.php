@@ -2102,7 +2102,7 @@ class DK_Staff__StatisticRepository {
 
 
         // 交付统计
-        $query_delivery = DK_Common__Delivery::select('company_id','channel_id','business_id')
+        $query_delivery = DK_Common__Delivery::withTrashed()->select('company_id','channel_id','business_id')
             ->addSelect(DB::raw("
                     count(*) as delivery_count_for_all
                 "))
@@ -2148,7 +2148,7 @@ class DK_Staff__StatisticRepository {
 
 
 
-        $query = DK_Company::select('id','name','user_status','company_category','company_type','superior_company_id')
+        $query = DK_Company::withTrashed()->select('id','name','user_status','company_category','company_type','superior_company_id')
             ->with([
 //                'superior' => function($query) { $query->select(['id','name']); },
 //                'team_er' => function($query) { $query->select(['id','name','leader_id'])->with(['leader']); },
@@ -2178,7 +2178,7 @@ class DK_Staff__StatisticRepository {
         else $query->orderBy("superior_company_id", "asc")->orderBy("id", "asc");
 
         if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+        else $list = $query->skip($skip)->take($limit)->get();
 //        dd($list->toArray());
 
         $list_all = [];
@@ -2425,7 +2425,7 @@ class DK_Staff__StatisticRepository {
             }
         }
         // 工单统计（当日）
-        $query_order_today = DK_Common__Order::select('delivered_project_id')
+        $query_order_today = DK_Common__Order::withTrashed()->select('delivered_project_id')
             ->addSelect(DB::raw("
                     count(IF(delivered_status = 1, TRUE, NULL)) as count__for__order_today_all,
                     count(IF(delivered_result = '正常交付', TRUE, NULL)) as count__for__order_today_normal,
@@ -2458,7 +2458,7 @@ class DK_Staff__StatisticRepository {
 
 
         // 交付统计
-        $query_delivery = DK_Common__Delivery::select('project_id')
+        $query_delivery = DK_Common__Delivery::withTrashed()->select('project_id')
             ->addSelect(DB::raw("
                     count(*) as count__for__delivered_all,
                     count(IF(delivery_type = 1, TRUE, NULL)) as count__for__delivered_normal,
@@ -2643,7 +2643,7 @@ class DK_Staff__StatisticRepository {
             }
         }
         // 工单统计（当日）
-        $project_team_order_list = DK_Common__Order::select('delivered_project_id','creator_team_id')
+        $project_team_order_list = DK_Common__Order::withTrashed()->select('delivered_project_id','creator_team_id')
             ->addSelect(DB::raw("
                     count(IF(delivered_status = 1, TRUE, NULL)) as count__for__order_today_all,
                     count(IF(delivered_result = '正常交付', TRUE, NULL)) as count__for__order_today_normal,
@@ -2668,7 +2668,7 @@ class DK_Staff__StatisticRepository {
             ->get();
 
 
-        $query = DK_Common__Project::select('id','name','alias_name','daily_goal')
+        $query = DK_Common__Project::withTrashed()->select('id','name','alias_name','daily_goal')
             ->where('active', 1);
 //            ->where('item_status', 1);
 
@@ -2712,7 +2712,7 @@ class DK_Staff__StatisticRepository {
 
         if($limit == -1) $project_list = $query->get();
         else $project_list = $query->skip($skip)->take($limit)->get();
-//        $project_list = $query_project->withTrashed()->get();
+//        $project_list = $query_project->get();
 
 
 //        $total_data = [];
@@ -2822,10 +2822,9 @@ class DK_Staff__StatisticRepository {
             ->toArray();
 
 
-        $query = DK_Common__Project::select('*')
+        $query = DK_Common__Project::withTrashed()->select('*')
             ->where('active', 1)
             ->where('item_status', 1)
-            ->withTrashed()
             ->with(['creator','inspector_er','pivot__project_staff','pivot__project_team']);
 
         if(in_array($me->user_type,[41,81,84]))
@@ -3030,9 +3029,8 @@ class DK_Staff__StatisticRepository {
             ->toArray();
 
 
-        $query = DK_Common__Client::select('*')
+        $query = DK_Common__Client::withTrashed()->select('*')
 //            ->where('item_status', 1)
-            ->withTrashed()
             ->with(['creator']);
 
 
@@ -3339,9 +3337,8 @@ class DK_Staff__StatisticRepository {
             ->toArray();
 
 
-        $query = DK_Common__Client::select('*')
+        $query = DK_Common__Client::withTrashed()->select('*')
             ->where('user_status', 1)
-            ->withTrashed()
             ->with(['creator']);
 
 
@@ -3503,7 +3500,7 @@ class DK_Staff__StatisticRepository {
         $me = $this->me;
 
         // 工单统计（员工）统计
-        $query_order__for__staff = DK_Common__Order::select('creator_id')
+        $query_order__for__staff = DK_Common__Order::withTrashed()->select('creator_id')
             ->addSelect(DB::raw("
                     count(IF(is_published = 1, TRUE, NULL)) as order_count__for__all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count__for__inspected,
@@ -3521,7 +3518,7 @@ class DK_Staff__StatisticRepository {
 
 
         // 工单统计（团队）统计
-        $query_order__for__team = DK_Common__Order::select('creator_team_id')
+        $query_order__for__team = DK_Common__Order::withTrashed()->select('creator_team_id')
             ->addSelect(DB::raw("
                     count(IF(is_published = 1, TRUE, NULL)) as order_count__for__all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count__for__inspected,
@@ -3539,7 +3536,7 @@ class DK_Staff__StatisticRepository {
 
 
         // 工单统计（小组）统计
-        $query_order__for__team_group = DK_Common__Order::select('creator_team_id','creator_team_group_id')
+        $query_order__for__team_group = DK_Common__Order::withTrashed()->select('creator_team_id','creator_team_group_id')
             ->addSelect(DB::raw("
                     count(IF(is_published = 1, TRUE, NULL)) as order_count__for__all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count__for__inspected,
@@ -3676,7 +3673,7 @@ class DK_Staff__StatisticRepository {
             ->toArray();
 
 
-        $query = DK_Common__Staff::select(['id','staff_category','staff_position','name','department_id','team_id','team_group_id'])
+        $query = DK_Common__Staff::withTrashed()->select(['id','staff_category','staff_position','name','department_id','team_id','team_group_id'])
             ->with([
 //                'superior' => function($query) { $query->select(['id','name']); },
                 'team_er' => function($query) { $query->select(['id','name']); },
@@ -3741,7 +3738,7 @@ class DK_Staff__StatisticRepository {
         else $query->orderBy("team_id", "asc")->orderBy("team_group_id", "asc")->orderBy("id", "asc");
 
         if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+        else $list = $query->skip($skip)->take($limit)->get();
 
         foreach ($list as $k => $v)
         {
@@ -3945,7 +3942,7 @@ class DK_Staff__StatisticRepository {
         $me = $this->me;
 
         // 工单统计
-        $query_order = DK_Common__Order::select('creator_id')
+        $query_order = DK_Common__Order::withTrashed()->select('creator_id')
             ->addSelect(DB::raw("
                     count(IF(is_published = 1, TRUE, NULL)) as order_count__for__all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count__for__inspected,
@@ -4026,7 +4023,7 @@ class DK_Staff__StatisticRepository {
 
 
         // 员工查询
-        $query = DK_Common__Staff::select(['id','name','team_id','team_group_id'])
+        $query = DK_Common__Staff::withTrashed()->select(['id','name','team_id','team_group_id'])
             ->with([
                 'team_er' => function($query) { $query->select(['id','name']); },
                 'team_group_er' => function($query) { $query->select(['id','name']); }
@@ -4110,7 +4107,7 @@ class DK_Staff__StatisticRepository {
         else $query->orderBy("team_id", "asc")->orderBy("team_group_id", "asc")->orderBy("id", "asc");
 
         if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+        else $list = $query->skip($skip)->take($limit)->get();
 
         foreach ($list as $k => $v)
         {
@@ -4165,7 +4162,7 @@ class DK_Staff__StatisticRepository {
 
 
         // 工单统计
-        $query_order = DK_Common__Order::select('creator_id')
+        $query_order = DK_Common__Order::withTrashed()->select('creator_id')
             ->where('created_type',1)
             ->groupBy('creator_id');
 
@@ -4530,7 +4527,7 @@ class DK_Staff__StatisticRepository {
         $me = $this->me;
 
         // 员工统计
-        $query_order = DK_Common__Order::select('inspector_id','inspected_date')
+        $query_order = DK_Common__Order::withTrashed()->select('inspector_id','inspected_date')
             ->addSelect(DB::raw("
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as count__for__order_inspected,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as count__for__order_accepted_normal,
@@ -4577,7 +4574,7 @@ class DK_Staff__StatisticRepository {
 
 
 
-        $query = DK_Common__Staff::select(['id','item_status','staff_category','staff_position','login_number','name','team_id','team_group_id'])
+        $query = DK_Common__Staff::withTrashed()->select(['id','item_status','staff_category','staff_position','login_number','name','team_id','team_group_id'])
             ->with([
                 'team_er' => function($query) { $query->select(['id','name']); },
                 'team_group_er' => function($query) { $query->select(['id','name']); },
@@ -4639,7 +4636,7 @@ class DK_Staff__StatisticRepository {
         else $query->orderBy("team_id", "asc")->orderBy("team_group_id", "asc")->orderBy("id", "asc");
 
         if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+        else $list = $query->skip($skip)->take($limit)->get();
 
 
         // 数据拼接
@@ -4706,7 +4703,7 @@ class DK_Staff__StatisticRepository {
         if(!in_array($me->user_type,[0,1,9,11,41,61])) return view($this->view_blade_403);
 
         // 员工统计
-        $query_delivery = DK_Common__Delivery::select('creator_id')
+        $query_delivery = DK_Common__Delivery::withTrashed()->select('creator_id')
             ->addSelect(DB::raw("
                     count(*) as order_count_for_delivered
                 "))
@@ -4795,7 +4792,7 @@ class DK_Staff__StatisticRepository {
         else $query->orderBy("id", "asc");
 
         if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+        else $list = $query->skip($skip)->take($limit)->get();
 
 
         // 数据拼接
@@ -4886,7 +4883,7 @@ class DK_Staff__StatisticRepository {
         }
 
         // 工单统计
-        $query_order = DK_Common__Order::select('project_id','creator_team_id')
+        $query_order = DK_Common__Order::withTrashed()->select('project_id','creator_team_id')
             ->addSelect(DB::raw("
                     count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
@@ -4921,10 +4918,9 @@ class DK_Staff__StatisticRepository {
             ->toArray();
 
 
-        $query = DK_Common__Project::select('*')
+        $query = DK_Common__Project::withTrashed()->select('*')
             ->where('active', 1)
             ->where('item_status', 1)
-            ->withTrashed()
             ->with([
                 'creator',
                 'inspector_er',
@@ -5217,7 +5213,7 @@ class DK_Staff__StatisticRepository {
         $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
 
         // 工单统计
-        $query_order = DK_Common__Order::select('creator_team_id','published_date')
+        $query_order = DK_Common__Order::withTrashed()->select('creator_team_id','published_date')
             ->addSelect(DB::raw("
                     count(DISTINCT creator_id) as staff_count,
                     count(IF(is_published = 1, TRUE, NULL)) as count__for__order_all,
@@ -5565,10 +5561,9 @@ class DK_Staff__StatisticRepository {
             ->toArray();
 
 
-        $project_list = DK_Common__Project::select('id','name','alias_name')
+        $project_list = DK_Common__Project::withTrashed()->select('id','name','alias_name')
             ->where('active', 1)
 //            ->where('item_status', 1)
-            ->withTrashed()
             ->get();
 
         foreach ($project_list as $k => $v)
@@ -6427,9 +6422,8 @@ class DK_Staff__StatisticRepository {
             ->toArray();
 
 
-        $client_list = DK_Common__Client::select('id','name')
+        $client_list = DK_Common__Client::withTrashed()->select('id','name')
 //            ->where('item_status', 1)
-            ->withTrashed()
             ->get();
 
         foreach ($client_list as $k => $v)
