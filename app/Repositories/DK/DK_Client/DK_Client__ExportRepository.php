@@ -251,8 +251,8 @@ class DK_Client__ExportRepository {
                     'K'=>16,
                     'L'=>16,
                     'M'=>40,
-                    'N'=>40,
-                    'O'=>30
+                    'N'=>60,
+                    'O'=>60
                 ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
@@ -429,10 +429,10 @@ class DK_Client__ExportRepository {
                     'H'=>16,
                     'I'=>16,
                     'J'=>16,
-                    'K'=>40,
+                    'K'=>16,
                     'L'=>30,
-                    'M'=>30,
-                    'N'=>30
+                    'M'=>60,
+                    'N'=>60
                 ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
@@ -609,10 +609,10 @@ class DK_Client__ExportRepository {
                     'H'=>16,
                     'I'=>16,
                     'J'=>16,
-                    'K'=>40,
+                    'K'=>16,
                     'L'=>30,
-                    'M'=>30,
-                    'N'=>30
+                    'M'=>60,
+                    'N'=>60
                 ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
