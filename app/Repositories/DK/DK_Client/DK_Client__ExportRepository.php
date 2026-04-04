@@ -300,6 +300,8 @@ class DK_Client__ExportRepository {
 //            $cellData[$k]['creator_name'] = $v['creator']['name'];
             $cellData[$k]['created_time'] = date('Y-m-d H:i:s', $v['created_at']);
 
+            $cellData[$k]['order_quality'] = $v['order_quality'];
+
             if($v['assign_status'] == 1) $cellData[$k]['assign_status'] = "已分配";
             else $cellData[$k]['assign_status'] = "未分配";
 
@@ -369,6 +371,7 @@ class DK_Client__ExportRepository {
             'id'=>'ID',
 //            'creator_name'=>'创建人',
             'created_time'=>'交付时间',
+            'order_quality'=>'工单质量',
             'assign_status'=>'是否分配',
             'client_staff_er_name'=>'分派员工',
 //            'project_er_name'=>'项目',
@@ -477,6 +480,8 @@ class DK_Client__ExportRepository {
 //            $cellData[$k]['creator_name'] = $v['creator']['name'];
             $cellData[$k]['created_time'] = date('Y-m-d H:i:s', $v['created_at']);
 
+            $cellData[$k]['order_quality'] = $v['order_quality'];
+
             if($v['assign_status'] == 1) $cellData[$k]['assign_status'] = "已分配";
             else $cellData[$k]['assign_status'] = "未分配";
 
@@ -546,6 +551,7 @@ class DK_Client__ExportRepository {
             'id'=>'ID',
 //            'creator_name'=>'创建人',
             'created_time'=>'交付时间',
+            'order_quality'=>'工单质量',
             'assign_status'=>'是否分配',
             'client_staff_er_name'=>'分派员工',
 //            'project_er_name'=>'项目',
