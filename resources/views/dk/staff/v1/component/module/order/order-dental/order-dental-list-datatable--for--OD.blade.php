@@ -1007,53 +1007,53 @@
                         return $result_html;
                     }
                 },
-                {
-                    "title": "录音播放",
-                    "name": "recording_address_list",
-                    "data": "recording_address_list",
-                    "className": "",
-                    "width": "400px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1)
-                        {
-                            $(nTd).attr('data-id',row.id).attr('data-name','录音播放');
-                            $(nTd).attr('data-key','recording_address_play').attr('data-value',data);
-                        }
-                    },
-                    render: function(data, type, row, meta) {
-                        // return data;
-                        if($.trim(data))
-                        {
-                            try
-                            {
-                                var $recording_list = JSON.parse(data);
-
-                                var $return_html = '';
-                                $.each($recording_list, function(index, value)
-                                {
-
-                                    var $audio_html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
-                                    $return_html += $audio_html;
-                                });
-                                return $return_html;
-                            }
-                            catch(e)
-                            {
-                                // console.log(e);
-                                return '';
-                            }
-                        }
-                        else
-                        {
-                            if(row.recording_address)
-                            {
-                                return '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+row.recording_address+'" type="audio/mpeg"></audio>';
-                            }
-                            else return '';
-                        }
-                    }
-                },
+                // {
+                //     "title": "录音播放",
+                //     "name": "recording_address_list",
+                //     "data": "recording_address_list",
+                //     "className": "",
+                //     "width": "400px",
+                //     "orderable": false,
+                //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                //         if(row.is_completed != 1)
+                //         {
+                //             $(nTd).attr('data-id',row.id).attr('data-name','录音播放');
+                //             $(nTd).attr('data-key','recording_address_play').attr('data-value',data);
+                //         }
+                //     },
+                //     render: function(data, type, row, meta) {
+                //         // return data;
+                //         if($.trim(data))
+                //         {
+                //             try
+                //             {
+                //                 var $recording_list = JSON.parse(data);
+                //
+                //                 var $return_html = '';
+                //                 $.each($recording_list, function(index, value)
+                //                 {
+                //
+                //                     var $audio_html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
+                //                     $return_html += $audio_html;
+                //                 });
+                //                 return $return_html;
+                //             }
+                //             catch(e)
+                //             {
+                //                 // console.log(e);
+                //                 return '';
+                //             }
+                //         }
+                //         else
+                //         {
+                //             if(row.recording_address)
+                //             {
+                //                 return '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+row.recording_address+'" type="audio/mpeg"></audio>';
+                //             }
+                //             else return '';
+                //         }
+                //     }
+                // },
                 {
                     "title": "录音下载",
                     "name": "recording_address_get_download",
