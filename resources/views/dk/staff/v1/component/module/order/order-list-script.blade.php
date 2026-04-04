@@ -3640,7 +3640,7 @@
                     }
                     if(window.staffDepartment == 'CSD' && ['manager','supervisor','staff'].includes(window.staffRole))
                     {
-                        if(['通过','折扣通过','郊区通过','内部通过'].includes(window.inspected_result))
+                        if(['通过','折扣通过','郊区通过','内部通过'].includes($response.data.inspected_result))
                         {
                             $modal.find('.item-recording-box').hide();
                         }
