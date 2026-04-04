@@ -3638,6 +3638,17 @@
                         // var $recording_redirection = '<a class="btn btn-xs item-inspected-redirection-recording-list-submit" data-id="'+$id+'">跳转</a>';
                         // $that.after($recording_redirection);
                     }
+                    if(window.staffDepartment == 'CSD' && ['manager','supervisor','staff'].includes(window.staffRole))
+                    {
+                        if(['通过','折扣通过','郊区通过','内部通过'].includes(window.inspected_result))
+                        {
+                            $modal.find('.item-recording-box').hide();
+                        }
+                        else
+                        {
+                            $modal.find('.item-recording-box').show();
+                        }
+                    }
 
 
                     $modal.find('textarea[name="description"]').val($response.data.description);
