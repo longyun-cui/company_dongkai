@@ -3625,7 +3625,6 @@
                         var $recording_list_html = '';
                         $.each($recording_list, function(index, value)
                         {
-
                             var $audio_html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
                             $recording_list_html += $audio_html;
                         });
@@ -3640,7 +3639,7 @@
                     }
                     if(window.staffDepartment == 'CSD' && ['manager','supervisor','staff'].includes(window.staffRole))
                     {
-                        if(['通过','折扣通过','郊区通过','内部通过'].includes($response.data.inspected_result))
+                        if(['通过','折扣通过','郊区通过','内部通过','重复'].includes($response.data.inspected_result))
                         {
                             $modal.find('.item-recording-box').hide();
                         }
