@@ -299,6 +299,27 @@
                 </a>
             </li>
             @endif
+            {{--工单列表--}}
+            @if(in_array($me->staff_category,[0,1,9,71]))
+            <li class="treeview _none-">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="delivery-duplicate-list"
+                   data-title='<i class="fa fa-paste text-orange"></i> 重复交付'
+                   data-content=''
+
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-delivery-duplicate-list"
+                   data-datatable-target="delivery-duplicate-list"
+                   data-datatable-clone-object="delivery-duplicate-list-clone"
+                >
+                    <i class="fa fa-paste text-orange"></i>
+                    <span>重复交付</span>
+                </a>
+            </li>
+            @endif
 
 
             {{--百应AI--}}

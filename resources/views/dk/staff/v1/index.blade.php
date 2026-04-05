@@ -106,6 +106,7 @@
     @include(env('DK_STAFF__TEMPLATE').'component.module.delivery.delivery-dental.delivery-dental-list')
     @include(env('DK_STAFF__TEMPLATE').'component.module.delivery.delivery-aesthetic.delivery-aesthetic-list')
     @include(env('DK_STAFF__TEMPLATE').'component.module.delivery.delivery-luxury.delivery-luxury-list')
+    @include(env('DK_STAFF__TEMPLATE').'component.module.delivery..delivery-duplicate-list')
     @endif
 
 
@@ -339,6 +340,7 @@
         @include(env('DK_STAFF__TEMPLATE').'component.module.delivery.delivery-dental.delivery-dental-list-datatable')
         @include(env('DK_STAFF__TEMPLATE').'component.module.delivery.delivery-aesthetic.delivery-aesthetic-list-datatable')
         @include(env('DK_STAFF__TEMPLATE').'component.module.delivery.delivery-luxury.delivery-luxury-list-datatable')
+        @include(env('DK_STAFF__TEMPLATE').'component.module.delivery.delivery-duplicate-list-datatable')
     @endif
 
 

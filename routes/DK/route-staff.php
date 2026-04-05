@@ -231,6 +231,7 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
 
     // 【交付】列表
     Route::post('/o1/delivery/delivery-list/datatable-query', $controller.'@o1__delivery__list__datatable_query');
+    Route::post('/o1/delivery/delivery-duplicate-list/datatable-query', $controller.'@o1__delivery__duplicate__list__datatable_query');
     // 【工单】删除 & 恢复 & 永久删除
     Route::post('/o1/delivery/item-delete', $controller.'@o1__delivery__item_delete');
     Route::post('/o1/delivery/bulk-exported-status-change', $controller.'@o1__delivery__bulk_exported_status_change');

@@ -1028,6 +1028,11 @@ class DKStaffController extends Controller
     {
         return $this->delivery_repo->o1__delivery__list__datatable_query(request()->all());
     }
+    // 【交付】datatable
+    public function o1__delivery__duplicate__list__datatable_query()
+    {
+        return $this->delivery_repo->o1__delivery__duplicate__list__datatable_query(request()->all());
+    }
     // 【交付】删除
     public function o1__delivery__item_delete()
     {

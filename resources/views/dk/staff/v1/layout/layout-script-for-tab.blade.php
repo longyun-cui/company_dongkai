@@ -241,6 +241,10 @@
                 {
                     Datatable__for__Delivery_Luxury_List('#'+$config.id);
                 }
+                else if($id == "datatable-delivery-duplicate-list")
+                {
+                    Datatable__for__Delivery_List__Duplicate('#'+$config.id);
+                }
                 else if($id == "by")
                 {
                     console.log("by");

@@ -231,6 +231,66 @@ class DK_Staff__DeliveryRepository {
 
         return datatable_response($list, $draw, $total);
     }
+    // 【工单】返回-列表-数据
+    public function o1__delivery__duplicate__list__datatable_query($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        $duplicate_list = DK_Common__Delivery::select('dk_common__delivery.*')
+            ->with([
+                'inspector_er',
+                'original_project_er'=>function($query) { $query->select('id','name','alias_name'); },
+                'project_er'=>function($query) { $query->select('id','name','alias_name'); },
+                'client_er'=>function($query) { $query->select('id','name'); },
+                'company_er'=>function($query) { $query->select('id','name'); },
+                'channel_er'=>function($query) { $query->select('id','name'); },
+                'business_er'=>function($query) { $query->select('id','name'); },
+                'order_er',
+                'creator'=>function($query) { $query->select('id','name'); }
+            ])
+            ->join(DB::raw('(
+                    SELECT client_phone, delivered_date, project_id
+                    FROM `dk_common__delivery`
+                    WHERE `project_id` > 0 and `deleted_at` is null 
+                    GROUP BY client_phone, delivered_date, project_id
+                    HAVING COUNT(*) > 1
+                ) as dup'), function($join) {
+                $join->on('dk_common__delivery.client_phone', '=', 'dup.client_phone')
+                    ->on('dk_common__delivery.delivered_date', '=', 'dup.delivered_date')
+                    ->on('dk_common__delivery.project_id', '=', 'dup.project_id');
+            })
+            ->orderBy('client_phone')
+            ->orderBy('delivered_date')
+            ->orderBy('project_id')
+            ->get();
+
+
+        $total = $duplicate_list->count();
+
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+
+
+        foreach ($duplicate_list as $k => $v)
+        {
+//            $list[$k]->encode_id = encode($v->id);
+
+            if($v->creator_id == $me->id)
+            {
+                $duplicate_list[$k]->is_me = 1;
+                $v->is_me = 1;
+            }
+            else
+            {
+                $duplicate_list[$k]->is_me = 0;
+                $v->is_me = 0;
+            }
+        }
+//        dd($list->toArray());
+
+        return datatable_response($duplicate_list, $draw, $total);
+    }
 
 
     // 【交付】删除
