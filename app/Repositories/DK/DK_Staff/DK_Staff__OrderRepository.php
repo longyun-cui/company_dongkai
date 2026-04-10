@@ -861,6 +861,13 @@ class DK_Staff__OrderRepository {
 //        dd($custom_location_city.$custom_location_district);
 
 
+        // 电话号码必须为11位整数
+        if(preg_match('/^1\d{10}$/', $post_data['client_phone']) === 1)
+        {
+        }
+        else return response_error([],"电话号码非法！");
+
+
         $this->get_me();
         $me = $this->me;
 
@@ -1066,6 +1073,7 @@ class DK_Staff__OrderRepository {
             $project = DK_Common__Project::where(['active'=>1,'item_status'=>1])->find($post_data['project_id']);
             if(!$project) return response_error([],"选择【项目】不存在，刷新页面重试！");
         }
+
 
 
 
@@ -2081,6 +2089,13 @@ class DK_Staff__OrderRepository {
         $description = trim($post_data["description"]);
 
 
+        // 电话号码必须为11位整数
+        if(preg_match('/^1\d{10}$/', $post_data['client_phone']) === 1)
+        {
+        }
+        else return response_error([],"电话号码非法！");
+
+
 
         $time = time();
         $date = date("Y-m-d");
@@ -2417,6 +2432,13 @@ class DK_Staff__OrderRepository {
         $location_district = $post_data["location_district"];
         $field_1 = $post_data["field_1"];
         $description = trim($post_data["description"]);
+
+
+        // 电话号码必须为11位整数
+        if(preg_match('/^1\d{10}$/', $post_data['client_phone']) === 1)
+        {
+        }
+        else return response_error([],"电话号码非法！");
 
 
 
@@ -2906,6 +2928,13 @@ class DK_Staff__OrderRepository {
         $location_district = $post_data["location_district"];
         $field_1 = $post_data["field_1"];
         $description = trim($post_data["description"]);
+
+
+        // 电话号码必须为11位整数
+        if(preg_match('/^1\d{10}$/', $post_data['client_phone']) === 1)
+        {
+        }
+        else return response_error([],"电话号码非法！");
 
 
         $time = time();
