@@ -98,7 +98,7 @@
 
                         if(row.deleted_at == null)
                         {
-                            $html_delete = '<a class="btn btn-xs bg-black- item-delete-by-admin-submit" data-id="'+data+'">删除</a>';
+                            $html_delete = '<a class="btn btn-xs bg-black- delivery--item-delete-submit" data-id="'+data+'">删除</a>';
                         }
                         else
                         {
