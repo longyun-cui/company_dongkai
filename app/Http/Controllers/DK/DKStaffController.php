@@ -68,6 +68,7 @@ class DKStaffController extends Controller
 
     private $statistic_repo;
 
+
     public function __construct()
     {
         $this->repo = new DK_Staff__IndexRepository;
@@ -98,17 +99,6 @@ class DKStaffController extends Controller
     }
 
 
-    // 测试
-    public function test_index()
-    {
-        return $this->test_repo->view__staff__test_index();
-    }
-
-    // 测试
-    public function test_temp()
-    {
-        return $this->test_repo->view__staff__test__temp(request()->all());
-    }
 
 
 
@@ -372,6 +362,13 @@ class DKStaffController extends Controller
     public function view__staff__404()
     {
         return $this->repo->view__staff__404();
+    }
+
+
+    // 测试
+    public function view__staff__test()
+    {
+        return $this->repo->view__staff__test();
     }
 
 
@@ -931,6 +928,11 @@ class DKStaffController extends Controller
     {
         return $this->order_repo->o1__order__item_inspecting_save(request()->all());
     }
+    // 【工单】审核
+    public function o1__order__item_inspecting__by_ai__save()
+    {
+        return $this->order_repo->o1__order__item_inspecting__by_ai__save(request()->all());
+    }
     // 【工单】申诉
     public function o1__order__item_appealing_save()
     {
@@ -977,6 +979,11 @@ class DKStaffController extends Controller
     public function o1__order__item_call_recording__get__by_api()
     {
         return $this->order_repo->o1__order__item_call_recording__get__by_api(request()->all());
+    }
+    // 【工单】获取录音
+    public function o1__order__item_inspecting__by__ali_api()
+    {
+        return $this->order_repo->o1__order__item_inspecting__by__ali_api(request()->all());
     }
 
 

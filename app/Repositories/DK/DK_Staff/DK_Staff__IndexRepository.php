@@ -370,4 +370,124 @@ class DK_Staff__IndexRepository {
     }
 
 
+    //
+    public function view__staff__test()
+    {
+//        $this->get_me();
+
+        // 设置请求的URL
+        // 以下是北京地域url，如果使用新加坡地域的模型，需要将url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions
+        $url = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
+        // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：$apiKey = "sk-xxx";
+        // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/model-studio/get-api-key
+        $apiKey = env('DASHSCOPE_API_KEY');
+        // 设置请求头
+        $headers = [
+            'Authorization: Bearer ' . $apiKey,
+            'Content-Type: application/json'
+        ];
+        // 设置请求体
+        $data = [
+            // 模型列表：https://help.aliyun.com/model-studio/getting-started/models
+            "model" => "qwen3.5-omni-plus",
+            "messages" => [
+                [
+                    "role" => "system",
+                    "content" => "你是一个严格的质检员，请分析录音内容，请严格遵循JSON Schema输出。禁止使用Markdown格式，禁止包含json代码块标记，禁止换行，输出内容必须是单行的紧凑JSON字符串。不要包含任何其他解释或文字。如果信息在录音中不存在，请对应字段填null！"
+                ],
+                [
+                    "role" => "user",
+                    "content" => [
+                        [
+                            "type" => "input_audio",
+                            "input_audio" => [
+                                "data" => "http://call02.zlyx.jjccyun.cn/data/voicerecord/11/20260417/none-20260417-173852-13362365888-fnj13yldx.mp3",
+                                "format" => "mp3"
+                            ]
+                        ],
+                        [
+                            "type" => "text",
+                            "text" => "请帮我分析录音，提取以下信息：1.客户所在的城市与行政区；2.需要医疗的牙齿数量（数字）；3.客户上门的意愿（布尔值：true/false 或 枚举值：有意愿/无意愿）。"
+                        ]
+                    ]
+                ]
+            ],
+            "parameters" => [
+                "response_format" => [
+                    "type" => "json_object",
+                    "schema" => [
+                        "type" => "object",
+                        "properties" => [
+                            "location" => [
+                                "type" => "object",
+                                "properties" => [
+                                    "city" => [
+                                        "type" => "string",
+                                        "description" => "客户所在城市，例如：嘉兴市"
+                                    ],
+                                    "district" => [
+                                        "type" => "string",
+                                        "description" => "客户所在行政区，例如：南湖区"
+                                    ]
+                                ],
+                                "required" => ["city"]
+                            ],
+                            "dental_need" => [
+                                "type" => "object",
+                                "properties" => [
+                                    "tooth_count" => [
+                                        "type" => "integer",
+                                        "description" => "需要医疗的牙齿数量"
+                                    ],
+                                    "visit_willingness" => [
+                                        "type" => "boolean",
+                                        "description" => "客户是否有上门意愿"
+                                    ]
+                                ],
+                                "required" => ["visit_willingness"]
+                            ]
+                        ],
+                        "required" => ["location", "dental_need"]
+                    ]
+                ]
+            ],
+//            "stream" => true,
+//            "stream_options" => [
+//                "include_usage" => true
+//            ],
+            "modalities" => ["text"],
+            "audio" => [
+                "format" => "mp3"
+            ]
+        ];
+
+//        dd($data);
+        // 初始化cURL会话
+        $ch = curl_init();
+        // 设置cURL选项
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        // 执行cURL会话
+        $response = curl_exec($ch);
+        // 检查是否有错误发生
+        if (curl_errno($ch)) {
+            echo 'Curl error: ' . curl_error($ch);
+        }
+        // 关闭cURL资源
+        curl_close($ch);
+        // 输出响应结果
+//        echo $response;
+        echo '<br>';
+//        dd($response);
+        dd(json_decode($response,true));
+
+
+    }
+
+
+
+
 }

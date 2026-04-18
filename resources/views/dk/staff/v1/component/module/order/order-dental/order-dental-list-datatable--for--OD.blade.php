@@ -364,6 +364,10 @@
                         {
                             $result_html = '<small class="btn-xs bg-yellow">重复•可分发</small>';
                         }
+                        else if(data == "虚假")
+                        {
+                            $result_html = '<small class="btn-xs bg-orange">虚假</small>';
+                        }
                         else
                         {
                             $result_html = '<small class="btn-xs bg-purple">'+data+'</small>';

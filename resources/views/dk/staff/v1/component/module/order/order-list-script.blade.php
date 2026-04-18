@@ -2824,6 +2824,67 @@
 
 
 
+        // 【工单】发布
+        $(".main-wrapper").off('click', ".order--item-ai-inspecting--submit").on('click', ".order--item-ai-inspecting--submit", function() {
+            var $that = $(this);
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $item_category = $datatable_wrapper.data('datatable-item-category');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+
+            //
+            var $index = layer.load(1, {
+                shade: [0.3, '#fff'],
+                content: '<span class="loadtip">正在审核</span>',
+                success: function (layer) {
+                    layer.find('.layui-layer-content').css({
+                        'padding-top': '40px',
+                        'width': '100px',
+                    });
+                    layer.find('.loadtip').css({
+                        'font-size':'20px',
+                        'margin-left':'-18px'
+                    });
+                }
+            });
+
+            //
+            $.post(
+                "{{ url('/o1/order/item-inspecting--by-ai') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: "order--item-inspecting--by-ai",
+                    item_category: $item_category,
+                    item_id: $that.attr('data-id')
+                },
+                'json'
+            )
+                .done(function($response, status, jqXHR) {
+                    console.log('#'+$that.attr('id')+'.post.done.');
+
+                    $response = JSON.parse($response);
+                    if(!$response.success)
+                    {
+                        if($response.msg) layer.msg($response.msg);
+                    }
+                    else
+                    {
+                        $('#'+$table_id).DataTable().ajax.reload(null,false);
+                    }
+                })
+                .fail(function(jqXHR, status, error) {
+                    console.log('#'+$that.attr('id')+'.post.fail.');
+                    layer.msg('服务器错误！');
+
+                })
+                .always(function(jqXHR, status) {
+                    console.log('#'+$that.attr('id')+'.post.always.');
+                    layer.closeAll('loading');
+                });
+
+        });
+
+
+
 
 
 

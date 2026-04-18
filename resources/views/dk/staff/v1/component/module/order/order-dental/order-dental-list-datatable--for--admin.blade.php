@@ -1373,11 +1373,15 @@
                         var $html_delete = '';
                         var $html_publish = '';
                         var $html_inspect = '';
+                        var $html_ai_inspect = '';
                         var $html_appeal = '';
                         var $html_appeal_handle = '';
                         var $html_deliver_fool = '';
                         var $html_deliver = '';
                         var $html_distribute = '';
+
+
+                        // $html_ai_inspect = '<a class="btn btn-xs order--item-ai-inspecting--submit" data-id="'+data+'">AI审核</a>';
 
 
                         // 记录
@@ -1478,6 +1482,7 @@
                             $html_edit = '';
                             $html_publish = '';
                             $html_delete = '';
+                            $html_ai_inspect = '';
                             $html_inspect = '';
                             $html_appeal = '';
                             $html_appeal_handle = '';
@@ -1492,6 +1497,7 @@
                             $html_edit+
                             $html_publish+
                             $html_delete+
+                            $html_ai_inspect+
                             $html_inspect+
                             $html_appeal+
                             $html_appeal_handle+

@@ -42,6 +42,8 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
     Route::get('/403', $controller.'@view__staff__403');
     Route::get('/404', $controller.'@view__staff__404');
 
+    Route::get('/test', $controller.'@view__staff__test');
+
 
 
 
@@ -212,6 +214,7 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
     Route::post('/o1/order/item-follow-save', $controller.'@o1__order__item_follow_save');
     Route::post('/o1/order/item-detail-editing-save', $controller.'@o1__order__item_detail_editing_save');
     Route::post('/o1/order/item-inspecting-save', $controller.'@o1__order__item_inspecting_save');
+    Route::post('/o1/order/item-inspecting--by-ai', $controller.'@o1__order__item_inspecting__by_ai__save');
     Route::post('/o1/order/item-appealing-save', $controller.'@o1__order__item_appealing_save');
     Route::post('/o1/order/item-appealed-handling-save', $controller.'@o1__order__item_appealed_handling_save');
     Route::post('/o1/order/item-delivering-save', $controller.'@o1__order__item_delivering_save');
@@ -222,6 +225,7 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
     Route::post('/o1/order/bulk-distributing-save', $controller.'@o1__order__bulk_distributing_save');
     // 【工单】api
     Route::post('/o1/order/item-call-recording--get--by-api', $controller.'@o1__order__item_call_recording__get__by_api');
+    Route::post('/o1/order/item-inspecting--by--ali-api', $controller.'@o1__order__item_inspecting__by__ali_api');
     // 【工单】操作记录
     Route::post('/o1/order/item-operation-record-list/datatable-query', $controller.'@o1__order__item_operation_record_list__datatable_query');
     Route::post('/o1/order/item-delivery-record-list/datatable-query', $controller.'@o1__order__item_delivery_record_list__datatable_query');
