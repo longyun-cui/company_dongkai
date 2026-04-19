@@ -52,8 +52,9 @@ class DK_Common__Order__AI_Inspected__Record extends Model
         'order_id',
 
         'ai_platform',
-        'ai_modal',
+        'ai_model',
         'ai_prompt',
+        'token_consumed_num',
 
         'custom_date',
         'custom_datetime',
@@ -99,11 +100,6 @@ class DK_Common__Order__AI_Inspected__Record extends Model
     {
         return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','creator_id','id');
     }
-    // 创作者（客户）
-    function client_creator()
-    {
-        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Client','creator_id','id');
-    }
     // 创作者
     function updater()
     {
@@ -121,63 +117,11 @@ class DK_Common__Order__AI_Inspected__Record extends Model
     }
 
 
-    // 客户
-    function before_client_er()
+    // 订单
+    function order_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Client','before_client_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Order','order_id','id');
     }
-    // 客户
-    function after_client_er()
-    {
-        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Client','after_client_id','id');
-    }
-    // 项目
-    function before_project_er()
-    {
-        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Project','before_project_id','id');
-    }
-    // 项目
-    function after_project_er()
-    {
-        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Project','after_project_id','id');
-    }
-
-
-
-
-    // 其他人的
-    function pivot_item_relation()
-    {
-        return $this->hasMany('App\Models\YH\YH_Pivot_User_Item','item_id','id');
-    }
-
-    // 其他人的
-    function others()
-    {
-        return $this->hasMany('App\Models\YH\YH_Pivot_User_Item','item_id','id');
-    }
-
-    // 收藏
-    function collections()
-    {
-        return $this->hasMany('App\Models\YH\YH_Pivot_User_Collection','item_id','id');
-    }
-
-    // 转发内容
-    function forward_item()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Item','item_id','id');
-    }
-
-
-
-
-    // 与我相关的话题
-    function pivot_collection_item_users()
-    {
-        return $this->belongsToMany('App\Models\Dk\DK_User','pivot_user_item','item_id','user_id');
-    }
-
 
 
 }

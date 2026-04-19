@@ -199,6 +199,7 @@
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-operation-record')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-detail-editing')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-inspecting')
+    @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-inspecting-ai')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-appealing')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-appealed-handling')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-delivering')
@@ -332,6 +333,7 @@
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-list-script')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-operation-record-datatable')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-delivery-record-datatable')
+    @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-ai-record-datatable')
 
 
     {{--交付--}}

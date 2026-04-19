@@ -1382,6 +1382,7 @@
 
 
                         // $html_ai_inspect = '<a class="btn btn-xs order--item-ai-inspecting--submit" data-id="'+data+'">AI审核</a>';
+                        $html_ai_inspect = '<a class="btn btn-xs modal-show--for--order--item-ai-inspecting" data-id="'+data+'">AI审核</a>';
 
 
                         // 记录

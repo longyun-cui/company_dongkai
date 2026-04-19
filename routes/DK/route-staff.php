@@ -229,6 +229,7 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
     // 【工单】操作记录
     Route::post('/o1/order/item-operation-record-list/datatable-query', $controller.'@o1__order__item_operation_record_list__datatable_query');
     Route::post('/o1/order/item-delivery-record-list/datatable-query', $controller.'@o1__order__item_delivery_record_list__datatable_query');
+    Route::post('/o1/order/item-ai-record-list/datatable-query', $controller.'@o1__order__item_ai_record_list__datatable_query');
 
 
 

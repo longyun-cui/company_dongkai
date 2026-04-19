@@ -992,11 +992,18 @@ class DKStaffController extends Controller
     {
         return $this->order_repo->o1__order__item_operation_record_list__datatable_query(request()->all());
     }
-    // 【工单】【行程】列表
+    // 【工单】【交付】列表
     public function o1__order__item_delivery_record_list__datatable_query()
     {
         return $this->order_repo->o1__order__item_delivery_record_list__datatable_query(request()->all());
     }
+    // 【工单】【交付】列表
+    public function o1__order__item_ai_record_list__datatable_query()
+    {
+        return $this->order_repo->o1__order__item_ai_record_list__datatable_query(request()->all());
+    }
+
+
 
 
     // 【工单】【跟进】保存
