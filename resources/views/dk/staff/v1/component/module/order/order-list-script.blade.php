@@ -3034,7 +3034,7 @@
             var $that = $(this);
             var $modal = $that.closest('.modal-wrapper');
             var $item_id = $modal.find('input[name="item_id"]').val();
-            var $ai_datatable_id = 'datatable--for--order--item-ai-inspecting--of--ai-record-list';
+            var $ai_datatable_id = 'datatable--for--order--item--ai-inspecting--of--ai-record-list';
 
             //
             var $index = layer.load(1, {
