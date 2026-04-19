@@ -1266,12 +1266,17 @@
                         var $html_delete = '';
                         var $html_publish = '';
                         var $html_inspect = '';
+                        var $html_ai_inspect = '';
                         var $html_push = '';
                         var $html_deliver = '';
                         var $html_deliver_fool = '';
                         var $html_distribute = '';
                         var $html_appeal = '';
                         var $html_appeal_handle = '';
+
+
+                        // $html_ai_inspect = '<a class="btn btn-xs order--item-ai-inspecting--submit" data-id="'+data+'">AI审核</a>';
+                        $html_ai_inspect = '<a class="btn btn-xs modal-show--for--order--item-ai-inspecting" data-id="'+data+'">AI审核</a>';
 
                         // 记录
                         if(row.created_type != 9)
@@ -1342,6 +1347,7 @@
                             $html_edit = '';
                             $html_publish = '';
                             $html_inspect = '';
+                            $html_ai_inspect = '';
                             $html_delete = '';
                             $html_push = '';
                             $html_appeal = '';
@@ -1355,6 +1361,7 @@
                         var $html =
                             $html_edit+
                             $html_publish+
+                            $html_ai_inspect+
                             $html_inspect+
                             $html_delete+
                             $html_push+
