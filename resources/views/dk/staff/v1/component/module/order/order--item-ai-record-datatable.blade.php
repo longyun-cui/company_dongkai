@@ -110,8 +110,8 @@
                             var $city_html = '【城市】' + data.city + ' - ' + data.district + ' <br>';
                             var $teeth_count_html = '【牙齿数量】' + data.teeth_count + ' <br>';
                             var $willingness_html = '';
-                            if(data.willingness == 'true') $willingness_html = '【上门意愿】是';
-                            else if(data.willingness == 'false') $willingness_html = '【上门意愿】否';
+                            if(data.willingness == true) $willingness_html = '【上门意愿】是';
+                            else if(data.willingness == false) $willingness_html = '【上门意愿】否';
                             else $willingness_html = '【上门意愿】' + data.willingness;
 
                             return $city_html + $teeth_count_html + $willingness_html;
