@@ -153,7 +153,7 @@
                     "title": "AI审核",
                     "data": "ai_prompt",
                     "className": "",
-                    "width": "300px",
+                    "width": "500px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
