@@ -76,6 +76,16 @@
                         }
                     },
                     {
+                        "title": "平台",
+                        "data": "ai_platform",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
                         "title": "模型",
                         "data": "ai_model",
                         "className": "",
@@ -86,7 +96,7 @@
                         }
                     },
                     {
-                        "title": "Token",
+                        "title": "消耗Token",
                         "data": "token_total",
                         "className": "",
                         "width": "120px",
@@ -104,46 +114,24 @@
                         render: function(data, type, row, meta) {
 
                             var $return_html = '';
-                            // $.each(data, function($index, $value) {
-                            //     $return_html += '【'+ $index +'】' + $value + ' <br>';
-                            // });
-                            var $city_html = '【城市】' + data.city + ' - ' + data.district + ' <br>';
-                            var $teeth_count_html = '【牙齿数量】' + data.teeth_count + ' <br>';
-                            var $willingness_html = '';
-                            if(data.willingness == true) $willingness_html = '【上门意愿】是';
-                            else if(data.willingness == false) $willingness_html = '【上门意愿】否';
-                            else $willingness_html = '【上门意愿】' + data.willingness;
+                            $.each(data, function($index, $value) {
+                                var $index_text = $index;
+                                if($index_text == 'city') $index_text = '城市';
+                                else if($index_text == 'district') $index_text = '行政区';
+                                else if($index_text == 'gender') $index_text = '性别';
+                                else if($index_text == 'age') $index_text = '年龄';
+                                else if($index_text == 'tooth_count') $index_text = '牙齿数量';
+                                else if($index_text == 'teeth_count') $index_text = '牙齿数量';
+                                else if($index_text == 'health_status') $index_text = '三高（健康状况）';
+                                else if($index_text == 'willingness') $index_text = '上门意愿';
 
-                            return $city_html + $teeth_count_html + $willingness_html;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "120px",
-                        "title": "操作人",
-                        "data": "creator_id",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(window.staffDepartment == 'CSD' && window.staffRole != 'director')
-                            {
-                                if(row.creator_team_id != window.teamId)
-                                {
-                                    return row.creator == null ? '--' : '****';
-                                }
+                                var $value_text = $value;
+                                if($value == true) $value_text = '是';
+                                else if($value == false) $value_text = '否';
 
-                                if([1,11].includes(row.operate_category))
-                                {
-                                    return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.name+'</a>';
-                                }
-                                else
-                                {
-                                    return row.creator == null ? '--' : '****';
-                                }
-                            }
-                            else
-                            {
-                                return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.name+'</a>';
-                            }
+                                $return_html += '【'+ $index_text +'】' + $value_text + ' <br>';
+                            });
+                            return $return_html;
                         }
                     },
                     {

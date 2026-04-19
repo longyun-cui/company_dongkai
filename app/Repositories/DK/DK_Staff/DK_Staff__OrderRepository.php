@@ -6501,7 +6501,7 @@ class DK_Staff__OrderRepository {
 //        else return response_error([],"电话号码非法！");
 
 
-        $prompt_text = '请帮我分析录音，提取以下信息：1.客户所在的城市与行政区；2.需要医疗的牙齿数量（数字）；3.客户上门的意愿（布尔值：true/false 或 枚举值：有意愿/无意愿）。';
+        $prompt_text = '请帮我分析录音，提取以下信息：1.客户性别（男士/女士）；2.客户年龄（可以是年龄范围，如60多岁）；3.客户所在的城市与行政区；4.需要医疗的牙齿数量（数字）；5.客户三高（健康）状态（正常与否）；6.客户上门的意愿（布尔值：true/false 或 枚举值：有意愿/无意愿）。';
         $ai_prompt = $prompt_text;
 
         $this->get_me();
@@ -6822,6 +6822,20 @@ class DK_Staff__OrderRepository {
                     "schema" => [
                         "type" => "object",
                         "properties" => [
+                            "info" => [
+                                "type" => "object",
+                                "properties" => [
+                                    "gender" => [
+                                        "type" => "string",
+                                        "description" => "客户性别，例如：男士"
+                                    ],
+                                    "age" => [
+                                        "type" => "string",
+                                        "description" => "客户年龄，例如：60多岁"
+                                    ]
+                                ],
+                                "required" => ["gender"]
+                            ],
                             "location" => [
                                 "type" => "object",
                                 "properties" => [
@@ -6839,19 +6853,23 @@ class DK_Staff__OrderRepository {
                             "dental_need" => [
                                 "type" => "object",
                                 "properties" => [
+                                    "health" => [
+                                        "type" => "string",
+                                        "description" => "客户三高（健康）状态，三高是否正常"
+                                    ],
                                     "tooth_count" => [
                                         "type" => "integer",
                                         "description" => "需要医疗的牙齿数量"
                                     ],
                                     "visit_willingness" => [
                                         "type" => "boolean",
-                                        "description" => "客户是否有上门意愿"
+                                        "description" => "客户是否接受医助后续电话回访，或者是否有上门意愿"
                                     ]
                                 ],
                                 "required" => ["visit_willingness"]
                             ]
                         ],
-                        "required" => ["location", "dental_need"]
+                        "required" => ["info","location", "dental_need"]
                     ]
                 ]
             ],
