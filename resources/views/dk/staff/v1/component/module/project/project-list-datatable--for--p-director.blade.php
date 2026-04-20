@@ -92,7 +92,7 @@
                     "title": "项目名称",
                     "data": "name",
                     "className": "text-center",
-                    "width": "120px",
+                    "width": "160px",
                     "orderable": true,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
@@ -160,7 +160,7 @@
                     "title": "备注",
                     "data": "description",
                     "className": "",
-                    "width": "300px",
+                    "width": "200px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)

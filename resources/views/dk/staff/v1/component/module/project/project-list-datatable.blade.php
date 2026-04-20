@@ -32,7 +32,7 @@
             },
             "fixedColumns": {
                 "leftColumns": "@if($is_mobile_equipment) 1 @else 1 @endif",
-                "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
+                "rightColumns": "1"
             },
             "columns": [
                 {
@@ -313,7 +313,7 @@
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(row.is_completed != 1)
                         {
                             $(nTd).addClass('modal-show-for-info-text-set');
                             $(nTd).attr('data-id',row.id).attr('data-name','每日目标');
@@ -335,7 +335,7 @@
                     "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(row.is_completed != 1)
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -360,10 +360,10 @@
                     "title": "AI审核",
                     "data": "ai_prompt",
                     "className": "",
-                    "width": "300px",
+                    "width": "500px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(row.is_completed != 1)
                         {
                             $(nTd).addClass('modal-show-for-info-text-set');
                             $(nTd).attr('data-id',row.id).attr('data-name','AI审核');
@@ -384,10 +384,10 @@
                     "title": "备注",
                     "data": "description",
                     "className": "",
-                    "width": "300px",
+                    "width": "200px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(row.is_completed != 1)
                         {
                             $(nTd).addClass('modal-show-for-info-text-set');
                             $(nTd).attr('data-id',row.id).attr('data-name','备注');

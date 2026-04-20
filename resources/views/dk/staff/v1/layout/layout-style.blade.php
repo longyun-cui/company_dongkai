@@ -94,9 +94,13 @@
     .dropdown.filter-menu .box-footer { border-top:0; }
     .dataTables_wrapper.no-footer .dataTables_scrollBody { border-bottom:0 }
 
+
+
     .tableArea { margin-top:16px; }
     .tableArea.table-order table { min-width:3400px; }
-    .tableArea.table-delivery table { min-width:1280px; }
+    .tableArea.table-delivery. table { min-width:1280px; }
+
+    .tableArea.table-project table tr th, .tableArea.table-project table tr td { white-space:normal !important; }
 
     tbody tr.merge-odd { background-color: #f4f4f4 !important; /* 浅灰色 - 奇数合并块 */ }
     tbody tr.merge-even { background-color: #ffffff !important; /* 白色 - 偶数合并块 */ }

@@ -213,7 +213,7 @@
                     <label class="control-label col-md-2">AI审核提示词</label>
                     <div class="col-md-8 ">
                         {{--<input type="text" class="form-control" name="description" placeholder="描述" value="{{$data->description or ''}}">--}}
-                        <textarea class="form-control" name="ai_prompt" rows="3" cols="100%"></textarea>
+                        <textarea class="form-control" name="ai_prompt" rows="10" cols="100%"></textarea>
                     </div>
                 </div>
 
