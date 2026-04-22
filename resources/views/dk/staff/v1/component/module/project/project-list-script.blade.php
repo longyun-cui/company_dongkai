@@ -89,7 +89,10 @@
                         $modal.find('input[name="name"]').val($response.data.name);
                         $modal.find('input[name="alias_name"]').val($response.data.alias_name);
                         $modal.find('input[name="location_city"]').val($response.data.location_city);
+
+                        $modal.find('textarea[name="ai_model"]').val($response.data.ai_model);
                         $modal.find('textarea[name="ai_prompt"]').val($response.data.ai_prompt);
+
                         $modal.find('textarea[name="description"]').val($response.data.description);
 
                         $modal.find('input[name="is_distributive"]').prop('checked', false);

@@ -208,6 +208,13 @@
                 </div>
 
 
+                {{--AI审核模型--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">AI审核模型</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="ai_model" placeholder="AI审核模型" value="">
+                    </div>
+                </div>
                 {{--AI审核提示词--}}
                 <div class="form-group">
                     <label class="control-label col-md-2">AI审核提示词</label>

@@ -125,6 +125,7 @@ class DK_Common__Order extends Model
         'completed_date',
         'completed_at',
 
+        'ai_inspected_status',
         'inspector_id',
         'inspected_status',
         'inspected_result',

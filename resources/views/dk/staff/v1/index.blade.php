@@ -110,6 +110,12 @@
     @endif
 
 
+    {{--AI审核--}}
+    @if(in_array($me->staff_category,[0,1,9,71]))
+        @include(env('DK_STAFF__TEMPLATE').'component.module.ai.ai-list')
+    @endif
+
+
     {{--百应--}}
     @if(in_array($me->staff_category,[0,1,9,71]))
     @include(env('DK_STAFF__TEMPLATE').'component.module.by.by-list')
@@ -343,6 +349,12 @@
         @include(env('DK_STAFF__TEMPLATE').'component.module.delivery.delivery-aesthetic.delivery-aesthetic-list-datatable')
         @include(env('DK_STAFF__TEMPLATE').'component.module.delivery.delivery-luxury.delivery-luxury-list-datatable')
         @include(env('DK_STAFF__TEMPLATE').'component.module.delivery.delivery-duplicate-list-datatable')
+    @endif
+
+
+    {{--AI审核--}}
+    @if(in_array($me->staff_category,[0,1,9,71]))
+        @include(env('DK_STAFF__TEMPLATE').'component.module.ai.ai-list-datatable')
     @endif
 
 

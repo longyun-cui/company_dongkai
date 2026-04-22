@@ -510,4 +510,246 @@ class DK_Staff__CommonRepository {
     }
 
 
+
+    //
+    public function o1__api__ai_inspecting__from__ali($post_data)
+    {
+        $model = $post_data['model'];
+        $prompt = $post_data['prompt'];
+        $audio = $post_data['voice_record'];
+
+        // 设置请求的URL
+        $url = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
+        // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：$apiKey = "sk-xxx";
+        $apiKey = env('DASHSCOPE_API_KEY');
+        // 设置请求头
+        $headers = [
+            'Authorization: Bearer ' . $apiKey,
+            'Content-Type: application/json'
+        ];
+        // 设置请求体
+        $data = [
+            // 模型列表：https://help.aliyun.com/model-studio/getting-started/models
+            "model" => $model,
+            "messages" => [
+                [
+                    "role" => "system",
+                    "content" => "你是一个严格的质检员，请分析录音内容，请严格遵循JSON Schema输出。禁止使用Markdown格式，禁止包含json代码块标记，禁止换行，输出内容必须是单行的紧凑JSON字符串。不要包含任何其他解释或文字。如果信息在录音中不存在，请对应字段填null！"
+                ],
+                [
+                    "role" => "user",
+                    "content" => [
+                        [
+                            "type" => "input_audio",
+                            "input_audio" => [
+                                "data" => $audio,
+                                "format" => "mp3"
+                            ]
+                        ],
+                        [
+                            "type" => "text",
+                            "text" => $prompt
+                        ]
+                    ]
+                ]
+            ],
+            "parameters" => [
+                "response_format" => [
+                    "type" => "json_object",
+                    "schema" => [
+                        "type" => "object",
+                        "properties" => [
+                        ],
+                        "required" => []
+                    ]
+                ]
+            ],
+//            "stream" => true,
+//            "stream_options" => [
+//                "include_usage" => true
+//            ],
+            "modalities" => ["text"],
+            "audio" => [
+                "format" => "mp3"
+            ]
+        ];
+
+
+        // 初始化cURL会话
+        $ch = curl_init();
+        // 设置cURL选项
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        // 执行cURL会话
+        $response = curl_exec($ch);
+        // 检查是否有错误发生
+        if (curl_errno($ch)) {
+            echo 'Curl error: ' . curl_error($ch);
+        }
+        // 关闭cURL资源
+        curl_close($ch);
+        // 输出响应结果
+        return $response;
+
+
+    }
+
+
+    // 【工单】外呼系统呼叫记录
+    public function o1__api__get_call_recording__from__by($post_data)
+    {
+
+        $serverFrom_name = $post_data['serverFrom_name'];
+        $API_Customer_Password = $post_data['api_customer_password'];
+        $API_Customer_Account = $post_data['api_customer_account'];
+        $client_phone = $post_data['client_phone'];
+        $published_date = $post_data['published_date'];
+
+
+        $timestamp = time();
+        $seq = $timestamp;
+        $digest = md5($API_Customer_Account.'@'.$timestamp.'@'.$seq.'@'.$API_Customer_Password);
+
+        $request_data['authentication']['customer'] = $API_Customer_Account;
+        $request_data['authentication']['timestamp'] = strval($timestamp);
+        $request_data['authentication']['seq'] = strval($seq);
+        $request_data['authentication']['digest'] = $digest;
+
+        $request_data['request']['seq'] = '';
+        $request_data['request']['userData'] = '';
+//        $request_data['request']['agent'] = $agent;
+        $request_data['request']['callee'] = $client_phone;
+        $request_data['request']['startTime'] = $published_date.' 00:00:00';
+        $request_data['request']['endTime'] = $published_date.' 23:59:59';
+
+
+        if($serverFrom_name == "FNJ")
+        {
+            $server = "http://feiniji.cn";
+            $url = "http://feiniji.cn/openapi/V2.0.6/getCdrList";
+        }
+        else if($serverFrom_name == "call-01")
+        {
+            $server = "http://call01.zlyx.jjccyun.cn";
+            $url = "http://call01.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
+        }
+        else if($serverFrom_name == "call-02")
+        {
+            $server = "http://call02.zlyx.jjccyun.cn";
+            $url = "http://call02.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
+        }
+        else if($serverFrom_name == "call-03")
+        {
+            $server = "http://call03.zlyx.jjccyun.cn";
+            $url = "http://call03.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
+        }
+        else if($serverFrom_name == "call-04")
+        {
+            $server = "http://call04.zlyx.jjccyun.cn";
+            $url = "http://call04.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
+        }
+        else if($serverFrom_name == "call-04")
+        {
+            $server = "http://call04.zlyx.jjccyun.cn";
+            $url = "http://call04.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
+        }
+        else if($serverFrom_name == "sys-21")
+        {
+            $server = "http://okcc8.zytchina.net";
+            $url = "http://okcc8.zytchina.net/openapi/V2.0.6/getCdrList";
+        }
+        else
+        {
+            return response_error([],"请先配置API！");
+        }
+
+
+        $request_data = json_encode($request_data);
+//        dd($request_data);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Accept: application/json"));
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true); // post数据
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $request_data); // post的变量
+        $request_result = curl_exec($ch);
+
+
+        $return = [];
+        $return['error'] = 0;
+        $return['status'] = 1;
+        $return['result'] = '';
+        $return['recording_address_list'] = '';
+
+        if(curl_errno($ch))
+        {
+            curl_close($ch);
+
+            $return['error'] = 1;
+            $return['status'] = 9;
+            $return['result'] = '请求失败！';
+        }
+        else
+        {
+            curl_close($ch);
+
+            $result = json_decode($request_result);
+            if($result->result->error == "0")
+            {
+                if($result->data)
+                {
+                    $file = [];
+                    $response = $result->data->response;
+                    if($response->total > 0)
+                    {
+                        foreach ($response->cdr as $k => $v)
+                        {
+                            if(!empty($v->filename)) $file[] = $server.$v->filename;
+                        }
+
+                        if(count($file) > 0)
+                        {
+
+                            $recording_address_list = json_encode($file);
+                            $return['recording_address_list'] = $recording_address_list;
+                        }
+                        else
+                        {
+                            $return['error'] = 1;
+                            $return['result'] = '没有有效通话记录c！';
+                        }
+                    }
+                    else
+                    {
+                        $return['error'] = 1;
+                        $return['result'] = '没有有效通话记录b！';
+                    }
+                }
+                else
+                {
+                    $return['error'] = 1;
+                    $return['result'] = '没有有效通话记录a！';
+                }
+            }
+            else
+            {
+                $return['error'] = 1;
+                $return['result'] = $result->result->msg;
+            }
+        }
+
+        return $return;
+
+
+    }
+
+
+
+
+
 }

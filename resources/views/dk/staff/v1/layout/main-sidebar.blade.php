@@ -322,6 +322,29 @@
             @endif
 
 
+            {{--AI审核--}}
+            @if(in_array($me->staff_category,[0,1,9,51,71]))
+                <li class="treeview _none-">
+                    <a class="tab-control datatable-control"
+                       data-type="create"
+                       data-unique="y"
+                       data-id="ai-record-list"
+                       data-title='<i class="fa fa-font text-red"></i> AI审核'
+                       data-content=''
+
+                       data-datatable-type="create"
+                       data-datatable-unique="y"
+                       data-datatable-id="datatable-ai-record-list"
+                       data-datatable-target="ai-record-list"
+                       data-datatable-clone-object="ai-record-list-clone"
+                    >
+                        <i class="fa fa-font text-red"></i>
+                        <span>AI审核</span>
+                    </a>
+                </li>
+            @endif
+
+
             {{--百应AI--}}
             @if(in_array($me->staff_category,[0,1,9,51,71]))
             <li class="treeview _none-">

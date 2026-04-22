@@ -28,6 +28,7 @@ use App\Models\DK_CC\DK_CC_Call_Statistic;
 use App\Models\DK\DK_API_BY_Received;
 
 
+use App\Jobs\DK\DK_AI_Inspect_Job;
 use App\Jobs\DK_Client\AutomaticDispatchingJob;
 use App\Jobs\DK\BYApReceivedJob;
 
@@ -6465,7 +6466,7 @@ class DK_Staff__OrderRepository {
 
 
 
-    // 【工单】审核
+    // 【工单】AI审核
     public function o1__order__item_inspecting__by_ai__save($post_data)
     {
         $messages = [
@@ -6486,19 +6487,6 @@ class DK_Staff__OrderRepository {
         if($operate != 'order--item-inspecting--by-ai') return response_error([],"参数[operate]有误！");
         $item_id = $post_data["item_id"];
         if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数[ID]有误！");
-
-//        $inspected_result = $post_data["order-item-inspecting--inspected-result"];
-//        if(!in_array($inspected_result,config('dk.common-config.inspected_result')))
-//        {
-//            return response_error([],"审核结果非法！");
-//        }
-
-
-        // 电话号码必须为11位整数
-//        if(preg_match('/^1\d{10}$/', $post_data['client_phone']) === 1)
-//        {
-//        }
-//        else return response_error([],"电话号码非法！");
 
 
         $prompt_text = '请帮我分析录音，提取以下信息：1.客户性别（男士/女士）；2.客户年龄（可以是年龄范围，如60多岁）；3.客户所在的城市与行政区；4.需要医疗的牙齿数量（数字）；5.客户三高（健康）状态（正常与否）；6.客户上门的意愿（布尔值：true/false 或 枚举值：有意愿/无意愿）。';
@@ -6664,7 +6652,6 @@ class DK_Staff__OrderRepository {
         {
             return response_error([],"录音文件地址不存在！");
         }
-//        dd('继续操作');
 
 
 //        if(in_array($me->staff_category,[51,61]) && $item->published_at < strtotime("yesterday"))
@@ -6673,14 +6660,9 @@ class DK_Staff__OrderRepository {
 //        }
 
 
-
         $time = time();
         $date = date("Y-m-d");
         $datetime = date('Y-m-d H:i:s');
-
-
-
-
 
 
 //        $record_data["ip"] = Get_IP();
@@ -6747,7 +6729,7 @@ class DK_Staff__OrderRepository {
 
                 $ai_inspected->result = $ai_inspecting_response;
                 $bool_ai_2 = $ai_inspected->save();
-                if(!$bool_ai_2) throw new Exception("DK_Common__Order--update--fail");
+                if(!$bool_ai_2) throw new Exception("DK_Common__Order__AI_Inspected__Record--update--fail");
 
 //                $record = new DK_Common__Order__Operation_Record;
 //
@@ -6760,6 +6742,98 @@ class DK_Staff__OrderRepository {
 
 
             return response_success([],"审核完成!");
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+    }
+    // 【工单】AI审核
+    public function o1__order__bulk_inspecting__by_ai__save($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'ids.required' => 'ids.required.',
+//            'project_id.required' => 'project_id.required.',
+//            'client_id.required' => 'client_id.required.',
+//            'delivered_result.required' => 'delivered_result.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'ids' => 'required',
+//            'project_id' => 'required',
+//            'client_id' => 'required',
+//            'delivered_result' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'bulk-inspecting--by-ai') return response_error([],"参数[operate]有误！");
+        $ids = $post_data['ids'];
+        $ids_array = explode("-", $ids);
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->staff_category,[0,1,9,71])) return response_error([],"你没有操作权限！");
+
+
+        $time = time();
+        $date = date("Y-m-d");
+        $datetime = date('Y-m-d H:i:s');
+
+        $sorted = collect($ids_array)->sort();
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $count = 0;
+            $msg = '';
+            $ids = [];
+            $job_ids = [];
+
+            foreach($sorted as $key => $id)
+            {
+                $item = DK_Common__Order::withTrashed()->find($id);
+                if($item)
+                {
+                    $item->ai_inspected_status = 1;
+                    $item->save();
+                }
+                else
+                {
+                    return response_error([],"该内容不存在，刷新页面重试！");
+                }
+
+                $ai_inspected = new DK_Common__Order__AI_Inspected__Record;
+                $ai_data['item_status'] = 1;
+                $ai_data['order_id'] = $id;
+
+                $bool_ai = $ai_inspected->fill($ai_data)->save();
+                if(!$bool_ai) throw new Exception("DK_Common__Order__AI_Inspected__Record--update--fail");
+
+                $count += 1;
+                $ids[] = $id;
+                $job_ids[] = $ai_inspected->id;
+            }
+
+            DB::commit();
+
+            foreach($job_ids as $key => $id)
+            {
+                DK_AI_Inspect_Job::dispatch($id);
+            }
+
+            return response_success(['ids'=>$ids],$msg);
         }
         catch (Exception $e)
         {

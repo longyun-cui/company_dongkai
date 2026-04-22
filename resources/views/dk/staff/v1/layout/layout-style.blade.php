@@ -101,6 +101,7 @@
     .tableArea.table-delivery. table { min-width:1280px; }
 
     .tableArea.table-project table tr th, .tableArea.table-project table tr td { white-space:normal !important; }
+    .tableArea.table-ai table tr th, .tableArea.table-ai table tr td { white-space:normal !important; }
 
     tbody tr.merge-odd { background-color: #f4f4f4 !important; /* 浅灰色 - 奇数合并块 */ }
     tbody tr.merge-even { background-color: #ffffff !important; /* 白色 - 偶数合并块 */ }

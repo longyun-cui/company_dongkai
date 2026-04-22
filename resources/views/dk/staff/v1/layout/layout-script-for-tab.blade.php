@@ -245,6 +245,16 @@
                 {
                     Datatable__for__Delivery_List__Duplicate('#'+$config.id);
                 }
+                else if($id == "ai")
+                {
+                    console.log("ai");
+                    console.log("ai");
+                    console.log("ai");
+                }
+                else if($id == "datatable-ai-record-list")
+                {
+                    Datatable__for__AI__Record__List('#'+$config.id);
+                }
                 else if($id == "by")
                 {
                     console.log("by");

@@ -3498,6 +3498,88 @@
             window.open($url);
         });
 
+        // 【批量操作】批量·AI质检
+        $(".main-wrapper").off('click', '.order--bulk-ai-inspect-summit').on('click', '.order--bulk-ai-inspect-summit', function() {
+            var $that = $(this);
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $order_category = $that.data('order-category');
+            var $item_category = $datatable_wrapper.data('datatable-item-category');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+
+
+            var $ids = '';
+            $datatable_wrapper.find('input[name="bulk-id"]:checked').each(function() {
+                $ids += $(this).val()+'-';
+            });
+            $ids = $ids.slice(0, -1);
+
+
+            layer.msg('确定"批量AI质检"么', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+
+                    layer.close(index);
+
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">正在提交</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
+                    });
+
+                    $.post(
+                        "{{ url('/o1/order/bulk-inspecting--by-ai') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "bulk-inspecting--by-ai",
+                            ids: $ids
+                        },
+                        'json'
+                    )
+                        .done(function($response) {
+                            console.log('done');
+
+                            $response = JSON.parse($response);
+                            if(!$response.success) layer.msg($response.msg);
+                            else
+                            {
+                                layer.closeAll('loading');
+                                // $('#'+$table_id).DataTable().ajax.reload(null,false);
+
+                                if (!!$response.data.item_list)
+                                {
+                                    var $item_list = $response.data.item_list;
+                                    $.each($item_list, function(index, $item)
+                                    {
+                                        var $td = $datatable_wrapper.find('td[data-key=order_id][data-value='+$item.id+']');
+                                        var $row = $td.parents('tr');
+                                        update_order_row_status($row,$item);
+                                    });
+                                }
+                            }
+                        })
+                        .fail(function(jqXHR, textStatus, errorThrown) {
+                            console.log('fail');
+                            layer.msg('服务器错误！');
+
+                        })
+                        .always(function(jqXHR, textStatus) {
+                            layer.closeAll('loading');
+                        });
+
+                }
+            });
+        });
+
         // 【批量操作】批量·一键交付
         $(".main-wrapper").off('click', '.order--bulk-delivering-summit--by-fool').on('click', '.order--bulk-delivering-summit--by-fool', function() {
             var $that = $(this);

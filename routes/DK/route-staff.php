@@ -215,6 +215,7 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
     Route::post('/o1/order/item-detail-editing-save', $controller.'@o1__order__item_detail_editing_save');
     Route::post('/o1/order/item-inspecting-save', $controller.'@o1__order__item_inspecting_save');
     Route::post('/o1/order/item-inspecting--by-ai', $controller.'@o1__order__item_inspecting__by_ai__save');
+    Route::post('/o1/order/bulk-inspecting--by-ai', $controller.'@o1__order__bulk_inspecting__by_ai__save');
     Route::post('/o1/order/item-appealing-save', $controller.'@o1__order__item_appealing_save');
     Route::post('/o1/order/item-appealed-handling-save', $controller.'@o1__order__item_appealed_handling_save');
     Route::post('/o1/order/item-delivering-save', $controller.'@o1__order__item_delivering_save');
@@ -226,6 +227,7 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
     // 【工单】api
     Route::post('/o1/order/item-call-recording--get--by-api', $controller.'@o1__order__item_call_recording__get__by_api');
     Route::post('/o1/order/item-inspecting--by--ali-api', $controller.'@o1__order__item_inspecting__by__ali_api');
+    Route::post('/o1/order/bulk-inspecting--by--ali-api', $controller.'@o1__order__bulk_inspecting__by__ali_api');
     // 【工单】操作记录
     Route::post('/o1/order/item-operation-record-list/datatable-query', $controller.'@o1__order__item_operation_record_list__datatable_query');
     Route::post('/o1/order/item-delivery-record-list/datatable-query', $controller.'@o1__order__item_delivery_record_list__datatable_query');
@@ -240,6 +242,12 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
     // 【工单】删除 & 恢复 & 永久删除
     Route::post('/o1/delivery/item-delete', $controller.'@o1__delivery__item_delete');
     Route::post('/o1/delivery/bulk-exported-status-change', $controller.'@o1__delivery__bulk_exported_status_change');
+
+
+
+
+    // 【交付】列表
+    Route::post('/o1/ai/ai-record-list/datatable-query', $controller.'@o1__ai__record__list__datatable_query');
 
 
 

@@ -26,6 +26,7 @@ use App\Repositories\DK\DK_Staff\DK_Staff__ProjectRepository;
 use App\Repositories\DK\DK_Staff\DK_Staff__OrderRepository;
 use App\Repositories\DK\DK_Staff\DK_Staff__DeliveryRepository;
 
+use App\Repositories\DK\DK_Staff\DK_Staff__AIRepository;
 use App\Repositories\DK\DK_Staff\DK_Staff__BYRepository;
 
 use App\Repositories\DK\DK_Staff\DK_Staff__ExportRepository;
@@ -60,6 +61,7 @@ class DKStaffController extends Controller
     private $order_repo;
     private $delivery_repo;
 
+    private $ai_repo;
     private $by_repo;
 
     private $export_repo;
@@ -89,6 +91,7 @@ class DKStaffController extends Controller
         $this->order_repo = new DK_Staff__OrderRepository;
         $this->delivery_repo = new DK_Staff__DeliveryRepository;
 
+        $this->ai_repo = new DK_Staff__AIRepository;
         $this->by_repo = new DK_Staff__BYRepository;
 
         $this->export_repo = new DK_Staff__ExportRepository;
@@ -928,10 +931,15 @@ class DKStaffController extends Controller
     {
         return $this->order_repo->o1__order__item_inspecting_save(request()->all());
     }
-    // 【工单】审核
+    // 【工单】ai审核
     public function o1__order__item_inspecting__by_ai__save()
     {
         return $this->order_repo->o1__order__item_inspecting__by_ai__save(request()->all());
+    }
+    // 【工单】ai审核
+    public function o1__order__bulk_inspecting__by_ai__save()
+    {
+        return $this->order_repo->o1__order__bulk_inspecting__by_ai__save(request()->all());
     }
     // 【工单】申诉
     public function o1__order__item_appealing_save()
@@ -980,10 +988,15 @@ class DKStaffController extends Controller
     {
         return $this->order_repo->o1__order__item_call_recording__get__by_api(request()->all());
     }
-    // 【工单】获取录音
+    // 【工单】ai质检
     public function o1__order__item_inspecting__by__ali_api()
     {
         return $this->order_repo->o1__order__item_inspecting__by__ali_api(request()->all());
+    }
+    // 【工单】ai质检
+    public function o1__order__bulk_inspecting__by__ali_api()
+    {
+        return $this->order_repo->o1__order__bulk_inspecting__by__ali_api(request()->all());
     }
 
 
@@ -1056,6 +1069,15 @@ class DKStaffController extends Controller
     public function o1__delivery__bulk_exported_status_change()
     {
         return $this->delivery_repo->o1__delivery__bulk_exported_status_change(request()->all());
+    }
+
+
+
+
+    // 【API】【百应】datatable
+    public function o1__ai__record__list__datatable_query()
+    {
+        return $this->ai_repo->o1__ai__record__list__datatable_query(request()->all());
     }
 
 

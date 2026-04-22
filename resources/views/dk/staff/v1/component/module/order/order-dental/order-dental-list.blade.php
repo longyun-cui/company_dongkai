@@ -311,6 +311,13 @@
             </button>
 
 
+            @if(in_array($me->staff_position,[0,1,9,31]))
+            <button type="button" onclick="" class="btn btn-default btn-filter order--bulk-ai-inspect-summit" data-order-category="1">
+                <i class="fa fa-download"></i> 批量·AI质检
+            </button>
+            @endif
+
+
             <button type="button" class="btn btn-default btn-filter order--bulk-delivering-summit--by-fool">
                 <i class="fa fa-share"></i> 批量·一键交付
             </button>
