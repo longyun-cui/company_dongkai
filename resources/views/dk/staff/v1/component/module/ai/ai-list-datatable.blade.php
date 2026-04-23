@@ -67,7 +67,7 @@
                     "title": "状态",
                     "data": "item_status",
                     "className": "",
-                    "width": "120px",
+                    "width": "100px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         var $result_html = '';
@@ -98,7 +98,7 @@
                     "title": "工单ID",
                     "data": "order_id",
                     "className": "",
-                    "width": "120px",
+                    "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         return data;
@@ -128,7 +128,7 @@
                     "title": "消耗Token",
                     "data": "usage",
                     "className": "text-left",
-                    "width": "160px",
+                    "width": "120px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         if(!data) return '--';
@@ -146,21 +146,21 @@
                     }
                 },
                 {
-                    "title": "耗时",
+                    "title": "耗时(s)",
                     "data": "ai_used_time",
                     "className": "text-left",
-                    "width": "160px",
+                    "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         var $return_html = '';
                         $return_html += '【程序】' + row.program_used_time + ' <br>';
-                        $return_html += '【AI】' + data + ' <br>';
+                        $return_html += '【质检】' + data + ' <br>';
                         return $return_html;
                     }
                 },
                 {
                     "className": "text-left",
-                    "width": "500px",
+                    "width": "400px",
                     "title": "详情",
                     "data": "content",
                     "orderable": false,
