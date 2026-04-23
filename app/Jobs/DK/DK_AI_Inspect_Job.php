@@ -48,6 +48,10 @@ class DK_AI_Inspect_Job implements ShouldQueue
      */
     public function handle()
     {
+        $microtime_start = microtime(true);
+
+        $ai_platform = config('dk.common-config.ai_platform_text');
+        $ai_model = config('dk.common-config.ai_model_text');
         $ai_prompt = config('dk.common-config.ai_prompt_text');
 
 
@@ -75,6 +79,8 @@ class DK_AI_Inspect_Job implements ShouldQueue
             $project = DK_Common__Project::find($order->project_id);
             if($project)
             {
+                $ai_platform = !empty($project->ai_platform) ? $project->ai_platform : $ai_platform;
+                $ai_model = !empty($project->ai_model) ? $project->ai_model : $ai_model;
                 $ai_prompt = !empty($project->ai_prompt) ? $project->ai_prompt : $ai_prompt;
             }
             else
@@ -212,7 +218,7 @@ class DK_AI_Inspect_Job implements ShouldQueue
                     curl_close($ch); // 关闭cURL会话
 
 
-                    sleep(0.8); // 暂停1秒
+                    sleep(0.6); // 暂停1秒
 
 
                     $ch = curl_init($url);
@@ -284,31 +290,39 @@ class DK_AI_Inspect_Job implements ShouldQueue
             $record_data["content"] = json_encode($record_content);
 
 
-            $ai_inspected = new DK_Common__Order__AI_Inspected__Record;
-            $ai_data['ai_platform'] = 'ali';
-            $ai_data['ai_model'] = 'qwen3.5-omni-plus';
+            $ai_data['ai_platform'] = $ai_platform;
+            $ai_data['ai_model'] = $ai_model;
             $ai_data['ai_prompt'] = $ai_prompt;
             $ai_data['order_id'] = $order_id;
 
-            $bool_ai = $ai_inspected->fill($ai_data)->save();
+            $item->ai_platform = $ai_platform;
+            $item->ai_model = $ai_model;
+            $item->ai_prompt = $ai_prompt;
+
+            $bool_ai = $item->save();
             if(!$bool_ai)
             {
-                throw new Exception("DK_Common__Order--update--fail");
+                throw new Exception("DK_Common_DK_Common__Order__AI_Inspected__Record_Order--update--fail");
             }
             else
             {
+                $ai_inspecting_post_date['platform'] = $ai_data['ai_platform'];
                 $ai_inspecting_post_date['model'] = $ai_data['ai_model'];
                 $ai_inspecting_post_date['prompt'] = $ai_data['ai_prompt'];
                 $ai_inspecting_post_date['voice_record'] = $voice_record_url;
 
+                $microtime_ai = microtime(true);
                 $ai_inspecting_response = $this->commonRepository->o1__api__ai_inspecting__from__ali($ai_inspecting_post_date);
+                $microtime_ended = microtime(true);
 
-                $ai_inspected->item_status = 9;
-                $ai_inspected->result = $ai_inspecting_response;
-                $bool_ai_2 = $ai_inspected->save();
+                $item->item_status = 9;
+                $item->ai_used_time = $microtime_ended - $microtime_ai;
+                $item->program_used_time = $microtime_ended - $microtime_start;
+                $item->result = $ai_inspecting_response;
+                $bool_ai_2 = $item->save();
                 if(!$bool_ai_2)
                 {
-                    throw new Exception("DK_Common__Order--update--fail");
+                    throw new Exception("DK_Common__Order__AI_Inspected__Record--update--fail");
                 }
 
 //                $record = new DK_Common__Order__Operation_Record;

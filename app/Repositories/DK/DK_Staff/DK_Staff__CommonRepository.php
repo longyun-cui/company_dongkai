@@ -514,6 +514,7 @@ class DK_Staff__CommonRepository {
     //
     public function o1__api__ai_inspecting__from__ali($post_data)
     {
+        $platform = $post_data['platform'];
         $model = $post_data['model'];
         $prompt = $post_data['prompt'];
         $audio = $post_data['voice_record'];
