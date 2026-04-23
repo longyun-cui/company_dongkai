@@ -70,7 +70,28 @@
                     "width": "120px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return data;
+                        var $result_html = '';
+                        if(data == 0)
+                        {
+                            $result_html = '<small class="btn-xs bg-aqua">待审核</small>';
+                        }
+                        else if(data == 1)
+                        {
+                            $result_html = '<small class="btn-xs bg-blue">审核中</small>';
+                        }
+                        else if(data == 9)
+                        {
+                            $result_html = '<small class="btn-xs bg-green">已审核</small>';
+                        }
+                        else if(data == 99)
+                        {
+                            $result_html = '<small class="btn-xs bg-black">审核有误</small>';
+                        }
+                        else
+                        {
+                            $result_html = '<small class="btn-xs bg-black">有误</small>';
+                        }
+                        return $result_html;
                     }
                 },
                 {
