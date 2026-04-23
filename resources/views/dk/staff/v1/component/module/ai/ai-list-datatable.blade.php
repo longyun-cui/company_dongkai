@@ -149,7 +149,7 @@
                     "title": "耗时(s)",
                     "data": "ai_used_time",
                     "className": "text-left",
-                    "width": "80px",
+                    "width": "100px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         var $return_html = '';
