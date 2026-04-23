@@ -6431,14 +6431,23 @@ class DK_Staff__OrderRepository {
                     $response = $result->data->response;
                     if($response->total > 0)
                     {
+                        $success_count = 0;
                         foreach ($response->cdr as $k => $v)
                         {
-                            if(!empty($v->filename)) $file[] = $server.$v->filename;
+                            if($v->serviceType == 4) $success_count += 1;
                         }
+
+                        if($success_count > 0)
+                        {
+                            foreach ($response->cdr as $k => $v)
+                            {
+                                if(!empty($v->filename)) $file[] = $server.$v->filename;
+                            }
+                        }
+                        else return response_error([],'没有有效通话记录，非自动点拨通话！');
 
                         if(count($file) > 0)
                         {
-
                             if(count($file) == 1)
                             {
 //                                $item->recording_address = $file[0];
