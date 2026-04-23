@@ -146,6 +146,19 @@
                     }
                 },
                 {
+                    "title": "耗时",
+                    "data": "ai_used_time",
+                    "className": "text-left",
+                    "width": "160px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        var $return_html = '';
+                        $return_html += '【程序】' + row.program_used_time + ' <br>';
+                        $return_html += '【AI】' + data + ' <br>';
+                        return $return_html;
+                    }
+                },
+                {
                     "className": "text-left",
                     "width": "500px",
                     "title": "详情",
