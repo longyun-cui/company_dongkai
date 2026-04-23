@@ -97,12 +97,36 @@
                     },
                     {
                         "title": "消耗Token",
-                        "data": "token_total",
+                        "data": "usage",
                         "className": "",
                         "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
+                            if(!data) return '--';
+
+                            var $return_html = '';
+                            $return_html += '【全部消耗】' + data.total_tokens + ' <br>';
+                            $return_html += '【提示总耗】' + data.prompt_tokens + ' <br>';
+                            $return_html += '【音频消耗】' + data.prompt_tokens_details.audio_tokens + ' <br>';
+                            $return_html += '【文本消耗】' + data.prompt_tokens_details.text_tokens + ' <br>';
+                            $return_html += '【返回消耗】' + data.completion_tokens + ' <br>';
+                            // $.each(data, function($index, $value) {
+                            //     $return_html += '【'+ $index +'】' + $value + ' <br>';
+                            // });
+                            return $return_html;
+                        }
+                    },
+                    {
+                        "title": "耗时(s)",
+                        "data": "ai_used_time",
+                        "className": "text-left",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            var $return_html = '';
+                            $return_html += '【程序】' + row.program_used_time + ' <br>';
+                            $return_html += '【质检】' + data + ' <br>';
+                            return $return_html;
                         }
                     },
                     {
@@ -112,24 +136,11 @@
                         "data": "content",
                         "orderable": false,
                         render: function(data, type, row, meta) {
+                            if(!data) return '--';
 
                             var $return_html = '';
                             $.each(data, function($index, $value) {
-                                var $index_text = $index;
-                                if($index_text == 'city') $index_text = '城市';
-                                else if($index_text == 'district') $index_text = '行政区';
-                                else if($index_text == 'gender') $index_text = '性别';
-                                else if($index_text == 'age') $index_text = '年龄';
-                                else if($index_text == 'tooth_count') $index_text = '牙齿数量';
-                                else if($index_text == 'teeth_count') $index_text = '牙齿数量';
-                                else if($index_text == 'health_status') $index_text = '三高（健康状况）';
-                                else if($index_text == 'willingness') $index_text = '上门意愿';
-
-                                var $value_text = $value;
-                                if($value == true) $value_text = '是';
-                                else if($value == false) $value_text = '否';
-
-                                $return_html += '【'+ $index_text +'】' + $value_text + ' <br>';
+                                $return_html += '【'+ $index +'】' + $value + ' <br>';
                             });
                             return $return_html;
                         }

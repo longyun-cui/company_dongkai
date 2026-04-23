@@ -324,6 +324,7 @@
 
             {{--AI审核--}}
             @if(in_array($me->staff_category,[0,1,9,51,71]))
+            @if(in_array($me->staff_position,[0,1,11,31]))
                 <li class="treeview _none-">
                     <a class="tab-control datatable-control"
                        data-type="create"
@@ -342,6 +343,7 @@
                         <span>AI审核</span>
                     </a>
                 </li>
+            @endif
             @endif
 
 

@@ -1740,10 +1740,32 @@ class DK_Staff__OrderRepository {
 
         foreach ($list as $k => $v)
         {
-            $result = json_decode($v->result);
-            $content = json_decode($result->choices[0]->message->content);
-            $list[$k]->content = $content;
-            $list[$k]->token_total = $result->usage->total_tokens;
+            if(!empty($v->result))
+            {
+                $result = json_decode($v->result);
+                if(isset($result->choices[0]->message->content))
+                {
+                    $content = json_decode($result->choices[0]->message->content);
+                    $list[$k]->content = $content;
+                }
+                else
+                {
+                    $list[$k]->content = null;
+                }
+                if(isset($result->usage))
+                {
+                    $list[$k]->usage = $result->usage;
+                }
+                else
+                {
+                    $list[$k]->usage = null;
+                }
+            }
+            else
+            {
+                $list[$k]->content = null;
+                $list[$k]->usage = null;
+            }
         }
 //        dd($list->toArray());
         return datatable_response($list, $draw, $total);
