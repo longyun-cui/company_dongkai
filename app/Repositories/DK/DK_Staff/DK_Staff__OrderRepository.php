@@ -6519,6 +6519,8 @@ class DK_Staff__OrderRepository {
             return response_error([],$messages->first());
         }
 
+        $microtime_start = microtime(true);
+
         $operate = $post_data["operate"];
         if($operate != 'order--item-inspecting--by-ai') return response_error([],"参数[operate]有误！");
         $item_id = $post_data["item_id"];
@@ -6766,9 +6768,14 @@ class DK_Staff__OrderRepository {
                 $ai_inspecting_post_date['voice_record'] = $voice_record_url;
                 $ai_inspecting_post_date['voice_record_list'] = $recording_address_list;
 
+                $microtime_ai = microtime(true);
 //                $ai_inspecting_response = $this->o1__public__api__ai_inspecting__from__ali($ai_inspecting_post_date);
-                $ai_inspecting_response = $this->commonRepository->o1__api__ai_inspecting__from__ali($ai_inspecting_post_date);;
+                $ai_inspecting_response = $this->commonRepository->o1__api__ai_inspecting__from__ali($ai_inspecting_post_date);
+                $microtime_ended = microtime(true);
 
+                $item->item_status = 9;
+                $item->ai_used_time = $microtime_ended - $microtime_ai;
+                $item->program_used_time = $microtime_ended - $microtime_start;
                 $ai_inspected->result = $ai_inspecting_response;
                 $bool_ai_2 = $ai_inspected->save();
                 if(!$bool_ai_2) throw new Exception("DK_Common__Order__AI_Inspected__Record--update--fail");
@@ -6779,6 +6786,8 @@ class DK_Staff__OrderRepository {
 //                if(!$bool_1) throw new Exception("DK_Common__Order__Operation_Record--insert--fail");
             }
 
+            $item->ai_inspected_status = 9;
+            $item->save();
 
             DB::commit();
 
