@@ -6773,9 +6773,9 @@ class DK_Staff__OrderRepository {
                 $ai_inspecting_response = $this->commonRepository->o1__api__ai_inspecting__from__ali($ai_inspecting_post_date);
                 $microtime_ended = microtime(true);
 
-                $item->item_status = 9;
-                $item->ai_used_time = $microtime_ended - $microtime_ai;
-                $item->program_used_time = $microtime_ended - $microtime_start;
+                $ai_inspected->item_status = 9;
+                $ai_inspected->ai_used_time = $microtime_ended - $microtime_ai;
+                $ai_inspected->program_used_time = $microtime_ended - $microtime_start;
                 $ai_inspected->result = $ai_inspecting_response;
                 $bool_ai_2 = $ai_inspected->save();
                 if(!$bool_ai_2) throw new Exception("DK_Common__Order__AI_Inspected__Record--update--fail");
