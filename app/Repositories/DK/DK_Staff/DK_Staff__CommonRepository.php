@@ -518,6 +518,23 @@ class DK_Staff__CommonRepository {
         $model = $post_data['model'];
         $prompt = $post_data['prompt'];
         $audio = $post_data['voice_record'];
+        $audio_list = $post_data['voice_record_list'];
+
+        $content_list = [];
+        foreach($audio_list as $k => $v)
+        {
+            $audio = [];
+            $audio['type'] = "input_audio";
+            $audio['input_audio']['data'] = $v;
+            $audio['input_audio']['format'] = "mp3";
+            $content_list[] = $audio;
+        }
+        {
+            $text = [];
+            $text['type'] = "text";
+            $text['text'] = $prompt;
+            $content_list[] = $text;
+        }
 
         // 设置请求的URL
         $url = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
@@ -535,36 +552,24 @@ class DK_Staff__CommonRepository {
             "messages" => [
                 [
                     "role" => "system",
-                    "content" => "你是一个严格的质检员，请分析录音内容，请严格遵循JSON Schema输出。禁止使用Markdown格式，禁止包含json代码块标记，禁止换行，输出内容必须是单行的紧凑JSON字符串。不要包含任何其他解释或文字。如果信息在录音中不存在，请对应字段填null！"
+                    "content" => "你是一个严格的质检员，请分析录音内容，请严格遵循JSON Schema输出。禁止使用Markdown格式，禁止包含json代码块标记，禁止换行，输出内容必须是单行的紧凑JSON字符串，每一个返回字段均为关联数组类型， :之后不要再有{，避免数据格式混乱。不要包含任何其他解释或文字。如果信息在录音中不存在，请对应字段填null！"
                 ],
                 [
                     "role" => "user",
-                    "content" => [
-                        [
-                            "type" => "input_audio",
-                            "input_audio" => [
-                                "data" => $audio,
-                                "format" => "mp3"
-                            ]
-                        ],
-                        [
-                            "type" => "text",
-                            "text" => $prompt
-                        ]
-                    ]
+                    "content" => $content_list
                 ]
             ],
-            "parameters" => [
-                "response_format" => [
-                    "type" => "json_object",
-                    "schema" => [
-                        "type" => "object",
-                        "properties" => [
-                        ],
-                        "required" => []
-                    ]
-                ]
-            ],
+//            "parameters" => [
+//                "response_format" => [
+//                    "type" => "json_object",
+//                    "schema" => [
+//                        "type" => "object",
+//                        "properties" => [
+//                        ],
+//                        "required" => []
+//                    ]
+//                ]
+//            ],
 //            "stream" => true,
 //            "stream_options" => [
 //                "include_usage" => true
@@ -574,6 +579,7 @@ class DK_Staff__CommonRepository {
                 "format" => "mp3"
             ]
         ];
+//        dd($data);
 
 
         // 初始化cURL会话

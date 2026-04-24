@@ -24081,6 +24081,178 @@ EOF;
 
 
     }
+    public function v3_operate_api_OKCC_receiving_result_by_clientMark($post_data)
+    {
+
+        $serverFrom = $post_data['serverFrom'];
+
+        if($serverFrom == 'FNJ')
+        {
+            $serverFrom_id = 11;
+        }
+        else if($serverFrom == 'call-01')
+        {
+            $serverFrom_id = 1;
+        }
+        else if($serverFrom == 'call-02')
+        {
+            $serverFrom_id = 2;
+        }
+        else if($serverFrom == 'call-03')
+        {
+            $serverFrom_id = 3;
+        }
+        else if($serverFrom == 'call-04')
+        {
+            $serverFrom_id = 4;
+        }
+        else
+        {
+            $serverFrom_id = 0;
+        }
+
+        $insert_data['serverFrom_id'] = $serverFrom_id;
+        $insert_data['serverFrom_name'] = $serverFrom;
+        $insert_data['api_customer_account'] = $post_data['customerAccount'];
+        $insert_data['api_type'] = $post_data['notify']['type'];
+        $insert_data['staffNo'] = $post_data['notify']['data']['userName'];
+        $insert_data['telephone_number'] = $post_data['notify']['data']['number1'];
+        $insert_data['content'] = json_encode($post_data);
+
+        $mine = new DK_CC_API_Received_From_OKCC;
+
+        $bool_c = $mine->fill($insert_data)->save();
+
+
+
+        $notify = $post_data['notify'];
+        $clientMark_data = $post_data['notify']['data'];
+        $clientMark_field = $post_data['notify']['field'];
+//        dd($clientMark_field);
+
+        $api_staffNo = (int)$clientMark_data['userName'];
+        $phone_number = $clientMark_data['number1'];
+
+
+        $staff = DK_User::with([])->where('api_staffNo',$api_staffNo)->first();
+        if(!$staff)
+        {
+            $return['result']['error'] = 1;
+            $return['result']['msg'] = '该坐席未绑定员工！';
+            return json_encode($return);
+        }
+
+
+        $order_where['created_type'] = 99;
+        $order_where['api_staffNo'] = $api_staffNo;
+        $order_where['client_phone'] = $phone_number;
+        $order = DK_Order::select('*')->where($order_where)->orderby('id','desc')->first();
+        if($order)
+        {
+//            if($order->is_published == 0)
+            if($order->inspected_status == 0)
+            {
+                // 启动数据库事务
+                DB::beginTransaction();
+                try
+                {
+//                    DK_Order::select('*')->where($order_where)->orderby('id','desc')->first();
+                    $bool_o = $order->update($insert_data);
+                    if(!$bool_o) throw new Exception("DK_Order--update--fail");
+
+                    DB::commit();
+
+                    $return['result']['error'] = 0;
+                    $return['result']['msg'] = '更新完成！';
+                    return json_encode($return);
+
+                }
+                catch (Exception $e)
+                {
+                    DB::rollback();
+//                    $msg = '操作失败，请重试！';
+                    $msg = $e->getMessage();
+//                    return response_fail([],$msg);
+
+                    $return['result']['error'] = 1;
+                    $return['result']['msg'] = $msg;
+                    return json_encode($return);
+                }
+            }
+            else
+            {
+                $return['result']['error'] = 0;
+                $return['result']['msg'] = '该客户资料已发布，无法更新！';
+                return json_encode($return);
+            }
+        }
+        else {
+
+            $is_repeat = DK_Order::where(['project_id' => $insert_data['project_id'], 'client_phone' => $phone_number])
+                ->where('is_published', '>', 0)->count("*");
+            if ($is_repeat == 0) {
+                $is_repeat = DK_Pivot_Client_Delivery::where(['project_id' => $insert_data['project_id'], 'client_phone' => $phone_number])->count("*");
+            }
+
+            $staff = DK_User::with(['department_district_er', 'department_group_er'])->where('api_staffNo', $api_staffNo)->first();
+
+            $insert_data["created_type"] = 99;
+            $insert_data["item_category"] = 1;
+            $insert_data["active"] = 1;
+            $insert_data["is_published"] = 1;
+            $insert_data["published_at"] = time();
+            $insert_data["is_repeat"] = $is_repeat;
+            $insert_data["creator_id"] = $staff->id;
+            $insert_data["api_staffNo"] = $api_staffNo;
+            $insert_data["client_name"] = $clientMark_data['clientName'];
+            $insert_data["client_phone"] = $phone_number;
+
+            $insert_data['department_district_id'] = $staff->department_district_id;
+            $insert_data['department_group_id'] = $staff->department_group_id;
+            if ($staff->department_district_er) $insert_data['department_manager_id'] = $staff->department_district_er->leader_id;
+            if ($staff->department_group_er) $insert_data['department_supervisor_id'] = $staff->department_group_er->leader_id;
+
+
+            $call_where['serverFrom_name'] = $serverFrom;
+            $call_where['staffNo'] = $api_staffNo;
+            $call_where['callee'] = $phone_number;
+
+
+            // 启动数据库事务
+            DB::beginTransaction();
+            try
+            {
+                $mine = new DK_Order;
+                $bool_o = $mine->fill($insert_data)->save();
+                if(!$bool_o) throw new Exception("DK_Order--insert--fail");
+
+
+                DB::commit();
+
+                $return['result']['error'] = 0;
+                $return['result']['msg'] = '';
+                return json_encode($return);
+
+            }
+            catch (Exception $e)
+            {
+                DB::rollback();
+//            $msg = '操作失败，请重试！';
+                $msg = $e->getMessage();
+//            exit($e->getMessage());
+//            return response_fail([],$msg);
+
+//                $return['result']['error'] = 1;
+//                $return['result']['msg'] = $msg;
+//                return json_encode($return);
+            }
+
+        }
+
+
+
+
+    }
 
 
 

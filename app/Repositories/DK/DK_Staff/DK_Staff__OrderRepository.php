@@ -32,6 +32,8 @@ use App\Jobs\DK\DK_AI_Inspect_Job;
 use App\Jobs\DK_Client\AutomaticDispatchingJob;
 use App\Jobs\DK\BYApReceivedJob;
 
+use App\Repositories\DK\DK_Staff\DK_Staff__CommonRepository;
+
 use App\Repositories\Common\CommonRepository;
 
 use Response, Auth, Validator, DB, Exception, Cache, Blade, Carbon, DateTime;
@@ -45,6 +47,7 @@ class DK_Staff__OrderRepository {
     private $me_admin;
     private $view_blade_403;
     private $view_blade_404;
+    private $commonRepository;
 
     public function __construct()
     {
@@ -54,6 +57,8 @@ class DK_Staff__OrderRepository {
         Blade::setEchoFormat('%s');
         Blade::setEchoFormat('e(%s)');
         Blade::setEchoFormat('nl2br(e(%s))');
+
+        $this->commonRepository = new DK_Staff__CommonRepository;
     }
 
 
@@ -6607,7 +6612,10 @@ class DK_Staff__OrderRepository {
                 $item->recording_address_list = $response['recording_address_list'];
                 $bool = $item->save();
                 $recording_address_list = json_decode($response['recording_address_list']);
-                if(count($recording_address_list) > 0) $voice_record_url = $recording_address_list[0];
+                if(count($recording_address_list) > 0)
+                {
+                    $voice_record_url = $recording_address_list[0];
+                }
 
             }
             else return response_error([],"录音文件地址获取失败！");
@@ -6752,11 +6760,14 @@ class DK_Staff__OrderRepository {
             if(!$bool_ai) throw new Exception("DK_Common__Order--update--fail");
             else
             {
+                $ai_inspecting_post_date['platform'] = $ai_data['ai_platform'];
                 $ai_inspecting_post_date['model'] = $ai_data['ai_model'];
                 $ai_inspecting_post_date['prompt'] = $ai_data['ai_prompt'];
                 $ai_inspecting_post_date['voice_record'] = $voice_record_url;
+                $ai_inspecting_post_date['voice_record_list'] = $recording_address_list;
 
-                $ai_inspecting_response = $this->o1__public__api__ai_inspecting__from__ali($ai_inspecting_post_date);
+//                $ai_inspecting_response = $this->o1__public__api__ai_inspecting__from__ali($ai_inspecting_post_date);
+                $ai_inspecting_response = $this->commonRepository->o1__api__ai_inspecting__from__ali($ai_inspecting_post_date);;
 
                 $ai_inspected->result = $ai_inspecting_response;
                 $bool_ai_2 = $ai_inspected->save();

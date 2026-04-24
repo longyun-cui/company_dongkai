@@ -38,7 +38,7 @@ class DK_AI_Inspect_Job implements ShouldQueue
     {
         //
         $this->id = $ai_inspected_record_id;
-        $this->commonRepository = new DK_Staff__CommonRepository;;
+        $this->commonRepository = new DK_Staff__CommonRepository;
     }
 
     /**
@@ -310,6 +310,7 @@ class DK_AI_Inspect_Job implements ShouldQueue
                 $ai_inspecting_post_date['model'] = $ai_data['ai_model'];
                 $ai_inspecting_post_date['prompt'] = $ai_data['ai_prompt'];
                 $ai_inspecting_post_date['voice_record'] = $voice_record_url;
+                $ai_inspecting_post_date['voice_record_list'] = $recording_address_list;
 
                 $microtime_ai = microtime(true);
                 $ai_inspecting_response = $this->commonRepository->o1__api__ai_inspecting__from__ali($ai_inspecting_post_date);
