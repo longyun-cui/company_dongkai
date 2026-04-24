@@ -140,8 +140,13 @@ class DK_Staff__AIRepository {
                     $content_decode = json_decode($content);
                     if(!$content_decode)
                     {
-                        $content_fix = robustJsonFixer(robustJsonFix($content));
+                        $content_fix = robustJsonFix($content);
                         $content_decode = json_decode($content_fix);
+                        if(!$content_decode)
+                        {
+                            $content_fix_2 = robustJsonFixer($content_fix);
+                            $content_decode = json_decode($content_fix_2);
+                        }
                     }
                     $list[$k]->content = $content_decode;
                 }
