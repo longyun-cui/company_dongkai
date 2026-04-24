@@ -23,6 +23,7 @@
                 "dataType" : 'json',
                 "data": function (d) {
                     d._token = $('meta[name="_token"]').attr('content');
+                    d.id = $tableSearch.find('input[name="ai-id"]').val();
                     d.title = $tableSearch.find('input[name="ai-title"]').val();
                     d.keyword = $tableSearch.find('input[name="ai-keyword"]').val();
                     d.type = $tableSearch.find('select[name="ai-type"]').val();
@@ -161,10 +162,11 @@
                 {
                     "className": "text-left",
                     "width": "400px",
-                    "title": "详情",
+                    "title": "返回结果",
                     "data": "content",
                     "orderable": false,
                     render: function(data, type, row, meta) {
+                        console.log(data);
                         if(!data) return '--';
 
                         var $return_html = '';

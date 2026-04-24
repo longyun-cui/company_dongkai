@@ -1263,7 +1263,139 @@ if(!function_exists('datatable_response'))
 
 
 
+if(!function_exists('robustJsonFix'))
+{
+    function robustJsonFix($jsonString)
+    {
+        // 匹配所有键值对
+        $jsonString = preg_replace_callback('/"([^"]+)"\s*:\s*([^,}]+)/', function ($matches) {
+            $key = $matches[1];
+            $value = trim($matches[2]);
 
+            // 移除末尾可能多余的引号
+            if (substr($value, 0, 1) !== '"' && substr($value, -1) === '"') {
+                $value = substr($value, 0, -1);
+            }
+
+            // 检查是否为null、true、false、数字或已经是正确格式
+            if (preg_match('/^(null|true|false|\d+|\d+\.\d+)$/i', $value) ||
+                preg_match('/^\[.*\]$/', $value) ||
+                preg_match('/^\{.*\}$/', $value)) {
+                return '"' . $key . '":' . $value;
+            }
+
+            // 确保字符串被双引号包围
+            if (substr($value, 0, 1) !== '"' || substr($value, -1) !== '"') {
+                $value = '"' . trim($value, '"') . '"';
+            }
+
+            return '"' . $key . '":' . $value;
+        }, $jsonString);
+
+        return $jsonString;
+    }
+}
+
+if(!function_exists('robustJsonFixer'))
+{
+    function robustJsonFixer($jsonString)
+    {
+
+        // 记录原始字符串用于调试
+        $original = $jsonString;
+
+        // 修复步骤1: 处理键的引号问题
+        // 修复模式1: 键没有引号，如 咨询人身份4:
+        $pattern1 = '/([{,]\s*)([^{}":,\[\]]+?)(\s*:\s*)/';
+        $jsonString = preg_replace_callback($pattern1, function($matches) {
+            $before = $matches[1];  // { 或 ,
+            $key = trim($matches[2]);
+            $after = $matches[3];   // : 及其周围的空格
+
+            // 跳过已经是正确格式的键
+            if (preg_match('/^"[^"]+"$/', $key)) {
+                return $before . $key . $after;
+            }
+
+            return $before . '"' . $key . '"' . $after;
+        }, $jsonString);
+
+        // 修复步骤2: 处理键有结尾引号但没有开头引号，如 咨询人身份4":
+        $pattern2 = '/([{,]\s*)([^{}":,\[\]]+?)"(\s*:\s*)/';
+        $jsonString = preg_replace_callback($pattern2, function($matches) {
+            $before = $matches[1];
+            $key = trim($matches[2]);
+            $after = $matches[3];
+            return $before . '"' . $key . '"' . $after;
+        }, $jsonString);
+
+        // 修复步骤3: 处理键有开头引号但没有结尾引号，如 "咨询人身份4:
+        $pattern3 = '/([{,]\s*)"([^{}":,\[\]]+?)(\s*:\s*)/';
+        $jsonString = preg_replace_callback($pattern3, function($matches) {
+            $before = $matches[1];
+            $key = trim($matches[2]);
+            $after = $matches[3];
+            return $before . '"' . $key . '"' . $after;
+        }, $jsonString);
+
+        // 修复步骤5: 处理字符串值
+        $jsonString = preg_replace_callback('/:\s*([^"{}\[\],\s][^",{}\[\]]*?)(?=\s*[,}\]])/', function($matches) {
+            $value = trim($matches[1]);
+
+            // 检查特殊值
+            $lowerValue = strtolower($value);
+            if (in_array($lowerValue, ['null', 'true', 'false']) || is_numeric($value)) {
+                return ':' . $value;
+            }
+
+            // 检查是否是数组或对象
+            if (preg_match('/^[\[\{].*[\]\}]$/', $value)) {
+                return ':' . $value;
+            }
+
+            // 处理字符串值
+            $value = rtrim($value, '"');
+            $value = ltrim($value, '"');
+
+            return ':"' . $value . '"';
+        }, $jsonString);
+
+        return $jsonString;
+    }
+}
+
+
+if(!function_exists('fixJsonStringWithKeys'))
+{
+    function fixJsonStringWithKeys($jsonString) {
+        // 第一步：修复键的问题
+        $jsonString = preg_replace_callback('/(?<=^|,|\{)\s*([^"{}\[\]:,]+?)\s*:/', function($matches) {
+            $key = trim($matches[1]);
+            return '"' . $key . '":';
+        }, $jsonString);
+
+        // 第二步：修复值的问题
+        $jsonString = preg_replace_callback('/:\s*([^"{}\[\],\s]+)(?=\s*[,}])/', function($matches) {
+            $value = trim($matches[1]);
+
+            // 检查是否为null、true、false、数字
+            if (preg_match('/^(null|true|false|[-+]?\d*\.?\d+)$/i', $value)) {
+                return ':' . strtolower($value);
+            }
+
+            // 否则添加双引号
+            return ':"' . $value . '"';
+        }, $jsonString);
+
+        // 第三步：修复不匹配的引号（值有结尾引号但没有开头引号）
+        $jsonString = preg_replace_callback('/:\s*([^"][^"]*)"(?=\s*[,}])/', function($matches) {
+            $value = trim($matches[1]);
+            return ':"' . $value . '"';
+        }, $jsonString);
+
+        return $jsonString;
+    }
+}
 
 
 

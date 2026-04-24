@@ -94,6 +94,8 @@ class DK_Staff__AIRepository {
         if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
         if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
 
+        if(!empty($post_data['order_id'])) $query->where('order_id', $post_data['order_id']);
+
 
         // 状态 [|]
         if(!empty($post_data['item_status']))
@@ -134,8 +136,14 @@ class DK_Staff__AIRepository {
                 $result = json_decode($v->result);
                 if(isset($result->choices[0]->message->content))
                 {
-                    $content = json_decode($result->choices[0]->message->content);
-                    $list[$k]->content = $content;
+                    $content = $result->choices[0]->message->content;
+                    $content_decode = json_decode($content);
+                    if(!$content_decode)
+                    {
+                        $content_fix = robustJsonFixer(robustJsonFix($content));
+                        $content_decode = json_decode($content_fix);
+                    }
+                    $list[$k]->content = $content_decode;
                 }
                 else
                 {
