@@ -133,6 +133,14 @@
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         if(!data) return '--';
+                        var $fee = 0;
+
+                        var $prompt_audio_tokens = data.prompt_tokens_details.audio_tokens;
+                        var $prompt_text_tokens = data.prompt_tokens_details.text_tokens;
+                        var $completion_text_tokens = data.completion_tokens_details.text_tokens;
+
+                        $fee = ($prompt_audio_tokens * 53) + ($prompt_text_tokens * 7) + ($completion_text_tokens * 40);
+                        $fee = ($fee / 1000000).toFixed(4);
 
                         var $return_html = '';
                         $return_html += '【全部消耗】' + data.total_tokens + ' <br>';
@@ -140,6 +148,8 @@
                         $return_html += '【音频消耗】' + data.prompt_tokens_details.audio_tokens + ' <br>';
                         $return_html += '【文本消耗】' + data.prompt_tokens_details.text_tokens + ' <br>';
                         $return_html += '【返回消耗】' + data.completion_tokens + ' <br>';
+                        $return_html += ' <br>';
+                        $return_html += '【费用】' + $fee + ' <br>';
                         // $.each(data, function($index, $value) {
                         //     $return_html += '【'+ $index +'】' + $value + ' <br>';
                         // });
