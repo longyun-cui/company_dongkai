@@ -27,7 +27,7 @@
                     d.title = $tableSearch.find('input[name="ai-title"]').val();
                     d.keyword = $tableSearch.find('input[name="ai-keyword"]').val();
                     d.type = $tableSearch.find('select[name="ai-type"]').val();
-                    d.status = $tableSearch.find('select[name="ai-item-status"]').val();
+                    d.item_status = $tableSearch.find('select[name="ai-item-status"]').val();
                     d.order_id = $tableSearch.find('input[name="ai-order-id"]').val();
                 },
             },
@@ -166,7 +166,10 @@
                     "data": "content",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        console.log(data);
+                        if(row.item_status == 99)
+                        {
+                            return row.description;
+                        }
                         if(!data) return '--';
 
                         var $return_html = '';

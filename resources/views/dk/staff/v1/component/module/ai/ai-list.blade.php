@@ -31,8 +31,9 @@
 
             <select class="search-filter form-filter select2-box-c" name="ai-item-status">
                 <option value ="-1">全部</option>
-                <option value ="1">启用</option>
-                <option value ="9">禁用</option>
+                <option value ="1">审核中</option>
+                <option value ="9">已审核</option>
+                <option value ="99">审核有误</option>
             </select>
 
 
