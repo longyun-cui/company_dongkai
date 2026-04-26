@@ -1750,8 +1750,19 @@ class DK_Staff__OrderRepository {
                 $result = json_decode($v->result);
                 if(isset($result->choices[0]->message->content))
                 {
-                    $content = json_decode($result->choices[0]->message->content);
-                    $list[$k]->content = $content;
+                    $content = $result->choices[0]->message->content;
+                    $content_decode = json_decode($content);
+                    if(!$content_decode)
+                    {
+                        $content_fix = robustJsonFix($content);
+                        $content_decode = json_decode($content_fix);
+                        if(!$content_decode)
+                        {
+                            $content_fix_2 = robustJsonFixer($content_fix);
+                            $content_decode = json_decode($content_fix_2);
+                        }
+                    }
+                    $list[$k]->content = $content_decode;
                 }
                 else
                 {
