@@ -24119,7 +24119,15 @@ EOF;
         $insert_data['api_customer_account'] = $post_data['customerAccount'];
         $insert_data['api_type'] = $post_data['notify']['type'];
         $insert_data['staffNo'] = $post_data['notify']['data']['userName'];
-        $insert_data['telephone_number'] = $post_data['notify']['data']['number'];
+        if($serverFrom == 'call-01')
+        {
+            $insert_data['telephone_number'] = $post_data['notify']['data']['number'];
+        }
+        else if($serverFrom == 'call-02')
+        {
+            $insert_data['telephone_number'] = $post_data['notify']['data']['number1'];
+        }
+        else $insert_data['telephone_number'] = $post_data['notify']['data']['number'];
         $insert_data['content'] = json_encode($post_data);
 
 
