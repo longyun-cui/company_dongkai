@@ -24142,7 +24142,16 @@ EOF;
 //        dd($clientMark_field);
 
         $api_staffNo = (int)$clientMark_data['userName'];
-        $phone_number = (int)$clientMark_data['number'];
+
+        if($serverFrom == 'call-01')
+        {
+            $phone_number = (int)$clientMark_data['number'];
+        }
+        else if($serverFrom == 'call-02')
+        {
+            $phone_number = (int)$clientMark_data['number1'];
+        }
+        else $phone_number = (int)$clientMark_data['number'];
 
 
         $staff = DK_Common__Staff::with([])->where('api_staffNo',$api_staffNo)->first();
