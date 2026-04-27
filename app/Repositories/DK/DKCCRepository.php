@@ -24122,9 +24122,9 @@ EOF;
         $insert_data['telephone_number'] = $post_data['notify']['data']['number'];
         $insert_data['content'] = json_encode($post_data);
 
-//        $mine = new DK_CC_API_Received_From_OKCC;
-//
-//        $bool_c = $mine->fill($insert_data)->save();
+
+        $mine = new DK_CC_API_Received_From_OKCC;
+        $bool_c = $mine->fill($insert_data)->save();
 
 
 
