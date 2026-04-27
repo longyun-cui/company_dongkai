@@ -23,6 +23,8 @@
             $modal.find('.radio-btn').show();
             $modal.modal('show');
 
+            $modal.find('input[name="client_phone"]').prop('readonly', false);
+
             $('.modal-select2').select2({
                 dropdownParent: $('#'+$modal_id), // 替换为你的模态框 ID
                 minimumInputLength: 0,
@@ -92,6 +94,7 @@
 
                         $modal.find('input[name="client_name"]').val($response.data.client_name);
                         $modal.find('input[name="client_phone"]').val($response.data.client_phone);
+                        $modal.find('input[name="client_phone"]').prop('readonly', true);
                         $modal.find('select[name="client_type"]').val($response.data.client_type).trigger('change');
                         $modal.find('select[name="client_intention"]').val($response.data.client_intention).trigger('change');
 
@@ -241,11 +244,11 @@
 
         });
         // 【工单】编辑-显示
-        $(".main-wrapper").on('click', ".modal-show--for--order-dental--item-edit", function() {
+        $(".main-wrapper").on('click', ".modal-show--for--order-luxury--item-edit", function() {
             var $that = $(this);
             var $row = $that.parents('tr');
 
-            var $modal_id = 'modal--for--order-dental--item-edit';
+            var $modal_id = 'modal--for--order-luxury--item-edit';
             var $modal = $("#"+$modal_id);
 
             var $form_id = 'form--for--order--item-edit';
