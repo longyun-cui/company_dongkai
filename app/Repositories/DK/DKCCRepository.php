@@ -22971,7 +22971,36 @@ EOF;
 //        if($userData == 'calling')
         if(true)
         {
-//            $insert_data['api_customer_account'] = $post_data['customerAccount'];
+            $serverFrom = $post_data['serverFrom'];
+
+            if($serverFrom == 'FNJ')
+            {
+                $serverFrom_id = 11;
+            }
+            else if($serverFrom == 'call-01')
+            {
+                $serverFrom_id = 1;
+            }
+            else if($serverFrom == 'call-02')
+            {
+                $serverFrom_id = 2;
+            }
+            else if($serverFrom == 'call-03')
+            {
+                $serverFrom_id = 3;
+            }
+            else if($serverFrom == 'call-04')
+            {
+                $serverFrom_id = 4;
+            }
+            else
+            {
+                $serverFrom_id = 0;
+            }
+            $insert_data['serverFrom_id'] = $serverFrom_id;
+            $insert_data['serverFrom_name'] = $serverFrom;
+            $insert_data['api_customer_account'] = $post_data['customerAccount'];
+            $insert_data['staffNo'] = $post_data['notify']['data']['userName'];
             $insert_data['api_type'] = $post_data['notify']['type'];
             $insert_data['content'] = json_encode($post_data);
 

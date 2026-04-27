@@ -690,16 +690,18 @@ class DK_Staff__OrderRepository {
 //                if(!$v->is_me || (($v->published_at > 0) && (($time - $v->published_at) > 86400)))
                 if($me->staff_position != 31)
                 {
-//                    if(!$v->is_me || (($v->published_at > 0) && ($v->published_at < strtotime("yesterday"))))
-//                    {
-//                        $client_phone = $v->client_phone;
-//                        if(is_numeric($client_phone))
-//                        {
-//                            $v->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
-//                        }
-//                    }
-                    $client_phone = $v->client_phone;
-                    $v->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
+                    // 电话两天后不可见
+                    if(!$v->is_me || (($v->published_at > 0) && ($v->published_at < strtotime("yesterday"))))
+                    {
+                        $client_phone = $v->client_phone;
+                        if(is_numeric($client_phone))
+                        {
+                            $v->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
+                        }
+                    }
+                    // 电话不可见
+//                    $client_phone = $v->client_phone;
+//                    $v->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
                 }
             }
 
@@ -775,16 +777,18 @@ class DK_Staff__OrderRepository {
         {
             if($me->staff_position != 31)
             {
-//                if(!($item->creator_id == $me->id) || (($item->published_at > 0) && ($item->published_at < strtotime("yesterday"))))
-//                {
-//                    $client_phone = $item->client_phone;
-//                    if(is_numeric($client_phone))
-//                    {
-//                        $item->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
-//                    }
-//                }
-                $client_phone = $item->client_phone;
-                $item->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
+                // 电话两天后不可见
+                if(!($item->creator_id == $me->id) || (($item->published_at > 0) && ($item->published_at < strtotime("yesterday"))))
+                {
+                    $client_phone = $item->client_phone;
+                    if(is_numeric($client_phone))
+                    {
+                        $item->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
+                    }
+                }
+                // 电话不可见
+//                $client_phone = $item->client_phone;
+//                $item->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
             }
         }
 
@@ -799,7 +803,7 @@ class DK_Staff__OrderRepository {
             'work_shift' => 'required',
             'project_id' => 'required|numeric|min:1',
             'client_name' => 'required',
-//            'client_phone' => 'required|numeric',
+            'client_phone' => 'required|numeric',
 //            'client_intention' => 'required',
 //            'field_1' => 'required',
 //            'location_city' => 'required',
@@ -813,8 +817,8 @@ class DK_Staff__OrderRepository {
             'project_id.numeric' => '选择项目参数有误！',
             'project_id.min' => '请选择项目！',
             'client_name.required' => '请填写客户信息！',
-//            'client_phone.required' => '请填写客户电话！',
-//            'client_phone.numeric' => '客户电话格式有误！',
+            'client_phone.required' => '请填写客户电话！',
+            'client_phone.numeric' => '客户电话格式有误！',
 //            'client_type.required' => '请选择患者类型！',
 //            'client_intention.required' => '请选择客户意向！',
 //            'location_city.required' => '请选择城市！',
@@ -873,10 +877,10 @@ class DK_Staff__OrderRepository {
 
 
         // 电话号码必须为11位整数
-//        if(preg_match('/^1\d{10}$/', $post_data['client_phone']) === 1)
-//        {
-//        }
-//        else return response_error([],"电话号码非法！");
+        if(preg_match('/^1\d{10}$/', $post_data['client_phone']) === 1)
+        {
+        }
+        else return response_error([],"电话号码非法！");
 
 
         $this->get_me();
