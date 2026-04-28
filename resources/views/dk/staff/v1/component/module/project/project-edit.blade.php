@@ -208,6 +208,31 @@
                 </div>
 
 
+                <div class="form-group form-type">
+                    <label class="control-label col-md-2">是否自动AI审核</label>
+                    <div class="col-md-8">
+                        <div class="btn-group">
+
+                            <button type="button" class="btn">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="is_automatic_ai_inspecting" value="0"> 否
+                                    </label>
+                                </div>
+                            </button>
+                            <button type="button" class="btn">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="is_automatic_ai_inspecting" value="1" checked="checked"> 是
+                                    </label>
+                                </div>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+
+
                 {{--AI审核模型--}}
                 <div class="form-group">
                     <label class="control-label col-md-2">AI审核模型</label>

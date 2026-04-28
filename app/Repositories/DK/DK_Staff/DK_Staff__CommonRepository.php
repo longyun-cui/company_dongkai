@@ -609,6 +609,7 @@ class DK_Staff__CommonRepository {
     public function o1__api__get_call_recording__from__by($post_data)
     {
 
+//        dd($post_data);
         $serverFrom_name = $post_data['serverFrom_name'];
         $API_Customer_Password = $post_data['api_customer_password'];
         $API_Customer_Account = $post_data['api_customer_account'];
@@ -714,10 +715,20 @@ class DK_Staff__CommonRepository {
                     $response = $result->data->response;
                     if($response->total > 0)
                     {
+                        $success_count = 0;
                         foreach ($response->cdr as $k => $v)
                         {
-                            if(!empty($v->filename)) $file[] = $server.$v->filename;
+                            if($v->serviceType == 4) $success_count += 1;
                         }
+
+                        if($success_count > 0)
+                        {
+                            foreach ($response->cdr as $k => $v)
+                            {
+                                if(!empty($v->filename)) $file[] = $server.$v->filename;
+                            }
+                        }
+                        else return response_error([],'没有有效通话记录，非自动点拨通话！');
 
                         if(count($file) > 0)
                         {

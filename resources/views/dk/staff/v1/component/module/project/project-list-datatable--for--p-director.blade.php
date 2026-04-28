@@ -133,6 +133,18 @@
                     }
                 },
                 {
+                    "title": "自动AI质检",
+                    "data": "is_automatic_ai_inspecting",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(data == 0) return '<small class="btn-xs btn-danger">否</small>';
+                        else if(data == 1) return '<small class="btn-xs btn-success">是</small>';
+                        else return '--';
+                    }
+                },
+                {
                     "title": "AI模型",
                     "data": "ai_model",
                     "className": "",

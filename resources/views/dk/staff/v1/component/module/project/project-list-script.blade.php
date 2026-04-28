@@ -95,8 +95,13 @@
 
                         $modal.find('textarea[name="description"]').val($response.data.description);
 
+                        // 是否允许分发
                         $modal.find('input[name="is_distributive"]').prop('checked', false);
                         $modal.find('input[name="is_distributive"][value="'+$response.data.is_distributive+'"]').prop('checked', true).trigger('change');
+
+                        // 是否自动AI审核
+                        $modal.find('input[name="is_automatic_ai_inspecting"]').prop('checked', false);
+                        $modal.find('input[name="is_automatic_ai_inspecting"][value="'+$response.data.is_automatic_ai_inspecting+'"]').prop('checked', true).trigger('change');
 
 
 

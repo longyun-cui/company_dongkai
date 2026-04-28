@@ -1718,10 +1718,10 @@ class DKCCController extends Controller
             // 2025-12-27
             return $this->repo->v2_operate_api_OKCC_receiving_result_by_billing(request()->all());
         }
-//        else if($api_type == 'clientMark')
-//        {
-//            return $this->repo->v3_operate_api_OKCC_receiving_result_by_clientMark(request()->all());
-//        }
+        else if($api_type == 'clientMark')
+        {
+            return $this->repo->v3_operate_api_OKCC_receiving_result_by_clientMark(request()->all());
+        }
         else  return $this->repo->operate_api_OKCC_receiving_result(request()->all());
     }
 

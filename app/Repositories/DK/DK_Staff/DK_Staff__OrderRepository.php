@@ -2191,6 +2191,15 @@ class DK_Staff__OrderRepository {
         }
         if($is_repeat > 0) $is_repeat += 1;
 
+
+        // 自动AI质检
+        $is_automatic_ai_inspecting = 0;
+        $project = DK_Common__Project::find($item->project_id);
+        if($project && $project->is_automatic_ai_inspecting == 1)
+        {
+            $is_automatic_ai_inspecting = 1;
+        }
+
         // 启动数据库事务
         DB::beginTransaction();
         try
@@ -2262,6 +2271,10 @@ class DK_Staff__OrderRepository {
             }
 
 
+            if($is_automatic_ai_inspecting == 1)
+            {
+                $item->ai_inspected_status = 1;
+            }
             $item->is_repeat = $is_repeat;
             $item->is_published = 1;
             $item->published_at = $time;
@@ -2287,9 +2300,25 @@ class DK_Staff__OrderRepository {
                 if(!$bool_1) throw new Exception("DK_Common__Order__Operation_Record--insert--fail");
             }
 
+
+            // 自动AI质检
+            if($is_automatic_ai_inspecting == 1)
+            {
+                $ai_inspected = new DK_Common__Order__AI_Inspected__Record;
+                $ai_data['item_status'] = 1;
+                $ai_data['order_id'] = $id;
+
+                $bool_ai = $ai_inspected->fill($ai_data)->save();
+                if(!$bool_ai) throw new Exception("DK_Common__Order__AI_Inspected__Record--insert--fail");
+            }
+
             DB::commit();
 
 
+            if($is_automatic_ai_inspecting == 1)
+            {
+                DK_AI_Inspect_Job::dispatch($ai_inspected->id);
+            }
 
             if(env('APP_ENV') == "production" && $item->order_category == 1)
             {
@@ -6852,10 +6881,11 @@ class DK_Staff__OrderRepository {
             $get_recording_data['client_phone'] = $item->client_phone;
             $get_recording_data['published_date'] = $item->published_date;
 
-            $response = $this->o1__public__api__get_call_recording__from__by($get_recording_data);
+//            $response = $this->o1__public__api__get_call_recording__from__by($get_recording_data);
+            $response = $this->commonRepository->o1__api__get_call_recording__from__by($get_recording_data);
+//            dd($response);
             if($response['error'] == 0)
             {
-
                 $item->recording_address_list = $response['recording_address_list'];
                 $bool = $item->save();
                 $recording_address_list = json_decode($response['recording_address_list']);
@@ -6865,10 +6895,19 @@ class DK_Staff__OrderRepository {
                 }
 
             }
-            else return response_error([],"录音文件地址获取失败！");
+            else if($response['error'] == 1)
+            {
+                return response_error([],$response['result']);
+
+            }
+            else
+            {
+//                return response_error([],"录音文件地址获取失败！");
+                return response_error([],json_encode($response));
+            }
 
         }
-//        dd(1);
+
 
         if(!empty($voice_record_url))
         {
@@ -7102,7 +7141,7 @@ class DK_Staff__OrderRepository {
                 $item = DK_Common__Order::withTrashed()->find($id);
                 if($item)
                 {
-                    $item->ai_inspected_status = 1;
+                    $item->c = 1;
                     $item->save();
                 }
                 else
