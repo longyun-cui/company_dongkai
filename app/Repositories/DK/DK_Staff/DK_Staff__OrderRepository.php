@@ -7141,7 +7141,7 @@ class DK_Staff__OrderRepository {
                 $item = DK_Common__Order::withTrashed()->find($id);
                 if($item)
                 {
-                    $item->c = 1;
+                    $item->ai_inspected_status = 1;
                     $item->save();
                 }
                 else
