@@ -6818,7 +6818,7 @@ class DK_Staff__OrderRepository {
 
 
         $prompt_text = '请帮我分析录音，提取以下信息：1.客户性别（男士/女士）；2.客户年龄（可以是年龄范围，如60多岁）；3.客户所在的城市与行政区；4.需要医疗的牙齿数量（数字）；5.客户三高（健康）状态（正常与否）；6.客户上门的意愿（布尔值：true/false 或 枚举值：有意愿/无意愿）。';
-        $ai_prompt = $prompt_text;
+        $ai_prompt = config('dk.common-config.ai_prompt_text');
 
         $this->get_me();
         $me = $this->me;
@@ -6835,7 +6835,8 @@ class DK_Staff__OrderRepository {
         $project = DK_Common__Project::find($item->project_id);
         if($project)
         {
-            $ai_prompt = !empty($project->ai_prompt) ? $project->ai_prompt : $prompt_text;
+//            $ai_prompt = !empty($project->ai_prompt) ? $project->ai_prompt : $prompt_text;
+            $ai_prompt = !empty($project->ai_prompt) ? ($project->ai_prompt.$ai_prompt) : $ai_prompt;
         }
         else return response_error([],"该工单的【项目】不存在，刷新页面重试！");
 
