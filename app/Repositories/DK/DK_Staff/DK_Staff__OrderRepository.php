@@ -2282,7 +2282,7 @@ class DK_Staff__OrderRepository {
             }
 
 
-            if($is_automatic_ai_inspecting == 1)
+            if($is_repeat == 0 && $is_automatic_ai_inspecting == 1)
             {
                 $item->ai_inspected_status = 1;
             }
