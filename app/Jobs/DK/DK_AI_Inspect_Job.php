@@ -345,7 +345,7 @@ class DK_AI_Inspect_Job implements ShouldQueue
                             $record_row['title'] = '员工操作';
                             $record_row['field'] = 'item_operation';
                             $record_row['before'] = '';
-                            $record_row['after'] = '审核质检';
+                            $record_row['after'] = '质检审核';
                             $record_content[] = $record_row;
                         }
                         if(true)
@@ -369,10 +369,10 @@ class DK_AI_Inspect_Job implements ShouldQueue
                         if(true)
                         {
                             $record_row = [];
-                            $record_row['title'] = '判定依据及理由';
+                            $record_row['title'] = '判定理由';
                             $record_row['field'] = 'inspected_description';
                             $record_row['before'] = '';
-                            $record_row['after'] = $content_decode->判定依据及理由;
+                            $record_row['after'] = $content_decode->判定理由;
                             $record_content[] = $record_row;
                         }
 
