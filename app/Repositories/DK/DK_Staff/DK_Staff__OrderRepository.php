@@ -2313,7 +2313,7 @@ class DK_Staff__OrderRepository {
 
 
             // 自动AI质检
-            if($is_automatic_ai_inspecting == 1)
+            if($is_repeat == 0 && $is_automatic_ai_inspecting == 1)
             {
                 $ai_inspected = new DK_Common__Order__AI_Inspected__Record;
                 $ai_data['item_status'] = 1;
@@ -2326,7 +2326,7 @@ class DK_Staff__OrderRepository {
             DB::commit();
 
 
-            if($is_automatic_ai_inspecting == 1)
+            if($is_repeat == 0 && $is_automatic_ai_inspecting == 1)
             {
                 DK_AI_Inspect_Job::dispatch($ai_inspected->id);
             }
