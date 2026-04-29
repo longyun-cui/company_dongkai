@@ -62,6 +62,7 @@
                     d.created_type = $tableSearch.find('select[name="order-created-type"]').val();
                     d.recording_quality = $tableSearch.find('select[name="order-recording-quality"]').val();
                     d.inspected_status = $tableSearch.find('select[name="order-inspected-status"]').val();
+                    d.ai_inspected_status = $tableSearch.find('select[name="order-ai-inspected-status"]').val();
                     d.inspected_result = $tableSearch.find('select[name="order-inspected-result[]"]').val();
                     d.appealed_status = $tableSearch.find('select[name="order-appealed-status"]').val();
                     d.delivered_status = $tableSearch.find('select[name="order-delivered-status"]').val();
@@ -296,7 +297,7 @@
                         }
                         else if(data == 99)
                         {
-                            $result_html = '<small class="btn-xs bg-black">有误！</small>';
+                            $result_html = '<small class="btn-xs bg-black">有误</small>';
                         }
                         else
                         {

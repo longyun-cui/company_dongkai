@@ -148,6 +148,17 @@
 
 
             {{--审核状态--}}
+            @if(in_array($me->staff_category,[0,1,9,71]))
+            <select class="search-filter form-filter filter-lg select2-box-c" name="order-ai-inspected-status">
+                <option value="-1">AI审核状态</option>
+                <option value="1">审核中</option>
+                <option value="9">已审核</option>
+                <option value="99">有误</option>
+            </select>
+            @endif
+
+
+            {{--审核状态--}}
             <select class="search-filter form-filter filter-lg select2-box-c" name="order-inspected-status">
                 <option value="-1">审核状态</option>
                 @if(in_array($me->staff_category,[0,1,9,41]))

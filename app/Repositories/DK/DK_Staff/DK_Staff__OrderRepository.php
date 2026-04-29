@@ -371,6 +371,17 @@ class DK_Staff__OrderRepository {
 
 
         // 审核状态
+        if(!empty($post_data['ai_inspected_status']))
+        {
+            $ai_inspected_status_int = (int)$post_data['ai_inspected_status'];
+            if(!in_array($ai_inspected_status_int,[-1]))
+            {
+                $query->where('dk_common__order.ai_inspected_status', $ai_inspected_status_int);
+            }
+        }
+
+
+        // 审核状态
         if(!empty($post_data['inspected_status']))
         {
             $inspected_status = $post_data['inspected_status'];
