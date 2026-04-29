@@ -7,12 +7,12 @@
         <div class=" pull-left">
 
             @if(in_array($me->staff_category,[0,1,9,71]))
-            <button type="button" onclick="" class="btn btn-filter modal-show--for--ai-item-create"
-                    data-form-id="form--for--ai-item-edit"
-                    data-modal-id="modal--for--ai-item-edit"
-                    data-title="添加项目"
+            <button type="button" onclick="" class="btn btn-filter modal-show--for--ai-item-inspecting"
+                    data-form-id="form--for--ai-item-inspecting"
+                    data-modal-id="modal--for--ai-item-inspecting"
+                    data-title="录音审核"
             >
-                <i class="fa fa-plus"></i> 添加
+                <i class="fa fa-plus"></i> 审核
             </button>
             @endif
             <button type="button" onclick="" class="btn btn-default btn-filter _none"><i class="fa fa-play"></i> 启用</button>

@@ -21,6 +21,8 @@ use App\Models\DK\DK_Common\DK_Pivot__Team_Project;
 
 use App\Models\DK\DK_Common\DK_Common__Order__AI_Inspected__Record;
 
+use App\Repositories\DK\DK_Staff\DK_Staff__CommonRepository;
+
 use App\Repositories\Common\CommonRepository;
 
 use Response, Auth, Validator, DB, Exception, Cache, Blade, Carbon;
@@ -37,6 +39,7 @@ class DK_Staff__AIRepository {
     private $modelOrder;
     private $view_blade_403;
     private $view_blade_404;
+    protected $commonRepository;
 
 
     public function __construct()
@@ -47,6 +50,8 @@ class DK_Staff__AIRepository {
         Blade::setEchoFormat('%s');
         Blade::setEchoFormat('e(%s)');
         Blade::setEchoFormat('nl2br(e(%s))');
+
+        $this->commonRepository = new DK_Staff__CommonRepository;
     }
 
 
@@ -174,6 +179,78 @@ class DK_Staff__AIRepository {
     }
 
 
+    public function o1__ai__item__inspecting($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+//            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+//            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+//        $operate = $post_data["operate"];
+//        if($operate != 'order--item-inspecting--by-ai') return response_error([],"参数[operate]有误！");
+//        $item_id = $post_data["item_id"];
+//        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数[ID]有误！");
+
+
+        $prompt_text = !empty($post_data['prompt_text']) ? $post_data['prompt_text'] : config('dk.common-config.ai_prompt_text');
+        $recording_address = $post_data['recording_address'];
+        $recording_address_list = [];
+        $recording_address_list[] = $recording_address;
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->staff_category,[0,1,71]))
+        {
+            return response_error([],"你没有操作权限！");
+        }
+
+
+
+        $ai_inspecting_post_date['platform'] = 'ali';
+        $ai_inspecting_post_date['model'] = 'qwen3.5-omni-plus';
+        $ai_inspecting_post_date['prompt'] = $prompt_text;
+        $ai_inspecting_post_date['voice_record'] = $recording_address;
+        $ai_inspecting_post_date['voice_record_list'] = $recording_address_list;
+
+        $microtime_ai = microtime(true);
+        $ai_inspecting_response = $this->commonRepository->o1__api__ai_inspecting__from__ali($ai_inspecting_post_date);
+        if(!empty($ai_inspecting_response))
+        {
+            $result = json_decode($ai_inspecting_response);
+            if(isset($result->choices[0]->message->content))
+            {
+                $content = $result->choices[0]->message->content;
+                $content_decode = json_decode($content);
+                if(!$content_decode)
+                {
+                    $content_fix = robustJsonFix($content);
+                    $content_decode = json_decode($content_fix);
+                    if(!$content_decode)
+                    {
+                        $content_fix_2 = robustJsonFixer($content_fix);
+                        $content_decode = json_decode($content_fix_2);
+                    }
+                }
+                return response_success(['result'=>$content_decode],"审核完成!");
+            }
+            else
+            {
+                return response_fail([],'返回结果为空！');
+            }
+        }
+        else return response_fail([],"返回结果有误！");
+
+
+    }
 
 
 }

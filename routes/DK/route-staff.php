@@ -246,8 +246,9 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
 
 
 
-    // 【交付】列表
+    // 【AI】列表
     Route::post('/o1/ai/ai-record-list/datatable-query', $controller.'@o1__ai__record__list__datatable_query');
+    Route::post('/o1/ai/item-inspecting', $controller.'@o1__ai__item__inspecting');
 
 
 

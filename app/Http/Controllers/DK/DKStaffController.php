@@ -1075,10 +1075,14 @@ class DKStaffController extends Controller
 
 
 
-    // 【API】【百应】datatable
+    // 【API】【AI】datatable
     public function o1__ai__record__list__datatable_query()
     {
         return $this->ai_repo->o1__ai__record__list__datatable_query(request()->all());
+    }
+    public function o1__ai__item__inspecting()
+    {
+        return $this->ai_repo->o1__ai__item__inspecting(request()->all());
     }
 
 

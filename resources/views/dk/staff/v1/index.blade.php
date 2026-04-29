@@ -212,6 +212,10 @@
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-distributing')
 
 
+    {{--AI--}}
+    @include(env('DK_STAFF__TEMPLATE').'component.module.ai.ai--item-inspecting')
+
+
     {{--百应--}}
     @include(env('DK_STAFF__TEMPLATE').'component.module.by.by--item-inspecting')
 
@@ -355,6 +359,7 @@
     {{--AI审核--}}
     @if(in_array($me->staff_category,[0,1,9,71]))
         @include(env('DK_STAFF__TEMPLATE').'component.module.ai.ai-list-datatable')
+        @include(env('DK_STAFF__TEMPLATE').'component.module.ai.ai-script')
     @endif
 
 
