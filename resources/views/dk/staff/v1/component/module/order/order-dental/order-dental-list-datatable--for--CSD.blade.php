@@ -243,6 +243,14 @@
                         {
                             $result_html = '<small class="btn-xs bg-red">拒绝</small>';
                         }
+                        else if(data == "超区")
+                        {
+                            $result_html = '<small class="btn-xs bg-red">拒绝</small>';
+                        }
+                        else if(data == "超龄")
+                        {
+                            $result_html = '<small class="btn-xs bg-red">拒绝</small>';
+                        }
                         else if(data == "重复")
                         {
                             $result_html = '<small class="btn-xs bg-yellow">重复</small>';

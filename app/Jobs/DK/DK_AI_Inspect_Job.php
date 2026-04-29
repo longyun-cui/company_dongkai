@@ -313,7 +313,8 @@ class DK_AI_Inspect_Job implements ShouldQueue
                     if(array_key_exists($content_decode->审核结果,config('dk.common-config.ai_inspected_result_to_order_inspected_result')))
                     {
                         $order->inspected_status = 1;
-                        $order->inspected_result = config('dk.common-config.ai_inspected_result_to_order_inspected_result.'.$content_decode->审核结果);
+                        $order->inspected_result = $content_decode->审核结果;
+//                        $order->inspected_result = config('dk.common-config.ai_inspected_result_to_order_inspected_result.'.$content_decode->审核结果);
                         $order->inspected_at = $time;
                         $order->inspected_date = $date;
                         $bool_order = $order->save();
@@ -362,7 +363,7 @@ class DK_AI_Inspect_Job implements ShouldQueue
                             $record_row['title'] = '审核结果';
                             $record_row['field'] = 'inspected_result';
                             $record_row['before'] = '';
-                            $record_row['after'] = $content_decode->审核结果;
+                            $record_row['after'] = config('dk.common-config.ai_inspected_result_to_order_inspected_result.'.$content_decode->审核结果);
                             $record_content[] = $record_row;
                         }
                         if(true)
