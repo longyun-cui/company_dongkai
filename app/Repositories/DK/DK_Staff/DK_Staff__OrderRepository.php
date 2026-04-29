@@ -1791,8 +1791,13 @@ class DK_Staff__OrderRepository {
                 }
                 else
                 {
-                    $list[$k]->content = null;
+                    if(isset($result->error))
+                    {
+                        $list[$k]->content = $result->error;
+                    }
+                    else $list[$k]->content = null;
                 }
+
                 if(isset($result->usage))
                 {
                     $list[$k]->usage = $result->usage;
