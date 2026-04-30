@@ -194,7 +194,7 @@
                     "name": "order_id",
                     "data": "order_id",
                     "className": "",
-                    "width": "400px",
+                    "width": "380px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1)
@@ -215,7 +215,7 @@
                                 $.each($recording_list, function(index, value)
                                 {
 
-                                    var $audio_html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
+                                    var $audio_html = '<audio controls controlsList="nodownload" style="width:360px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
                                     $return_html += $audio_html;
                                 });
                                 return $return_html;
@@ -257,8 +257,8 @@
 //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
 
                         var $currentYear = new Date().getFullYear();
-                        if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-                        else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                        if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+                        else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
                     }
                 }
             ],
