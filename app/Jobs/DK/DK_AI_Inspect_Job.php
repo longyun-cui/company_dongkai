@@ -82,7 +82,8 @@ class DK_AI_Inspect_Job implements ShouldQueue
             {
                 $ai_platform = !empty($project->ai_platform) ? $project->ai_platform : $ai_platform;
                 $ai_model = !empty($project->ai_model) ? $project->ai_model : $ai_model;
-                $ai_prompt = !empty($project->ai_prompt) ? ($project->ai_prompt.$ai_prompt) : $ai_prompt;
+                $ai_prompt = !empty($project->ai_prompt) ? ($project->ai_prompt) : $ai_prompt;
+//                $ai_prompt = !empty($project->ai_prompt) ? ($project->ai_prompt.$ai_prompt) : $ai_prompt;
             }
             else
             {
