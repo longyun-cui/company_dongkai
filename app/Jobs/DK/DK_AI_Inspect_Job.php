@@ -308,82 +308,85 @@ class DK_AI_Inspect_Job implements ShouldQueue
                         }
                         else $content_decode = null;
                     }
-                }
-                if($content_decode)
-                {
-                    if(array_key_exists($content_decode->审核结果,config('dk.common-config.ai_inspected_result_to_order_inspected_result')))
+
+
+                    if($content_decode)
                     {
-                        $order->inspected_status = 1;
-                        $order->inspected_result = $content_decode->审核结果;
+                        if(array_key_exists($content_decode->审核结果,config('dk.common-config.ai_inspected_result_to_order_inspected_result')))
+                        {
+                            $order->inspected_status = 1;
+                            $order->inspected_result = $content_decode->审核结果;
 //                        $order->inspected_result = config('dk.common-config.ai_inspected_result_to_order_inspected_result.'.$content_decode->审核结果);
-                        $order->inspected_at = $time;
-                        $order->inspected_date = $date;
-                        $bool_order = $order->save();
-                        if(!$bool_order) throw new Exception("DK_Common__Order--update--fail");
+                            $order->inspected_at = $time;
+                            $order->inspected_date = $date;
+                            $bool_order = $order->save();
+                            if(!$bool_order) throw new Exception("DK_Common__Order--update--fail");
 
 
-                        $record_data["ip"] = Get_IP();
-                        $record_data["record_object"] = 1;
-                        $record_data["record_category"] = 1;
-                        $record_data["record_type"] = 1;
-                        $record_data["creator_id"] = 101;
-                        $record_data["creator_company_id"] = 0;
-                        $record_data["creator_department_id"] = 0;
-                        $record_data["creator_team_id"] = 0;
-                        $record_data["order_id"] = $order->id;
-                        $record_data["operate_object"] = 1;
-                        $record_data["operate_category"] = 41;
-                        $record_data["operate_type"] = 51;
-                        $record_data["description"] = $content_decode->判定依据及理由;
+                            $record_data["ip"] = Get_IP();
+                            $record_data["record_object"] = 1;
+                            $record_data["record_category"] = 1;
+                            $record_data["record_type"] = 1;
+                            $record_data["creator_id"] = 101;
+                            $record_data["creator_company_id"] = 0;
+                            $record_data["creator_department_id"] = 0;
+                            $record_data["creator_team_id"] = 0;
+                            $record_data["order_id"] = $order->id;
+                            $record_data["operate_object"] = 1;
+                            $record_data["operate_category"] = 41;
+                            $record_data["operate_type"] = 51;
+                            $record_data["description"] = $content_decode->判定依据及理由;
 
 
-                        $record_content = [];
+                            $record_content = [];
 
 
-                        if(true)
-                        {
-                            $record_row = [];
-                            $record_row['title'] = '员工操作';
-                            $record_row['field'] = 'item_operation';
-                            $record_row['before'] = '';
-                            $record_row['after'] = '质检审核';
-                            $record_content[] = $record_row;
+                            if(true)
+                            {
+                                $record_row = [];
+                                $record_row['title'] = '员工操作';
+                                $record_row['field'] = 'item_operation';
+                                $record_row['before'] = '';
+                                $record_row['after'] = '质检审核';
+                                $record_content[] = $record_row;
+                            }
+                            if(true)
+                            {
+                                $record_row = [];
+                                $record_row['title'] = '审核时间';
+                                $record_row['field'] = 'inspected_time';
+                                $record_row['before'] = '';
+                                $record_row['after'] = $datetime;
+                                $record_content[] = $record_row;
+                            }
+                            if(true)
+                            {
+                                $record_row = [];
+                                $record_row['title'] = '审核结果';
+                                $record_row['field'] = 'inspected_result';
+                                $record_row['before'] = '';
+                                $record_row['after'] = config('dk.common-config.ai_inspected_result_to_order_inspected_result.'.$content_decode->审核结果);
+                                $record_content[] = $record_row;
+                            }
+                            if(true)
+                            {
+                                $record_row = [];
+                                $record_row['title'] = '判定理由';
+                                $record_row['field'] = 'inspected_description';
+                                $record_row['before'] = '';
+                                $record_row['after'] = $content_decode->判定理由;
+                                $record_content[] = $record_row;
+                            }
+
+                            $record_data["content"] = json_encode($record_content);
+                            $record = new DK_Common__Order__Operation_Record;
+
+                            $bool_1 = $record->fill($record_data)->save();
+                            if(!$bool_1) throw new Exception("DK_Common__Order__Operation_Record--insert--fail");
+
                         }
-                        if(true)
-                        {
-                            $record_row = [];
-                            $record_row['title'] = '审核时间';
-                            $record_row['field'] = 'inspected_time';
-                            $record_row['before'] = '';
-                            $record_row['after'] = $datetime;
-                            $record_content[] = $record_row;
-                        }
-                        if(true)
-                        {
-                            $record_row = [];
-                            $record_row['title'] = '审核结果';
-                            $record_row['field'] = 'inspected_result';
-                            $record_row['before'] = '';
-                            $record_row['after'] = config('dk.common-config.ai_inspected_result_to_order_inspected_result.'.$content_decode->审核结果);
-                            $record_content[] = $record_row;
-                        }
-                        if(true)
-                        {
-                            $record_row = [];
-                            $record_row['title'] = '判定理由';
-                            $record_row['field'] = 'inspected_description';
-                            $record_row['before'] = '';
-                            $record_row['after'] = $content_decode->判定理由;
-                            $record_content[] = $record_row;
-                        }
-
-                        $record_data["content"] = json_encode($record_content);
-                        $record = new DK_Common__Order__Operation_Record;
-
-                        $bool_1 = $record->fill($record_data)->save();
-                        if(!$bool_1) throw new Exception("DK_Common__Order__Operation_Record--insert--fail");
-
                     }
+
                 }
 
 
