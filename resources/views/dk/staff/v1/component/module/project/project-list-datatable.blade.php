@@ -276,7 +276,7 @@
                     "title": "团队",
                     "data": "pivot__project_team",
                     "className": "text-center white-space-normal",
-                    "width": "160px",
+                    "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                     },
@@ -293,7 +293,7 @@
                     "title": "员工",
                     "data": "pivot__project_staff",
                     "className": "text-center white-space-normal",
-                    "width": "120px",
+                    "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                     },

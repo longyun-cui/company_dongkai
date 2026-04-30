@@ -119,7 +119,7 @@
                     "title": "团队",
                     "data": "pivot__project_team",
                     "className": "text-center white-space-normal",
-                    "width": "200px",
+                    "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                     },
