@@ -1765,6 +1765,9 @@
             var $operation_datatable_id = 'datatable--for--order--item-inspecting--of--operation-record-list';
             Datatable__for__Order_Item_Operation_Record_List.init($operation_datatable_id,$id);
 
+            var $ai_datatable_id = 'datatable--for--order--item--inspecting--of--ai-record-list';
+            Datatable__for__Order_Item_AI_Record_List.init($ai_datatable_id,$id);
+
 
             var $modal_id = 'modal--for--order--item-inspecting';
             var $modal = $("#"+$modal_id);
