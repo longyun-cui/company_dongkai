@@ -396,7 +396,7 @@
                     "title": "AI提示词",
                     "data": "ai_prompt",
                     "className": "",
-                    "width": "500px",
+                    "width": "100px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1)
@@ -411,9 +411,9 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        return data;
-                        // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
-                        // else return '';
+                        // return data;
+                        if(data) return '<small class="btn-xs bg-yellow">有提示词</small>';
+                        else return '';
                     }
                 },
                 {
