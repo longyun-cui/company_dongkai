@@ -28,7 +28,7 @@
                     d.name = $('input[name="staff-name"]').val();
                     d.department = $tableSearch.find('select[name="staff-department"]').val();
                     d.team = $tableSearch.find('select[name="staff-team"]').val();
-                    d.staff_status = $tableSearch.find('select[name="staff-status"]').val();
+                    d.item_status = $tableSearch.find('select[name="staff-status"]').val();
                     d.staff_category = $tableSearch.find('select[name="staff-category"]').val();
                     d.staff_position = $tableSearch.find('select[name="staff-position"]').val();
                 },
