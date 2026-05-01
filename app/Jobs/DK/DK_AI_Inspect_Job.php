@@ -401,7 +401,8 @@ class DK_AI_Inspect_Job implements ShouldQueue
         }
         catch (Exception $e)
         {
-            DB::rollback();
+//            DB::rollback();
+            DB::commit();
             $msg = $e->getMessage();
 //            exit($e->getMessage());
 //            return response_fail([],$msg);
