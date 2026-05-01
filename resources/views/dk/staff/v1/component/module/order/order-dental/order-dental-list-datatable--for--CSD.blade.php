@@ -824,7 +824,7 @@
                             $html_detail = '<a class="btn btn-xs modal-show--for--order--item-detail-editing" data-role="'+$role+'" data-id="'+data+'">详情</a>';
 
                             // 申诉
-                            if(row.appealed_status == 0 && ['拒绝','拒绝可交付','不合格'].includes(row.inspected_result))
+                            if(row.appealed_status == 0 && ['拒绝','拒绝可交付','不合格','超区','超龄'].includes(row.inspected_result))
                             {
                                 $html_appeal = '<a class="btn btn-xs modal-show--for--order--item-appealing" data-id="'+data+'">申诉</a>';
                             }
