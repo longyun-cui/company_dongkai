@@ -2460,7 +2460,8 @@ class DK_Staff__OrderRepository {
         else
         {
             $project_id = (int)$post_data["project_id"];
-            $client_phone = (int)$post_data["client_phone"];
+//            $client_phone = (int)$post_data["client_phone"];
+            $client_phone = (int)$item->client_phone;
         }
 
         $client_name = trim($post_data["client_name"]);
@@ -2476,7 +2477,7 @@ class DK_Staff__OrderRepository {
 
 
         // 电话号码必须为11位整数
-        if(preg_match('/^1\d{10}$/', $post_data['client_phone']) === 1)
+        if(preg_match('/^1\d{10}$/', $item->client_phone) === 1)
         {
         }
         else return response_error([],"电话号码非法！");
@@ -2808,7 +2809,8 @@ class DK_Staff__OrderRepository {
 
         $project_id = $post_data["project_id"];
         $client_name = $post_data["client_name"];
-        $client_phone = $post_data["client_phone"];
+//        $client_phone = $post_data["client_phone"];
+        $client_phone = $item->client_phone;
         if($item->order_category == 1)
         {
             $client_type = $post_data["client_type"];
@@ -2821,7 +2823,7 @@ class DK_Staff__OrderRepository {
 
 
         // 电话号码必须为11位整数
-        if(preg_match('/^1\d{10}$/', $post_data['client_phone']) === 1)
+        if(preg_match('/^1\d{10}$/', $item->client_phone) === 1)
         {
         }
         else return response_error([],"电话号码非法！");
@@ -3304,7 +3306,8 @@ class DK_Staff__OrderRepository {
 
         $project_id = $post_data["project_id"];
         $client_name = $post_data["client_name"];
-        $client_phone = $post_data["client_phone"];
+//        $client_phone = $post_data["client_phone"];
+        $client_phone = $item->client_phone;
         if($item->order_category == 1)
         {
             $client_type = $post_data["client_type"];
@@ -3317,7 +3320,7 @@ class DK_Staff__OrderRepository {
 
 
         // 电话号码必须为11位整数
-        if(preg_match('/^1\d{10}$/', $post_data['client_phone']) === 1)
+        if(preg_match('/^1\d{10}$/', $item->client_phone) === 1)
         {
         }
         else return response_error([],"电话号码非法！");
