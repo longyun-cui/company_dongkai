@@ -892,8 +892,8 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(data == 1) return '1-2颗';
-                        else if(data == 2) return '3-5颗';
+                        if(data == 1) return '单颗';
+                        else if(data == 2) return '2-5颗';
                         else if(data == 3) return '6颗';
                         else if(data == 11) return '半口';
                         else if(data == 19) return '全口';

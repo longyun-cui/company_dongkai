@@ -94,7 +94,7 @@
 
                         $modal.find('input[name="client_name"]').val($response.data.client_name);
                         $modal.find('input[name="client_phone"]').val($response.data.client_phone);
-                        // $modal.find('input[name="client_phone"]').prop('readonly', true);
+                        $modal.find('input[name="client_phone"]').prop('readonly', true);
                         $modal.find('select[name="client_type"]').val($response.data.client_type).trigger('change');
                         $modal.find('select[name="client_intention"]').val($response.data.client_intention).trigger('change');
 
