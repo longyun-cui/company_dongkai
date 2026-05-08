@@ -14,12 +14,12 @@
             <input type="text" class="search-filter form-filter filter-sm filter-keyup" name="order-id" placeholder="ID" value="" />
 
             {{--电话号码--}}
-            <input type="text" class="search-filter form-filter filter-md filter-keyup" name="order-client-phone" placeholder="电话号码" value="" />
+            <input type="text" class="search-filter form-filter filter-smd filter-keyup" name="order-client-phone" placeholder="电话号码" value="" />
 
             {{--发布日期--}}
 {{--            <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-assign" placeholder="发布日期" value="" readonly="readonly" />--}}
-            <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-start" placeholder="开始日期" value="" readonly="readonly" />
-            <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-ended" placeholder="结束日期" value="" readonly="readonly" />
+            <input type="text" class="search-filter form-filter filter-smd filter-keyup date-picker-c" name="order-start" placeholder="开始日期" value="" readonly="readonly" />
+            <input type="text" class="search-filter form-filter filter-smd filter-keyup date-picker-c" name="order-ended" placeholder="结束日期" value="" readonly="readonly" />
 
             {{--创建方式--}}
             @if(in_array($me->staff_category,[0,1,9,71]))
@@ -34,7 +34,7 @@
 
             {{--选择质检员--}}
             @if(in_array($me->staff_category,[0,1,9,51]))
-                <select class="search-filter form-filter filter-lg select2-box-c select2-staff-c-" name="order-inspector">
+                <select class="search-filter form-filter filter-md select2-box-c select2-staff-c-" name="order-inspector">
                     <option value="-1">选择质检员</option>
                     @if(!empty($inspector_list) && count($inspector_list) > 0)
                         @foreach($inspector_list as $v)
@@ -46,7 +46,7 @@
 
             {{--选择部门--}}
             @if(in_array($me->staff_category,[0,1,9,51,71]))
-                <select class="search-filter form-filter filter-xl select2-box-c"
+                <select class="search-filter form-filter filter-md select2-box-c"
                         name="order-department"
                         data-team-category=""
                         data-team-type=""
@@ -78,7 +78,7 @@
             @endif
 
             {{--选择项目--}}
-            <select class="search-filter form-filter filter-lg select2-box-c select2--project-c-" data-item-category="1" name="order-project">
+            <select class="search-filter form-filter filter-md select2-box-c select2--project-c-" data-item-category="1" name="order-project">
                 <option value="-1">选择项目</option>
                 @if(!empty($project_list__for__dental) && count($project_list__for__dental) > 0)
                     @foreach($project_list__for__dental as $v)
@@ -89,7 +89,7 @@
 
             {{--选择交付项目--}}
             @if(in_array($me->staff_category,[0,1,9,71]))
-            <select class="search-filter form-filter filter-lg select2-box-c select2--project-c-"
+            <select class="search-filter form-filter filter-md select2-box-c select2--project-c-"
                     name="order-delivered-project"
                     data-client-category="1"
             >
@@ -120,7 +120,7 @@
 
             {{--可分发--}}
             @if(in_array($me->staff_category,[0,1,9,71]))
-                <select class="search-filter form-filter filter-md select2-box-c" name="order-distribute-type">
+                <select class="search-filter form-filter filter-smd select2-box-c" name="order-distribute-type">
                     <option value="">常规筛选</option>
                     <option value="1">可分发</option>
                 </select>
@@ -128,7 +128,7 @@
 
 
             {{--客户类型--}}
-            <select class="search-filter form-filter filter-md select2-box-c" name="order-client-type">
+            <select class="search-filter form-filter filter-smd select2-box-c" name="order-client-type">
                 <option value="-1">客户类型</option>
                 @foreach(config('dk.common-config.dental_type') as $k => $v)
                     <option value="{{ $k }}">{{ $v }}</option>
@@ -138,7 +138,7 @@
 
             {{--录音质量--}}
             @if(in_array($me->staff_category,[0,1,9,51,61,71]))
-                <select class="search-filter form-filter filter-md select2-box-c" name="order-recording-quality">
+                <select class="search-filter form-filter filter-smd select2-box-c" name="order-recording-quality">
                     <option value="-1">录音质量</option>
                     <option value="0">合格</option>
                     <option value="1">优秀</option>
@@ -149,7 +149,7 @@
 
             {{--审核状态--}}
             @if(in_array($me->staff_category,[0,1,9,71]))
-            <select class="search-filter form-filter filter-lg select2-box-c" name="order-ai-inspected-status">
+            <select class="search-filter form-filter filter-smd select2-box-c" name="order-ai-inspected-status">
                 <option value="-1">AI审核状态</option>
                 <option value="1">审核中</option>
                 <option value="9">已审核</option>
@@ -159,7 +159,7 @@
 
 
             {{--审核状态--}}
-            <select class="search-filter form-filter filter-lg select2-box-c" name="order-inspected-status">
+            <select class="search-filter form-filter filter-smd select2-box-c" name="order-inspected-status">
                 <option value="-1">审核状态</option>
                 @if(in_array($me->staff_category,[0,1,9,41]))
                     <option value="待发布">待发布</option>
@@ -196,11 +196,11 @@
 
             {{--交付日期--}}
             @if(in_array($me->staff_category,[0,1,9,71]))
-            <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-delivered_date" placeholder="交付日期" value="" readonly="readonly" />
+            <input type="text" class="search-filter form-filter filter-smd filter-keyup date-picker-c" name="order-delivered_date" placeholder="交付日期" value="" readonly="readonly" />
             @endif
             {{--交付状态--}}
             @if(in_array($me->staff_category,[0,1,9,71]))
-            <select class="search-filter form-filter filter-lg select2-box-c" name="order-delivered-status">
+            <select class="search-filter form-filter filter-smd select2-box-c" name="order-delivered-status">
                 <option value="-1">交付状态</option>
                 <option value="0">未操作</option>
                 <option value="1">已交付</option>
@@ -222,7 +222,7 @@
 
 
             {{--城市--}}
-            <select class="search-filter form-filter filter-lg select2-box-c select--location-city-c"
+            <select class="search-filter form-filter filter-smd select2-box-c select--location-city-c"
                     name="order-city"
             >
                 <option value="-1">选择城市</option>

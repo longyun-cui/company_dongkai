@@ -28,6 +28,7 @@
                     d.title = $tableSearch.find('input[name="project-title"]').val();
                     d.keyword = $tableSearch.find('input[name="project-keyword"]').val();
                     d.item_status = $tableSearch.find('select[name="project-item-status"]').val();
+                    d.is_automatic = $tableSearch.find('select[name="project-is-automatic"]').val();
                 },
             },
             "fixedColumns": {

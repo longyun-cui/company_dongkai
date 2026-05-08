@@ -15,7 +15,7 @@
         let $tableSearch = $datatable_wrapper.find('.datatable-search-box');
 
         var table = $('#'+$tableId).DataTable({
-            "aLengthMenu": [[10, 50, 100, 200], ["10", "50", "100", "200"]],
+            "aLengthMenu": [[20, 50, 100, 200], ["20", "50", "100", "200"]],
             "processing": true,
             "serverSide": true,
             "searching": true,
@@ -71,10 +71,10 @@
             "fixedColumns": {
 
                 @if($me->department_district_id == 0)
-                "leftColumns": "@if($is_mobile_equipment) 1 @else 5 @endif",
+                "leftColumns": "@if($is_mobile_equipment) 1 @else 4 @endif",
                 "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
                 @else
-                "leftColumns": "@if($is_mobile_equipment) 1 @else 4 @endif",
+                "leftColumns": "@if($is_mobile_equipment) 1 @else 3 @endif",
                 "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
                 @endif
 
@@ -89,17 +89,17 @@
                 @endif
             ],
             "columns": [
-                {
-                    "title": '<input type="checkbox" class="check-review-all">',
-                    "name": "checkbox",
-                    // "data": "id",
-                    "data": null,
-                    "width": "60px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+row.id+'"></label>';
-                    }
-                },
+                // {
+                //     "title": '<input type="checkbox" class="check-review-all">',
+                //     "name": "checkbox",
+                //     // "data": "id",
+                //     "data": null,
+                //     "width": "40px",
+                //     "orderable": false,
+                //     render: function(data, type, row, meta) {
+                //         return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+row.id+'"></label>';
+                //     }
+                // },
 //                    {
 //                        "title": "序号",
 //                        "width": "32px",
@@ -112,7 +112,7 @@
                     "name": "id",
                     "data": "id",
                     "className": "",
-                    "width": "40px",
+                    "width": "60px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {

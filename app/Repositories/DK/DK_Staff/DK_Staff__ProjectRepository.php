@@ -109,6 +109,18 @@ class DK_Staff__ProjectRepository {
             $query->where('item_status', 1);
         }
 
+
+        // 状态 [|]
+        if(isset($post_data['is_automatic']))
+        {
+            $is_automatic_int = intval($post_data['is_automatic']);
+            if(!in_array($is_automatic_int,[-1]))
+            {
+                $query->where('is_automatic_ai_inspecting', $is_automatic_int);
+            }
+        }
+
+
         if(in_array($me->staff_category, [41,51,61]))
         {
             if($me->staff_position == 31)

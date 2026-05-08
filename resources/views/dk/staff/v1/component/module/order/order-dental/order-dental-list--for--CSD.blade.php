@@ -33,17 +33,17 @@
             <input type="text" class="search-filter form-filter filter-sm filter-keyup" name="order-id" placeholder="ID" value="" />
 
             {{--电话号码--}}
-            <input type="text" class="search-filter form-filter filter-md filter-keyup" name="order-client-phone" placeholder="电话号码" value="" />
+            <input type="text" class="search-filter form-filter filter-smd filter-keyup" name="order-client-phone" placeholder="电话号码" value="" />
 
             {{--发布日期--}}
-            <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-assign" placeholder="发布日期" value="" readonly="readonly" />
+            <input type="text" class="search-filter form-filter filter-smd filter-keyup date-picker-c" name="order-assign" placeholder="发布日期" value="" readonly="readonly" />
 {{--            <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-start" placeholder="开始日期" value="" readonly="readonly" />--}}
 {{--            <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-ended" placeholder="结束日期" value="" readonly="readonly" />--}}
 
 
             {{--选择员工--}}
             @if(in_array($me->staff_position,[0,1,9,11,31,41,61]))
-            <select class="search-filter form-filter filter-lg select2-box-c select2-staff-c-" name="order-staff">
+            <select class="search-filter form-filter filter-md select2-box-c select2-staff-c-" name="order-staff">
                 <option value="-1">选择员工</option>
                 @if(!empty($staff_list) && count($staff_list) > 0)
                     @foreach($staff_list as $v)
@@ -142,9 +142,6 @@
                         </tfoot>
                     </table>
                 </div>
-            </div>
-
-            <div class="box-header">
             </div>
 
         </div>

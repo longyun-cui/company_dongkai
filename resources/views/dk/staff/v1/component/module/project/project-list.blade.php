@@ -29,6 +29,12 @@
             <input type="text" class="search-filter form-filter filter-keyup" name="project-id" placeholder="ID">
             <input type="text" class="search-filter form-filter filter-keyup" name="project-name" placeholder="名称">
 
+            <select class="search-filter form-filter select2-box-c" name="project-is-automatic">
+                <option value ="-1">自动质检</option>
+                <option value ="1">是</option>
+                <option value ="0">否</option>
+            </select>
+
             <select class="search-filter form-filter select2-box-c" name="project-item-status">
                 <option value ="-1">全部</option>
                 <option value ="1">启用</option>

@@ -15,7 +15,7 @@
         let $tableSearch = $datatable_wrapper.find('.datatable-search-box');
 
         var table = $('#'+$tableId).DataTable({
-            "aLengthMenu": [[10, 50, 100, 200], ["10", "50", "100", "200"]],
+            "aLengthMenu": [[20, 50, 100, 200], ["20", "50", "100", "200"]],
             "processing": true,
             "serverSide": true,
             "searching": true,
@@ -93,7 +93,7 @@
                     "name": "id",
                     "data": "id",
                     "className": "",
-                    "width": "40px",
+                    "width": "60px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {

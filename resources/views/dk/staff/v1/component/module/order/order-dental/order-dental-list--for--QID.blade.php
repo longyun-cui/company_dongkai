@@ -14,16 +14,16 @@
             <input type="text" class="search-filter form-filter filter-sm filter-keyup" name="order-id" placeholder="ID" value="" />
 
             {{--电话号码--}}
-            <input type="text" class="search-filter form-filter filter-md filter-keyup" name="order-client-phone" placeholder="电话号码" value="" />
+            <input type="text" class="search-filter form-filter filter-smd filter-keyup" name="order-client-phone" placeholder="电话号码" value="" />
 
             {{--发布日期--}}
 {{--            <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-assign" placeholder="发布日期" value="" readonly="readonly" />--}}
-            <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-start" placeholder="开始日期" value="" readonly="readonly" />
-            <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-ended" placeholder="结束日期" value="" readonly="readonly" />
+            <input type="text" class="search-filter form-filter filter-smd filter-keyup date-picker-c" name="order-start" placeholder="开始日期" value="" readonly="readonly" />
+            <input type="text" class="search-filter form-filter filter-smd filter-keyup date-picker-c" name="order-ended" placeholder="结束日期" value="" readonly="readonly" />
 
             {{--创建方式--}}
             @if(in_array($me->staff_category,[0,1,9,71]))
-                <select class="search-filter form-filter filter-md select2-box-c" name="order-created-type">
+                <select class="search-filter form-filter filter-smd select2-box-c" name="order-created-type">
                     <option value="-1">创建方式</option>
                     <option value="1">人工</option>
                     <option value="9">导入</option>

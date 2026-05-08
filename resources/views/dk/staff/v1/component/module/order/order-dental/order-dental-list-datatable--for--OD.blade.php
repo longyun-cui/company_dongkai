@@ -15,7 +15,7 @@
         let $tableSearch = $datatable_wrapper.find('.datatable-search-box');
 
         var table = $('#'+$tableId).DataTable({
-            "aLengthMenu": [[10, 50, 100, 200], ["10", "50", "100", "200"]],
+            "aLengthMenu": [[10, 20, 50, 100, 200], ["10", "20", "50", "100", "200"]],
             "processing": true,
             "serverSide": true,
             "searching": true,
@@ -83,7 +83,7 @@
                     "name": "checkbox",
                     // "data": "id",
                     "data": null,
-                    "width": "60px",
+                    "width": "40px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+row.id+'"></label>';
@@ -101,7 +101,7 @@
                     "name": "id",
                     "data": "id",
                     "className": "",
-                    "width": "40px",
+                    "width": "60px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
