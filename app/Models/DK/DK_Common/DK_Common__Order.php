@@ -129,6 +129,7 @@ class DK_Common__Order extends Model
         'inspector_id',
         'inspected_status',
         'inspected_result',
+        'inspected_result_2',
         'inspected_result_code',
         'inspected_description',
         'inspected_date',

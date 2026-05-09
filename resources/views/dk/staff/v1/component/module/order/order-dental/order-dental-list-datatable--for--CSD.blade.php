@@ -208,7 +208,7 @@
                     "width": "72px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(row.is_completed != 1)
                         {
                             $(nTd).addClass('modal-show-for-field-set-');
                             $(nTd).attr('data-id',row.id).attr('data-name','审核结果');
@@ -223,7 +223,17 @@
                     render: function(data, type, row, meta) {
                         if(!row.inspected_at) return '--';
                         var $result_html = '';
-                        if(data == "通过" || data == "折扣通过" || data == "郊区通过" || data == "内部通过")
+                        var $result_2_html = '';
+                        var $inspected_result_2 = row.inspected_result_2;
+                        if(data == "通过")
+                        {
+                            $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
+                            if($inspected_result_2)
+                            {
+                                $result_2_html = '<small class="btn-xs bg-green">'+$inspected_result_2+'</small>';
+                            }
+                        }
+                        else if(data == "折扣通过" || data == "郊区通过" || data == "内部通过")
                         {
                             $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
                         }
@@ -261,9 +271,9 @@
                         }
                         else
                         {
-                            $result_html = '<small class="btn-xs bg-purple">'+data+'</small>';
+                            $result_html = '<small class="btn-xs bg-black">有误</small>';
                         }
-                        return $result_html;
+                        return $result_html + $result_2_html;
                     }
                 },
                 {

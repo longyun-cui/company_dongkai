@@ -317,7 +317,7 @@
                                     data-modal="#modal--for--order--item-inspecting"
                             >
                                 <option value="">选择审核结果</option>
-                                @foreach(config('dk.common-config.inspected_result') as $v)
+                                @foreach(config('dk.common-config.inspected_result_for_inspecting') as $v)
                                     <option value ="{{ $v }}">{{ $v }}</option>
                                 @endforeach
                             </select>

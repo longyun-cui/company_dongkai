@@ -64,6 +64,7 @@
                     d.ai_inspected_status = $tableSearch.find('select[name="order-ai-inspected-status"]').val();
                     d.inspected_status = $tableSearch.find('select[name="order-inspected-status"]').val();
                     d.inspected_result = $tableSearch.find('select[name="order-inspected-result[]"]').val();
+                    d.inspected_result_2 = $tableSearch.find('select[name="order-inspected-result-2[]"]').val();
                     d.appealed_status = $tableSearch.find('select[name="order-appealed-status"]').val();
                     d.delivered_status = $tableSearch.find('select[name="order-delivered-status"]').val();
                     d.delivered_result = $tableSearch.find('select[name="order-delivered-result[]"]').val();
@@ -374,13 +375,27 @@
                     render: function(data, type, row, meta) {
                         if(!row.inspected_at) return '--';
                         var $result_html = '';
-                        if(data == "通过" || data == "折扣通过" || data == "郊区通过" || data == "内部通过")
+                        var $result_2_html = '';
+                        var $inspected_result_2 = row.inspected_result_2;
+                        if(data == "通过")
+                        {
+                            $result_html = '<small class="btn-xs bg-green">通过</small>';
+                            if($inspected_result_2)
+                            {
+                                $result_2_html = '<small class="btn-xs bg-green">'+$inspected_result_2+'</small>';
+                            }
+                        }
+                        else if(data == "折扣通过" || data == "郊区通过" || data == "内部通过")
                         {
                             $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
                         }
                         else if(data == "拒绝")
                         {
                             $result_html = '<small class="btn-xs bg-red">拒绝</small>';
+                            if($inspected_result_2)
+                            {
+                                $result_2_html = '<small class="btn-xs bg-red">'+$inspected_result_2+'</small>';
+                            }
                         }
                         else if(data == "拒绝可交付")
                         {
@@ -398,15 +413,12 @@
                         {
                             $result_html = '<small class="btn-xs bg-yellow">重复•可分发</small>';
                         }
-                        else if(data == "虚假")
-                        {
-                            $result_html = '<small class="btn-xs bg-orange">虚假</small>';
-                        }
                         else
                         {
                             $result_html = '<small class="btn-xs bg-purple">'+data+'</small>';
                         }
-                        return $result_html;
+
+                        return $result_html + $result_2_html;
                     }
                 },
                 // {

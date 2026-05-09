@@ -315,9 +315,39 @@ class DK_AI_Inspect_Job implements ShouldQueue
                     {
                         if(array_key_exists($content_decode->审核结果,config('dk.common-config.ai_inspected_result_to_order_inspected_result')))
                         {
+                            $count = 0;
+                            if($content_decode->审核结果 == '通过')
+                            {
+                                if(isset($content_decode->客户姓氏是否询问) && $content_decode->客户姓氏是否询问 == '是') $count += 1;
+                                if(isset($content_decode->客户年龄是否询问) && $content_decode->客户年龄是否询问 == '是') $count += 1;
+                                if(isset($content_decode->客户三高状态是否询问) && $content_decode->客户三高状态是否询问 == '是') $count += 1;
+                                if(isset($content_decode->询问客户当前在不在【城市名称】的话术) && $content_decode->询问客户当前在不在【城市名称】的话术 == '是') $count += 1;
+
+                                $order->inspected_result = $content_decode->审核结果;
+                                $order->inspected_result_2 = '三档';
+                                if($count == 3) $order->inspected_result_2 = '二档';
+                                if($count >= 4) $order->inspected_result_2 = '一档';
+
+                            }
+                            else if($content_decode->审核结果 == '超区')
+                            {
+                                $order->inspected_result = '拒绝';
+                                $order->inspected_result_2 = $content_decode->审核结果;
+                            }
+                            else if($content_decode->审核结果 == '超龄')
+                            {
+                                $order->inspected_result = '拒绝';
+                                $order->inspected_result_2 = $content_decode->审核结果;
+                            }
+                            else
+                            {
+                                $order->inspected_result = $content_decode->审核结果;
+                                $order->inspected_result_2 = $content_decode->审核结果;
+                            }
+
                             $order->inspected_status = 1;
-                            $order->inspected_result = $content_decode->审核结果;
-//                        $order->inspected_result = config('dk.common-config.ai_inspected_result_to_order_inspected_result.'.$content_decode->审核结果);
+//                            $order->inspected_result = $content_decode->审核结果;
+//                            $order->inspected_result = config('dk.common-config.ai_inspected_result_to_order_inspected_result.'.$content_decode->审核结果);
                             $order->inspected_at = $time;
                             $order->inspected_date = $date;
                             $bool_order = $order->save();

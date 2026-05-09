@@ -421,6 +421,14 @@ class DK_Staff__OrderRepository {
                 $query->whereIn('dk_common__order.inspected_result', $post_data['inspected_result']);
             }
         }
+        // 审核结果
+        if(!empty($post_data['inspected_result_2']))
+        {
+            if(count($post_data['inspected_result_2']))
+            {
+                $query->whereIn('dk_common__order.inspected_result_2', $post_data['inspected_result_2']);
+            }
+        }
 
 
         // 申诉状态
@@ -2205,6 +2213,21 @@ class DK_Staff__OrderRepository {
         else return response_error([],"电话号码非法！");
 
 
+        // 自动AI质检
+        $is_automatic_ai_inspecting = 0;
+        $project = DK_Common__Project::find($item->project_id);
+        if($project && $project->is_automatic_ai_inspecting == 1)
+        {
+            $is_automatic_ai_inspecting = 1;
+        }
+        else return response_error([],"工单所选【项目】不存在！");
+        // 判断项目与城市是否匹配
+        if($project->location_city != $item->location_city)
+        {
+            return response_error([],"工单所选【城市】与项目所在城市不匹配！");
+        }
+
+
         $is_today_repeat = DK_Common__Order::where(['client_phone'=>(int)$client_phone])
             ->where('id','<>',$id)
             ->where('is_published','=',1)
@@ -2226,15 +2249,6 @@ class DK_Staff__OrderRepository {
             $is_repeat = DK_Common__Delivery::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])->count("*");
         }
         if($is_repeat > 0) $is_repeat += 1;
-
-
-        // 自动AI质检
-        $is_automatic_ai_inspecting = 0;
-        $project = DK_Common__Project::find($item->project_id);
-        if($project && $project->is_automatic_ai_inspecting == 1)
-        {
-            $is_automatic_ai_inspecting = 1;
-        }
 
         // 启动数据库事务
         DB::beginTransaction();
@@ -2800,7 +2814,7 @@ class DK_Staff__OrderRepository {
         }
 
         $inspected_result = $post_data["order-item-inspecting--inspected-result"];
-        if(!in_array($inspected_result,config('dk.common-config.inspected_result')))
+        if(!in_array($inspected_result,config('dk.common-config.inspected_result_for_inspecting')))
         {
             return response_error([],"审核结果非法！");
         }
@@ -3080,7 +3094,45 @@ class DK_Staff__OrderRepository {
 
             $item->inspector_id = $me->id;
             $item->inspected_status = 1;
-            $item->inspected_result = $inspected_result;
+            if($inspected_result == '通过·一档')
+            {
+                $item->inspected_result = '通过';
+                $item->inspected_result_2 = '一档';
+            }
+            else if($inspected_result == '通过·二档')
+            {
+                $item->inspected_result = '通过';
+                $item->inspected_result_2 = '二档';
+            }
+            else if($inspected_result == '通过·三档')
+            {
+                $item->inspected_result = '通过';
+                $item->inspected_result_2 = '三档';
+            }
+            else if($inspected_result == '不合格')
+            {
+                $item->inspected_result = '拒绝';
+                $item->inspected_result_2 = '不合格';
+            }
+            else if($inspected_result == '虚假')
+            {
+                $item->inspected_result = '拒绝';
+                $item->inspected_result_2 = '虚假';
+            }
+            else if($inspected_result == '超区')
+            {
+                $item->inspected_result = '拒绝';
+                $item->inspected_result_2 = '超区';
+            }
+            else if($inspected_result == '超龄')
+            {
+                $item->inspected_result = '拒绝';
+                $item->inspected_result_2 = '超龄';
+            }
+            else
+            {
+                $item->inspected_result = $inspected_result;
+            }
 //            if($inspected_description)
 //            {
 //                $item->inspected_description = $inspected_description;
