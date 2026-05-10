@@ -2216,9 +2216,12 @@ class DK_Staff__OrderRepository {
         // 自动AI质检
         $is_automatic_ai_inspecting = 0;
         $project = DK_Common__Project::find($item->project_id);
-        if($project && $project->is_automatic_ai_inspecting == 1)
+        if($project)
         {
-            $is_automatic_ai_inspecting = 1;
+            if($project->is_automatic_ai_inspecting == 1)
+            {
+                $is_automatic_ai_inspecting = 1;
+            }
         }
         else return response_error([],"工单所选【项目】不存在！");
         // 判断项目与城市是否匹配
