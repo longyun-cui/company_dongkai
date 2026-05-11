@@ -2493,12 +2493,15 @@ class DK_Staff__OrderRepository {
             else
             {
                 curl_close($ch);
-                $item->api_is_pushed_for_cpa = 1;
-                $item->save();
-                return response_success([],"推送成功！");
+                $result = json_decode($result);
+                if($result->code == 0)
+                {
+                    $item->api_is_pushed_for_cpa = 1;
+                    $item->save();
+                    return response_success([],"推送成功！");
+                }
+                else return response_error([],$result->message);
             }
-            curl_close($ch);
-            return $return;
 
         }
         else return response_error([],'已经推送过了！');
