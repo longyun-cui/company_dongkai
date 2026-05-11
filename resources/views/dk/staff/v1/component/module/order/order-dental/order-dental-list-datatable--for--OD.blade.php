@@ -1334,6 +1334,7 @@
                         var $html_inspect = '';
                         var $html_ai_inspect = '';
                         var $html_push = '';
+                        var $html_api_cpa_pushing = '';
                         var $html_deliver = '';
                         var $html_deliver_fool = '';
                         var $html_distribute = '';
@@ -1407,6 +1408,8 @@
                                 }
                             }
 
+                            $html_api_cpa_pushing = '<a class="btn btn-xs order--item--api-cpa-push-submit" data-id="'+data+'">推送</a>';
+
                         }
 
 
@@ -1423,6 +1426,7 @@
                             $html_deliver_fool = '';
                             $html_deliver = '';
                             $html_distribute = '';
+                            $html_api_cpa_pushing = '';
                         }
 
 
@@ -1440,6 +1444,7 @@
                             $html_distribute+
                             $html_detail+
                             $html_record+
+                            $html_api_cpa_pushing+
                             // $more_html+
                             '';
                         return $html;
