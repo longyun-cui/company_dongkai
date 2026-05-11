@@ -135,6 +135,8 @@ class DK_Staff__StaffRepository {
         if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
         if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
 
+        if(!empty($post_data['api_staffNo'])) $query->where('api_staffNo', $post_data['api_staffNo']);
+
         // 状态 [|]
         if(!empty($post_data['item_status']))
         {
@@ -319,6 +321,13 @@ class DK_Staff__StaffRepository {
             $post_data["creator_id"] = $me->id;
 //            $post_data['name'] = $post_data['name'];
 
+
+            if($post_data["api_staffNo"] != 0)
+            {
+                $is_api_staffNo_repeat = DK_Common__Staff::where('api_staffNo',$post_data["api_staffNo"])->get();
+                if($is_api_staffNo_repeat) return response_error([],"【API坐席ID】已存在，请更换！");
+            }
+
         }
         else if($operate_type == 'edit') // 编辑
         {
@@ -329,8 +338,15 @@ class DK_Staff__StaffRepository {
                 $is_exist = DK_Common__Staff::where('login_number',$post_data['login_number'])->where('id','!=',$operate_id)->first();
                 if($is_exist) return response_error([],"工号重复，请更换工号再试一次！");
             }
+
+            if($post_data["api_staffNo"] != 0)
+            {
+                $is_api_staffNo_repeat = DK_Common__Staff::where('api_staffNo',$post_data['api_staffNo'])->where('id','!=',$operate_id)->first();
+                if($is_api_staffNo_repeat) return response_error([],"【API坐席ID】已存在，请更换！");
+            }
         }
         else return response_error([],"参数有误！");
+
 
         if($me->staff_position == 11)
         {

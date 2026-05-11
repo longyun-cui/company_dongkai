@@ -28,7 +28,8 @@
 
             <input type="text" class="search-filter form-filter filter-keyup" name="staff-id" placeholder="ID" />
             <input type="text" class="search-filter form-filter filter-keyup" name="staff-number" placeholder="工号" />
-            <input type="text" class="search-filter form-filter filter-keyup" name="staff-name" placeholder="名称" />
+            <input type="text" class="search-filter form-filter filter-keyup" name="staff-name" placeholder="姓名" />
+            <input type="text" class="search-filter form-filter filter-keyup" name="staff-api-staffNo" placeholder="API坐席ID" />
 
 
             @if(in_array($me->staff_category,[0,1,9,71]))

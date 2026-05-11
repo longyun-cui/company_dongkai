@@ -24183,7 +24183,7 @@ EOF;
         else $phone_number = $clientMark_data['number'];
 
 
-        $staff = DK_Common__Staff::with([])->where('api_staffNo',$api_staffNo)->first();
+        $staff = DK_Common__Staff::with([])->where('api_staffNo',$api_staffNo)->orderBy('id','desc')->first();
         if(!$staff)
         {
             $return['result']['error'] = 1;
