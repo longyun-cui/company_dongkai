@@ -2459,14 +2459,16 @@ class DK_Staff__OrderRepository {
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,9,11,71])) return response_error([],"你没有操作权限！");
 
-        if($item->api_is_pushed == 0)
+        if($item->api_is_pushed_for_cpa == 0)
         {
-            $push_data["oldID"] = "补牙";
+            $push_data["oldID"] = "";
             $push_data["customerName"] = $item->client_name;
             $push_data["customerPhone"] = $item->client_phone;
             $push_data["sourceCode"] = '2051126624782389248';
             $push_data["sourceName"] = '神书CPA';
             $push_data["clueDate"] = $datetime;
+            $push_data["formContent"] = $item->description;
+            $push_data["remark"] = '';
             $push_data["cityName"] = $item->location_city;
             $push_data["areaName"] = $item->location_district;
 //            dd($push_data);
