@@ -1443,8 +1443,8 @@
                             $html_deliver+
                             $html_distribute+
                             $html_detail+
-                            $html_record+
                             $html_api_cpa_pushing+
+                            $html_record+
                             // $more_html+
                             '';
                         return $html;
