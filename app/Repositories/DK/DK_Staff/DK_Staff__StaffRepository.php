@@ -310,15 +310,14 @@ class DK_Staff__StaffRepository {
 
         if($operate_type == 'create') // 添加 ( $id==0，添加一个新用户 )
         {
-            if($post_data["api_staffNo"] != 0)
-            {
-                $is_api_staffNo_repeat = DK_Common__Staff::where('api_staffNo',$post_data["api_staffNo"])->fisrt();
-                if($is_api_staffNo_repeat) return response_error([],"【API坐席ID】已存在，请更换a！");
-            }
-
-
             $is_exist = DK_Common__Staff::where('login_number',$post_data['login_number'])->first();
             if($is_exist) return response_error([],"该【工号】已存在！");
+
+            if($post_data["api_staffNo"] != 0)
+            {
+                $is_api_staffNo_repeat = DK_Common__Staff::where('api_staffNo',$post_data["api_staffNo"])->first();
+                if($is_api_staffNo_repeat) return response_error([],"【API坐席ID】已存在，请更换a！");
+            }
 
             $mine = new DK_Common__Staff;
             $post_data["item_status"] = 1;
