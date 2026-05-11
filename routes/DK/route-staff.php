@@ -208,6 +208,8 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
     Route::post('/o1/order/item-disable', $controller.'@o1__order__item_disable');
     // 【工单】发布
     Route::post('/o1/order/item-publish', $controller.'@o1__order__item_publish');
+    // 【工单】发布
+    Route::post('/o1/order/item--api-cpa-pushing', $controller.'@o1__order__item__api_cpa_pushing');
     // 【工单】完成
     Route::post('/o1/order/item-complete', $controller.'@o1__order__item_publish');
     // 【工单】跟进

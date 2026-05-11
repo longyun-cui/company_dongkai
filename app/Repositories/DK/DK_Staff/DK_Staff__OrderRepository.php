@@ -2425,6 +2425,85 @@ class DK_Staff__OrderRepository {
         }
 
     }
+    // 【工单】推送
+    public function o1__order__item__api_cpa_pushing($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $time = time();
+        $date = date("Y-m-d");
+        $datetime = date('Y-m-d H:i:s');
+
+        $operate = $post_data["operate"];
+        if($operate != 'order--item--api-cpa-pushing') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Common__Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
+
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,71])) return response_error([],"你没有操作权限！");
+
+        if($item->api_is_pushed == 0)
+        {
+            $push_data["oldID"] = "补牙";
+            $push_data["customerName"] = $item->client_name;
+            $push_data["customerPhone"] = $item->client_phone;
+            $push_data["sourceCode"] = '2051126624782389248';
+            $push_data["sourceName"] = '神书CPA';
+            $push_data["clueDate"] = $datetime;
+            $push_data["cityName"] = $item->location_city;
+            $push_data["areaName"] = $item->location_district;
+//            dd($push_data);
+
+            $push_data = json_encode($push_data);
+
+            $url = "https://clue.gxtykq.com/clueMIANYANGAPI/api/receiveClues";
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Accept: application/json"));
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true); // post数据
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $push_data); // post的变量
+            $result = curl_exec($ch);
+            if(curl_errno($ch))
+            {
+                curl_close($ch);
+                return response_error([],curl_error($ch));
+            }
+            else
+            {
+                curl_close($ch);
+                $item->api_is_pushed_for_cpa = 1;
+                $item->save();
+                return response_success([],"推送成功！");
+            }
+            curl_close($ch);
+            return $return;
+
+        }
+        else return response_error([],'已经推送过了！');
+
+
+
+    }
 
     // 【工单】修改
     public function o1__order__item_detail_editing_save($post_data)
@@ -6895,6 +6974,7 @@ class DK_Staff__OrderRepository {
         if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数[ID]有误！");
 
 
+        $ai_model = config('dk.common-config.ai_model_text');
         $ai_prompt = config('dk.common-config.ai_prompt_text');
 
         $this->get_me();
@@ -6912,6 +6992,7 @@ class DK_Staff__OrderRepository {
         $project = DK_Common__Project::find($item->project_id);
         if($project)
         {
+            $ai_model = !empty($project->ai_model) ? $project->ai_model : $ai_model;
             $ai_prompt = !empty($project->ai_prompt) ? $project->ai_prompt : $ai_prompt;
 //            $ai_prompt = !empty($project->ai_prompt) ? ($project->ai_prompt.$ai_prompt) : $ai_prompt;
         }
@@ -7132,7 +7213,7 @@ class DK_Staff__OrderRepository {
         {
             $ai_inspected = new DK_Common__Order__AI_Inspected__Record;
             $ai_data['ai_platform'] = 'ali';
-            $ai_data['ai_model'] = 'qwen3.5-omni-plus';
+            $ai_data['ai_model'] = $ai_model;
             $ai_data['ai_prompt'] = $ai_prompt;
             $ai_data['order_id'] = $item_id;
 

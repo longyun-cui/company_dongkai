@@ -1369,6 +1369,26 @@
                     }
                 },
                 {
+                    "title": "神书CPA",
+                    "name": "api_is_pushed_for_cpa",
+                    "data": "api_is_pushed_for_cpa",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        {
+                            $(nTd).attr('data-id',row.id);
+                            $(nTd).attr('data-name','神书CPA');
+                            $(nTd).attr('data-key','api_is_pushed_for_cpa');
+                            $(nTd).attr('data-value',data);
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        if(data == 1) return '<small class="btn-xs btn-primary">是</small>';
+                        else return '--';
+                    }
+                },
+                {
                     "title": "创建人",
                     "name": "creator_id",
                     "data": "creator_id",
@@ -1421,6 +1441,7 @@
                         var $html_delete = '';
                         var $html_publish = '';
                         var $html_inspect = '';
+                        var $html_api_cpa_pushing = '';
                         var $html_ai_inspect = '';
                         var $html_appeal = '';
                         var $html_appeal_handle = '';
@@ -1523,6 +1544,8 @@
                                 }
                             }
 
+                            $html_api_cpa_pushing = '<a class="btn btn-xs order--item--api-cpa-push-submit" data-id="'+data+'">推送</a>';
+
                         }
 
 
@@ -1539,6 +1562,7 @@
                             $html_deliver = '';
                             $html_distribute = '';
                             $html_detail = '';
+                            $html_api_cpa_pushing = '';
                         }
 
 
@@ -1554,6 +1578,7 @@
                             $html_deliver+
                             $html_distribute+
                             $html_detail+
+                            $html_api_cpa_pushing+
                             $html_record+
                             // $more_html+
                             '';

@@ -1114,6 +1114,76 @@
         });
 
 
+        // 【工单】神书CPA推送
+        $(".main-wrapper").off('click', ".order--item--api-cpa-push-submit").on('click', ".order--item--api-cpa-push-submit", function() {
+            var $that = $(this);
+            var $row = $that.parents('tr');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $item_category = $datatable_wrapper.data('datatable-item-category');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+
+
+            // layer.msg('确定"发布"么?', {
+            //     time: 0
+            //     ,btn: ['确定', '取消']
+            //     ,yes: function(index)
+            //     {
+            //         layer.close(index);
+
+                    //
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">正在提交</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
+                    });
+
+                    //
+                    $.post(
+                        "{{ url('/o1/order/item--api-cpa-pushing') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "order--item--api-cpa-pushing",
+                            item_category: $item_category,
+                            item_id: $that.attr('data-id')
+                        },
+                        'json'
+                    )
+                        .done(function($response, status, jqXHR) {
+                            console.log('#'+$that.attr('id')+'.post.done.');
+
+                            $response = JSON.parse($response);
+                            if(!$response.success)
+                            {
+                                if($response.msg) layer.msg($response.msg);
+                            }
+                            else
+                            {
+                                $row.find('[data-key="api_is_pushed_for_cpa"]').html('<small class="btn-xs btn-primary">是</small>');
+                                // $('#'+$table_id).DataTable().ajax.reload(null,false);
+                            }
+                        })
+                        .fail(function(jqXHR, status, error) {
+                            console.log('#'+$that.attr('id')+'.post.fail.');
+                            layer.msg('服务器错误！');
+
+                        })
+                        .always(function(jqXHR, status) {
+                            console.log('#'+$that.attr('id')+'.post.always.');
+                            layer.closeAll('loading');
+                        });
+            //     }
+            // });
+        });
+
 
 
         // 【监听】录音播放速率

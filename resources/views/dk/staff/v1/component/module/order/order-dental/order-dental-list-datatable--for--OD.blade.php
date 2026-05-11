@@ -1260,6 +1260,26 @@
                     }
                 },
                 {
+                    "title": "神书CPA",
+                    "name": "api_is_pushed_for_cpa",
+                    "data": "api_is_pushed_for_cpa",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        {
+                            $(nTd).attr('data-id',row.id);
+                            $(nTd).attr('data-name','神书CPA');
+                            $(nTd).attr('data-key','api_is_pushed_for_cpa');
+                            $(nTd).attr('data-value',data);
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        if(data == 1) return '<small class="btn-xs btn-primary">是</small>';
+                        else return '--';
+                    }
+                },
+                {
                     "title": "创建人",
                     "name": "creator_id",
                     "data": "creator_id",
