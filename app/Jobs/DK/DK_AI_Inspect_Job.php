@@ -416,11 +416,11 @@ class DK_AI_Inspect_Job implements ShouldQueue
                             if(!$bool_1) throw new Exception("DK_Common__Order__Operation_Record--insert--fail");
 
                         }
+                        else throw new Exception("【审核结果】有误！");
                     }
-
+                    else throw new Exception("【content_decode】有误！");
                 }
-
-
+                else throw new Exception("【result.choices[0].message.content】不存在！");
             }
 
             $order->ai_inspected_status = 9;

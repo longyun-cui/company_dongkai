@@ -24196,11 +24196,12 @@ EOF;
 //        $order_where['api_staffNo'] = $api_staffNo;
         $order_where['creator_id'] = $staff->id;
         $order_where['client_phone'] = $phone_number;
-        $order = DK_Common__Order::select('*')->where($order_where)->orderby('id','desc')->first();
+        $todayStart = strtotime("today");
+        $order = DK_Common__Order::select('*')->where($order_where)->where('created_at','>',$todayStart)->orderby('id','desc')->first();
         if($order)
         {
             $return['result']['error'] = 1;
-            $return['result']['msg'] = '该号码已录单！';
+            $return['result']['msg'] = '该号码当日已录单！';
             return json_encode($return);
         }
         else
