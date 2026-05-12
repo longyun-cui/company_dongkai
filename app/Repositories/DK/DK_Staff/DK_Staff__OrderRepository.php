@@ -1887,10 +1887,13 @@ class DK_Staff__OrderRepository {
 //            {
 //                if($item->creator_team_id != $me->team_id) return response_error([],"你没有操作权限！");
 //            }
-//            else if($me->staff_position == 31)
-//            {
-//                if($item->creator_department_id != $me->department_id) return response_error([],"你没有操作权限！");
-//            }
+            else if($me->staff_position == 31)
+            {
+                if($item->creator_department_id != $me->department_id) return response_error([],"你没有操作权限！");
+                $todayStart = strtotime("today");
+//                dd($item->created_at->timestamp);
+                if($todayStart < $item->created_at->timestamp) return response_error([],"不能删除当天的工单！");
+            }
             else
             {
                 return response_error([],"用户类型错误！");
