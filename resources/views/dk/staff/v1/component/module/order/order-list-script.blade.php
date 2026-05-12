@@ -1123,37 +1123,120 @@
             var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
 
 
-            layer.msg('确定"推送"么?', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index)
-                {
+            {{--layer.msg('确定"推送"么?', {--}}
+            {{--    time: 0--}}
+            {{--    ,btn: ['确定', '取消']--}}
+            {{--    ,yes: function(index)--}}
+            {{--    {--}}
+            {{--        layer.close(index);--}}
+
+            {{--        //--}}
+            {{--        var $index = layer.load(1, {--}}
+            {{--            shade: [0.3, '#fff'],--}}
+            {{--            content: '<span class="loadtip">正在提交</span>',--}}
+            {{--            success: function (layer) {--}}
+            {{--                layer.find('.layui-layer-content').css({--}}
+            {{--                    'padding-top': '40px',--}}
+            {{--                    'width': '100px',--}}
+            {{--                });--}}
+            {{--                layer.find('.loadtip').css({--}}
+            {{--                    'font-size':'20px',--}}
+            {{--                    'margin-left':'-18px'--}}
+            {{--                });--}}
+            {{--            }--}}
+            {{--        });--}}
+
+            {{--        //--}}
+            {{--        $.post(--}}
+            {{--            "{{ url('/o1/order/item--api-cpa-pushing') }}",--}}
+            {{--            {--}}
+            {{--                _token: $('meta[name="_token"]').attr('content'),--}}
+            {{--                operate: "order--item--api-cpa-pushing",--}}
+            {{--                item_category: $item_category,--}}
+            {{--                item_id: $that.attr('data-id')--}}
+            {{--            },--}}
+            {{--            'json'--}}
+            {{--        )--}}
+            {{--            .done(function($response, status, jqXHR) {--}}
+            {{--                console.log('#'+$that.attr('id')+'.post.done.');--}}
+
+            {{--                $response = JSON.parse($response);--}}
+            {{--                if(!$response.success)--}}
+            {{--                {--}}
+            {{--                    if($response.msg) layer.msg($response.msg);--}}
+            {{--                }--}}
+            {{--                else--}}
+            {{--                {--}}
+            {{--                    $row.find('[data-key="api_is_pushed_for_cpa"]').html('<small class="btn-xs btn-primary">是</small>');--}}
+            {{--                    // $('#'+$table_id).DataTable().ajax.reload(null,false);--}}
+            {{--                }--}}
+            {{--            })--}}
+            {{--            .fail(function(jqXHR, status, error) {--}}
+            {{--                console.log('#'+$that.attr('id')+'.post.fail.');--}}
+            {{--                layer.msg('服务器错误！');--}}
+
+            {{--            })--}}
+            {{--            .always(function(jqXHR, status) {--}}
+            {{--                console.log('#'+$that.attr('id')+'.post.always.');--}}
+            {{--                layer.closeAll('loading');--}}
+            {{--            });--}}
+            {{--    }--}}
+            {{--});--}}
+
+            // 创建包含下拉选项的弹框
+            layer.open({
+                type: 1,
+                title: '选择推送渠道',
+                area: ['300px', '200px'],
+                content: `
+        <div style="padding: 20px;">
+            <div class="layui-form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">推送渠道</label>
+                    <div class="layui-input-block">
+                        <select class="form-control" id="cpa-pushing-channel">
+                            <option value="1" selected>神书CPA</option>
+                            <option value="2">数智CPA</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `,
+                btn: ['确定', '取消'],
+                yes: function(index, layero) {
+                    // 获取选中的值
+                    var $channel = $('#cpa-pushing-channel').val();
+                    var selectedText = $('#cpa-pushing-channel option:selected').text();
+
                     layer.close(index);
 
-                    //
-                    var $index = layer.load(1, {
+                    // 显示加载层
+                    var loadIndex = layer.load(1, {
                         shade: [0.3, '#fff'],
                         content: '<span class="loadtip">正在提交</span>',
-                        success: function (layer) {
+                        success: function(layer) {
                             layer.find('.layui-layer-content').css({
                                 'padding-top': '40px',
                                 'width': '100px',
                             });
                             layer.find('.loadtip').css({
-                                'font-size':'20px',
-                                'margin-left':'-18px'
+                                'font-size': '20px',
+                                'margin-left': '-18px'
                             });
                         }
                     });
 
-                    //
+                    // 发送请求
                     $.post(
                         "{{ url('/o1/order/item--api-cpa-pushing') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: "order--item--api-cpa-pushing",
                             item_category: $item_category,
-                            item_id: $that.attr('data-id')
+                            item_id: $that.attr('data-id'),
+                            channel: $channel,  // 添加选中的推送类型
+                            push_type_text: selectedText  // 可选：传递文本
                         },
                         'json'
                     )
@@ -1167,8 +1250,20 @@
                             }
                             else
                             {
-                                $row.find('[data-key="api_is_pushed_for_cpa"]').html('<small class="btn-xs btn-primary">是</small>');
-                                // $('#'+$table_id).DataTable().ajax.reload(null,false);
+                                console.log($channel);
+                                if($channel == 1)
+                                {
+                                    $row.find('[data-key="api_is_pushed_for_cpa"]').html('<small class="btn-xs btn-primary">神书</small>');
+                                }
+                                else if($channel == 2)
+                                {
+                                    $row.find('[data-key="api_is_pushed_for_cpa"]').html('<small class="btn-xs btn-primary">数智</small>');
+                                }
+                                else
+                                {
+                                    $row.find('[data-key="api_is_pushed_for_cpa"]').html('<small class="btn-xs btn-primary">是</small>');
+                                }
+                                layer.msg('推送成功！');
                             }
                         })
                         .fail(function(jqXHR, status, error) {
@@ -1182,6 +1277,8 @@
                         });
                 }
             });
+
+
         });
 
 

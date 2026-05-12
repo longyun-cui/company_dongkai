@@ -1260,7 +1260,7 @@
                     }
                 },
                 {
-                    "title": "神书CPA",
+                    "title": "CPA",
                     "name": "api_is_pushed_for_cpa",
                     "data": "api_is_pushed_for_cpa",
                     "className": "",
@@ -1269,13 +1269,14 @@
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         {
                             $(nTd).attr('data-id',row.id);
-                            $(nTd).attr('data-name','神书CPA');
+                            $(nTd).attr('data-name','CPA');
                             $(nTd).attr('data-key','api_is_pushed_for_cpa');
                             $(nTd).attr('data-value',data);
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(data == 1) return '<small class="btn-xs btn-primary">是</small>';
+                        if(data == 1) return '<small class="btn-xs btn-primary">神书</small>';
+                        else if(data == 2) return '<small class="btn-xs btn-primary">数智</small>';
                         else return '--';
                     }
                 },

@@ -2451,6 +2451,9 @@ class DK_Staff__OrderRepository {
 
         $operate = $post_data["operate"];
         if($operate != 'order--item--api-cpa-pushing') return response_error([],"参数[operate]有误！");
+        $channel = $post_data["channel"];
+        if(!in_array($channel,[1,2])) return response_error([],"渠道有误！");
+
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
@@ -2462,13 +2465,24 @@ class DK_Staff__OrderRepository {
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,9,11,71])) return response_error([],"你没有操作权限！");
 
-        if($item->api_is_pushed_for_cpa == 0)
+
+        if($item->api_is_pushed_for_cpa != 9)
         {
+            if($channel == 1)
+            {
+                $push_data["sourceCode"] = '2051126624782389248';
+                $push_data["sourceName"] = '神书CPA';
+            }
+            else if($channel == 2)
+            {
+                $push_data["sourceCode"] = '1987785835776315392';
+                $push_data["sourceName"] = '数智CPA';
+            }
+
+
 //            $push_data["oldID"] = '';
             $push_data["customerName"] = $item->client_name;
             $push_data["customerPhone"] = $item->client_phone;
-            $push_data["sourceCode"] = '2051126624782389248';
-            $push_data["sourceName"] = '神书CPA';
             $push_data["clueDate"] = $datetime;
             $push_data["formContent"] = $item->description;
 //            $push_data["remark"] = '';
@@ -2499,7 +2513,7 @@ class DK_Staff__OrderRepository {
                 $result = json_decode($result);
                 if($result->code == 0)
                 {
-                    $item->api_is_pushed_for_cpa = 1;
+                    $item->api_is_pushed_for_cpa = $channel;
                     $item->save();
                     return response_success([],"推送成功！");
                 }
