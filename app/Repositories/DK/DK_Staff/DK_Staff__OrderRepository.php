@@ -2466,7 +2466,7 @@ class DK_Staff__OrderRepository {
         if(!in_array($me->user_type,[0,1,9,11,71])) return response_error([],"你没有操作权限！");
 
 
-        if($item->api_is_pushed_for_cpa != 9)
+        if($item->api_is_pushed_for_cpa == 0)
         {
             if($channel == 1)
             {
