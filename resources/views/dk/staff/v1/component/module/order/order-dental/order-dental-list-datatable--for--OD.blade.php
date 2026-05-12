@@ -1441,9 +1441,9 @@
                             $html_appeal_handle+
                             $html_deliver_fool+
                             $html_deliver+
+                            $html_api_cpa_pushing+
                             $html_distribute+
                             $html_detail+
-                            $html_api_cpa_pushing+
                             $html_record+
                             // $more_html+
                             '';

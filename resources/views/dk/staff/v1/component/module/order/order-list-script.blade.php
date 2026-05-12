@@ -1123,12 +1123,12 @@
             var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
 
 
-            // layer.msg('确定"发布"么?', {
-            //     time: 0
-            //     ,btn: ['确定', '取消']
-            //     ,yes: function(index)
-            //     {
-            //         layer.close(index);
+            layer.msg('确定"推送"么?', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index)
+                {
+                    layer.close(index);
 
                     //
                     var $index = layer.load(1, {
@@ -1180,8 +1180,8 @@
                             console.log('#'+$that.attr('id')+'.post.always.');
                             layer.closeAll('loading');
                         });
-            //     }
-            // });
+                }
+            });
         });
 
 
