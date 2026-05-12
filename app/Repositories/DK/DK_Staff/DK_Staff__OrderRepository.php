@@ -2464,14 +2464,14 @@ class DK_Staff__OrderRepository {
 
         if($item->api_is_pushed_for_cpa == 0)
         {
-            $push_data["oldID"] = "";
+//            $push_data["oldID"] = '';
             $push_data["customerName"] = $item->client_name;
             $push_data["customerPhone"] = $item->client_phone;
             $push_data["sourceCode"] = '2051126624782389248';
             $push_data["sourceName"] = '神书CPA';
             $push_data["clueDate"] = $datetime;
             $push_data["formContent"] = $item->description;
-            $push_data["remark"] = '';
+//            $push_data["remark"] = '';
             $push_data["cityName"] = $item->location_city;
             $push_data["areaName"] = $item->location_district;
 //            dd($push_data);
