@@ -307,7 +307,6 @@ class DK_AI_Inspect_Job implements ShouldQueue
                             $content_fix_2 = robustJsonFixer($content_fix);
                             $content_decode = json_decode($content_fix_2);
                         }
-                        else $content_decode = null;
                     }
 
 
