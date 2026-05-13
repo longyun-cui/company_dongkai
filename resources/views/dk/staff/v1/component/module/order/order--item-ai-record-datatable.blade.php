@@ -146,17 +146,22 @@
                         "data": "content",
                         "orderable": false,
                         render: function(data, type, row, meta) {
+                            var $error_html = '';
                             if(row.item_status == 99)
                             {
-                                return row.description;
+                                $error_html =  row.description + "<br><br>";
                             }
-                            if(!data) return '--';
+                            if(!data)
+                            {
+                                if(!$error_html) return '--';
+                                else return $error_html;
+                            }
 
                             var $return_html = '';
                             $.each(data, function($index, $value) {
                                 $return_html += '【'+ $index +'】' + $value + ' <br>';
                             });
-                            return $return_html;
+                            return $error_html + $return_html;
                         }
                     },
                     {
