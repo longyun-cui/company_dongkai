@@ -293,6 +293,10 @@
                 {
                     Datatable__for__Statistic_Caller_Overview('#'+$config.id);
                 }
+                else if($id == "datatable-statistic-caller-appealed")
+                {
+                    Datatable__for__Statistic_Caller_Appealed('#'+$config.id);
+                }
                 else if($id == "datatable-statistic-caller-rank")
                 {
                     Datatable__for__Statistic_Caller_Rank('#'+$config.id);

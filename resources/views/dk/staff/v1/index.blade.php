@@ -132,6 +132,7 @@
 
     {{--员工--}}
     @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.staff.statistic-caller-overview')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.staff.statistic-caller-appealed')
     @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.staff.statistic-caller-rank')
     @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.staff.statistic-caller-recent')
     @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.staff.statistic-caller-daily')
@@ -381,6 +382,7 @@
 
     {{--员工--}}
     @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.staff.statistic-caller-overview-datatable')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.staff.statistic-caller-appealed-datatable')
     @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.staff.statistic-caller-rank-datatable')
     @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.staff.statistic-caller-recent-datatable')
     @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.staff.statistic-caller-daily-datatable')

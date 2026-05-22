@@ -3935,6 +3935,216 @@ class DK_Staff__StatisticRepository {
 
         return datatable_response($list, $draw, $total);
     }
+    // 【生产-统计】坐席申诉
+    public function o1__statistic__production__caller_appealed($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        // 工单统计
+        $query_order = DK_Common__Order::withTrashed()->select('creator_id')
+            ->addSelect(DB::raw("
+                    count(IF(is_published = 1, TRUE, NULL)) as order_count__for__all,
+                    count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count__for__inspected,
+                    count(IF(inspected_result in ('拒绝','不合格','超区','超龄'), TRUE, NULL)) as order_count__for__rejected,
+                    count(IF(appealed_status > 0, TRUE, NULL)) as order_count__for__appealed,
+                    count(IF(appealed_status = 7, TRUE, NULL)) as order_count__for__appealed_rejected,
+                    count(IF(appealed_status = 11, TRUE, NULL)) as order_count__for__success,
+                    count(IF(appealed_status = 19, TRUE, NULL)) as order_count__for__failed
+                "))
+            ->where('created_type',1)
+            ->groupBy('creator_id');
+
+        // 项目
+        $project_id = 0;
+        if(isset($post_data['project']))
+        {
+            if(!in_array($post_data['project'],[-1,0,'-1','0']))
+            {
+                $project_id = $post_data['project'];
+                $query_order->where('project_id', $project_id);
+            }
+        }
+
+        // 团队
+        if(!empty($post_data['team']))
+        {
+            $team_id_int = (int)$post_data['team'];
+            if(!in_array($team_id_int,[-1,0]))
+            {
+                $query_order->where('team_id', $team_id_int);
+            }
+        }
+        // 团队-小组
+        if(!empty($post_data['group']))
+        {
+            $group_id_int = (int)$post_data['group'];
+            if(!in_array($group_id_int,[-1,0]))
+            {
+                $query_order->where('team_group_id', $group_id_int);
+            }
+        }
+
+
+        // 时间
+        $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';
+        if($time_type == 'date')
+        {
+            $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+            $query_order->where('published_date',$the_date);
+        }
+        else if($time_type == 'month')
+        {
+            $the_month  = isset($post_data['time_month']) ? $post_data['time_month']  : date('Y-m');
+            $the_month_timestamp = strtotime($the_month);
+
+            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+            $query_order->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date]);
+        }
+        else if($time_type == 'period')
+        {
+            if(!empty($post_data['date_start'])) $query_order->where('published_date', '>=', $post_data['date_start']);
+            if(!empty($post_data['date_ended'])) $query_order->where('published_date', '<=', $post_data['date_ended']);
+        }
+        else
+        {
+        }
+
+        $query_order = $query_order->get()->keyBy('creator_id')->toArray();
+
+
+        // 员工查询
+        $query = DK_Common__Staff::withTrashed()->select(['id','name','team_id','team_group_id'])
+            ->with([
+                'team_er' => function($query) { $query->select(['id','name']); },
+                'team_group_er' => function($query) { $query->select(['id','name']); }
+            ])
+            ->where('active',1)
+            ->where('team_id','>',0)
+//            ->where('team_group_id','>',0)
+            ->where('staff_category',41)
+            ->whereIn('staff_position',[41,61,99]);
+
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+
+
+        // 团队
+        if(!empty($post_data['team']))
+        {
+            $team_id_int = (int)$post_data['team'];
+            if(!in_array($team_id_int,[-1,0]))
+            {
+                $query->where('team_id', $team_id_int);
+            }
+        }
+        // 团队-小组
+        if(!empty($post_data['group']))
+        {
+            $group_id_int = (int)$post_data['group'];
+            if(!in_array($group_id_int,[-1,0]))
+            {
+                $query->where('team_group_id', $group_id_int);
+            }
+        }
+
+
+        // 客服部
+        if($me->staff_category == 41)
+        {
+            // 部门总监
+            if($me->staff_position == 31)
+            {
+                // 根据部门查看
+                $query->where('department_id', $me->department_id);
+            }
+            // 团队经理
+            else if($me->staff_position == 41)
+            {
+                // 根据团队查看
+                $query->where('team_id', $me->team_id);
+            }
+            // 小组主管
+            else if($me->staff_position == 61)
+            {
+                // 根据小区查看
+                $query->where('team_id', $me->team_id);
+                $query->where('team_group_id', $me->team_group_id);
+            }
+            // 职员
+            else if($me->staff_position == 99)
+            {
+                // 根据部门查看
+                $query->where('id', $me->id);
+            }
+        }
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : -1;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("team_id", "asc")->orderBy("team_group_id", "asc")->orderBy("id", "asc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+
+        foreach ($list as $k => $v)
+        {
+            if(isset($query_order[$v->id]))
+            {
+                $list[$k]->order_count__for__all = $query_order[$v->id]['order_count__for__all'];
+                $list[$k]->order_count__for__inspected = $query_order[$v->id]['order_count__for__inspected'];
+                $list[$k]->order_count__for__rejected = $query_order[$v->id]['order_count__for__rejected'];
+                $list[$k]->order_count__for__appealed = $query_order[$v->id]['order_count__for__appealed'];
+                $list[$k]->order_count__for__appealed_rejected = $query_order[$v->id]['order_count__for__appealed_rejected'];
+                $list[$k]->order_count__for__success = $query_order[$v->id]['order_count__for__success'];
+                $list[$k]->order_count__for__failed = $query_order[$v->id]['order_count__for__failed'];
+            }
+            else
+            {
+                $list[$k]->order_count__for__all = 0;
+                $list[$k]->order_count__for__inspected = 0;
+                $list[$k]->order_count__for__rejected = 0;
+                $list[$k]->order_count__for__appealed = 0;
+                $list[$k]->order_count__for__appealed_rejected = 0;
+                $list[$k]->order_count__for__success = 0;
+                $list[$k]->order_count__for__failed = 0;
+            }
+
+            // 有效率
+//            if($v->order_count__for__all > 0)
+//            {
+//                $list[$k]->order_rate__for__effective = round(($v->order_count__for__effective * 100 / $v->order_count__for__all),2);
+//            }
+//            else $list[$k]->order_rate__for__effective = 0;
+        }
+//        dd($list->toArray());
+
+
+        $list = $list->reject(function ($item) {
+            return $item->order_count__for__all == 0;
+        })->values();
+
+        return datatable_response($list, $draw, $total);
+    }
     // 【生产-统计】坐席排名
     public function o1__statistic__production__caller_rank($post_data)
     {

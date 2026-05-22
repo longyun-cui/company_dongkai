@@ -283,6 +283,26 @@
                             <a href="javascript:void(0);" class="tab-control datatable-control"
                                data-type="create"
                                data-unique="y"
+                               data-id="statistic-caller-appealed"
+                               data-title='<i class="fa fa-bar-chart text-orange"></i> 坐席申诉'
+                               data-content=''
+
+                               data-datatable-type="create"
+                               data-datatable-unique="y"
+                               data-datatable-id="datatable-statistic-caller-appealed"
+                               data-datatable-target="statistic-caller-appealed"
+                               data-datatable-clone-object="statistic-caller-appealed-clone"
+                            >
+                                <i class="fa fa-bar-chart text-orange"></i> <span>坐席申诉</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        @endif
+                        @if(in_array($me->staff_category,[0,1,9,41]) && in_array($me->staff_position,[0,1,9,11,31,41,61]))
+                        <li>
+                            <a href="javascript:void(0);" class="tab-control datatable-control"
+                               data-type="create"
+                               data-unique="y"
                                data-id="statistic-caller-rank"
                                data-title='<i class="fa fa-line-chart text-orange"></i> 坐席排名'
                                data-content=''

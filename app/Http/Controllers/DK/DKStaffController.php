@@ -1401,6 +1401,11 @@ class DKStaffController extends Controller
     {
         return $this->statistic_repo->o1__statistic__production__caller_overview(request()->all());
     }
+    // 【统计】【员工】【坐席】申诉
+    public function o1__statistic__production__caller_appealed()
+    {
+        return $this->statistic_repo->o1__statistic__production__caller_appealed(request()->all());
+    }
     // 【统计】【员工】【坐席】排名
     public function o1__statistic__production__caller_rank()
     {
