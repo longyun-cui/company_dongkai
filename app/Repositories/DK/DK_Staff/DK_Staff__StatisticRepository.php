@@ -3988,7 +3988,10 @@ class DK_Staff__StatisticRepository {
 
         // 时间
         $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';
-        if($time_type == 'date')
+        if($time_type == 'all')
+        {
+        }
+        else if($time_type == 'date')
         {
             $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
             $query_order->where('published_date',$the_date);
@@ -4014,6 +4017,8 @@ class DK_Staff__StatisticRepository {
         }
         else
         {
+            $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+            $query_order->where('published_date',$the_date);
         }
 
         $query_order = $query_order->get()->keyBy('creator_id')->toArray();
