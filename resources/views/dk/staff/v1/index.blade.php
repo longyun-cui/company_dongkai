@@ -207,6 +207,7 @@
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-inspecting')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-inspecting-ai')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-appealing')
+    @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-appealed-confirming')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-appealed-handling')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-delivering')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-distributing')

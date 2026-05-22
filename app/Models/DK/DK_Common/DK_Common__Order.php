@@ -137,6 +137,8 @@ class DK_Common__Order extends Model
         'inspected_date',
         'inspected_at',
 
+        'rejected_reason',
+
         'appellant_id',
         'appealed_status',
         'appealed_result',

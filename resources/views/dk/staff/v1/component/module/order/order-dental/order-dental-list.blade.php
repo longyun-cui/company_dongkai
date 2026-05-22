@@ -193,7 +193,7 @@
 
 
             {{--申诉状态--}}
-            @if(in_array($me->staff_category,[0,1,9,61]))
+            @if(in_array($me->staff_category,[0,1,9,61,71]))
                 <select class="search-filter form-filter filter-md select2-box-c" name="order-appealed-status">
                     <option value="">申诉状态</option>
                     @foreach(config('dk.common-config.appealed_status') as $v)

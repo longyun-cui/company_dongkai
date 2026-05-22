@@ -219,6 +219,7 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
     Route::post('/o1/order/item-inspecting--by-ai', $controller.'@o1__order__item_inspecting__by_ai__save');
     Route::post('/o1/order/bulk-inspecting--by-ai', $controller.'@o1__order__bulk_inspecting__by_ai__save');
     Route::post('/o1/order/item-appealing-save', $controller.'@o1__order__item_appealing_save');
+    Route::post('/o1/order/item-appealed-confirming-save', $controller.'@o1__order__item_appealed_confirming_save');
     Route::post('/o1/order/item-appealed-handling-save', $controller.'@o1__order__item_appealed_handling_save');
     Route::post('/o1/order/item-delivering-save', $controller.'@o1__order__item_delivering_save');
     Route::post('/o1/order/bulk-delivering-save', $controller.'@o1__order__bulk_delivering_save');

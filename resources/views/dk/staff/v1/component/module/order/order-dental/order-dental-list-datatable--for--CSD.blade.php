@@ -169,11 +169,27 @@
                                 }
                                 else if(row.appealed_status == 1)
                                 {
-                                    return '<small class="btn-xs bg-red">申诉中</small>';
+                                    return '<small class="btn-xs bg-red">申诉·申请</small>';
+                                }
+                                else if(row.appealed_status == 2)
+                                {
+                                    return '<small class="btn-xs bg-orange">申诉中</small>';
+                                }
+                                else if(row.appealed_status == 7)
+                                {
+                                    return '<small class="btn-xs bg-red">申诉·驳回</small>';
                                 }
                                 else if(row.appealed_status == 9)
                                 {
-                                    return '<small class="btn-xs bg-green">申诉·结束</small>';
+                                    return '<small class="btn-xs bg-aqua">申诉·结束</small>';
+                                }
+                                else if(row.appealed_status == 11)
+                                {
+                                    return '<small class="btn-xs bg-green">申诉·成功</small>';
+                                }
+                                else if(row.appealed_status == 19)
+                                {
+                                    return '<small class="btn-xs bg-red">申诉·失败</small>';
                                 }
                                 else
                                 {
@@ -281,7 +297,7 @@
                     "name": 'published_at',
                     "data": 'published_at',
                     "className": "",
-                    "width": "120px",
+                    "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     render: function(data, type, row, meta) {
@@ -309,7 +325,7 @@
                     "name": "project_id",
                     "data": "project_id",
                     "className": "",
-                    "width": "160px",
+                    "width": "120px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
@@ -370,7 +386,7 @@
                     "name": "client_name",
                     "data": "client_name",
                     "className": "",
-                    "width": "80px",
+                    "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
@@ -770,7 +786,7 @@
                     "name": "creator_team_id",
                     "data": "creator_team_id",
                     "className": "",
-                    "width": "120px",
+                    "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         if(!data) return '--';
@@ -821,6 +837,7 @@
                         var $html_delete = '';
                         var $html_publish = '';
                         var $html_appeal = '';
+                        var $html_appeal_confirm = '';
                         var $html_record = '';
 
                         // 记录
@@ -865,6 +882,15 @@
                             {
                                 $html_appeal = '<a class="btn btn-xs modal-show--for--order--item-appealing" data-id="'+data+'">申诉</a>';
                             }
+
+                            if(window.staffRole == 'manager')
+                            {
+                                // 申诉确认
+                                if(row.appealed_status == 1)
+                                {
+                                    $html_appeal_confirm = '<a class="btn btn-xs modal-show--for--order--item-appealed-confirming" data-id="'+data+'">申诉确认</a>';
+                                }
+                            }
                         }
 
 
@@ -874,6 +900,7 @@
                             $html_delete+
                             $html_publish+
                             $html_appeal+
+                            $html_appeal_confirm+
                             $html_detail+
                             $html_record+
                             '';

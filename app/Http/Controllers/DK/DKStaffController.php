@@ -952,6 +952,11 @@ class DKStaffController extends Controller
     {
         return $this->order_repo->o1__order__item_appealing_save(request()->all());
     }
+    // 【工单】申诉确认
+    public function o1__order__item_appealed_confirming_save()
+    {
+        return $this->order_repo->o1__order__item_appealed_confirming_save(request()->all());
+    }
     // 【工单】申诉处理
     public function o1__order__item_appealed_handling_save()
     {

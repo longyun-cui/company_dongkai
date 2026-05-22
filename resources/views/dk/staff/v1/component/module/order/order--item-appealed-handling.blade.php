@@ -277,6 +277,25 @@
                             <textarea class="form-control" name="order--item-appealed-handling--description" rows="3" cols="100%"></textarea>
                         </div>
                     </div>
+                    {{--拒绝原因--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 拒绝原因</label>
+                        <div class="col-md-9 ">
+                            <div class="btn-group">
+
+                                @foreach(config('dk.common-config.rejected_reason') as $k => $v)
+                                <button type="button" class="btn">
+                                    <span class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="order--item-appealed-handling--rejected-reason[]" value="{{ $k }}"> {{ $v }}
+                                        </label>
+                                    </span>
+                                </button>
+                                @endforeach
+
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
             </form>

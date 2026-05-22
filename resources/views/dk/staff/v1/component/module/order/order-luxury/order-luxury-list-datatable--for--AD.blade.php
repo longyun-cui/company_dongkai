@@ -164,92 +164,50 @@
                 },
                 {
                     "title": "工单状态",
-                    "name": "order_status",
-                    "data": "id",
+                    "name": "appealed_status",
+                    "data": "appealed_status",
                     "className": "",
                     "width": "72px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(row.is_completed != 1)
                         {
                             $(nTd).addClass('order_status');
-                            $(nTd).attr('data-id',row.id).attr('data-name','工单状态');
-                            $(nTd).attr('data-key','order_status').attr('data-value',row.id);
-                            if(data) $(nTd).attr('data-operate-type','edit');
-                            else $(nTd).attr('data-operate-type','add');
+                            $(nTd).attr('data-id',row.id);
+                            $(nTd).attr('data-name','工单状态');
+                            $(nTd).attr('data-key','appealed_status');
+                            $(nTd).attr('data-value',row.id);
                         }
                     },
                     render: function(data, type, row, meta) {
-//                            return data;
-
-                        if(row.deleted_at != null)
+                        if(data == 1)
                         {
-                            return '<small class="btn-xs bg-black">已删除</small>';
+                            return '<small class="btn-xs bg-blue">申诉·申请</small>';
                         }
-
-                        if(row.item_status == 97)
+                        else if(data == 2)
                         {
-                            return '<small class="btn-xs bg-navy">已弃用</small>';
+                            return '<small class="btn-xs bg-orange">申诉中</small>';
                         }
-
-                        if(row.is_published == 0)
+                        else if(data == 7)
                         {
-                            return '<small class="btn-xs bg-teal">未发布</small>';
+                            return '<small class="btn-xs bg-orange">申诉·驳回</small>';
                         }
-                        else
+                        else if(data == 9)
                         {
-                            if(row.is_completed == 1)
-                            {
-                                return '<small class="btn-xs bg-olive">已结束</small>';
-                            }
+                            return '<small class="btn-xs bg-blue">申诉·结束</small>';
                         }
-
-
-                        // if(row.client_id > 0)
-                        // {
-                        //     return '<small class="btn-xs bg-olive">已交付</small>';
-                        // }
-
-                        if(row.inspected_at)
+                        else if(data == 11)
                         {
-
-                            if(row.inspected_status == 1)
-                            {
-                                if(row.appealed_status == 0)
-                                {
-                                    return '<small class="btn-xs bg-blue">已审核</small>';
-                                }
-                                else if(row.appealed_status == 1)
-                                {
-                                    return '<small class="btn-xs bg-red">申诉中</small>';
-                                }
-                                else if(row.appealed_status == 9)
-                                {
-                                    return '<small class="btn-xs bg-green">申诉·结束</small>';
-                                }
-                                else
-                                {
-                                    return '<small class="btn-xs bg-blue">已审核</small>';
-                                }
-                            }
-                            else if(row.inspected_status == 9)
-                            {
-                                return '<small class="btn-xs bg-aqua">等待再审</small>';
-                            }
-                            else return '--';
+                            return '<small class="btn-xs bg-green">申诉·成功</small>';
+                        }
+                        else if(data == 19)
+                        {
+                            return '<small class="btn-xs bg-red">申诉·失败</small>';
                         }
                         else
                         {
-                            if(row.created_type == 9)
-                            {
-                                return '<small class="btn-xs bg-blue">导入</small>';
-                            }
-                            else
-                            {
-                                return '<small class="btn-xs bg-aqua">待审核</small>';
-                            }
+                            return '<small class="btn-xs bg-black">有误</small>';
                         }
-
                     }
                 },
                 {
@@ -339,7 +297,7 @@
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return row.creator == null ? '未知' : '<a class="caller-control" data-id="'+data+'" data-title="'+row.creator.name+'">'+row.creator.name+'</a>';
+                        return row.creator == null ? '未知' : row.creator.name;
                     }
                 },
                 {
@@ -350,21 +308,6 @@
                     "width": "120px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if("{{ in_array($me->user_type,[0,1,11,19]) }}")
-                        {
-                            $(nTd).attr('data-row-index',iRow);
-
-                            $(nTd).addClass('modal-show-for-phone-pool-info');
-                            $(nTd).attr('data-id',row.id).attr('data-name','电话池');
-                            $(nTd).attr('data-key','pool').attr('data-value',row.id);
-                            $(nTd).attr('data-phone',row.client_phone);
-                            $(nTd).attr('data-city',row.location_city);
-
-                            $(nTd).attr('data-column-type','info');
-                            $(nTd).attr('data-column-name','电话池');
-                        }
-                    },
                     render: function(data, type, row, meta) {
 //                            return data;
                         if(!data) return '';

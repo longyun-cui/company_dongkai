@@ -435,19 +435,31 @@ class DK_Staff__OrderRepository {
         if(!empty($post_data['appealed_status']))
         {
             $appealed_status = $post_data['appealed_status'];
-            if(in_array($appealed_status,config('info.appealed_status')))
+            if(in_array($appealed_status,config('dk.common-config.appealed_status')))
             {
                 if($appealed_status == '已申诉')
                 {
-                    $query->whereIn('dk_common__order.appealed_status', [1,9]);
+                    $query->where('dk_common__order.appealed_status', '>', 0);
                 }
                 else if($appealed_status == '申诉中')
                 {
-                    $query->where('dk_common__order.appealed_status', 1);
+                    $query->where('dk_common__order.appealed_status', 2);
+                }
+                else if($appealed_status == '申诉驳回')
+                {
+                    $query->where('dk_common__order.appealed_status', 7);
                 }
                 else if($appealed_status == '申诉结束')
                 {
-                    $query->where('dk_common__order.appealed_status', 9);
+                    $query->whereIn('dk_common__order.appealed_status', [9,11,19]);
+                }
+                else if($appealed_status == '申诉成功')
+                {
+                    $query->where('dk_common__order.appealed_status', 11);
+                }
+                else if($appealed_status == '申诉失败')
+                {
+                    $query->where('dk_common__order.appealed_status', 19);
                 }
             }
         }
@@ -568,7 +580,7 @@ class DK_Staff__OrderRepository {
         if($me->staff_category == 61)
         {
             $query->where('dk_common__order.created_type','=',1);
-            $query->where('dk_common__order.appealed_status','>',0);
+            $query->whereIn('dk_common__order.appealed_status',[2,9,11,19]);
 
 //            if($me->staff_position == 31)
 //            {
@@ -2526,6 +2538,92 @@ class DK_Staff__OrderRepository {
 
 
     }
+    // 【工单】推送
+    public function o1__order__item__api_ty_pushing($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $time = time();
+        $date = date("Y-m-d");
+        $datetime = date('Y-m-d H:i:s');
+
+        $operate = $post_data["operate"];
+        if($operate != 'order--item--api-ty-pushing') return response_error([],"参数[operate]有误！");
+        $channel = $post_data["channel"];
+        if(!in_array($channel,[1,2])) return response_error([],"渠道有误！");
+
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Common__Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
+
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,71])) return response_error([],"你没有操作权限！");
+
+
+        if($item->api_is_pushed_for_ty == 0)
+        {
+//            $push_data["oldID"] = '';
+            $push_data["customerName"] = $item->client_name;
+            $push_data["customerPhone"] = $item->client_phone;
+            $push_data["clueDate"] = $datetime;
+            $push_data["formContent"] = $item->description;
+//            $push_data["remark"] = '';
+            $push_data["cityName"] = $item->location_city;
+            $push_data["areaName"] = $item->location_district;
+//            dd($push_data);
+
+            $push_data = json_encode($push_data);
+
+            $url = "https://clue.gxtykq.com/clueMIANYANGAPI/api/receiveClues";
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Accept: application/json"));
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true); // post数据
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $push_data); // post的变量
+            $result = curl_exec($ch);
+            if(curl_errno($ch))
+            {
+                curl_close($ch);
+                return response_error([],curl_error($ch));
+            }
+            else
+            {
+                curl_close($ch);
+                $result = json_decode($result);
+                if($result->code == 0)
+                {
+                    $item->api_is_pushed_for_cpa = $channel;
+                    $item->save();
+                    return response_success([],"推送成功！");
+                }
+                else return response_error([],$result->message);
+            }
+
+        }
+        else return response_error([],'已经推送过了！');
+
+
+
+    }
 
     // 【工单】修改
     public function o1__order__item_detail_editing_save($post_data)
@@ -2952,6 +3050,7 @@ class DK_Staff__OrderRepository {
         $date = date("Y-m-d");
         $datetime = date('Y-m-d H:i:s');
 
+        $rejected_reason_text = '';
 
 
         $record_data["ip"] = Get_IP();
@@ -2998,13 +3097,52 @@ class DK_Staff__OrderRepository {
             $record_row['code'] = $inspected_result;
 
             $before__inspected_result = !empty($item->inspected_result) ? $item->inspected_result : '';
-            if($before__inspected_result == '不合格') $record_row['before'] = '拒绝.';
+            if(in_array($before__inspected_result,['不合格','超区','超龄'])) $record_row['before'] = '拒绝.';
             else $record_row['before'] = $before__inspected_result;
 
-            if($inspected_result == '不合格') $record_row['after'] = '拒绝.';
+            if(in_array($inspected_result,['不合格','超区','超龄'])) $record_row['after'] = '拒绝.';
             else $record_row['after'] = $inspected_result;
 
             $record_content[] = $record_row;
+
+
+            if(in_array($inspected_result,['拒绝','不合格','超区','超龄']))
+            {
+                if(isset($post_data["order--item-inspecting--rejected-reason"]))
+                {
+                    $rejected_reason = $post_data["order--item-inspecting--rejected-reason"];
+
+                    $record_row = [];
+                    $record_row['title'] = '拒绝原因';
+                    $record_row['field'] = 'handled_rejected_reason';
+//                $record_row['code'] = $appealed_handled_result;
+
+                    $record_row['before'] = '';
+                    $reasons = '';
+                    $char = '-';
+                    foreach($rejected_reason as $v)
+                    {
+                        $rejected_reason_text .= $v.'-';
+                        $reasons .= config('dk.common-config.rejected_reason.'.$v).'-';
+                    }
+                    $position_2 = strrpos($rejected_reason_text, $char);
+                    if ($position_2 !== false)
+                    {
+                        // 替换最后一个特定字符为空字符串
+                        $rejected_reason_text = substr_replace($rejected_reason_text, '', $position_2, strlen($char));
+                    }
+                    $position = strrpos($reasons, $char);
+                    if ($position !== false)
+                    {
+                        // 替换最后一个特定字符为空字符串
+                        $reasons = substr_replace($reasons, '', $position, strlen($char));
+                    }
+                    $record_row['after'] = $reasons;
+
+                    $record_content[] = $record_row;
+                }
+            }
+
         }
         if($inspected_description)
         {
@@ -3213,6 +3351,11 @@ class DK_Staff__OrderRepository {
                 $item->inspected_result = '通过';
                 $item->inspected_result_2 = '三档';
             }
+            else if($inspected_result == '拒绝')
+            {
+                $item->inspected_result = '拒绝';
+                $item->inspected_result_2 = '拒绝';
+            }
             else if($inspected_result == '不合格')
             {
                 $item->inspected_result = '拒绝';
@@ -3241,6 +3384,9 @@ class DK_Staff__OrderRepository {
 //            {
 //                $item->inspected_description = $inspected_description;
 //            }
+
+            if($rejected_reason_text) $item->rejected_reason = $rejected_reason_text;
+
             $item->recording_quality = $recording_quality;
             $item->inspected_at = $time;
             $item->inspected_date = $date;
@@ -3270,7 +3416,7 @@ class DK_Staff__OrderRepository {
         }
     }
 
-    // 【工单】申诉
+    // 【工单】申诉·申请
     public function o1__order__item_appealing_save($post_data)
     {
 //        dd($post_data);
@@ -3414,6 +3560,172 @@ class DK_Staff__OrderRepository {
         }
     }
 
+    // 【工单】申诉·确认
+    public function o1__order__item_appealed_confirming_save($post_data)
+    {
+//        dd($post_data);
+//        return response_success([]);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order--item-appealed-confirming') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Common__Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->staff_category,[0,1,41]))
+        {
+            return response_error([],"你没有操作权限！");
+        }
+        if(!in_array($me->staff_position,[0,1,31,41]))
+        {
+            return response_error([],"你没有操作权限！");
+        }
+
+        if($me->staff_category == 41 && $me->staff_position != 31 && $item->published_at < strtotime("yesterday"))
+        {
+            return response_error([],"超过申诉时效，请联系部门总监！");
+        }
+
+        $confirming_url = $post_data["order--item-appealed-confirming--url"];
+        $confirming_result = $post_data["order--item-appealed-confirming--result"];
+        $confirming_description = $post_data["order--item-appealed-confirming--description"];
+
+
+        if(!in_array($confirming_result,[1,2]))
+        {
+            return response_error([],"申诉确认结果有误！");
+        }
+
+        $time = time();
+        $date = date("Y-m-d");
+        $datetime = date('Y-m-d H:i:s');
+
+
+
+        $record_data["ip"] = Get_IP();
+        $record_data["record_object"] = 1;
+        $record_data["record_category"] = 1;
+        $record_data["record_type"] = 1;
+        $record_data["creator_id"] = $me->id;
+        $record_data["creator_company_id"] = $me->company_id;
+        $record_data["creator_department_id"] = $me->department_id;
+        $record_data["creator_team_id"] = $me->team_id;
+        $record_data["order_id"] = $id;
+        $record_data["operate_object"] = 1;
+        $record_data["operate_category"] = 41;
+        $record_data["operate_type"] = 61;
+        $record_data["description"] = $confirming_description;
+
+
+        $record_content = [];
+
+
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '员工操作';
+            $record_row['field'] = 'item_operation';
+            $record_row['before'] = '';
+            $record_row['after'] = '申诉确认';
+            $record_content[] = $record_row;
+        }
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '确认时间';
+            $record_row['field'] = 'confirming_time';
+            $record_row['before'] = '';
+            $record_row['after'] = $datetime;
+            $record_content[] = $record_row;
+        }
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '确认结果';
+            $record_row['field'] = 'confirming_time';
+            $record_row['before'] = '';
+            if($confirming_result == 1) $record_row['after'] = '申诉·确认';
+            else if($confirming_result == 2) $record_row['after'] = '申诉·驳回';
+            else $record_row['after'] = '';
+            $record_content[] = $record_row;
+        }
+//        if($confirming_url)
+//        {
+//            $record_row = [];
+//            $record_row['title'] = '录音url';
+//            $record_row['field'] = 'handled_url';
+//            $record_row['code'] = $appealed_url;
+//
+//            $record_row['before'] = '';
+//            $record_row['after'] = $appealed_url;
+//
+//            $record_content[] = $record_row;
+//        }
+        if($confirming_description)
+        {
+            $record_row = [];
+            $record_row['title'] = '确认说明';
+            $record_row['field'] = 'confirming_description';
+            $record_row['before'] = '';
+            $record_row['after'] = $confirming_description;
+            $record_content[] = $record_row;
+        }
+        $record_data["content"] = json_encode($record_content);
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->appellant_id = $me->id;
+            if($confirming_result == 1) $item->appealed_status = 2;
+            else if($confirming_result == 2) $item->appealed_status = 7;
+
+//            if($appealed_url) $item->appealed_url = $appealed_url;
+//            if($appealed_description) $item->appealed_description = $appealed_description;
+//            $item->appealed_at = time();
+            $item->appealed_date = $date;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("DK_Common__Order--update--fail");
+            else
+            {
+                $record = new DK_Common__Order__Operation_Record;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("DK_Common__Order__Operation_Record--insert--fail");
+            }
+
+            DB::commit();
+
+            return response_success([],"申诉完成!");
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+    }
+
     // 【工单】申诉·处理
     public function o1__order__item_appealed_handling_save($post_data)
     {
@@ -3486,6 +3798,8 @@ class DK_Staff__OrderRepository {
         $date = date("Y-m-d");
         $datetime = date('Y-m-d H:i:s');
 
+        $rejected_reason_text = '';
+
 
         $record_data["ip"] = Get_IP();
         $record_data["record_object"] = 1;
@@ -3531,11 +3845,52 @@ class DK_Staff__OrderRepository {
             $record_row['code'] = $appealed_handled_result;
 
             $record_row['before'] = '';
-            if($appealed_handled_result == 1) $record_row['after'] = '申诉·成功';
-            else if($appealed_handled_result == 9) $record_row['after'] = '申诉·失败';
+//            if($appealed_handled_result == 1) $record_row['after'] = '申诉·成功';
+//            else if($appealed_handled_result == 9) $record_row['after'] = '申诉·失败';
+            if(array_key_exists($appealed_handled_result,config('dk.common-config.appealed_handled_result')))
+            {
+                $record_row['after'] = config('dk.common-config.appealed_handled_result.'.$appealed_handled_result);
+            }
             else $record_row['after'] = '复核结果有误！';
 
             $record_content[] = $record_row;
+
+            if($appealed_handled_result == 9)
+            {
+                if(isset($post_data["order--item-appealed-handling--rejected-reason"]))
+                {
+                    $rejected_reason = $post_data["order--item-appealed-handling--rejected-reason"];
+
+                    $record_row = [];
+                    $record_row['title'] = '拒绝原因';
+                    $record_row['field'] = 'handled_rejected_reason';
+//                $record_row['code'] = $appealed_handled_result;
+
+                    $record_row['before'] = '';
+                    $reasons = '';
+                    $char = '-';
+                    foreach($rejected_reason as $v)
+                    {
+                        $rejected_reason_text .= $v.'-';
+                        $reasons .= config('dk.common-config.rejected_reason.'.$v).'-';
+                    }
+                    $position_2 = strrpos($rejected_reason_text, $char);
+                    if ($position_2 !== false)
+                    {
+                        // 替换最后一个特定字符为空字符串
+                        $rejected_reason_text = substr_replace($rejected_reason_text, '', $position_2, strlen($char));
+                    }
+                    $position = strrpos($reasons, $char);
+                    if ($position !== false)
+                    {
+                        // 替换最后一个特定字符为空字符串
+                        $reasons = substr_replace($reasons, '', $position, strlen($char));
+                    }
+                    $record_row['after'] = $reasons;
+
+                    $record_content[] = $record_row;
+                }
+            }
         }
         if($appealed_handled_description)
         {
@@ -3731,13 +4086,64 @@ class DK_Staff__OrderRepository {
             if($appealed_handled_result == 1)
             {
                 $item->inspected_result = '通过';
+                $item->inspected_result_2 = '';
+                $item->appealed_status = 11;
+            }
+            else if($appealed_handled_result == 2)
+            {
+                $item->inspected_result = '折扣通过';
+                $item->inspected_result_2 = '';
+                $item->appealed_status = 11;
+            }
+            else if($appealed_handled_result == 3)
+            {
+                $item->inspected_result = '郊区通过';
+                $item->inspected_result_2 = '';
+                $item->appealed_status = 11;
+            }
+            else if($appealed_handled_result == 4)
+            {
+                $item->inspected_result = '内部通过';
+                $item->inspected_result_2 = '';
+                $item->appealed_status = 11;
+            }
+            else if($appealed_handled_result == 5)
+            {
+                $item->inspected_result = '通过';
+                $item->inspected_result_2 = '一档';
+                $item->appealed_status = 11;
+            }
+            else if($appealed_handled_result == 6)
+            {
+                $item->inspected_result = '通过';
+                $item->inspected_result_2 = '二档';
+                $item->appealed_status = 11;
+            }
+            else if($appealed_handled_result == 7)
+            {
+                $item->inspected_result = '通过';
+                $item->inspected_result = '三档';
+                $item->appealed_status = 11;
+            }
+            else if($appealed_handled_result == 9)
+            {
+                $item->inspected_result = '拒绝';
+                $item->inspected_result_2 = '拒绝';
+                $item->appealed_status = 19;
+            }
+            else
+            {
+
             }
             $item->appealed_handler_id = $me->id;
-            $item->appealed_status = 9;
+//            $item->appealed_status = 9;
             $item->appealed_result = $appealed_handled_result;
 //            if($appealed_handled_description) $item->appealed_handled_description = $appealed_handled_description;
 //            $item->appealed_at = time();
             $item->appealed_handled_date = $date;
+
+            if($rejected_reason_text) $item->rejected_reason = $rejected_reason_text;
+
             $bool = $item->save();
             if(!$bool) throw new Exception("DK_Common__Order--update--fail");
             else
