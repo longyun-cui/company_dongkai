@@ -3617,6 +3617,8 @@ class DK_Staff__OrderRepository {
         $date = date("Y-m-d");
         $datetime = date('Y-m-d H:i:s');
 
+        $rejected_reason_text = '';
+
 
 
         $record_data["ip"] = Get_IP();
@@ -3661,10 +3663,55 @@ class DK_Staff__OrderRepository {
             $record_row['title'] = '确认结果';
             $record_row['field'] = 'confirming_time';
             $record_row['before'] = '';
-            if($confirming_result == 1) $record_row['after'] = '申诉·确认';
-            else if($confirming_result == 2) $record_row['after'] = '申诉·驳回';
+            if($confirming_result == 1)
+            {
+                $record_row['after'] = '申诉·确认';
+            }
+            else if($confirming_result == 2)
+            {
+                $record_row['after'] = '申诉·驳回';
+            }
             else $record_row['after'] = '';
             $record_content[] = $record_row;
+
+            if($confirming_result == 2)
+            {
+                $record_row['after'] = '申诉·驳回';
+
+                if(isset($post_data["order--item-appealed-confirming--rejected-reason"]))
+                {
+                    $rejected_reason = $post_data["order--item-appealed-confirming--rejected-reason"];
+
+                    $record_row = [];
+                    $record_row['title'] = '拒绝原因';
+                    $record_row['field'] = 'confirming_rejected_reason';
+//                $record_row['code'] = $appealed_handled_result;
+
+                    $record_row['before'] = '';
+                    $reasons = '';
+                    $char = '-';
+                    foreach($rejected_reason as $v)
+                    {
+                        $rejected_reason_text .= $v.'-';
+                        $reasons .= config('dk.common-config.rejected_reason.'.$v).'-';
+                    }
+                    $position_2 = strrpos($rejected_reason_text, $char);
+                    if ($position_2 !== false)
+                    {
+                        // 替换最后一个特定字符为空字符串
+                        $rejected_reason_text = substr_replace($rejected_reason_text, '', $position_2, strlen($char));
+                    }
+                    $position = strrpos($reasons, $char);
+                    if ($position !== false)
+                    {
+                        // 替换最后一个特定字符为空字符串
+                        $reasons = substr_replace($reasons, '', $position, strlen($char));
+                    }
+                    $record_row['after'] = $reasons;
+
+                    $record_content[] = $record_row;
+                }
+            }
         }
 //        if($confirming_url)
 //        {
