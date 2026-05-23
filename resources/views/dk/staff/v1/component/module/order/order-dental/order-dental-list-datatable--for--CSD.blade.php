@@ -883,7 +883,7 @@
                                 $html_appeal = '<a class="btn btn-xs modal-show--for--order--item-appealing" data-id="'+data+'">申诉</a>';
                             }
 
-                            if(window.staffRole == 'manager')
+                            if(window.staffRole == 'manager' || window.staffRole == 'supervisor')
                             {
                                 // 申诉确认
                                 if(row.appealed_status == 1)

@@ -3960,7 +3960,7 @@ class DK_Staff__OrderRepository {
         {
             return response_error([],"你没有操作权限！");
         }
-        if(!in_array($me->staff_position,[0,1,31,41]))
+        if(!in_array($me->staff_position,[0,1,31,41,61]))
         {
             return response_error([],"你没有操作权限！");
         }
