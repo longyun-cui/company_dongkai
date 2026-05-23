@@ -365,7 +365,7 @@
                     </div>
                     {{--拒绝原因--}}
                     <div class="form-group">
-                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 拒绝原因</label>
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 拒绝类型</label>
                         <div class="col-md-9 ">
                             <div class="btn-group">
 

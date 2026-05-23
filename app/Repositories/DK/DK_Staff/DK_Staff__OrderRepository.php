@@ -3113,7 +3113,7 @@ class DK_Staff__OrderRepository {
                     $rejected_reason = $post_data["order--item-inspecting--rejected-reason"];
 
                     $record_row = [];
-                    $record_row['title'] = '拒绝原因';
+                    $record_row['title'] = '拒绝类型';
                     $record_row['field'] = 'handled_rejected_reason';
 //                $record_row['code'] = $appealed_handled_result;
 
@@ -3683,7 +3683,7 @@ class DK_Staff__OrderRepository {
                     $rejected_reason = $post_data["order--item-appealed-confirming--rejected-reason"];
 
                     $record_row = [];
-                    $record_row['title'] = '拒绝原因';
+                    $record_row['title'] = '拒绝类型';
                     $record_row['field'] = 'confirming_rejected_reason';
 //                $record_row['code'] = $appealed_handled_result;
 
@@ -3909,7 +3909,7 @@ class DK_Staff__OrderRepository {
                     $rejected_reason = $post_data["order--item-appealed-handling--rejected-reason"];
 
                     $record_row = [];
-                    $record_row['title'] = '拒绝原因';
+                    $record_row['title'] = '拒绝类型';
                     $record_row['field'] = 'handled_rejected_reason';
 //                $record_row['code'] = $appealed_handled_result;
 
