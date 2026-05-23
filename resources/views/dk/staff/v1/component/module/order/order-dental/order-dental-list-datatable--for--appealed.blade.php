@@ -272,7 +272,7 @@
 
                         if(row.appealed_status == 1)
                         {
-                            return '<small class="btn-xs bg-red">申诉·申请</small>';
+                            return '<small class="btn-xs bg-blue">申诉·申请</small>';
                         }
                         else if(row.appealed_status == 2)
                         {
