@@ -2710,7 +2710,7 @@
             $row.addClass('operating');
 
 
-            var $operation_datatable_id = 'datatable--for--order--item-appealed-handled-confirming--of--operation-record-list';
+            var $operation_datatable_id = 'datatable--for--order--item-appealed-handling--of--operation-record-list';
             Datatable__for__Order_Item_Operation_Record_List.init($operation_datatable_id,$id);
 
 
