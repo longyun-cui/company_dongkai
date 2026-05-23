@@ -219,6 +219,10 @@
                 {
                     Datatable__for__Order_Luxury_List($config.id);
                 }
+                else if($id == "datatable-order-dental-appealed-list")
+                {
+                    Datatable__for__Order_Dental__Appealed_List($config.id);
+                }
                 else if($id == "delivery")
                 {
                     console.log("delivery");

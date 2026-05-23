@@ -206,6 +206,16 @@ class DK_Common__Order extends Model
     {
         return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','inspector_id','id');
     }
+    // 申请人
+    function appellant()
+    {
+        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','appellant_id','id');
+    }
+    // 复核人
+    function appealed_handler()
+    {
+        return $this->belongsTo('App\Models\DK\DK_Common\DK_Common__Staff','appealed_handler_id','id');
+    }
     // 交付者
     function deliverer()
     {

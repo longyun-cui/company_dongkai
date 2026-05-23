@@ -194,6 +194,30 @@
                     <span>口腔•工单</span>
                 </a>
             </li>
+            @if(
+                (in_array($me->staff_category,[0,1,9,61,71]) && in_array($me->staff_position,[0,1,9,11,31,41,61,99]))
+                || (in_array($me->staff_category,[41]) && in_array($me->staff_position,[0,1,9,11,31]))
+            )
+            <li class="treeview _none-">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="order-dental-appealed-list"
+                   data-title='口腔•申诉'
+                   data-content=''
+                   data-icon='<i class="fa fa-file-sound-o text-orange"></i>'
+
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-order-dental-appealed-list"
+                   data-datatable-target="order-dental-appealed-list"
+                   data-datatable-clone-object="order-dental-appealed-list-clone"
+                >
+                    <i class="fa fa-file-sound-o text-orange"></i>
+                    <span>口腔•申诉</span>
+                </a>
+            </li>
+            @endif
             {{--口腔•交付列表--}}
             @if(in_array($me->staff_category,[0,1,9,71]))
             <li class="treeview _none-">
