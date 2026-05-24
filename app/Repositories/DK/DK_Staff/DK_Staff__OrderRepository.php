@@ -441,6 +441,10 @@ class DK_Staff__OrderRepository {
                 {
                     $query->where('dk_common__order.appealed_status', '>', 0);
                 }
+                else if($appealed_status == '申诉申请')
+                {
+                    $query->where('dk_common__order.appealed_status', 1);
+                }
                 else if($appealed_status == '申诉中')
                 {
                     $query->where('dk_common__order.appealed_status', 2);
@@ -921,6 +925,10 @@ class DK_Staff__OrderRepository {
                 if($appealed_status == '已申诉')
                 {
                     $query->where('dk_common__order.appealed_status', '>', 0);
+                }
+                else if($appealed_status == '申诉申请')
+                {
+                    $query->where('dk_common__order.appealed_status', 1);
                 }
                 else if($appealed_status == '申诉中')
                 {
