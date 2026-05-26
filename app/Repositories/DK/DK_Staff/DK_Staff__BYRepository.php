@@ -118,6 +118,8 @@ class DK_Staff__BYRepository {
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
         if(!empty($post_data['mobile'])) $query->where('mobile', $post_data['mobile']);
 
+        if(!empty($post_data['client_phone'])) $query->where('client_phone', $post_data['client_phone']);
+
 
         // 发布日期
         if(!empty($post_data['assign'])) $query->where('received_date', $post_data['assign']);
@@ -194,6 +196,10 @@ class DK_Staff__BYRepository {
         if($limit == -1) $list = $query->get();
         else $list = $query->skip($skip)->take($limit)->get();
 //        dd($list->toArray());
+
+//        foreach ($list as $k => $v)
+//        {
+//        }
 
         return datatable_response($list, $draw, $total);
     }

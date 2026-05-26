@@ -79,6 +79,7 @@ class BYApReceivedJob implements ShouldQueue
                 {
                     if(in_array($item_para->lable_info->is_wx,['是','对'])) $update["is_wx"] = 1;
                 }
+                if(isset($item_para->lable_info->teeth_count)) $update["teeth_count"] = $item_para->lable_info->teeth_count;
                 if(isset($item_para->lable_info->location_city)) $update["location_city"] = $item_para->lable_info->location_city;
                 if(isset($item_para->lable_info->location_district)) $update["location_district"] = $item_para->lable_info->location_district;
             }
