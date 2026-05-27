@@ -530,6 +530,16 @@
                     }
                 },
                 {
+                    "title": "审核原因",
+                    "data": "inspected_description",
+                    "className": "",
+                    "width": "",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
                     "title": "创建时间",
                     "data": 'created_at',
                     "className": "",
