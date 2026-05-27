@@ -4544,7 +4544,7 @@ class DK_Staff__OrderRepository {
             else if($appealed_handled_result == 7)
             {
                 $item->inspected_result = '通过';
-                $item->inspected_result = '三档';
+                $item->inspected_result_2 = '三档';
                 $item->appealed_status = 11;
             }
             else if($appealed_handled_result == 9)
