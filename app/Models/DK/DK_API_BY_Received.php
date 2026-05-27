@@ -35,6 +35,8 @@ class DK_API_BY_Received extends Model
         'dialog_content',
         'recording_address',
 
+        'teeth_count',
+
         'location_city',
         'location_district',
 
