@@ -321,11 +321,12 @@ class DK_AI_Inspect_Job implements ShouldQueue
                                 if(isset($content_decode->客户年龄是否询问) && $content_decode->客户年龄是否询问 == '是') $count += 1;
                                 if(isset($content_decode->客户三高状态是否询问) && $content_decode->客户三高状态是否询问 == '是') $count += 1;
                                 if(isset($content_decode->询问客户当前在不在【城市名称】的话术) && $content_decode->询问客户当前在不在【城市名称】的话术 == '是') $count += 1;
+                                if(isset($content_decode->结尾是否明确跟客户说“医助两小时回电，注意接听”的话术) && $content_decode->结尾是否明确跟客户说“医助两小时回电，注意接听”的话术 == '是') $count += 1;
 
                                 $order->inspected_result = $content_decode->审核结果;
                                 $order->inspected_result_2 = '三档';
-                                if($count == 3) $order->inspected_result_2 = '二档';
-                                if($count >= 4) $order->inspected_result_2 = '一档';
+                                if($count == 4) $order->inspected_result_2 = '二档';
+                                if($count >= 5) $order->inspected_result_2 = '一档';
 
                             }
                             else if($content_decode->审核结果 == '超区')
