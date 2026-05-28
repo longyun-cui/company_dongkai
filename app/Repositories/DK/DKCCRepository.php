@@ -24207,7 +24207,7 @@ EOF;
         else
         {
 
-            if($clientMark_data['type'] = '医美客户')
+            if($clientMark_data['type'] == '医美客户')
             {
                 $order_insert_data["order_category"] = 11;
             }
