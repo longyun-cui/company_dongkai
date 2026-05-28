@@ -662,6 +662,33 @@
                     }
                 },
                 {
+                    "title": "创建时间",
+                    "name": 'created_at',
+                    "data": 'created_at',
+                    "className": "",
+                    "width": "120px",
+                    "orderable": false,
+                    "orderSequence": ["desc", "asc"],
+                    render: function(data, type, row, meta) {
+//                            return data;
+                        var $date = new Date(data*1000);
+                        var $year = $date.getFullYear();
+                        var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                        var $day = ('00'+($date.getDate())).slice(-2);
+                        var $hour = ('00'+$date.getHours()).slice(-2);
+                        var $minute = ('00'+$date.getMinutes()).slice(-2);
+                        var $second = ('00'+$date.getSeconds()).slice(-2);
+
+//                            return $year+'-'+$month+'-'+$day;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+
+                        var $currentYear = new Date().getFullYear();
+                        if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute+':'+$second;
+                        else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute+':'+$second;
+                    }
+                },
+                {
                     "title": "操作",
                     "name": 'operation',
                     "data": 'id',
