@@ -24207,8 +24207,15 @@ EOF;
         else
         {
 
+            if($clientMark_data['type'] = '医美客户')
+            {
+                $order_insert_data["order_category"] = 11;
+            }
+            else
+            {
+                $order_insert_data["order_category"] = 1;
+            }
             $order_insert_data["created_type"] = 99;
-            $order_insert_data["order_category"] = 1;
             $order_insert_data["active"] = 1;
             $order_insert_data["creator_id"] = $staff->id;
             $order_insert_data["creator_company_id"] = $staff->company_id;
