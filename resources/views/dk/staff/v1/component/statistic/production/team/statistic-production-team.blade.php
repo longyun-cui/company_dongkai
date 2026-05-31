@@ -11,6 +11,14 @@
 
 
 
+            {{--审核状态--}}
+            <select class="search-filter form-filter filter-lg select2-box-c" name="statistic-production-team-order-category">
+                <option value="-1">全部类型</option>
+                <option value="1">口腔</option>
+                <option value="11">医美</option>
+                <option value="31">二奢</option>
+            </select>
+
             {{--按天查看--}}
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre date-pre" data-target="statistic-production-team-date">
                 <i class="fa fa-chevron-left"></i>
@@ -45,7 +53,7 @@
             </button>
 
 
-            <button type="button" class="btn btn-success btn-filter filter-submit">
+            <button type="button" class="btn btn-success btn-filter filter-submit" data-time-type="all">
                 <i class="fa fa-search"></i> 全部查询
             </button>
 

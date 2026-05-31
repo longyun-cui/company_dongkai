@@ -1396,6 +1396,11 @@ class DKStaffController extends Controller
     {
         return $this->statistic_repo->o1__statistic__production__team(request()->all());
     }
+    // 【统计】【生产】团队看板
+    public function o1__statistic__production__team__v2()
+    {
+        return $this->statistic_repo->o1__statistic__production__team__v2(request()->all());
+    }
 
 
 

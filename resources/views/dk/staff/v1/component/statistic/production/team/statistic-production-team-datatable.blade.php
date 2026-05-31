@@ -73,7 +73,41 @@
                     }
                 },
                 {
+                    "title": "部门",
+                    "data": "name",
+                    "className": "text-center",
+                    "width": "80px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.id == "统计")
+                        {
+                            $(nTd).addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        return data;
+
+                    }
+                },
+                {
                     "title": "团队",
+                    "data": "name",
+                    "className": "text-center",
+                    "width": "80px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.id == "统计")
+                        {
+                            $(nTd).addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        return data;
+
+                    }
+                },
+                {
+                    "title": "小组",
                     "data": "name",
                     "className": "text-center",
                     "width": "80px",
@@ -128,6 +162,60 @@
                 {
                     "title": "通过量",
                     "data": "count__for__order_accepted_normal",
+                    "className": "bg-inspected",
+                    "width": "80px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.id == "统计")
+                        {
+                            $(nTd).addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        if(!data) return '--';
+                        return data;
+                    }
+                },
+                {
+                    "title": "一档",
+                    "data": "count__for__order_accepted_normal_1",
+                    "className": "bg-inspected",
+                    "width": "80px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.id == "统计")
+                        {
+                            $(nTd).addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        if(!data) return '--';
+                        return data;
+                    }
+                },
+                {
+                    "title": "二档",
+                    "data": "count__for__order_accepted_normal_2",
+                    "className": "bg-inspected",
+                    "width": "80px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.id == "统计")
+                        {
+                            $(nTd).addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        if(!data) return '--';
+                        return data;
+                    }
+                },
+                {
+                    "title": "三档",
+                    "data": "count__for__order_accepted_normal_3",
                     "className": "bg-inspected",
                     "width": "80px",
                     "orderable": true,

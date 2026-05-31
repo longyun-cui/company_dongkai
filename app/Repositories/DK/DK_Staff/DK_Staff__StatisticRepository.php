@@ -74,9 +74,6 @@ class DK_Staff__StatisticRepository {
 
 
 
-
-
-
     // 【统计】返回-综合-数据
     public function o1__get_statistic_data_of_comprehensive_overview($post_data)
     {
@@ -1068,8 +1065,8 @@ class DK_Staff__StatisticRepository {
                 "))
             ->orderBy("call_date", "desc");
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         $order_list = $query_order->get();
@@ -1320,8 +1317,8 @@ class DK_Staff__StatisticRepository {
 
         $total = $query->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         if(!empty($post_data['length']) && $post_data['length'] = -1) $limit = 50;
@@ -1610,8 +1607,8 @@ class DK_Staff__StatisticRepository {
                 "))
             ->orderBy("call_date", "desc");
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         $order_list = $query_order->get();
@@ -1827,8 +1824,8 @@ class DK_Staff__StatisticRepository {
 
 
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         $list = $query_order->get();
@@ -1991,8 +1988,8 @@ class DK_Staff__StatisticRepository {
             ->orderBy("count", "desc");
 
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         $list = $query_order->get();
@@ -2094,7 +2091,6 @@ class DK_Staff__StatisticRepository {
 
 
 
-
     public function o1__get_statistic_data_of_company_overview($post_data)
     {
         $this->get_me();
@@ -2161,8 +2157,8 @@ class DK_Staff__StatisticRepository {
 
         $total = $query->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         if(isset($post_data['order']))
@@ -2375,8 +2371,8 @@ class DK_Staff__StatisticRepository {
 
         $total = $query->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         if(isset($post_data['order']))
@@ -2498,8 +2494,8 @@ class DK_Staff__StatisticRepository {
 
         $total = $query->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : -1;
 
         if(isset($post_data['order']))
@@ -2694,8 +2690,8 @@ class DK_Staff__StatisticRepository {
 
         $total = $query->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : -1;
 
         if(isset($post_data['order']))
@@ -2869,8 +2865,8 @@ class DK_Staff__StatisticRepository {
 
         $total = $query->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : -1;
 
         if(isset($post_data['order']))
@@ -3053,8 +3049,8 @@ class DK_Staff__StatisticRepository {
 
         $total = $query->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : -1;
 
         if(isset($post_data['order']))
@@ -3245,7 +3241,7 @@ class DK_Staff__StatisticRepository {
         }
         else if($time_type == 'month')
         {
-            $the_month  = isset($post_data['assign_month']) ? $post_data['assign_month']  : date('Y-m');
+            $the_month  = isset($post_data['assign_month']) ? $post_data['assign_month'] : date('Y-m');
             $the_month_timestamp = strtotime($the_month);
 
             $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
@@ -3361,8 +3357,8 @@ class DK_Staff__StatisticRepository {
 
         $total = $query->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : -1;
 
         if(isset($post_data['order']))
@@ -3721,8 +3717,8 @@ class DK_Staff__StatisticRepository {
 
 //        $total = $query->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         if(isset($post_data['order']))
@@ -4092,8 +4088,8 @@ class DK_Staff__StatisticRepository {
 
         $total = $query->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : -1;
 
         if(isset($post_data['order']))
@@ -4305,8 +4301,8 @@ class DK_Staff__StatisticRepository {
 
         $total = $query->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : -1;
 
         if(isset($post_data['order']))
@@ -4525,8 +4521,8 @@ class DK_Staff__StatisticRepository {
 
         $total = $query->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : -1;
 
         if(isset($post_data['order']))
@@ -4656,8 +4652,8 @@ class DK_Staff__StatisticRepository {
 
         $total = $query_this_month->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         $list = $query_this_month->get();
@@ -4834,8 +4830,8 @@ class DK_Staff__StatisticRepository {
 
         $total = $query->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         if(isset($post_data['order']))
@@ -4990,8 +4986,8 @@ class DK_Staff__StatisticRepository {
 
         $total = $query->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         if(isset($post_data['order']))
@@ -5212,8 +5208,8 @@ class DK_Staff__StatisticRepository {
 
         $total = $query->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : -1;
 
         if(isset($post_data['order']))
@@ -5434,26 +5430,32 @@ class DK_Staff__StatisticRepository {
                     count(IF(is_published = 1, TRUE, NULL)) as count__for__order_all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as count__for__order_inspected,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as count__for__order_accepted_normal,
+                    count(IF(inspected_result_2 = '一档', TRUE, NULL)) as count__for__order_accepted_normal_1,
+                    count(IF(inspected_result_2 = '二档', TRUE, NULL)) as count__for__order_accepted_normal_2,
+                    count(IF(inspected_result_2 = '三档', TRUE, NULL)) as count__for__order_accepted_normal_3,
                     count(IF(inspected_result = '折扣通过', TRUE, NULL)) as count__for__order_accepted_discount,
                     count(IF(inspected_result = '郊区通过', TRUE, NULL)) as count__for__order_accepted_suburb,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as count__for__order_accepted_inside,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as count__for__order_repeated,
                     count(IF(inspected_result = '拒绝' or inspected_result = '不合格' or inspected_result = '超区' or inspected_result = '超龄', TRUE, NULL)) as count__for__order_refused
-                "))
-            ->whereDate("published_date",$the_date);
+                "));
+//            ->whereDate("published_date",$the_date)
 //            ->groupBy('team_id')
 
 
         // 时间
-        $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';
-        if($time_type == 'date')
+        $time_type  = isset($post_data['time_type']) ? $post_data['time_type'] : '';
+        if($time_type == 'all')
         {
-            $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+        }
+        else if($time_type == 'date')
+        {
+            $the_date  = isset($post_data['time_date']) ? $post_data['time_date'] : date('Y-m-d');
             $query_order->where('published_date',$the_date);
         }
         else if($time_type == 'month')
         {
-            $the_month  = isset($post_data['time_month']) ? $post_data['time_month']  : date('Y-m');
+            $the_month  = isset($post_data['time_month']) ? $post_data['time_month'] : date('Y-m');
             $the_month_timestamp = strtotime($the_month);
 
             $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
@@ -5472,6 +5474,8 @@ class DK_Staff__StatisticRepository {
         }
         else
         {
+            $the_date  = isset($post_data['time_date']) ? $post_data['time_date'] : date('Y-m-d');
+            $query_order->where('published_date',$the_date);
         }
 
         $query_order = $query_order->groupBy('creator_team_id')->get()->keyBy('creator_team_id')->toArray();
@@ -5487,8 +5491,8 @@ class DK_Staff__StatisticRepository {
 
         $total = $query->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : -1;
 
         if(isset($post_data['order']))
@@ -5514,6 +5518,9 @@ class DK_Staff__StatisticRepository {
         $total_data['count__for__order_inspected'] = 0;
         $total_data['count__for__order_accepted'] = 0;
         $total_data['count__for__order_accepted_normal'] = 0;
+        $total_data['count__for__order_accepted_normal_1'] = 0;
+        $total_data['count__for__order_accepted_normal_2'] = 0;
+        $total_data['count__for__order_accepted_normal_3'] = 0;
         $total_data['count__for__order_accepted_discount'] = 0;
         $total_data['count__for__order_accepted_suburb'] = 0;
         $total_data['count__for__order_accepted_inside'] = 0;
@@ -5532,6 +5539,9 @@ class DK_Staff__StatisticRepository {
                 $list[$k]->count__for__order_all = $query_order[$v->id]['count__for__order_all'];
                 $list[$k]->count__for__order_inspected = $query_order[$v->id]['count__for__order_inspected'];
                 $list[$k]->count__for__order_accepted_normal = $query_order[$v->id]['count__for__order_accepted_normal'];
+                $list[$k]->count__for__order_accepted_normal_1 = $query_order[$v->id]['count__for__order_accepted_normal_1'];
+                $list[$k]->count__for__order_accepted_normal_2 = $query_order[$v->id]['count__for__order_accepted_normal_2'];
+                $list[$k]->count__for__order_accepted_normal_3 = $query_order[$v->id]['count__for__order_accepted_normal_3'];
                 $list[$k]->count__for__order_accepted_discount = $query_order[$v->id]['count__for__order_accepted_discount'];
                 $list[$k]->count__for__order_accepted_suburb = $query_order[$v->id]['count__for__order_accepted_suburb'];
                 $list[$k]->count__for__order_accepted_inside = $query_order[$v->id]['count__for__order_accepted_inside'];
@@ -5555,6 +5565,9 @@ class DK_Staff__StatisticRepository {
                 $list[$k]->count__for__order_inspected = 0;
                 $list[$k]->count__for__order_accepted = 0;
                 $list[$k]->count__for__order_accepted_normal = 0;
+                $list[$k]->count__for__order_accepted_normal_1 = 0;
+                $list[$k]->count__for__order_accepted_normal_2 = 0;
+                $list[$k]->count__for__order_accepted_normal_3 = 0;
                 $list[$k]->count__for__order_accepted_discount = 0;
                 $list[$k]->count__for__order_accepted_suburb = 0;
                 $list[$k]->count__for__order_accepted_inside = 0;
@@ -5596,6 +5609,255 @@ class DK_Staff__StatisticRepository {
             $total_data['count__for__order_all'] += $v->count__for__order_all;
             $total_data['count__for__order_inspected'] += $v->count__for__order_inspected;
             $total_data['count__for__order_accepted_normal'] += $v->count__for__order_accepted_normal;
+            $total_data['count__for__order_accepted_normal_1'] += $v->count__for__order_accepted_normal_1;
+            $total_data['count__for__order_accepted_normal_2'] += $v->count__for__order_accepted_normal_2;
+            $total_data['count__for__order_accepted_normal_3'] += $v->count__for__order_accepted_normal_3;
+            $total_data['count__for__order_accepted_discount'] += $v->count__for__order_accepted_discount;
+            $total_data['count__for__order_accepted_suburb'] += $v->count__for__order_accepted_suburb;
+            $total_data['count__for__order_accepted_inside'] += $v->count__for__order_accepted_inside;
+            $total_data['count__for__order_accepted_all'] += (
+                $v->count__for__order_accepted_normal +
+                $v->count__for__order_accepted_discount +
+                $v->count__for__order_accepted_suburb +
+                $v->count__for__order_accepted_inside
+            );
+            $total_data['count__for__order_accepted_effective'] += (
+                $v->count__for__order_accepted_normal +
+                $v->count__for__order_accepted_discount
+            );
+            $total_data['count__for__order_repeated'] += $v->count__for__order_repeated;
+            $total_data['count__for__order_refused'] += $v->count__for__order_refused;
+
+        }
+
+        // 人均提交量
+        if($total_data['staff_count'] > 0)
+        {
+            $total_data['per__for__order_all'] = round(($total_data['count__for__order_all'] / $total_data['staff_count']),2);
+            $total_data['per__for__order_accepted_all'] = round(($total_data['count__for__order_accepted_all'] / $total_data['staff_count']),2);
+            $total_data['per__for__order_accepted_effective'] = round(($total_data['count__for__order_accepted_effective'] / $total_data['staff_count']),2);
+        }
+        else
+        {
+            $total_data['per__for__order_all'] = 0;
+            $total_data['per__for__order_accepted_all'] = 0;
+            $total_data['per__for__order_accepted_effective'] = 0;
+        }
+
+
+        // 通过率 & 有效率
+        if($total_data['count__for__order_all'] > 0)
+        {
+            $total_data['rate__for__order_accepted_all'] = round(($total_data['count__for__order_accepted_all'] * 100 / $total_data['count__for__order_all']),2);
+            $total_data['rate__for__order_accepted_effective'] = round(($total_data['count__for__order_accepted_effective'] * 100 / $total_data['count__for__order_all']),2);
+        }
+        else
+        {
+            $total_data['rate__for__order_accepted_all'] = 0;
+            $total_data['rate__for__order_accepted_effective'] = 0;
+        }
+
+
+        $list[] = $total_data;
+
+        return datatable_response($list, $draw, $total);
+    }
+
+    public function o1__statistic__production__team__v2($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+
+        // 工单统计
+        $query_order = DK_Common__Order::withTrashed()->select('creator_department_id','creator_team_id','creator_team_group_id','published_date')
+            ->addSelect(DB::raw("
+                    count(DISTINCT creator_id) as staff_count,
+                    count(IF(is_published = 1, TRUE, NULL)) as count__for__order_all,
+                    count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as count__for__order_inspected,
+                    count(IF(inspected_result = '通过', TRUE, NULL)) as count__for__order_accepted_normal,
+                    count(IF(inspected_result_2 = '一档', TRUE, NULL)) as count__for__order_accepted_normal_1,
+                    count(IF(inspected_result_2 = '二档', TRUE, NULL)) as count__for__order_accepted_normal_2,
+                    count(IF(inspected_result_2 = '三档', TRUE, NULL)) as count__for__order_accepted_normal_3,
+                    count(IF(inspected_result = '折扣通过', TRUE, NULL)) as count__for__order_accepted_discount,
+                    count(IF(inspected_result = '郊区通过', TRUE, NULL)) as count__for__order_accepted_suburb,
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as count__for__order_accepted_inside,
+                    count(IF(inspected_result = '重复', TRUE, NULL)) as count__for__order_repeated,
+                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格' or inspected_result = '超区' or inspected_result = '超龄', TRUE, NULL)) as count__for__order_refused
+                "));
+//            ->whereDate("published_date",$the_date)
+//            ->groupBy('team_id')
+
+
+        // 时间
+        $time_type  = isset($post_data['time_type']) ? $post_data['time_type'] : '';
+        if($time_type == 'all')
+        {
+        }
+        else if($time_type == 'date')
+        {
+            $the_date  = isset($post_data['time_date']) ? $post_data['time_date'] : date('Y-m-d');
+            $query_order->where('published_date',$the_date);
+        }
+        else if($time_type == 'month')
+        {
+            $the_month  = isset($post_data['time_month']) ? $post_data['time_month'] : date('Y-m');
+            $the_month_timestamp = strtotime($the_month);
+
+            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+            $query_order->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date]);
+        }
+        else if($time_type == 'period')
+        {
+            if(!empty($post_data['date_start'])) $query_order->where('published_date', '>=', $post_data['date_start']);
+            if(!empty($post_data['date_ended'])) $query_order->where('published_date', '<=', $post_data['date_ended']);
+        }
+        else
+        {
+            $the_date  = isset($post_data['time_date']) ? $post_data['time_date'] : date('Y-m-d');
+            $query_order->where('published_date',$the_date);
+        }
+
+        $query_order = $query_order->groupBy('creator_department_id')->groupBy('creator_team_id')->groupBy('creator_team_group_id')->get()->toArray();
+//        dd($query_order);
+
+
+        $query = DK_Common__Team::select('id','name')
+            ->where('active',1)
+            ->where('team_category',41)
+            ->where('team_type',11)
+            ->where(['item_status'=>1]);
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : -1;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "asc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+
+        $total_data = [];
+        $total_data['id'] = '统计';
+        $total_data['name'] = '--';
+        $total_data['staff_count'] = 0;
+        $total_data['count__for__order_all'] = 0;
+        $total_data['count__for__order_inspected'] = 0;
+        $total_data['count__for__order_accepted'] = 0;
+        $total_data['count__for__order_accepted_normal'] = 0;
+        $total_data['count__for__order_accepted_normal_1'] = 0;
+        $total_data['count__for__order_accepted_normal_2'] = 0;
+        $total_data['count__for__order_accepted_normal_3'] = 0;
+        $total_data['count__for__order_accepted_discount'] = 0;
+        $total_data['count__for__order_accepted_suburb'] = 0;
+        $total_data['count__for__order_accepted_inside'] = 0;
+        $total_data['count__for__order_accepted_all'] = 0;
+        $total_data['count__for__order_accepted_effective'] = 0;
+        $total_data['count__for__order_repeated'] = 0;
+        $total_data['count__for__order_refused'] = 0;
+
+
+        foreach ($list as $k => $v)
+        {
+            if(isset($query_order[$v->id]))
+            {
+                $list[$k]->staff_count = $query_order[$v->id]['staff_count'];
+                $list[$k]->count__for__order_all = $query_order[$v->id]['count__for__order_all'];
+                $list[$k]->count__for__order_inspected = $query_order[$v->id]['count__for__order_inspected'];
+                $list[$k]->count__for__order_accepted_normal = $query_order[$v->id]['count__for__order_accepted_normal'];
+                $list[$k]->count__for__order_accepted_normal_1 = $query_order[$v->id]['count__for__order_accepted_normal_1'];
+                $list[$k]->count__for__order_accepted_normal_2 = $query_order[$v->id]['count__for__order_accepted_normal_2'];
+                $list[$k]->count__for__order_accepted_normal_3 = $query_order[$v->id]['count__for__order_accepted_normal_3'];
+                $list[$k]->count__for__order_accepted_discount = $query_order[$v->id]['count__for__order_accepted_discount'];
+                $list[$k]->count__for__order_accepted_suburb = $query_order[$v->id]['count__for__order_accepted_suburb'];
+                $list[$k]->count__for__order_accepted_inside = $query_order[$v->id]['count__for__order_accepted_inside'];
+                $list[$k]->count__for__order_accepted_all = (
+                    $query_order[$v->id]['count__for__order_accepted_normal'] +
+                    $query_order[$v->id]['count__for__order_accepted_discount'] +
+                    $query_order[$v->id]['count__for__order_accepted_suburb'] +
+                    $query_order[$v->id]['count__for__order_accepted_inside']
+                );
+                $list[$k]->count__for__order_accepted_effective = (
+                    $query_order[$v->id]['count__for__order_accepted_normal'] +
+                    $query_order[$v->id]['count__for__order_accepted_discount']
+                );
+                $list[$k]->count__for__order_repeated = $query_order[$v->id]['count__for__order_repeated'];
+                $list[$k]->count__for__order_refused = $query_order[$v->id]['count__for__order_refused'];
+            }
+            else
+            {
+                $list[$k]->staff_count = 0;
+                $list[$k]->count__for__order_all = 0;
+                $list[$k]->count__for__order_inspected = 0;
+                $list[$k]->count__for__order_accepted = 0;
+                $list[$k]->count__for__order_accepted_normal = 0;
+                $list[$k]->count__for__order_accepted_normal_1 = 0;
+                $list[$k]->count__for__order_accepted_normal_2 = 0;
+                $list[$k]->count__for__order_accepted_normal_3 = 0;
+                $list[$k]->count__for__order_accepted_discount = 0;
+                $list[$k]->count__for__order_accepted_suburb = 0;
+                $list[$k]->count__for__order_accepted_inside = 0;
+                $list[$k]->count__for__order_accepted_all = 0;
+                $list[$k]->count__for__order_accepted_effective = 0;
+                $list[$k]->count__for__order_repeated = 0;
+                $list[$k]->count__for__order_refused = 0;
+            }
+
+            // 人均 提交量 & 通过量 & 有效量
+            if($v->staff_count > 0)
+            {
+                $list[$k]->per__for__order_all = round(($v->count__for__order_all / $v->staff_count),2);
+                $list[$k]->per__for__order_accepted_all = round(($v->count__for__order_accepted_all / $v->staff_count),2);
+                $list[$k]->per__for__order_accepted_effective = round(($v->count__for__order_accepted_effective / $v->staff_count),2);
+            }
+            else
+            {
+                $list[$k]->per__for__order_all = 0;
+                $list[$k]->per__for__order_accepted_all = 0;
+                $list[$k]->per__for__order_accepted_effective = 0;
+            }
+
+            // 通过率 & 有效率
+            if($v->count__for__order_all > 0)
+            {
+                $list[$k]->rate__for__order_accepted_all = round(($v->count__for__order_accepted_all * 100 / $v->count__for__order_all),2);
+                $list[$k]->rate__for__order_accepted_effective = round(($v->count__for__order_accepted_effective * 100 / $v->count__for__order_all),2);
+            }
+            else
+            {
+                $list[$k]->rate__for__order_accepted_all = 0;
+                $list[$k]->rate__for__order_accepted_effective = 0;
+            }
+
+
+
+            $total_data['staff_count'] += $v->staff_count;
+            $total_data['count__for__order_all'] += $v->count__for__order_all;
+            $total_data['count__for__order_inspected'] += $v->count__for__order_inspected;
+            $total_data['count__for__order_accepted_normal'] += $v->count__for__order_accepted_normal;
+            $total_data['count__for__order_accepted_normal_1'] += $v->count__for__order_accepted_normal_1;
+            $total_data['count__for__order_accepted_normal_2'] += $v->count__for__order_accepted_normal_2;
+            $total_data['count__for__order_accepted_normal_3'] += $v->count__for__order_accepted_normal_3;
             $total_data['count__for__order_accepted_discount'] += $v->count__for__order_accepted_discount;
             $total_data['count__for__order_accepted_suburb'] += $v->count__for__order_accepted_suburb;
             $total_data['count__for__order_accepted_inside'] += $v->count__for__order_accepted_inside;
@@ -5680,8 +5942,8 @@ class DK_Staff__StatisticRepository {
 
         $total = $query->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : -1;
 //        if($limit > 100) $limit = 100;
 
@@ -6224,13 +6486,13 @@ class DK_Staff__StatisticRepository {
         }
         if($time_type == 'date')
         {
-            $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date']  : date('Y-m-d');
+            $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date'] : date('Y-m-d');
             $query->where("statistic_date",$assign_date);
             $title  = $assign_date;
         }
         else if($time_type == 'month')
         {
-            $assign_month  = isset($post_data['assign_month']) ? $post_data['assign_month']  : date('Y-m');
+            $assign_month  = isset($post_data['assign_month']) ? $post_data['assign_month'] : date('Y-m');
             $assign_month_timestamp = strtotime($assign_month);
 
             $assign_month_start_date = date('Y-m-01',$assign_month_timestamp); // 指定月份-开始日期
@@ -6260,15 +6522,15 @@ class DK_Staff__StatisticRepository {
         }
         else
         {
-            $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date']  : date('Y-m-d');
+            $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date'] : date('Y-m-d');
             $query->where("statistic_date",$assign_date);
             $title  = $assign_date;
         }
 
         $total = $query->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : -1;
 //        if($limit > 100) $limit = 100;
 
@@ -6353,13 +6615,13 @@ class DK_Staff__StatisticRepository {
         }
         if($time_type == 'date')
         {
-            $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date']  : date('Y-m-d');
+            $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date'] : date('Y-m-d');
             $query->where("statistic_date",$assign_date);
             $title  = $assign_date;
         }
         else if($time_type == 'month')
         {
-            $assign_month  = isset($post_data['assign_month']) ? $post_data['assign_month']  : date('Y-m');
+            $assign_month  = isset($post_data['assign_month']) ? $post_data['assign_month'] : date('Y-m');
             $assign_month_timestamp = strtotime($assign_month);
 
             $assign_month_start_date = date('Y-m-01',$assign_month_timestamp); // 指定月份-开始日期
@@ -6389,7 +6651,7 @@ class DK_Staff__StatisticRepository {
         }
         else
         {
-            $assign_month  = isset($post_data['assign_month']) ? $post_data['assign_month']  : date('Y-m');
+            $assign_month  = isset($post_data['assign_month']) ? $post_data['assign_month'] : date('Y-m');
             $assign_month_timestamp = strtotime($assign_month);
 
             $assign_month_start_date = date('Y-m-01',$assign_month_timestamp); // 指定月份-开始日期
@@ -6401,8 +6663,8 @@ class DK_Staff__StatisticRepository {
 
         $total = $query->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : -1;
 //        if($limit > 100) $limit = 100;
 
@@ -6488,8 +6750,8 @@ class DK_Staff__StatisticRepository {
 
         $total = $query->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : -1;
 //        if($limit > 100) $limit = 100;
 
@@ -7100,13 +7362,13 @@ class DK_Staff__StatisticRepository {
         }
         if($time_type == 'date')
         {
-            $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date']  : date('Y-m-d');
+            $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date'] : date('Y-m-d');
             $query->where("statistic_date",$assign_date);
             $title  = $assign_date;
         }
         else if($time_type == 'month')
         {
-            $assign_month  = isset($post_data['assign_month']) ? $post_data['assign_month']  : date('Y-m');
+            $assign_month  = isset($post_data['assign_month']) ? $post_data['assign_month'] : date('Y-m');
             $assign_month_timestamp = strtotime($assign_month);
 
             $assign_month_start_date = date('Y-m-01',$assign_month_timestamp); // 指定月份-开始日期
@@ -7136,15 +7398,15 @@ class DK_Staff__StatisticRepository {
         }
         else
         {
-            $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date']  : date('Y-m-d');
+            $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date'] : date('Y-m-d');
             $query->where("statistic_date",$assign_date);
             $title  = $assign_date;
         }
 
         $total = $query->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : -1;
 //        if($limit > 100) $limit = 100;
 
@@ -7237,13 +7499,13 @@ class DK_Staff__StatisticRepository {
         }
         if($time_type == 'date')
         {
-            $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date']  : date('Y-m-d');
+            $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date'] : date('Y-m-d');
             $query->where("statistic_date",$assign_date);
             $title  = $assign_date;
         }
         else if($time_type == 'month')
         {
-            $assign_month  = isset($post_data['assign_month']) ? $post_data['assign_month']  : date('Y-m');
+            $assign_month  = isset($post_data['assign_month']) ? $post_data['assign_month'] : date('Y-m');
             $assign_month_timestamp = strtotime($assign_month);
 
             $assign_month_start_date = date('Y-m-01',$assign_month_timestamp); // 指定月份-开始日期
@@ -7273,7 +7535,7 @@ class DK_Staff__StatisticRepository {
         }
         else
         {
-            $assign_month  = isset($post_data['assign_month']) ? $post_data['assign_month']  : date('Y-m');
+            $assign_month  = isset($post_data['assign_month']) ? $post_data['assign_month'] : date('Y-m');
             $assign_month_timestamp = strtotime($assign_month);
 
             $assign_month_start_date = date('Y-m-01',$assign_month_timestamp); // 指定月份-开始日期
@@ -7285,8 +7547,8 @@ class DK_Staff__StatisticRepository {
 
         $total = $query->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : -1;
 //        if($limit > 100) $limit = 100;
 
@@ -7399,8 +7661,8 @@ class DK_Staff__StatisticRepository {
 
         $total = $query->count();
 
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : -1;
 //        if($limit > 100) $limit = 100;
 
