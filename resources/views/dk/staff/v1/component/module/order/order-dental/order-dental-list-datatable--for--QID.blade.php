@@ -292,7 +292,16 @@
                     render: function(data, type, row, meta) {
                         if(!row.inspected_at) return '--';
                         var $result_html = '';
-                        if(data == "通过" || data == "折扣通过" || data == "郊区通过" || data == "内部通过")
+                        var $result_2_html = '';
+                        if(data == "通过")
+                        {
+                            $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
+                            if($inspected_result_2 && ['一档','二档','三挡'].includes(row.inspected_result_2))
+                            {
+                                $result_2_html = '<small class="btn-xs bg-green">'+$inspected_result_2+'</small>';
+                            }
+                        }
+                        else if(data == "折扣通过" || data == "郊区通过" || data == "内部通过")
                         {
                             $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
                         }
@@ -357,7 +366,7 @@
                         {
                             $result_html = '<small class="btn-xs bg-purple">'+data+'</small>';
                         }
-                        return $result_html;
+                        return $result_html + $result_2_html;
                     }
                 },
                 {
