@@ -244,7 +244,7 @@
                         if(data == "通过")
                         {
                             $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
-                            if($inspected_result_2 && ['一档','二档','三挡'].includes(row.inspected_result_2))
+                            if($inspected_result_2 && ['一档','二档','三挡'].includes($inspected_result_2))
                             {
                                 $result_2_html = '<small class="btn-xs bg-green">'+$inspected_result_2+'</small>';
                             }
