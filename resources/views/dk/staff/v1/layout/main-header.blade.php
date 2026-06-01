@@ -135,6 +135,27 @@
                         <li class="divider"></li>
                         @endif
 
+                        @if(in_array($me->staff_category,[0,1,9,41,71]) && $me->staff_position <= 61)
+                        <li>
+                            <a href="javascript:void(0);" class="tab-control datatable-control"
+                               data-type="create"
+                               data-unique="y"
+                               data-id="statistic-production-team-v2"
+                               data-title='<i class="fa fa-area-chart text-blue"></i> <span>团队成单</span>'
+                               data-content=''
+
+                               data-datatable-type="create"
+                               data-datatable-unique="y"
+                               data-datatable-id="datatable-statistic-production-team-v2"
+                               data-datatable-target="statistic-production-team-v2"
+                               data-datatable-clone-object="statistic-production-team-v2-clone"
+                            >
+                                <i class="fa fa-area-chart text-blue"></i> <span>团队成单</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        @endif
+
 
 
 

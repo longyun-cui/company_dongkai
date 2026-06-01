@@ -133,6 +133,7 @@
     @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.project.statistic-production-project')
     @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.department.statistic-production-department')
     @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.team.statistic-production-team')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.team.statistic-production-team-v2')
 
     {{--员工--}}
     @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.staff.statistic-caller-overview')
@@ -387,6 +388,7 @@
     @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.project.statistic-production-project-datatable')
     @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.department.statistic-production-department-datatable')
     @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.team.statistic-production-team-datatable')
+    @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.team.statistic-production-team-v2-datatable')
 
     {{--员工--}}
     @include(env('DK_STAFF__TEMPLATE').'component.statistic.production.staff.statistic-caller-overview-datatable')

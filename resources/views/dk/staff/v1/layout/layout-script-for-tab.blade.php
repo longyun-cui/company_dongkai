@@ -287,6 +287,10 @@
                 {
                     Datatable__for__Statistic_Production_Team('#'+$config.id);
                 }
+                else if($id == "datatable-statistic-production-team-v2")
+                {
+                    Datatable__for__Statistic_Production_Team_V2('#'+$config.id);
+                }
                 else if($id == "caller")
                 {
                     console.log("caller");

@@ -5684,10 +5684,75 @@ class DK_Staff__StatisticRepository {
                     count(IF(inspected_result = '郊区通过', TRUE, NULL)) as count__for__order_accepted_suburb,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as count__for__order_accepted_inside,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as count__for__order_repeated,
-                    count(IF(inspected_result = '拒绝' or inspected_result = '不合格' or inspected_result = '超区' or inspected_result = '超龄', TRUE, NULL)) as count__for__order_refused
+                    count(IF(inspected_result in ('拒绝','不合格','超区','超龄'), TRUE, NULL)) as count__for__order_refused
                 "));
-//            ->whereDate("published_date",$the_date)
-//            ->groupBy('team_id')
+
+
+        // 工单种类 []
+        if(isset($post_data['order_category']))
+        {
+            $order_category = (int)$post_data['order_category'];
+            if(!in_array($order_category,[-1]))
+            {
+                $query_order->where('order_category', $order_category);
+            }
+        }
+
+
+        // 部门
+        if(!empty($post_data['department']))
+        {
+            $department_id_int = intval($post_data['department']);
+            if(!in_array($department_id_int,[-1,0]))
+            {
+                $query_order->where('creator_department_id', $department_id_int);
+            }
+        }
+
+        // 团队-单选
+//        if(!empty($post_data['team']))
+//        {
+//            $team = intval($post_data['team']);
+//            if(!in_array($team,[-1,0]))
+//            {
+//                $query->where('dk_common__order.creator_team_id', $team);
+//            }
+//        }
+        // 团队-多选
+        if(!empty($post_data['team_list']) && count($post_data['team_list']) > 0)
+        {
+            $query_order->whereIn('creator_team_id', $post_data['team_list']);
+        }
+
+
+        // 客服部
+        if($me->staff_category == 41)
+        {
+            if($me->staff_position == 31)
+            {
+                // 根据部门查看
+                $query_order->where('department_id', $me->department_id);
+            }
+            // 团队经理
+            else if($me->staff_position == 41)
+            {
+                // 根据部门查看
+                $query_order->where('team_id', $me->team_id);
+            }
+            // 小组主管
+            else if($me->staff_position == 61)
+            {
+                // 根据部门查看
+                $query_order->where('team_id', $me->team_id);
+                $query_order->where('team_group_id', $me->team_group_id);
+            }
+            // 职员
+            else if($me->staff_position == 99)
+            {
+                // 根据部门查看
+                $query_order->where('id', $me->id);
+            }
+        }
 
 
         // 时间
@@ -5725,41 +5790,33 @@ class DK_Staff__StatisticRepository {
             $query_order->where('published_date',$the_date);
         }
 
-        $query_order = $query_order->groupBy('creator_department_id')->groupBy('creator_team_id')->groupBy('creator_team_group_id')->get()->toArray();
-//        dd($query_order);
+
+        $order_list = $query_order->groupBy('creator_department_id')->groupBy('creator_team_id')->groupBy('creator_team_group_id')->get();
+//        dd($order_list->toArray());
 
 
-        $query = DK_Common__Team::select('id','name')
-            ->where('active',1)
-            ->where('team_category',41)
-            ->where('team_type',11)
-            ->where(['item_status'=>1]);
-
-
-        $total = $query->count();
+        $total = count($order_list);
 
         $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
-        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : -1;
 
-        if(isset($post_data['order']))
-        {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
 
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
-        }
-        else $query->orderBy("id", "asc");
 
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->get();
+        $department_list = DK_Common__Department::select('id','name')->where('active',1)->get()->keyBy('id')->toArray();
+
+        $team_list = DK_Common__Team::select('id','name')->where('active',1)->get()->keyBy('id')->toArray();
+
+
+
 
         $total_data = [];
         $total_data['id'] = '统计';
         $total_data['name'] = '--';
+        $total_data['creator_department_id'] = '';
+        $total_data['creator_team_id'] = '';
+        $total_data['creator_team_group_id'] = '';
+        $total_data['department_name'] = '统计';
+        $total_data['team_name'] = '统计';
+        $total_data['group_name'] = '统计';
         $total_data['staff_count'] = 0;
         $total_data['count__for__order_all'] = 0;
         $total_data['count__for__order_inspected'] = 0;
@@ -5777,80 +5834,61 @@ class DK_Staff__StatisticRepository {
         $total_data['count__for__order_refused'] = 0;
 
 
-        foreach ($list as $k => $v)
+        foreach ($order_list as $k => $v)
         {
-            if(isset($query_order[$v->id]))
-            {
-                $list[$k]->staff_count = $query_order[$v->id]['staff_count'];
-                $list[$k]->count__for__order_all = $query_order[$v->id]['count__for__order_all'];
-                $list[$k]->count__for__order_inspected = $query_order[$v->id]['count__for__order_inspected'];
-                $list[$k]->count__for__order_accepted_normal = $query_order[$v->id]['count__for__order_accepted_normal'];
-                $list[$k]->count__for__order_accepted_normal_1 = $query_order[$v->id]['count__for__order_accepted_normal_1'];
-                $list[$k]->count__for__order_accepted_normal_2 = $query_order[$v->id]['count__for__order_accepted_normal_2'];
-                $list[$k]->count__for__order_accepted_normal_3 = $query_order[$v->id]['count__for__order_accepted_normal_3'];
-                $list[$k]->count__for__order_accepted_discount = $query_order[$v->id]['count__for__order_accepted_discount'];
-                $list[$k]->count__for__order_accepted_suburb = $query_order[$v->id]['count__for__order_accepted_suburb'];
-                $list[$k]->count__for__order_accepted_inside = $query_order[$v->id]['count__for__order_accepted_inside'];
-                $list[$k]->count__for__order_accepted_all = (
-                    $query_order[$v->id]['count__for__order_accepted_normal'] +
-                    $query_order[$v->id]['count__for__order_accepted_discount'] +
-                    $query_order[$v->id]['count__for__order_accepted_suburb'] +
-                    $query_order[$v->id]['count__for__order_accepted_inside']
-                );
-                $list[$k]->count__for__order_accepted_effective = (
-                    $query_order[$v->id]['count__for__order_accepted_normal'] +
-                    $query_order[$v->id]['count__for__order_accepted_discount']
-                );
-                $list[$k]->count__for__order_repeated = $query_order[$v->id]['count__for__order_repeated'];
-                $list[$k]->count__for__order_refused = $query_order[$v->id]['count__for__order_refused'];
-            }
-            else
-            {
-                $list[$k]->staff_count = 0;
-                $list[$k]->count__for__order_all = 0;
-                $list[$k]->count__for__order_inspected = 0;
-                $list[$k]->count__for__order_accepted = 0;
-                $list[$k]->count__for__order_accepted_normal = 0;
-                $list[$k]->count__for__order_accepted_normal_1 = 0;
-                $list[$k]->count__for__order_accepted_normal_2 = 0;
-                $list[$k]->count__for__order_accepted_normal_3 = 0;
-                $list[$k]->count__for__order_accepted_discount = 0;
-                $list[$k]->count__for__order_accepted_suburb = 0;
-                $list[$k]->count__for__order_accepted_inside = 0;
-                $list[$k]->count__for__order_accepted_all = 0;
-                $list[$k]->count__for__order_accepted_effective = 0;
-                $list[$k]->count__for__order_repeated = 0;
-                $list[$k]->count__for__order_refused = 0;
-            }
 
-            // 人均 提交量 & 通过量 & 有效量
-            if($v->staff_count > 0)
+            if(isset($department_list[$v->creator_department_id]))
             {
-                $list[$k]->per__for__order_all = round(($v->count__for__order_all / $v->staff_count),2);
-                $list[$k]->per__for__order_accepted_all = round(($v->count__for__order_accepted_all / $v->staff_count),2);
-                $list[$k]->per__for__order_accepted_effective = round(($v->count__for__order_accepted_effective / $v->staff_count),2);
+                $order_list[$k]->department_name = $department_list[$v->creator_department_id]['name'];
             }
-            else
-            {
-                $list[$k]->per__for__order_all = 0;
-                $list[$k]->per__for__order_accepted_all = 0;
-                $list[$k]->per__for__order_accepted_effective = 0;
-            }
+            else $order_list[$k]->department_name = '';
 
-            // 通过率 & 有效率
-            if($v->count__for__order_all > 0)
+            if(isset($team_list[$v->creator_team_id]))
             {
-                $list[$k]->rate__for__order_accepted_all = round(($v->count__for__order_accepted_all * 100 / $v->count__for__order_all),2);
-                $list[$k]->rate__for__order_accepted_effective = round(($v->count__for__order_accepted_effective * 100 / $v->count__for__order_all),2);
+                $order_list[$k]->team_name = $team_list[$v->creator_team_id]['name'];
             }
-            else
+            else $order_list[$k]->team_name = '';
+
+            if($v->creator_team_group_id > 0)
             {
-                $list[$k]->rate__for__order_accepted_all = 0;
-                $list[$k]->rate__for__order_accepted_effective = 0;
+                if(isset($team_list[$v->creator_team_group_id]))
+                {
+                    $order_list[$k]->group_name = $team_list[$v->creator_team_group_id]['name'];
+                }
+                else $order_list[$k]->group_name = '';
             }
+            else $order_list[$k]->group_name = '未分组';
 
 
 
+//            // 人均 提交量 & 通过量 & 有效量
+//            if($v->staff_count > 0)
+//            {
+//                $list[$k]->per__for__order_all = round(($v->count__for__order_all / $v->staff_count),2);
+//                $list[$k]->per__for__order_accepted_all = round(($v->count__for__order_accepted_all / $v->staff_count),2);
+//                $list[$k]->per__for__order_accepted_effective = round(($v->count__for__order_accepted_effective / $v->staff_count),2);
+//            }
+//            else
+//            {
+//                $list[$k]->per__for__order_all = 0;
+//                $list[$k]->per__for__order_accepted_all = 0;
+//                $list[$k]->per__for__order_accepted_effective = 0;
+//            }
+//
+//            // 通过率 & 有效率
+//            if($v->count__for__order_all > 0)
+//            {
+//                $list[$k]->rate__for__order_accepted_all = round(($v->count__for__order_accepted_all * 100 / $v->count__for__order_all),2);
+//                $list[$k]->rate__for__order_accepted_effective = round(($v->count__for__order_accepted_effective * 100 / $v->count__for__order_all),2);
+//            }
+//            else
+//            {
+//                $list[$k]->rate__for__order_accepted_all = 0;
+//                $list[$k]->rate__for__order_accepted_effective = 0;
+//            }
+//
+//
+//
             $total_data['staff_count'] += $v->staff_count;
             $total_data['count__for__order_all'] += $v->count__for__order_all;
             $total_data['count__for__order_inspected'] += $v->count__for__order_inspected;
@@ -5876,37 +5914,37 @@ class DK_Staff__StatisticRepository {
 
         }
 
-        // 人均提交量
-        if($total_data['staff_count'] > 0)
-        {
-            $total_data['per__for__order_all'] = round(($total_data['count__for__order_all'] / $total_data['staff_count']),2);
-            $total_data['per__for__order_accepted_all'] = round(($total_data['count__for__order_accepted_all'] / $total_data['staff_count']),2);
-            $total_data['per__for__order_accepted_effective'] = round(($total_data['count__for__order_accepted_effective'] / $total_data['staff_count']),2);
-        }
-        else
-        {
-            $total_data['per__for__order_all'] = 0;
-            $total_data['per__for__order_accepted_all'] = 0;
-            $total_data['per__for__order_accepted_effective'] = 0;
-        }
+//        // 人均提交量
+//        if($total_data['staff_count'] > 0)
+//        {
+//            $total_data['per__for__order_all'] = round(($total_data['count__for__order_all'] / $total_data['staff_count']),2);
+//            $total_data['per__for__order_accepted_all'] = round(($total_data['count__for__order_accepted_all'] / $total_data['staff_count']),2);
+//            $total_data['per__for__order_accepted_effective'] = round(($total_data['count__for__order_accepted_effective'] / $total_data['staff_count']),2);
+//        }
+//        else
+//        {
+//            $total_data['per__for__order_all'] = 0;
+//            $total_data['per__for__order_accepted_all'] = 0;
+//            $total_data['per__for__order_accepted_effective'] = 0;
+//        }
+//
+//
+//        // 通过率 & 有效率
+//        if($total_data['count__for__order_all'] > 0)
+//        {
+//            $total_data['rate__for__order_accepted_all'] = round(($total_data['count__for__order_accepted_all'] * 100 / $total_data['count__for__order_all']),2);
+//            $total_data['rate__for__order_accepted_effective'] = round(($total_data['count__for__order_accepted_effective'] * 100 / $total_data['count__for__order_all']),2);
+//        }
+//        else
+//        {
+//            $total_data['rate__for__order_accepted_all'] = 0;
+//            $total_data['rate__for__order_accepted_effective'] = 0;
+//        }
 
 
-        // 通过率 & 有效率
-        if($total_data['count__for__order_all'] > 0)
-        {
-            $total_data['rate__for__order_accepted_all'] = round(($total_data['count__for__order_accepted_all'] * 100 / $total_data['count__for__order_all']),2);
-            $total_data['rate__for__order_accepted_effective'] = round(($total_data['count__for__order_accepted_effective'] * 100 / $total_data['count__for__order_all']),2);
-        }
-        else
-        {
-            $total_data['rate__for__order_accepted_all'] = 0;
-            $total_data['rate__for__order_accepted_effective'] = 0;
-        }
+        $order_list[] = $total_data;
 
-
-        $list[] = $total_data;
-
-        return datatable_response($list, $draw, $total);
+        return datatable_response($order_list, $draw, $total);
     }
 
 
