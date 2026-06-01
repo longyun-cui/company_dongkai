@@ -5732,20 +5732,20 @@ class DK_Staff__StatisticRepository {
             if($me->staff_position == 31)
             {
                 // 根据部门查看
-                $query_order->where('department_id', $me->department_id);
+                $query_order->where('creator_department_id', $me->department_id);
             }
             // 团队经理
             else if($me->staff_position == 41)
             {
                 // 根据部门查看
-                $query_order->where('team_id', $me->team_id);
+                $query_order->where('creator_team_id', $me->team_id);
             }
             // 小组主管
             else if($me->staff_position == 61)
             {
                 // 根据部门查看
-                $query_order->where('team_id', $me->team_id);
-                $query_order->where('team_group_id', $me->team_group_id);
+                $query_order->where('creator_team_id', $me->team_id);
+                $query_order->where('creator_team_group_id', $me->team_group_id);
             }
             // 职员
             else if($me->staff_position == 99)
