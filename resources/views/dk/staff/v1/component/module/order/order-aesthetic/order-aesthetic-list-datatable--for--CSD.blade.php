@@ -719,7 +719,7 @@
                         // 编辑
                         if(row.is_published == 0)
                         {
-                            $html_edit = '<a class="btn btn-xs modal-show--for--order-dental--item-edit" data-role="cs" data-id="'+data+'">编辑</a>';
+                            $html_edit = '<a class="btn btn-xs modal-show--for--order-aesthetic--item-edit" data-role="cs" data-id="'+data+'">编辑</a>';
                         }
 
                         // 发布
@@ -733,7 +733,7 @@
                             // 编辑
                             if(row.inspected_status == 1 && row.inspected_result == '二次待审')
                             {
-                                $html_edit = '<a class="btn btn-xs modal-show--for--order-dental--item-edit" data-role="cs" data-id="'+data+'">编辑</a>';
+                                $html_edit = '<a class="btn btn-xs modal-show--for--order-aesthetic--item-edit" data-role="cs" data-id="'+data+'">编辑</a>';
                             }
 
                             // 详情编辑
