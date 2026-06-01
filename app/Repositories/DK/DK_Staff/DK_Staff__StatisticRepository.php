@@ -5676,6 +5676,7 @@ class DK_Staff__StatisticRepository {
                     count(DISTINCT creator_id) as staff_count,
                     count(IF(is_published = 1, TRUE, NULL)) as count__for__order_all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as count__for__order_inspected,
+                    count(IF(inspected_result in ('通过','折扣通过','郊区通过','内部通过'), TRUE, NULL)) as count__for__order_accepted,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as count__for__order_accepted_normal,
                     count(IF(inspected_result_2 = '一档', TRUE, NULL)) as count__for__order_accepted_normal_1,
                     count(IF(inspected_result_2 = '二档', TRUE, NULL)) as count__for__order_accepted_normal_2,
@@ -5860,6 +5861,12 @@ class DK_Staff__StatisticRepository {
             else $order_list[$k]->group_name = '未分组';
 
 
+            $order_list[$k]->count__for__order_accepted_all = (
+                $v->count__for__order_accepted_normal +
+                $v->count__for__order_accepted_discount +
+                $v->count__for__order_accepted_suburb +
+                $v->count__for__order_accepted_inside
+            );
 
 //            // 人均 提交量 & 通过量 & 有效量
 //            if($v->staff_count > 0)
@@ -5892,6 +5899,7 @@ class DK_Staff__StatisticRepository {
             $total_data['staff_count'] += $v->staff_count;
             $total_data['count__for__order_all'] += $v->count__for__order_all;
             $total_data['count__for__order_inspected'] += $v->count__for__order_inspected;
+            $total_data['count__for__order_accepted'] += $v->count__for__order_accepted;
             $total_data['count__for__order_accepted_normal'] += $v->count__for__order_accepted_normal;
             $total_data['count__for__order_accepted_normal_1'] += $v->count__for__order_accepted_normal_1;
             $total_data['count__for__order_accepted_normal_2'] += $v->count__for__order_accepted_normal_2;

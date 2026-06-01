@@ -289,6 +289,24 @@
                         return data;
                     }
                 },
+                {
+                    "title": "有效总计",
+                    "data": "count__for__order_accepted_all",
+                    "className": "bg-inspected",
+                    "width": "80px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.id == "统计")
+                        {
+                            $(nTd).addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        if(!data) return '--';
+                        return data;
+                    }
+                },
                 // {
                 //     "title": "人均报单",
                 //     "data": "per__for__order_all",
