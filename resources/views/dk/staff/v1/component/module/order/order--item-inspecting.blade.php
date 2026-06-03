@@ -84,6 +84,11 @@
             <div class="box-header with-border margin-top-16px margin-bottom-4px">
                 <h3 class="box-title">录音审核 <span class="id-box"></span></h3>
                 <div class="box-tools pull-right caption">
+                    <a class="item-submit--for--order--item-ai-inspecting--api-sent">
+                        {{--                        <button type="button" class="btn btn-success pull-right">--}}
+                        <i class="fa fa-plus"></i> AI审核
+                        {{--                        </button>--}}
+                    </a>
                 </div>
             </div>
 
