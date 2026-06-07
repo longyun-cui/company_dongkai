@@ -52,6 +52,9 @@ Route::group(['domain'=>env('DOMAIN_WWW'), 'namespace'=>'DK'], function () {
 Route::group(['domain'=>env('DOMAIN_DK_SUPER'), 'namespace'=>'DK'], function () {
     require(__DIR__ . '/DK/route-super.php');
 });
+Route::group(['domain'=>env('DOMAIN_DK_API'), 'namespace'=>'DK'], function () {
+    require(__DIR__ . '/DK/route-api.php');
+});
 Route::group(['domain'=>env('DOMAIN_DK_CC'), 'namespace'=>'DK'], function () {
     require(__DIR__ . '/DK/route-cc.php');
 });

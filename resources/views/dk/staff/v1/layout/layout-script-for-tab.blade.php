@@ -185,6 +185,10 @@
                 {
                     Datatable__for__Staff_List('#'+$config.id);
                 }
+                else if($id == "datatable-mac-address-list")
+                {
+                    Datatable__for__Mac_Address__List('#'+$config.id);
+                }
                 else if($id == "datatable-location-list")
                 {
                     Datatable__for__Location_List('#'+$config.id);

@@ -18,6 +18,8 @@ use App\Repositories\DK\DK_Staff\DK_Staff__DepartmentRepository;
 use App\Repositories\DK\DK_Staff\DK_Staff__TeamRepository;
 use App\Repositories\DK\DK_Staff\DK_Staff__StaffRepository;
 
+use App\Repositories\DK\DK_Staff\DK_Staff__MacRepository;
+
 use App\Repositories\DK\DK_Staff\DK_Staff__LocationRepository;
 
 use App\Repositories\DK\DK_Staff\DK_Staff__ClientRepository;
@@ -52,6 +54,7 @@ class DKStaffController extends Controller
     private $department_repo;
     private $team_repo;
     private $staff_repo;
+    private $mac_address_repo;
 
     private $location_repo;
 
@@ -82,6 +85,8 @@ class DKStaffController extends Controller
         $this->department_repo = new DK_Staff__DepartmentRepository;
         $this->team_repo = new DK_Staff__TeamRepository;
         $this->staff_repo = new DK_Staff__StaffRepository;
+
+        $this->mac_address_repo = new DK_Staff__MacRepository;
 
         $this->location_repo = new DK_Staff__LocationRepository;
 
@@ -658,6 +663,59 @@ class DKStaffController extends Controller
     public function o1__staff__item_operation_record_list__datatable_query()
     {
         return $this->staff_repo->o1__staff__item_operation_record_list__datatable_query(request()->all());
+    }
+
+
+
+
+
+
+
+
+    // 【员工】datatable
+    public function o1__mac_address__list__datatable_query()
+    {
+        return $this->mac_address_repo->o1__mac_address__list__datatable_query(request()->all());
+    }
+    // 【员工】获取
+    public function o1__mac_address__item_get()
+    {
+        return $this->mac_address_repo->o1__mac_address__item_get(request()->all());
+    }
+    // 【员工】编辑-保存
+    public function o1__mac_address__item_save()
+    {
+        return $this->mac_address_repo->o1__mac_address__item_save(request()->all());
+    }
+    // 【员工】删除
+    public function o1__mac_address__item_delete()
+    {
+        return $this->mac_address_repo->o1__mac_address__item_delete(request()->all());
+    }
+    // 【员工】恢复
+    public function o1__mac_address__item_restore()
+    {
+        return $this->mac_address_repo->o1__mac_address__item_restore(request()->all());
+    }
+    // 【员工】彻底删除
+    public function o1__mac_address__item_delete_permanently()
+    {
+        return $this->mac_address_repo->o1__mac_address__item_delete_permanently(request()->all());
+    }
+    // 【员工】启用
+    public function o1__mac_address__item_enable()
+    {
+        return $this->mac_address_repo->o1__mac_address__item_enable(request()->all());
+    }
+    // 【员工】禁用
+    public function o1__mac_address__item_disable()
+    {
+        return $this->mac_address_repo->o1__mac_address__item_disable(request()->all());
+    }
+    // 【员工】操作记录
+    public function o1__mac_address__item_operation_record_list__datatable_query()
+    {
+        return $this->mac_address_repo->o1__mac_address__item_operation_record_list__datatable_query(request()->all());
     }
 
 

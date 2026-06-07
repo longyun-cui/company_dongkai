@@ -58,6 +58,8 @@
     @include(env('DK_STAFF__TEMPLATE').'component.module.team.team-list')
     {{--员工--}}
     @include(env('DK_STAFF__TEMPLATE').'component.module.staff.staff-list')
+    {{--mac--}}
+    @include(env('DK_STAFF__TEMPLATE').'component.module.mac-address.mac-address-list')
 
 
     {{--地域--}}
@@ -186,6 +188,9 @@
     {{--员工--}}
     @include(env('DK_STAFF__TEMPLATE').'component.module.staff.staff-edit')
     @include(env('DK_STAFF__TEMPLATE').'component.module.staff.staff--item-operation-record')
+    {{--mac--}}
+    @include(env('DK_STAFF__TEMPLATE').'component.module.mac-address.mac-address-edit')
+    @include(env('DK_STAFF__TEMPLATE').'component.module.mac-address.mac-address--item-operation-record')
 
 
     {{--地域--}}
@@ -271,6 +276,11 @@
     @include(env('DK_STAFF__TEMPLATE').'component.module.staff.staff-list-datatable')
     @include(env('DK_STAFF__TEMPLATE').'component.module.staff.staff-list-script')
     @include(env('DK_STAFF__TEMPLATE').'component.module.staff.staff--item-operation-record-datatable')
+    {{--mac--}}
+    @include(env('DK_STAFF__TEMPLATE').'component.module.mac-address.mac-address-edit-script')
+    @include(env('DK_STAFF__TEMPLATE').'component.module.mac-address.mac-address-list-datatable')
+    @include(env('DK_STAFF__TEMPLATE').'component.module.mac-address.mac-address-list-script')
+    @include(env('DK_STAFF__TEMPLATE').'component.module.mac-address.mac-address--item-operation-record-datatable')
 
 
     {{--地域--}}

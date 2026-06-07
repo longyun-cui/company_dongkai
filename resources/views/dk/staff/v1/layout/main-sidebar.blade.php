@@ -96,6 +96,28 @@
                 </a>
             </li>
             @endif
+            {{--员工列表--}}
+                @if(in_array($me->staff_category,[0,1,9]) || ($me->staff_category == 41 && in_array($me->staff_position,[0,1,9,11,31])) || ($me->staff_category == 71 && $me->staff_position == 31))
+            <li class="treeview">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="mac-address-list"
+                   data-title='MAC管理'
+                   data-content='<i class="fa fa-laptop text-white"></i> MAC管理'
+                   data-icon='<i class="fa fa-laptop text-blue"></i>'
+
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-mac-address-list"
+                   data-datatable-target="mac-address-list"
+                   data-datatable-clone-object="mac-address-list-clone"
+                >
+                    <i class="fa fa-laptop text-white"></i>
+                    <span>MAC管理</span>
+                </a>
+            </li>
+            @endif
 
 
             {{--地域列表--}}

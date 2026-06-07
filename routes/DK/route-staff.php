@@ -132,6 +132,26 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
 
 
 
+    // 【MAC】
+    Route::post('/o1/mac-address/mac-address-list/datatable-query', $controller.'@o1__mac_address__list__datatable_query');
+    Route::post('/o1/mac-address/item-get', $controller.'@o1__mac_address__item_get');
+    Route::post('/o1/mac-address/item-save', $controller.'@o1__mac_address__item_save');
+    // 【MAC】删除 & 恢复 & 永久删除
+    Route::post('/o1/mac-address/item-delete', $controller.'@o1__mac_address__item_delete');
+    Route::post('/o1/mac-address/item-restore', $controller.'@o1__mac_address__item_restore');
+    Route::post('/o1/mac-address/item-delete-permanently', $controller.'@o1__mac_address__item_delete_permanently');
+    // 【MAC】启用 & 禁用
+    Route::post('/o1/mac-address/item-enable', $controller.'@o1__mac_address__item_enable');
+    Route::post('/o1/mac-address/item-disable', $controller.'@o1__mac_address__item_disable');
+    // 【MAC】登录
+    Route::post('/o1/mac-address/item-password-reset', $controller.'@o1__mac_address__item_password_reset');
+    Route::post('/o1/mac-address/item-login', $controller.'@o1__mac_address__item_login');
+    // 【MAC】操作记录
+    Route::post('/o1/mac-address/item-operation-record-list/datatable-query', $controller.'@o1__mac_address__item_operation_record_list__datatable_query');
+
+
+
+
     // 【地区】
     Route::post('/o1/location/location-list/datatable-query', $controller.'@o1__location__list__datatable_query');
     Route::post('/o1/location/item-get', $controller.'@o1__location__item_get');
