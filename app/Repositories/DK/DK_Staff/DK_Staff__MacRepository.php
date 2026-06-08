@@ -274,14 +274,14 @@ class DK_Staff__MacRepository {
         {
             $mine = DK_Common__Mac_Address::find($operate_id);
             if(!$mine) return response_error([],"该【MAC地址】不存在，刷新页面重试！");
-            if($mine->mac_address != $post_data['mac_address'])
-            {
-                $is_exist = DK_Common__Mac_Address::where('mac_address',$post_data['mac_address'])->where('id','!=',$operate_id)->first();
-                if($is_exist) return response_error([],"该【MAC地址】重复，请更换再试一次！");
+//            if($mine->mac_address != $post_data['mac_address'])
+//            {
+//            }
+            $is_exist = DK_Common__Mac_Address::where('mac_address',$post_data['mac_address'])->where('id','!=',$operate_id)->first();
+            if($is_exist) return response_error([],"该【MAC地址】重复，请更换再试一次！");
 
-                $is_exist = DK_Common__Mac_Address::where('api_userName',$post_data['api_userName'])->where('id','!=',$operate_id)->first();
-                if($is_exist) return response_error([],"该【用户名】重复，请更换再试一次！");
-            }
+            $is_exist = DK_Common__Mac_Address::where('api_userName',$post_data['api_userName'])->where('id','!=',$operate_id)->first();
+            if($is_exist) return response_error([],"该【用户名】重复，请更换再试一次！");
         }
         else return response_error([],"参数有误！");
 
