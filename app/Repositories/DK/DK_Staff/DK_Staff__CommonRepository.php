@@ -185,19 +185,26 @@ class DK_Staff__CommonRepository {
         }
 
 
-        if(in_array($me->staff_position,[31,41,51,61,71]))
+        // 查询范围
+        if(!empty($post_data['query_scope']) && $post_data['query_scope'] == "all")
         {
-            $query->where('department_id',$me->department_id);
         }
-
-        if(in_array($me->staff_position,[41,51,61,71]))
+        else
         {
-            $query->where('superior_team_id',$me->team_id);
-        }
+            if(in_array($me->staff_position,[31,41,51,61,71]))
+            {
+                $query->where('department_id',$me->department_id);
+            }
 
-        if(in_array($me->staff_position,[61]))
-        {
-            $query->where('superior_team_group_id',$me->team_group_id);
+            if(in_array($me->staff_position,[41,51,61,71]))
+            {
+                $query->where('superior_team_id',$me->team_id);
+            }
+
+            if(in_array($me->staff_position,[61]))
+            {
+                $query->where('superior_team_group_id',$me->team_group_id);
+            }
         }
 
 

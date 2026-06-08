@@ -45,6 +45,7 @@
                                         name="department_id"
                                         id="select2--department--for--mac-address-item-edit"
                                         data-modal="#modal--for--mac-address-item-edit"
+                                        data-query-scope="all"
                                         data-item-category=""
                                         data-item-type=""
                                         data-department-category="41"
@@ -70,6 +71,7 @@
                                             data-modal="#modal--for--mac-address-item-edit"
                                             data-item-category=""
                                             data-item-type="11"
+                                            data-query-scope="all"
                                             data-team-category=""
                                             data-team-type="11"
                                             data-team-target="#select2---team-group--for--mac-address-item-edit"
@@ -85,6 +87,7 @@
                                         data-modal="#modal--for--mac-address-item-edit"
                                         data-item-category=""
                                         data-item-type="31"
+                                        data-query-scope="all"
                                 >
                                     <option data-id="0" value="0">选择小组</option>
                                 </select>
