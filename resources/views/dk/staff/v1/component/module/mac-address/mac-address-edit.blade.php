@@ -133,13 +133,13 @@
 {{--                    </div>--}}
 {{--                </div>--}}
                 {{--描述--}}
-                <div class="form-group _none">
-                    <label class="control-label col-md-2">描述</label>
-                    <div class="col-md-9 ">
-                        {{--<input type="text" class="form-control" name="description" placeholder="描述" value="{{$data->description or ''}}">--}}
-                        <textarea class="form-control" name="description" rows="3" cols="100%"></textarea>
-                    </div>
-                </div>
+{{--                <div class="form-group _none">--}}
+{{--                    <label class="control-label col-md-2">描述</label>--}}
+{{--                    <div class="col-md-9 ">--}}
+{{--                        --}}{{--<input type="text" class="form-control" name="description" placeholder="描述" value="{{$data->description or ''}}">--}}
+{{--                        <textarea class="form-control" name="description" rows="3" cols="100%"></textarea>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
                 
 
             </div>
