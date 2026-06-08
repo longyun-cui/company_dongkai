@@ -228,10 +228,14 @@ class DK_Staff__MacRepository {
         $messages = [
             'operate.required' => '参数有误！',
             'mac_address.required' => '请输入MAC地址！',
+            'api_customerName.required' => '请输入客户名！',
+            'api_userName.required' => '请输入用户名！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
             'mac_address' => 'required',
+            'api_customerName' => 'required',
+            'api_userName' => 'required',
         ], $messages);
         if ($v->fails())
         {
@@ -255,6 +259,9 @@ class DK_Staff__MacRepository {
             $is_exist = DK_Common__Mac_Address::where('mac_address',$post_data['mac_address'])->first();
             if($is_exist) return response_error([],"该【MAC地址】已存在！");
 
+            $is_exist = DK_Common__Mac_Address::where('api_userName',$post_data['api_userName'])->first();
+            if($is_exist) return response_error([],"该【用户名】已存在！");
+
             $mine = new DK_Common__Mac_Address;
             $post_data["item_status"] = 1;
 //            $post_data["user_category"] = 11;
@@ -271,6 +278,9 @@ class DK_Staff__MacRepository {
             {
                 $is_exist = DK_Common__Mac_Address::where('mac_address',$post_data['mac_address'])->where('id','!=',$operate_id)->first();
                 if($is_exist) return response_error([],"【MAC地址】重复，请更换再试一次！");
+
+                $is_exist = DK_Common__Mac_Address::where('api_userName',$post_data['api_userName'])->where('id','!=',$operate_id)->first();
+                if($is_exist) return response_error([],"【用户名】重复，请更换再试一次！");
             }
         }
         else return response_error([],"参数有误！");
