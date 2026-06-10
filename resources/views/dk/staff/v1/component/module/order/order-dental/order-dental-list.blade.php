@@ -77,6 +77,16 @@
                 </select>
             @endif
 
+            {{--选择员工--}}
+            @if(in_array($me->staff_category,[0,1,9,71]))
+                <select class="search-filter form-filter filter-lg select2-box-c select2--staff-c" name="order-staff">
+                    <option value="-1">选择员工</option>
+                    @foreach($staff_list as $v)
+                        <option value="{{ $v->id }}">{{ $v->name }}</option>
+                    @endforeach
+                </select>
+            @endif
+
             {{--选择项目--}}
             <select class="search-filter form-filter filter-md select2-box-c select2--project-c-" data-item-category="1" name="order-project">
                 <option value="-1">选择项目</option>
