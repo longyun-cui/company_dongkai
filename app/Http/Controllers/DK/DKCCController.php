@@ -1726,6 +1726,13 @@ class DKCCController extends Controller
     }
 
 
+    // 【API】LXY 励销云
+    public function operate_api_LXY_receiving_result()
+    {
+        return $this->repo->v1_operate_api_LXY_receiving_result(request()->all());
+    }
+
+
 
 
 

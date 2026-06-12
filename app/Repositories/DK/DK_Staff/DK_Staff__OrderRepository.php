@@ -3398,6 +3398,15 @@ class DK_Staff__OrderRepository {
         $inspected_description = $post_data["order-item-inspecting--description"];
         $recording_quality = $post_data["order-item-inspecting--recording-quality"];
 
+
+        if(in_array($inspected_result,['拒绝','不合格','超区','超龄','虚假']))
+        {
+            if(!isset($post_data["order--item-inspecting--rejected-reason"]))
+            {
+                return response_error([],"请选择拒绝类型！");
+            }
+        }
+
         $project_id = $post_data["project_id"];
         $client_name = $post_data["client_name"];
 //        $client_phone = $post_data["client_phone"];
@@ -3418,6 +3427,32 @@ class DK_Staff__OrderRepository {
         {
         }
         else return response_error([],"电话号码非法！");
+
+        if(in_array($inspected_result,['拒绝','不合格','虚假','超区','超龄']))
+        {
+            $item->inspected_result = '拒绝';
+            $item->inspected_result_2 = '拒绝';
+        }
+        else if($inspected_result == '不合格')
+        {
+            $item->inspected_result = '拒绝';
+            $item->inspected_result_2 = '不合格';
+        }
+        else if($inspected_result == '虚假')
+        {
+            $item->inspected_result = '拒绝';
+            $item->inspected_result_2 = '虚假';
+        }
+        else if($inspected_result == '超区')
+        {
+            $item->inspected_result = '拒绝';
+            $item->inspected_result_2 = '超区';
+        }
+        else if($inspected_result == '超龄')
+        {
+            $item->inspected_result = '拒绝';
+            $item->inspected_result_2 = '超龄';
+        }
 
 
 
@@ -3472,16 +3507,16 @@ class DK_Staff__OrderRepository {
             $record_row['code'] = $inspected_result;
 
             $before__inspected_result = !empty($item->inspected_result) ? $item->inspected_result : '';
-            if(in_array($before__inspected_result,['不合格','超区','超龄'])) $record_row['before'] = '拒绝.';
+            if(in_array($before__inspected_result,['不合格','超区','超龄','虚假'])) $record_row['before'] = '拒绝.';
             else $record_row['before'] = $before__inspected_result;
 
-            if(in_array($inspected_result,['不合格','超区','超龄'])) $record_row['after'] = '拒绝.';
+            if(in_array($inspected_result,['不合格','超区','超龄','虚假'])) $record_row['after'] = '拒绝.';
             else $record_row['after'] = $inspected_result;
 
             $record_content[] = $record_row;
 
 
-            if(in_array($inspected_result,['拒绝','不合格','超区','超龄']))
+            if(in_array($inspected_result,['拒绝','不合格','超区','超龄','虚假']))
             {
                 if(isset($post_data["order--item-inspecting--rejected-reason"]))
                 {

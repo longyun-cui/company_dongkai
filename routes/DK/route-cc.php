@@ -13,6 +13,7 @@ Route::match(['get','post'], 'logout', $controller.'@logout');
 Route::match(['get','post'], 'logout_without_token', $controller.'@logout_without_token');
 
 Route::match(['get','post'], '/cc_api/okcc/receiving-result', $controller.'@operate_api_OKCC_receiving_result');
+Route::match(['get','post'], '/cc_api/lxy/receiving-result', $controller.'@operate_api_LXY_receiving_result');
 
 /*
  * 超级管理员系统（后台）

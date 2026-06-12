@@ -317,16 +317,34 @@ class DK_AI_Inspect_Job implements ShouldQueue
                             $count = 0;
                             if($content_decode->审核结果 == '通过')
                             {
-                                if(isset($content_decode->客户姓氏是否询问) && $content_decode->客户姓氏是否询问 == '是') $count += 1;
-                                if(isset($content_decode->客户年龄是否询问) && $content_decode->客户年龄是否询问 == '是') $count += 1;
-                                if(isset($content_decode->客户三高状态是否询问) && $content_decode->客户三高状态是否询问 == '是') $count += 1;
-                                if(isset($content_decode->是否确认客户当前时间在不在【城市名称】的话术) && $content_decode->是否确认客户当前时间在不在【城市名称】的话术 == '是') $count += 1;
-                                if(isset($content_decode->结尾是否明确跟客户说“医助两小时回电，注意接听”的话术) && $content_decode->结尾是否明确跟客户说“医助两小时回电，注意接听”的话术 == '是') $count += 1;
+//                                if(isset($content_decode->客户姓氏是否询问) && $content_decode->客户姓氏是否询问 == '是') $count += 1;
+//                                if(isset($content_decode->客户年龄是否询问) && $content_decode->客户年龄是否询问 == '是') $count += 1;
+//                                if(isset($content_decode->客户三高状态是否询问) && $content_decode->客户三高状态是否询问 == '是') $count += 1;
+//                                if(isset($content_decode->是否确认客户当前时间在不在【城市名称】的话术) && $content_decode->是否确认客户当前时间在不在【城市名称】的话术 == '是') $count += 1;
+//                                if(isset($content_decode->结尾是否明确跟客户说“医助两小时回电，注意接听”的话术) && $content_decode->结尾是否明确跟客户说“医助两小时回电，注意接听”的话术 == '是') $count += 1;
+//
+//                                $order->inspected_result = $content_decode->审核结果;
+//                                $order->inspected_result_2 = '三档';
+//                                if($count == 4) $order->inspected_result_2 = '二档';
+//                                if($count >= 5) $order->inspected_result_2 = '一档';
+
+
+                                if(isset($content_decode->开场白话术) && $content_decode->开场白话术 == '有') $count += 1;
+                                if(isset($content_decode->客户姓氏话术) && $content_decode->客户姓氏话术 == '有') $count += 1;
+                                if(isset($content_decode->客户年龄话术) && $content_decode->客户年龄话术 == '有') $count += 1;
+                                if(isset($content_decode->客户三高话术) && $content_decode->客户三高话术 == '有') $count += 1;
+                                if(isset($content_decode->缺失数量话术) && $content_decode->缺失数量话术 == '有') $count += 1;
+                                if(isset($content_decode->缺牙是否处理话术) && $content_decode->缺牙是否处理话术 == '有') $count += 1;
+                                if(isset($content_decode->是否了解种植牙话术) && $content_decode->是否了解种植牙话术 == '有') $count += 1;
+                                if(isset($content_decode->否考虑种植牙话术) && $content_decode->否考虑种植牙话术 == '有') $count += 1;
+                                if(isset($content_decode->客户在不在当地话术) && $content_decode->客户在不在当地话术 == '有') $count += 1;
+                                if(isset($content_decode->结尾邀约话术) && $content_decode->结尾邀约话术 == '有') $count += 1;
 
                                 $order->inspected_result = $content_decode->审核结果;
+
                                 $order->inspected_result_2 = '三档';
-                                if($count == 4) $order->inspected_result_2 = '二档';
-                                if($count >= 5) $order->inspected_result_2 = '一档';
+                                if($count >= 4 && $count <= 6) $order->inspected_result_2 = '二档';
+                                if($count >= 7) $order->inspected_result_2 = '一档';
 
                             }
                             else if($content_decode->审核结果 == '超区')
