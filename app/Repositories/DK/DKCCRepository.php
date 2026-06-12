@@ -19,6 +19,7 @@ use App\Models\DK_CC\DK_CC_Call_Record;
 use App\Models\DK_CC\DK_CC_Call_Record_Current;
 use App\Models\DK_CC\DK_CC_Call_Statistic;
 use App\Models\DK_CC\DK_CC_API_Received_From_OKCC;
+use App\Models\DK_CC\DK_CC_API_Received_From_LXY;
 
 use App\Models\DK\DK_Department;
 use App\Models\DK\DK_District;
@@ -24216,6 +24217,7 @@ EOF;
                 $order_insert_data["order_category"] = 1;
             }
             $order_insert_data["created_type"] = 99;
+            $order_insert_data["created_source"] = 11;
             $order_insert_data["active"] = 1;
             $order_insert_data["creator_id"] = $staff->id;
             $order_insert_data["creator_company_id"] = $staff->company_id;
@@ -24266,74 +24268,19 @@ EOF;
     public function v1_operate_api_LXY_receiving_result($post_data)
     {
 
-        $serverFrom = $post_data['serverFrom'];
-
-        if($serverFrom == 'FNJ')
-        {
-            $serverFrom_id = 11;
-        }
-        else if($serverFrom == 'call-01')
-        {
-            $serverFrom_id = 1;
-        }
-        else if($serverFrom == 'call-02')
-        {
-            $serverFrom_id = 2;
-        }
-        else if($serverFrom == 'call-03')
-        {
-            $serverFrom_id = 3;
-        }
-        else if($serverFrom == 'call-04')
-        {
-            $serverFrom_id = 4;
-        }
-        else
-        {
-            $serverFrom_id = 0;
-        }
-
-        $insert_data['serverFrom_id'] = $serverFrom_id;
-        $insert_data['serverFrom_name'] = $serverFrom;
-        $insert_data['api_customer_account'] = $post_data['customerAccount'];
-        $insert_data['api_type'] = $post_data['notify']['type'];
-        $insert_data['staffNo'] = $post_data['notify']['data']['userName'];
-        if($serverFrom == 'call-01')
-        {
-            $insert_data['telephone_number'] = $post_data['notify']['data']['number'];
-        }
-        else if($serverFrom == 'call-02')
-        {
-            $insert_data['telephone_number'] = $post_data['notify']['data']['number1'];
-        }
-        else $insert_data['telephone_number'] = $post_data['notify']['data']['number'];
+        $insert_data['telephone_number'] = $post_data['customerPhone'];
         $insert_data['content'] = json_encode($post_data);
 
 
-        $mine = new DK_CC_API_Received_From_OKCC;
+        $mine = new DK_CC_API_Received_From_LXY;
         $bool_c = $mine->fill($insert_data)->save();
 
 
-
-        $notify = $post_data['notify'];
-        $clientMark_data = $post_data['notify']['data'];
-//        $clientMark_field = $post_data['notify']['field'];
-//        dd($clientMark_field);
-
-        $api_staffNo = (int)$clientMark_data['userName'];
-
-        if($serverFrom == 'call-01')
-        {
-            $phone_number = $clientMark_data['number'];
-        }
-        else if($serverFrom == 'call-02')
-        {
-            $phone_number = $clientMark_data['number1'];
-        }
-        else $phone_number = $clientMark_data['number'];
+        $phone_number = $post_data['customerPhone'];
+        $api_staffNo = $post_data['userId'];
 
 
-        $staff = DK_Common__Staff::with([])->where('api_staffNo',$api_staffNo)->orderBy('id','desc')->first();
+        $staff = DK_Common__Staff::with([])->where('lxy_staffNo',$api_staffNo)->orderBy('id','desc')->first();
         if(!$staff)
         {
             $return['result']['error'] = 1;
@@ -24356,17 +24303,9 @@ EOF;
         }
         else
         {
-
-            if($clientMark_data['type'] == '医美客户')
-            {
-                $order_insert_data["order_category"] = 11;
-            }
-            else
-            {
-                $order_insert_data["order_category"] = 1;
-            }
+            $order_insert_data["order_category"] = 1;
             $order_insert_data["created_type"] = 99;
-            $order_insert_data["created_source"] = 99;
+            $order_insert_data["created_source"] = 12;
             $order_insert_data["active"] = 1;
             $order_insert_data["creator_id"] = $staff->id;
             $order_insert_data["creator_company_id"] = $staff->company_id;
@@ -24376,6 +24315,14 @@ EOF;
             $order_insert_data["creator_team_group_id"] = $staff->team_group_id;
             $order_insert_data["creator_team_unit_id"] = $staff->team_unit_id;
             $order_insert_data["client_phone"] = $phone_number;
+
+
+            $file = [];
+            if(!empty($post_data['recordUrl']))
+            {
+                $file[] = $post_data['recordUrl'];
+                $order_insert_data["recording_address_list"] = json_encode($file);
+            }
 
             // 启动数据库事务
             DB::beginTransaction();

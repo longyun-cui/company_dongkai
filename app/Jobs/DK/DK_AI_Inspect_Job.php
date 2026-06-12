@@ -206,7 +206,8 @@ class DK_AI_Inspect_Job implements ShouldQueue
                     }
                     else
                     {
-                        $url = $protocol . '//' . $hostname . $port . '/recordFile/listen?file=' . $path;
+//                        $url = $protocol . '//' . $hostname . $port . '/recordFile/listen?file=' . $path;
+                        $url = $voice_record_url;
                     }
 
                     $ch = curl_init($url); // 初始化cURL会话

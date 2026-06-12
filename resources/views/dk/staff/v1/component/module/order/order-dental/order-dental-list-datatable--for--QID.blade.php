@@ -725,61 +725,6 @@
                     }
                 },
                 {
-                    "title": "是否+V",
-                    "name": "is_wx",
-                    "data": "is_wx",
-                    "className": "",
-                    "width": "60px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
-                        {
-                            $(nTd).attr('data-row-index',iRow);
-
-                            $(nTd).addClass('modal-show-for-field-set');
-                            $(nTd).attr('data-id',row.id).attr('data-name','是否+V');
-                            $(nTd).attr('data-key','is_wx').attr('data-value',data);
-
-                            $(nTd).attr('data-column-type','radio');
-                            $(nTd).attr('data-column-name','是否+V');
-
-                            if(data) $(nTd).attr('data-operate-type','edit');
-                            else $(nTd).attr('data-operate-type','add');
-                        }
-                    },
-                    render: function(data, type, row, meta) {
-                        if(data == 1) return '<small class="btn-xs btn-primary">是</small>';
-                        else return '--';
-                    }
-                },
-                {
-                    "title": "微信号",
-                    "name": "wx_id",
-                    "data": "wx_id",
-                    "className": "",
-                    "width": "100px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
-                        {
-                            $(nTd).attr('data-row-index',iRow);
-
-                            $(nTd).addClass('modal-show-for-field-set');
-                            $(nTd).attr('data-id',row.id).attr('data-name','微信号');
-                            $(nTd).attr('data-key','wx_id').attr('data-value',data);
-
-                            $(nTd).attr('data-column-type','text');
-                            $(nTd).attr('data-column-name','微信号');
-
-                            if(data) $(nTd).attr('data-operate-type','edit');
-                            else $(nTd).attr('data-operate-type','add');
-                        }
-                    },
-                    render: function(data, type, row, meta) {
-                        return data;
-                    }
-                },
-                {
                     "title": "所在城市",
                     "name": "location_city_district",
                     "data": "location_city",

@@ -24,6 +24,8 @@ class DK_Common__Order extends Model
         'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
 
         'created_type',
+        'created_source',
+
         'order_category',
         'order_type',
         'order_quality',

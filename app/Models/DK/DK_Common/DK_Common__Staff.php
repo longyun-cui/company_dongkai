@@ -80,6 +80,8 @@ class DK_Common__Staff extends Authenticatable
         'api_customer_account',
         'api_staffNo',
 
+        'lxy_staffNo',
+
         'visit_num', 'share_num', 'favor_num',  'follow_num', 'fans_num',
 
     ];
