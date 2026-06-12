@@ -377,6 +377,13 @@
                         <input type="text" class="form-control" name="api_staffNo" placeholder="API坐席ID，没有添0" value="">
                     </div>
                 </div>
+                {{--外呼系统坐席ID--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> L-ID</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="lxy_staffNo" placeholder="L-ID，没有添0" value="">
+                    </div>
+                </div>
                 {{--描述--}}
                 <div class="form-group _none">
                     <label class="control-label col-md-2">描述</label>

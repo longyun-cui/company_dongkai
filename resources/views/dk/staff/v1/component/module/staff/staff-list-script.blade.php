@@ -119,6 +119,7 @@
                         }
 
                         $modal.find('input[name="api_staffNo"]').val($response.data.api_staffNo);
+                        $modal.find('input[name="lxy_staffNo"]').val($response.data.lxy_staffNo);
 
                         var $datatable_wrapper = $that.closest('.datatable-wrapper');
                         var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");

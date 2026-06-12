@@ -27,6 +27,7 @@
                     d.login_number = $('input[name="staff-number"]').val();
                     d.name = $('input[name="staff-name"]').val();
                     d.api_staffNo = $('input[name="staff-api-staffNo"]').val();
+                    d.lxy_staffNo = $('input[name="staff-lxy-staffNo"]').val();
                     d.department = $tableSearch.find('select[name="staff-department"]').val();
                     d.team = $tableSearch.find('select[name="staff-team"]').val();
                     d.item_status = $tableSearch.find('select[name="staff-status"]').val();
@@ -243,6 +244,16 @@
                 {
                     "title": "API坐席ID",
                     "data": "api_staffNo",
+                    "className": "",
+                    "width": "100px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return '<a href="javascript:void(0);">'+data+'</a>';
+                    }
+                },
+                {
+                    "title": "L-ID",
+                    "data": "lxy_staffNo",
                     "className": "",
                     "width": "100px",
                     "orderable": false,

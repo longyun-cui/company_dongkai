@@ -136,6 +136,7 @@ class DK_Staff__StaffRepository {
         if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
 
         if(!empty($post_data['api_staffNo'])) $query->where('api_staffNo', $post_data['api_staffNo']);
+        if(!empty($post_data['lxy_staffNo'])) $query->where('lxy_staffNo', $post_data['lxy_staffNo']);
 
         // 状态 [|]
         if(!empty($post_data['item_status']))
@@ -319,6 +320,12 @@ class DK_Staff__StaffRepository {
                 if($is_api_staffNo_repeat) return response_error([],"【API坐席ID】已存在，请更换a！");
             }
 
+            if(!empty($post_data["lxy_staffNo"]))
+            {
+                $is_lxy_staffNo_repeat = DK_Common__Staff::where('lxy_staffNo',$post_data["lxy_staffNo"])->first();
+                if($is_lxy_staffNo_repeat) return response_error([],"【L-ID】已存在，请更换a！");
+            }
+
             $mine = new DK_Common__Staff;
             $post_data["item_status"] = 1;
 //            $post_data["user_category"] = 11;
@@ -342,6 +349,12 @@ class DK_Staff__StaffRepository {
             {
                 $is_api_staffNo_repeat = DK_Common__Staff::where('api_staffNo',$post_data['api_staffNo'])->where('id','!=',$operate_id)->first();
                 if($is_api_staffNo_repeat) return response_error([],"【API坐席ID】已存在，请更换！");
+            }
+
+            if(!empty($post_data["lxy_staffNo"]))
+            {
+                $is_lxy_staffNo_repeat = DK_Common__Staff::where('lxy_staffNo',$post_data["lxy_staffNo"])->where('id','!=',$operate_id)->first();
+                if($is_lxy_staffNo_repeat) return response_error([],"【L-ID】已存在，请更换a！");
             }
         }
         else return response_error([],"参数有误！");
