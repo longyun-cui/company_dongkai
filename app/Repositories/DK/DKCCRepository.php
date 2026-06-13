@@ -13820,7 +13820,7 @@ EOF;
                 $bool_1 = $record->fill($record_data)->save();
                 if(!$bool_1) throw new Exception("insert--record--fail");
             }
-            
+
             DB::commit();
             return response_success([]);
         }
@@ -23257,7 +23257,7 @@ EOF;
             $return['result']['error'] = 0;
             $return['result']['msg'] = '';
             return json_encode($return);
-            
+
         }
         catch (Exception $e)
         {

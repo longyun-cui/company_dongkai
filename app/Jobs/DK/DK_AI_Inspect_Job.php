@@ -200,6 +200,10 @@ class DK_AI_Inspect_Job implements ShouldQueue
                     {
                         $url = 'http://8.142.7.121:9091/res/rs1/recordFile/listen?file=' . $path;
                     }
+                    else if($hostname == 'call02.zlyx.jjccyun.cn')
+                    {
+                        $url = $protocol . '//' . $hostname . $port . '/recordFile/listen?file=' . $path;
+                    }
                     else if($hostname == 'fnjvce02.zlexin.cn')
                     {
                         $url = $protocol . '//' . $hostname . $port . '/recordFile/listen?file=' . $path;

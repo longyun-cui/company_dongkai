@@ -7707,8 +7707,8 @@ class DK_Staff__OrderRepository {
         }
         else if($serverFrom_name == "call-02")
         {
-            $server = "http://fnjvce02.zlexin.cn";
-            $url = "http://fnjvce02.zlexin.cn/openapi/V2.0.6/getCdrList";
+            $server = "http://call02.zlyx.jjccyun.cn";
+            $url = "http://call02.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
         }
         else if($serverFrom_name == "call-03")
         {
@@ -7994,13 +7994,18 @@ class DK_Staff__OrderRepository {
                 {
                     $url = 'http://8.142.7.121:9091/res/rs1/recordFile/listen?file=' . $path;
                 }
+                else if($hostname == 'call02.zlyx.jjccyun.cn')
+                {
+                    $url = $protocol . '//' . $hostname . $port . '/recordFile/listen?file=' . $path;
+                }
                 else if($hostname == 'fnjvce02.zlexin.cn')
                 {
                     $url = $protocol . '//' . $hostname . $port . '/recordFile/listen?file=' . $path;
                 }
                 else
                 {
-                    $url = $protocol . '//' . $hostname . $port . '/recordFile/listen?file=' . $path;
+//                    $url = $protocol . '//' . $hostname . $port . '/recordFile/listen?file=' . $path;
+                    $url = $voice_record_url;
                 }
 
                 $ch = curl_init($url); // 初始化cURL会话
@@ -8419,8 +8424,8 @@ class DK_Staff__OrderRepository {
         }
         else if($serverFrom_name == "call-02")
         {
-            $server = "http://fnjvce02.zlexin.cn";
-            $url = "http://fnjvce02.zlexin.cn/openapi/V2.0.6/getCdrList";
+            $server = "http://call02.zlyx.jjccyun.cn";
+            $url = "http://call02.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
         }
         else if($serverFrom_name == "call-03")
         {
