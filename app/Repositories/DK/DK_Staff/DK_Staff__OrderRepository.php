@@ -7707,8 +7707,8 @@ class DK_Staff__OrderRepository {
         }
         else if($serverFrom_name == "call-02")
         {
-            $server = "http://call02.zlyx.jjccyun.cn";
-            $url = "http://call02.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
+            $server = "http://fnjvce02.zlexin.cn";
+            $url = "http://fnjvce02.zlexin.cn/openapi/V2.0.6/getCdrList";
         }
         else if($serverFrom_name == "call-03")
         {
@@ -7994,7 +7994,7 @@ class DK_Staff__OrderRepository {
                 {
                     $url = 'http://8.142.7.121:9091/res/rs1/recordFile/listen?file=' . $path;
                 }
-                else if($hostname == 'call02.zlyx.jjccyun.cn')
+                else if($hostname == 'fnjvce02.zlexin.cn')
                 {
                     $url = $protocol . '//' . $hostname . $port . '/recordFile/listen?file=' . $path;
                 }
@@ -8419,8 +8419,8 @@ class DK_Staff__OrderRepository {
         }
         else if($serverFrom_name == "call-02")
         {
-            $server = "http://call02.zlyx.jjccyun.cn";
-            $url = "http://call02.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
+            $server = "http://fnjvce02.zlexin.cn";
+            $url = "http://fnjvce02.zlexin.cn/openapi/V2.0.6/getCdrList";
         }
         else if($serverFrom_name == "call-03")
         {
