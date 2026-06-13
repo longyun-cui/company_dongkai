@@ -24277,7 +24277,7 @@ EOF;
 
 
         $phone_number = $post_data['customerPhone'];
-        $api_staffNo = $post_data['userId'];
+        $api_staffNo = $post_data['bridgeUserId'];
 
 
         $staff = DK_Common__Staff::with([])->where('lxy_staffNo',$api_staffNo)->orderBy('id','desc')->first();
