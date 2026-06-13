@@ -160,6 +160,14 @@
                         {
                             $result_html = '<small class="btn-xs bg-black">有误</small>';
                         }
+                        if(row.created_source == 11)
+                        {
+                            $result_html = '<small class="btn-xs bg-green">OKCC</small>';
+                        }
+                        else if(row.created_source == 12)
+                        {
+                            $result_html = '<small class="btn-xs bg-green">LXY</small>';
+                        }
                         return $result_html;
                     }
                 },
