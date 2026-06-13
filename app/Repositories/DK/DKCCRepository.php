@@ -3297,8 +3297,8 @@ class DKCCRepository {
         }
         else if($mine->serverFrom_name == "call-02")
         {
-            $server = "http://fnjvce02.zlexin.cn";
-            $url = "http://fnjvce02.zlexin.cn/openapi/V2.1.2/login";
+            $server = "http://call02.zlyx.jjccyun.cn";
+            $url = "http://call02.zlyx.jjccyun.cn/openapi/V2.1.2/login";
             $API_Customer_Password = env('API_CALL_02_C1_PASSWORD');
         }
         else if($mine->serverFrom_name == "call-03")
@@ -23072,7 +23072,7 @@ EOF;
         else if($serverFrom == 'call-02')
         {
             $serverFrom_id = 2;
-            $server_http = 'http://fnjvce02.zlexin.cn';
+            $server_http = 'http://call02.zlyx.jjccyun.cn';
         }
         else if($serverFrom == 'call-03')
         {
@@ -23301,7 +23301,7 @@ EOF;
         else if($serverFrom == 'call-02')
         {
             $serverFrom_id = 2;
-            $server_http = 'http://fnjvce02.zlexin.cn';
+            $server_http = 'http://call02.zlyx.jjccyun.cn';
         }
         else if($serverFrom == 'call-03')
         {
@@ -23696,7 +23696,7 @@ EOF;
                 }
                 else if($serverFrom == 'call-02')
                 {
-                    $server_http = 'http://fnjvce02.zlexin.cn';
+                    $server_http = 'http://call02.zlyx.jjccyun.cn';
                 }
                 else if($serverFrom == 'call-03')
                 {
@@ -24026,7 +24026,7 @@ EOF;
                 }
                 else if($serverFrom == 'call-02')
                 {
-                    $server_http = 'http://fnjvce02.zlexin.cn';
+                    $server_http = 'http://call02.zlyx.jjccyun.cn';
                 }
                 else if($serverFrom == 'call-03')
                 {
