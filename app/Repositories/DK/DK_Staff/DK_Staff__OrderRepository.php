@@ -7707,8 +7707,10 @@ class DK_Staff__OrderRepository {
         }
         else if($serverFrom_name == "call-02")
         {
-            $server = "http://call02.zlyx.jjccyun.cn";
-            $url = "http://call02.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
+//            $server = "http://call02.zlyx.jjccyun.cn";
+//            $url = "http://call02.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
+            $server = "http://fnjvce02.zlexin.cn";
+            $url = "http://fnjvce02.zlexin.cn/openapi/V2.0.6/getCdrList";
         }
         else if($serverFrom_name == "call-03")
         {
@@ -7747,6 +7749,8 @@ class DK_Staff__OrderRepository {
         curl_setopt($ch, CURLOPT_POST, true); // post数据
         curl_setopt($ch, CURLOPT_POSTFIELDS, $request_data); // post的变量
         $request_result = curl_exec($ch);
+//        dd($url);
+//        dd($request_data);
 
 
         if(curl_errno($ch))
@@ -8424,8 +8428,10 @@ class DK_Staff__OrderRepository {
         }
         else if($serverFrom_name == "call-02")
         {
-            $server = "http://call02.zlyx.jjccyun.cn";
-            $url = "http://call02.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
+//            $server = "http://call02.zlyx.jjccyun.cn";
+//            $url = "http://call02.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
+            $server = "http://fnjvce02.zlexin.cn";
+            $url = "http://fnjvce02.zlexin.cn/openapi/V2.0.6/getCdrList";
         }
         else if($serverFrom_name == "call-03")
         {
