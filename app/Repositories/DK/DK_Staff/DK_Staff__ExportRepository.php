@@ -2102,7 +2102,7 @@ class DK_Staff__ExportRepository {
             $cellData[$k]['inspected_result'] = $v['inspected_result'];
             $cellData[$k]['rejected_reason'] = $v['rejected_reason'];
 
-            $cellData[$k]['recording_file'] = '';
+//            $cellData[$k]['recording_file'] = '';
             if(!empty($v['recording_address_list']))
             {
                 $recording_file = "";
@@ -2113,9 +2113,10 @@ class DK_Staff__ExportRepository {
                     {
                         $recording_file .= $recording."\r\n";
                     }
-                    $cellData[$k]['recording_file'] = $recording_file;
+                    $cellData[$k]['recording_file'] = trim(rtrim($recording_file,"\r\n"), '"');
                 }
             }
+//            dd($cellData[$k]['recording_file']);
         }
 
 
