@@ -8514,7 +8514,7 @@ class DK_Staff__OrderRepository {
 
             $return['error'] = 1;
             $return['status'] = 9;
-            $return['result'] = '请求失败！';
+            $return['result'] = '请求失败b！';
         }
         else
         {
