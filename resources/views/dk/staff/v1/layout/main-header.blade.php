@@ -156,6 +156,27 @@
                         <li class="divider"></li>
                         @endif
 
+                        @if(in_array($me->staff_category,[0,1,9,41,71]) && $me->staff_position <= 61)
+                        <li>
+                            <a href="javascript:void(0);" class="tab-control datatable-control"
+                               data-type="create"
+                               data-unique="y"
+                               data-id="statistic-production-order-rejected"
+                               data-title='<i class="fa fa-area-chart text-red"></i> <span>拒单统计</span>'
+                               data-content=''
+
+                               data-datatable-type="create"
+                               data-datatable-unique="y"
+                               data-datatable-id="datatable-statistic-production-order-rejected"
+                               data-datatable-target="statistic-production-order-rejected"
+                               data-datatable-clone-object="statistic-production-order-rejected-clone"
+                            >
+                                <i class="fa fa-area-chart text-red"></i> <span>拒单统计</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        @endif
+
 
 
 

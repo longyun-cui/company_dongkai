@@ -347,6 +347,7 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
     Route::post('/o1/statistic/production/department', $controller.'@o1__statistic__production__department');
     Route::post('/o1/statistic/production/team', $controller.'@o1__statistic__production__team');
     Route::post('/o1/statistic/production/team/v2', $controller.'@o1__statistic__production__team__v2');
+    Route::post('/o1/statistic/production/order/rejected', $controller.'@o1__statistic__production__order__rejected');
     // 【生产统计】
     Route::post('/o1/statistic/production/caller-overview', $controller.'@o1__statistic__production__caller_overview');
     Route::post('/o1/statistic/production/caller-appealed', $controller.'@o1__statistic__production__caller_appealed');

@@ -5955,6 +5955,182 @@ class DK_Staff__StatisticRepository {
         return datatable_response($order_list, $draw, $total);
     }
 
+    public function o1__statistic__production__order__rejected($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+
+        // 工单统计
+        $query_count = DK_Common__Order::withTrashed()->whereNotNull('rejected_reason')->where('rejected_reason', '!=', '');
+
+
+        $query_order = DK_Common__Order::query()
+            ->select(
+                DB::raw("SUBSTRING_INDEX(SUBSTRING_INDEX(dk_common__order.rejected_reason, '-', n.n), '-', -1) as reason_code"),
+                DB::raw("COUNT(*) as total_count")
+            )
+            ->join(DB::raw("(
+                SELECT 1 AS n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL
+                SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7
+            ) n"), function($join) {
+                $join->on(DB::raw("CHAR_LENGTH(dk_common__order.rejected_reason) - CHAR_LENGTH(REPLACE(dk_common__order.rejected_reason, '-', ''))"), '>=', DB::raw("n.n - 1"));
+            })
+            ->whereNotNull('rejected_reason')
+            ->where('rejected_reason', '!=', '');
+
+
+        // 工单种类 []
+        if(isset($post_data['order_category']))
+        {
+            $order_category = (int)$post_data['order_category'];
+            if(!in_array($order_category,[-1]))
+            {
+                $query_count->where('order_category', $order_category);
+                $query_order->where('order_category', $order_category);
+            }
+        }
+
+
+        // 部门
+        if(!empty($post_data['department']))
+        {
+            $department_id_int = intval($post_data['department']);
+            if(!in_array($department_id_int,[-1,0]))
+            {
+                $query_count->where('creator_department_id', $department_id_int);
+                $query_order->where('creator_department_id', $department_id_int);
+            }
+        }
+
+        // 团队-单选
+//        if(!empty($post_data['team']))
+//        {
+//            $team = intval($post_data['team']);
+//            if(!in_array($team,[-1,0]))
+//            {
+//                $query->where('dk_common__order.creator_team_id', $team);
+//            }
+//        }
+        // 团队-多选
+        if(!empty($post_data['team_list']) && count($post_data['team_list']) > 0)
+        {
+            $query_count->whereIn('creator_team_id', $post_data['team_list']);
+            $query_order->whereIn('creator_team_id', $post_data['team_list']);
+        }
+
+
+        // 客服部
+        if($me->staff_category == 41)
+        {
+            if($me->staff_position == 31)
+            {
+                // 根据部门查看
+                $query_count->where('creator_department_id', $me->department_id);
+                $query_order->where('creator_department_id', $me->department_id);
+            }
+            // 团队经理
+            else if($me->staff_position == 41)
+            {
+                // 根据部门查看
+                $query_count->where('creator_team_id', $me->team_id);
+                $query_order->where('creator_team_id', $me->team_id);
+            }
+            // 小组主管
+            else if($me->staff_position == 61)
+            {
+                // 根据部门查看
+                $query_count->where('creator_team_id', $me->team_id);
+                $query_order->where('creator_team_id', $me->team_id);
+                $query_count->where('creator_team_group_id', $me->team_group_id);
+                $query_order->where('creator_team_group_id', $me->team_group_id);
+            }
+            // 职员
+            else if($me->staff_position == 99)
+            {
+                // 根据部门查看
+                $query_count->where('id', $me->id);
+                $query_order->where('id', $me->id);
+            }
+        }
+
+
+        // 时间
+        $time_type  = isset($post_data['time_type']) ? $post_data['time_type'] : '';
+        if($time_type == 'all')
+        {
+        }
+        else if($time_type == 'date')
+        {
+            $the_date  = isset($post_data['time_date']) ? $post_data['time_date'] : date('Y-m-d');
+            $query_count->where('published_date',$the_date);
+            $query_order->where('published_date',$the_date);
+        }
+        else if($time_type == 'month')
+        {
+            $the_month  = isset($post_data['time_month']) ? $post_data['time_month'] : date('Y-m');
+            $the_month_timestamp = strtotime($the_month);
+
+            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+            $query_count->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date]);
+            $query_order->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date]);
+        }
+        else if($time_type == 'period')
+        {
+            if(!empty($post_data['date_start'])) $query_count->where('published_date', '>=', $post_data['date_start']);
+            if(!empty($post_data['date_ended'])) $query_count->where('published_date', '<=', $post_data['date_ended']);
+            if(!empty($post_data['date_start'])) $query_order->where('published_date', '>=', $post_data['date_start']);
+            if(!empty($post_data['date_ended'])) $query_order->where('published_date', '<=', $post_data['date_ended']);
+        }
+        else
+        {
+//            $the_date  = isset($post_data['time_date']) ? $post_data['time_date'] : date('Y-m-d');
+//            $query_count->where('published_date',$the_date);
+//            $query_order->where('published_date',$the_date);
+        }
+
+        // 先计算总数
+        $totalOrders = $query_count->count();
+
+        $order_list = $query_order->groupBy('reason_code')->orderBy('reason_code')->get();
+//        dd($order_list->toArray());
+
+
+        $reasons = config('dk.common-config.rejected_reason');
+
+        $stats = collect($reasons)->map(function($name, $code) use ($order_list, $totalOrders) {
+            $result = $order_list->firstWhere('reason_code', (string)$code);
+            $count = $result ? (int)$result->total_count : 0;
+            $percentage = $totalOrders > 0 ? round(($count / $totalOrders) * 100, 2) : 0;
+
+            return [
+                'code' => $code,
+                'name' => $name,
+                'count' => $count,
+                'percentage' => $percentage . '%'
+            ];
+        })->values();
+
+
+        $total = count($order_list);
+
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+
+
+//        foreach ($order_list as $k => $v)
+//        {
+//        }
+
+        return datatable_response($stats, $draw, $total);
+    }
+
 
 
 

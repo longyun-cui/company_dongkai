@@ -1459,6 +1459,11 @@ class DKStaffController extends Controller
     {
         return $this->statistic_repo->o1__statistic__production__team__v2(request()->all());
     }
+    // 【统计】【生产】拒单统计
+    public function o1__statistic__production__order__rejected()
+    {
+        return $this->statistic_repo->o1__statistic__production__order__rejected(request()->all());
+    }
 
 
 

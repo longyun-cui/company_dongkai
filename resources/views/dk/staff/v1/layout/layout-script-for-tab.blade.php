@@ -295,6 +295,10 @@
                 {
                     Datatable__for__Statistic_Production_Team_V2('#'+$config.id);
                 }
+                else if($id == "datatable-statistic-production-order-rejected")
+                {
+                    Datatable__for__Statistic_Production_Order_Rejected('#'+$config.id);
+                }
                 else if($id == "caller")
                 {
                     console.log("caller");
