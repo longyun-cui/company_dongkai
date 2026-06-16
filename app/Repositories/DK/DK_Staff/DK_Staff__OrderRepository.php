@@ -7786,7 +7786,7 @@ class DK_Staff__OrderRepository {
         if(curl_errno($ch))
         {
             curl_close($ch);
-            return response_error([],"请求失败！");
+            return response_error([],"请求失败c！");
         }
         else
         {

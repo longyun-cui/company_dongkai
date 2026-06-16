@@ -695,6 +695,7 @@ class DK_Staff__CommonRepository {
         curl_setopt($ch, CURLOPT_POST, true); // post数据
         curl_setopt($ch, CURLOPT_POSTFIELDS, $request_data); // post的变量
         $request_result = curl_exec($ch);
+//        dd($request_result);
 
 
         $return = [];
@@ -709,7 +710,7 @@ class DK_Staff__CommonRepository {
 
             $return['error'] = 1;
             $return['status'] = 9;
-            $return['result'] = '请求失败！';
+            $return['result'] = '请求失败z！';
         }
         else
         {
