@@ -216,6 +216,25 @@
                     <span>口腔•工单</span>
                 </a>
             </li>
+            <li class="treeview _none-">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="order-dental-rejected-list"
+                   data-title='口腔•拒单'
+                   data-content=''
+                   data-icon='<i class="fa fa-file-excel-o text-orange"></i>'
+
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-order-dental-rejected-list"
+                   data-datatable-target="order-dental-rejected-list"
+                   data-datatable-clone-object="order-dental-rejected-list-clone"
+                >
+                    <i class="fa fa-file-excel-o text-orange"></i>
+                    <span>口腔•拒单</span>
+                </a>
+            </li>
             @if(
                 (in_array($me->staff_category,[0,1,9,61,71]) && in_array($me->staff_position,[0,1,9,11,31,41,61,99]))
                 || (in_array($me->staff_category,[41]) && in_array($me->staff_position,[0,1,9,11,31]))

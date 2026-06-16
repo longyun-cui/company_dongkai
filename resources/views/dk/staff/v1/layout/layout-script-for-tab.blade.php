@@ -215,6 +215,10 @@
                 {
                     Datatable__for__Order_Dental_List($config.id);
                 }
+                else if($id == "datatable-order-dental-rejected-list")
+                {
+                    Datatable__for__Order_Dental_Rejected_List($config.id);
+                }
                 else if($id == "datatable-order-aesthetic-list")
                 {
                     Datatable__for__Order_Aesthetic_List($config.id);

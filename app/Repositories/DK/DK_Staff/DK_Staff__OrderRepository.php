@@ -162,6 +162,17 @@ class DK_Staff__OrderRepository {
                 $query->where('dk_common__order.order_category', $order_category);
             }
         }
+        // 工单种类 []
+        if(isset($post_data['order_rejected']))
+        {
+            $order_category = intval($post_data['order_rejected']);
+            if($order_category == 1)
+            {
+                $query->whereIn('dk_common__order.inspected_result', ['拒绝','超区','超龄','不合格','虚假']);
+            }
+        }
+
+
 
         // 工单类型 []
         if(isset($post_data['item_type']))
@@ -738,6 +749,25 @@ class DK_Staff__OrderRepository {
                     $client_phone = $v->client_phone;
                     $v->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
                 }
+            }
+
+            $list[$k]->rejected_reason_text = '';
+            if(!empty($v->rejected_reason))
+            {
+                // 分割字符串并过滤空值
+                $ids = array_filter(explode('-', $v->rejected_reason));
+
+                $reasons = config('dk.common-config.rejected_reason');
+
+                // 使用集合映射并过滤无效ID
+                $result = collect($ids)
+                    ->map(function ($id) use ($reasons) {
+                        return $reasons[$id] ?? null;
+                    })
+                    ->filter()  // 移除null值
+                    ->implode('；');
+
+                $list[$k]->rejected_reason_text = $result . '；';
             }
 
         }
