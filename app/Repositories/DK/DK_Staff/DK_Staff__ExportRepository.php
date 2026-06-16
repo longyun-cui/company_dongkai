@@ -4766,6 +4766,21 @@ class DK_Staff__ExportRepository {
             $cellData[$k]['inspector_name'] = $v['inspector']['name'];
             $cellData[$k]['inspected_time'] = date('Y-m-d H:i:s', $v['inspected_at']);
             $cellData[$k]['inspected_result'] = $v['inspected_result'];
+
+
+            if(!empty($v['recording_address_list']))
+            {
+                $recording_file = "";
+                $recording_address_list = json_decode($v['recording_address_list']);
+                if(count($recording_address_list) > 0)
+                {
+                    foreach($recording_address_list as $key => $recording)
+                    {
+                        $recording_file .= $recording."\r\n";
+                    }
+                    $cellData[$k]['recording_file'] = trim(rtrim($recording_file,"\r\n"), '"');
+                }
+            }
         }
 
 
@@ -4796,6 +4811,7 @@ class DK_Staff__ExportRepository {
                 'inspector_name'=>'审核人',
                 'inspected_time'=>'审核时间',
                 'inspected_result'=>'审核结果',
+                'recording_file'=>'录音文件',
             ];
         }
         else
@@ -4824,6 +4840,7 @@ class DK_Staff__ExportRepository {
                 'inspector_name'=>'审核人',
                 'inspected_time'=>'审核时间',
                 'inspected_result'=>'审核结果',
+                'recording_file'=>'录音文件',
             ];
         }
         array_unshift($cellData, $title_row);
