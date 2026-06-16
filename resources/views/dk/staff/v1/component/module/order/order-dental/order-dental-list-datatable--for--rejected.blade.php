@@ -104,6 +104,82 @@
                     }
                 },
                 {
+                    "title": "审核结果",
+                    "name": "inspected_result",
+                    "data": "inspected_result",
+                    "className": "text-center",
+                    "width": "72px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.is_completed != 1)
+                        {
+                            $(nTd).addClass('modal-show-for-field-set-');
+                            $(nTd).attr('data-id',row.id).attr('data-name','审核结果');
+                            $(nTd).attr('data-key','inspected_result').attr('data-value',data);
+
+                            $(nTd).attr('data-column-name','审核结果');
+
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        if(!row.inspected_at) return '--';
+                        var $result_html = '';
+                        var $result_2_html = '';
+                        var $inspected_result_2 = row.inspected_result_2;
+                        if(data == "通过")
+                        {
+                            $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
+                            if($inspected_result_2 && ['一档','二档','三挡'].includes(row.inspected_result))
+                            {
+                                $result_2_html = '<small class="btn-xs bg-green">'+$inspected_result_2+'</small>';
+                            }
+                        }
+                        else if(data == "折扣通过" || data == "郊区通过" || data == "内部通过")
+                        {
+                            $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
+                        }
+                        else if(data == "拒绝")
+                        {
+                            $result_html = '<small class="btn-xs bg-red">拒绝</small>';
+                        }
+                        else if(data == "拒绝可交付")
+                        {
+                            $result_html = '<small class="btn-xs bg-red">拒绝</small>';
+                        }
+                        else if(data == "不合格")
+                        {
+                            $result_html = '<small class="btn-xs bg-red">拒绝</small>';
+                        }
+                        else if(data == "虚假")
+                        {
+                            $result_html = '<small class="btn-xs bg-red">拒绝</small>';
+                        }
+                        else if(data == "超区")
+                        {
+                            $result_html = '<small class="btn-xs bg-red">拒绝</small>';
+                        }
+                        else if(data == "超龄")
+                        {
+                            $result_html = '<small class="btn-xs bg-red">拒绝</small>';
+                        }
+                        else if(data == "重复")
+                        {
+                            $result_html = '<small class="btn-xs bg-yellow">重复</small>';
+                        }
+                        else if(data == "重复•可分发")
+                        {
+                            $result_html = '<small class="btn-xs bg-yellow">重复</small>';
+                        }
+                        else
+                        {
+                            $result_html = '<small class="btn-xs bg-black">有误</small>';
+                        }
+                        return $result_html + $result_2_html;
+                    }
+                },
+                {
                     "title": "项目",
                     "name": "project_id",
                     "data": "project_id",
