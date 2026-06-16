@@ -6091,9 +6091,9 @@ class DK_Staff__StatisticRepository {
         }
         else
         {
-//            $the_date  = isset($post_data['time_date']) ? $post_data['time_date'] : date('Y-m-d');
-//            $query_count->where('published_date',$the_date);
-//            $query_order->where('published_date',$the_date);
+            $the_date  = isset($post_data['time_date']) ? $post_data['time_date'] : date('Y-m-d');
+            $query_count->where('published_date',$the_date);
+            $query_order->where('published_date',$the_date);
         }
 
         // 先计算总数
