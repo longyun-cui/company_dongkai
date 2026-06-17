@@ -521,8 +521,10 @@ class DK_Staff__CommonRepository {
     //
     public function o1__api__ai_inspecting__from__ali($post_data)
     {
+//        dd($post_data);
         $platform = $post_data['platform'];
         $model = $post_data['model'];
+        $system_prompt = !empty($post_data['system_prompt']) ? $post_data['system_prompt'] : '';
         $prompt = $post_data['prompt'];
         $audio = $post_data['voice_record'];
         $audio_list = $post_data['voice_record_list'];
@@ -559,7 +561,7 @@ class DK_Staff__CommonRepository {
             "messages" => [
                 [
                     "role" => "system",
-                    "content" => "你是一个严格的质检员，请分析录音内容，请严格遵循JSON Schema输出。禁止使用Markdown格式，禁止包含json代码块标记，禁止换行，输出内容必须是单行的紧凑JSON字符串，每一个返回字段均为关联数组类型， :之后不要再有{、}、[、]等能够污染php程序的符号、特殊符号和保留字，输出内容也不要包含英文字符的单引号与双引号，如需引用标注，请使用中文的引号，避免数据格式混乱。不要包含任何其他解释或文字。如果信息在录音中不存在，请对应字段填null！"
+                    "content" => "你是一个严格的质检员，请分析录音内容，请严格遵循JSON Schema输出。禁止使用Markdown格式，禁止包含json代码块标记，禁止换行，输出内容必须是单行的紧凑JSON字符串，每一个返回字段均为关联数组类型， :之后不要再有{、}、[、]等能够污染php程序的符号、特殊符号和保留字，输出内容也不要包含英文字符的单引号与双引号，如需引用标注，请使用中文的引号，避免数据格式混乱。不要包含任何其他解释或文字。如果信息在录音中不存在，请对应字段填null！ ".$system_prompt
                 ],
                 [
                     "role" => "user",

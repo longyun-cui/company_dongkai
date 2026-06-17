@@ -7895,6 +7895,7 @@ class DK_Staff__OrderRepository {
 
         $ai_model = config('dk.common-config.ai_model_text');
         $ai_prompt = config('dk.common-config.ai_prompt_text');
+        $ai_system_prompt = config('dk.common-config.ai_system_prompt_text');
 
         $this->get_me();
         $me = $this->me;
@@ -7913,6 +7914,7 @@ class DK_Staff__OrderRepository {
         {
             $ai_model = !empty($project->ai_model) ? $project->ai_model : $ai_model;
             $ai_prompt = !empty($project->ai_prompt) ? $project->ai_prompt : $ai_prompt;
+            $ai_system_prompt = !empty($project->ai_system_prompt) ? $project->ai_system_prompt : $ai_system_prompt;
 //            $ai_prompt = !empty($project->ai_prompt) ? ($project->ai_prompt.$ai_prompt) : $ai_prompt;
         }
         else return response_error([],"该工单的【项目】不存在，刷新页面重试！");
@@ -8138,6 +8140,7 @@ class DK_Staff__OrderRepository {
             $ai_inspected = new DK_Common__Order__AI_Inspected__Record;
             $ai_data['ai_platform'] = 'ali';
             $ai_data['ai_model'] = $ai_model;
+            $ai_data['ai_system_prompt'] = $ai_system_prompt;
             $ai_data['ai_prompt'] = $ai_prompt;
             $ai_data['order_id'] = $item_id;
 
@@ -8147,6 +8150,7 @@ class DK_Staff__OrderRepository {
             {
                 $ai_inspecting_post_date['platform'] = $ai_data['ai_platform'];
                 $ai_inspecting_post_date['model'] = $ai_data['ai_model'];
+                $ai_inspecting_post_date['system_prompt'] = $ai_data['ai_system_prompt'];
                 $ai_inspecting_post_date['prompt'] = $ai_data['ai_prompt'];
                 $ai_inspecting_post_date['voice_record'] = $voice_record_url;
                 $ai_inspecting_post_date['voice_record_list'] = $recording_address_list;

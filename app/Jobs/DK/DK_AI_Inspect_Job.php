@@ -54,6 +54,7 @@ class DK_AI_Inspect_Job implements ShouldQueue
         $ai_platform = config('dk.common-config.ai_platform_text');
         $ai_model = config('dk.common-config.ai_model_text');
         $ai_prompt = config('dk.common-config.ai_prompt_text');
+        $ai_system_prompt = config('dk.common-config.ai_system_prompt_text');
 
 
         $id = $this->id;
@@ -83,7 +84,8 @@ class DK_AI_Inspect_Job implements ShouldQueue
                 $ai_platform = !empty($project->ai_platform) ? $project->ai_platform : $ai_platform;
                 $ai_model = !empty($project->ai_model) ? $project->ai_model : $ai_model;
                 $ai_prompt = !empty($project->ai_prompt) ? ($project->ai_prompt) : $ai_prompt;
-//                $ai_prompt = !empty($project->ai_prompt) ? ($project->ai_prompt.$ai_prompt) : $ai_prompt;
+//                $ai_prompt = !empty($project->ai_prompt) ? ($project->ai_prompt) : $ai_prompt;
+                $ai_system_prompt = !empty($project->ai_system_prompt) ? $project->ai_system_prompt : $ai_system_prompt;
             }
             else
             {
@@ -264,11 +266,13 @@ class DK_AI_Inspect_Job implements ShouldQueue
             $ai_data['ai_platform'] = $ai_platform;
             $ai_data['ai_model'] = $ai_model;
             $ai_data['ai_prompt'] = $ai_prompt;
+            $ai_data['ai_system_prompt'] = $ai_system_prompt;
             $ai_data['order_id'] = $order_id;
 
             $item->ai_platform = $ai_platform;
             $item->ai_model = $ai_model;
             $item->ai_prompt = $ai_prompt;
+            $item->ai_system_prompt = $ai_system_prompt;
 
             $bool_ai = $item->save();
             if(!$bool_ai)
@@ -279,6 +283,7 @@ class DK_AI_Inspect_Job implements ShouldQueue
             {
                 $ai_inspecting_post_date['platform'] = $ai_data['ai_platform'];
                 $ai_inspecting_post_date['model'] = $ai_data['ai_model'];
+                $ai_inspecting_post_date['system_prompt'] = $ai_data['ai_system_prompt'];
                 $ai_inspecting_post_date['prompt'] = $ai_data['ai_prompt'];
                 $ai_inspecting_post_date['voice_record'] = $voice_record_url;
                 $ai_inspecting_post_date['voice_record_list'] = $recording_address_list;

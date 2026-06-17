@@ -35,6 +35,8 @@ class DK_Common__Project extends Model
         'ai_platform',
         'ai_model',
         'ai_prompt',
+        'ai_system_prompt',
+        'ai_user_prompt',
 
 
         'contact', 'contact_name', 'contact_phone', 'contact_email', 'contact_wx_id', 'contact_wx_qr_code_img', 'contact_address',

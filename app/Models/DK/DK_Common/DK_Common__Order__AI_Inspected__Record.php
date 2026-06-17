@@ -54,6 +54,7 @@ class DK_Common__Order__AI_Inspected__Record extends Model
         'ai_platform',
         'ai_model',
         'ai_prompt',
+        'ai_system_prompt',
         'token_consumed_num',
         'ai_used_time',
         'program_used_time',
