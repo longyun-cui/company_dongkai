@@ -172,6 +172,15 @@ class DK_Staff__AIRepository {
                 {
                     $list[$k]->usage = null;
                 }
+
+                if(isset($result->id))
+                {
+                    $list[$k]->chatcmpl = $result->id;
+                }
+                else
+                {
+                    $list[$k]->chatcmpl = null;
+                }
             }
             else
             {

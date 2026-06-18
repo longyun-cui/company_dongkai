@@ -152,6 +152,8 @@
                         $return_html += '【费用】' + $fee + ' <br>';
                         // $.each(data, function($index, $value) {
                         //     $return_html += '【'+ $index +'】' + $value + ' <br>';
+                        $return_html += ' <br>';
+                        $return_html += '【id】' + row.chatcmpl + ' <br>';
                         // });
                         return $return_html;
                     }
