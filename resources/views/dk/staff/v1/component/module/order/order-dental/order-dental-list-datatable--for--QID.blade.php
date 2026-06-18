@@ -62,6 +62,7 @@
                     d.recording_quality = $tableSearch.find('select[name="order-recording-quality"]').val();
                     d.inspected_status = $tableSearch.find('select[name="order-inspected-status"]').val();
                     d.inspected_result = $tableSearch.find('select[name="order-inspected-result[]"]').val();
+                    d.inspected_result_2 = $tableSearch.find('select[name="order-inspected-result-2[]"]').val();
                     d.appealed_status = $tableSearch.find('select[name="order-appealed-status"]').val();
                     d.delivered_status = $tableSearch.find('select[name="order-delivered-status"]').val();
                     d.delivered_result = $tableSearch.find('select[name="order-delivered-result[]"]').val();
