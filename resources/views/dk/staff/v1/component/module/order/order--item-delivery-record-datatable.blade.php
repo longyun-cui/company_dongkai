@@ -120,6 +120,7 @@
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(data == 'order') return '<small class="btn-xs bg-green">工单</small>';
+                            if(data == 'import') return '<small class="btn-xs bg-aqua">导入</small>';
                             else if(data == 'delivery') return '<small class="btn-xs bg-blue">交付</small>';
                             else return '有误';
                         }
@@ -160,6 +161,14 @@
                         render: function(data, type, row, meta) {
                             var $return_html = '';
                             if(row.item_type == 'order')
+                            {
+                                if(row.delivered_project_er)
+                                {
+                                    if(row.delivered_project_er.alias_name) $return_html = row.delivered_project_er.name + ' ('+row.delivered_project_er.alias_name+')';
+                                    else $return_html = row.delivered_project_er.name;
+                                }
+                            }
+                            if(row.item_type == 'import')
                             {
                                 if(row.delivered_project_er)
                                 {

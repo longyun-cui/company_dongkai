@@ -12,6 +12,7 @@ use App\Models\DK\DK_Common\DK_Common__Client;
 use App\Models\DK\DK_Common\DK_Common__Project;
 
 use App\Models\DK\DK_Common\DK_Common__Order;
+use App\Models\DK\DK_Common\DK_Common__Order__Import;
 use App\Models\DK\DK_Common\DK_Common__Order__Operation_Record;
 use App\Models\DK\DK_Common\DK_Common__Delivery;
 
@@ -701,6 +702,84 @@ class DK_Staff__OrderRepository {
 //            ->skip($skip)
 //            ->take($limit)
 //            ->get();
+
+
+
+
+        // 电话号码查询，查询导入数据
+        if($me->staff_category != 41)
+        {
+            if(!empty($post_data['client_phone']))
+            {
+                $query->where('dk_common__order.client_phone', $post_data['client_phone']);
+                $query_import = DK_Common__Order__Import::select('*')
+                    ->with([
+                        'delivered_project_er'=>function($query) { $query->select(['id','name','alias_name']); },
+                        'delivered_client_er'=>function($query) { $query->select(['id','name']); },
+                    ])
+                    ->where('client_phone',(int)$post_data['client_phone'])
+                    ->where('order_category',(int)$post_data['order_category']);
+
+
+                // 交付项目
+                if(isset($post_data['delivered_project']))
+                {
+                    $delivered_projectId = intval($post_data['delivered_project']);
+                    if(!in_array($delivered_projectId,[-1,0]))
+                    {
+                        $query_import->where('delivered_project_id', $delivered_projectId);
+                    }
+                }
+
+
+                // 交付客户
+                if(isset($post_data['delivered_client']))
+                {
+                    $delivered_clientId = intval($post_data['delivered_client']);
+                    if(!in_array($delivered_clientId,[-1,0]))
+                    {
+                        $query_import->where('delivered_client_id', $delivered_clientId);
+                    }
+                }
+
+                $import_list = $query_import->get();
+                foreach ($import_list as $k => $v)
+                {
+                    $import_list[$k]->created_type = 9;
+                    $import_list[$k]->project_id = 0;
+                    $import_list[$k]->is_repeat = 0;
+                    $import_list[$k]->client_name = null;
+                    $import_list[$k]->client_type = null;
+                    $import_list[$k]->client_intention = null;
+                    $import_list[$k]->field_1 = null;
+                    $import_list[$k]->location_city = null;
+                    $import_list[$k]->description = null;
+                    $import_list[$k]->work_shift = null;
+                    $import_list[$k]->recording_address_list = null;
+                    $import_list[$k]->recording_quality = 0;
+                    $import_list[$k]->creator_team_id = 0;
+                    $import_list[$k]->creator_team_group_id = 0;
+                    $import_list[$k]->ai_inspected_status = 0;
+                    $import_list[$k]->inspected_status = 1;
+                    $import_list[$k]->inspected_result = '';
+                    $import_list[$k]->delivered_status = 1;
+                    $import_list[$k]->delivered_result = '';
+                    $import_list[$k]->delivered_at = null;
+                    $import_list[$k]->inspector_id = 0;
+                    $import_list[$k]->inspected_at = null;
+                    $import_list[$k]->published_at = null;
+                    $import_list[$k]->api_is_pushed = 0;
+                    $import_list[$k]->api_is_pushed_for_cpa = 0;
+                }
+
+                $list = $list->merge($import_list);
+
+                $total = $list->count();
+
+            }
+        }
+
+
 
         foreach ($list as $k => $v)
         {
@@ -1918,6 +1997,7 @@ class DK_Staff__OrderRepository {
     }
 
 
+    // 【工单】导入
     public function o1__order__import__by_txt($post_data)
     {
         $messages = [
@@ -2012,15 +2092,16 @@ class DK_Staff__OrderRepository {
                         {
                             $data[] = [
                                 'creator_id'=>$me->id,
-                                'created_type'=>9,
+//                                'created_type'=>9,
                                 'client_phone'=>trim($v),
                                 'order_category'=>$order_category,
                                 'delivered_client_id'=>$client_id,
                                 'delivered_project_id'=>$project_id,
-                                'is_published'=>1,
+//                                'is_published'=>1,
 //                                'published_date'=>$date,
-                                'inspected_status'=>1,
-                                'inspected_result'=>'通过',
+//                                'inspected_status'=>1,
+//                                'inspected_result'=>'通过',
+                                'created_date'=>$date,
                                 'created_at'=>$time
                             ];
                         }
@@ -2036,7 +2117,7 @@ class DK_Staff__OrderRepository {
                 {
                     foreach($insert_data as $insert_value)
                     {
-                        $modal_order = new DK_Common__Order;
+                        $modal_order = new DK_Common__Order__Import;
                         $bool = $modal_order->insert($insert_value);
 
                         if(!$bool) throw new Exception("DK_Common__Order--insert--fail");
@@ -2140,6 +2221,15 @@ class DK_Staff__OrderRepository {
             ->where('order_category',$order->order_category)
             ->get();
 
+        $import_list = DK_Common__Order__Import::select('*')
+            ->with([
+                'delivered_project_er'=>function($query) { $query->select(['id','name','alias_name']); },
+                'delivered_client_er'=>function($query) { $query->select(['id','name']); },
+            ])
+            ->where('client_phone',$order->client_phone)
+            ->where('order_category',$order->order_category)
+            ->get();
+
         $delivery_list = DK_Common__Delivery::select('*')
             ->with([
                 'original_project_er'=>function($query) { $query->select(['id','name','alias_name']); },
@@ -2158,6 +2248,11 @@ class DK_Staff__OrderRepository {
         foreach ($order_list as $k => $v)
         {
             $v->item_type = "order";
+            $list[] = $v;
+        }
+        foreach ($import_list as $k => $v)
+        {
+            $v->item_type = "import";
             $list[] = $v;
         }
         foreach ($delivery_list as $k => $v)
@@ -2669,7 +2764,19 @@ class DK_Staff__OrderRepository {
             ->count("*");
         if($is_repeat == 0)
         {
-            $is_repeat = DK_Common__Delivery::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])->count("*");
+            $is_repeat = DK_Common__Order__Import::where(['delivered_project_id'=>$project_id,'client_phone'=>(int)$client_phone])
+                ->where('order_category',$item->order_category)
+                ->count("*");
+            if($is_repeat == 0)
+            {
+                $is_repeat = DK_Common__Order__Import::where(['delivered_project_id'=>$project_id,'client_phone'=>(int)$client_phone])
+                    ->where('order_category',$item->order_category)
+                    ->count("*");
+                if($is_repeat == 0)
+                {
+                    $is_repeat = DK_Common__Delivery::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])->count("*");
+                }
+            }
         }
         if($is_repeat > 0) $is_repeat += 1;
 
@@ -3643,7 +3750,13 @@ class DK_Staff__OrderRepository {
                 ->count("*");
             if($is_repeat == 0)
             {
-                $is_repeat = DK_Common__Delivery::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])->count("*");
+                $is_repeat = DK_Common__Order__Import::where(['delivered_project_id'=>$project_id,'client_phone'=>(int)$client_phone])
+                    ->where('order_category',$item->order_category)
+                    ->count("*");
+                if($is_repeat == 0)
+                {
+                    $is_repeat = DK_Common__Delivery::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])->count("*");
+                }
             }
             if($is_repeat > 0) $is_repeat += 1;
 
@@ -4438,7 +4551,13 @@ class DK_Staff__OrderRepository {
                 ->count("*");
             if($is_repeat == 0)
             {
-                $is_repeat = DK_Common__Delivery::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])->count("*");
+                $is_repeat = DK_Common__Order__Import::where(['delivered_project_id'=>$project_id,'client_phone'=>(int)$client_phone])
+                    ->where('order_category',$item->order_category)
+                    ->count("*");
+                if($is_repeat == 0)
+                {
+                    $is_repeat = DK_Common__Delivery::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])->count("*");
+                }
             }
             if($is_repeat > 0) $is_repeat += 1;
 
@@ -5084,6 +5203,45 @@ class DK_Staff__OrderRepository {
         }
 
 
+        // [判断]【导入】是否重复
+        if($is_next == 1)
+        {
+            $is_order_list = DK_Common__Order__Import::select('id','order_category','client_phone','delivered_project_id','delivered_client_id')
+                ->where('order_category',$order_category)
+                ->where('client_phone',$client_phone)
+                ->where(function ($query) use($delivered_project_id,$delivered_client_id) {
+                    $query->where('delivered_project_id',$delivered_project_id)->orWhere('delivered_client_id',$delivered_client_id);
+                })
+                ->where('id','<>',$id)
+                ->get();
+            if(count($is_order_list) > 0)
+            {
+                $is_delivery = 99;
+                $delivered_result = '交付失败';
+                foreach($is_order_list as $o)
+                {
+                    // 判断项目
+                    if($o->delivered_project_id == $delivered_project_id)
+                    {
+//                        $delivered_result = '项目·重复';
+                        $delivered_result = '重复';
+                        $non_delivery_reason = '【项目】重复';
+                        break; // 跳出循环
+                    }
+
+                    // 判断客户
+                    if($o->delivered_client_id == $delivered_client_id)
+                    {
+//                        $delivered_result = '客户·重复';
+                        $delivered_result = '重复';
+                        $non_delivery_reason = '【客户】重复';
+                        break; // 跳出循环
+                    }
+                }
+            }
+        }
+
+
         // [判断]【交付】是否重复
         if($is_next == 1)
         {
@@ -5465,6 +5623,48 @@ class DK_Staff__OrderRepository {
                 if($is_next == 1)
                 {
                     $is_order_list = DK_Common__Order::select('id','order_category','client_phone','delivered_project_id','delivered_client_id')
+                        ->where('order_category',$order_category)
+                        ->where('client_phone',$client_phone)
+                        ->where(function ($query) use($project_id,$client_id) {
+                            $query->where('delivered_project_id',$project_id)->orWhere('delivered_client_id',$client_id);
+                        })
+                        ->where('id','<>',$id)
+                        ->get();
+                    if(count($is_order_list) > 0)
+                    {
+                        $is_delivery = 99;
+                        $delivered_result = '交付失败';
+                        $non_delivered_result = '交付失败';
+                        foreach($is_order_list as $o)
+                        {
+                            // 判断项目
+                            if($o->delivered_project_id == $project_id)
+                            {
+                                $delivered_result = '重复';
+//                        $delivered_result = '项目·重复';
+                                $non_delivered_result = '交付失败';
+                                $non_delivery_reason = '【项目】重复';
+                                break; // 跳出循环
+                            }
+
+                            // 判断客户
+                            if($o->delivered_client_id == $client_id)
+                            {
+                                $delivered_result = '重复';
+                                $non_delivered_result = '交付失败';
+//                        $delivered_result = '客户·重复';
+                                $non_delivery_reason = '【客户】重复';
+                                break; // 跳出循环
+                            }
+                        }
+                    }
+                }
+
+
+                // [判断]【导入】是否重复
+                if($is_next == 1)
+                {
+                    $is_order_list = DK_Common__Order__Import::select('id','order_category','client_phone','delivered_project_id','delivered_client_id')
                         ->where('order_category',$order_category)
                         ->where('client_phone',$client_phone)
                         ->where(function ($query) use($project_id,$client_id) {
@@ -6052,6 +6252,45 @@ class DK_Staff__OrderRepository {
         }
 
 
+        // [判断]【导入】是否重复
+        if($is_next == 1)
+        {
+            $is_order_list = DK_Common__Order__Import::select('id','order_category','client_phone','delivered_project_id','delivered_client_id')
+                ->where('order_category',$order_category)
+                ->where('client_phone',$client_phone)
+                ->where(function ($query) use($project_id,$client_id) {
+                    $query->where('delivered_project_id',$project_id)->orWhere('delivered_client_id',$client_id);
+                })
+                ->where('id','<>',$id)
+                ->get();
+            if(count($is_order_list) > 0)
+            {
+                $is_delivery = 99;
+                $delivered_result = '交付失败';
+                foreach($is_order_list as $o)
+                {
+                    // 判断项目
+                    if($o->delivered_project_id == $project_id)
+                    {
+                        $delivered_result = '重复';
+//                        $delivered_result = '项目·重复';
+                        $non_delivery_reason = '【项目】重复';
+                        break; // 跳出循环
+                    }
+
+                    // 判断客户
+                    if($o->delivered_client_id == $client_id)
+                    {
+                        $delivered_result = '重复';
+//                        $delivered_result = '客户·重复';
+                        $non_delivery_reason = '【客户】重复';
+                        break; // 跳出循环
+                    }
+                }
+            }
+        }
+
+
         // [判断]【交付】是否重复
         if($is_next == 1)
         {
@@ -6465,6 +6704,45 @@ class DK_Staff__OrderRepository {
                 if($is_next == 1)
                 {
                     $is_order_list = DK_Common__Order::select('id','order_category','client_phone','delivered_project_id','delivered_client_id')
+                        ->where('order_category',$order_category)
+                        ->where('client_phone',$client_phone)
+                        ->where(function ($query) use($project_id,$client_id) {
+                            $query->where('delivered_project_id',$project_id)->orWhere('delivered_client_id',$client_id);
+                        })
+//                        ->where('id','<>',$id)
+                        ->get();
+                    if(count($is_order_list) > 0)
+                    {
+                        $is_delivery = 99;
+                        $delivered_result = '交付失败';
+                        foreach($is_order_list as $o)
+                        {
+                            // 判断项目
+                            if($o->delivered_project_id == $project_id)
+                            {
+                                $delivered_result = '重复';
+//                        $delivered_result = '项目·重复';
+                                $non_delivery_reason = '【项目】重复';
+                                break; // 跳出循环
+                            }
+
+                            // 判断客户
+                            if($o->delivered_client_id == $client_id)
+                            {
+                                $delivered_result = '重复';
+//                        $delivered_result = '客户·重复';
+                                $non_delivery_reason = '【客户】重复';
+                                break; // 跳出循环
+                            }
+                        }
+                    }
+                }
+
+
+                // [判断]【导入】是否重复
+                if($is_next == 1)
+                {
+                    $is_order_list = DK_Common__Order__Import::select('id','order_category','client_phone','delivered_project_id','delivered_client_id')
                         ->where('order_category',$order_category)
                         ->where('client_phone',$client_phone)
                         ->where(function ($query) use($project_id,$client_id) {
@@ -6955,6 +7233,42 @@ class DK_Staff__OrderRepository {
         }
 
 
+        // [判断]【导入】是否重复
+        if($is_next == 1)
+        {
+            $is_order_list = DK_Common__Order__Import::select('id','order_category','client_phone','delivered_project_id','delivered_client_id')
+                ->where('order_category',$order_category)
+                ->where('client_phone',$client_phone)
+                ->where(function ($query) use($delivered_project_id,$delivered_client_id) {
+                    $query->where('delivered_project_id',$delivered_project_id)->orWhere('delivered_client_id',$delivered_client_id);
+                })
+                ->get();
+            if(count($is_order_list) > 0)
+            {
+                $is_delivery = 99;
+                $delivered_result = '交付失败';
+                foreach($is_order_list as $o)
+                {
+                    // 判断项目
+                    if($o->delivered_project_id == $delivered_project_id)
+                    {
+                        $delivered_result = '项目·重复';
+                        $non_delivery_reason = '【项目】重复';
+                        break; // 跳出循环
+                    }
+
+                    // 判断客户
+                    if($o->delivered_client_id == $delivered_client_id)
+                    {
+                        $delivered_result = '客户·重复';
+                        $non_delivery_reason = '【客户】重复';
+                        break; // 跳出循环
+                    }
+                }
+            }
+        }
+
+
         // [判断]【交付】是否重复
         if($is_next == 1)
         {
@@ -7290,6 +7604,48 @@ class DK_Staff__OrderRepository {
                 if($is_next == 1)
                 {
                     $is_order_list = DK_Common__Order::select('id','order_category','client_phone','delivered_project_id','delivered_client_id')
+                        ->where('order_category',$order_category)
+                        ->where('client_phone',$client_phone)
+                        ->where(function ($query) use($project_id,$client_id) {
+                            $query->where('delivered_project_id',$project_id)->orWhere('delivered_client_id',$client_id);
+                        })
+                        ->where('id','<>',$id)
+                        ->get();
+                    if(count($is_order_list) > 0)
+                    {
+                        $is_next = 0;
+                        $is_delivery = 99;
+//                        $delivered_result = '交付失败';
+                        foreach($is_order_list as $o)
+                        {
+                            // 判断项目
+                            if($o->delivered_project_id == $project_id)
+                            {
+                                $non_delivered_result = '交付失败';
+//                                $delivered_result = '重复';
+//                                $delivered_result = '项目·重复';
+                                $non_delivery_reason = '【项目】重复';
+                                break; // 跳出循环
+                            }
+
+                            // 判断客户
+                            if($o->delivered_client_id == $client_id)
+                            {
+                                $non_delivered_result = '交付失败';
+//                                $delivered_result = '重复';
+//                                $delivered_result = '客户·重复';
+                                $non_delivery_reason = '【客户】重复';
+                                break; // 跳出循环
+                            }
+                        }
+                    }
+                }
+
+
+                // [判断]【导入】是否重复
+                if($is_next == 1)
+                {
+                    $is_order_list = DK_Common__Order__Import::select('id','order_category','client_phone','delivered_project_id','delivered_client_id')
                         ->where('order_category',$order_category)
                         ->where('client_phone',$client_phone)
                         ->where(function ($query) use($project_id,$client_id) {
