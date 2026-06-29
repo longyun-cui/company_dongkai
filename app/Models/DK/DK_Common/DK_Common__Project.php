@@ -31,12 +31,23 @@ class DK_Common__Project extends Model
         'is_distributive',
         'daily_goal',
 
+        'inspecting_method',
+
+        'is_automatic_ai_converting',
         'is_automatic_ai_inspecting',
+        'is_automatic_ai_inspecting_by_text',
+
         'ai_platform',
         'ai_model',
         'ai_prompt',
         'ai_system_prompt',
         'ai_user_prompt',
+
+        'ai_platform_for_text_inspecting',
+        'ai_model_for_text_inspecting',
+        'ai_prompt_for_text_inspecting',
+        'ai_system_prompt_for_text_inspecting',
+        'ai_user_prompt_for_text_inspecting',
 
 
         'contact', 'contact_name', 'contact_phone', 'contact_email', 'contact_wx_id', 'contact_wx_qr_code_img', 'contact_address',

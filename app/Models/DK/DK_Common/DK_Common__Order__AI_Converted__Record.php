@@ -4,11 +4,11 @@ namespace App\Models\DK\DK_Common;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DK_Common__Order__AI_Inspected__Record extends Model
+class DK_Common__Order__AI_Converted__Record extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "dk_common__order__ai_inspected__record";
+    protected $table = "dk_common__order__ai_converted__record";
 
     protected $fillable = [
         'active', 'status', 'result', 'result2',

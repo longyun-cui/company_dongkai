@@ -333,7 +333,7 @@
                     "title": "分发",
                     "data": "is_distributive",
                     "className": "",
-                    "width": "60px",
+                    "width": "40px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1)
@@ -358,10 +358,48 @@
                     }
                 },
                 {
-                    "title": "自动AI质检",
+                    "title": "审核方式",
+                    "data": "inspecting_method",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(data == 0) return '未选择';
+                        else if(data == 1) return '<small class="btn-xs btn-success">人工审核</small>';
+                        else if(data == 11) return '<small class="btn-xs btn-orange">AI审核</small>';
+                        else if(data == 21) return '<small class="btn-xs btn-danger">人工+AI审核</small>';
+                        else return '--';
+                    }
+                },
+                {
+                    "title": "自动AI<br>转文字",
+                    "data": "is_automatic_ai_converting",
+                    "className": "",
+                    "width": "50px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(data == 0) return '<small class="btn-xs btn-danger">否</small>';
+                        else if(data == 1) return '<small class="btn-xs btn-success">是</small>';
+                        else return '--';
+                    }
+                },
+                {
+                    "title": "自动AI<br>文字审核",
+                    "data": "is_automatic_ai_inspecting_by_text",
+                    "className": "",
+                    "width": "50px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(data == 0) return '<small class="btn-xs btn-danger">否</small>';
+                        else if(data == 1) return '<small class="btn-xs btn-success">是</small>';
+                        else return '--';
+                    }
+                },
+                {
+                    "title": "自动AI<br>录音审核",
                     "data": "is_automatic_ai_inspecting",
                     "className": "",
-                    "width": "60px",
+                    "width": "50px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         if(data == 0) return '<small class="btn-xs btn-danger">否</small>';

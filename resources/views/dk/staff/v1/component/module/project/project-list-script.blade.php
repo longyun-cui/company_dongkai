@@ -100,6 +100,17 @@
                         $modal.find('input[name="is_distributive"]').prop('checked', false);
                         $modal.find('input[name="is_distributive"][value="'+$response.data.is_distributive+'"]').prop('checked', true).trigger('change');
 
+                        // 审核方式
+                        $modal.find('select[name="inspecting_method"]').val($response.data.inspecting_method).trigger('change');
+
+                        // 是否自动AI录音转文字
+                        $modal.find('input[name="is_automatic_ai_converting"]').prop('checked', false);
+                        $modal.find('input[name="is_automatic_ai_converting"][value="'+$response.data.is_automatic_ai_converting+'"]').prop('checked', true).trigger('change');
+
+                        // 是否自动AI审核
+                        $modal.find('input[name="is_automatic_ai_inspecting_by_text"]').prop('checked', false);
+                        $modal.find('input[name="is_automatic_ai_inspecting_by_text"][value="'+$response.data.is_automatic_ai_inspecting_by_text+'"]').prop('checked', true).trigger('change');
+
                         // 是否自动AI审核
                         $modal.find('input[name="is_automatic_ai_inspecting"]').prop('checked', false);
                         $modal.find('input[name="is_automatic_ai_inspecting"][value="'+$response.data.is_automatic_ai_inspecting+'"]').prop('checked', true).trigger('change');

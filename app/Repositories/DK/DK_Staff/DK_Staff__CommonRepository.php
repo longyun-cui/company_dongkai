@@ -12,6 +12,9 @@ use App\Models\DK\DK_Common\DK_Common__Client;
 use App\Models\DK\DK_Common\DK_Common__Project;
 use App\Models\DK\DK_Common\DK_Common__Order;
 
+use App\Models\DK\DK_Common\DK_Common__Order__AI_Converted__Record;
+use App\Models\DK\DK_Common\DK_Common__Order__AI_Inspected__Record;
+
 use App\Repositories\Common\CommonRepository;
 
 use Response, Auth, Validator, DB, Exception, Cache, Blade, Carbon;
@@ -518,6 +521,134 @@ class DK_Staff__CommonRepository {
 
 
 
+    public function o1__order__get__ai_converted_result($order_id)
+    {
+        $order = DK_Common__Order::withTrashed()->find($order_id);
+        if(!$order) return false;
+
+        if(empty($order->content) && $order->ai_converted_status == 19)
+        {
+        }
+        else return false;
+
+        $item = DK_Common__Order__AI_Converted__Record::where('order_id',$order_id)->first();
+        if($item)
+        {
+            $response_decode = json_decode($item->result,true);
+            if(!empty($response_decode['output']['task_id']))
+            {
+                // 设置请求头
+                $apiKey = env('DASHSCOPE_API_KEY');
+                $headers = [
+                    'Authorization: Bearer ' . $apiKey
+                ];
+                $url = 'https://dashscope.aliyuncs.com/api/v1/tasks/'.$response_decode['output']['task_id'];
+
+                // 初始化cURL会话
+                $ch = curl_init();
+                // 设置cURL选项
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                // 执行cURL会话
+                $response_json = curl_exec($ch);
+                $response = json_decode($response_json,true);
+
+                $SUCCEEDED = false;
+                if($response['output']['task_status'] == "SUCCEEDED")
+                {
+                    $SUCCEEDED = true;
+                }
+
+                if($SUCCEEDED)
+                {
+                    $item->result = $response_json;
+                    $bool_ai_3 = $item->save();
+
+                    $task_results = $response['output']['results'];
+                    $transcription_text = '';
+                    $transcription_text_array = [];
+                    $transcription_content = [];
+
+                    foreach($task_results as $v)
+                    {
+                        $url = $v['transcription_url'];
+                        $transcript_json = file_get_contents($url);
+                        $transcription_content[] = $transcript_json;
+                        $transcript_json_decode = json_decode($transcript_json,true);
+                        $transcript_array = $transcript_json_decode['transcripts'];
+                        foreach($transcript_array as $k => $val)
+                        {
+                            $sentences_list = $val['sentences'];
+                            foreach($sentences_list as $key => $value)
+                            {
+                                if($k == 1)
+                                {
+                                    $transcription_text_array[(int)$value['sentence_id']] = '【客服】'.$value['text'];
+                                }
+                                else
+                                {
+                                    $transcription_text_array[(int)$value['sentence_id']] = '【潜在客户】'.$value['text'];
+                                }
+                            }
+                        }
+                    }
+//                    dd($transcription_text_array);
+
+                    if(count($transcription_text_array) > 0)
+                    {
+                        ksort($transcription_text_array);
+                        foreach($transcription_text_array as $k => $v)
+                        {
+                            $transcription_text .= $v. "\n";
+                        }
+                    }
+
+
+                    $order->ai_converted_status = 9;
+                    $order->content = $transcription_text;
+                    $order->save();
+
+
+                    $item->item_status = 9;
+                    $item->content = $transcription_text;
+                    $item->result2 = json_encode($transcription_content);
+                    $item->save();
+
+                }
+                else
+                {
+                    $order->ai_converted_status = 19;
+                    $order->save();
+
+                    $item->item_status = 19;
+                    $item->description = '任务未完成，稍后获取结果！';
+                    $item->save();
+                }
+                // 检查是否有错误发生
+                if (curl_errno($ch))
+                {
+//                echo 'Curl error: ' . curl_error($ch);
+                    $item->description = 'Curl error: ' . curl_error($ch);
+                    $item->save();
+                }
+                // 关闭cURL资源
+                curl_close($ch);
+            }
+            else
+            {
+                $item->item_status = 99;
+                $item->description = 'task_id不存在！';
+                $item->save();
+            }
+        }
+
+        return true;
+
+    }
+
+
     //
     public function o1__api__ai_inspecting__from__ali($post_data)
     {
@@ -612,6 +743,75 @@ class DK_Staff__CommonRepository {
 
 
     }
+    //
+    public function o1__api__ai_converting__from__ali($post_data)
+    {
+        $platform = $post_data['platform'];
+//        $model = $post_data['model'];
+//        $system_prompt = !empty($post_data['system_prompt']) ? $post_data['system_prompt'] : '';
+//        $prompt = $post_data['prompt'];
+        $audio = $post_data['voice_record'];
+        $audio_list = $post_data['voice_record_list'];
+
+        $content_list = [];
+//        foreach($audio_list as $k => $v)
+//        {
+//            $audio_list = [];
+//            $audio_list[] = $v;
+//        }
+
+        // 设置请求的URL
+        $url = 'https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription';
+        // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：$apiKey = "sk-xxx";
+        $apiKey = env('DASHSCOPE_API_KEY');
+        // 设置请求头
+        $headers = [
+            'Authorization: Bearer ' . $apiKey,
+            'Content-Type: application/json',
+            'X-DashScope-Async: enable'
+        ];
+        // 设置请求体
+        $data = [
+            // 模型列表：https://help.aliyun.com/model-studio/getting-started/models
+            "model" => "paraformer-v2",
+            "input" => [
+                "file_urls" => $audio_list
+            ],
+            "parameters" => [
+                "channel_id" => [
+                    0,1
+                ], //音轨索引，可选
+                "disfluency_removal_enabled" => false, //过滤语气词开关，可选
+                "timestamp_alignment_enabled" => false, //是否启用时间戳校准功能，可选
+//                "special_word_filter" => "xxx", //敏感词，可选
+                "diarization_enabled" => true, //自动说话人分离，可选
+                "speaker_count" => 2 //说话人数量参考，可选
+            ]
+        ];
+
+        // 初始化cURL会话
+        $ch = curl_init();
+        // 设置cURL选项
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        // 执行cURL会话
+        $response = curl_exec($ch);
+        // 检查是否有错误发生
+        if (curl_errno($ch)) {
+            echo 'Curl error: ' . curl_error($ch);
+        }
+        // 关闭cURL资源
+        curl_close($ch);
+        // 输出响应结果
+        return $response;
+
+
+    }
+
+
 
 
     // 【工单】外呼系统呼叫记录

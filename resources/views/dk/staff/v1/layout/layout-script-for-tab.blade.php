@@ -219,6 +219,10 @@
                 {
                     Datatable__for__Order_Dental_Rejected_List($config.id);
                 }
+                else if($id == "datatable-order-dental-different-list")
+                {
+                    Datatable__for__Order_Dental_Different_List($config.id);
+                }
                 else if($id == "datatable-order-aesthetic-list")
                 {
                     Datatable__for__Order_Aesthetic_List($config.id);
@@ -262,6 +266,10 @@
                     console.log("ai");
                     console.log("ai");
                     console.log("ai");
+                }
+                else if($id == "datatable-ai-converted-record-list")
+                {
+                    Datatable__for__AI__Converted__Record__List('#'+$config.id);
                 }
                 else if($id == "datatable-ai-record-list")
                 {

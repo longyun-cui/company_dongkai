@@ -1925,15 +1925,6 @@
             $row.addClass('operating');
 
 
-            var $delivery_datatable_id = 'datatable--for--order--item-inspecting--of--delivery-record-list';
-            Datatable__for__Order_Item_Delivery_Record_List.init($delivery_datatable_id,$id);
-
-
-            var $operation_datatable_id = 'datatable--for--order--item-inspecting--of--operation-record-list';
-            Datatable__for__Order_Item_Operation_Record_List.init($operation_datatable_id,$id);
-
-            var $ai_datatable_id = 'datatable--for--order--item--inspecting--of--ai-record-list';
-            Datatable__for__Order_Item_AI_Record_List.init($ai_datatable_id,$id);
 
 
             var $modal_id = 'modal--for--order--item-inspecting';
@@ -1944,6 +1935,27 @@
 
             $modal.find('input[name="operate[id]"]').val($id);
             $modal.find('input[name="item_id"]').val($id);
+
+
+
+
+            var $delivery_datatable_id = 'datatable--for--order--item-inspecting--of--delivery-record-list';
+            Datatable__for__Order_Item_Delivery_Record_List.init($delivery_datatable_id,$id);
+
+
+            var $operation_datatable_id = 'datatable--for--order--item-inspecting--of--operation-record-list';
+            Datatable__for__Order_Item_Operation_Record_List.init($operation_datatable_id,$id);
+
+            if(window.staffDepartment == 'QID' && window.staffRole == 'staff' )
+            {
+                $modal.find('.ai-box').hide();
+            }
+            else
+            {
+                $modal.find('.ai-box').show();
+                var $ai_datatable_id = 'datatable--for--order--item--inspecting--of--ai-record-list';
+                Datatable__for__Order_Item_AI_Record_List.init($ai_datatable_id,$id);
+            }
 
 
             var $data = new Object();
@@ -2012,6 +2024,7 @@
                             $modal.find('select[name="client_intention"]').val($response.data.client_intention).trigger('change');
                             $modal.find('select[name="teeth_count"]').val($response.data.teeth_count).trigger('change');
                             $modal.find('select[name="field_1"]').val($response.data.field_1).trigger('change');
+                            $modal.find('.converted-text').html($response.data.content.replace(/\n/g, "<br>"));  //  录音转文字
                         }
                         else if($response.data.order_category == 11)
                         {
@@ -2096,6 +2109,17 @@
                         $modal.find('.edit-submit').data('datatable-list-id',$table_id);
 
                         $modal.modal('show');
+
+
+                        if(window.staffDepartment == 'QID' && window.staffRole == 'staff' )
+                        {
+                            if($response.data.inspecting_method == 11)
+                            {
+                                $modal.find('.ai-box').show();
+                                var $ai_datatable_id = 'datatable--for--order--item--inspecting--of--ai-record-list';
+                                Datatable__for__Order_Item_AI_Record_List.init($ai_datatable_id,$id);
+                            }
+                        }
                     }
                 })
                 .fail(function(jqXHR, status, error) {
@@ -3419,7 +3443,7 @@
             //
             var $index = layer.load(1, {
                 shade: [0.3, '#fff'],
-                content: '<span class="loadtip">正在审核</span>',
+                content: '<span class="loadtip">正在请求</span>',
                 success: function (layer) {
                     layer.find('.layui-layer-content').css({
                         'padding-top': '40px',
@@ -3466,7 +3490,66 @@
                 });
 
         });
-        // 【工单】AI质检
+
+
+        // 【工单】【AI录音转文字】显示
+        $(".main-wrapper").off('click', ".item-submit--for--order--item-ai-converting--api-sent").on('click', ".item-submit--for--order--item-ai-converting--api-sent", function() {
+            var $that = $(this);
+            var $modal = $that.closest('.modal-wrapper');
+            var $item_id = $modal.find('input[name="item_id"]').val();
+            var $ai_datatable_id = 'datatable--for--order--item--ai-inspecting--of--ai-record-list';
+
+            //
+            var $index = layer.load(1, {
+                shade: [0.3, '#fff'],
+                content: '<span class="loadtip">正在审核</span>',
+                success: function (layer) {
+                    layer.find('.layui-layer-content').css({
+                        'padding-top': '40px',
+                        'width': '100px',
+                    });
+                    layer.find('.loadtip').css({
+                        'font-size':'20px',
+                        'margin-left':'-18px'
+                    });
+                }
+            });
+
+            //
+            $.post(
+                "{{ url('/o1/order/item-converting--by-ai') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: "order--item-converting--by-ai",
+                    item_id: $item_id
+                },
+                'json'
+            )
+                .done(function($response, status, jqXHR) {
+                    console.log('#'+$that.attr('id')+'.post.done.');
+
+                    $response = JSON.parse($response);
+                    if(!$response.success)
+                    {
+                        if($response.msg) layer.msg($response.msg);
+                    }
+                    else
+                    {
+                        // $('#'+$ai_datatable_id).DataTable().ajax.reload(null,false);
+                    }
+                })
+                .fail(function(jqXHR, status, error) {
+                    console.log('#'+$that.attr('id')+'.post.fail.');
+                    layer.msg('服务器错误！');
+
+                })
+                .always(function(jqXHR, status) {
+                    console.log('#'+$that.attr('id')+'.post.always.');
+                    layer.closeAll('loading');
+                });
+
+        });
+        // 【工单】AI录音转文字
         $(".main-wrapper").off('click', ".order--item-ai-inspecting--submit").on('click', ".order--item-ai-inspecting--submit", function() {
             var $that = $(this);
             var $datatable_wrapper = $that.closest('.datatable-wrapper');
@@ -3476,7 +3559,7 @@
             //
             var $index = layer.load(1, {
                 shade: [0.3, '#fff'],
-                content: '<span class="loadtip">正在审核</span>',
+                content: '<span class="loadtip">正在请求</span>',
                 success: function (layer) {
                     layer.find('.layui-layer-content').css({
                         'padding-top': '40px',
@@ -3876,6 +3959,88 @@
 
             var $url = url_build('/o1/export/order--export--by-ids?order_category='+$order_category+'&ids='+$ids);
             window.open($url);
+        });
+
+        // 【批量操作】批量·AI质检
+        $(".main-wrapper").off('click', '.order--bulk-ai-convert-summit').on('click', '.order--bulk-ai-convert-summit', function() {
+            var $that = $(this);
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $order_category = $that.data('order-category');
+            var $item_category = $datatable_wrapper.data('datatable-item-category');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+
+
+            var $ids = '';
+            $datatable_wrapper.find('input[name="bulk-id"]:checked').each(function() {
+                $ids += $(this).val()+'-';
+            });
+            $ids = $ids.slice(0, -1);
+
+
+            layer.msg('确定"批量AI转文字"么', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+
+                    layer.close(index);
+
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">正在提交</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
+                    });
+
+                    $.post(
+                        "{{ url('/o1/order/bulk-converting--by-ai') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "bulk-converting--by-ai",
+                            ids: $ids
+                        },
+                        'json'
+                    )
+                        .done(function($response) {
+                            console.log('done');
+
+                            $response = JSON.parse($response);
+                            if(!$response.success) layer.msg($response.msg);
+                            else
+                            {
+                                layer.closeAll('loading');
+                                // $('#'+$table_id).DataTable().ajax.reload(null,false);
+
+                                if (!!$response.data.item_list)
+                                {
+                                    var $item_list = $response.data.item_list;
+                                    $.each($item_list, function(index, $item)
+                                    {
+                                        var $td = $datatable_wrapper.find('td[data-key=order_id][data-value='+$item.id+']');
+                                        var $row = $td.parents('tr');
+                                        update_order_row_status($row,$item);
+                                    });
+                                }
+                            }
+                        })
+                        .fail(function(jqXHR, textStatus, errorThrown) {
+                            console.log('fail');
+                            layer.msg('服务器错误！');
+
+                        })
+                        .always(function(jqXHR, textStatus) {
+                            layer.closeAll('loading');
+                        });
+
+                }
+            });
         });
 
         // 【批量操作】批量·AI质检

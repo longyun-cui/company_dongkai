@@ -236,6 +236,30 @@
                 </a>
             </li>
             @if(
+                (in_array($me->staff_category,[0,1,9,71]) && in_array($me->staff_position,[0,1,9,11,31,41,61,99]))
+                || (in_array($me->staff_category,[41]) && in_array($me->staff_position,[0,1,9,11,31]))
+            )
+                <li class="treeview _none-">
+                    <a class="tab-control datatable-control"
+                       data-type="create"
+                       data-unique="y"
+                       data-id="order-dental-different-list"
+                       data-title='口腔•审核不一致'
+                       data-content=''
+                       data-icon='<i class="fa fa-file-sound-o text-orange"></i>'
+
+                       data-datatable-type="create"
+                       data-datatable-unique="y"
+                       data-datatable-id="datatable-order-dental-different-list"
+                       data-datatable-target="order-dental-different-list"
+                       data-datatable-clone-object="order-dental-different-list-clone"
+                    >
+                        <i class="fa fa-file-code-o text-orange"></i>
+                        <span>口腔•审核不一致</span>
+                    </a>
+                </li>
+            @endif
+            @if(
                 (in_array($me->staff_category,[0,1,9,61,71]) && in_array($me->staff_position,[0,1,9,11,31,41,61,99]))
                 || (in_array($me->staff_category,[41]) && in_array($me->staff_position,[0,1,9,11,31]))
             )
@@ -387,6 +411,29 @@
             @endif
 
 
+            {{--AI审核--}}
+            @if(in_array($me->staff_category,[0,1,9,51,71]))
+            @if(in_array($me->staff_position,[0,1,11,31]))
+                <li class="treeview _none-">
+                    <a class="tab-control datatable-control"
+                       data-type="create"
+                       data-unique="y"
+                       data-id="ai-converted-record-list"
+                       data-title='<i class="fa fa-font text-red"></i> AI转文字'
+                       data-content=''
+
+                       data-datatable-type="create"
+                       data-datatable-unique="y"
+                       data-datatable-id="datatable-ai-converted-record-list"
+                       data-datatable-target="ai-converted-record-list"
+                       data-datatable-clone-object="ai-converted-record-list-clone"
+                    >
+                        <i class="fa fa-font text-red"></i>
+                        <span>AI转文字</span>
+                    </a>
+                </li>
+            @endif
+            @endif
             {{--AI审核--}}
             @if(in_array($me->staff_category,[0,1,9,51,71]))
             @if(in_array($me->staff_position,[0,1,11,31]))

@@ -239,6 +239,8 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
     Route::post('/o1/order/item-inspecting-save', $controller.'@o1__order__item_inspecting_save');
     Route::post('/o1/order/item-inspecting--by-ai', $controller.'@o1__order__item_inspecting__by_ai__save');
     Route::post('/o1/order/bulk-inspecting--by-ai', $controller.'@o1__order__bulk_inspecting__by_ai__save');
+    Route::post('/o1/order/item-converting--by-ai', $controller.'@o1__order__item_converting__by_ai__save');
+    Route::post('/o1/order/bulk-converting--by-ai', $controller.'@o1__order__bulk_converting__by_ai__save');
     Route::post('/o1/order/item-appealing-save', $controller.'@o1__order__item_appealing_save');
     Route::post('/o1/order/item-appealed-confirming-save', $controller.'@o1__order__item_appealed_confirming_save');
     Route::post('/o1/order/item-appealed-handling-save', $controller.'@o1__order__item_appealed_handling_save');
@@ -255,6 +257,7 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
     // 【工单】操作记录
     Route::post('/o1/order/item-operation-record-list/datatable-query', $controller.'@o1__order__item_operation_record_list__datatable_query');
     Route::post('/o1/order/item-delivery-record-list/datatable-query', $controller.'@o1__order__item_delivery_record_list__datatable_query');
+    Route::post('/o1/order/item-ai-converted-record-list/datatable-query', $controller.'@o1__order__item_ai_converted_record_list__datatable_query');
     Route::post('/o1/order/item-ai-record-list/datatable-query', $controller.'@o1__order__item_ai_record_list__datatable_query');
 
 
@@ -271,8 +274,10 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
 
 
     // 【AI】列表
+    Route::post('/o1/ai/ai-converted-record-list/datatable-query', $controller.'@o1__ai__converted_record__list__datatable_query');
     Route::post('/o1/ai/ai-record-list/datatable-query', $controller.'@o1__ai__record__list__datatable_query');
     Route::post('/o1/ai/item-inspecting', $controller.'@o1__ai__item__inspecting');
+    Route::post('/o1/ai/converted--item--get-result', $controller.'@o1__ai__converted__item__get_result');
 
 
 

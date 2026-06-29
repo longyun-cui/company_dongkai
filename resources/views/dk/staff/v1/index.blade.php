@@ -77,12 +77,14 @@
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list--for--appealed')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list--for--rejected')
+        @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list--for--different')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-aesthetic.order-aesthetic-list')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-luxury.order-luxury-list')
     @elseif($me->staff_category == 41)
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list--for--CSD')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list--for--appealed')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list--for--rejected')
+        @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list--for--different')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-aesthetic.order-aesthetic-list--for--CSD')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-luxury.order-luxury-list--for--CSD')
     @elseif($me->staff_category == 51)
@@ -102,6 +104,7 @@
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list--for--appealed')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list--for--rejected')
+        @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list--for--different')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-aesthetic.order-aesthetic-list')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-luxury.order-luxury-list')
     @else
@@ -122,6 +125,7 @@
 
     {{--AI审核--}}
     @if(in_array($me->staff_category,[0,1,9,71]))
+        @include(env('DK_STAFF__TEMPLATE').'component.module.ai.ai-list--for--converted')
         @include(env('DK_STAFF__TEMPLATE').'component.module.ai.ai-list')
     @endif
 
@@ -342,12 +346,14 @@
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--admin')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--appealed')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--rejected')
+        @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--different')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-aesthetic.order-aesthetic-list-datatable--for--admin')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-luxury.order-luxury-list-datatable--for--admin')
     @elseif(in_array($me->staff_category,[41]))
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--CSD')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--appealed')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--rejected')
+        @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--different')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-aesthetic.order-aesthetic-list-datatable--for--CSD')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-luxury.order-luxury-list-datatable--for--CSD')
     @elseif(in_array($me->staff_category,[51]))
@@ -364,6 +370,7 @@
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--OD')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--appealed')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--rejected')
+        @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--different')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-aesthetic.order-aesthetic-list-datatable--for--OD')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-luxury.order-luxury-list-datatable--for--OD')
     @else
@@ -389,6 +396,7 @@
 
     {{--AI审核--}}
     @if(in_array($me->staff_category,[0,1,9,71]))
+        @include(env('DK_STAFF__TEMPLATE').'component.module.ai.ai-list-datatable--for--converted')
         @include(env('DK_STAFF__TEMPLATE').'component.module.ai.ai-list-datatable')
         @include(env('DK_STAFF__TEMPLATE').'component.module.ai.ai-script')
     @endif

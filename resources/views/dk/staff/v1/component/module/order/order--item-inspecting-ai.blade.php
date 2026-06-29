@@ -85,9 +85,14 @@
                 <h3 class="box-title">ai记录 <span class="id-box"></span></h3>
                 <div class="box-tools pull-right caption">
                     <a class="item-submit--for--order--item-ai-inspecting--api-sent">
-{{--                        <button type="button" class="btn btn-success pull-right">--}}
+                        {{--<button type="button" class="btn btn-success pull-right">--}}
                             <i class="fa fa-plus"></i> AI审核
-{{--                        </button>--}}
+                        {{--</button>--}}
+                    </a>
+                    <a class="item-submit--for--order--item-ai-converting--api-sent" style="margin-left:4px;">
+                        {{--<button type="button" class="btn btn-success pull-right">--}}
+                        <i class="fa fa-plus"></i> AI转文字
+                        {{--</button>--}}
                     </a>
                 </div>
             </div>

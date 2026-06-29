@@ -256,11 +256,12 @@ class DK_AI_Inspect_Job implements ShouldQueue
             }
 
 
-
-
             $time = time();
             $date = date("Y-m-d");
             $datetime = date('Y-m-d H:i:s');
+
+            $inspected_result = '';
+            $inspected_result_2 = '';
 
 
             $ai_data['ai_platform'] = $ai_platform;
@@ -319,7 +320,6 @@ class DK_AI_Inspect_Job implements ShouldQueue
                         }
                     }
 
-
                     if($content_decode)
                     {
                         if(array_key_exists($content_decode->审核结果,config('dk.common-config.ai_inspected_result_to_order_inspected_result')))
@@ -327,18 +327,6 @@ class DK_AI_Inspect_Job implements ShouldQueue
                             $count = 0;
                             if($content_decode->审核结果 == '通过')
                             {
-//                                if(isset($content_decode->客户姓氏是否询问) && $content_decode->客户姓氏是否询问 == '是') $count += 1;
-//                                if(isset($content_decode->客户年龄是否询问) && $content_decode->客户年龄是否询问 == '是') $count += 1;
-//                                if(isset($content_decode->客户三高状态是否询问) && $content_decode->客户三高状态是否询问 == '是') $count += 1;
-//                                if(isset($content_decode->是否确认客户当前时间在不在【城市名称】的话术) && $content_decode->是否确认客户当前时间在不在【城市名称】的话术 == '是') $count += 1;
-//                                if(isset($content_decode->结尾是否明确跟客户说“医助两小时回电，注意接听”的话术) && $content_decode->结尾是否明确跟客户说“医助两小时回电，注意接听”的话术 == '是') $count += 1;
-//
-//                                $order->inspected_result = $content_decode->审核结果;
-//                                $order->inspected_result_2 = '三档';
-//                                if($count == 4) $order->inspected_result_2 = '二档';
-//                                if($count >= 5) $order->inspected_result_2 = '一档';
-
-
                                 if(isset($content_decode->开场白话术) && $content_decode->开场白话术 == '有') $count += 1;
                                 if(isset($content_decode->客户姓氏话术) && $content_decode->客户姓氏话术 == '有') $count += 1;
                                 if(isset($content_decode->客户年龄话术) && $content_decode->客户年龄话术 == '有') $count += 1;
@@ -350,36 +338,58 @@ class DK_AI_Inspect_Job implements ShouldQueue
                                 if(isset($content_decode->客户在不在当地话术) && $content_decode->客户在不在当地话术 == '有') $count += 1;
                                 if(isset($content_decode->结尾邀约话术) && $content_decode->结尾邀约话术 == '有') $count += 1;
 
-                                $order->inspected_result = $content_decode->审核结果;
+//                                $order->inspected_result = $content_decode->审核结果;
+//
+//                                $order->inspected_result_2 = '三档';
+//                                if($count >= 4 && $count <= 6) $order->inspected_result_2 = '二档';
+//                                if($count >= 7) $order->inspected_result_2 = '一档';
 
-                                $order->inspected_result_2 = '三档';
-                                if($count >= 4 && $count <= 6) $order->inspected_result_2 = '二档';
-                                if($count >= 7) $order->inspected_result_2 = '一档';
+                                $inspected_result = $content_decode->审核结果;
+
+                                $inspected_result_2 = '三档';
+                                if($count >= 4 && $count <= 6) $inspected_result_2 = '二档';
+                                if($count >= 7) $inspected_result_2 = '一档';
 
                             }
                             else if($content_decode->审核结果 == '超区')
                             {
-                                $order->inspected_result = '拒绝';
-                                $order->inspected_result_2 = $content_decode->审核结果;
+//                                $order->inspected_result = '拒绝';
+//                                $order->inspected_result_2 = $content_decode->审核结果;
+
+                                $inspected_result = '拒绝';
+                                $inspected_result_2 = $content_decode->审核结果;
                             }
                             else if($content_decode->审核结果 == '超龄')
                             {
-                                $order->inspected_result = '拒绝';
-                                $order->inspected_result_2 = $content_decode->审核结果;
+//                                $order->inspected_result = '拒绝';
+//                                $order->inspected_result_2 = $content_decode->审核结果;
+
+                                $inspected_result = '拒绝';
+                                $inspected_result_2 = $content_decode->审核结果;
                             }
                             else
                             {
-                                $order->inspected_result = $content_decode->审核结果;
-                                $order->inspected_result_2 = $content_decode->审核结果;
+//                                $order->inspected_result = $content_decode->审核结果;
+//                                $order->inspected_result_2 = $content_decode->审核结果;
+
+                                $inspected_result = $content_decode->审核结果;
+                                $inspected_result_2 = $content_decode->审核结果;
                             }
 
-                            $order->inspected_status = 1;
-//                            $order->inspected_result = $content_decode->审核结果;
-//                            $order->inspected_result = config('dk.common-config.ai_inspected_result_to_order_inspected_result.'.$content_decode->审核结果);
-                            $order->inspected_at = $time;
-                            $order->inspected_date = $date;
-                            $bool_order = $order->save();
-                            if(!$bool_order) throw new Exception("DK_Common__Order--update--fail");
+
+                            if(in_array($order->inspecting_method,[0,11]))
+                            {
+                                $order->inspected_status = 1;
+                                $order->inspected_result = $inspected_result;
+                                $order->inspected_result_2 = $inspected_result_2;
+                                $order->inspected_at = $time;
+                                $order->inspected_date = $date;
+
+                                $bool_order = $order->save();
+                                if(!$bool_order) throw new Exception("DK_Common__Order--update--fail");
+                            }
+
+
 
 
                             $record_data["ip"] = Get_IP();
@@ -396,9 +406,7 @@ class DK_AI_Inspect_Job implements ShouldQueue
                             $record_data["operate_type"] = 51;
                             $record_data["description"] = $content_decode->判定依据及理由;
 
-
                             $record_content = [];
-
 
                             if(true)
                             {
@@ -438,10 +446,13 @@ class DK_AI_Inspect_Job implements ShouldQueue
                             }
 
                             $record_data["content"] = json_encode($record_content);
-                            $record = new DK_Common__Order__Operation_Record;
 
-                            $bool_1 = $record->fill($record_data)->save();
-                            if(!$bool_1) throw new Exception("DK_Common__Order__Operation_Record--insert--fail");
+                            if(in_array($order->inspecting_method,[0,11]))
+                            {
+                                $record = new DK_Common__Order__Operation_Record;
+                                $bool_1 = $record->fill($record_data)->save();
+                                if(!$bool_1) throw new Exception("DK_Common__Order__Operation_Record--insert--fail");
+                            }
 
                         }
                         else throw new Exception("【审核结果】有误！");
@@ -452,6 +463,14 @@ class DK_AI_Inspect_Job implements ShouldQueue
             }
 
             $order->ai_inspected_status = 9;
+            if(!empty($inspected_result))
+            {
+                if(!empty($inspected_result_2))
+                {
+                    $order->ai_inspected_result = $inspected_result.'·'.$inspected_result_2;
+                }
+                else $order->ai_inspected_result = $inspected_result;
+            }
             $order->save();
 
             DB::commit();

@@ -20,6 +20,7 @@ use App\Models\DK\DK_Common\DK_Pivot__Department_Project;
 use App\Models\DK\DK_Common\DK_Pivot__Staff_Project;
 use App\Models\DK\DK_Common\DK_Pivot__Team_Project;
 
+use App\Models\DK\DK_Common\DK_Common__Order__AI_Converted__Record;
 use App\Models\DK\DK_Common\DK_Common__Order__AI_Inspected__Record;
 
 
@@ -30,8 +31,9 @@ use App\Models\DK\DK_API_BY_Received;
 
 
 use App\Jobs\DK\DK_AI_Inspect_Job;
+use App\Jobs\DK\DK_AI_convert_Job;
 use App\Jobs\DK_Client\AutomaticDispatchingJob;
-use App\Jobs\DK\BYApReceivedJob;
+
 
 use App\Repositories\DK\DK_Staff\DK_Staff__CommonRepository;
 
@@ -163,13 +165,23 @@ class DK_Staff__OrderRepository {
                 $query->where('dk_common__order.order_category', $order_category);
             }
         }
-        // 工单种类 []
+        // 拒单 []
         if(isset($post_data['order_rejected']))
         {
-            $order_category = intval($post_data['order_rejected']);
-            if($order_category == 1)
+            $order_rejected_int = intval($post_data['order_rejected']);
+            if($order_rejected_int == 1)
             {
                 $query->whereIn('dk_common__order.inspected_result', ['拒绝','超区','超龄','不合格','虚假']);
+            }
+        }
+        // 审核不一致 []
+        if(isset($post_data['order_different']))
+        {
+            $order_different_int = intval($post_data['order_different']);
+            if($order_different_int == 1)
+            {
+                $query->whereIn('dk_common__order.inspecting_method', [0,21])
+                    ->where('dk_common__order.manual_inspected_result', '!=', 'dk_common__order.ai_inspected_result');
             }
         }
 
@@ -1268,6 +1280,8 @@ class DK_Staff__OrderRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
+        $response = $this->commonRepository->o1__order__get__ai_converted_result($id);
+
         $item = DK_Common__Order::withTrashed()
             ->with([
                 'owner'=>function($query) { $query->select('id','name'); },
@@ -1306,7 +1320,6 @@ class DK_Staff__OrderRepository {
                 $item->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
             }
         }
-
 
         return response_success($item,"");
     }
@@ -2264,7 +2277,91 @@ class DK_Staff__OrderRepository {
 //        dd($delivery_list->toArray());
         return datatable_response($list, $draw, $total);
     }
-    // 【工单】【AI质检】返回-列表-数据
+    // 【工单】【AI录音转文字】返回-列表-数据
+    public function o1__order__item_ai_converted_record_list__datatable_query($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = DK_Common__Order__AI_Converted__Record::select('*')
+            ->with([
+                'order_er'=>function($query) { $query->select(['*']); },
+            ])
+            ->where(['order_id'=>$id]);
+//            ->where(['record_object'=>21,'operate_object'=>61,'item_id'=>$id]);
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            if(!empty($v->result))
+            {
+                $result = json_decode($v->result);
+                if(isset($result->choices[0]->message->content))
+                {
+                    $content = $result->choices[0]->message->content;
+                    $content_decode = json_decode($content);
+                    if(!$content_decode)
+                    {
+                        $content_fix = robustJsonFix($content);
+                        $content_decode = json_decode($content_fix);
+                        if(!$content_decode)
+                        {
+                            $content_fix_2 = robustJsonFixer($content_fix);
+                            $content_decode = json_decode($content_fix_2);
+                        }
+                    }
+                    $list[$k]->content = $content_decode;
+                }
+                else
+                {
+                    if(isset($result->error))
+                    {
+                        $list[$k]->content = $result->error;
+                    }
+                    else $list[$k]->content = null;
+                }
+
+                if(isset($result->usage))
+                {
+                    $list[$k]->usage = $result->usage;
+                }
+                else
+                {
+                    $list[$k]->usage = null;
+                }
+            }
+            else
+            {
+                $list[$k]->content = null;
+                $list[$k]->usage = null;
+            }
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+    // 【工单】【AI录音审核】返回-列表-数据
     public function o1__order__item_ai_record_list__datatable_query($post_data)
     {
         $this->get_me();
@@ -2729,13 +2826,33 @@ class DK_Staff__OrderRepository {
 
 
         // 自动AI质检
+        $inspecting_method = 0;
+        $is_automatic_ai_converting = 0;
         $is_automatic_ai_inspecting = 0;
+        $is_automatic_ai_inspecting_by_text = 0;
+
         $project = DK_Common__Project::find($item->project_id);
         if($project)
         {
+            // 审核方式
+            $inspecting_method = $project->inspecting_method;
+
+            // 自动AI录音转文字
+            if($project->is_automatic_ai_converting == 1)
+            {
+                $is_automatic_ai_converting = 1;
+            }
+
+            // 自动AI录音审核
             if($project->is_automatic_ai_inspecting == 1)
             {
                 $is_automatic_ai_inspecting = 1;
+            }
+
+            // 自动AI文字审核
+            if($project->is_automatic_ai_inspecting_by_text == 1)
+            {
+                $is_automatic_ai_inspecting_by_text = 1;
             }
         }
         else return response_error([],"工单所选【项目】不存在！");
@@ -2851,10 +2968,17 @@ class DK_Staff__OrderRepository {
             }
 
 
+            // 自动AI录音转文字
+            if($is_repeat == 0 && $is_automatic_ai_converting == 1)
+            {
+                $item->ai_converted_status = 1;
+            }
+            // 自动AI录音质检
             if($is_repeat == 0 && $is_automatic_ai_inspecting == 1)
             {
                 $item->ai_inspected_status = 1;
             }
+            $item->inspecting_method = $inspecting_method;
             $item->is_repeat = $is_repeat;
             $item->is_published = 1;
             $item->published_at = $time;
@@ -2881,7 +3005,19 @@ class DK_Staff__OrderRepository {
             }
 
 
-            // 自动AI质检
+            // 自动AI录音转文字
+            if($is_repeat == 0 && $is_automatic_ai_converting == 1)
+            {
+                $ai_converted = new DK_Common__Order__AI_Converted__Record;
+                $ai_converted_data['item_status'] = 1;
+                $ai_converted_data['order_id'] = $id;
+
+                $bool_ai = $ai_converted->fill($ai_converted_data)->save();
+                if(!$bool_ai) throw new Exception("DK_Common__Order__AI_Converted__Record--insert--fail");
+            }
+
+
+            // 自动AI录音质检
             if($is_repeat == 0 && $is_automatic_ai_inspecting == 1)
             {
                 $ai_inspected = new DK_Common__Order__AI_Inspected__Record;
@@ -2895,6 +3031,13 @@ class DK_Staff__OrderRepository {
             DB::commit();
 
 
+            //
+            if($is_repeat == 0 && $is_automatic_ai_converting == 1)
+            {
+                DK_AI_Convert_Job::dispatch($ai_converted->id);
+            }
+
+            //
             if($is_repeat == 0 && $is_automatic_ai_inspecting == 1)
             {
                 DK_AI_Inspect_Job::dispatch($ai_inspected->id);
@@ -3184,6 +3327,7 @@ class DK_Staff__OrderRepository {
         if($me->staff_category == 41 && in_array($me->staff_position,[41,51,61,71,99]))
         {
             // 客服团队不可编辑
+            return response_error([],"客服团队不可编辑！");
         }
         else
         {
@@ -3544,6 +3688,16 @@ class DK_Staff__OrderRepository {
             }
         }
 
+
+        if(!isset($post_data["order--item-inspecting--key-info-hit"]))
+        {
+            return response_error([],"请选择命中关键信息！");
+        }
+        $key_info_hit = $post_data["order--item-inspecting--key-info-hit"];
+        $key_info_hit_count = count($key_info_hit);
+        $key_info_hit_text = '';
+
+
         $project_id = $post_data["project_id"];
         $client_name = $post_data["client_name"];
 //        $client_phone = $post_data["client_phone"];
@@ -3691,6 +3845,66 @@ class DK_Staff__OrderRepository {
             }
 
         }
+
+
+        //
+        if($inspected_result == '通过')
+        {
+            $record_row = [];
+            $record_row['title'] = '通过档位';
+            $record_row['field'] = '';
+            $record_row['before'] = !empty($item->inspected_result_2) ? $item->inspected_result_2 : '';
+
+            $item->inspected_result = '通过';
+            if($key_info_hit_count >= 7)
+            {
+                $record_row['after'] = '一档';
+            }
+            else if($key_info_hit_count > 4 && $key_info_hit_count < 7)
+            {
+                $record_row['after'] = '二档';
+            }
+            else
+            {
+                $record_row['after'] = '三档';
+            }
+            $record_content[] = $record_row;
+        }
+
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '命中关键信息';
+            $record_row['field'] = 'key_info_hit';
+//                $record_row['code'] = $appealed_handled_result;
+
+//            $record_row['before'] = !empty($item->key_info_hit) ? $item->key_info_hit : '';
+            $record_row['before'] = '';
+
+            $hits = '';
+            $char = '-';
+            foreach($key_info_hit as $v)
+            {
+                $key_info_hit_text .= $v.'-';
+                $hits .= config('dk.common-config.key_info_hit.'.$v).'-';
+            }
+            $position_2 = strrpos($key_info_hit_text, $char);
+            if ($position_2 !== false)
+            {
+                // 替换最后一个特定字符为空字符串
+                $key_info_hit_text = substr_replace($key_info_hit_text, '', $position_2, strlen($char));
+            }
+            $position = strrpos($hits, $char);
+            if ($position !== false)
+            {
+                // 替换最后一个特定字符为空字符串
+                $hits = substr_replace($hits, '', $position, strlen($char));
+            }
+            $record_row['after'] = $hits;
+
+            $record_content[] = $record_row;
+        }
+
         if($inspected_description)
         {
             $record_row = [];
@@ -3889,45 +4103,72 @@ class DK_Staff__OrderRepository {
 
             $item->inspector_id = $me->id;
             $item->inspected_status = 1;
-            if($inspected_result == '通过·一档')
+            if($inspected_result == '通过')
+            {
+                $item->inspected_result = '通过';
+                if($key_info_hit_count >= 7)
+                {
+                    $item->inspected_result_2 = '一档';
+                    $item->manual_inspected_result = '通过·一档';
+                }
+                else if($key_info_hit_count > 4 && $key_info_hit_count < 7)
+                {
+                    $item->inspected_result_2 = '二档';
+                    $item->manual_inspected_result = '通过·二档';
+                }
+                else
+                {
+                    $item->inspected_result_2 = '三档';
+                    $item->manual_inspected_result = '通过·三档';
+                }
+            }
+            else if($inspected_result == '通过·一档')
             {
                 $item->inspected_result = '通过';
                 $item->inspected_result_2 = '一档';
+                $item->manual_inspected_result = '通过·一档';
             }
             else if($inspected_result == '通过·二档')
             {
                 $item->inspected_result = '通过';
                 $item->inspected_result_2 = '二档';
+                $item->manual_inspected_result = '通过·二档';
             }
             else if($inspected_result == '通过·三档')
             {
                 $item->inspected_result = '通过';
                 $item->inspected_result_2 = '三档';
+                $item->manual_inspected_result = '通过·三档';
             }
             else if($inspected_result == '拒绝')
             {
                 $item->inspected_result = '拒绝';
                 $item->inspected_result_2 = '拒绝';
+                $item->manual_inspected_result = '拒绝·拒绝';
             }
             else if($inspected_result == '不合格')
             {
                 $item->inspected_result = '拒绝';
                 $item->inspected_result_2 = '不合格';
+                $item->manual_inspected_result = '拒绝·不合格';
             }
             else if($inspected_result == '虚假')
             {
                 $item->inspected_result = '拒绝';
                 $item->inspected_result_2 = '虚假';
+                $item->manual_inspected_result = '拒绝·虚假';
             }
             else if($inspected_result == '超区')
             {
                 $item->inspected_result = '拒绝';
                 $item->inspected_result_2 = '超区';
+                $item->manual_inspected_result = '拒绝·超区';
             }
             else if($inspected_result == '超龄')
             {
                 $item->inspected_result = '拒绝';
                 $item->inspected_result_2 = '超龄';
+                $item->manual_inspected_result = '拒绝·超龄';
             }
             else
             {
@@ -3938,6 +4179,7 @@ class DK_Staff__OrderRepository {
 //                $item->inspected_description = $inspected_description;
 //            }
 
+            if($key_info_hit_text) $item->key_info_hit = $key_info_hit_text;
             if($rejected_reason_text) $item->rejected_reason = $rejected_reason_text;
 
             $item->recording_quality = $recording_quality;
@@ -8412,7 +8654,7 @@ class DK_Staff__OrderRepository {
                 curl_close($ch); // 关闭cURL会话
 
 
-                sleep(0.5); // 暂停1秒
+                sleep(1); // 暂停1秒
 
 
                 $ch = curl_init($url);
@@ -8628,6 +8870,524 @@ class DK_Staff__OrderRepository {
             foreach($job_ids as $key => $id)
             {
                 DK_AI_Inspect_Job::dispatch($id);
+            }
+
+            return response_success(['ids'=>$ids],$msg);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+    }
+
+
+    // 【工单】AI审核
+    public function o1__order__item_converting__by_ai__save($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $microtime_start = microtime(true);
+
+        $operate = $post_data["operate"];
+        if($operate != 'order--item-converting--by-ai') return response_error([],"参数[operate]有误！");
+        $item_id = $post_data["item_id"];
+        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数[ID]有误！");
+
+
+        $ai_model = config('dk.common-config.ai_model_text');
+        $ai_prompt = config('dk.common-config.ai_prompt_text');
+        $ai_system_prompt = config('dk.common-config.ai_system_prompt_text');
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->staff_category,[0,1,51,61,71]))
+        {
+            return response_error([],"你没有操作权限！");
+        }
+
+
+        $item = DK_Common__Order::withTrashed()->find($item_id);
+        if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
+
+
+        $project = DK_Common__Project::find($item->project_id);
+        if($project)
+        {
+            $ai_model = !empty($project->ai_model) ? $project->ai_model : $ai_model;
+            $ai_prompt = !empty($project->ai_prompt) ? $project->ai_prompt : $ai_prompt;
+            $ai_system_prompt = !empty($project->ai_system_prompt) ? $project->ai_system_prompt : $ai_system_prompt;
+//            $ai_prompt = !empty($project->ai_prompt) ? ($project->ai_prompt.$ai_prompt) : $ai_prompt;
+        }
+        else return response_error([],"该工单的【项目】不存在，刷新页面重试！");
+
+        $voice_record_url = '';
+        $recording_address_list = $item->recording_address_list;
+        if(!empty($recording_address_list))
+        {
+            $recording_address_list = json_decode($recording_address_list);
+            if(count($recording_address_list) > 0) $voice_record_url = $recording_address_list[0];
+//            dd($voice_record_url);
+            if(!empty($voice_record_url))
+            {
+            }
+            else
+            {
+                return response_error([],"该工单的【录音】不存在，刷新页面重试！");
+            }
+        }
+        else
+        {
+            $staff_id = $item->creator_id;
+
+            $staff = DK_Common__Staff::withTrashed()->find($staff_id);
+            if(!$staff) return response_error([],"该【员工】不存在，刷新页面重试！");
+            $team_id = $staff->team_id;
+            $agent[] = $staff->api_staffNo;
+
+            $team = DK_Common__Team::withTrashed()->find($team_id);
+            if(!$team) return response_error([],"所属【团队】不存在，刷新页面重试！");
+
+
+            if($item->order_category == 1)
+            {
+                $serverFrom_name = $team->serverFrom_name;
+                $API_Customer_Password = $team->api_customer_password;
+                $API_Customer_Account = $team->api_customer_account;
+                $API_customerUserName = $team->api_customer_name;
+            }
+            else if($item->order_category == 11)
+            {
+                $serverFrom_name = $team->serverFrom_name_2;
+                $API_Customer_Password = $team->api_customer_password_2;
+                $API_Customer_Account = $team->api_customer_account_2;
+                $API_customerUserName = $team->api_customer_name_2;
+            }
+            else
+            {
+                $serverFrom_name = $team->serverFrom_name;
+                $API_Customer_Password = $team->api_customer_password;
+                $API_Customer_Account = $team->api_customer_account;
+                $API_customerUserName = $team->api_customer_name;
+            }
+
+            $get_recording_data = [];
+            $get_recording_data['serverFrom_name'] = $serverFrom_name;
+            $get_recording_data['api_customer_password'] = $API_Customer_Password;
+            $get_recording_data['api_customer_account'] = $API_Customer_Account;
+            $get_recording_data['api_customer_name'] = $API_customerUserName;
+            $get_recording_data['client_phone'] = $item->client_phone;
+            $get_recording_data['published_date'] = $item->published_date;
+
+//            $response = $this->o1__public__api__get_call_recording__from__by($get_recording_data);
+            $response = $this->commonRepository->o1__api__get_call_recording__from__by($get_recording_data);
+//            dd($response);
+            if($response['error'] == 0)
+            {
+                $item->recording_address_list = $response['recording_address_list'];
+                $bool = $item->save();
+                $recording_address_list = json_decode($response['recording_address_list']);
+                if(count($recording_address_list) > 0)
+                {
+                    $voice_record_url = $recording_address_list[0];
+                }
+
+            }
+            else if($response['error'] == 1)
+            {
+                return response_error([],$response['result']);
+
+            }
+            else
+            {
+//                return response_error([],"录音文件地址获取失败！");
+                return response_error([],json_encode($response));
+            }
+
+        }
+
+
+        if(!empty($voice_record_url))
+        {
+            $ch = curl_init($voice_record_url);
+            curl_setopt($ch, CURLOPT_NOBODY, true); // 只获取头部信息，不下载body内容
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_exec($ch);
+            $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            if ($responseCode == 200)
+            {
+            }
+            else
+            {
+                $myUrl = parse_url($voice_record_url);
+                $protocol = isset($myUrl['scheme']) ? $myUrl['scheme'] . ':' : '';
+                $hostname = isset($myUrl['host']) ? $myUrl['host'] : '';
+                $port = isset($myUrl['port']) ? ':' . $myUrl['port'] : '';
+                $path = isset($myUrl['path']) ? $myUrl['path'] : '';
+
+                $url = '';
+                if($hostname == 'call01.zlyx.jjccyun.cn')
+                {
+                    $url = 'http://8.142.7.121:9091/res/rs1/recordFile/listen?file=' . $path;
+                }
+                else if($hostname == 'call02.zlyx.jjccyun.cn')
+                {
+                    $url = $protocol . '//' . $hostname . $port . '/recordFile/listen?file=' . $path;
+                }
+                else if($hostname == 'fnjvce02.zlexin.cn')
+                {
+                    $url = $protocol . '//' . $hostname . $port . '/recordFile/listen?file=' . $path;
+                }
+                else
+                {
+//                    $url = $protocol . '//' . $hostname . $port . '/recordFile/listen?file=' . $path;
+                    $url = $voice_record_url;
+                }
+
+                $ch = curl_init($url); // 初始化cURL会话
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // 设置选项，返回响应内容而不是输出到页面上
+                curl_setopt($ch, CURLOPT_HEADER, 0); // 不需要头部信息，设置为0
+                $response = curl_exec($ch); // 执行cURL请求并获取响应结果
+                if(curl_errno($ch)) { // 检查是否有错误发生
+//                    echo 'Error:' . curl_error($ch);
+                } else {
+//                    echo $response; // 输出响应内容
+                }
+                curl_close($ch); // 关闭cURL会话
+
+
+                sleep(1); // 暂停1秒
+
+
+                $ch = curl_init($url);
+                curl_setopt($ch, CURLOPT_NOBODY, true); // 只获取头部信息，不下载body内容
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_exec($ch);
+                $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                curl_close($ch);
+                if ($responseCode == 200)
+                {
+                }
+                else
+                {
+                    return response_error([],"录音文件不存在！");
+                }
+            }
+        }
+        else
+        {
+            return response_error([],"录音文件地址不存在！");
+        }
+
+
+        $time = time();
+        $date = date("Y-m-d");
+        $datetime = date('Y-m-d H:i:s');
+
+
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '员工操作';
+            $record_row['field'] = 'item_operation';
+            $record_row['before'] = '';
+            $record_row['after'] = 'AI录音转文字';
+            $record_content[] = $record_row;
+        }
+        if(true)
+        {
+            $record_row = [];
+            $record_row['title'] = '审核时间';
+            $record_row['field'] = 'inspected_time';
+            $record_row['before'] = '';
+            $record_row['after'] = $datetime;
+            $record_content[] = $record_row;
+        }
+
+
+        $record_data["content"] = json_encode($record_content);
+
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $ai_converted = new DK_Common__Order__AI_Converted__Record;
+            $ai_data['ai_platform'] = 'ali';
+            $ai_data['ai_model'] = $ai_model;
+//            $ai_data['ai_system_prompt'] = $ai_system_prompt;
+//            $ai_data['ai_prompt'] = $ai_prompt;
+            $ai_data['order_id'] = $item_id;
+
+            $bool_ai = $ai_converted->fill($ai_data)->save();
+            if(!$bool_ai) throw new Exception("DK_Common__Order__AI_Inspected__Record--update--fail");
+            else
+            {
+                $ai_inspecting_post_date['platform'] = $ai_data['ai_platform'];
+//                $ai_inspecting_post_date['model'] = $ai_data['ai_model'];
+                $ai_inspecting_post_date['model'] = '';
+//                $ai_inspecting_post_date['system_prompt'] = $ai_data['ai_system_prompt'];
+//                $ai_inspecting_post_date['prompt'] = $ai_data['ai_prompt'];
+                $ai_inspecting_post_date['voice_record'] = $voice_record_url;
+                $ai_inspecting_post_date['voice_record_list'] = $recording_address_list;
+
+                $microtime_ai = microtime(true);
+//                $ai_inspecting_response = $this->o1__public__api__ai_inspecting__from__ali($ai_inspecting_post_date);
+                $ai_inspecting_response = $this->commonRepository->o1__api__ai_converting__from__ali($ai_inspecting_post_date);
+                $microtime_ended = microtime(true);
+
+                $ai_converted->record_category = 1;
+                $ai_converted->item_status = 9;
+                $ai_converted->ai_used_time = $microtime_ended - $microtime_ai;
+                $ai_converted->program_used_time = $microtime_ended - $microtime_start;
+                $ai_converted->result = $ai_inspecting_response;
+                $bool_ai_2 = $ai_converted->save();
+                if(!$bool_ai_2) throw new Exception("DK_Common__Order__AI_Inspected__Record--update--fail");
+
+
+
+//                $record = new DK_Common__Order__Operation_Record;
+//
+//                $bool_1 = $record->fill($record_data)->save();
+//                if(!$bool_1) throw new Exception("DK_Common__Order__Operation_Record--insert--fail");
+            }
+
+            $item->ai_inspected_status = 9;
+            $item->save();
+
+            DB::commit();
+
+        }
+        catch (Exception $e)
+        {
+//            DB::rollback();
+            DB::commit();
+//            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            $ai_converted->item_status = 99;
+            $ai_converted->description = $msg;
+            $ai_converted->save();
+            return response_fail([],$msg);
+        }
+
+        $response_decode = json_decode($ai_inspecting_response,true);
+//        dd($response_decode);
+        if(!empty($response_decode['output']['task_id']))
+        {
+            sleep(3); // 暂停1秒
+            // 设置请求头
+            $apiKey = env('DASHSCOPE_API_KEY');
+            $headers = [
+                'Authorization: Bearer ' . $apiKey
+            ];
+            $url = 'https://dashscope.aliyuncs.com/api/v1/tasks/'.$response_decode['output']['task_id'];
+
+                // 初始化cURL会话
+            $ch = curl_init();
+            // 设置cURL选项
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            // 执行cURL会话
+            $response_json = curl_exec($ch);
+            $response = json_decode($response_json,true);
+
+            $SUCCEEDED = false;
+            if($response['output']['task_status'] == "SUCCEEDED")
+            {
+
+                $SUCCEEDED = true;
+            }
+            else
+            {
+                sleep(2); // 暂停1秒
+                $response_json = curl_exec($ch);
+                $response = json_decode($response_json,true);
+                if($response['output']['task_status'] == "SUCCEEDED")
+                {
+                    $SUCCEEDED = true;
+                }
+            }
+
+            if($SUCCEEDED)
+            {
+                $ai_converted->result = $response_json;
+                $bool_ai_3 = $ai_converted->save();
+
+                $task_results = $response['output']['results'];
+                $transcription_text = '';
+                $transcription_text_array = [];
+                $transcription_content = [];
+
+                foreach($task_results as $v)
+                {
+                    $url = $v['transcription_url'];
+                    $transcript_json = file_get_contents($url);
+                    $transcription_content[] = $transcript_json;
+                    $transcript_json_decode = json_decode($transcript_json,true);
+                    $transcript_array = $transcript_json_decode['transcripts'];
+                    foreach($transcript_array as $k => $val)
+                    {
+                        $sentences_list = $val['sentences'];
+                        foreach($sentences_list as $key => $value)
+                        {
+                            if($k == 1)
+                            {
+                                $transcription_text_array[(int)$value['sentence_id']] = '[客服] '.$value['text'];
+                            }
+                            else
+                            {
+                                $transcription_text_array[(int)$value['sentence_id']] = '【潜在客户】'.$value['text'];
+                            }
+                        }
+                    }
+                }
+//                    dd($transcription_text_array);
+
+                if(count($transcription_text_array) > 0)
+                {
+                    ksort($transcription_text_array);
+                    foreach($transcription_text_array as $k => $v)
+                    {
+                        $transcription_text .= $v. "\n";
+                    }
+                }
+                $item->content = $transcription_text;
+                $item->save();
+
+
+                $ai_converted->item_status = 9;
+                $ai_converted->content = $transcription_text;
+                $ai_converted->result2 = json_encode($transcription_content);
+                $ai_converted->save();
+
+            }
+            else
+            {
+                $ai_converted->item_status = 19;
+                $ai_converted->description = '任务未完成，稍后获取结果！';
+                $ai_converted->save();
+            }
+            // 检查是否有错误发生
+            if (curl_errno($ch))
+            {
+//                echo 'Curl error: ' . curl_error($ch);
+                $ai_converted->description = 'Curl error: ' . curl_error($ch);
+                $ai_converted->save();
+            }
+            // 关闭cURL资源
+            curl_close($ch);
+        }
+        else
+        {
+            $ai_converted->item_status = 99;
+            $ai_converted->description = 'task_id不存在！';
+            $ai_converted->save();
+        }
+
+
+        return response_success([],"审核完成!");
+
+    }
+    // 【工单】AI审核
+    public function o1__order__bulk_converting__by_ai__save($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'ids.required' => 'ids.required.',
+//            'project_id.required' => 'project_id.required.',
+//            'client_id.required' => 'client_id.required.',
+//            'delivered_result.required' => 'delivered_result.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'ids' => 'required',
+//            'project_id' => 'required',
+//            'client_id' => 'required',
+//            'delivered_result' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'bulk-converting--by-ai') return response_error([],"参数[operate]有误！");
+        $ids = $post_data['ids'];
+        $ids_array = explode("-", $ids);
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->staff_category,[0,1,9,71])) return response_error([],"你没有操作权限！");
+
+
+        $time = time();
+        $date = date("Y-m-d");
+        $datetime = date('Y-m-d H:i:s');
+
+        $sorted = collect($ids_array)->sort();
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $count = 0;
+            $msg = '';
+            $ids = [];
+            $job_ids = [];
+
+            foreach($sorted as $key => $id)
+            {
+                $item = DK_Common__Order::withTrashed()->find($id);
+                if($item)
+                {
+                    $item->ai_inspected_status = 1;
+                    $item->save();
+                }
+                else
+                {
+                    return response_error([],"该内容不存在，刷新页面重试！");
+                }
+
+                $ai_inspected = new DK_Common__Order__AI_Converted__Record;
+                $ai_data['item_status'] = 1;
+                $ai_data['order_id'] = $id;
+
+                $bool_ai = $ai_inspected->fill($ai_data)->save();
+                if(!$bool_ai) throw new Exception("DK_Common__Order__AI_Inspected__Record--update--fail");
+
+                $count += 1;
+                $ids[] = $id;
+                $job_ids[] = $ai_inspected->id;
+            }
+
+            DB::commit();
+
+            foreach($job_ids as $key => $id)
+            {
+                DK_AI_convert_Job::dispatch($id);
             }
 
             return response_success(['ids'=>$ids],$msg);

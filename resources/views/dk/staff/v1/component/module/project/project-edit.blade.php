@@ -25,7 +25,7 @@
                 {{--项目类型--}}
                 <div class="form-group form-category">
                     <label class="control-label col-md-2">项目种类</label>
-                    <div class="col-md-8">
+                    <div class="col-md-9">
                         <div class="btn-group">
 
                             <button type="button" class="btn radio-btn radio-item-category">
@@ -60,14 +60,14 @@
                 {{--项目名称--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 项目名称</label>
-                    <div class="col-md-8 ">
+                    <div class="col-md-9 ">
                         <input type="text" class="form-control" name="name" placeholder="项目名称" value="">
                     </div>
                 </div>
                 {{--真实名称--}}
                 <div class="form-group">
                     <label class="control-label col-md-2">真实名称</label>
-                    <div class="col-md-8 ">
+                    <div class="col-md-9 ">
                         <input type="text" class="form-control" name="alias_name" placeholder="真实名称" value="">
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                 {{--城市--}}
                 <div class="form-group">
                     <label class="control-label col-md-2">城市</label>
-                    <div class="col-md-8 ">
+                    <div class="col-md-9 ">
                         <input type="text" class="form-control" name="location_city" placeholder="城市" value="">
                     </div>
                 </div>
@@ -85,7 +85,7 @@
                 {{--客户--}}
                 <div class="form-group">
                     <label class="control-label col-md-2">客户</label>
-                    <div class="col-md-8 ">
+                    <div class="col-md-9 ">
                         <select class="form-control select2-reset select2--client"
                                 name="client_id"
                                 id="select2--client--for--project-item-edit"
@@ -100,7 +100,7 @@
                 {{--团队--}}
 {{--                <div class="form-group">--}}
 {{--                    <label class="control-label col-md-2">团队</label>--}}
-{{--                    <div class="col-md-8 ">--}}
+{{--                    <div class="col-md-9 ">--}}
 {{--                        <select class="form-control select2-multiple-reset select2--team" multiple="multiple"--}}
 {{--                                name="teams[]"--}}
 {{--                                id="select2--teams--for--project-item-edit"--}}
@@ -116,7 +116,7 @@
                 {{--客服部门--}}
                 <div class="form-group">
                     <label class="control-label col-md-2">客服部门</label>
-                    <div class="col-md-8 ">
+                    <div class="col-md-9 ">
                         <select class="form-control select2-multiple-reset select2--department" multiple="multiple"
                                 name="CSD_department_list[]"
                                 id="select2--csd--for--project-item-edit"
@@ -134,7 +134,7 @@
                 {{--质检部门--}}
                 <div class="form-group">
                     <label class="control-label col-md-2">质检部门</label>
-                    <div class="col-md-8 ">
+                    <div class="col-md-9 ">
                         <select class="form-control select2-multiple-reset select2--department" multiple="multiple"
                                 name="QID_department_list[]"
                                 id="select2--qid--for--project-item-edit"
@@ -152,7 +152,7 @@
                 {{--复核部门--}}
                 <div class="form-group">
                     <label class="control-label col-md-2">复核部门</label>
-                    <div class="col-md-8 ">
+                    <div class="col-md-9 ">
                         <select class="form-control select2-multiple-reset select2--department" multiple="multiple"
                                 name="AD_department_list[]"
                                 id="select2--ad--for--project-item-edit"
@@ -170,7 +170,7 @@
                 {{--质检员--}}
 {{--                <div class="form-group">--}}
 {{--                    <label class="control-label col-md-2">质检</label>--}}
-{{--                    <div class="col-md-8 ">--}}
+{{--                    <div class="col-md-9 ">--}}
 {{--                        <select class="form-control select2-multiple-reset select2--staff" multiple="multiple"--}}
 {{--                                name="peoples[]"--}}
 {{--                                id="select2--peoples--for--project-item-edit"--}}
@@ -185,7 +185,7 @@
 
                 <div class="form-group form-type">
                     <label class="control-label col-md-2">是否允许分发</label>
-                    <div class="col-md-8">
+                    <div class="col-md-9">
                         <div class="btn-group">
 
                             <button type="button" class="btn">
@@ -208,22 +208,89 @@
                 </div>
 
 
+                {{--审核方式--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 审核方式</label>
+                    <div class="col-md-9 ">
+                        <select class="form-control modal--select2 select2-reset"
+                                name="inspecting_method"
+                                data-modal="#modal--for--project-item-edit"
+                        >
+                            <option value="0">选择审核方式</option>
+                            <option value ="1">人工审核</option>
+                            <option value ="11">AI审核</option>
+                            <option value ="21">人工+AI审核</option>
+                        </select>
+                    </div>
+                </div>
+
+
                 <div class="form-group form-type">
-                    <label class="control-label col-md-2">是否自动AI审核</label>
-                    <div class="col-md-8">
+                    <label class="control-label col-md-2">自动AI转文字</label>
+                    <div class="col-md-9">
                         <div class="btn-group">
 
                             <button type="button" class="btn">
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="is_automatic_ai_inspecting" value="0"> 否
+                                        <input type="radio" name="is_automatic_ai_converting" value="0" checked="checked"> 否
                                     </label>
                                 </div>
                             </button>
                             <button type="button" class="btn">
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="is_automatic_ai_inspecting" value="1" checked="checked"> 是
+                                        <input type="radio" name="is_automatic_ai_converting" value="1"> 是
+                                    </label>
+                                </div>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group form-type _none-">
+                    <label class="control-label col-md-2">自动AI文字审核</label>
+                    <div class="col-md-9">
+                        <div class="btn-group">
+
+                            <button type="button" class="btn">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="is_automatic_ai_inspecting_by_text" value="0" checked="checked"> 否
+                                    </label>
+                                </div>
+                            </button>
+                            <button type="button" class="btn">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="is_automatic_ai_inspecting_by_text" value="1"> 是
+                                    </label>
+                                </div>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group form-type">
+                    <label class="control-label col-md-2">自动AI录音审核</label>
+                    <div class="col-md-9">
+                        <div class="btn-group">
+
+                            <button type="button" class="btn">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="is_automatic_ai_inspecting" value="0" checked="checked"> 否
+                                    </label>
+                                </div>
+                            </button>
+                            <button type="button" class="btn">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="is_automatic_ai_inspecting" value="1"> 是
                                     </label>
                                 </div>
                             </button>
@@ -236,14 +303,14 @@
                 {{--AI审核模型--}}
                 <div class="form-group">
                     <label class="control-label col-md-2">AI审核模型</label>
-                    <div class="col-md-8 ">
+                    <div class="col-md-9 ">
                         <input type="text" class="form-control" name="ai_model" placeholder="AI审核模型" value="">
                     </div>
                 </div>
                 {{--AI审核提示词--}}
                 <div class="form-group">
                     <label class="control-label col-md-2">AI系统提示词</label>
-                    <div class="col-md-8 ">
+                    <div class="col-md-9 ">
                         {{--<input type="text" class="form-control" name="description" placeholder="描述" value="{{$data->description or ''}}">--}}
                         <textarea class="form-control" name="ai_system_prompt" rows="10" cols="100%"></textarea>
                     </div>
@@ -251,7 +318,7 @@
                 {{--AI审核提示词--}}
                 <div class="form-group">
                     <label class="control-label col-md-2">AI提示词</label>
-                    <div class="col-md-8 ">
+                    <div class="col-md-9 ">
                         {{--<input type="text" class="form-control" name="description" placeholder="描述" value="{{$data->description or ''}}">--}}
                         <textarea class="form-control" name="ai_prompt" rows="10" cols="100%"></textarea>
                     </div>
@@ -261,7 +328,7 @@
                 {{--描述--}}
                 <div class="form-group">
                     <label class="control-label col-md-2">描述</label>
-                    <div class="col-md-8 ">
+                    <div class="col-md-9 ">
                         {{--<input type="text" class="form-control" name="description" placeholder="描述" value="{{$data->description or ''}}">--}}
                         <textarea class="form-control" name="description" rows="3" cols="100%"></textarea>
                     </div>
@@ -271,7 +338,7 @@
                 {{--头像--}}
                 <div class="form-group _none">
                     <label class="control-label col-md-2">头像</label>
-                    <div class="col-md-8 fileinput-group">
+                    <div class="col-md-9 fileinput-group">
 
                         <div class="fileinput fileinput-new" data-provides="fileinput">
                             <div class="fileinput-new thumbnail">
@@ -300,7 +367,7 @@
                 {{--启用--}}
 {{--                <div class="form-group form-type _none">--}}
 {{--                    <label class="control-label col-md-2">启用</label>--}}
-{{--                    <div class="col-md-8">--}}
+{{--                    <div class="col-md-9">--}}
 {{--                        <div class="btn-group">--}}
 
 {{--                            <button type="button" class="btn">--}}
@@ -328,7 +395,7 @@
 
             <div class="box-footer">
                 <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
+                    <div class="col-md-9 col-md-offset-2">
                         <button type="button" class="btn btn-success edit-submit" id="submit--for--project-item-edit">
                             <i class="fa fa-check"></i> 提交
                         </button>

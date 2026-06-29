@@ -78,21 +78,29 @@
         </div>
 
 
-        <div class="box- box-info- form-container">
+        <div class="box- box-info- form-container ai-box">
 
 
             <div class="box-header with-border margin-top-16px margin-bottom-4px">
-                <h3 class="box-title">录音审核 <span class="id-box"></span></h3>
+                <h3 class="box-title">
+                    AI审核 <span class="id-box"></span>
+                </h3>
+
                 <div class="box-tools pull-right caption">
+                    <a class="item-submit--for--order--item-ai-converting--api-sent" style="margin-right:12px;float:left;">
+                        {{--<button type="button" class="btn btn-success pull-right">--}}
+                        <i class="fa fa-plus"></i> AI转文字
+                        {{--</button>--}}
+                    </a>
                     <a class="item-submit--for--order--item-ai-inspecting--api-sent">
-                        {{--                        <button type="button" class="btn btn-success pull-right">--}}
-                        <i class="fa fa-plus"></i> AI审核
-                        {{--                        </button>--}}
+                        {{--<button type="button" class="btn btn-success pull-right">--}}
+                        <i class="fa fa-plus"></i> AI录音审核
+                        {{--</button>--}}
                     </a>
                 </div>
             </div>
 
-            <div class="box-body datatable-body" id="">
+            <div class="box-body datatable-body">
 
                 <table class='table table-striped table-bordered' id='datatable--for--order--item--inspecting--of--ai-record-list'>
                     <thead>
@@ -313,6 +321,13 @@
                             </div>
                         </div>
                     </div>
+                    {{--通话小结--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2">录音转文字</label>
+                        <div class="col-md-9 ">
+                            <div class="converted-text"></div>
+                        </div>
+                    </div>
                     {{--审核结果--}}
                     <div class="form-group">
                         <label class="control-label col-md-2"><sup class="text-red">*</sup> 审核结果</label>
@@ -326,6 +341,25 @@
                                     <option value ="{{ $v }}">{{ $v }}</option>
                                 @endforeach
                             </select>
+                        </div>
+                    </div>
+                    {{--命中关键信息--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 命中关键信息</label>
+                        <div class="col-md-9 ">
+                            <div class="btn-group">
+
+                                @foreach(config('dk.common-config.key_info_hit') as $k => $v)
+                                    <button type="button" class="btn">
+                                    <span class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="order--item-inspecting--key-info-hit[]" value="{{ $k }}"> {{ $v }}
+                                        </label>
+                                    </span>
+                                    </button>
+                                @endforeach
+
+                            </div>
                         </div>
                     </div>
                     {{--录音质量--}}

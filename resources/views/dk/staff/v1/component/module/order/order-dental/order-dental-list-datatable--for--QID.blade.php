@@ -180,7 +180,7 @@
                     "width": "72px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
+                        if(row.is_completed != 1)
                         {
                             $(nTd).addClass('order_status');
                             $(nTd).attr('data-id',row.id).attr('data-name','工单状态');

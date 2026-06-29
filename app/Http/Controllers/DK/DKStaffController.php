@@ -999,15 +999,25 @@ class DKStaffController extends Controller
     {
         return $this->order_repo->o1__order__item_inspecting_save(request()->all());
     }
-    // 【工单】ai审核
+    // 【工单】ai 审核
     public function o1__order__item_inspecting__by_ai__save()
     {
         return $this->order_repo->o1__order__item_inspecting__by_ai__save(request()->all());
     }
-    // 【工单】ai审核
+    // 【工单】ai 审核
     public function o1__order__bulk_inspecting__by_ai__save()
     {
         return $this->order_repo->o1__order__bulk_inspecting__by_ai__save(request()->all());
+    }
+    // 【工单】ai 录音转文字
+    public function o1__order__item_converting__by_ai__save()
+    {
+        return $this->order_repo->o1__order__item_converting__by_ai__save(request()->all());
+    }
+    // 【工单】ai 录音转文字
+    public function o1__order__bulk_converting__by_ai__save()
+    {
+        return $this->order_repo->o1__order__bulk_converting__by_ai__save(request()->all());
     }
     // 【工单】申诉
     public function o1__order__item_appealing_save()
@@ -1083,7 +1093,12 @@ class DKStaffController extends Controller
     {
         return $this->order_repo->o1__order__item_delivery_record_list__datatable_query(request()->all());
     }
-    // 【工单】【交付】列表
+    // 【工单】【AI录音转文字】列表
+    public function o1__order__item_ai_converted_record_list__datatable_query()
+    {
+        return $this->order_repo->o1__order__item_ai_converted_record_list__datatable_query(request()->all());
+    }
+    // 【工单】【AI审核】列表
     public function o1__order__item_ai_record_list__datatable_query()
     {
         return $this->order_repo->o1__order__item_ai_record_list__datatable_query(request()->all());
@@ -1148,6 +1163,11 @@ class DKStaffController extends Controller
 
 
     // 【API】【AI】datatable
+    public function o1__ai__converted_record__list__datatable_query()
+    {
+        return $this->ai_repo->o1__ai__converted_record__list__datatable_query(request()->all());
+    }
+    // 【API】【AI】datatable
     public function o1__ai__record__list__datatable_query()
     {
         return $this->ai_repo->o1__ai__record__list__datatable_query(request()->all());
@@ -1155,6 +1175,10 @@ class DKStaffController extends Controller
     public function o1__ai__item__inspecting()
     {
         return $this->ai_repo->o1__ai__item__inspecting(request()->all());
+    }
+    public function o1__ai__converted__item__get_result()
+    {
+        return $this->ai_repo->o1__ai__converted__item__get_result(request()->all());
     }
 
 

@@ -129,8 +129,16 @@ class DK_Common__Order extends Model
         'completed_date',
         'completed_at',
 
+        'inspected_method',
+        'ai_converted_status',
+
+        'manual_inspected_status',
+        'manual_inspected_result',
         'ai_inspected_status',
+        'ai_inspected_result',
+
         'inspector_id',
+        'inspected_active',
         'inspected_status',
         'inspected_result',
         'inspected_result_2',
@@ -139,6 +147,7 @@ class DK_Common__Order extends Model
         'inspected_date',
         'inspected_at',
 
+        'key_info_hit',
         'rejected_reason',
 
         'appellant_id',
@@ -173,7 +182,7 @@ class DK_Common__Order extends Model
     ];
     protected $dateFormat = 'U';
 
-    protected $hidden = ['content','custom'];
+    protected $hidden = ['custom'];
 
     protected $dates = ['created_at','updated_at','deleted_at'];
 //    public function getDates()
