@@ -73,6 +73,7 @@ class DK_Common__Order extends Model
         'assign_time',
         'is_distributive_condition',
         'client_type',
+        'client_age',
         'client_name',
         'client_phone',
         'client_intention',

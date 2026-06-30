@@ -92,6 +92,7 @@
                         // 班次
                         $modal.find('select[name="work_shift"]').val($response.data.work_shift).trigger('change');
 
+                        $modal.find('select[name="client_age"]').val($response.data.client_age).trigger('change');
                         $modal.find('input[name="client_name"]').val($response.data.client_name);
                         $modal.find('input[name="client_phone"]').val($response.data.client_phone);
                         $modal.find('input[name="client_phone"]').prop('readonly', true);

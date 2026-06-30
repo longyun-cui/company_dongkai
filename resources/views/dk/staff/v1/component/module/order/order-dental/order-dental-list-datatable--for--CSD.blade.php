@@ -389,7 +389,7 @@
                     "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1))
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -416,7 +416,7 @@
                     "width": "100px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1))
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -433,6 +433,35 @@
                     },
                     render: function(data, type, row, meta) {
                         return data;
+                    }
+                },
+                {
+                    "title": "客户年龄",
+                    "name": "client_age",
+                    "data": "client_age",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(!(row.is_published == 1))
+                        {
+                            $(nTd).attr('data-row-index',iRow);
+
+                            $(nTd).addClass('modal-show-for-field-set');
+                            $(nTd).attr('data-id',row.id).attr('data-name','客户年龄');
+                            $(nTd).attr('data-key','client_age').attr('data-value',data);
+
+                            $(nTd).attr('data-column-type','radio');
+                            $(nTd).attr('data-column-name','客户年龄');
+
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        if(data == 1) return '<small class="btn-xs bg-green">18-90岁</small>';
+                        else if(data == 99) return '<small class="btn-xs bg-navy">未询问</small>';
+                        else return '--';
                     }
                 },
                 {
@@ -737,8 +766,24 @@
                         if(!data) return '--';
 
                         var $creator_team = row.creator_team_er == null ? '' : row.creator_team_er.name;
+                        // var $creator_team_group = row.creator_team_group_er == null ? '' : ' - ' + row.creator_team_group_er.name;
+                        // return '<a href="javascript:void(0);">'+$creator_team + $creator_team_group+'</a>';
+                        return '<a href="javascript:void(0);">'+$creator_team + '</a>';
+                    }
+                },
+                {
+                    "title": "小组",
+                    "name": "creator_team_group_id",
+                    "data": "creator_team_group_id",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(!data) return '--';
+
+                        // var $creator_team = row.creator_team_er == null ? '' : row.creator_team_er.name;
                         var $creator_team_group = row.creator_team_group_er == null ? '' : ' - ' + row.creator_team_group_er.name;
-                        return '<a href="javascript:void(0);">'+$creator_team + $creator_team_group+'</a>';
+                        return '<a href="javascript:void(0);">'+$creator_team_group+'</a>';
                     }
                 },
                 {
