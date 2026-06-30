@@ -180,8 +180,21 @@ class DK_Staff__OrderRepository {
             $order_different_int = intval($post_data['order_different']);
             if($order_different_int == 1)
             {
-                $query->whereIn('dk_common__order.inspecting_method', [0,21])
-                    ->where('dk_common__order.manual_inspected_result', '!=', 'dk_common__order.ai_inspected_result');
+
+                $query->where(function ($query) {
+                    $query->where(function ($query1) {
+
+                        $query1->where('dk_common__order.inspecting_method', 21)
+                            ->where('dk_common__order.manual_inspected_result', '!=', 'dk_common__order.ai_inspected_result');
+                    })
+                        ->orWhere(function ($query2) {
+
+                            $query2->where('dk_common__order.inspecting_method', 0)
+                                ->whereNotNull('dk_common__order.manual_inspected_result')
+                                ->whereNotNull('dk_common__order.ai_inspected_result')
+                                ->where('dk_common__order.manual_inspected_result', '!=', 'dk_common__order.ai_inspected_result');
+                        });
+                });
             }
         }
 
