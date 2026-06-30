@@ -747,7 +747,7 @@ class DK_Staff__CommonRepository {
     public function o1__api__ai_converting__from__ali($post_data)
     {
         $platform = $post_data['platform'];
-//        $model = $post_data['model'];
+        $model = $post_data['model'];
 //        $system_prompt = !empty($post_data['system_prompt']) ? $post_data['system_prompt'] : '';
 //        $prompt = $post_data['prompt'];
         $audio = $post_data['voice_record'];
@@ -773,7 +773,7 @@ class DK_Staff__CommonRepository {
         // 设置请求体
         $data = [
             // 模型列表：https://help.aliyun.com/model-studio/getting-started/models
-            "model" => "paraformer-v2",
+            "model" => $model,
             "input" => [
                 "file_urls" => $audio_list
             ],
@@ -781,6 +781,7 @@ class DK_Staff__CommonRepository {
                 "channel_id" => [
                     0,1
                 ], //音轨索引，可选
+                "language_hints" => ["cn"],
                 "disfluency_removal_enabled" => false, //过滤语气词开关，可选
                 "timestamp_alignment_enabled" => false, //是否启用时间戳校准功能，可选
 //                "special_word_filter" => "xxx", //敏感词，可选

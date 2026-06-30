@@ -252,7 +252,7 @@
 
         'ai_platform__for___converting' => 'ali',
 //        'ai_model__for___converting' => 'paraformer-v2',
-        'ai_model__for___converting' => 'fun-asr-flash-2026-06-15',
+        'ai_model__for___converting' => 'fun-asr',
 
 
         'ai_platform_text' => 'ali',
