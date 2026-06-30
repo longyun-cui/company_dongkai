@@ -27,9 +27,8 @@
 
 
             <input type="text" class="search-filter form-filter filter-keyup" name="mac-address-id" placeholder="ID" />
-            <input type="text" class="search-filter form-filter filter-keyup" name="mac-address-number" placeholder="工号" />
-            <input type="text" class="search-filter form-filter filter-keyup" name="mac-address-name" placeholder="姓名" />
-            <input type="text" class="search-filter form-filter filter-keyup" name="mac-address-api-mac-addressNo" placeholder="API坐席ID" />
+            <input type="text" class="search-filter form-filter filter-keyup" name="mac-customerName" placeholder="客户名" />
+            <input type="text" class="search-filter form-filter filter-keyup" name="mac-userName" placeholder="用户名" />
 
 
 

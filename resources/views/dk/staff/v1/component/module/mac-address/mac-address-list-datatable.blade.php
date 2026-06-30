@@ -24,8 +24,8 @@
                 "data": function (d) {
                     d._token = $('meta[name="_token"]').attr('content');
                     d.id = $('input[name="mac-address-id"]').val();
-                    d.login_number = $('input[name="mac-address-number"]').val();
-                    d.name = $('input[name="mac-address-name"]').val();
+                    d.api_customerName = $('input[name="mac-customerName"]').val();
+                    d.api_userName = $('input[name="mac-userName"]').val();
                     d.team = $tableSearch.find('select[name="mac-address-team"]').val();
                     d.item_status = $tableSearch.find('select[name="mac-address-status"]').val();
                 },

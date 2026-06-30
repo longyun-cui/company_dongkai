@@ -102,7 +102,8 @@ class DK_Staff__MacRepository {
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
         if(!empty($post_data['mac_address'])) $query->where('mac_address', 'like', "%{$post_data['mac_address']}%");
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
-        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+        if(!empty($post_data['api_customerName'])) $query->where('api_customerName', 'like', "%{$post_data['api_customerName']}%");
+        if(!empty($post_data['api_userName'])) $query->where('api_userName', 'like', "%{$post_data['api_userName']}%");
         if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
         if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
         if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
