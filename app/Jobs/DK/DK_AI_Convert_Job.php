@@ -1,7 +1,6 @@
 <?php
 namespace App\Jobs\DK;
 
-use App\Models\DK\DK_Common\DK_Common__Order__AI_Converted__Record;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -11,6 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use App\Models\DK\DK_Common\DK_Common__Order;
 use App\Models\DK\DK_Common\DK_Common__Order__Operation_Record;
 use App\Models\DK\DK_Common\DK_Common__Order__AI_Inspected__Record;
+use App\Models\DK\DK_Common\DK_Common__Order__AI_Converted__Record;
 use App\Models\DK\DK_Common\DK_Common__Project;
 use App\Models\DK\DK_Common\DK_Common__Staff;
 use App\Models\DK\DK_Common\DK_Common__Team;

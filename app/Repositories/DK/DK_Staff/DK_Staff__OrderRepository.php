@@ -31,7 +31,7 @@ use App\Models\DK\DK_API_BY_Received;
 
 
 use App\Jobs\DK\DK_AI_Inspect_Job;
-use App\Jobs\DK\DK_AI_convert_Job;
+use App\Jobs\DK\DK_AI_Convert_Job;
 use App\Jobs\DK_Client\AutomaticDispatchingJob;
 
 
@@ -9400,7 +9400,7 @@ class DK_Staff__OrderRepository {
 
             foreach($job_ids as $key => $id)
             {
-                DK_AI_convert_Job::dispatch($id);
+                DK_AI_Convert_Job::dispatch($id);
             }
 
             return response_success(['ids'=>$ids],$msg);
