@@ -773,6 +773,7 @@ class DK_Staff__OrderRepository {
                     $import_list[$k]->created_type = 9;
                     $import_list[$k]->project_id = 0;
                     $import_list[$k]->is_repeat = 0;
+                    $import_list[$k]->client_age = 0;
                     $import_list[$k]->client_name = null;
                     $import_list[$k]->client_type = null;
                     $import_list[$k]->client_intention = null;
