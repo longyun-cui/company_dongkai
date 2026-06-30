@@ -100,51 +100,24 @@
                     }
                 },
                 {
-                    "title": "工单ID",
-                    "data": "order_id",
-                    "className": "",
-                    "width": "80px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        return data;
-                    }
-                },
-                {
-                    "title": "平台",
-                    "data": "ai_platform",
-                    "className": "",
-                    "width": "50px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        return data;
-                    }
-                },
-                {
-                    "title": "模型",
-                    "data": "ai_model",
-                    "className": "",
-                    "width": "120px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        return data;
-                    }
-                },
-                {
-                    "title": "耗时(s)",
-                    "data": "ai_used_time",
+                    "title": "基本信息",
+                    "data": "id",
                     "className": "text-left",
-                    "width": "120px",
+                    "width": "160px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         var $return_html = '';
-                        $return_html += '【程序】' + row.program_used_time + ' <br>';
-                        $return_html += '【质检】' + data + ' <br>';
+                        $return_html += '【工单】' + row.order_id + '<br>';
+                        $return_html += '【平台】' + row.ai_platform + '<br>';
+                        $return_html += '【模型】' + row.ai_model + '<br>';
+                        $return_html += '【程序】' + row.program_used_time + '<br>';
+                        $return_html += '【质检】' + row.ai_used_time + '<br>';
                         return $return_html;
                     }
                 },
                 {
                     "className": "text-left",
-                    "width": "500px",
+                    "width": "600px",
                     "title": "返回结果",
                     "data": "content",
                     "orderable": false,
@@ -162,7 +135,7 @@
                     "name": "order_id",
                     "data": "order_id",
                     "className": "",
-                    "width": "240px",
+                    "width": "380px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1)
@@ -183,7 +156,7 @@
                                 $.each($recording_list, function(index, value)
                                 {
 
-                                    var $audio_html = '<audio controls controlsList="nodownload" style="width:230px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
+                                    var $audio_html = '<audio controls controlsList="nodownload" style="width:360px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
                                     $return_html += $audio_html;
                                 });
                                 return $return_html;
@@ -198,7 +171,7 @@
                         {
                             if(row.recording_address)
                             {
-                                return '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+row.recording_address+'" type="audio/mpeg"></audio>';
+                                return '<audio controls controlsList="nodownload" style="width:360px;height:20px;"><source src="'+row.recording_address+'" type="audio/mpeg"></audio>';
                             }
                             else return '';
                         }

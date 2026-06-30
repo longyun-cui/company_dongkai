@@ -352,13 +352,22 @@ class DK_AI_Convert_Job implements ShouldQueue
                                 $sentences_list = $val['sentences'];
                                 foreach($sentences_list as $key => $value)
                                 {
-                                    if($k == 1)
+//                                    if($k == 1)
+//                                    {
+//                                        $transcription_text_array[(int)$value['sentence_id']] = '[客服] '.$value['text'];
+//                                    }
+//                                    else
+//                                    {
+//                                        $transcription_text_array[(int)$value['sentence_id']] = '【潜在客户】'.$value['text'];
+//                                    }
+
+                                    if($value['speaker_id'] == 0)
                                     {
-                                        $transcription_text_array[(int)$value['sentence_id']] = '[客服] '.$value['text'];
+                                        $transcription_text_array[(int)$value['sentence_id']] = '【AA】'.$value['text'];
                                     }
                                     else
                                     {
-                                        $transcription_text_array[(int)$value['sentence_id']] = '【潜在客户】'.$value['text'];
+                                        $transcription_text_array[(int)$value['sentence_id']] = '【zz】'.$value['text'];
                                     }
                                 }
                             }
