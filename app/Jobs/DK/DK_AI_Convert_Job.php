@@ -367,7 +367,7 @@ class DK_AI_Convert_Job implements ShouldQueue
                                     }
                                     else
                                     {
-                                        $transcription_text_array[(int)$value['sentence_id']] = '【zz】'.$value['text'];
+                                        $transcription_text_array[(int)$value['sentence_id']] = '【--】'.$value['text'];
                                     }
                                 }
                             }

@@ -9276,7 +9276,7 @@ class DK_Staff__OrderRepository {
                             }
                             else
                             {
-                                $transcription_text_array[(int)$value['sentence_id']] = '【zz】'.$value['text'];
+                                $transcription_text_array[(int)$value['sentence_id']] = '【--】'.$value['text'];
                             }
                         }
                     }
