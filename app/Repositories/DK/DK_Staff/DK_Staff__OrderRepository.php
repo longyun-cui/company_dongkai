@@ -3693,6 +3693,17 @@ class DK_Staff__OrderRepository {
         $recording_quality = $post_data["order-item-inspecting--recording-quality"];
 
 
+        if(in_array($inspected_result,['通过','折扣通过','郊区通过','内部通过']))
+        {
+            if(!isset($post_data["order--item-inspecting--key-info-hit"]))
+            {
+                return response_error([],"请选择命中关键信息！");
+            }
+            $key_info_hit = $post_data["order--item-inspecting--key-info-hit"];
+            $key_info_hit_count = count($key_info_hit);
+        }
+
+
         if(in_array($inspected_result,['拒绝','不合格','超区','超龄','虚假']))
         {
             if(!isset($post_data["order--item-inspecting--rejected-reason"]))
@@ -3701,14 +3712,6 @@ class DK_Staff__OrderRepository {
             }
         }
 
-
-        if(!isset($post_data["order--item-inspecting--key-info-hit"]))
-        {
-            return response_error([],"请选择命中关键信息！");
-        }
-        $key_info_hit = $post_data["order--item-inspecting--key-info-hit"];
-        $key_info_hit_count = count($key_info_hit);
-        $key_info_hit_text = '';
 
 
         $project_id = $post_data["project_id"];
@@ -3764,6 +3767,8 @@ class DK_Staff__OrderRepository {
         $date = date("Y-m-d");
         $datetime = date('Y-m-d H:i:s');
 
+
+        $key_info_hit_text = '';
         $rejected_reason_text = '';
 
 
@@ -3884,7 +3889,7 @@ class DK_Staff__OrderRepository {
             $record_content[] = $record_row;
         }
 
-        if(true)
+        if(in_array($inspected_result,['通过','折扣通过','郊区通过','内部通过']))
         {
             $record_row = [];
             $record_row['title'] = '命中关键信息';
