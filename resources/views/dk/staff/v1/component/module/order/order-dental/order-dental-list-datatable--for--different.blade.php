@@ -189,18 +189,22 @@
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                     },
                     render: function(data, type, row, meta) {
-                        if (data.includes('通过'))
+                        if(data)
                         {
-                            return '<small class="btn-xs bg-green">'+data+'</small>';
+                            if (data.includes('通过'))
+                            {
+                                return '<small class="btn-xs bg-green">'+data+'</small>';
+                            }
+                            else if (data.includes('拒绝'))
+                            {
+                                return '<small class="btn-xs bg-red">'+data+'</small>';
+                            }
+                            else
+                            {
+                                return data;
+                            }
                         }
-                        else if (data.includes('拒绝'))
-                        {
-                            return '<small class="btn-xs bg-red">'+data+'</small>';
-                        }
-                        else
-                        {
-                            return data;
-                        }
+                        else return '';
                     }
                 },
                 {
@@ -213,18 +217,22 @@
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                     },
                     render: function(data, type, row, meta) {
-                        if (data.includes('通过'))
+                        if(data)
                         {
-                            return '<small class="btn-xs bg-green">'+data+'</small>';
+                            if (data.includes('通过'))
+                            {
+                                return '<small class="btn-xs bg-green">'+data+'</small>';
+                            }
+                            else if (data.includes('拒绝'))
+                            {
+                                return '<small class="btn-xs bg-red">'+data+'</small>';
+                            }
+                            else
+                            {
+                                return data;
+                            }
                         }
-                        else if (data.includes('拒绝'))
-                        {
-                            return '<small class="btn-xs bg-red">'+data+'</small>';
-                        }
-                        else
-                        {
-                            return data;
-                        }
+                        else return '';
                     }
                 },
                 {
