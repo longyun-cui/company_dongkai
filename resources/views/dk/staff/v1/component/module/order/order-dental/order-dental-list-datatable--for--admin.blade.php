@@ -302,6 +302,37 @@
                     }
                 },
                 {
+                    "title": "审核方式",
+                    "data": "inspecting_method",
+                    "className": "",
+                    "width": "72px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        var $result_html = '';
+                        if(data == 0)
+                        {
+                            $result_html = '--';
+                        }
+                        else if(data == 1)
+                        {
+                            $result_html = '<small class="btn-xs bg-blue">人工</small>';
+                        }
+                        else if(data == 11)
+                        {
+                            $result_html = '<small class="btn-xs bg-green">AI</small>';
+                        }
+                        else if(data == 21)
+                        {
+                            $result_html = '<small class="btn-xs bg-red">人+AI</small>';
+                        }
+                        else
+                        {
+                            $result_html = '<small class="btn-xs bg-black">有误</small>';
+                        }
+                        return $result_html;
+                    }
+                },
+                {
                     "title": "AI",
                     "data": "ai_inspected_status",
                     "className": "",

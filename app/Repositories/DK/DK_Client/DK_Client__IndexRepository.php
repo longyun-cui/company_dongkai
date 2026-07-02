@@ -384,6 +384,28 @@ class DK_Client__IndexRepository {
 
 
 
+    public function operate_download_item_recording_download($post_data)
+    {
+        $item_id = $post_data['item_id'];
+        $record_url = $post_data['url'];
+
+        $randomNumber = rand(1000, 9999);
+
+        $name = $item_id.$randomNumber.'.mp3';
+        $extension = 'mp3';
+//        $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+
+        $file = file_get_contents($record_url);
+        return Response::make($file, 200)
+            ->header('Content-Type', 'application/'.$extension)
+            ->header('Content-Disposition', "attachment; filename=$name");
+
+    }
+
+
+
+
+
     // 【交付管理】返回-列表-数据
     public function query_last_delivery()
     {

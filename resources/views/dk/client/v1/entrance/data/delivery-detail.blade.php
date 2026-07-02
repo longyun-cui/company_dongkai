@@ -13,7 +13,7 @@
         <title>FNJ</title>
 
         <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+{{--        <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">--}}
 
         <!-- Styles -->
         <style>
@@ -70,26 +70,26 @@
         </style>
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
+        <div class="flex-center position-ref full-height main-content">
 
             @if(!empty($data))
             <div class="content">
-                <div class="title m-b-md">
-                    <span>{{ $data->client_name or '' }}</span>
-                </div>
-                <div class="title m-b-md">
-                    <span>{{ $data->client_phone or '' }}</span>
-                </div>
-                <div class="title m-b-md">
-                    <span>{{ $data->wx_id or '' }}</span>
-                </div>
-                <div class="title m-b-md">
-                    <span>{{ $data->location_city or '' }} - {{ $data->location_district or '' }}</span>
-                </div>
-                <div class="title m-b-md">
-                    <span>{{ $data->description or '' }}</span>
-                </div>
-                <div class="title m-b-md">
+{{--                <div class="title m-b-md">--}}
+{{--                    <span>{{ $data->client_name or '' }}</span>--}}
+{{--                </div>--}}
+{{--                <div class="title m-b-md">--}}
+{{--                    <span>{{ $data->client_phone or '' }}</span>--}}
+{{--                </div>--}}
+{{--                <div class="title m-b-md">--}}
+{{--                    <span>{{ $data->wx_id or '' }}</span>--}}
+{{--                </div>--}}
+{{--                <div class="title m-b-md">--}}
+{{--                    <span>{{ $data->location_city or '' }} - {{ $data->location_district or '' }}</span>--}}
+{{--                </div>--}}
+{{--                <div class="title m-b-md">--}}
+{{--                    <span>{{ $data->description or '' }}</span>--}}
+{{--                </div>--}}
+                <div class="title m-b-md recording_address_download" data-address-list="{{ $data->recording_address_list or '' }}">
                     @if(!empty($recording_list) && count($recording_list) > 0)
                     @foreach($recording_list as $recording)
                         <audio controls controlsList="nodownload" style="width:480px;height:80px;">
@@ -97,6 +97,11 @@
                         </audio>
                     @endforeach
                     @endif
+                </div>
+                <div class="title m-b-xs">
+                    <span class="">
+                        <a class="btn btn-xs item-download-recording-list-submit">下载</a>
+                    </span>
                 </div>
             </div>
             @endif
@@ -106,5 +111,43 @@
                 </div>
             </div>
         </div>
+        <script src="{{ asset('/AdminLTE/plugins/jQuery/jquery-2.2.3.min.js') }}"></script>
+        <script>
+            $(function() {
+
+                // 【下载录音】
+                $(".main-content").on('click', ".item-download-recording-list-submit", function() {
+                    var $that = $(this);
+
+                    $recording_list_str = $('.recording_address_download').data('address-list');
+                    console.log($recording_list_str);
+                    if($recording_list_str)
+                    {
+                        var $recording_list = JSON.parse($recording_list_str);
+                        console.log($recording_list);
+
+                        $.each($recording_list, function($index, $value) {
+
+                            console.log($index);
+                            console.log($value);
+
+                            var $obj = new Object();
+                            $obj.item_id = $item_id;
+
+                            $obj.url = $value;
+
+                            var $randomNumber = Math.floor(Math.random() * 100) + 1;
+                            $obj.randomNumber = $randomNumber;
+                            console.log($obj);
+
+                            var $url = url_build('/download/item-recording-download',$obj);
+                            window.open($url);
+
+                        });
+                    }
+                });
+
+            });
+        </script>
     </body>
 </html>
