@@ -67,6 +67,17 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+
+            .item-download-recording-list-submit
+            {
+                cursor:pointer;
+            }
+            .item-download-recording-list-submit:hover
+            {
+                color: purple;
+                display: inline-block; /* 或其他合适的display值 */
+                box-shadow: inset 0 -2px purple; /* 在底部添加一个黑色的阴影 */
+            }
         </style>
     </head>
     <body>
@@ -89,7 +100,7 @@
 {{--                <div class="title m-b-md">--}}
 {{--                    <span>{{ $data->description or '' }}</span>--}}
 {{--                </div>--}}
-                <div class="title m-b-md recording_address_download" data-address-list="{{ $data->recording_address_list or '' }}">
+                <div class="title m-b-md recording_address_download" data-address-list="{{ $data->recording_address_list }}">
                     @if(!empty($recording_list) && count($recording_list) > 0)
                     @foreach($recording_list as $recording)
                         <audio controls controlsList="nodownload" style="width:480px;height:80px;">
@@ -100,7 +111,7 @@
                 </div>
                 <div class="title m-b-xs">
                     <span class="">
-                        <a class="btn btn-xs item-download-recording-list-submit">下载</a>
+                        <a class="btn btn-xs item-download-recording-list-submit" data-id="{{ $data->id }}">下载</a>
                     </span>
                 </div>
             </div>
@@ -118,15 +129,16 @@
                 // 【下载录音】
                 $(".main-content").on('click', ".item-download-recording-list-submit", function() {
                     var $that = $(this);
+                    var $item_id = $that.data('id');
 
                     $recording_list_str = $('.recording_address_download').data('address-list');
                     console.log($recording_list_str);
                     if($recording_list_str)
                     {
-                        var $recording_list = JSON.parse($recording_list_str);
-                        console.log($recording_list);
+                        // var $recording_list = JSON.parse($recording_list_str);
+                        // console.log($recording_list);
 
-                        $.each($recording_list, function($index, $value) {
+                        $.each($recording_list_str, function($index, $value) {
 
                             console.log($index);
                             console.log($value);
@@ -148,6 +160,22 @@
                 });
 
             });
+
+
+            function url_build(path, params)
+            {
+                var url = "" + path;
+                var _paramUrl = "";
+                // url 拼接 a=b&c=d
+                if(params)
+                {
+                    _paramUrl = Object.keys(params).map(function (k) {
+                        return [encodeURIComponent(k), encodeURIComponent(params[k])].join("=");
+                    }).join("&");
+                    _paramUrl = "?" + _paramUrl
+                }
+                return url + _paramUrl
+            }s
         </script>
     </body>
 </html>

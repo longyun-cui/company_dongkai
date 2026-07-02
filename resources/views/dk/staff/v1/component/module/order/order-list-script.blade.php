@@ -1597,6 +1597,7 @@
             console.log($item_id);
 
             $recording_list_str = $row.find('td[data-key=recording_address_download]').attr('data-address-list');
+            console.log($recording_list_str);
             if($recording_list_str)
             {
                 var $recording_list = JSON.parse($recording_list_str);
