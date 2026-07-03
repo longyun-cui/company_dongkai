@@ -22,6 +22,16 @@
 {{--            <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-ended" placeholder="结束日期" value="" readonly="readonly" />--}}
 
 
+            {{--选择项目--}}
+            <select class="search-filter form-filter filter-md select2-box-c select2--project-c-" data-item-category="1" name="order-project">
+                <option value="-1">选择项目</option>
+                @if(!empty($project_list__for__dental) && count($project_list__for__dental) > 0)
+                    @foreach($project_list__for__dental as $v)
+                        <option value="{{ $v->id }}">{{ $v->name }}</option>
+                    @endforeach
+                @endif
+            </select>
+
 
 
             <button type="button" class="btn btn-default btn-filter filter-submit">
