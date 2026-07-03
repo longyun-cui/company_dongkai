@@ -760,7 +760,7 @@
                     "name": "creator_team_id",
                     "data": "creator_team_id",
                     "className": "",
-                    "width": "80px",
+                    "width": "60px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         if(!data) return '--';
@@ -776,13 +776,13 @@
                     "name": "creator_team_group_id",
                     "data": "creator_team_group_id",
                     "className": "",
-                    "width": "80px",
+                    "width": "60px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         if(!data) return '--';
 
                         // var $creator_team = row.creator_team_er == null ? '' : row.creator_team_er.name;
-                        var $creator_team_group = row.creator_team_group_er == null ? '' : ' - ' + row.creator_team_group_er.name;
+                        var $creator_team_group = row.creator_team_group_er == null ? '' : row.creator_team_group_er.name;
                         return '<a href="javascript:void(0);">'+$creator_team_group+'</a>';
                     }
                 },

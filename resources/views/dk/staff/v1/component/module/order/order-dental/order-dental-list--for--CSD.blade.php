@@ -41,6 +41,23 @@
 {{--            <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-ended" placeholder="结束日期" value="" readonly="readonly" />--}}
 
 
+            {{--选择团队--}}
+            @if(in_array($me->staff_position,[0,1,9,31]))
+                <select class="search-filter form-filter filter-xl select2-box-c select2--team-c-"
+                        name="order-team-list[]"
+                        data-team-category="41"
+                        data-team-type="11"
+                        multiple="multiple"
+                >
+                    <option value="-1">选择团队</option>
+                    @if(!empty($team_list) && count($team_list) > 0)
+                        @foreach($team_list as $v)
+                            <option value="{{ $v->id }}">{{ $v->name }}</option>
+                        @endforeach
+                    @endif
+                </select>
+            @endif
+
             {{--选择员工--}}
             @if(in_array($me->staff_position,[0,1,9,11,31,41,61]))
             <select class="search-filter form-filter filter-md select2-box-c select2-staff-c-" name="order-staff">
