@@ -301,7 +301,17 @@
                 //         if(data) return data + " %";
                 //         return data
                 //     }
-                // }
+                // },
+                {
+                    "title": " ",
+                    "data": "id",
+                    "className": "",
+                    "width": "",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return '';
+                    }
+                }
 
             ],
             "columnDefs": [
