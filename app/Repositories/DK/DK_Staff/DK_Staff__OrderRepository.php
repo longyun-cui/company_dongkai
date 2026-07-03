@@ -785,6 +785,7 @@ class DK_Staff__OrderRepository {
                     $import_list[$k]->recording_quality = 0;
                     $import_list[$k]->creator_team_id = 0;
                     $import_list[$k]->creator_team_group_id = 0;
+                    $import_list[$k]->inspecting_method = 0;
                     $import_list[$k]->ai_inspected_status = 0;
                     $import_list[$k]->inspected_status = 1;
                     $import_list[$k]->inspected_result = '';
