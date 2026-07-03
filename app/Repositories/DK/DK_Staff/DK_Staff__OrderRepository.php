@@ -742,7 +742,7 @@ class DK_Staff__OrderRepository {
             if(!empty($post_data['client_phone']))
             {
                 $query->where('dk_common__order.client_phone', $post_data['client_phone']);
-                $query_import = DK_Common__Order__Import::select('*')
+                $query_import = DK_Common__Order__Import::withTrashed()->select('*')
                     ->with([
                         'delivered_project_er'=>function($query) { $query->select(['id','name','alias_name']); },
                         'delivered_client_er'=>function($query) { $query->select(['id','name']); },
