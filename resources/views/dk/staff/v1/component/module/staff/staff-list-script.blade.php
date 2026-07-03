@@ -119,6 +119,28 @@
                             $($option).attr('api-exclusive-type', $response.data.team_er.api_exclusive_type);
                             $select.append($option).trigger('change');
                             $select.attr('api-exclusive-type', $response.data.team_er.api_exclusive_type);
+
+                            var $api_exclusive_type = $response.data.team_er.api_exclusive_type;
+                            if($api_exclusive_type == 0)
+                            {
+                                $modal.find('.okcc-box').show();
+                                $modal.find('.lxy-box').show();
+                            }
+                            else if($api_exclusive_type == 1)
+                            {
+                                $modal.find('.okcc-box').show();
+                                $modal.find('.lxy-box').hide();
+                            }
+                            else if($api_exclusive_type == 11)
+                            {
+                                $modal.find('.okcc-box').hide();
+                                $modal.find('.lxy-box').show();
+                            }
+                            else
+                            {
+                                $modal.find('.okcc-box').show();
+                                $modal.find('.lxy-box').show();
+                            }
                         }
                         // 小组
                         if($response.data.team_group_er)
@@ -224,19 +246,18 @@
             var $that = $(this);
             var $modal = $that.parents('.modal-wrapper');
 
-            var $api = $(this).attr('api-exclusive-type');
-            console.log($api);
-            if($api == 0)
+            var $api_exclusive_type = $(this).attr('api-exclusive-type');
+            if($api_exclusive_type == 0)
             {
                 $modal.find('.okcc-box').show();
                 $modal.find('.lxy-box').show();
             }
-            else if($api == 1)
+            else if($api_exclusive_type == 1)
             {
                 $modal.find('.okcc-box').show();
                 $modal.find('.lxy-box').hide();
             }
-            else if($api == 11)
+            else if($api_exclusive_type == 11)
             {
                 $modal.find('.okcc-box').hide();
                 $modal.find('.lxy-box').show();

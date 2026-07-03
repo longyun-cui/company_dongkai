@@ -239,8 +239,8 @@
                 </div>
 
                 {{--API专属类型--}}
-{{--                @if(in_array($me->staff_category, [0,1,11,41]))--}}
-{{--                @if(in_array($me->staff_position, [0,1,11,21,31]))--}}
+                @if(in_array($me->staff_category, [0,1,11,41]))
+                @if(in_array($me->staff_position, [0,1,11,21,31]))
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> API专属类型</label>
                     <div class="col-md-8 ">
@@ -254,8 +254,8 @@
                         </select>
                     </div>
                 </div>
-{{--                @endif--}}
-{{--                @endif--}}
+                @endif
+                @endif
 
 
                 {{--描述--}}
