@@ -5863,9 +5863,9 @@ class DK_Staff__StatisticRepository {
 
             $order_list[$k]->count__for__order_accepted_all = (
                 $v->count__for__order_accepted_normal +
-                $v->count__for__order_accepted_discount +
-                $v->count__for__order_accepted_suburb +
-                $v->count__for__order_accepted_inside
+                $v->count__for__order_accepted_discount
+//                $v->count__for__order_accepted_suburb +
+//                $v->count__for__order_accepted_inside
             );
 
 //            // 人均 提交量 & 通过量 & 有效量
@@ -5909,9 +5909,9 @@ class DK_Staff__StatisticRepository {
             $total_data['count__for__order_accepted_inside'] += $v->count__for__order_accepted_inside;
             $total_data['count__for__order_accepted_all'] += (
                 $v->count__for__order_accepted_normal +
-                $v->count__for__order_accepted_discount +
-                $v->count__for__order_accepted_suburb +
-                $v->count__for__order_accepted_inside
+                $v->count__for__order_accepted_discount
+//                $v->count__for__order_accepted_suburb +
+//                $v->count__for__order_accepted_inside
             );
             $total_data['count__for__order_accepted_effective'] += (
                 $v->count__for__order_accepted_normal +

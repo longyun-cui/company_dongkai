@@ -155,13 +155,74 @@ class DK_Staff__IndexRepository {
 
 
         // 【客服】团队
-        $team_list = DK_Common__Team::select('id','name')
+        $team_query = DK_Common__Team::select('id','name')
             ->where('active',1)
             ->where('item_status',1)
             ->where('team_category',41)
-            ->where('team_type',11)
-            ->get();
+            ->where('team_type',11);
+        // 客服部
+        if($me->staff_category == 41)
+        {
+            if($me->staff_position == 31)
+            {
+                // 部门总监
+                $team_query->where('department_id',$me->department_id);
+            }
+            else if($me->staff_position == 41)
+            {
+                // 团队经理
+                $team_query->where('department_id',$me->department_id);
+                $team_query->where('superior_team_id',$me->team_id);
+            }
+            else if($me->staff_position == 61)
+            {
+                // 小组主管
+                $team_query->where('department_id',$me->department_id);
+                $team_query->where('superior_team_id',$me->team_id);
+                $team_query->where('team_id',-1);
+            }
+            else
+            {
+                $team_query->where('team_id',-1);
+            }
+        }
+        $team_list = $team_query->get();
         $view_data['team_list'] = $team_list;
+
+        // 【客服】小组
+        $group_query = DK_Common__Team::select('id','name')
+            ->where('active',1)
+            ->where('item_status',1)
+            ->where('team_category',41)
+            ->where('team_type',31);
+        // 客服部
+        if($me->staff_category == 41)
+        {
+            if($me->staff_position == 31)
+            {
+                // 部门总监
+                $group_query->where('department_id',$me->department_id);
+            }
+            else if($me->staff_position == 41)
+            {
+                // 团队经理
+                $group_query->where('department_id',$me->department_id);
+                $group_query->where('superior_team_id',$me->team_id);
+            }
+            else if($me->staff_position == 61)
+            {
+                // 小组主管
+                $group_query->where('department_id',$me->department_id);
+                $group_query->where('superior_team_id',$me->team_id);
+                $group_query->where('team_id',-1);
+            }
+            else
+            {
+                $group_query->where('team_id',-1);
+            }
+        }
+        $group_list = $group_query->get();
+        $view_data['group_list'] = $group_list;
 
 
         // 【客服】人员

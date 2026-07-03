@@ -45,6 +45,7 @@
                     d.title = $tableSearch.find('input[name="order-title"]').val();
                     d.keyword = $tableSearch.find('input[name="order-keyword"]').val();
                     d.team_list = $tableSearch.find('select[name="order-team-list[]"]').val();
+                    d.group_list = $tableSearch.find('select[name="order-group-list[]"]').val();
                     d.staff = $tableSearch.find('select[name="order-staff"]').val();
                     d.distribute_type = $tableSearch.find('select[name="order-distribute-type"]').val();
                     d.project = $tableSearch.find('select[name="order-project"]').val();

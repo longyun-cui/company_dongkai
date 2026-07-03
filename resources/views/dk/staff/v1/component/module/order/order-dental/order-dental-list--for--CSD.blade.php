@@ -43,7 +43,7 @@
 
             {{--选择团队--}}
             @if(in_array($me->staff_position,[0,1,9,31]))
-                <select class="search-filter form-filter filter-xl select2-box-c select2--team-c-"
+                <select class="search-filter form-filter filter-lg select2-box-c select2--team-c-"
                         name="order-team-list[]"
                         data-team-category="41"
                         data-team-type="11"
@@ -52,6 +52,22 @@
                     <option value="-1">选择团队</option>
                     @if(!empty($team_list) && count($team_list) > 0)
                         @foreach($team_list as $v)
+                            <option value="{{ $v->id }}">{{ $v->name }}</option>
+                        @endforeach
+                    @endif
+                </select>
+            @endif
+            {{--选择团队--}}
+            @if(in_array($me->staff_position,[0,1,9,31,41]))
+                <select class="search-filter form-filter filter-lg select2-box-c select2--team-c-"
+                        name="order-group-list[]"
+                        data-team-category="41"
+                        data-team-type="31"
+                        multiple="multiple"
+                >
+                    <option value="-1">选择团队</option>
+                    @if(!empty($group_list) && count($group_list) > 0)
+                        @foreach($group_list as $v)
                             <option value="{{ $v->id }}">{{ $v->name }}</option>
                         @endforeach
                     @endif
@@ -90,7 +106,7 @@
 
 
             {{--审核状态--}}
-            <select class="search-filter form-filter filter-lg select2-box-c" name="order-inspected-status">
+            <select class="search-filter form-filter filter-md select2-box-c" name="order-inspected-status">
                 <option value="-1">审核状态</option>
                 <option value="待发布">待发布</option>
                 <option value="待审核">待审核</option>

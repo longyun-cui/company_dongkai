@@ -265,6 +265,11 @@ class DK_Staff__OrderRepository {
         {
             $query->whereIn('dk_common__order.creator_team_id', $post_data['team_list']);
         }
+        // 小组-多选
+        if(!empty($post_data['group_list']) && count($post_data['group_list']) > 0)
+        {
+            $query->whereIn('dk_common__order.creator_team_group_id', $post_data['group_list']);
+        }
 
 
         // 员工
