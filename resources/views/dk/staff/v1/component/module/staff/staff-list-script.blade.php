@@ -110,7 +110,15 @@
                         // 团队
                         if($response.data.team_er)
                         {
-                            $modal.find('select[name="team_id"]').append(new Option($response.data.team_er.name, $response.data.team_id, true, true)).trigger('change');
+                            // $modal.find('select[name="team_id"]').append(new Option($response.data.team_er.name, $response.data.team_id, true, true)).trigger('change');
+                            // $modal.find('select[name="team_id"]').data('api-exclusive-type', $response.data.team_er.api_exclusive_type);
+
+                            var $select = $modal.find('select[name="team_id"]');
+                            var $option = new Option($response.data.team_er.name, $response.data.team_id, true, true);
+// 给 option 设置 data 属性
+                            $($option).attr('api-exclusive-type', $response.data.team_er.api_exclusive_type);
+                            $select.append($option).trigger('change');
+                            $select.attr('api-exclusive-type', $response.data.team_er.api_exclusive_type);
                         }
                         // 小组
                         if($response.data.team_group_er)
@@ -212,6 +220,34 @@
 
 
         // 【员工】员工类型
+        $(".main-wrapper").on('change', '#modal--for--staff-item-edit select[name="team_id"]', function() {
+            var $that = $(this);
+            var $modal = $that.parents('.modal-wrapper');
+
+            var $api = $(this).attr('api-exclusive-type');
+            console.log($api);
+            if($api == 0)
+            {
+                $modal.find('.okcc-box').show();
+                $modal.find('.lxy-box').show();
+            }
+            else if($api == 1)
+            {
+                $modal.find('.okcc-box').show();
+                $modal.find('.lxy-box').hide();
+            }
+            else if($api == 11)
+            {
+                $modal.find('.okcc-box').hide();
+                $modal.find('.lxy-box').show();
+            }
+            else
+            {
+                $modal.find('.okcc-box').show();
+                $modal.find('.lxy-box').show();
+            }
+        });
+        // 【员工】员工类型
         $(".main-wrapper").on('change', '#modal--for--staff-item-edit input[name="staff_category"]', function() {
             var $that = $(this);
             var $modal = $that.parents('.modal-wrapper');
@@ -237,6 +273,8 @@
                 $modal.find('.department-box').show();
                 $modal.find('.team-box').show();
             }
+
+            var $api_type = $(this).data('api-type');
         });
         // 【员工】员工职位
         $(".main-wrapper").on('change', '#modal--for--staff-item-edit input[name="staff_position"]', function() {

@@ -285,6 +285,7 @@
                                     data-team-category=""
                                     data-team-type="11"
                                     data-team-target="#select2---team-group--for--staff-item-edit"
+                                    data-api-exclusive-type=""
                             >
                                 <option data-id="0" value="0">选择团队</option>
                             </select>
@@ -370,18 +371,19 @@
 {{--                        <input type="text" class="form-control" name="true_name" placeholder="真实姓名" value="">--}}
 {{--                    </div>--}}
 {{--                </div>--}}
+
                 {{--外呼系统坐席ID--}}
-                <div class="form-group">
+                <div class="form-group okcc-box">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 外呼系统坐席ID</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="api_staffNo" placeholder="API坐席ID，没有添0" value="">
+                        <input type="text" class="form-control" name="api_staffNo" placeholder="API坐席ID，没有添0" value="0">
                     </div>
                 </div>
                 {{--外呼系统坐席ID--}}
-                <div class="form-group">
+                <div class="form-group lxy-box">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> L-ID</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="lxy_staffNo" placeholder="L-ID，没有添0" value="">
+                        <input type="text" class="form-control" name="lxy_staffNo" placeholder="L-ID，没有添0" value="0">
                     </div>
                 </div>
                 {{--描述--}}

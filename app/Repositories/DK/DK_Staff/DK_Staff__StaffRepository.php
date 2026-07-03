@@ -262,7 +262,7 @@ class DK_Staff__StaffRepository {
             ->with([
                 'company_er'=>function($query) { $query->select('id','name'); },
                 'department_er'=>function($query) { $query->select('id','name'); },
-                'team_er'=>function($query) { $query->select('id','name'); },
+                'team_er'=>function($query) { $query->select('id','name','api_exclusive_type'); },
                 'team_group_er'=>function($query) { $query->select('id','name'); }
             ])
             ->find($item_id);
@@ -457,6 +457,25 @@ class DK_Staff__StaffRepository {
 //                    $user_ext_create['user_id'] = $mine->id;
 //                    $bool_2 = $user_ext->fill($user_ext_create)->save();
 //                    if(!$bool_2) throw new Exception("insert--user-ext--failed");
+                }
+
+                $staff_category = $mine->staff_category;
+                $staff_position = $mine->staff_position;
+                if($staff_category == 41 && in_array($staff_position,[41,51,61,71,99]))
+                {
+                    $team_id = $mine->team_id;
+                    $team = DK_Common__Team::find($team_id);
+                    if($team->api_exclusive_type == 1)
+                    {
+                        $mine->lxy_staffNo = 0;
+                        $mine->save();
+                    }
+                    else if($team->api_exclusive_type == 11)
+                    {
+
+                        $mine->api_staffNo = 0;
+                        $mine->save();
+                    }
                 }
 
                 // 头像

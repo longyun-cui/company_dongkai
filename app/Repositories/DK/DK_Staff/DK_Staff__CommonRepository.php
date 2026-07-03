@@ -177,7 +177,7 @@ class DK_Staff__CommonRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = DK_Common__Team::select(['id','name as text'])
+        $query = DK_Common__Team::select(['id','name as text','api_exclusive_type'])
             ->where('active',1)
             ->where('item_status',1);
 
@@ -367,12 +367,6 @@ class DK_Staff__CommonRepository {
                 $list = [];
             }
         }
-
-
-
-
-
-
 
 //        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
 //        array_unshift($list,$unSpecified);

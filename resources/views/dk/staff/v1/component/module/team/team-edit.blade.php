@@ -238,6 +238,25 @@
                     </div>
                 </div>
 
+                {{--API专属类型--}}
+{{--                @if(in_array($me->staff_category, [0,1,11,41]))--}}
+{{--                @if(in_array($me->staff_position, [0,1,11,21,31]))--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> API专属类型</label>
+                    <div class="col-md-8 ">
+                        <select class="form-control modal--select2 select2-reset"
+                                name="api_exclusive_type"
+                                data-modal="#modal--for--team-item-edit"
+                        >
+                            <option value ="0">选择客服API专属类型</option>
+                            <option value ="1">OKCC</option>
+                            <option value ="11">励销云</option>
+                        </select>
+                    </div>
+                </div>
+{{--                @endif--}}
+{{--                @endif--}}
+
 
                 {{--描述--}}
                 <div class="form-group">

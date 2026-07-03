@@ -660,6 +660,17 @@
                     },
                     cache: true
                 },
+                templateSelection: function(data, container) {
+                    // 检查是否为有效选中项（避免空数据打印）
+                    if (data.id && data.text)
+                    {
+                        // console.log("Selected:", data.id, data.text);
+                        // console.log(data);
+                    }
+
+                    $(data.element).data("api-exclusive-type",data.api_exclusive_type);
+                    return data.text;
+                },
                 escapeMarkup: function (markup) { return markup; },
                 dropdownParent: $dropdownParent.find('.modal-content'),
                 minimumInputLength: 0,
@@ -678,8 +689,28 @@
                 var $staff_target = $(this).data('staff-target');
                 $($staff_target).val(null).trigger('change');
                 $($staff_target).data('team-id',$team_id);
+
+                var selectedData = $(this).select2('data')[0];
+
+                if (selectedData && selectedData.api_exclusive_type !== undefined)
+                {
+                    // 存到 select 元素的 jQuery data 中
+                    $(this).attr('api-exclusive-type', selectedData.api_exclusive_type);
+                }
             });
+
+            // $that.on('select2:select', function(e) {
+            //     var data = e.params.data;
+            //     $(this).attr('api-exclusive-type', data.api_exclusive_type);
+            // });
+
+
         });
+        // $(".select2--team").on("select2:select",function(){
+        //     var $id = $(this).val();
+        //     console.log($(this).find('option:selected').attr('api-exclusive-type'));
+        //     $(this).attr('api-exclusive-type',$(this).find('option:selected').attr('api-exclusive-type'));
+        // });
         // 员工
         $('.select2--staff').each(function() {
             var $that = $(this);

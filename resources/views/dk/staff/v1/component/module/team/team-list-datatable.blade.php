@@ -223,6 +223,32 @@
                     }
                 },
                 {
+                    "title": "API专属",
+                    "data": "api_exclusive_type",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+//                            return data;
+                        if(data == 0)
+                        {
+                            return '--';
+
+                        }
+                        else if(data == 1)
+                        {
+                            return '<small class="btn-xs bg-green">OKCC</small>';
+                        }
+                        else if(data == 11)
+                        {
+                            return '<small class="btn-xs bg-blue">LXY</small>';
+                        }
+                        else
+                        {
+                            return '<small class="btn-xs bg-black">有误</small>';
+                        }
+                    }
+                },
+                {
                     "title": "备注",
                     "data": "remark",
                     "className": "text-center",

@@ -67,7 +67,7 @@ class DK_Staff__TeamRepository {
         $me = $this->me;
 
 
-        $query = DK_Common__Team::select(['id','item_status','name','team_category','team_type','company_id','department_id','superior_team_id','leader_id','remark','creator_id','created_at','updated_at','deleted_at'])
+        $query = DK_Common__Team::select(['id','item_status','name','team_category','team_type','company_id','department_id','superior_team_id','leader_id','api_exclusive_type','remark','creator_id','created_at','updated_at','deleted_at'])
             ->withTrashed()
             ->with([
                 'creator'=>function($query) { $query->select(['id','name']); },

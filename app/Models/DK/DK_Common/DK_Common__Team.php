@@ -43,6 +43,8 @@ class DK_Common__Team extends Model
         'leader_id',
 
 
+        'api_exclusive_type',
+
         'serverFrom_id',
         'serverFrom_name',
         'api_customer_account',
