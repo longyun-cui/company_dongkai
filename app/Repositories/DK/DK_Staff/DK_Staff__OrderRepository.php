@@ -747,7 +747,7 @@ class DK_Staff__OrderRepository {
                         'delivered_project_er'=>function($query) { $query->select(['id','name','alias_name']); },
                         'delivered_client_er'=>function($query) { $query->select(['id','name']); },
                     ])
-                    ->where('client_phone',(int)$post_data['client_phone'])
+                    ->where('client_phone',$post_data['client_phone'])
                     ->where('order_category',(int)$post_data['order_category']);
 
 
