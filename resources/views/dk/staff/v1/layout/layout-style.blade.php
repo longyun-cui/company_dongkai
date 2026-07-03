@@ -99,6 +99,8 @@
 
 
     .tableArea { margin-top:16px; }
+    .tableArea table tr td.text-left { padding-left:8px; }
+    .tableArea table tr td.text-right { padding-right:8px; }
     .tableArea.table-order table { min-width:3400px; }
     .tableArea.table-delivery. table { min-width:1280px; }
 

@@ -99,14 +99,30 @@
                     }
                 },
                 {
-                    "title": "客服<br>报单量",
+                    "title": "客服报单量",
                     "data": "staff_count__for__all",
-                    "className": "bg-inspected",
+                    "className": "text-right bg-inspected",
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 // {
@@ -120,25 +136,57 @@
                 //     }
                 // },
                 {
-                    "title": "客服<br>通过量",
+                    "title": "客服通过量",
                     "data": "staff_count__for__accepted_normal",
-                    "className": "bg-inspected",
+                    "className": "text-right bg-inspected",
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
-                    "title": "审核<br>折扣通过",
+                    "title": "审核折扣通过",
                     "data": "staff_count__for__accepted_discount",
-                    "className": "bg-inspected",
+                    "className": "text-right bg-inspected",
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 // {
@@ -164,9 +212,9 @@
                 //     }
                 // },
                 {
-                    "title": "客服<br>通过率",
+                    "title": "客服通过率",
                     "data": "staff_rate__for__effective",
-                    "className": "bg-inspected",
+                    "className": "text-right bg-inspected",
                     "width": "100px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
@@ -175,42 +223,90 @@
                     }
                 },
                 {
-                    "title": "小组<br>报单量",
+                    "title": "小组报单量",
                     "data": "group_count__for__all",
-                    "className": "text-center vertical-middle bg-group",
+                    "className": "text-right vertical-middle bg-group",
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
-                    "title": "小组<br>通过量",
+                    "title": "小组通过量",
                     "data": "group_count__for__accepted_normal",
-                    "className": "text-center vertical-middle bg-group",
+                    "className": "text-right vertical-middle bg-group",
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
-                    "title": "小组<br>折扣通过",
+                    "title": "小组折扣通过",
                     "data": "group_count__for__accepted_discount",
-                    "className": "text-center vertical-middle bg-group",
+                    "className": "text-right vertical-middle bg-group",
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
-                    "title": "小组<br>有效率",
+                    "title": "小组有效率",
                     "data": "group_rate__for__effective",
-                    "className": "text-center vertical-middle bg-group",
+                    "className": "text-right vertical-middle bg-group",
                     "width": "100px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
@@ -219,42 +315,90 @@
                     }
                 },
                 {
-                    "title": "团队<br>报单量",
+                    "title": "团队报单量",
                     "data": "team_count__for__all",
-                    "className": "text-center vertical-middle bg-district",
+                    "className": "text-right vertical-middle bg-district",
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
-                    "title": "团队<br>通过量",
+                    "title": "团队通过量",
                     "data": "team_count__for__accepted_normal",
-                    "className": "text-center vertical-middle bg-district",
+                    "className": "text-right vertical-middle bg-district",
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
-                    "title": "团队<br>折扣通过",
+                    "title": "团队折扣通过",
                     "data": "team_count__for__accepted_discount",
-                    "className": "text-center vertical-middle bg-district",
+                    "className": "text-right vertical-middle bg-district",
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
-                    "title": "团队<br>有效率",
+                    "title": "团队有效率",
                     "data": "team_rate__for__effective",
-                    "className": "text-center vertical-middle bg-district",
+                    "className": "text-right vertical-middle bg-district",
                     "width": "100px",
                     "orderable": false,
                     render: function(data, type, row, meta) {

@@ -62,8 +62,8 @@
                 {
                     "title": "姓名",
                     "data": "name",
-                    "className": "text-center",
-                    "width": "100px",
+                    "className": "text-right",
+                    "width": "160px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         {
@@ -82,8 +82,8 @@
                 {
                     "title": "部门",
                     "data": "id",
-                    "className": "text-center",
-                    "width": "120px",
+                    "className": "text-right",
+                    "width": "100px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                     },
@@ -97,85 +97,197 @@
                 {
                     "title": "今天",
                     "data": "order_0",
-                    "className": "bg-delivered",
+                    "className": "text-right bg-delivered",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
                     "title": "昨天",
                     "data": "order_1",
-                    "className": "bg-delivered",
+                    "className": "text-right bg-delivered",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
                     "title": "前天",
                     "data": "order_2",
-                    "className": "bg-delivered",
+                    "className": "text-right bg-delivered",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
                     "title": "3天前",
                     "data": "order_3",
-                    "className": "bg-delivered",
+                    "className": "text-right bg-delivered",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
                     "title": "4天前",
                     "data": "order_4",
-                    "className": "bg-delivered",
+                    "className": "text-right bg-delivered",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
                     "title": "5天前",
                     "data": "order_5",
-                    "className": "bg-delivered",
+                    "className": "text-right bg-delivered",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
                     "title": "6天前",
                     "data": "order_6",
-                    "className": "bg-delivered",
+                    "className": "text-right bg-delivered",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 // {

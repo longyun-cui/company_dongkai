@@ -62,8 +62,8 @@
                 {
                     "title": "姓名",
                     "data": "name",
-                    "className": "text-center",
-                    "width": "100px",
+                    "className": "text-right",
+                    "width": "160px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         {
@@ -86,7 +86,7 @@
                     "title": "部门",
                     "data": "id",
                     "className": "text-center",
-                    "width": "120px",
+                    "width": "100px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                     },
@@ -98,51 +98,115 @@
                     }
                 },
                 {
-                    "title": "客服<br>提交量",
+                    "title": "客服提交量",
                     "data": "order_count__for__all",
-                    "className": "bg-inspected",
-                    "width": "80px",
+                    "className": "text-right bg-inspected",
+                    "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
                     "title": "通过量",
                     "data": "order_count__for__accepted_normal",
-                    "className": "bg-inspected",
-                    "width": "80px",
+                    "className": "text-right bg-inspected",
+                    "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
                     "title": "折扣通过",
                     "data": "order_count__for__accepted_discount",
-                    "className": "bg-inspected",
-                    "width": "80px",
+                    "className": "text-right bg-inspected",
+                    "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 {
                     "title": "有效量",
                     "data": "order_count__for__effective",
-                    "className": "bg-inspected",
-                    "width": "80px",
+                    "className": "text-right bg-inspected",
+                    "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     render: function(data, type, row, meta) {
-                        if(!data) return '--';
-                        return data;
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
                     }
                 },
                 // {
@@ -182,13 +246,39 @@
                 {
                     "title": "有效率",
                     "data": "order_rate__for__effective",
-                    "className": "bg-inspected",
+                    "className": "text-right bg-inspected",
                     "width": "100px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
                     render: function(data, type, row, meta) {
-                        if(data) return data + " %";
-                        return data
+                        // if(data) return data + " %";
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(data) return data + " %";
+                            return data
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
+                    }
+                },
+                {
+                    "title": " ",
+                    "data": "id",
+                    "className": "",
+                    "width": "",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return '';
                     }
                 }
 
