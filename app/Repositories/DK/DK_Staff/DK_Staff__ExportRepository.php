@@ -499,6 +499,22 @@ class DK_Staff__ExportRepository {
             $cellData[$k]['inspector_name'] = $v['inspector']['name'];
             $cellData[$k]['inspected_time'] = date('Y-m-d H:i:s', $v['inspected_at']);
             $cellData[$k]['inspected_result'] = $v['inspected_result'];
+            $cellData[$k]['rejected_reason'] = $v['rejected_reason'];
+
+
+            if(!empty($v['recording_address_list']))
+            {
+                $recording_file = "";
+                $recording_address_list = json_decode($v['recording_address_list']);
+                if(count($recording_address_list) > 0)
+                {
+                    foreach($recording_address_list as $key => $recording)
+                    {
+                        $recording_file .= $recording."\r\n";
+                    }
+                    $cellData[$k]['recording_file'] = trim(rtrim($recording_file,"\r\n"), '"');
+                }
+            }
         }
 
 
@@ -529,6 +545,8 @@ class DK_Staff__ExportRepository {
                 'inspector_name'=>'审核人',
                 'inspected_time'=>'审核时间',
                 'inspected_result'=>'审核结果',
+                'rejected_reason'=>'拒绝原因',
+                'recording_file'=>'录音文件',
             ];
         }
         else
@@ -557,6 +575,8 @@ class DK_Staff__ExportRepository {
                 'inspector_name'=>'审核人',
                 'inspected_time'=>'审核时间',
                 'inspected_result'=>'审核结果',
+                'rejected_reason'=>'拒绝原因',
+                'recording_file'=>'录音文件',
             ];
         }
         array_unshift($cellData, $title_row);
@@ -590,8 +610,8 @@ class DK_Staff__ExportRepository {
                 $sheet->setWidth(array(
                     'A'=>10, 'B'=>20, 'C'=>20, 'D'=>20, 'E'=>20, 'F'=>20, 'G'=>20,
                     'H'=>20, 'I'=>20, 'J'=>20, 'K'=>20, 'L'=>20, 'M'=>20, 'N'=>20,
-                    'O'=>20, 'P'=>20, 'Q'=>60, 'R'=>60, 'S'=>60, 'T'=>20,
-                    'U'=>20, 'V'=>20, 'W'=>20, 'X'=>60, 'Y'=>60, 'Z'=>20
+                    'O'=>20, 'P'=>20, 'Q'=>20, 'R'=>60, 'S'=>60, 'T'=>20,
+                    'U'=>20, 'V'=>20, 'W'=>20, 'X'=>20, 'Y'=>60, 'Z'=>20
                 ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
