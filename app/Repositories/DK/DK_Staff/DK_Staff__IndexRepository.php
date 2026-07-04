@@ -213,7 +213,7 @@ class DK_Staff__IndexRepository {
             {
                 // 小组主管
                 $group_query->where('department_id',$me->department_id);
-                $group_query->where('superior_team_id',$me->team_id);
+//                $group_query->where('superior_team_id',$me->team_id);
                 $group_query->where('team_id',-1);
             }
             else
