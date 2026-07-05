@@ -128,7 +128,7 @@
                     "title": "原因",
                     "data": "name",
                     "className": "text-left",
-                    "width": "80px",
+                    "width": "160px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
@@ -178,6 +178,16 @@
                         return data;
                     }
                 },
+                {
+                    "title": " ",
+                    "data": "id",
+                    "className": "",
+                    "width": "",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return '';
+                    }
+                }
             ],
             "columnDefs": [
             ],
