@@ -78,7 +78,7 @@
                 {
                     "title": "项目名称",
                     "data": "name",
-                    "className": "text-center",
+                    "className": "text-left",
                     "width": "200px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -95,7 +95,7 @@
                 {
                     "title": "报单量",
                     "data": "order_count_for_all",
-                    "className": "bg-service-customer",
+                    "className": "text-right bg-service-customer",
                     "width": "60px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -145,7 +145,7 @@
                 {
                     "title": "审核量",
                     "data": "order_count_for_inspected",
-                    "className": "bg-inspected",
+                    "className": "text-right bg-inspected",
                     "width": "60px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -177,7 +177,7 @@
                 {
                     "title": "通过量",
                     "data": "order_count_for_accepted",
-                    "className": "bg-inspected",
+                    "className": "text-right bg-inspected",
                     "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -208,7 +208,7 @@
                 {
                     "title": "折扣通过",
                     "data": "order_count_for_accepted_discount",
-                    "className": "bg-inspected",
+                    "className": "text-right bg-inspected",
                     "width": "60px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -240,7 +240,7 @@
                 {
                     "title": "郊区通过",
                     "data": "order_count_for_accepted_suburb",
-                    "className": "bg-inspected",
+                    "className": "text-right bg-inspected",
                     "width": "60px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -272,7 +272,7 @@
                 {
                     "title": "内部通过",
                     "data": "order_count_for_accepted_inside",
-                    "className": "bg-inspected",
+                    "className": "text-right bg-inspected",
                     "width": "60px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -321,7 +321,7 @@
                 {
                     "title": "重复量",
                     "data": "order_count_for_repeated",
-                    "className": "bg-inspected",
+                    "className": "text-right bg-inspected",
                     "width": "60px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -353,7 +353,7 @@
                 {
                     "title": "拒绝量",
                     "data": "order_count_for_refused",
-                    "className": "bg-inspected",
+                    "className": "text-right bg-inspected",
                     "width": "60px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -385,7 +385,7 @@
                 {
                     "title": "待审核量",
                     "data": "order_count_for_inspected",
-                    "className": "bg-inspected",
+                    "className": "text-right bg-inspected",
                     "width": "60px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -443,7 +443,7 @@
                 {
                     "title": "不合格",
                     "data": "order_count_for_accepted_non",
-                    "className": "bg-grey",
+                    "className": "text-right bg-grey",
                     "width": "60px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -477,7 +477,7 @@
                 {
                     "title": "交付量",
                     "data": "order_count_for_delivered",
-                    "className": "bg-grey",
+                    "className": "text-right bg-grey",
                     "width": "60px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -509,7 +509,7 @@
                 {
                     "title": "待交付量",
                     "data": "order_count_for_delivered",
-                    "className": "bg-grey",
+                    "className": "text-right bg-grey",
                     "width": "60px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -536,7 +536,7 @@
                 {
                     "title": "通过率",
                     "data": "order_rate_for_accepted",
-                    "className": "bg-gray",
+                    "className": "text-right bg-gray",
                     "width": "60px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -725,7 +725,7 @@
                 {
                     "title": "每日目标",
                     "data": "daily_goal",
-                    "className": "text-center text-green",
+                    "className": "text-right text-green",
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {

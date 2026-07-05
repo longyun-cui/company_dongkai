@@ -95,7 +95,7 @@
                 {
                     "title": "团队",
                     "data": "team_name",
-                    "className": "text-center",
+                    "className": "text-right",
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -112,7 +112,7 @@
                 {
                     "title": "小组",
                     "data": "group_name",
-                    "className": "text-center",
+                    "className": "text-right",
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -130,7 +130,7 @@
                 {
                     "title": "出勤人数",
                     "data": "staff_count",
-                    "className": "text-center",
+                    "className": "text-right ",
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -148,7 +148,7 @@
                 {
                     "title": "报单量",
                     "data": "count__for__order_all",
-                    "className": "bg-inspected",
+                    "className": "text-right bg-inspected",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -166,7 +166,7 @@
                 {
                     "title": "通过量",
                     "data": "count__for__order_accepted_normal",
-                    "className": "bg-inspected",
+                    "className": "text-right bg-inspected",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -184,7 +184,7 @@
                 {
                     "title": "一档",
                     "data": "count__for__order_accepted_normal_1",
-                    "className": "bg-inspected",
+                    "className": "text-right bg-inspected",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -202,7 +202,7 @@
                 {
                     "title": "二档",
                     "data": "count__for__order_accepted_normal_2",
-                    "className": "bg-inspected",
+                    "className": "text-right bg-inspected",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -220,7 +220,7 @@
                 {
                     "title": "三档",
                     "data": "count__for__order_accepted_normal_3",
-                    "className": "bg-inspected",
+                    "className": "text-right bg-inspected",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -238,7 +238,7 @@
                 {
                     "title": "折扣通过",
                     "data": "count__for__order_accepted_discount",
-                    "className": "bg-inspected",
+                    "className": "text-right bg-inspected",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -292,7 +292,7 @@
                 {
                     "title": "有效总计",
                     "data": "count__for__order_accepted_all",
-                    "className": "bg-inspected",
+                    "className": "text-right bg-inspected",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],

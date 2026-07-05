@@ -109,7 +109,7 @@
                 {
                     "title": "类型",
                     "data": "code",
-                    "className": "text-center",
+                    "className": "text-right",
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -127,7 +127,7 @@
                 {
                     "title": "原因",
                     "data": "name",
-                    "className": "text-center",
+                    "className": "text-left",
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -145,7 +145,7 @@
                 {
                     "title": "拒单量",
                     "data": "count",
-                    "className": "bg-inspected",
+                    "className": "text-right bg-inspected",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
@@ -163,7 +163,7 @@
                 {
                     "title": "占比",
                     "data": "percentage",
-                    "className": "bg-inspected",
+                    "className": "text-right bg-inspected",
                     "width": "80px",
                     "orderable": true,
                     "orderSequence": ["desc", "asc"],
