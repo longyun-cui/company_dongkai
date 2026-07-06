@@ -3289,6 +3289,20 @@ class DKCCRepository {
             $url = "http://feiniji.cn/openapi/V2.1.2/login";
             $API_Customer_Password = env('API_CALL_FNJ_C1_PASSWORD');
         }
+        else if($mine->serverFrom_name == "fnj-call-01")
+        {
+//            $server = "http://call01.fnjcall.cn";
+//            $url = "http://call01.fnjcall.cn/openapi/V2.0.6/getCdrList";
+            $server = "http://47.116.66.111";
+            $url = "http://47.116.66.111/openapi/V2.0.6/getCdrList";
+        }
+        else if($mine->serverFrom_name == "fnj-call-02")
+        {
+//            $server = "http://call02.fnjcall.cn";
+//            $url = "http://call02.fnjcall.cn/openapi/V2.0.6/getCdrList";
+            $server = "http://47.116.66.111";
+            $url = "http://47.116.66.111/openapi/V2.0.6/getCdrList";
+        }
         else if($mine->serverFrom_name == "call-01")
         {
             $server = "http://call01.zlyx.jjccyun.cn";
@@ -22980,6 +22994,14 @@ EOF;
             {
                 $serverFrom_id = 11;
             }
+            else if($serverFrom == 'fnj-call-01')
+            {
+                $serverFrom_id = 101;
+            }
+            else if($serverFrom == 'fnj-call-02')
+            {
+                $serverFrom_id = 102;
+            }
             else if($serverFrom == 'call-01')
             {
                 $serverFrom_id = 1;
@@ -23065,6 +23087,18 @@ EOF;
         {
             $serverFrom_id = 11;
             $server_http = 'http://feiniji.cn';
+        }
+        else if($serverFrom == "fnj-call-01")
+        {
+            $serverFrom_id = 101;
+            $server_http = 'http://call01.fnjcall.cn';
+            $server_http = 'http://47.116.66.111';
+        }
+        else if($serverFrom == "fnj-call-02")
+        {
+            $serverFrom_id = 102;
+            $server_http = 'http://call02.fnjcall.cn';
+            $server_http = 'http://47.116.66.111';
         }
         else if($serverFrom == 'call-01')
         {
@@ -23296,6 +23330,16 @@ EOF;
             $serverFrom_id = 11;
             $server_http = 'http://feiniji.cn';
         }
+        else if($serverFrom == 'fnj-call-01')
+        {
+            $serverFrom_id = 101;
+            $server_http = 'http://47.116.66.111';
+        }
+        else if($serverFrom == 'fnj-call-02')
+        {
+            $serverFrom_id = 102;
+            $server_http = 'http://47.116.66.111';
+        }
         else if($serverFrom == 'call-01')
         {
             $serverFrom_id = 1;
@@ -23467,6 +23511,14 @@ EOF;
         {
             $serverFrom_id = 11;
         }
+        else if($serverFrom == 'fnj-call-01')
+        {
+            $serverFrom_id = 101;
+        }
+        else if($serverFrom == 'fnj-call-02')
+        {
+            $serverFrom_id = 102;
+        }
         else if($serverFrom == 'call-01')
         {
             $serverFrom_id = 1;
@@ -23693,6 +23745,14 @@ EOF;
                 if($serverFrom == 'FNJ')
                 {
                     $server_http = 'http://feiniji.cn';
+                }
+                else if($serverFrom == 'fnj-call-01')
+                {
+                    $server_http = 'http://47.116.66.111';
+                }
+                else if($serverFrom == 'fnj-call-02')
+                {
+                    $server_http = 'http://47.116.66.111';
                 }
                 else if($serverFrom == 'call-01')
                 {
@@ -23798,6 +23858,14 @@ EOF;
         {
             $serverFrom_id = 11;
         }
+        else if($serverFrom == 'fnj-call-01')
+        {
+            $serverFrom_id = 101;
+        }
+        else if($serverFrom == 'fnj-call-02')
+        {
+            $serverFrom_id = 102;
+        }
         else if($serverFrom == 'call-01')
         {
             $serverFrom_id = 1;
@@ -24025,6 +24093,14 @@ EOF;
                 {
                     $server_http = 'http://feiniji.cn';
                 }
+                else if($serverFrom == 'fnj-call-01')
+                {
+                    $server_http = 'http://47.116.66.111';
+                }
+                else if($serverFrom == 'fnj-call-02')
+                {
+                    $server_http = 'http://47.116.66.111';
+                }
                 else if($serverFrom == 'call-01')
                 {
                     $server_http = 'http://call01.zlyx.jjccyun.cn';
@@ -24129,6 +24205,14 @@ EOF;
         {
             $serverFrom_id = 11;
         }
+        else if($serverFrom == 'fnj-call-01')
+        {
+            $serverFrom_id = 101;
+        }
+        else if($serverFrom == 'fnj-call-02')
+        {
+            $serverFrom_id = 102;
+        }
         else if($serverFrom == 'call-01')
         {
             $serverFrom_id = 1;
@@ -24145,14 +24229,6 @@ EOF;
         {
             $serverFrom_id = 4;
         }
-        else if($serverFrom == 'fnj-call-01')
-        {
-            $serverFrom_id = 101;
-        }
-        else if($serverFrom == 'fnj-call-02')
-        {
-            $serverFrom_id = 102;
-        }
         else
         {
             $serverFrom_id = 0;
@@ -24163,19 +24239,23 @@ EOF;
         $insert_data['api_customer_account'] = $post_data['customerAccount'];
         $insert_data['api_type'] = $post_data['notify']['type'];
         $insert_data['staffNo'] = $post_data['notify']['data']['userName'];
-        if($serverFrom == 'call-01')
+        if($serverFrom == 'FNJ')
+        {
+            $insert_data['telephone_number'] = $post_data['notify']['data']['number'];
+        }
+        else if($serverFrom == 'fnj-call-01')
+        {
+            $insert_data['telephone_number'] = $post_data['notify']['data']['number1'];
+        }
+        else if($serverFrom == 'fnj-call-02')
+        {
+            $insert_data['telephone_number'] = $post_data['notify']['data']['number1'];
+        }
+        else if($serverFrom == 'call-01')
         {
             $insert_data['telephone_number'] = $post_data['notify']['data']['number'];
         }
         else if($serverFrom == 'call-02')
-        {
-            $insert_data['telephone_number'] = $post_data['notify']['data']['number1'];
-        }
-        else if($serverFrom == 'fnj-call-02')
-        {
-            $insert_data['telephone_number'] = $post_data['notify']['data']['number1'];
-        }
-        else if($serverFrom == 'fnj-call-02')
         {
             $insert_data['telephone_number'] = $post_data['notify']['data']['number1'];
         }
@@ -24198,9 +24278,17 @@ EOF;
 
         $api_staffNo = (int)$clientMark_data['userName'];
 
-        if($serverFrom == 'fnj-call-01')
+        if($serverFrom == 'FNJ')
         {
             $phone_number = $clientMark_data['number'];
+        }
+        else if($serverFrom == 'fnj-call-01')
+        {
+            $phone_number = $clientMark_data['number1'];
+        }
+        else if($serverFrom == 'fnj-call-02')
+        {
+            $phone_number = $clientMark_data['number1'];
         }
         else if($serverFrom == 'call-01')
         {
@@ -24210,7 +24298,10 @@ EOF;
         {
             $phone_number = $clientMark_data['number1'];
         }
-        else $phone_number = $clientMark_data['number'];
+        else
+        {
+            $phone_number = $clientMark_data['number'];
+        }
 
 
         $staff = DK_Common__Staff::with([])->where('api_staffNo',$api_staffNo)->orderBy('id','desc')->first();
