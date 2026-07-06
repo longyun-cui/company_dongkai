@@ -852,6 +852,13 @@ class DK_Staff__CommonRepository {
             $server = "http://feiniji.cn";
             $url = "http://feiniji.cn/openapi/V2.0.6/getCdrList";
         }
+        else if($serverFrom_name == "fnj-call-01")
+        {
+//            $server = "http://call01.fnjcall.cn";
+//            $url = "http://call01.fnjcall.cn/openapi/V2.0.6/getCdrList";
+            $server = "http://47.116.66.111";
+            $url = "http://47.116.66.111/openapi/V2.0.6/getCdrList";
+        }
         else if($serverFrom_name == "call-01")
         {
             $server = "http://call01.zlyx.jjccyun.cn";

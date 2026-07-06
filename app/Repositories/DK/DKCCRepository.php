@@ -24145,6 +24145,14 @@ EOF;
         {
             $serverFrom_id = 4;
         }
+        else if($serverFrom == 'fnj-call-01')
+        {
+            $serverFrom_id = 101;
+        }
+        else if($serverFrom == 'fnj-call-02')
+        {
+            $serverFrom_id = 102;
+        }
         else
         {
             $serverFrom_id = 0;
@@ -24163,7 +24171,18 @@ EOF;
         {
             $insert_data['telephone_number'] = $post_data['notify']['data']['number1'];
         }
-        else $insert_data['telephone_number'] = $post_data['notify']['data']['number'];
+        else if($serverFrom == 'fnj-call-02')
+        {
+            $insert_data['telephone_number'] = $post_data['notify']['data']['number1'];
+        }
+        else if($serverFrom == 'fnj-call-02')
+        {
+            $insert_data['telephone_number'] = $post_data['notify']['data']['number1'];
+        }
+        else
+        {
+            $insert_data['telephone_number'] = $post_data['notify']['data']['number'];
+        }
         $insert_data['content'] = json_encode($post_data);
 
 
@@ -24179,7 +24198,11 @@ EOF;
 
         $api_staffNo = (int)$clientMark_data['userName'];
 
-        if($serverFrom == 'call-01')
+        if($serverFrom == 'fnj-call-01')
+        {
+            $phone_number = $clientMark_data['number'];
+        }
+        else if($serverFrom == 'call-01')
         {
             $phone_number = $clientMark_data['number'];
         }
