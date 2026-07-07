@@ -79,7 +79,7 @@
                     "title": "项目名称",
                     "data": "name",
                     "className": "text-left",
-                    "width": "200px",
+                    "width": "120px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
@@ -736,6 +736,16 @@
                     },
                     render: function(data, type, row, meta) {
                         return data;
+                    }
+                },
+                {
+                    "title": " ",
+                    "data": "id",
+                    "className": "",
+                    "width": "",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return '';
                     }
                 }
             ],

@@ -329,7 +329,7 @@
                     }
                 },
                 {
-                    "title": "成单数",
+                    "title": "通过单数",
                     "data": "order_accepted_count",
                     "type": "num",
                     "className": "text-right bg-published",
@@ -364,7 +364,7 @@
                     }
                 },
                 {
-                    "title": "成单率",
+                    "title": "通过单率",
                     "data": null,
                     "type": "num",
                     "className": "text-right bg-published",
@@ -406,7 +406,7 @@
                     }
                 },
                 {
-                    "title": "成单均话费",
+                    "title": "通过单均话费",
                     "data": "order_accepted_count",
                     "type": "num",
                     "className": "text-right bg-published",
