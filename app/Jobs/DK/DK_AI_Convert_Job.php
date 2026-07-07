@@ -31,6 +31,8 @@ class DK_AI_Convert_Job implements ShouldQueue
     protected $id;
     protected $commonRepository;
 
+    public $queue = 'queue_vip';
+
     /**
      * Create a new job instance.
      *

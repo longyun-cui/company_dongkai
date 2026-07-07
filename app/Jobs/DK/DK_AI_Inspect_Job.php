@@ -27,6 +27,8 @@ class DK_AI_Inspect_Job implements ShouldQueue
     public $tries = 3;
     public $timeout = 600;
 
+    public $queue = 'queue_shared';
+
     protected $id;
     protected $commonRepository;
 
