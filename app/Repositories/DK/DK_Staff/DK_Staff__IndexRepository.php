@@ -434,6 +434,8 @@ class DK_Staff__IndexRepository {
     //
     public function view__staff__test()
     {
+        $sql = DB::connection('mysql_vos')->select('SHOW COLUMNS FROM e_cdr_20260707');
+        dd($sql);
 //        $this->get_me();
 
         // 设置请求的URL

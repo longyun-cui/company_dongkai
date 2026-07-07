@@ -7862,7 +7862,7 @@ class DK_Staff__StatisticRepository {
                 COUNT(DISTINCT o.id) as order_count,
                 COUNT(DISTINCT 
                 CASE 
-                    WHEN o.delivered_result IN ('正常交付', '折扣交付', '郊区交付', '内部交付', '隔日交付') 
+                    WHEN o.inspected_result IN ('通过', '折扣通过', '郊区通过', '内部交付') 
                     THEN o.id 
                  END) as order_accepted_count
             "))
