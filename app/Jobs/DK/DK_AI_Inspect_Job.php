@@ -27,7 +27,7 @@ class DK_AI_Inspect_Job implements ShouldQueue
     public $tries = 3;
     public $timeout = 600;
 
-    public $queue = 'queue_shared';
+//    public $queue = 'queue_shared';
 
     protected $id;
     protected $commonRepository;
@@ -42,6 +42,7 @@ class DK_AI_Inspect_Job implements ShouldQueue
         //
         $this->id = $ai_inspected_record_id;
         $this->commonRepository = new DK_Staff__CommonRepository;
+        $this->onQueue('queue_shared');
     }
 
     /**

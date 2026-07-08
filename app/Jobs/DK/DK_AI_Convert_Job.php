@@ -31,7 +31,7 @@ class DK_AI_Convert_Job implements ShouldQueue
     protected $id;
     protected $commonRepository;
 
-    public $queue = 'queue_vip';
+//    public $queue = 'queue_vip';
 
     /**
      * Create a new job instance.
@@ -43,6 +43,8 @@ class DK_AI_Convert_Job implements ShouldQueue
         //
         $this->id = $ai_converted_record_id;
         $this->commonRepository = new DK_Staff__CommonRepository;
+
+        $this->onQueue('queue_vip');
     }
 
     /**
