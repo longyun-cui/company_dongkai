@@ -856,14 +856,14 @@ class DK_Staff__CommonRepository {
         {
 //            $server = "http://call01.fnjcall.cn";
 //            $url = "http://call01.fnjcall.cn/openapi/V2.0.6/getCdrList";
-            $server = "http://47.116.66.111";
+            $server = "http://47.116.66.111/recordFile/listen?key=";
             $url = "http://47.116.66.111/openapi/V2.0.6/getCdrList";
         }
         else if($serverFrom_name == "fnj-call-02")
         {
 //            $server = "http://call02.fnjcall.cn";
 //            $url = "http://call02.fnjcall.cn/openapi/V2.0.6/getCdrList";
-            $server = "http://47.116.66.111";
+            $server = "http://47.116.66.111/recordFile/listen?key=";
             $url = "http://47.116.66.111/openapi/V2.0.6/getCdrList";
         }
         else if($serverFrom_name == "call-01")
