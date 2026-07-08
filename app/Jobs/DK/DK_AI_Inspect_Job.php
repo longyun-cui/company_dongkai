@@ -42,6 +42,7 @@ class DK_AI_Inspect_Job implements ShouldQueue
         //
         $this->id = $ai_inspected_record_id;
         $this->commonRepository = new DK_Staff__CommonRepository;
+
         $this->onQueue('queue_shared');
     }
 
