@@ -463,7 +463,10 @@ class DK_AI_Inspect_Job implements ShouldQueue
                     }
                     else throw new Exception("【content_decode】有误！");
                 }
-                else throw new Exception("【result.choices[0].message.content】不存在！");
+                else
+                {
+                    throw new Exception("【result.choices[0].message.content】不存在！");
+                }
             }
 
             $order->ai_inspected_status = 9;
@@ -490,6 +493,29 @@ class DK_AI_Inspect_Job implements ShouldQueue
             $item->item_status = 99;
             $item->description = $msg;
             $item->save();
+
+
+            if($msg == "【result.choices[0].message.content】不存在！")
+            {
+                if(isset($result->error) && isset($result->error->code))
+                {
+                    if(in_array($result->error->code,['insufficient_quota','internal_server_error','limit_burst_rate']))
+                    {
+                        $ai_inspected = new DK_Common__Order__AI_Inspected__Record;
+                        $ai_data['created_date'] = date('Y-m-d');
+                        $ai_data['item_status'] = 1;
+                        $ai_data['order_id'] = $order_id;
+
+                        $bool_ai = $ai_inspected->fill($ai_data)->save();
+                        if($bool_ai)
+                        {
+                            DK_AI_Inspect_Job::dispatch($ai_inspected->id);
+                            return;
+                        }
+                    }
+                }
+            }
+
 
             $order->ai_inspected_status = 99;
             $order->save();

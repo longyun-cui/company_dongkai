@@ -3076,6 +3076,7 @@ class DK_Staff__OrderRepository {
             if($is_repeat == 0 && $is_automatic_ai_inspecting == 1)
             {
                 $ai_inspected = new DK_Common__Order__AI_Inspected__Record;
+                $ai_data['created_date'] = $date;
                 $ai_data['item_status'] = 1;
                 $ai_data['order_id'] = $id;
 
@@ -8808,6 +8809,8 @@ class DK_Staff__OrderRepository {
         try
         {
             $ai_inspected = new DK_Common__Order__AI_Inspected__Record;
+
+            $ai_data['created_date'] = $date;
             $ai_data['ai_platform'] = 'ali';
             $ai_data['ai_model'] = $ai_model;
             $ai_data['ai_system_prompt'] = $ai_system_prompt;
@@ -8926,6 +8929,7 @@ class DK_Staff__OrderRepository {
                 }
 
                 $ai_inspected = new DK_Common__Order__AI_Inspected__Record;
+                $ai_data['created_date'] = $date;
                 $ai_data['item_status'] = 1;
                 $ai_data['order_id'] = $id;
 
@@ -9204,7 +9208,7 @@ class DK_Staff__OrderRepository {
             $ai_data['order_id'] = $item_id;
 
             $bool_ai = $ai_converted->fill($ai_data)->save();
-            if(!$bool_ai) throw new Exception("DK_Common__Order__AI_Inspected__Record--update--fail");
+            if(!$bool_ai) throw new Exception("DK_Common__Order__AI_Converted__Record--update--fail");
             else
             {
                 $ai_inspecting_post_date['platform'] = $ai_data['ai_platform'];
@@ -9223,7 +9227,7 @@ class DK_Staff__OrderRepository {
                 $ai_converted->program_used_time = $microtime_ended - $microtime_start;
                 $ai_converted->result = $ai_inspecting_response;
                 $bool_ai_2 = $ai_converted->save();
-                if(!$bool_ai_2) throw new Exception("DK_Common__Order__AI_Inspected__Record--update--fail");
+                if(!$bool_ai_2) throw new Exception("DK_Common__Order__AI_Converted__Record--update--fail");
 
 
 
@@ -9448,7 +9452,7 @@ class DK_Staff__OrderRepository {
                 $ai_data['order_id'] = $id;
 
                 $bool_ai = $ai_inspected->fill($ai_data)->save();
-                if(!$bool_ai) throw new Exception("DK_Common__Order__AI_Inspected__Record--update--fail");
+                if(!$bool_ai) throw new Exception("DK_Common__Order__AI_Converted__Record--update--fail");
 
                 $count += 1;
                 $ids[] = $id;

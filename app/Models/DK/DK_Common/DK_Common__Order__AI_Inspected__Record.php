@@ -76,6 +76,8 @@ class DK_Common__Order__AI_Inspected__Record extends Model
 
         'ip',
 
+        'created_date',
+
         'is_published', 'publisher_id','published_at',
         'is_completed', 'completer_id', 'completed_at',
         'is_verified', 'verifier_id', 'verified_at',
