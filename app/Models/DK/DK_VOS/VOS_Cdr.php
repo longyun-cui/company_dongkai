@@ -5,48 +5,74 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class VOS_User extends Authenticatable
+class VOS_Cdr extends Authenticatable
 {
     use Notifiable;
-    use SoftDeletes;
 
     protected $connection = 'mysql_vos';
 
     protected $table = "e_cdr";
 
     protected $fillable = [
-        'active', 'status', 'user_active', 'user_status',
-        'user_group', 'user_category', 'user_type',
-        'group', 'category', 'type',
-
-        'creator_id', 'parent_id', 'p_id',
-        'name', 'username', 'nickname', 'true_name', 'short_name', 'description', 'portrait_img', 'tag',
-        'mobile', 'telephone', 'email', 'password',
-
-        'wx_unionid',
-        'department_district_id', 'department_group_id', 'department_manager_id', 'department_supervisor_id', 'superior_id',
-        'district_category', 'district_type', 'district_id',
-        'introduction_id', 'advertising_id',
-
-        'QQ_number',
-        'wx_id',
-        'wx_qr_code_img',
-        'wb_name',
-        'wb_address',
-        'website',
-        'address',
-
-        'api_serverFrom_id',
-        'api_serverFrom_name',
-        'api_customer_account',
-        'api_staffNo',
-
-        'contact', 'contact_name', 'contact_phone', 'contact_email', 'contact_wx_id', 'contact_wx_qr_code_img', 'contact_address',
-        'linkman', 'linkman_name', 'linkman_phone', 'linkman_email', 'linkman_wx_id', 'linkman_wx_qr_code_img', 'linkman_address',
-        'company', 'department', 'position', 'business_description',
-        'visit_num', 'share_num', 'favor_num',  'follow_num', 'fans_num',
-        'login_error_num',
-        'admin_token',
+        'callere164',
+        'calleraccesse164',
+        'calleee164',
+        'calleeaccesse164',
+        'callerip',
+        'callerrtpip',
+        'callercodec',
+        'callergatewayid',
+        'callerproductid',
+        'callertogatewaye164',
+        'callertype',
+        'calleeip',
+        'calleertpip',
+        'calleecodec',
+        'calleegatewayid',
+        'calleeproductid',
+        'calleetogatewaye164',
+        'calleetype',
+        'billingmode',
+        'calllevel',
+        'agentfeetime',
+        'starttime',
+        'stoptime',
+        'callerpdd',
+        'calleepdd',
+        'holdtime',
+        'callerareacode',
+        'feetime',
+        'fee',
+        'tax',
+        'suitefee',
+        'suitefeetime',
+        'incomefee',
+        'incometax',
+        'customeraccount',
+        'customername',
+        'calleeareacode',
+        'agentfee',
+        'agenttax',
+        'agentsuitefee',
+        'agentsuitefeetime',
+        'agentaccount',
+        'agentname',
+        'flowno',
+        'softswitchname',
+        'softswitchcallid',
+        'callercallid',
+        'calleroriginalcallid',
+        'calleecallid',
+        'calleroriginalinfo',
+        'rtpforward',
+        'enddirection',
+        'endreason',
+        'billingtype',
+        'cdrlevel',
+        'agentcdr_id',
+        'sipreasonheader',
+        'recordstarttime',
+        'transactionid',
     ];
 
     public $timestamps = false;
@@ -60,12 +86,16 @@ class VOS_User extends Authenticatable
 
 
 
-
-    // 所属代理商
-    function ext()
+    public function setConnectionName($connectionName)
     {
-        return $this->hasOne('App\Models\DK\DK_UserExt','user_id','id');
+        $this->connection = $connectionName;
     }
+
+    public function setTableName($tableName)
+    {
+        $this->table = $tableName;
+    }
+
 
 
     // 拥有者

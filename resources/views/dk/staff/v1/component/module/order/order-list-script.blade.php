@@ -36,6 +36,9 @@
         $(".main-wrapper").on('click', ".modal-show--for--order-dental--item-edit", function() {
             var $that = $(this);
             var $row = $that.parents('tr');
+            var $item_operation = $row.find('[data-key="item_operation"]');
+            var $encode_id = $item_operation.attr('data-encode-id');
+
 
             var $modal_id = 'modal--for--order-dental--item-edit';
             var $modal = $("#"+$modal_id);
@@ -68,7 +71,7 @@
                     _token: $('meta[name="_token"]').attr('content'),
                     operate: "item-get",
                     item_type: "order",
-                    item_id: $that.data('id')
+                    item_id: $encode_id
                 },
                 'json'
             )
@@ -143,6 +146,8 @@
         $(".main-wrapper").on('click', ".modal-show--for--order-aesthetic--item-edit", function() {
             var $that = $(this);
             var $row = $that.parents('tr');
+            var $item_operation = $row.find('[data-key="item_operation"]');
+            var $encode_id = $item_operation.attr('data-encode-id');
 
             var $modal_id = 'modal--for--order-aesthetic--item-edit';
             var $modal = $("#"+$modal_id);
@@ -175,7 +180,7 @@
                     _token: $('meta[name="_token"]').attr('content'),
                     operate: "item-get",
                     item_type: "order",
-                    item_id: $that.data('id')
+                    item_id: $encode_id
                 },
                 'json'
             )
@@ -248,6 +253,8 @@
         $(".main-wrapper").on('click', ".modal-show--for--order-luxury--item-edit", function() {
             var $that = $(this);
             var $row = $that.parents('tr');
+            var $item_operation = $row.find('[data-key="item_operation"]');
+            var $encode_id = $item_operation.attr('data-encode-id');
 
             var $modal_id = 'modal--for--order-luxury--item-edit';
             var $modal = $("#"+$modal_id);
@@ -280,7 +287,7 @@
                     _token: $('meta[name="_token"]').attr('content'),
                     operate: "item-get",
                     item_type: "order",
-                    item_id: $that.data('id')
+                    item_id: $encode_id
                 },
                 'json'
             )
@@ -1916,6 +1923,9 @@
             var $id = $that.data('id');
             var $item_id = $that.data('id');
             var $row = $that.parents('tr');
+            var $item_operation = $row.find('[data-key="item_operation"]');
+            var $encode_id = $item_operation.attr('data-encode-id');
+
             var $datatable_wrapper = $that.closest('.datatable-wrapper');
             var $item_category = $datatable_wrapper.data('datatable-item-category');
             var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
@@ -1985,7 +1995,7 @@
                     _token: $('meta[name="_token"]').attr('content'),
                     operate: "item-get",
                     item_type: "order",
-                    item_id: $that.data('id')
+                    item_id: $encode_id
                 },
                 'json'
             )
@@ -2315,6 +2325,9 @@
             var $id = $that.data('id');
             var $item_id = $that.data('id');
             var $row = $that.parents('tr');
+            var $item_operation = $row.find('[data-key="item_operation"]');
+            var $encode_id = $item_operation.attr('data-encode-id');
+
             var $datatable_wrapper = $that.closest('.datatable-wrapper');
             var $item_category = $datatable_wrapper.data('datatable-item-category');
             var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
@@ -2365,7 +2378,7 @@
                     _token: $('meta[name="_token"]').attr('content'),
                     operate: "item-get",
                     item_type: "order",
-                    item_id: $that.data('id')
+                    item_id: $encode_id
                 },
                 'json'
             )
@@ -2520,6 +2533,9 @@
             var $id = $that.data('id');
             var $item_id = $that.data('id');
             var $row = $that.parents('tr');
+            var $item_operation = $row.find('[data-key="item_operation"]');
+            var $encode_id = $item_operation.attr('data-encode-id');
+
             var $datatable_wrapper = $that.closest('.datatable-wrapper');
             var $item_category = $datatable_wrapper.data('datatable-item-category');
             var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
@@ -2570,7 +2586,7 @@
                     _token: $('meta[name="_token"]').attr('content'),
                     operate: "item-get",
                     item_type: "order",
-                    item_id: $that.data('id')
+                    item_id: $encode_id
                 },
                 'json'
             )
@@ -2725,6 +2741,9 @@
             var $id = $that.data('id');
             var $item_id = $that.data('id');
             var $row = $that.parents('tr');
+            var $item_operation = $row.find('[data-key="item_operation"]');
+            var $encode_id = $item_operation.attr('data-encode-id');
+
             var $datatable_wrapper = $that.closest('.datatable-wrapper');
             var $item_category = $datatable_wrapper.data('datatable-item-category');
             var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
@@ -2775,7 +2794,7 @@
                     _token: $('meta[name="_token"]').attr('content'),
                     operate: "item-get",
                     item_type: "order",
-                    item_id: $that.data('id')
+                    item_id: $encode_id
                 },
                 'json'
             )
@@ -3237,6 +3256,9 @@
             var $id = $that.data('id');
             var $item_id = $that.data('id');
             var $row = $that.parents('tr');
+            var $item_operation = $row.find('[data-key="item_operation"]');
+            var $encode_id = $item_operation.attr('data-encode-id');
+
             var $datatable_wrapper = $that.closest('.datatable-wrapper');
             var $item_category = $datatable_wrapper.data('datatable-item-category');
             var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
@@ -3294,7 +3316,7 @@
                     _token: $('meta[name="_token"]').attr('content'),
                     operate: "item-get",
                     item_type: "order",
-                    item_id: $that.data('id')
+                    item_id: $encode_id
                 },
                 'json'
             )
@@ -4394,6 +4416,9 @@
         var $item_id = $that.data('id');
         var $role = $that.data('role');
         var $row = $that.parents('tr');
+        var $item_operation = $row.find('[data-key="item_operation"]');
+        var $encode_id = $item_operation.attr('data-encode-id');
+
         var $datatable_wrapper = $that.closest('.datatable-wrapper');
         var $item_category = $datatable_wrapper.data('datatable-item-category');
         var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
@@ -4475,7 +4500,7 @@
                 _token: $('meta[name="_token"]').attr('content'),
                 operate: "item-get",
                 item_type: "order",
-                item_id: $that.data('id')
+                item_id: $encode_id
             },
             'json'
         )

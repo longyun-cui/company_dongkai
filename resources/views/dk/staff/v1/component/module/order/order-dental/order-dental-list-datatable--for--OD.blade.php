@@ -1409,6 +1409,15 @@
                     "className": "",
                     "width": "180px",
                     "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        {
+                            $(nTd).attr('data-id',data);
+                            $(nTd).attr('data-encode-id',row.encode_id);
+                            $(nTd).attr('data-key','item_operation');
+                            $(nTd).attr('data-value',data);
+                            $(nTd).addClass('item_operation');
+                        }
+                    },
                     render: function(data, type, row, meta) {
 
                         var $html_edit = '';
