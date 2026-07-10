@@ -29,6 +29,7 @@
                     d.type = $tableSearch.find('select[name="ai-type"]').val();
                     d.item_status = $tableSearch.find('select[name="ai-item-status"]').val();
                     d.order_id = $tableSearch.find('input[name="ai-order-id"]').val();
+                    d.assign_date = $tableSearch.find('input[name="ai-date"]').val();
                 },
             },
             "fixedColumns": {

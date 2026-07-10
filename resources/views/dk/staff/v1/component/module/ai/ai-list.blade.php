@@ -28,6 +28,7 @@
 
             <input type="text" class="search-filter form-filter filter-keyup" name="ai-id" placeholder="ID">
             <input type="text" class="search-filter form-filter filter-keyup" name="ai-order-id" placeholder="订单ID">
+            <input type="text" class="search-filter form-filter filter-smd filter-keyup date-picker-c" name="ai-date" placeholder="审核日期" value="{{ date('Y-m-d') }}" readonly="readonly" />
 
             <select class="search-filter form-filter select2-box-c" name="ai-item-status">
                 <option value ="-1">全部</option>

@@ -101,6 +101,7 @@ class DK_Staff__AIRepository {
         if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
 
         if(!empty($post_data['order_id'])) $query->where('order_id', $post_data['order_id']);
+        if(!empty($post_data['assign_date'])) $query->where('created_date', $post_data['assign_date']);
 
 
         // 状态 [|]
@@ -168,6 +169,7 @@ class DK_Staff__AIRepository {
         if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
 
         if(!empty($post_data['order_id'])) $query->where('order_id', $post_data['order_id']);
+        if(!empty($post_data['assign_date'])) $query->where('created_date', $post_data['assign_date']);
 
 
         // 状态 [|]
