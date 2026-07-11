@@ -25,9 +25,11 @@ use App\Jobs\DK_Client\AutomaticDispatchingJob;
 use App\Jobs\DK\BYApReceivedJob;
 
 use App\Repositories\Common\CommonRepository;
+use App\Repositories\DK\DK_Staff\DK_Staff__CommonRepository;
 
 use Response, Auth, Validator, DB, Exception, Cache, Blade, Carbon, DateTime;
 use QrCode, Excel;
+
 
 class DK_Staff__IndexRepository {
 
@@ -37,9 +39,12 @@ class DK_Staff__IndexRepository {
     private $me_admin;
     private $view_blade_403;
     private $view_blade_404;
+    protected $commonRepository;
 
     public function __construct()
     {
+        $this->commonRepository = new DK_Staff__CommonRepository;
+
         $this->view_blade_403 = env('DK_STAFF__TEMPLATE').'403';
         $this->view_blade_404 = env('DK_STAFF__TEMPLATE').'404';
 
@@ -439,34 +444,8 @@ class DK_Staff__IndexRepository {
 //        $this->get_me();
 
 
-//        $cdr = new VOS_Cdr();
-//        $cdr->setConnectionName('mysql_vos');
-//        $cdr->setTableName('e_cdr_' . '20260708');
-//
-//        $sql = $cdr->select('*')->get();
-//        dd($sql->toArray());
-
-        $phone = '17398318795';
-        $result = (new VOS_Cdr)
-            ->setTable('e_cdr_' . '20260708')
-            ->select([
-                'calleeaccesse164',
-                'callergatewayid',
-                'calleegatewayid',
-                'callerip',
-                'callerrtpip',
-                'holdtime',
-                'starttime'
-            ])
-//            ->whereBetween('starttime', [
-//                now()->subMinutes(30)->timestamp * 1000,
-//                now()->timestamp * 1000
-//            ])
-//            ->where('holdtime', '>', 0)
-            ->where('calleeaccesse164', $phone)
-            ->orderByDesc('starttime')
-            ->first();
-        dd($result->toArray());
+        $response = $this->commonRepository->o1__api__push__entry_order__to__vos_data(9604607);
+        dd($response);
 
 
     }

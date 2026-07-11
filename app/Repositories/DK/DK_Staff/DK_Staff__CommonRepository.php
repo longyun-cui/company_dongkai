@@ -15,6 +15,8 @@ use App\Models\DK\DK_Common\DK_Common__Order;
 use App\Models\DK\DK_Common\DK_Common__Order__AI_Converted__Record;
 use App\Models\DK\DK_Common\DK_Common__Order__AI_Inspected__Record;
 
+use App\Models\DK\DK_VOS\VOS_Cdr;
+
 use App\Repositories\Common\CommonRepository;
 
 use Response, Auth, Validator, DB, Exception, Cache, Blade, Carbon;
@@ -818,7 +820,7 @@ class DK_Staff__CommonRepository {
 
 
 
-    // 【工单】外呼系统呼叫记录
+    // 【工单】获取okcc录音
     public function o1__api__get_call_recording__from__by($post_data)
     {
 
@@ -995,7 +997,280 @@ class DK_Staff__CommonRepository {
 
 
     }
+    // 【工单】获取okcc录音
+    public function o1__api__get_call_recording__from__OKCC($post_data)
+    {
 
+//        dd($post_data);
+        $serverFrom_name = $post_data['serverFrom_name'];
+        $API_Customer_Password = $post_data['api_customer_password'];
+        $API_Customer_Account = $post_data['api_customer_account'];
+        $client_phone = $post_data['client_phone'];
+        $published_date = $post_data['published_date'];
+
+
+        $timestamp = time();
+        $seq = $timestamp;
+        $digest = md5($API_Customer_Account.'@'.$timestamp.'@'.$seq.'@'.$API_Customer_Password);
+
+        $request_data['authentication']['customer'] = $API_Customer_Account;
+        $request_data['authentication']['timestamp'] = strval($timestamp);
+        $request_data['authentication']['seq'] = strval($seq);
+        $request_data['authentication']['digest'] = $digest;
+
+        $request_data['request']['seq'] = '';
+        $request_data['request']['userData'] = '';
+//        $request_data['request']['agent'] = $agent;
+        $request_data['request']['callee'] = $client_phone;
+        $request_data['request']['startTime'] = $published_date.' 00:00:00';
+        $request_data['request']['endTime'] = $published_date.' 23:59:59';
+
+
+        if($serverFrom_name == "FNJ")
+        {
+            $server = "http://feiniji.cn";
+            $url = "http://feiniji.cn/openapi/V2.0.6/getCdrList";
+        }
+        else if($serverFrom_name == "fnj-call-01")
+        {
+//            $server = "http://call01.fnjcall.cn";
+//            $url = "http://call01.fnjcall.cn/openapi/V2.0.6/getCdrList";
+            $server = "http://47.116.66.111/recordFile/listen?key=";
+            $url = "http://47.116.66.111/openapi/V2.0.6/getCdrList";
+        }
+        else if($serverFrom_name == "fnj-call-02")
+        {
+//            $server = "http://call02.fnjcall.cn";
+//            $url = "http://call02.fnjcall.cn/openapi/V2.0.6/getCdrList";
+            $server = "http://47.116.66.111/recordFile/listen?key=";
+            $url = "http://47.116.66.111/openapi/V2.0.6/getCdrList";
+        }
+        else if($serverFrom_name == "call-01")
+        {
+            $server = "http://call01.zlyx.jjccyun.cn";
+            $url = "http://call01.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
+        }
+        else if($serverFrom_name == "call-02")
+        {
+//            $server = "http://call02.zlyx.jjccyun.cn";
+//            $url = "http://call02.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
+            $server = "http://fnjvce02.zlexin.cn";
+            $url = "http://fnjvce02.zlexin.cn/openapi/V2.0.6/getCdrList";
+        }
+        else if($serverFrom_name == "call-03")
+        {
+            $server = "http://call03.zlyx.jjccyun.cn";
+            $url = "http://call03.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
+        }
+        else if($serverFrom_name == "call-04")
+        {
+            $server = "http://call04.zlyx.jjccyun.cn";
+            $url = "http://call04.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
+        }
+        else if($serverFrom_name == "call-04")
+        {
+            $server = "http://call04.zlyx.jjccyun.cn";
+            $url = "http://call04.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
+        }
+        else if($serverFrom_name == "sys-21")
+        {
+            $server = "http://okcc8.zytchina.net";
+            $url = "http://okcc8.zytchina.net/openapi/V2.0.6/getCdrList";
+        }
+        else
+        {
+            return response_error([],"请先配置API！");
+        }
+
+
+        $request_data = json_encode($request_data);
+//        dd($request_data);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Accept: application/json"));
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true); // post数据
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $request_data); // post的变量
+        $request_result = curl_exec($ch);
+//        dd($request_result);
+
+
+        $return = [];
+        $return['error'] = 0;
+        $return['status'] = 1;
+        $return['result'] = '';
+        $return['recording_address_list'] = '';
+
+        if(curl_errno($ch))
+        {
+            curl_close($ch);
+
+            $return['error'] = 1;
+            $return['status'] = 9;
+            $return['result'] = '请求失败z！';
+        }
+        else
+        {
+            curl_close($ch);
+
+            $result = json_decode($request_result);
+            if($result->result->error == "0")
+            {
+                if($result->data)
+                {
+                    $file = [];
+                    $response = $result->data->response;
+                    if($response->total > 0)
+                    {
+                        $success_count = 0;
+                        foreach ($response->cdr as $k => $v)
+                        {
+                            if($v->serviceType == 4) $success_count += 1;
+                        }
+
+                        if($success_count > 0)
+                        {
+                            foreach ($response->cdr as $k => $v)
+                            {
+                                if(!empty($v->filename)) $file[] = $server.$v->filename;
+                            }
+                        }
+                        else return response_error([],'没有有效通话记录，非自动点拨通话！');
+
+                        if(count($file) > 0)
+                        {
+
+                            $recording_address_list = json_encode($file);
+                            $return['recording_address_list'] = $recording_address_list;
+                        }
+                        else
+                        {
+                            $return['error'] = 1;
+                            $return['result'] = '没有有效通话记录c！';
+                        }
+                    }
+                    else
+                    {
+                        $return['error'] = 1;
+                        $return['result'] = '没有有效通话记录b！';
+                    }
+                }
+                else
+                {
+                    $return['error'] = 1;
+                    $return['result'] = '没有有效通话记录a！';
+                }
+            }
+            else
+            {
+                $return['error'] = 1;
+                $return['result'] = $result->result->msg;
+            }
+        }
+
+        return $return;
+
+
+    }
+
+
+
+    // 【工单】推送录单到vosDATA数据系统
+    public function o1__api__push__entry_order__to__vos_data($order_id)
+    {
+        $timestamp = time();
+        $time = time();
+        $date = date("Y-m-d");
+        $datetime = date('Y-m-d H:i:s');
+
+        $order = DK_Common__Order::find($order_id);
+        if(!$order) return false;
+
+        $phone = $order->client_phone;
+
+//        dd('vos_'.$date);
+        $result = (new VOS_Cdr)
+            ->setTable('e_cdr_' . date('Ymd'))
+            ->select([
+                'calleeaccesse164',
+                'callergatewayid',
+                'calleegatewayid',
+                'callerip',
+                'callerrtpip',
+                'holdtime',
+                'starttime'
+            ])
+//            ->whereBetween('starttime', [
+//                now()->subMinutes(30)->timestamp * 1000,
+//                now()->timestamp * 1000
+//            ])
+//            ->where('holdtime', '>', 0)
+            ->where('calleeaccesse164', $phone)
+            ->orderByDesc('starttime')
+            ->first();
+        if($result)
+        {
+            $result = $result->toArray();
+            $result['phone'] = $phone;
+            $result['source_order_id'] = encode($order_id,'vos-data-2026');
+            $result['vos_db_ip'] = env('VOS_DB_HOST');
+        }
+        else
+        {
+            return false;
+        }
+
+        $server = "http://101.37.119.163";
+        $api_url = "http://101.37.119.163/api/external/vos/gateway-order-events";
+
+        $token = md5('vos_'.date('Ymd'));
+
+        // 设置请求头
+        $headers = [
+            'Content-Type: application/json',
+            'X-VOS-Token: '.$token
+        ];
+        // 设置请求体
+        $contents = json_encode($result);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $api_url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true); // post数据
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $contents); // post的变量
+        $request_result = curl_exec($ch);
+//        dd($request_result);
+
+
+        $return = [];
+        $return['error'] = 0;
+        $return['status'] = 1;
+        $return['result'] = '';
+
+        if(curl_errno($ch))
+        {
+            curl_close($ch);
+
+            $return['error'] = 1;
+            $return['status'] = 9;
+            $return['result'] = 'curl推送失败！';
+        }
+        else
+        {
+            curl_close($ch);
+            dd($request_result);
+
+            $return['result'] = $request_result;
+        }
+
+        return $return;
+
+
+    }
 
 
 

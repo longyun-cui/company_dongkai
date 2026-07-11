@@ -338,7 +338,7 @@ class DK_AI_Inspect_Job implements ShouldQueue
                                 if(isset($content_decode->缺失数量话术) && $content_decode->缺失数量话术 == '有') $count += 1;
                                 if(isset($content_decode->缺牙是否处理话术) && $content_decode->缺牙是否处理话术 == '有') $count += 1;
                                 if(isset($content_decode->是否了解种植牙话术) && $content_decode->是否了解种植牙话术 == '有') $count += 1;
-                                if(isset($content_decode->否考虑种植牙话术) && $content_decode->否考虑种植牙话术 == '有') $count += 1;
+                                if(isset($content_decode->是否考虑种植牙话术) && $content_decode->是否考虑种植牙话术 == '有') $count += 1;
                                 if(isset($content_decode->客户在不在当地话术) && $content_decode->客户在不在当地话术 == '有') $count += 1;
                                 if(isset($content_decode->结尾邀约话术) && $content_decode->结尾邀约话术 == '有') $count += 1;
 
