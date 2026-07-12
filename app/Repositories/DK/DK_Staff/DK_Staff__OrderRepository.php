@@ -3527,7 +3527,13 @@ class DK_Staff__OrderRepository {
                     ->count("*");
                 if($is_repeat == 0)
                 {
-                    $is_repeat = DK_Common__Delivery::where(['project_id'=>$project_id,'client_phone'=>$client_phone])->count("*");
+                    $is_repeat = DK_Common__Order__Import::where(['delivered_project_id'=>$project_id,'client_phone'=>$client_phone])
+                        ->where('order_category',$item->order_category)
+                        ->count("*");
+                    if($is_repeat == 0)
+                    {
+                        $is_repeat = DK_Common__Delivery::where(['project_id'=>$project_id,'client_phone'=>$client_phone])->count("*");
+                    }
                 }
                 if($is_repeat > 0) $is_repeat += 1;
 
