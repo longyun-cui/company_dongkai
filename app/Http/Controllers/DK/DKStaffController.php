@@ -376,7 +376,7 @@ class DKStaffController extends Controller
     // 测试
     public function view__staff__test()
     {
-        return $this->repo->view__staff__test();
+        return $this->repo->view__staff__test(request()->all());
     }
 
 

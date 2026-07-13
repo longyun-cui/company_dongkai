@@ -21,8 +21,14 @@ use App\Models\DK\DK_API_BY_Received;
 use App\Models\DK\DK_VOS\VOS_Cdr;
 
 
-use App\Jobs\DK_Client\AutomaticDispatchingJob;
 use App\Jobs\DK\BYApReceivedJob;
+
+
+use App\Jobs\DK\DK_AI_Inspect_Job;
+use App\Jobs\DK\DK_AI_Convert_Job;
+use App\Jobs\DK\DK_Push_Oder_to_Vos_Data_Job;
+use App\Jobs\DK_Client\AutomaticDispatchingJob;
+
 
 use App\Repositories\Common\CommonRepository;
 use App\Repositories\DK\DK_Staff\DK_Staff__CommonRepository;
@@ -439,13 +445,14 @@ class DK_Staff__IndexRepository {
 
 
     //
-    public function view__staff__test()
+    public function view__staff__test($post_data)
     {
 //        $this->get_me();
 
-
-        $response = $this->commonRepository->o1__api__push__entry_order__to__vos_data(9604607);
-        dd($response);
+        $id = $post_data['id'];
+        DK_Push_Oder_to_Vos_Data_Job::dispatch($id);
+//        $response = $this->commonRepository->o1__api__push__entry_order__to__vos_data($id);
+//        dd($response);
 
 
     }

@@ -1442,6 +1442,24 @@
                     }
                 },
                 {
+                    "title": "推送vos",
+                    "name": "api_is_pushed_to_vos_data",
+                    "data": "api_is_pushed_to_vos_data",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(data == 0) return '--';
+                        else if(data == 100) return '<small class="btn-xs btn-primary">是</small>';
+                        else if(data == 9) return '<small class="btn-xs btn-danger">null</small>';
+                        else if(data == 19) return '<small class="btn-xs btn-warning">失败</small>';
+                        else if(data == 71) return '<small class="btn-xs bg-black">401</small>';
+                        else if(data == 72) return '<small class="btn-xs bg-black">422</small>';
+                        else if(data == 101) return '<small class="btn-xs bg-black">未知</small>';
+                        else return data;
+                    }
+                },
+                {
                     "title": "是否推送",
                     "name": "api_is_pushed",
                     "data": "api_is_pushed",

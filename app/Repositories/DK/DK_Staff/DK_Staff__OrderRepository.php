@@ -32,6 +32,7 @@ use App\Models\DK\DK_API_BY_Received;
 
 use App\Jobs\DK\DK_AI_Inspect_Job;
 use App\Jobs\DK\DK_AI_Convert_Job;
+use App\Jobs\DK\DK_Push_Oder_to_Vos_Data_Job;
 use App\Jobs\DK_Client\AutomaticDispatchingJob;
 
 
@@ -3138,6 +3139,8 @@ class DK_Staff__OrderRepository {
                 }
             }
 
+
+//            DK_Push_Oder_to_Vos_Data_Job::dispatch($id);
 
             return response_success([],"发布成功!");
         }
@@ -8397,13 +8400,15 @@ class DK_Staff__OrderRepository {
         }
         else if($serverFrom_name == "fnj-call-01")
         {
-            $server = "http://call01.fnjcall.cn";
-            $server = "http://47.116.66.111/recordFile/listen?key=";
-            $url = "http://47.116.66.111/openapi/V2.0.6/getCdrList";
+            $server = "http://call01.fnjcall.cn/recordFile/listen?key=";
+            $url = "http://call01.fnjcall.cn/openapi/V2.0.6/getCdrList";
+//            $server = "http://47.116.66.111/recordFile/listen?key=";
+//            $url = "http://47.116.66.111/openapi/V2.0.6/getCdrList";
         }
         else if($serverFrom_name == "fnj-call-02")
         {
-            $server = "http://call02.fnjcall.cn";
+//            $server = "http://call02.fnjcall.cn/recordFile/listen?key=";
+//            $url = "http://call02.fnjcall.cn/openapi/V2.0.6/getCdrList";
             $server = "http://47.116.66.111/recordFile/listen?key=";
             $url = "http://47.116.66.111/openapi/V2.0.6/getCdrList";
         }
@@ -8655,7 +8660,7 @@ class DK_Staff__OrderRepository {
             $get_recording_data['published_date'] = $item->published_date;
 
 //            $response = $this->o1__public__api__get_call_recording__from__by($get_recording_data);
-            $response = $this->commonRepository->o1__api__get_call_recording__from__by($get_recording_data);
+            $response = $this->commonRepository->o1__api__get_call_recording__from__OKCC($get_recording_data);
 //            dd($response);
             if($response['error'] == 0)
             {
@@ -9073,7 +9078,7 @@ class DK_Staff__OrderRepository {
             $get_recording_data['published_date'] = $item->published_date;
 
 //            $response = $this->o1__public__api__get_call_recording__from__by($get_recording_data);
-            $response = $this->commonRepository->o1__api__get_call_recording__from__by($get_recording_data);
+            $response = $this->commonRepository->o1__api__get_call_recording__from__OKCC($get_recording_data);
 //            dd($response);
             if($response['error'] == 0)
             {
@@ -9655,14 +9660,14 @@ class DK_Staff__OrderRepository {
         }
         else if($serverFrom_name == "fnj-call-01")
         {
-//            $server = "http://call01.fnjcall.cn";
-//            $url = "http://call01.fnjcall.cn/openapi/V2.0.6/getCdrList";
-            $server = "http://47.116.66.111/recordFile/listen?key=";
-            $url = "http://47.116.66.111/openapi/V2.0.6/getCdrList";
+            $server = "http://call01.fnjcall.cn/recordFile/listen?key=";
+            $url = "http://call01.fnjcall.cn/openapi/V2.0.6/getCdrList";
+//            $server = "http://47.116.66.111/recordFile/listen?key=";
+//            $url = "http://47.116.66.111/openapi/V2.0.6/getCdrList";
         }
         else if($serverFrom_name == "fnj-call-02")
         {
-//            $server = "http://call02.fnjcall.cn";
+//            $server = "http://call02.fnjcall.cn/recordFile/listen?key=";
 //            $url = "http://call02.fnjcall.cn/openapi/V2.0.6/getCdrList";
             $server = "http://47.116.66.111/recordFile/listen?key=";
             $url = "http://47.116.66.111/openapi/V2.0.6/getCdrList";

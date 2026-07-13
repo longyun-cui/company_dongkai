@@ -856,10 +856,10 @@ class DK_Staff__CommonRepository {
         }
         else if($serverFrom_name == "fnj-call-01")
         {
-//            $server = "http://call01.fnjcall.cn";
-//            $url = "http://call01.fnjcall.cn/openapi/V2.0.6/getCdrList";
-            $server = "http://47.116.66.111/recordFile/listen?key=";
-            $url = "http://47.116.66.111/openapi/V2.0.6/getCdrList";
+            $server = "http://call01.fnjcall.cn/recordFile/listen?key=";
+            $url = "http://call01.fnjcall.cn/openapi/V2.0.6/getCdrList";
+//            $server = "http://47.116.66.111/recordFile/listen?key=";
+//            $url = "http://47.116.66.111/openapi/V2.0.6/getCdrList";
         }
         else if($serverFrom_name == "fnj-call-02")
         {
@@ -1033,14 +1033,14 @@ class DK_Staff__CommonRepository {
         }
         else if($serverFrom_name == "fnj-call-01")
         {
-//            $server = "http://call01.fnjcall.cn";
-//            $url = "http://call01.fnjcall.cn/openapi/V2.0.6/getCdrList";
-            $server = "http://47.116.66.111/recordFile/listen?key=";
-            $url = "http://47.116.66.111/openapi/V2.0.6/getCdrList";
+            $server = "http://call01.fnjcall.cn/recordFile/listen?key=";
+            $url = "http://call01.fnjcall.cn/openapi/V2.0.6/getCdrList";
+//            $server = "http://47.116.66.111/recordFile/listen?key=";
+//            $url = "http://47.116.66.111/openapi/V2.0.6/getCdrList";
         }
         else if($serverFrom_name == "fnj-call-02")
         {
-//            $server = "http://call02.fnjcall.cn";
+//            $server = "http://call02.fnjcall.cn/recordFile/listen?key=";
 //            $url = "http://call02.fnjcall.cn/openapi/V2.0.6/getCdrList";
             $server = "http://47.116.66.111/recordFile/listen?key=";
             $url = "http://47.116.66.111/openapi/V2.0.6/getCdrList";
@@ -1185,12 +1185,21 @@ class DK_Staff__CommonRepository {
         $date = date("Y-m-d");
         $datetime = date('Y-m-d H:i:s');
 
+
+        $return = [];
+        $return['error'] = 0;
+        $return['status'] = 1;
+        $return['result'] = '';
+
         $order = DK_Common__Order::find($order_id);
-        if(!$order) return false;
+        if(!$order)
+        {
+            return false;
+        }
 
         $phone = $order->client_phone;
+//        dd($phone);
 
-//        dd('vos_'.$date);
         $result = (new VOS_Cdr)
             ->setTable('e_cdr_' . date('Ymd'))
             ->select([
@@ -1202,12 +1211,12 @@ class DK_Staff__CommonRepository {
                 'holdtime',
                 'starttime'
             ])
-//            ->whereBetween('starttime', [
-//                now()->subMinutes(30)->timestamp * 1000,
-//                now()->timestamp * 1000
-//            ])
-//            ->where('holdtime', '>', 0)
-            ->where('calleeaccesse164', $phone)
+            ->whereBetween('starttime', [
+                now()->subMinutes(30)->timestamp * 1000,
+                now()->timestamp * 1000
+            ])
+            ->where('holdtime', '>', 0)
+            ->where('calleeaccesse164', 'A'.$phone)
             ->orderByDesc('starttime')
             ->first();
         if($result)
@@ -1219,7 +1228,13 @@ class DK_Staff__CommonRepository {
         }
         else
         {
-            return false;
+            $order->api_is_pushed_to_vos_data = 9;
+            $bool = $order->save();
+
+            $return['error'] = 1;
+            $return['status'] = 9;
+            $return['result'] = '通话不存在！';
+            return $return;
         }
 
         $server = "http://101.37.119.163";
@@ -1246,10 +1261,6 @@ class DK_Staff__CommonRepository {
 //        dd($request_result);
 
 
-        $return = [];
-        $return['error'] = 0;
-        $return['status'] = 1;
-        $return['result'] = '';
 
         if(curl_errno($ch))
         {
@@ -1258,17 +1269,44 @@ class DK_Staff__CommonRepository {
             $return['error'] = 1;
             $return['status'] = 9;
             $return['result'] = 'curl推送失败！';
+
+            $order->api_is_pushed_to_vos_data = 19;
+            $bool = $order->save();
         }
         else
         {
             curl_close($ch);
-            dd($request_result);
 
-            $return['result'] = $request_result;
+            $result = json_decode($request_result,true);
+            if($result['code'] == 200)
+            {
+                $order->api_is_pushed_to_vos_data = 100;
+            }
+            else if($result['code'] == 401)
+            {
+                $order->api_is_pushed_to_vos_data = 71;
+            }
+            else if($result['code'] == 422)
+            {
+                $order->api_is_pushed_to_vos_data = 72;
+            }
+            else
+            {
+                $order->api_is_pushed_to_vos_data = 91;
+            }
+
+            $bool = $order->save();
+            if(!$bool)
+            {
+                $order->api_is_pushed_to_vos_data = 101;
+                $order->save();
+            }
+
+            $return['result'] = 'curl请求成功！';
+            $return['data'] = $request_result;
         }
 
         return $return;
-
 
     }
 

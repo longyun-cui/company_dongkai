@@ -159,7 +159,7 @@ class DK_AI_Inspect_Job implements ShouldQueue
                 $get_recording_data['client_phone'] = $order->client_phone;
                 $get_recording_data['published_date'] = $order->published_date;
 
-                $response = $this->commonRepository->o1__api__get_call_recording__from__by($get_recording_data);
+                $response = $this->commonRepository->o1__api__get_call_recording__from__OKCC($get_recording_data);
                 if($response['error'] == 0)
                 {
                     $order->recording_address_list = $response['recording_address_list'];

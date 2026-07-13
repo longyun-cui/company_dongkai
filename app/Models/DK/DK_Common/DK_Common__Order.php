@@ -104,6 +104,7 @@ class DK_Common__Order extends Model
         'field_9',
 
 
+        'api_is_pushed_to_vos_data',
         'api_is_pushed',
         'api_is_pushed_for_cpa',
 
