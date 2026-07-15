@@ -802,6 +802,7 @@ class DK_Staff__OrderRepository {
                     $import_list[$k]->inspected_at = null;
                     $import_list[$k]->published_at = null;
                     $import_list[$k]->api_is_pushed = 0;
+                    $import_list[$k]->api_is_pushed_to_vos_data = 0;
                     $import_list[$k]->api_is_pushed_for_cpa = 0;
                 }
 
