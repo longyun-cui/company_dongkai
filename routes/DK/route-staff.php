@@ -211,6 +211,7 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
 
     // 【工单】列表
     Route::post('/o1/order/order-list/datatable-query', $controller.'@o1__order__list__datatable_query');
+    Route::post('/o1/order/order-distribute-list/datatable-query', $controller.'@o1__order__distribute__list__datatable_query');
     Route::post('/o1/order/order-appealed-list/datatable-query', $controller.'@o1__order__appealed__list__datatable_query');
     // 【工单】创建&编辑
     Route::post('/o1/order/item-get', $controller.'@o1__order__item_get');

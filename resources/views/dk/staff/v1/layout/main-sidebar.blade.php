@@ -216,6 +216,27 @@
                     <span>口腔•工单</span>
                 </a>
             </li>
+            @if(in_array($me->staff_category,[0,1,9,71]))
+            <li class="treeview _none-">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="order-dental-distribute-list"
+                   data-title='口腔•可分发'
+                   data-content=''
+                   data-icon='<i class="fa fa-file-archive-o text-orange"></i>'
+
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-order-dental-distribute-list"
+                   data-datatable-target="order-dental-distribute-list"
+                   data-datatable-clone-object="order-dental-distribute-list-clone"
+                >
+                    <i class="fa fa-file-archive-o text-orange"></i>
+                    <span>口腔•可分发</span>
+                </a>
+            </li>
+            @endif
             <li class="treeview _none-">
                 <a class="tab-control datatable-control"
                    data-type="create"

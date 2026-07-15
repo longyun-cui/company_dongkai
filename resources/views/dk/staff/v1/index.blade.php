@@ -75,6 +75,7 @@
     {{--工单--}}
     @if(in_array($me->staff_category,[0,1,9]))
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list')
+        @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list--for--distribute')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list--for--appealed')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list--for--rejected')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list--for--different')
@@ -102,6 +103,7 @@
     @elseif($me->staff_category == 71)
 {{--        @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list--for--OD')--}}
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list')
+        @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list--for--distribute')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list--for--appealed')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list--for--rejected')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list--for--different')
@@ -344,6 +346,7 @@
 {{--    @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-edit-script')--}}
     @if(in_array($me->staff_category,[0,1,9]))
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--admin')
+        @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--distribute')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--appealed')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--rejected')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--different')
@@ -368,6 +371,7 @@
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-luxury.order-luxury-list-datatable--for--AD')
     @elseif(in_array($me->staff_category,[71]))
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--OD')
+        @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--distribute')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--appealed')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--rejected')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-list-datatable--for--different')

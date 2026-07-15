@@ -913,6 +913,10 @@ class DKStaffController extends Controller
     {
         return $this->order_repo->o1__order__list__datatable_query(request()->all());
     }
+    public function o1__order__distribute__list__datatable_query()
+    {
+        return $this->order_repo->o1__order__distribute__list__datatable_query(request()->all());
+    }
     public function o1__order__appealed__list__datatable_query()
     {
         return $this->order_repo->o1__order__appealed__list__datatable_query(request()->all());
