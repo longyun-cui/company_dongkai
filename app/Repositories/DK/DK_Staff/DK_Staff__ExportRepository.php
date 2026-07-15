@@ -4636,6 +4636,7 @@ class DK_Staff__ExportRepository {
         $query = DK_Common__Order::select('*')
             ->join('dk_common__delivery', 'dk_common__order.id', '=', 'dk_common__delivery.order_id')
             ->where('dk_common__order.order_category',1)
+            ->whereNull('dk_common__delivery.deleted_at')
             ->with([
                 'client_er'=>function($query) { $query->select('id','name'); },
                 'creator'=>function($query) { $query->select('id','name'); },
