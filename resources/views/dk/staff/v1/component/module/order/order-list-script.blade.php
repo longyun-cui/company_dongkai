@@ -21,6 +21,14 @@
             $modal.find('.box-title').html($title);
             $modal.find('.edit-submit').data('datatable-list-id',$table_id);
             $modal.find('.radio-btn').show();
+            if(window.team_api_exclusive_type == 99)
+            {
+                $modal.find('.recording-box').show();
+            }
+            else
+            {
+                $modal.find('.recording-box').hide();
+            }
             $modal.modal('show');
 
             $modal.find('input[name="client_phone"]').prop('readonly', false);
@@ -120,7 +128,28 @@
                         $modal.find('input[name="field_2"]').prop('checked', false);
                         $modal.find('input[name="field_2"][value="'+$response.data.field_2+'"]').prop('checked', true).trigger('change');
 
-                        $modal.find('input[name="recording_address"]').val($response.data.recording_address);
+                        if(window.team_api_exclusive_type == 99)
+                        {
+                            $modal.find('.recording-box').show();
+                        }
+                        else
+                        {
+                            $modal.find('.recording-box').hide();
+                        }
+                        if($response.data.recording_address_list)
+                        {
+
+                            var $recording_list = JSON.parse($response.data.recording_address_list);
+                            var $recording_list_html = '';
+                            $.each($recording_list, function(index, value)
+                            {
+                                var $audio_html = value;
+                                $recording_list_html += $audio_html;
+                            });
+                            $modal.find('input[name="recording_address"]').val($recording_list_html);
+                        }
+
+
                         $modal.find('textarea[name="description"]').val($response.data.description);
 
 

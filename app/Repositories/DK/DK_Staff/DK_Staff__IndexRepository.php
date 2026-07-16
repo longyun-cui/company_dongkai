@@ -118,6 +118,9 @@ class DK_Staff__IndexRepository {
     {
         $this->get_me();
         $me = $this->me;
+        $me->load([
+            'team_er'=>function($query){ $query->select('id','name','api_exclusive_type'); }
+        ]);
 
 //        if($me->id > 10000)
 //        {

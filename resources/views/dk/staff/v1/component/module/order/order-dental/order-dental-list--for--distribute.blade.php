@@ -48,6 +48,48 @@
             @endif
 
 
+            {{--客户类型--}}
+            <select class="search-filter form-filter filter-smd select2-box-c" name="order-client-type">
+                <option value="-1">客户类型</option>
+                @foreach(config('dk.common-config.dental_type') as $k => $v)
+                    <option value="{{ $k }}">{{ $v }}</option>
+                @endforeach
+            </select>
+
+
+            {{--审核结果--}}
+            <select class="search-filter form-filter filter-xl select2-box-c" name="order-inspected-result[]" multiple="multiple">
+                <option value="-1">审核结果</option>
+                @if($me->department_district_id <= 0)
+                    @foreach(config('dk.common-config.inspected_result') as $v)
+                        <option value="{{ $v }}">{{ $v }}</option>
+                    @endforeach
+                @else
+                    @foreach(config('dk.common-config.inspected_result_for_team') as $v)
+                        <option value="{{ $v }}">{{ $v }}</option>
+                    @endforeach
+                @endif
+            </select>
+            {{--审核结果--}}
+            @if(in_array($me->staff_category,[0,1,9,71]))
+                <select class="search-filter form-filter filter-xl select2-box-c" name="order-inspected-result-2[]" multiple="multiple">
+                    {{--<option value="-1">审核结果2</option>--}}
+                    @foreach(config('dk.common-config.inspected_result_2') as $v)
+                        <option value="{{ $v }}">{{ $v }}</option>
+                    @endforeach
+                </select>
+            @endif
+            {{--审核结果--}}
+            @if(in_array($me->staff_category,[51]))
+                <select class="search-filter form-filter filter-xl select2-box-c" name="order-inspected-result-2[]" multiple="multiple">
+                    {{--<option value="-1">审核结果2</option>--}}
+                    <option value="一档">一档</option>
+                    <option value="二档">二档</option>
+                    <option value="三档">三档</option>
+                </select>
+            @endif
+
+
             {{--城市--}}
             <select class="search-filter form-filter filter-smd select2-box-c select--location-city-c"
                     name="order-city"

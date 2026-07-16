@@ -2288,6 +2288,33 @@ class DK_Staff__OrderRepository {
 
         $this->get_me();
         $me = $this->me;
+        $me->load([
+            'team_er'=>function($query){ $query->select('id','name','api_exclusive_type'); }
+        ]);
+
+        if(isset($me->team_er) && $me->team_er->api_exclusive_type == 99)
+        {
+            $recording_address = $post_data["recording_address"];
+            if(!empty($recording_address))
+            {
+                $result = audioExists($recording_address);
+                if ($result['exists'])
+                {
+                    if($result['is_audio'])
+                    {
+                        $file = [];
+                        $file[] = $recording_address;
+                        unset($post_data["recording_address"]);
+                        $post_data["recording_address_list"] = json_encode($file);
+                        $post_data["created_source"] = 99;
+                    }
+                    else return response_error([],"录音地址指向不是音频文件！");
+                }
+                else return response_error([],"录音地址音频不存在！");
+            }
+            else return response_error([],"录音地址不能为空！");
+        }
+
 
         // 判断用户操作权限
 //        if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");

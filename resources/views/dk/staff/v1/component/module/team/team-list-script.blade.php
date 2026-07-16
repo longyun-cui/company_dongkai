@@ -110,6 +110,8 @@
                             $modal.find('#team-edit-select2-leader').append(new Option($response.data.leader.username, $response.data.leader_id, true, true)).trigger('change');
                         }
 
+                        $modal.find('select[name="api_exclusive_type"]').val($response.data.api_exclusive_type).trigger('change');
+
 
                         var $datatable_wrapper = $that.closest('.datatable-wrapper');
                         var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");

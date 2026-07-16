@@ -39,11 +39,16 @@
     @endif
 
     c = '{{ $me->team_id }}';
+    window.team_id = '{{ $me->team_id }}';
+    window.team_api_exclusive_type = '{{ isset($me->team_er) ? $me->team_er->api_exclusive_type : 0 }}';
+    console.log(window.team_api_exclusive_type);
+
 
     if(sessionStorage.getItem('session_unique_id'))
     {
         sessionStorage.setItem('session_unique_id',1);
     }
+
 
     (function ($) {
         $.getUrlParam = function (name) {

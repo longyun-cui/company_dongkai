@@ -893,6 +893,11 @@
                             }
                         }
 
+                        if(window.team_api_exclusive_type == 99)
+                        {
+                            $html_appeal = '';
+                            $html_detail = '';
+                        }
 
 
                         var $html =

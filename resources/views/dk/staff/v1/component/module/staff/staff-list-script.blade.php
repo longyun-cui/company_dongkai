@@ -136,6 +136,11 @@
                                 $modal.find('.okcc-box').hide();
                                 $modal.find('.lxy-box').show();
                             }
+                            else if($api_exclusive_type == 99)
+                            {
+                                $modal.find('.okcc-box').hide();
+                                $modal.find('.lxy-box').hide();
+                            }
                             else
                             {
                                 $modal.find('.okcc-box').show();
@@ -261,6 +266,11 @@
             {
                 $modal.find('.okcc-box').hide();
                 $modal.find('.lxy-box').show();
+            }
+            else if($api_exclusive_type == 99)
+            {
+                $modal.find('.okcc-box').hide();
+                $modal.find('.lxy-box').hide();
             }
             else
             {

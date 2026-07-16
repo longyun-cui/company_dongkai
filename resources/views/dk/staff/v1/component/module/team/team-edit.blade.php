@@ -248,9 +248,10 @@
                                 name="api_exclusive_type"
                                 data-modal="#modal--for--team-item-edit"
                         >
-                            <option value ="0">选择客服API专属类型</option>
-                            <option value ="1">OKCC</option>
-                            <option value ="11">励销云</option>
+                            <option value="0">选择客服API专属类型</option>
+                            <option value="1">OKCC</option>
+                            <option value="11">励销云</option>
+                            <option value="99">外部团队</option>
                         </select>
                     </div>
                 </div>

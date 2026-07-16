@@ -1399,6 +1399,58 @@ if(!function_exists('fixJsonStringWithKeys'))
 
 
 
+if(!function_exists('audioExists'))
+{
+    function audioExists($url)
+    {
+        $ch = curl_init($url);
+
+        // 设置 HEAD 请求
+        curl_setopt($ch, CURLOPT_NOBODY, true);  // 不获取正文
+        curl_setopt($ch, CURLOPT_HEADER, true);   // 获取响应头
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); // 跟随重定向
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 3);   // 最多重定向3次
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);    // 超时时间(秒)
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; AudioChecker/1.0)');
+
+        // 执行请求
+        curl_exec($ch);
+
+        // 获取 HTTP 状态码
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+
+        curl_close($ch);
+
+        // 判断条件
+        if ($httpCode == 200)
+        {
+            // 可选：验证是否为音频类型
+            $audioTypes = ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp4', 'audio/x-m4a'];
+            $isAudio = false;
+            foreach ($audioTypes as $type)
+            {
+                if (stripos($contentType, $type) !== false)
+                {
+                    $isAudio = true;
+                    break;
+                }
+            }
+
+            return [
+                'exists' => true,
+                'content_type' => $contentType,
+                'is_audio' => $isAudio
+            ];
+        }
+
+        return [
+            'exists' => false,
+            'http_code' => $httpCode
+        ];
+    }
+}
 
 
 //if(!function_exists('getClientIps'))
