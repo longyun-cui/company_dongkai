@@ -222,6 +222,7 @@
 
     {{--工单--}}
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-import--by-txt')
+    @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-import--for--outer')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-dental.order-dental-edit')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-aesthetic.order-aesthetic-edit')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order-luxury.order-luxury-edit')

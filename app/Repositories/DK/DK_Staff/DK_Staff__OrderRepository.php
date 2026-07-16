@@ -2216,8 +2216,8 @@ class DK_Staff__OrderRepository {
 //            'client_phone' => 'required|numeric',
 //            'client_intention' => 'required',
 //            'field_1' => 'required',
-//            'location_city' => 'required',
-//            'location_district' => 'required',
+            'location_city' => 'required',
+            'location_district' => 'required',
             'description' => 'required',
         ];
         $messages = [
@@ -2231,8 +2231,8 @@ class DK_Staff__OrderRepository {
 //            'client_phone.numeric' => '客户电话格式有误！',
 //            'client_type.required' => '请选择患者类型！',
 //            'client_intention.required' => '请选择客户意向！',
-//            'location_city.required' => '请选择城市！',
-//            'location_district.required' => '请选择行政区！',
+            'location_city.required' => '请选择城市！',
+            'location_district.required' => '请选择行政区！',
             'description.required' => '请输入通话小结！',
         ];
 
@@ -2376,6 +2376,23 @@ class DK_Staff__OrderRepository {
                 if(!$team_project) return response_error([],"部门没有【项目】权限，刷新页面重试！");
             }
         }
+
+
+
+
+        // 判断行政区与城市是否匹配
+        $city = DK_Common__Location::where('location_city',$post_data['location_city'])->first();
+        if($city)
+        {
+            $location_district_list = explode("-", $city->location_district);
+            if(!in_array($post_data['location_district'],$location_district_list))
+            {
+                return response_error([],"工单所选【区域】不存在！");
+            }
+        }
+        else return response_error([],"工单所选【城市】不存在！");
+
+
 
 
         // 启动数据库事务
@@ -2913,6 +2930,195 @@ class DK_Staff__OrderRepository {
 //            exit($e->getMessage());
             return response_fail([],$msg);
         }
+
+    }
+
+
+
+    // 【工单】保存-导入-数据
+    public function o1__order_dental__import__for__outer($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required',
+            'project_id.required' => '请选择项目！',
+            'project_id.numeric' => '选择项目参数有误！',
+            'project_id.min' => '请选择项目！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+//            'project_id' => 'required|numeric|min:1',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->staff_category,[0,1,9,41,71])) return response_error([],"你没有操作权限！");
+
+
+//        $project_id = $post_data['project_id'];
+
+        // 单文件
+        if(!empty($post_data["excel-file"]))
+        {
+
+//            $result = upload_storage($post_data["attachment"]);
+//            $result = upload_storage($post_data["attachment"], null, null, 'assign');
+            $result = upload_file_storage($post_data["excel-file"],null,'dk/unique/attachment','');
+            if($result["result"])
+            {
+//                $mine->attachment_name = $result["name"];
+//                $mine->attachment_src = $result["local"];
+//                $mine->save();
+                $attachment_file = storage_resource_path($result["local"]);
+
+                $data = Excel::load($attachment_file, function($reader) {
+
+//                  $reader->takeColumns(3);
+                    $reader->limitColumns(12);
+
+//                  $reader->takeRows(1000);
+                    $reader->limitRows(200);
+
+//                  $reader->ignoreEmpty();
+
+//                  $data = $reader->all();
+//                  $data = $reader->toArray();
+
+                })->get()->toArray();
+
+                $order_data = [];
+                foreach($data as $key => $value)
+                {
+                    if(is_numeric($value['client_phone']))
+                    {
+                        $temp_date['project_name'] = isset($value['project_name']) ? trim($value['project_name']) : '';
+                        if($temp_date['project_name'])
+                        {
+                            $project = DK_Common__Project::where('name',$temp_date['project_name'])->first();
+                            if($project) $temp_date['project_id'] = $project->id;
+                            else $temp_date['project_id'] = 0;
+                        }
+
+                        $temp_date['client_name'] = !empty($value['client_name']) ? trim($value['client_name']) : '';
+                        $temp_date['client_phone'] = $value['client_phone'];
+
+                        // 客户意愿
+                        if(!empty($value['client_intention']))
+                        {
+                            $client_intention = trim($value['client_intention']);
+                            if(array_key_exists($client_intention,config('dk.common-config.client_intention')))
+                            {
+                                $temp_date['client_intention'] = $client_intention;
+                            }
+                            else $temp_date['client_intention'] = 'B类';
+                        }
+                        else  $temp_date['client_intention'] = 'B类';
+
+                        // 类型
+                        if(!empty($value['client_type']))
+                        {
+                            $client_type = trim($value['client_type']);
+                            $key = array_search($client_type, config('dk.common-config.dental_type'));
+                            if($key) $temp_date['client_type'] = $key;
+                            else $temp_date['client_type'] = 1;
+                        }
+                        else $temp_date['client_type'] = 1;
+
+                        // 牙齿数量
+                        if(!empty($value['teeth_count']))
+                        {
+                            $teeth_count = trim($value['teeth_count']);
+                            $key = array_search($teeth_count, config('dk.common-config.teeth_count'));
+                            if($key) $temp_date['teeth_count'] = $key;
+                            else $temp_date['teeth_count'] = 1;
+                        }
+                        else $temp_date['teeth_count'] = 1;
+
+
+                        $temp_date['location_city'] = !empty($value['location_city']) ? trim($value['location_city']) : '';
+                        $temp_date['location_district'] = !empty($value['location_district']) ? trim($value['location_district']) : '';
+
+                        $recording_address = !empty($value['recording_address']) ? trim($value['recording_address']) : '';
+                        if($recording_address)
+                        {
+                            $file = [];
+                            $file[] = $recording_address;
+                            $temp_date["recording_address_list"] = json_encode($file);
+                        }
+                        else $temp_date['recording_address_list'] = null;
+
+                        $temp_date['description'] = !empty($value['description']) ? trim($value['description']) : '';
+
+                        $order_data[] = $temp_date;
+                    }
+                }
+
+                // 启动数据库事务
+                DB::beginTransaction();
+                try
+                {
+                    foreach($order_data as $key => $value)
+                    {
+                        $order = new DK_Common__Order;
+
+                        $order->order_category = 1;
+                        $order->creator_id = $me->id;
+                        $order->created_type = 1;
+                        $order->created_source = 99;
+
+                        $order->creator_company_id = $me->company_id;
+                        $order->creator_department_id = $me->department_id;
+                        $order->creator_team_id = $me->team_id;
+                        $order->creator_team_group_id = $me->team_group_id;
+
+//                        $order->inspected_status = 1;
+//                        $order->inspected_result = '通过';
+
+                        $order->project_id = $value['project_id'];
+
+                        $order->client_name = $value['client_name'];
+                        $order->client_phone = $value['client_phone'];
+
+                        $order->client_intention = $value['client_intention'];
+                        $order->client_type = $value['client_type'];
+                        $order->field_1 = $value['teeth_count'];  // 牙齿数量
+
+                        $order->work_shift = 1;
+
+                        $order->location_city = $value['location_city'];
+                        $order->location_district = $value['location_district'];
+
+                        $order->recording_address_list = $value['recording_address_list'];
+                        $order->description = $value['description'];
+
+
+//                        $order->is_published = 1;
+//                        $order->published_at = time();
+
+                        $bool = $order->save();
+                        if(!$bool) throw new Exception("DK_Common__Order--insert--fail");
+                    }
+
+                    DB::commit();
+                    return response_success(['count'=>count($order_data)]);
+                }
+                catch (Exception $e)
+                {
+                    DB::rollback();
+                    $msg = '操作失败，请重试！';
+                    $msg = $e->getMessage();
+//                    exit($e->getMessage());
+                    return response_fail([],$msg);
+                }
+            }
+            else return response_error([],"upload--attachment--fail");
+        }
+        else return response_error([],"清选择Excel文件！");
+
 
     }
 
@@ -3768,6 +3974,17 @@ class DK_Staff__OrderRepository {
         {
             return response_error([],"工单所选【城市】与项目所在城市不匹配！");
         }
+        // 判断行政区与城市是否匹配
+        $city = DK_Common__Location::where('location_city',$item->location_city)->first();
+        if($city)
+        {
+            $location_district_list = explode("-", $city->location_district);
+            if(!in_array($item->location_district,$location_district_list))
+            {
+                return response_error([],"工单所选【区域】不存在！");
+            }
+        }
+        else return response_error([],"工单所选【城市】不存在！");
 
 
         $is_today_repeat = DK_Common__Order::where(['client_phone'=>$client_phone])

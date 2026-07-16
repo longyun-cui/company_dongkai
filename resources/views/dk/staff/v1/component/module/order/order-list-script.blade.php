@@ -544,14 +544,118 @@
 
 
 
+        // 【工单】导入
+        $(".excel-file-upload").fileinput({
+            allowedFileExtensions : [ 'xls', 'xlsx' ],
+            showUpload: false
+        });
+        // 【工单】导入-显示
+        $(".main-wrapper").on('click', ".modal-show--for--order--import--for--outer", function() {
+            var $that = $(this);
+            var $form_id = $that.data('form-id');
+            var $modal_id = $that.data('modal-id');
+            var $title = $that.data('title');
+
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+
+            form_reset('#'+$form_id);
+
+            var $modal = $('#'+$modal_id);
+            $modal.find('input[name="operate[type]"]').val('import');
+            $modal.find('input[name="operate[id]"]').val(0);
+            $modal.find('.box-title').html($title);
+            $modal.find('.edit-submit').data('datatable-list-id',$table_id);
+            $modal.modal('show');
+        });
+        // 【工单】导入-提交
+        // 【工单】编辑-提交
+        $(".main-wrapper").on('click', "#submit--for--order--import--for--outer", function() {
+            var $that = $(this);
+
+            var $table_id = $that.data('datatable-list-id');
+            var $table = $('#'+$table_id);
+
+            var $modal_id = 'modal--for--order--import--for--outer';
+            // var $modal_id = $that.data('modal-id');
+            var $modal = $("#"+$modal_id);
+
+            var $form_id = 'form--for--order--import--for--outer';
+            // var $form_id = $that.data('form-id');
+            var $form = $("#"+$form_id);
+
+            var $index = layer.load(1, {
+                shade: [0.3, '#fff'],
+                content: '<span class="loadtip">正在提交</span>',
+                success: function (layer) {
+                    layer.find('.layui-layer-content').css({
+                        'padding-top': '40px',
+                        'width': '100px',
+                    });
+                    layer.find('.loadtip').css({
+                        'font-size':'20px',
+                        'margin-left':'-18px'
+                    });
+                }
+            });
+
+            var options = {
+                url: "{{ url('/o1/order/order-dental/import--for--outer') }}",
+                type: "post",
+                dataType: "json",
+                // target: "#div2",
+                // clearForm: true,
+                // restForm: true,
+                success: function ($response, status, xhr, $form) {
+                    // 请求成功时的回调
+                    console.log('#'+$that.attr('id')+'.form.ajaxSubmit.success.');
+
+                    if(!$response.success)
+                    {
+                        layer.msg($response.msg);
+                    }
+                    else
+                    {
+                        layer.msg($response.msg);
+                        layer.msg("添加" + $response.data.count + "条数据！");
+
+                        // 重置输入框
+                        // form_reset('#'+$form_id);
+                        $form.find(".fileinput-remove-button").click();
+
+                        $modal.modal('hide').on("hidden.bs.modal", function () {
+                            $("body").addClass("modal-open");
+                        });
+
+                        $('#'+$table_id).DataTable().ajax.reload(null,false);
+                    }
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown, $form) {
+                    // 请求失败时的回调
+                    // console.log(XMLHttpRequest);
+                    // console.log(textStatus);
+                    // console.log(errorThrown);
+                    console.log('#'+$that.attr('id')+'.form.ajaxSubmit.error.');
+                    layer.closeAll('loading');
+                },
+                complete: function(jqXHR, textStatus, $form) {
+                    // 无论成功或失败都会执行的回调
+                    // console.log(jqXHR);
+                    // console.log(textStatus);
+                    console.log('#'+$that.attr('id')+'.form.ajaxSubmit.complete');
+                    layer.closeAll('loading');
+                }
+            };
+            $form.ajaxSubmit(options);
+        });
 
 
+        // 【工单】去重导入
         $(".txt-file-upload").fileinput({
             allowedFileExtensions : [ 'txt' ],
             showUpload: false
         });
-
-        // 【工单】导入-显示
+        // 【工单】去重导入-显示
         $(".main-wrapper").on('click', ".modal-show--for--order--import--by-txt", function() {
             var $that = $(this);
             var $form_id = $that.data('form-id');
@@ -566,8 +670,7 @@
             $modal.find('.box-title').html($title);
             $modal.modal('show');
         });
-        // 【工单】导入-提交
-        // 【工单】编辑-提交
+        // 【工单】去重导入-提交
         $(".main-wrapper").on('click', "#submit--for--order--import--by-txt", function() {
             var $that = $(this);
 
@@ -646,6 +749,7 @@
             };
             $form.ajaxSubmit(options);
         });
+
 
 
 

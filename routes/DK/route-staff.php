@@ -220,6 +220,8 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
     Route::post('/o1/order/order-aesthetic/item-save', $controller.'@o1__order_aesthetic__item_save');
     Route::post('/o1/order/order-luxury/item-save', $controller.'@o1__order_dental__item_save');
     // 【工单】导入
+    Route::post('/o1/order/order-dental/import--for--outer', $controller.'@o1__order_dental__import__for__outer');
+    // 【工单】去重导入
     Route::post('/o1/order/import--by-txt', $controller.'@o1__order__import__by_txt');
     // 【工单】删除 & 恢复 & 永久删除
     Route::post('/o1/order/item-delete', $controller.'@o1__order__item_delete');

@@ -237,6 +237,7 @@
                 </a>
             </li>
             @endif
+            @if(isset($me->team_er) && $me->team_er->api_exclusive_type != 99)
             <li class="treeview _none-">
                 <a class="tab-control datatable-control"
                    data-type="create"
@@ -256,6 +257,7 @@
                     <span>口腔•拒单</span>
                 </a>
             </li>
+            @endif
             @if(
                 (in_array($me->staff_category,[0,1,9,71]) && in_array($me->staff_position,[0,1,9,11,31,41,61,99]))
                 || (in_array($me->staff_category,[41]) && in_array($me->staff_position,[0,1,9,11,31]))
@@ -328,6 +330,7 @@
 
 
             {{--医美•工单列表--}}
+            @if(isset($me->team_er) && $me->team_er->api_exclusive_type != 99)
             <li class="treeview _none-">
                 <a class="tab-control datatable-control"
                    data-type="create"
@@ -346,6 +349,7 @@
                     <span>医美•工单</span>
                 </a>
             </li>
+            @endif
             {{--医美•交付列表--}}
             @if(in_array($me->staff_category,[0,1,9,71]))
             <li class="treeview">
@@ -370,6 +374,7 @@
 
 
             {{--奢侈品•工单列表--}}
+            @if(isset($me->team_er) && $me->team_er->api_exclusive_type != 99)
             <li class="treeview _none-">
                 <a class="tab-control datatable-control"
                    data-type="create"
@@ -388,6 +393,7 @@
                     <span>奢侈品•工单</span>
                 </a>
             </li>
+            @endif
             {{--奢侈品•交付列表--}}
             @if(in_array($me->staff_category,[0,1,9,71]))
             <li class="treeview _none-">

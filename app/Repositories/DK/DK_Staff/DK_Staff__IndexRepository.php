@@ -452,9 +452,18 @@ class DK_Staff__IndexRepository {
     {
 //        $this->get_me();
 
+
+        $cdr = new VOS_Cdr();
+        $cdr->setConnectionName('mysql_vos_2');
+        $cdr->setTableName('e_cdr_' . date('Ymd'));
+
+        $result = $cdr->select('*')->count();
+        dd($result);
+
+
         $id = $post_data['id'];
-        DK_Push_Oder_to_Vos_Data_Job::dispatch($id);
-//        $response = $this->commonRepository->o1__api__push__entry_order__to__vos_data($id);
+//        DK_Push_Oder_to_Vos_Data_Job::dispatch($id);
+        $response = $this->commonRepository->o1__api__push__entry_order__to__vos_data($id);
 //        dd($response);
 
 

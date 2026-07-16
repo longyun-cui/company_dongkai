@@ -967,6 +967,13 @@ class DKStaffController extends Controller
 
 
     // 【工单】导入
+    public function o1__order_dental__import__for__outer()
+    {
+        return $this->order_repo->o1__order_dental__import__for__outer(request()->all());
+    }
+
+
+    // 【工单】去重导入
     public function o1__order__import__by_txt()
     {
         return $this->order_repo->o1__order__import__by_txt(request()->all());

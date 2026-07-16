@@ -10,7 +10,7 @@
 
         <div class=" pull-left">
 
-            @if(in_array($me->user_type,[0,1,9,11,19]))
+            @if(in_array($me->user_category,[0,1,9,11,41]))
                 <button type="button" onclick="" class="btn btn-filter btn-success modal-show--for--order--item-create"
                         data-form-id="form--for--order-dental--item-edit"
                         data-modal-id="modal--for--order-dental--item-edit"
@@ -18,6 +18,15 @@
                 >
                     <i class="fa fa-plus"></i> 添加
                 </button>
+                @if(isset($me->team_er) && $me->team_er->api_exclusive_type == 99)
+                <button type="button" onclick="" class="btn btn-filter btn-success modal-show--for--order--import--for--outer"
+                        data-form-id="form--for--order--import--for--outer"
+                        data-modal-id="modal--for--order--import--for--outer"
+                        data-title="导入【口腔】工单"
+                >
+                    <i class="fa fa-plus"></i> 导入
+                </button>
+                @endif
             @endif
             <button type="button" onclick="" class="btn btn-default btn-filter _none"><i class="fa fa-play"></i> 启用</button>
             <button type="button" onclick="" class="btn btn-default btn-filter _none"><i class="fa fa-stop"></i> 禁用</button>
