@@ -2304,7 +2304,6 @@ class DK_Staff__OrderRepository {
                     {
                         $file = [];
                         $file[] = $recording_address;
-                        unset($post_data["recording_address"]);
                         $post_data["recording_address_list"] = json_encode($file);
                         $post_data["created_source"] = 99;
                     }
@@ -2402,6 +2401,7 @@ class DK_Staff__OrderRepository {
             unset($mine_data['operate_id']);
             unset($mine_data['operate_category']);
             unset($mine_data['operate_type']);
+            unset($mine_data["recording_address"]);
 
             // 版本2 api推送数据需先编辑转为人工单
             if($operate_type == 'edit')
