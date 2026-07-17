@@ -2300,14 +2300,14 @@ class DK_Staff__OrderRepository {
                 $result = audioExists($recording_address);
                 if ($result['exists'])
                 {
-                    if($result['is_audio'])
-                    {
+//                    if($result['is_audio'])
+//                    {
                         $file = [];
                         $file[] = $recording_address;
                         $post_data["recording_address_list"] = json_encode($file);
                         $post_data["created_source"] = 99;
-                    }
-                    else return response_error([],"录音地址指向不是音频文件！");
+//                    }
+//                    else return response_error([],"录音地址指向不是音频文件！");
                 }
                 else return response_error([],"录音地址音频不存在！");
             }
