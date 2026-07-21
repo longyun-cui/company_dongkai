@@ -4792,6 +4792,10 @@ class DK_Staff__OrderRepository {
 
                         $bool_ai = $ai_inspected->fill($ai_data)->save();
                         if(!$bool_ai) throw new Exception("DK_Common__Order__AI_Inspected__Record--insert--fail");
+
+                        $item->ai_inspected_status = 1;
+                        $bool = $item->save();
+                        if(!$bool) throw new Exception("DK_Common__Order--update--fail");
                     }
                 }
             }
