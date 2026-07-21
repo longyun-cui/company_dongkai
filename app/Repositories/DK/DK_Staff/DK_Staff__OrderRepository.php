@@ -4567,6 +4567,7 @@ class DK_Staff__OrderRepository {
         if($me->staff_category == 41 && in_array($me->staff_position,[41,51,61,71,99]))
         {
             // 客服团队不可编辑
+            return response_error([],"客服团队不可编辑！");
         }
         else
         {
@@ -4582,10 +4583,24 @@ class DK_Staff__OrderRepository {
             }
         }
 
+        if($item->project_id != $project_id)
+        {
+            $project_old = DK_Common__Project::find($item->project_id);
+            if(!$project_old) return response_error([],"工单所在项目不存在！");
+            $project_new = DK_Common__Project::find($project_id);
+            if(!$project_new) return response_error([],"所选项目不存在，请刷新重试！");
+            if($project_old->location_city != $project_new->location_city)
+            {
+                return response_error([],"所选项目必须与原项目在同一城市！");
+            }
+        }
+
         // 是否重复
+        $is_repeat = 0;
         if($me->staff_category == 41 && in_array($me->staff_position,[41,51,61,71,99]))
         {
             // 客服团队不可编辑
+            return response_error([],"客服团队不可编辑！");
         }
         else
         {
@@ -4616,6 +4631,7 @@ class DK_Staff__OrderRepository {
                 $record_content[] = $record_row;
             }
         }
+        if($is_repeat > 0) return response_error([],"该项目已经交付过了！");
 
         if($item->order_category == 1)
         {
@@ -4752,6 +4768,31 @@ class DK_Staff__OrderRepository {
             }
 
             DB::commit();
+
+            // 是否重复
+            if($item->project_id != $project_id)
+            {
+                if($item->inspected_status != 1)
+                {
+
+                    $project_new = DK_Common__Project::find($project_id);
+                    if($project_new && $project_new->is_automatic_ai_inspecting == 1)
+                    {
+
+                        $ai_inspected = new DK_Common__Order__AI_Inspected__Record;
+                        $ai_data['created_date'] = $date;
+                        $ai_data['item_status'] = 1;
+                        $ai_data['order_id'] = $id;
+
+                        $bool_ai = $ai_inspected->fill($ai_data)->save();
+                        if(!$bool_ai) throw new Exception("DK_Common__Order__AI_Inspected__Record--insert--fail");
+                        else
+                        {
+                            DK_AI_Inspect_Job::dispatch($ai_inspected->id);
+                        }
+                    }
+                }
+            }
 
             return response_success([],"编辑成功!");
         }
@@ -5093,7 +5134,21 @@ class DK_Staff__OrderRepository {
             $record_content[] = $record_row;
         }
 
+
+        // 项目选择
+        if($item->project_id != $project_id)
+        {
+            $project_old = DK_Common__Project::find($item->project_id);
+            if(!$project_old) return response_error([],"工单所在项目不存在！");
+            $project_new = DK_Common__Project::find($project_id);
+            if(!$project_new) return response_error([],"所选项目不存在，请刷新重试！");
+            if($project_old->location_city != $project_new->location_city)
+            {
+                return response_error([],"所选项目必须与原项目在同一城市！");
+            }
+        }
         // 是否重复
+        $is_repeat = 0;
         if($item->project_id != $project_id || $item->client_phone != $client_phone)
         {
             $is_repeat = DK_Common__Order::where(['delivered_project_id'=>$project_id,'client_phone'=>$client_phone])
@@ -5119,6 +5174,8 @@ class DK_Staff__OrderRepository {
             $record_row['after'] = (($is_repeat) ? '是' : '否');
             $record_content[] = $record_row;
         }
+        if($is_repeat > 0) return response_error([],"该项目已经交付过了！");
+
 
         if($item->order_category == 1)
         {

@@ -349,6 +349,12 @@
                         }
                     },
                     render: function(data, type, row, meta) {
+                        if(row.created_type == 9)
+                        {
+                            if(row.delivered_project_er) return '<a href="javascript:void(0);">'+row.delivered_project_er.name+'</a>';
+                            else return '--';
+                        }
+
                         if(row.project_er == null)
                         {
                             return '未指定';

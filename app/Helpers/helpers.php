@@ -1452,6 +1452,31 @@ if(!function_exists('audioExists'))
     }
 }
 
+if(!function_exists('isAudioStreamPage'))
+{
+    function isAudioStreamPage($url)
+    {
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_NOBODY => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => true,
+            CURLOPT_TIMEOUT => 8,
+            CURLOPT_FOLLOWLOCATION => true,
+        ]);
+
+        $response = curl_exec($ch);
+        $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+        curl_close($ch);
+
+        return stripos($contentType, 'audio/') === 0;
+    }
+}
+
+
+
+
+
 
 //if(!function_exists('getClientIps'))
 //{

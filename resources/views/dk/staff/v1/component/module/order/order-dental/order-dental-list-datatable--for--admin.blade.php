@@ -724,7 +724,7 @@
                     "width": "160px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(!(row.is_published == 1) || (row.inspected_result == "二次待审"))
+                        if(!(row.is_published == 1))
                         {
                             $(nTd).attr('data-row-index',iRow);
 
@@ -751,6 +751,12 @@
                         }
                     },
                     render: function(data, type, row, meta) {
+                        if(row.created_type == 9)
+                        {
+                            if(row.delivered_project_er) return '<a href="javascript:void(0);">'+row.delivered_project_er.name+'</a>';
+                            else return '--';
+                        }
+
                         if("{{ in_array($me->user_type,[0,1,11,61,66]) }}")
                         {
                             if(row.project_er == null)
