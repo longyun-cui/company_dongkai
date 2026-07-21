@@ -3972,7 +3972,7 @@ class DK_Staff__OrderRepository {
         // 判断项目与城市是否匹配
         if($project->location_city != $item->location_city)
         {
-            return response_error([],"工单所选【城市】与项目所在城市不匹配！");
+            return response_error([],"工单所选【城市】与项目所在【城市】不匹配！");
         }
         // 判断行政区与城市是否匹配
         $city = DK_Common__Location::where('location_city',$item->location_city)->first();
@@ -4583,15 +4583,21 @@ class DK_Staff__OrderRepository {
             }
         }
 
+        // 更改项目
         if($item->project_id != $project_id)
         {
-            $project_old = DK_Common__Project::find($item->project_id);
-            if(!$project_old) return response_error([],"工单所在项目不存在！");
+//            $project_old = DK_Common__Project::find($item->project_id);
+//            if(!$project_old) return response_error([],"工单所在项目不存在！");
             $project_new = DK_Common__Project::find($project_id);
             if(!$project_new) return response_error([],"所选项目不存在，请刷新重试！");
-            if($project_old->location_city != $project_new->location_city)
+//            if($project_old->location_city != $project_new->location_city)
+//            {
+//                return response_error([],"所选项目必须与原项目在同一城市！");
+//            }
+            // 判断项目与城市是否匹配
+            if($project_new->location_city != $location_city)
             {
-                return response_error([],"所选项目必须与原项目在同一城市！");
+                return response_error([],"工单所选【城市】与项目所在【城市】不匹配！");
             }
         }
 
@@ -5135,16 +5141,21 @@ class DK_Staff__OrderRepository {
         }
 
 
-        // 项目选择
+        // 更改项目
         if($item->project_id != $project_id)
         {
-            $project_old = DK_Common__Project::find($item->project_id);
-            if(!$project_old) return response_error([],"工单所在项目不存在！");
+//            $project_old = DK_Common__Project::find($item->project_id);
+//            if(!$project_old) return response_error([],"工单所在项目不存在！");
             $project_new = DK_Common__Project::find($project_id);
             if(!$project_new) return response_error([],"所选项目不存在，请刷新重试！");
-            if($project_old->location_city != $project_new->location_city)
+//            if($project_new->location_city != $project_new->location_city)
+//            {
+//                return response_error([],"所选项目必须与原项目在同一城市！");
+//            }
+            // 判断项目与城市是否匹配
+            if($project_new->location_city != $location_city)
             {
-                return response_error([],"所选项目必须与原项目在同一城市！");
+                return response_error([],"工单所选【城市】与项目所在【城市】不匹配！");
             }
         }
         // 是否重复
