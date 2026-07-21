@@ -4434,6 +4434,8 @@ class DK_Staff__OrderRepository {
         $item = DK_Common__Order::withTrashed()->find($id);
         if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
 
+        $project_pre_id = $item->project_id;
+
         $this->get_me();
         $me = $this->me;
         if(!in_array($me->staff_category,[0,1,41,51,61,71]))
@@ -4773,14 +4775,12 @@ class DK_Staff__OrderRepository {
                 if(!$bool_1) throw new Exception("DK_Common__Order__Operation_Record--insert--fail");
             }
 
-            DB::commit();
 
             // 是否重复
-            if($item->project_id != $project_id)
+            if($project_pre_id != $project_id)
             {
                 if($item->inspected_status != 1)
                 {
-
                     $project_new = DK_Common__Project::find($project_id);
                     if($project_new && $project_new->is_automatic_ai_inspecting == 1)
                     {
@@ -4792,12 +4792,15 @@ class DK_Staff__OrderRepository {
 
                         $bool_ai = $ai_inspected->fill($ai_data)->save();
                         if(!$bool_ai) throw new Exception("DK_Common__Order__AI_Inspected__Record--insert--fail");
-                        else
-                        {
-                            DK_AI_Inspect_Job::dispatch($ai_inspected->id);
-                        }
                     }
                 }
+            }
+
+            DB::commit();
+
+            if(isset($ai_inspected))
+            {
+                DK_AI_Inspect_Job::dispatch($ai_inspected->id);
             }
 
             return response_success([],"编辑成功!");
