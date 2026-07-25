@@ -237,10 +237,6 @@
             <input type="text" class="search-filter filter-lg form-filter" name="order--bulk-export--delivered-description" placeholder="交付说明">
 
 
-            <button type="button" class="btn btn-default btn-filter order--bulk-delivering--summit">
-                <i class="fa fa-share"></i> 批量·交付
-            </button>
-
             <button type="button" class="btn btn-default btn-filter order--bulk-distributing--summit">
                 <i class="fa fa-share"></i> 批量·分发
             </button>

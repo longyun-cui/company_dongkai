@@ -777,9 +777,11 @@
 
 
                 <!-- Control Sidebar Toggle Button -->
-                <li class="_none">
-                    <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-                </li>
+                @if($me->staff_category == 41)
+                    <li class="_none-">
+                        <a href="#" data-toggle="control-sidebar"><i class="fa fa-cube"></i> 项目要求</a>
+                    </li>
+                @endif
 
 
             </ul>

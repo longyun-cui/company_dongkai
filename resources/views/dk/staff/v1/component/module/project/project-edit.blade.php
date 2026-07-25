@@ -183,6 +183,15 @@
 {{--                </div>--}}
 
 
+                {{--要求--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">要求</label>
+                    <div class="col-md-9 ">
+                        <textarea class="form-control" name="requirement" rows="5" cols="100%"></textarea>
+                    </div>
+                </div>
+
+
                 <div class="form-group form-type">
                     <label class="control-label col-md-2">是否允许分发</label>
                     <div class="col-md-9">

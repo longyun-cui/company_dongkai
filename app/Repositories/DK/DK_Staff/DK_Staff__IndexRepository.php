@@ -313,7 +313,7 @@ class DK_Staff__IndexRepository {
 
 
         // 项目
-        $project_query = DK_Common__Project::select('id','name')
+        $project_query = DK_Common__Project::select('id','name','requirement')
             ->where('active',1)
             ->where('item_status',1);
         // 客服部

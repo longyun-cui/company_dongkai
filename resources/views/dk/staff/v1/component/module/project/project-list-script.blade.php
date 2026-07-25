@@ -3,6 +3,22 @@
 
 
         // 【项目】添加-显示
+        $(".main-wrapper").on('click', ".modal-show--for--project--item-detail", function() {
+            var $that = $(this);
+            var $modal_id = $that.data('modal-id');
+            var $name = $that.data('name');
+            var $requirement = $that.data('requirement');
+
+
+            var $modal = $('#'+$modal_id);
+            $modal.find('.box-title').html($name);
+            $modal.find('.project-name').html($name);
+            $modal.find('.project-requirement').html($requirement);
+            $modal.modal('show');
+        });
+
+
+        // 【项目】添加-显示
         $(".main-wrapper").on('click', ".modal-show--for--project-item-create", function() {
             var $that = $(this);
             var $form_id = $that.data('form-id');
@@ -95,6 +111,8 @@
                         $modal.find('textarea[name="ai_prompt"]').val($response.data.ai_prompt);
 
                         $modal.find('textarea[name="description"]').val($response.data.description);
+
+                        $modal.find('textarea[name="requirement"]').val($response.data.requirement);
 
                         // 是否允许分发
                         $modal.find('input[name="is_distributive"]').prop('checked', false);

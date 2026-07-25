@@ -5263,7 +5263,7 @@ class DK_Staff__StatisticRepository {
         foreach ($list as $k => $v)
         {
 
-            if(in_array($me->user_type,[0,1,11,61,66,71,77]) && $me->team_id <= 0)
+            if(in_array($me->staff_category,[0,1,11,71]) && $me->team_id <= 0)
             {
                 if($v['alias_name']) $list[$k]['name'] .= ' ('.$v['alias_name'].')';
             }

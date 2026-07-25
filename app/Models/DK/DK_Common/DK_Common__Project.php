@@ -31,6 +31,8 @@ class DK_Common__Project extends Model
         'is_distributive',
         'daily_goal',
 
+        'requirement',
+
         'inspecting_method',
 
         'is_automatic_ai_converting',
