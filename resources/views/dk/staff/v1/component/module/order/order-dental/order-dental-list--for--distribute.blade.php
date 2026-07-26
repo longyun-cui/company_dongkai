@@ -180,25 +180,6 @@
             </button>
 
 
-            @if(in_array($me->staff_position,[0,1,9,31]))
-            <button type="button" onclick="" class="btn btn-default btn-filter order--bulk-ai-convert-summit" data-order-category="1">
-                <i class="fa fa-download"></i> 批量·AI转文字
-            </button>
-            @endif
-
-
-            @if(in_array($me->staff_position,[0,1,9,31]))
-            <button type="button" onclick="" class="btn btn-default btn-filter order--bulk-ai-inspect-summit" data-order-category="1">
-                <i class="fa fa-download"></i> 批量·AI质检
-            </button>
-            @endif
-
-
-            <button type="button" class="btn btn-default btn-filter order--bulk-delivering-summit--by-fool">
-                <i class="fa fa-share"></i> 批量·一键交付
-            </button>
-
-
             {{--交付项目--}}
             <select class="search-filter form-filter filter-lg select2-box-c select2--project-c-"
                     name="order--bulk-export--delivered-project"
