@@ -863,10 +863,10 @@ class DK_Staff__CommonRepository {
         }
         else if($serverFrom_name == "fnj-call-02")
         {
-//            $server = "http://call02.fnjcall.cn";
-//            $url = "http://call02.fnjcall.cn/openapi/V2.0.6/getCdrList";
-            $server = "http://47.116.66.111/recordFile/listen?key=";
-            $url = "http://47.116.66.111/openapi/V2.0.6/getCdrList";
+            $server = "http://call02.fnjcall.cn";
+            $url = "http://call02.fnjcall.cn/openapi/V2.0.6/getCdrList";
+//            $server = "http://47.116.33.6/recordFile/listen?key=";
+//            $url = "http://47.116.33.6/openapi/V2.0.6/getCdrList";
         }
         else if($serverFrom_name == "call-01")
         {
@@ -1040,10 +1040,10 @@ class DK_Staff__CommonRepository {
         }
         else if($serverFrom_name == "fnj-call-02")
         {
-//            $server = "http://call02.fnjcall.cn/recordFile/listen?key=";
-//            $url = "http://call02.fnjcall.cn/openapi/V2.0.6/getCdrList";
-            $server = "http://47.116.66.111/recordFile/listen?key=";
-            $url = "http://47.116.66.111/openapi/V2.0.6/getCdrList";
+            $server = "http://call02.fnjcall.cn/recordFile/listen?key=";
+            $url = "http://call02.fnjcall.cn/openapi/V2.0.6/getCdrList";
+//            $server = "http://47.116.33.6/recordFile/listen?key=";
+//            $url = "http://47.116.33.6/openapi/V2.0.6/getCdrList";
         }
         else if($serverFrom_name == "call-01")
         {

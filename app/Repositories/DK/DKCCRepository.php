@@ -3291,17 +3291,17 @@ class DKCCRepository {
         }
         else if($mine->serverFrom_name == "fnj-call-01")
         {
-//            $server = "http://call01.fnjcall.cn";
-//            $url = "http://call01.fnjcall.cn/openapi/V2.0.6/getCdrList";
-            $server = "http://47.116.66.111";
-            $url = "http://47.116.66.111/openapi/V2.0.6/getCdrList";
+            $server = "http://call01.fnjcall.cn";
+            $url = "http://call01.fnjcall.cn/openapi/V2.0.6/getCdrList";
+//            $server = "http://47.116.66.111";
+//            $url = "http://47.116.66.111/openapi/V2.0.6/getCdrList";
         }
         else if($mine->serverFrom_name == "fnj-call-02")
         {
-//            $server = "http://call02.fnjcall.cn";
-//            $url = "http://call02.fnjcall.cn/openapi/V2.0.6/getCdrList";
-            $server = "http://47.116.66.111";
-            $url = "http://47.116.66.111/openapi/V2.0.6/getCdrList";
+            $server = "http://call02.fnjcall.cn";
+            $url = "http://call02.fnjcall.cn/openapi/V2.0.6/getCdrList";
+//            $server = "http://47.116.33.6";
+//            $url = "http://47.116.33.6/openapi/V2.0.6/getCdrList";
         }
         else if($mine->serverFrom_name == "call-01")
         {
@@ -23091,14 +23091,14 @@ EOF;
         else if($serverFrom == "fnj-call-01")
         {
             $serverFrom_id = 101;
+//            $server_http = 'http://47.116.66.111';
             $server_http = 'http://call01.fnjcall.cn';
-            $server_http = 'http://47.116.66.111';
         }
         else if($serverFrom == "fnj-call-02")
         {
             $serverFrom_id = 102;
+//            $server_http = 'http://47.116.33.6';
             $server_http = 'http://call02.fnjcall.cn';
-            $server_http = 'http://47.116.66.111';
         }
         else if($serverFrom == 'call-01')
         {
@@ -23334,11 +23334,13 @@ EOF;
         {
             $serverFrom_id = 101;
             $server_http = 'http://47.116.66.111';
+            $server_http = 'http://call01.fnjcall.cn';
         }
         else if($serverFrom == 'fnj-call-02')
         {
             $serverFrom_id = 102;
-            $server_http = 'http://47.116.66.111';
+            $server_http = 'http://47.116.33.6';
+            $server_http = 'http://call02.fnjcall.cn';
         }
         else if($serverFrom == 'call-01')
         {
@@ -23749,10 +23751,12 @@ EOF;
                 else if($serverFrom == 'fnj-call-01')
                 {
                     $server_http = 'http://47.116.66.111';
+                    $server_http = 'http://call01.fnjcall.cn';
                 }
                 else if($serverFrom == 'fnj-call-02')
                 {
-                    $server_http = 'http://47.116.66.111';
+                    $server_http = 'http://47.116.33.6';
+                    $server_http = 'http://call02.fnjcall.cn';
                 }
                 else if($serverFrom == 'call-01')
                 {
@@ -24096,10 +24100,12 @@ EOF;
                 else if($serverFrom == 'fnj-call-01')
                 {
                     $server_http = 'http://47.116.66.111';
+                    $server_http = 'http://call01.fnjcall.cn';
                 }
                 else if($serverFrom == 'fnj-call-02')
                 {
-                    $server_http = 'http://47.116.66.111';
+                    $server_http = 'http://47.116.33.6';
+                    $server_http = 'http://call02.fnjcall.cn';
                 }
                 else if($serverFrom == 'call-01')
                 {
