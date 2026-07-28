@@ -4208,7 +4208,7 @@ class DK_Staff__OrderRepository {
             }
 
 
-//            DK_Push_Oder_to_Vos_Data_Job::dispatch($id);
+            DK_Push_Oder_to_Vos_Data_Job::dispatch($id);
 
             return response_success([],"发布成功!");
         }
