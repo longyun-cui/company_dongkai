@@ -1216,7 +1216,10 @@ class DK_Staff__CommonRepository {
                 now()->timestamp * 1000
             ])
             ->where('holdtime', '>', 0)
-            ->where('calleeaccesse164', 'A'.$phone)
+//            ->where('calleeaccesse164', 'A'.$phone)
+            ->where(function ($query) use($phone) {
+                $query->where('calleeaccesse164',$phone)->orWhere('calleeaccesse164','A'.$phone);
+            })
             ->orderByDesc('starttime')
             ->first();
         if($result)
