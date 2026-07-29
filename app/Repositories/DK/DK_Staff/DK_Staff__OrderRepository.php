@@ -4156,6 +4156,9 @@ class DK_Staff__OrderRepository {
             DB::commit();
 
 
+            DK_Push_Oder_to_Vos_Data_Job::dispatch($id);
+
+
             //
             if($is_repeat == 0 && $is_automatic_ai_converting == 1)
             {
@@ -4206,9 +4209,6 @@ class DK_Staff__OrderRepository {
                     }
                 }
             }
-
-
-            DK_Push_Oder_to_Vos_Data_Job::dispatch($id);
 
             return response_success([],"发布成功!");
         }
