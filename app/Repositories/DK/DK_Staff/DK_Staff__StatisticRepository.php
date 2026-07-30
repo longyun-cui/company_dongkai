@@ -2821,7 +2821,12 @@ class DK_Staff__StatisticRepository {
         $query = DK_Common__Project::withTrashed()->select('*')
             ->where('active', 1)
             ->where('item_status', 1)
-            ->with(['creator','inspector_er','pivot__project_staff','pivot__project_team']);
+            ->with([
+                'creator'=>function ($query) { $query->select('id','name'); },
+                'inspector_er'=>function ($query) { $query->select('id','name'); },
+                'pivot__project_staff',
+                'pivot__project_team'
+            ]);
 
         if(in_array($me->user_type,[41,81,84]))
         {
@@ -3027,7 +3032,9 @@ class DK_Staff__StatisticRepository {
 
         $query = DK_Common__Client::withTrashed()->select('*')
 //            ->where('item_status', 1)
-            ->with(['creator']);
+            ->with([
+                'creator'=>function ($query) { $query->select('id','name'); }
+            ]);
 
 
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
@@ -3335,7 +3342,9 @@ class DK_Staff__StatisticRepository {
 
         $query = DK_Common__Client::withTrashed()->select('*')
             ->where('user_status', 1)
-            ->with(['creator']);
+            ->with([
+                'creator'=>function ($query) { $query->select('id','name'); }
+            ]);
 
 
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
