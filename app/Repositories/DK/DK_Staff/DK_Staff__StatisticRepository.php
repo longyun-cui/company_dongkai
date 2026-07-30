@@ -5129,12 +5129,12 @@ class DK_Staff__StatisticRepository {
             ->toArray();
 
 
-        $query = DK_Common__Project::withTrashed()->select('*')
+        $query = DK_Common__Project::withTrashed()->select('id','name','alias_name','daily_goal')
             ->where('active', 1)
             ->where('item_status', 1)
             ->with([
-                'creator',
-                'inspector_er',
+                'creator'=>function ($query) { $query->select('id','name'); },
+                'inspector_er'=>function ($query) { $query->select('id','name'); },
                 'pivot__project_staff',
                 'pivot__project_team'
             ]);
