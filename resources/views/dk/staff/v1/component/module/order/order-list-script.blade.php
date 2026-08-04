@@ -2766,6 +2766,30 @@
                         $modal.find('input[name="field_2"][value="'+$response.data.field_2+'"]').prop('checked', true).trigger('change');
 
                         $modal.find('input[name="recording_address"]').val($response.data.recording_address);
+
+                        if($response.data.recording_address_list)
+                        {
+                            // var $html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+$item.recording_address+'" type="audio/mpeg"></audio>'
+                            // $row.find('[data-key="recording_address_play"]').html($html);
+
+                            var $recording_list = JSON.parse($response.data.recording_address_list);
+                            var $recording_list_html = '';
+                            $.each($recording_list, function(index, value)
+                            {
+
+                                var $audio_html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
+                                $recording_list_html += $audio_html;
+                            });
+                            $modal.find('.item-recording-box .item-detail-text').html($recording_list_html);
+
+                            $row.find('[data-key="recording_address_play"]').html($recording_list_html);
+                            $row.find('[data-key="order_status"]').attr('data-recording-address',$recording_list_html);
+
+                            $row.find('[data-key=recording_address_download]').attr('data-address-list',$response.data.recording_address_list);
+                            // var $recording_redirection = '<a class="btn btn-xs item-inspected-redirection-recording-list-submit" data-id="'+$id+'">跳转</a>';
+                            // $that.after($recording_redirection);
+                        }
+
                         $modal.find('textarea[name="description"]').val($response.data.description);
 
 
