@@ -79,6 +79,23 @@
                         </div>
                     </div>
                 </div>
+                {{--年龄--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户年龄</label>
+                    <div class="col-md-9 ">
+                        <select class="form-control modal--select2 select2-reset"
+                                name="client_age"
+                                data-modal="#modal--for--order-dental--item-edit"
+                        >
+                            <option value="">选择客户年龄</option>
+                            @for($i=18;$i<=90;$i++)
+                                <option value ="{{ $i }}">{{ $i }}岁</option>
+                            @endfor
+                            <option value ="1">18-90岁</option>
+                            {{--                            <option value ="99">未询问客户年龄</option>--}}
+                        </select>
+                    </div>
+                </div>
 
                 {{--所在城市--}}
                 <div class="form-group">
