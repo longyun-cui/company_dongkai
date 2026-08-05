@@ -85,7 +85,7 @@
                     <div class="col-md-9 ">
                         <select class="form-control modal--select2 select2-reset"
                                 name="client_age"
-                                data-modal="#modal--for--order-dental--item-edit"
+                                data-modal="#modal--for--order-aesthetic--item-edit"
                         >
                             <option value="">选择客户年龄</option>
                             @for($i=18;$i<=90;$i++)
