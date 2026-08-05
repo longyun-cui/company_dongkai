@@ -843,8 +843,12 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(data == 1) return '<small class="btn-xs bg-green">18-90岁</small>';
-                        else if(data == 99) return '未询问';
+                        if(data > 0 && data <= 100)
+                        {
+                            if(data == 1) return '<small class="btn-xs bg-green">18-90岁</small>';
+                            else if(data == 99) return '未询问';
+                            else return data+'岁';
+                        }
                         else return '--';
                     }
                 },
