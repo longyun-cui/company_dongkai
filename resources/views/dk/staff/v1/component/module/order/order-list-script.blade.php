@@ -2151,6 +2151,7 @@
                         $modal.find('input[name="operate[id]"]').val($item_id);
                         $modal.find('input[name="item_id"]').val($item_id);
 
+                        $modal.find('select[name="client_age"]').val($response.data.client_age).trigger('change');
                         $modal.find('input[name="client_name"]').val($response.data.client_name);
                         $modal.find('input[name="client_phone"]').val($response.data.client_phone);
 
@@ -2534,6 +2535,7 @@
                         $modal.find('input[name="operate[id]"]').val($item_id);
                         $modal.find('input[name="item_id"]').val($item_id);
 
+                        $modal.find('select[name="client_age"]').val($response.data.client_age).trigger('change');
                         $modal.find('input[name="client_name"]').val($response.data.client_name);
                         $modal.find('input[name="client_phone"]').val($response.data.client_phone);
 
@@ -2742,6 +2744,7 @@
                         $modal.find('input[name="operate[id]"]').val($item_id);
                         $modal.find('input[name="item_id"]').val($item_id);
 
+                        $modal.find('select[name="client_age"]').val($response.data.client_age).trigger('change');
                         $modal.find('input[name="client_name"]').val($response.data.client_name);
                         $modal.find('input[name="client_phone"]').val($response.data.client_phone);
 
@@ -2974,6 +2977,7 @@
                         $modal.find('input[name="operate[id]"]').val($item_id);
                         $modal.find('input[name="item_id"]').val($item_id);
 
+                        $modal.find('select[name="client_age"]').val($response.data.client_age).trigger('change');
                         $modal.find('input[name="client_name"]').val($response.data.client_name);
                         $modal.find('input[name="client_phone"]').val($response.data.client_phone);
 
@@ -3496,6 +3500,7 @@
                         $modal.find('input[name="operate[id]"]').val($item_id);
                         $modal.find('input[name="item_id"]').val($item_id);
 
+                        $modal.find('select[name="client_age"]').val($response.data.client_age).trigger('change');
                         $modal.find('input[name="client_name"]').val($response.data.client_name);
                         $modal.find('input[name="client_phone"]').val($response.data.client_phone);
 
@@ -4680,6 +4685,7 @@
                     $modal.find('input[name="operate[id]"]').val($item_id);
                     $modal.find('input[name="item_id"]').val($item_id);
 
+                    $modal.find('select[name="client_age"]').val($response.data.client_age).trigger('change');
                     $modal.find('input[name="client_name"]').val($response.data.client_name);
                     $modal.find('input[name="client_phone"]').val($response.data.client_phone);
 
