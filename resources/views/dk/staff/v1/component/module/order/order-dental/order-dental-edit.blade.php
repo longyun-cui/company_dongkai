@@ -90,7 +90,7 @@
                                 <option value ="{{ $i }}">{{ $i }}岁</option>
                             @endfor
                             <option value ="1">18-90岁</option>
-                            <option value ="99">未询问客户年龄</option>
+{{--                            <option value ="99">未询问客户年龄</option>--}}
                         </select>
                     </div>
                 </div>
