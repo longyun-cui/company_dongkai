@@ -4467,6 +4467,7 @@ class DK_Staff__OrderRepository {
             $client_phone = $item->client_phone;
         }
 
+        $client_age = $post_data["client_age"];
         $client_name = trim($post_data["client_name"]);
         if($item->order_category == 1)
         {
@@ -4556,6 +4557,16 @@ class DK_Staff__OrderRepository {
             }
         }
 
+        // 客户年龄
+        if($item->client_age != $client_age)
+        {
+            $record_row = [];
+            $record_row['title'] = '年龄';
+            $record_row['field'] = 'client_age';
+            $record_row['before'] = $item->client_age;
+            $record_row['after'] = $client_age;
+            $record_content[] = $record_row;
+        }
         // 客户姓名
         if($item->client_name != $client_name)
         {
@@ -4586,6 +4597,7 @@ class DK_Staff__OrderRepository {
                 $record_content[] = $record_row;
             }
         }
+
 
         // 更改项目
         if($item->project_id != $project_id)
@@ -4757,6 +4769,7 @@ class DK_Staff__OrderRepository {
                 if($item->project_id != $project_id) $item->project_id = $project_id;
                 if($item->client_phone != $client_phone) $item->client_phone = $client_phone;
             }
+            if($item->client_age != $client_age) $item->client_age = $client_age;
             if($item->client_name != $client_name) $item->client_name = $client_name;
             if($item->order_category == 1)
             {
@@ -4891,6 +4904,7 @@ class DK_Staff__OrderRepository {
 
 
         $project_id = $post_data["project_id"];
+        $client_age = $post_data["client_age"];
         $client_name = $post_data["client_name"];
 //        $client_phone = $post_data["client_phone"];
         $client_phone = $item->client_phone;
@@ -5128,6 +5142,17 @@ class DK_Staff__OrderRepository {
             }
             else return response_error([],"选择的【项目】不存在，刷新页面重试！");
         }
+
+        // 客户年龄
+        if($item->client_age != $client_age)
+        {
+            $record_row = [];
+            $record_row['title'] = '年龄';
+            $record_row['field'] = 'client_age';
+            $record_row['before'] = $item->client_age;
+            $record_row['after'] = $client_age;
+            $record_content[] = $record_row;
+        }
         // 客户姓名
         if($item->client_name != $client_name)
         {
@@ -5304,6 +5329,7 @@ class DK_Staff__OrderRepository {
                 $item->is_repeat = $is_repeat;
             }
             if($item->project_id != $project_id) $item->project_id = $project_id;
+            if($item->client_age != $client_age) $item->client_name = $client_age;
             if($item->client_name != $client_name) $item->client_name = $client_name;
             if($item->client_phone != $client_phone) $item->client_phone = $client_phone;
             if($item->order_category == 1)
