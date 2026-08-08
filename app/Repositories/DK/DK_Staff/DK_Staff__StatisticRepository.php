@@ -5089,12 +5089,18 @@ class DK_Staff__StatisticRepository {
 
         $the_day  = isset($post_data['time_date']) ? $post_data['time_date'] : date('Y-m-d');
 
+        $department_id = 0;
         $team_id = 0;
         $team_group_id = 0;
 
         // 客服部
         if($me->staff_category == 41)
         {
+            if($me->staff_position == 31)
+            {
+                $department_id = $me->department_id;
+            }
+
             $team_id = $me->team_id;
             if($me->staff_position == 61)
             {
@@ -5126,6 +5132,9 @@ class DK_Staff__StatisticRepository {
                     count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
                 "))
             ->where('published_date',$the_day)
+            ->when($department_id, function ($query) use ($department_id) {
+                return $query->where('creator_department_id', $department_id);
+            })
             ->when($team_id, function ($query) use ($team_id) {
                 return $query->where('creator_team_id', $team_id);
             })
