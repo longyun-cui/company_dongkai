@@ -113,7 +113,7 @@
                                     name="order--item-appealed-confirming--result"
                                     data-modal="#modal--for--order--item-appealed-confirming"
                             >
-                                <option value="">申诉确认</option>
+                                <option value="">选择申诉确认结果</option>
                                 <option value ="1">确认</option>
                                 <option value ="2">驳回</option>
                             </select>

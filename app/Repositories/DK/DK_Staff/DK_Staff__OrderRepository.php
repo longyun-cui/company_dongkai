@@ -221,6 +221,15 @@ class DK_Staff__OrderRepository {
                 $query->where('dk_common__order.created_type', $created_type);
             }
         }
+        // 来源 [人工|OKCC|LXY]
+        if(isset($post_data['created_source']))
+        {
+            $created_source = intval($post_data['created_source']);
+            if(!in_array($created_source,[-1]))
+            {
+                $query->where('dk_common__order.created_source', $created_source);
+            }
+        }
 
         // 地区
 //        if(!empty($post_data['district_city'])) $query->where('location_city', $post_data['district_city']);
@@ -6218,8 +6227,8 @@ class DK_Staff__OrderRepository {
             }
             else if($appealed_handled_result == 9)
             {
-                $item->inspected_result = '拒绝';
-                $item->inspected_result_2 = '拒绝';
+//                $item->inspected_result = '拒绝';
+//                $item->inspected_result_2 = '拒绝';
                 $item->appealed_status = 19;
             }
             else

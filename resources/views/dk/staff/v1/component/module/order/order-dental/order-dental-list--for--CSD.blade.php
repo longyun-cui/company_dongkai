@@ -50,6 +50,16 @@
 {{--            <input type="text" class="search-filter form-filter filter-md filter-keyup date-picker-c" name="order-ended" placeholder="结束日期" value="" readonly="readonly" />--}}
 
 
+            {{--来源--}}
+            @if(in_array($me->staff_position,[0,1,9,31]))
+                <select class="search-filter form-filter filter-md select2-box-c" name="order-created-source">
+                    <option value="-1">全部来源</option>
+                    <option value="1">人工</option>
+                    <option value="11">OKCC</option>
+                    <option value="12">LXY</option>
+                </select>
+            @endif
+
             {{--选择团队--}}
             @if(in_array($me->staff_position,[0,1,9,31]))
                 <select class="search-filter form-filter filter-lg select2-box-c select2--team-c-"

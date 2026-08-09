@@ -170,7 +170,7 @@
                                 @for($i=18;$i<=90;$i++)
                                     <option value ="{{ $i }}">{{ $i }}岁</option>
                                 @endfor
-{{--                                <option value ="1">18-90岁</option>--}}
+                                <option value ="1">18-90岁</option>
                             </select>
                         </div>
                     </div>

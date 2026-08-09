@@ -60,6 +60,7 @@
                     d.is_wx = $tableSearch.find('select[name="order-is-wx"]').val();
                     d.is_repeat = $tableSearch.find('select[name="order-is-repeat"]').val();
                     d.created_type = $tableSearch.find('select[name="order-created-type"]').val();
+                    d.created_source = $tableSearch.find('select[name="order-created-source"]').val();
                     d.recording_quality = $tableSearch.find('select[name="order-recording-quality"]').val();
                     d.ai_inspected_status = $tableSearch.find('select[name="order-ai-inspected-status"]').val();
                     d.inspected_status = $tableSearch.find('select[name="order-inspected-status"]').val();

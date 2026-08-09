@@ -58,6 +58,7 @@
                     d.is_wx = $tableSearch.find('select[name="order-is-wx"]').val();
                     d.is_repeat = $tableSearch.find('select[name="order-is-repeat"]').val();
                     d.created_type = $tableSearch.find('select[name="order-created-type"]').val();
+                    d.created_source = $tableSearch.find('select[name="order-created-source"]').val();
                     d.recording_quality = $tableSearch.find('select[name="order-recording-quality"]').val();
                     d.inspected_status = $tableSearch.find('select[name="order-inspected-status"]').val();
                     d.inspected_result = $tableSearch.find('select[name="order-inspected-result[]"]').val();
@@ -109,6 +110,58 @@
                     },
                     render: function(data, type, row, meta) {
                         return row.id;
+                    }
+                },
+                {
+                    "title": "来源",
+                    "name": "created_type",
+                    "data": "created_type",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+
+                        $(nTd).addClass('created_type');
+                        $(nTd).attr('data-id',row.id);
+                        $(nTd).attr('data-name','来源');
+                        $(nTd).attr('data-key','created_type');
+                        $(nTd).attr('data-value',row.id);
+
+                    },
+                    render: function(data, type, row, meta) {
+                        if(!data) return '--';
+                        var $result_html = '';
+
+                        if(data == 1)
+                        {
+                            $result_html = '<small class="btn-xs bg-green">人工</small>';
+                        }
+                        else if(data == 91)
+                        {
+                            $result_html = '<small class="btn-xs bg-red">百应AI</small>';
+                        }
+                        else if(data == 99)
+                        {
+                            $result_html = '<small class="btn-xs bg-red">API</small>';
+                        }
+                        else if(data == 9)
+                        {
+                            $result_html = '<small class="btn-xs bg-yellow">导入</small>';
+                        }
+                        else
+                        {
+                            $result_html = '<small class="btn-xs bg-black">有误</small>';
+                        }
+
+                        if(row.created_source == 11)
+                        {
+                            $result_html = '<small class="btn-xs bg-green">OKCC</small>';
+                        }
+                        else if(row.created_source == 12)
+                        {
+                            $result_html = '<small class="btn-xs bg-green">LXY</small>';
+                        }
+                        return $result_html;
                     }
                 },
                 {

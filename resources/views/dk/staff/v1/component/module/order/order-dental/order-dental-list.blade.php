@@ -31,6 +31,15 @@
                     <option value="99">API</option>
                 </select>
             @endif
+            {{--来源--}}
+            @if(in_array($me->staff_category,[0,1,9,71]))
+                <select class="search-filter form-filter filter-md select2-box-c" name="order-created-source">
+                    <option value="-1">全部来源</option>
+                    <option value="1">人工</option>
+                    <option value="11">OKCC</option>
+                    <option value="12">LXY</option>
+                </select>
+            @endif
 
             {{--选择质检员--}}
             @if(in_array($me->staff_category,[0,1,9,51]))
