@@ -5414,6 +5414,8 @@ class DK_Staff__OrderRepository {
             else
             {
                 $item->inspected_result = $inspected_result;
+                $item->inspected_result_2 = '';
+                $item->manual_inspected_result = $inspected_result;
             }
 //            if($inspected_description)
 //            {
