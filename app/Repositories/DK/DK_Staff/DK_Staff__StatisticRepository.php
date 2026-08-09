@@ -5118,7 +5118,7 @@ class DK_Staff__StatisticRepository {
                     count(IF(inspected_result = '郊区通过', TRUE, NULL)) as order_count_for_accepted_suburb,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
-                    count(IF(inspected_result = '不合格' or inspected_result_2 = '不合格', TRUE, NULL)) as order_count_for_accepted_non,
+                    count(IF(inspected_result = '不合格' or (inspected_result = '拒绝' and inspected_result_2 = '不合格'), TRUE, NULL)) as order_count_for_accepted_non,
                     count(IF(inspected_result = '拒绝' or inspected_result = '不合格' or inspected_result = '超区' or inspected_result = '超龄', TRUE, NULL)) as order_count_for_refused
                 "))
             ->addSelect(DB::raw("
