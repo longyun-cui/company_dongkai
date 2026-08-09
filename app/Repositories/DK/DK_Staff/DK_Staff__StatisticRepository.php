@@ -5108,6 +5108,39 @@ class DK_Staff__StatisticRepository {
             }
         }
 
+
+        // 部门
+        if(!empty($post_data['department']))
+        {
+            $post_department_int = (int)$post_data['department'];
+            if(!in_array($post_department_int,[-1,0]))
+            {
+                $department_id = $post_department_int;
+            }
+        }
+
+        // 团队
+        if(!empty($post_data['team']))
+        {
+            $post_team_int = (int)$post_data['team'];
+            if(!in_array($post_team_int,[-1,0]))
+            {
+                $team_id = $post_team_int;
+            }
+        }
+
+
+        // 来源 [人工|OKCC|LXY]
+        $created_source = 0;
+        if(isset($post_data['order_source']))
+        {
+            $order_created_source_int = intval($post_data['order_source']);
+            if(!in_array($order_created_source_int,[-1]))
+            {
+                $created_source = $order_created_source_int;
+            }
+        }
+
         // 工单统计
         $query_order = DK_Common__Order::withTrashed()->select('project_id','creator_team_id')
             ->addSelect(DB::raw("
@@ -5140,6 +5173,9 @@ class DK_Staff__StatisticRepository {
             })
             ->when($team_group_id, function ($query) use ($team_group_id) {
                 return $query->where('creator_team_group_id', $team_group_id);
+            })
+            ->when($created_source, function ($query) use ($created_source) {
+                return $query->where('created_source', $created_source);
             })
             ->groupBy('project_id')
             ->get()
@@ -5211,14 +5247,26 @@ class DK_Staff__StatisticRepository {
 
 
 
+        // 部门
+        if(!empty($post_data['department']))
+        {
+            $department_int = (int)$post_data['department'];
+            if(!in_array($department_int,[-1,0]))
+            {
+                $query->whereHas('pivot__project_department',  function ($query) use($department_int) {
+                    $query->where('department_id', $department_int);
+                });
+            }
+        }
+
         // 团队
         if(!empty($post_data['team']))
         {
-            $team = (int)$post_data['team'];
-            if(!in_array($team,[-1,0]))
+            $team_int = (int)$post_data['team'];
+            if(!in_array($team_int,[-1,0]))
             {
-                $query->whereHas('pivot__project_team',  function ($query) use($team) {
-                    $query->where('team_id', $team);
+                $query->whereHas('pivot__project_team',  function ($query) use($team_int) {
+                    $query->where('team_id', $team_int);
                 });
             }
         }

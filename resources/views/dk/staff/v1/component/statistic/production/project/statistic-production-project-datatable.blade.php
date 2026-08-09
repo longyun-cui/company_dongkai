@@ -28,12 +28,14 @@
                     d.keyword = $tableSearch.find('input[name="statistic-production-project-keyword"]').val();
                     d.status = $tableSearch.find('select[name="statistic-production-project-status"]').val();
                     d.order_category = $tableSearch.find('select[name="statistic-production-project-order-category"]').val();
+                    d.order_source = $tableSearch.find('select[name="statistic-production-project-order-created-source"]').val();
                     d.time_type = $tableSearch.find('input[name="statistic-production-project-time-type"]').val();
                     d.time_month = $tableSearch.find('input[name="statistic-production-project-month"]').val();
                     d.time_date = $tableSearch.find('input[name="statistic-production-project-date"]').val();
                     d.date_start = $tableSearch.find('input[name="statistic-production-project-start"]').val();
                     d.date_ended = $tableSearch.find('input[name="statistic-production-project-ended"]').val();
                     d.project = $tableSearch.find('input[name="statistic-production-project-project"]').val();
+                    d.department = $tableSearch.find('select[name="statistic-production-project-department"]').val();
                     d.team = $tableSearch.find('select[name="statistic-production-project-team"]').val();
                     d.team_group = $tableSearch.find('select[name="statistic-production-project-team-group"]').val();
                 },

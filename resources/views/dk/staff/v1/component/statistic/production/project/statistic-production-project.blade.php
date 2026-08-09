@@ -16,6 +16,28 @@
                 <option value="31">二奢</option>
             </select>
 
+            {{--来源--}}
+            @if(in_array($me->staff_position,[0,1,9,31]))
+                <select class="search-filter form-filter filter-md select2-box-c" name="statistic-production-project-order-created-source">
+                    <option value="-1">全部来源</option>
+                    <option value="1">人工</option>
+                    <option value="11">OKCC</option>
+                    <option value="12">LXY</option>
+                </select>
+            @endif
+
+            {{--选择部门--}}
+            @if(in_array($me->staff_category,[0,1,9,71]))
+                <select class="search-filter form-filter filter-md select2-box-c" name="statistic-production-project-department">
+                    <option value="-1">选择部门</option>
+                    @if(!empty($department_list) && count($department_list) > 0)
+                        @foreach($department_list as $v)
+                            <option value="{{ $v->id }}">{{ $v->name }}</option>
+                        @endforeach
+                    @endif
+                </select>
+            @endif
+
             @if(in_array($me->staff_category,[0,1,9,71]))
             <select class="search-filter form-filter filter-lg select2-box-c" name="statistic-production-project-team">
                 <option value="-1">选择团队</option>
