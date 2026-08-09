@@ -228,6 +228,7 @@
                     render: function(data, type, row, meta) {
                         if(!row.inspected_at) return '--';
                         var $result_html = '';
+                        var $inspected_result_2 = row.inspected_result_2;
                         if(data == "通过" || data == "折扣通过" || data == "郊区通过" || data == "内部通过")
                         {
                             $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
@@ -235,6 +236,10 @@
                         else if(data == "拒绝")
                         {
                             $result_html = '<small class="btn-xs bg-red">拒绝</small>';
+                            if($inspected_result_2)
+                            {
+                                $result_2_html = '<small class="btn-xs bg-red">'+$inspected_result_2+'</small>';
+                            }
                         }
                         else if(data == "拒绝可交付")
                         {
@@ -293,7 +298,7 @@
                         {
                             $result_html = '<small class="btn-xs bg-purple">'+data+'</small>';
                         }
-                        return $result_html;
+                        return $result_html + $result_2_html;
                     }
                 },
                 {

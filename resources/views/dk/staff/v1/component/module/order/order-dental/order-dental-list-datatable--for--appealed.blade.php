@@ -341,6 +341,10 @@
                         else if(data == "拒绝")
                         {
                             $result_html = '<small class="btn-xs bg-red">拒绝</small>';
+                            if($inspected_result_2)
+                            {
+                                $result_2_html = '<small class="btn-xs bg-red">'+$inspected_result_2+'</small>';
+                            }
                         }
                         else if(data == "拒绝可交付")
                         {
@@ -349,6 +353,7 @@
                         else if(data == "不合格")
                         {
                             $result_html = '<small class="btn-xs bg-red">拒绝</small>';
+                            $result_2_html = '<small class="btn-xs bg-red">'+$inspected_result_2+'</small>';
                         }
                         else if(data == "虚假")
                         {
