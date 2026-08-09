@@ -436,6 +436,11 @@ class DK_Staff__ExportRepository {
                 }
             }
 
+            if($v['client_age'] == 1) $cellData[$k]['client_age'] = '18-90岁';
+            else if($v['client_age'] == 99) $cellData[$k]['client_age'] = '未询问';
+            else if($v['client_age'] >= 18 && $v['client_age'] <= 90) $cellData[$k]['client_age'] = $v['client_age'].'岁';
+            else $cellData[$k]['client_age'] = '--';
+
 
             // 微信号 & 是否+V
             $cellData[$k]['wx_id'] = $v['wx_id'];
@@ -534,6 +539,7 @@ class DK_Staff__ExportRepository {
                 'client_type'=>'患者类型',
                 'client_name'=>'客户姓名',
                 'client_phone'=>'客户电话',
+                'client_age'=>'客户年龄',
                 'wx_id'=>'微信号',
                 'is_wx'=>'是否+V',
                 'location_city'=>'所在城市',
@@ -564,6 +570,7 @@ class DK_Staff__ExportRepository {
                 'client_type'=>'患者类型',
                 'client_name'=>'客户姓名',
                 'client_phone'=>'客户电话',
+                'client_age'=>'客户年龄',
                 'wx_id'=>'微信号',
                 'is_wx'=>'是否+V',
                 'location_city'=>'所在城市',
@@ -610,7 +617,7 @@ class DK_Staff__ExportRepository {
                 $sheet->setWidth(array(
                     'A'=>10, 'B'=>20, 'C'=>20, 'D'=>20, 'E'=>20, 'F'=>20, 'G'=>20,
                     'H'=>20, 'I'=>20, 'J'=>20, 'K'=>20, 'L'=>20, 'M'=>20, 'N'=>20,
-                    'O'=>20, 'P'=>20, 'Q'=>20, 'R'=>60, 'S'=>60, 'T'=>20,
+                    'O'=>20, 'P'=>20, 'Q'=>20, 'R'=>20, 'S'=>60, 'T'=>60,
                     'U'=>20, 'V'=>20, 'W'=>20, 'X'=>20, 'Y'=>60, 'Z'=>20
                 ));
                 $sheet->setAutoSize(false);
@@ -2056,6 +2063,11 @@ class DK_Staff__ExportRepository {
                 }
             }
 
+            if($v['client_age'] == 1) $cellData[$k]['client_age'] = '18-90岁';
+            else if($v['client_age'] == 99) $cellData[$k]['client_age'] = '未询问';
+            else if($v['client_age'] >= 18 && $v['client_age'] <= 90) $cellData[$k]['client_age'] = $v['client_age'].'岁';
+            else $cellData[$k]['client_age'] = '--';
+
 
             // 微信号 & 是否+V
             $cellData[$k]['wx_id'] = $v['wx_id'];
@@ -2157,6 +2169,7 @@ class DK_Staff__ExportRepository {
                 'client_type'=>'患者类型',
                 'client_name'=>'客户姓名',
                 'client_phone'=>'客户电话',
+                'client_age'=>'客户年龄',
                 'wx_id'=>'微信号',
                 'is_wx'=>'是否+V',
                 'location_city'=>'所在城市',
@@ -2188,6 +2201,7 @@ class DK_Staff__ExportRepository {
                 'client_type'=>'患者类型',
                 'client_name'=>'客户姓名',
                 'client_phone'=>'客户电话',
+                'client_age'=>'客户年龄',
                 'wx_id'=>'微信号',
                 'is_wx'=>'是否+V',
                 'location_city'=>'所在城市',
@@ -2268,8 +2282,8 @@ class DK_Staff__ExportRepository {
                 $sheet->setWidth(array(
                     'A'=>10, 'B'=>20, 'C'=>20, 'D'=>20, 'E'=>20, 'F'=>20, 'G'=>20,
                     'H'=>20, 'I'=>20, 'J'=>20, 'K'=>20, 'L'=>20, 'M'=>20, 'N'=>20,
-                    'O'=>20, 'P'=>20, 'Q'=>20, 'R'=>20, 'S'=>60, 'T'=>60,
-                    'U'=>20, 'V'=>20, 'W'=>20, 'X'=>20, 'Y'=>20, 'Z'=>20
+                    'O'=>20, 'P'=>20, 'Q'=>20, 'R'=>20, 'S'=>20, 'T'=>60,
+                    'U'=>60, 'V'=>20, 'W'=>20, 'X'=>20, 'Y'=>20, 'Z'=>20
                 ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
@@ -3475,6 +3489,11 @@ class DK_Staff__ExportRepository {
                 }
             }
 
+            if($v['client_age'] == 1) $cellData[$k]['client_age'] = '18-90岁';
+            else if($v['client_age'] == 99) $cellData[$k]['client_age'] = '未询问';
+            else if($v['client_age'] >= 18 && $v['client_age'] <= 90) $cellData[$k]['client_age'] = $v['client_age'].'岁';
+            else $cellData[$k]['client_age'] = '--';
+
 
             // 微信号 & 是否+V
             $cellData[$k]['wx_id'] = $v['wx_id'];
@@ -3557,6 +3576,7 @@ class DK_Staff__ExportRepository {
                 'client_type'=>'患者类型',
                 'client_name'=>'客户姓名',
                 'client_phone'=>'客户电话',
+                'client_age'=>'客户年龄',
                 'wx_id'=>'微信号',
                 'is_wx'=>'是否+V',
                 'location_city'=>'所在城市',
@@ -3585,6 +3605,7 @@ class DK_Staff__ExportRepository {
                 'client_type'=>'患者类型',
                 'client_name'=>'客户姓名',
                 'client_phone'=>'客户电话',
+                'client_age'=>'客户年龄',
                 'wx_id'=>'微信号',
                 'is_wx'=>'是否+V',
                 'location_city'=>'所在城市',
@@ -3629,7 +3650,7 @@ class DK_Staff__ExportRepository {
                 $sheet->setWidth(array(
                     'A'=>10, 'B'=>20, 'C'=>20, 'D'=>20, 'E'=>20, 'F'=>20, 'G'=>20,
                     'H'=>20, 'I'=>20, 'J'=>20, 'K'=>20, 'L'=>20, 'M'=>20, 'N'=>20,
-                    'O'=>20, 'P'=>20, 'Q'=>60, 'R'=>60, 'S'=>60, 'T'=>20,
+                    'O'=>20, 'P'=>20, 'Q'=>20, 'R'=>60, 'S'=>60, 'T'=>60,
                     'U'=>20, 'V'=>20, 'W'=>20, 'X'=>60, 'Y'=>60, 'Z'=>20
                 ));
                 $sheet->setAutoSize(false);
@@ -4724,6 +4745,11 @@ class DK_Staff__ExportRepository {
                 }
             }
 
+            if($v['client_age'] == 1) $cellData[$k]['client_age'] = '18-90岁';
+            else if($v['client_age'] == 99) $cellData[$k]['client_age'] = '未询问';
+            else if($v['client_age'] >= 18 && $v['client_age'] <= 90) $cellData[$k]['client_age'] = $v['client_age'].'岁';
+            else $cellData[$k]['client_age'] = '--';
+
 
             // 微信号 & 是否+V
             $cellData[$k]['wx_id'] = $v['wx_id'];
@@ -4821,6 +4847,7 @@ class DK_Staff__ExportRepository {
                 'client_type'=>'患者类型',
                 'client_name'=>'客户姓名',
                 'client_phone'=>'客户电话',
+                'client_age'=>'客户年龄',
                 'wx_id'=>'微信号',
                 'is_wx'=>'是否+V',
                 'location_city'=>'所在城市',
@@ -4850,6 +4877,7 @@ class DK_Staff__ExportRepository {
                 'client_type'=>'患者类型',
                 'client_name'=>'客户姓名',
                 'client_phone'=>'客户电话',
+                'client_age'=>'客户年龄',
                 'wx_id'=>'微信号',
                 'is_wx'=>'是否+V',
                 'location_city'=>'所在城市',
@@ -4928,7 +4956,7 @@ class DK_Staff__ExportRepository {
                 $sheet->setWidth(array(
                     'A'=>10, 'B'=>20, 'C'=>20, 'D'=>20, 'E'=>20, 'F'=>20, 'G'=>20,
                     'H'=>20, 'I'=>20, 'J'=>20, 'K'=>20, 'L'=>20, 'M'=>20, 'N'=>20,
-                    'O'=>20, 'P'=>20, 'Q'=>20, 'R'=>60, 'S'=>60, 'T'=>20,
+                    'O'=>20, 'P'=>20, 'Q'=>20, 'R'=>20, 'S'=>60, 'T'=>60,
                     'U'=>20, 'V'=>20, 'W'=>20, 'X'=>60, 'Y'=>60, 'Z'=>20
                 ));
                 $sheet->setAutoSize(false);

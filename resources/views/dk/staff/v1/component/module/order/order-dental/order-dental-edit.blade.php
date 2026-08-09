@@ -86,11 +86,11 @@
                                 data-modal="#modal--for--order-dental--item-edit"
                         >
                             <option value="">选择客户年龄</option>
+                            <option value ="99">未询问客户年龄</option>
                             @for($i=18;$i<=90;$i++)
                                 <option value ="{{ $i }}">{{ $i }}岁</option>
                             @endfor
-                            <option value ="1">18-90岁</option>
-{{--                            <option value ="99">未询问客户年龄</option>--}}
+{{--                            <option value ="1">18-90岁</option>--}}
                         </select>
                     </div>
                 </div>
