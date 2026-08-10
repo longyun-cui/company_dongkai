@@ -329,7 +329,7 @@ class DK_Staff__ExportRepository {
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
             });
-        })->export('xls');
+        })->export('xlsx');
 
     }
     // 【导出】工单-下载-IDs
@@ -623,7 +623,7 @@ class DK_Staff__ExportRepository {
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
             });
-        })->export('xls');
+        })->export('xlsx');
 
     }
     // 【导出】工单-下载-IDs
@@ -853,7 +853,7 @@ class DK_Staff__ExportRepository {
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
             });
-        })->export('xls');
+        })->export('xlsx');
 
     }
     // 【导出】工单-下载-IDs
@@ -1094,7 +1094,7 @@ class DK_Staff__ExportRepository {
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
             });
-        })->export('xls');
+        })->export('xlsx');
 
     }
 
@@ -1342,7 +1342,7 @@ class DK_Staff__ExportRepository {
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
             });
-        })->export('xls');
+        })->export('xlsx');
 
     }
 
@@ -1800,7 +1800,7 @@ class DK_Staff__ExportRepository {
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
             });
-        })->export('xls');
+        })->export('xlsx');
 
     }
     // 【导出】工单
@@ -2288,7 +2288,7 @@ class DK_Staff__ExportRepository {
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
             });
-        })->export('xls');
+        })->export('xlsx');
 
     }
     // 【导出】工单
@@ -2704,7 +2704,7 @@ class DK_Staff__ExportRepository {
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
             });
-        })->export('xls');
+        })->export('xlsx');
 
     }
     // 【导出】工单
@@ -3127,7 +3127,7 @@ class DK_Staff__ExportRepository {
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
             });
-        })->export('xls');
+        })->export('xlsx');
 
     }
 
@@ -3390,7 +3390,7 @@ class DK_Staff__ExportRepository {
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
             });
-        })->export('xls');
+        })->export('xlsx');
 
     }
     // 【导出】工单-下载-IDs
@@ -3656,7 +3656,7 @@ class DK_Staff__ExportRepository {
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
             });
-        })->export('xls');
+        })->export('xlsx');
 
     }
     // 【导出】工单-下载-IDs
@@ -3878,7 +3878,7 @@ class DK_Staff__ExportRepository {
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
             });
-        })->export('xls');
+        })->export('xlsx');
 
     }
     // 【导出】工单-下载-IDs
@@ -4110,7 +4110,7 @@ class DK_Staff__ExportRepository {
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
             });
-        })->export('xls');
+        })->export('xlsx');
 
     }
 
@@ -4523,7 +4523,7 @@ class DK_Staff__ExportRepository {
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
             });
-        })->export('xls');
+        })->export('xlsx');
 
     }
     // 【导出】交付
@@ -4962,7 +4962,7 @@ class DK_Staff__ExportRepository {
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
             });
-        })->export('xls');
+        })->export('xlsx');
 
     }
     // 【导出】交付
@@ -5359,7 +5359,7 @@ class DK_Staff__ExportRepository {
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
             });
-        })->export('xls');
+        })->export('xlsx');
 
     }
     // 【导出】交付
@@ -5763,7 +5763,7 @@ class DK_Staff__ExportRepository {
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
             });
-        })->export('xls');
+        })->export('xlsx');
 
     }
 
