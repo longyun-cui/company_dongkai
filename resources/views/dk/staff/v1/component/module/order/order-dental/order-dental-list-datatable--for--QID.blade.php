@@ -301,8 +301,10 @@
                     },
                     render: function(data, type, row, meta) {
                         if(!row.inspected_at) return '--';
+
                         var $result_html = '';
                         var $result_2_html = '';
+
                         var $inspected_result_2 = row.inspected_result_2;
                         if(data == "通过")
                         {
