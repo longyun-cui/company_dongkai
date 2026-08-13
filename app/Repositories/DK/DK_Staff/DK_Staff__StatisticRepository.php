@@ -2590,15 +2590,14 @@ class DK_Staff__StatisticRepository {
 
         $project_list = $project_list->filter(function ($item) {
             return (
-                $item->production_published_num > 0
+                $item->count__for__delivered_normal > 0
+                || $item->count__for__delivered_distribute > 0
                 || $item->count__for__order_today_all > 0
                 || $item->count__for__order_today_normal > 0
                 || $item->count__for__order_today_discount > 0
                 || $item->count__for__order_today_suburb > 0
                 || $item->count__for__order_today_inside > 0
                 || $item->count__for__order_today_refused > 0
-                || $item->count__for__delivered_normal > 0
-                || $item->count__for__delivered_distribute > 0
             );
         })->values();
 
