@@ -2492,7 +2492,7 @@ class DK_Staff__StatisticRepository {
             }
         }
 
-        $total = $query->count();
+//        $total = $query->count();
 
         $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
         $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
@@ -2533,6 +2533,8 @@ class DK_Staff__StatisticRepository {
 
         $total_data['count__for__delivered_normal'] = 0;
         $total_data['count__for__delivered_distribute'] = 0;
+
+        $total_data['rate__for__completed'] = '--';
 
         $total_data['remark'] = '';
 
@@ -2586,8 +2588,30 @@ class DK_Staff__StatisticRepository {
             else $project_list[$k]->rate__for__completed = 0;
         }
 
-//        $project_list_filtered = $project_list->filter(function ($item) {
-//            return ($item->production_published_num > 0 || $item->marketing_yesterday_num > 0 || $item->marketing_delivered_num > 0);
+        $project_list = $project_list->filter(function ($item) {
+            return (
+                $item->production_published_num > 0
+                || $item->count__for__order_today_all > 0
+                || $item->count__for__order_today_normal > 0
+                || $item->count__for__order_today_discount > 0
+                || $item->count__for__order_today_suburb > 0
+                || $item->count__for__order_today_inside > 0
+                || $item->count__for__order_today_refused > 0
+                || $item->count__for__delivered_normal > 0
+                || $item->count__for__delivered_distribute > 0
+            );
+        })->values();
+
+        $total = $project_list->count();
+
+//        $project_list = $project_list->sortByDesc(function ($user) {
+//            return $user['count__for__order_today_all'];
+//        })->sortBy(function ($user) {
+//            return $user['name'];
+//        });
+
+//        $project_list = $project_list->filter(function ($item) {
+//            return $item['count__for__delivered_normal'] > 0;
 //        });
 
         foreach ($project_list as $k => $v)
@@ -2616,6 +2640,8 @@ class DK_Staff__StatisticRepository {
             }
             else $project_list[$k]->rate__for__completed = 0;
         }
+
+        $project_list[] = $total_data;
 
         return datatable_response($project_list, $draw, $total);
 
