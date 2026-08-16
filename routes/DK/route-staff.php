@@ -311,9 +311,6 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
     Route::get('/o1/export/order--export--by-ids', $controller.'@o1__export__order__export__by_ids');
     Route::get('/o1/export/delivery--export--by-ids', $controller.'@o1__export__delivery__export__by_ids');
 
-
-    Route::get('/o1/export/delivery--export--by-ids', $controller.'@o1__export__delivery__export__by_ids');
-
     // 【导出-管理】
     Route::post('/o1/record/datatable-list-query', $controller.'@v1_operate_for_record_datatable_list_query');
     Route::post('/o1/export/export-list/datatable-query', $controller.'@o1__export__list__datatable_query');
