@@ -374,7 +374,7 @@ class DK_Staff__ExportRepository {
             ->when($team_id, function ($query) use ($team_id) {
                 return $query->where('team_id', $team_id);
             })
-            ->where('delivered_status',1)
+            ->where('delivered_status','>',0)
             ->whereIn('id',$ids_array);
 
 //        if(in_array($me->staff_category,[77]))
