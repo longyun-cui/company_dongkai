@@ -166,6 +166,19 @@
             @endif
 
 
+            {{--牙齿数量--}}
+            @if(in_array($me->staff_category,[0,1,9,41,51,61,71]))
+                <select class="search-filter form-filter filter-smd select2-box-c" name="order-field-1">
+                    <option value="-1">牙齿数量</option>
+                    @if(!empty(config('dk.common-config.teeth_count')))
+                        @foreach(config('dk.common-config.teeth_count') as $k => $v)
+                            <option value ="{{ $k }}">{{ $v }}</option>
+                        @endforeach
+                    @endif
+                </select>
+            @endif
+
+
             {{--审核状态--}}
             @if(in_array($me->staff_category,[0,1,9,71]))
             <select class="search-filter form-filter filter-smd select2-box-c" name="order-ai-inspected-status">

@@ -564,6 +564,17 @@ class DK_Staff__OrderRepository {
         }
 
 
+        // 牙齿数量
+        if(isset($post_data['field_1']))
+        {
+            $field_1_int = intval($post_data['field_1']);
+            if(!in_array($field_1_int,[-1]))
+            {
+                $query->where('dk_common__order.field_1', $field_1_int);
+            }
+        }
+
+
         // 录音质量 []
         if(isset($post_data['recording_quality']))
         {

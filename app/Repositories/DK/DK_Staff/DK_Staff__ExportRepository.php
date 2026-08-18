@@ -487,27 +487,27 @@ class DK_Staff__ExportRepository {
 //                }
 //                else $cellData[$k]['recording_address'] = $v['recording_address'];
 //            }
-            if(!empty($v['recording_address_list']))
-            {
-                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['id'],'2024').'&phone='.$v['client_phone'];
-            }
-            else
-            {
-                $cellData[$k]['recording_address'] = '';
-            }
+//            if(!empty($v['recording_address_list']))
+//            {
+//                $recording_address_list_text = "";
+//                $recording_address_list = json_decode($v['recording_address_list']);
+//                if(count($recording_address_list) > 0)
+//                {
+//                    foreach($recording_address_list as $key => $recording)
+//                    {
+//                        $recording_address_list_text .= $recording."\r\n";
+//                    }
+//                }
+//                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
+////                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['id'],'2024').'&phone='.$v['client_phone'];
+//            }
+//            else
+//            {
+//                $cellData[$k]['recording_address'] = '';
+//            }
 
-
-            // 是否重复
-            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
-            else $cellData[$k]['is_repeat'] = '--';
-
-            // 审核
-            $cellData[$k]['inspector_name'] = $v['inspector']['name'];
-            $cellData[$k]['inspected_time'] = date('Y-m-d H:i:s', $v['inspected_at']);
-            $cellData[$k]['inspected_result'] = $v['inspected_result'];
-            $cellData[$k]['rejected_reason'] = $v['rejected_reason'];
-
-
+            // 录音文件
+            $cellData[$k]['recording_file'] = '';
             if(!empty($v['recording_address_list']))
             {
                 $recording_file = "";
@@ -521,6 +521,17 @@ class DK_Staff__ExportRepository {
                     $cellData[$k]['recording_file'] = trim(rtrim($recording_file,"\r\n"), '"');
                 }
             }
+
+
+            // 是否重复
+            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
+            else $cellData[$k]['is_repeat'] = '--';
+
+            // 审核
+            $cellData[$k]['inspector_name'] = $v['inspector']['name'];
+            $cellData[$k]['inspected_time'] = date('Y-m-d H:i:s', $v['inspected_at']);
+            $cellData[$k]['inspected_result'] = $v['inspected_result'];
+            $cellData[$k]['rejected_reason'] = $v['rejected_reason'];
         }
 
 
@@ -547,13 +558,14 @@ class DK_Staff__ExportRepository {
                 'location_district'=>'行政区',
                 'teeth_count'=>'牙齿数量',
                 'description'=>'通话小结',
-                'recording_address'=>'录音地址',
+//                'recording_address'=>'录音地址',
+                'recording_address'=>'录音文件',
                 'is_repeat'=>'是否重复',
                 'inspector_name'=>'审核人',
                 'inspected_time'=>'审核时间',
                 'inspected_result'=>'审核结果',
                 'rejected_reason'=>'拒绝原因',
-                'recording_file'=>'录音文件',
+//                'recording_file'=>'录音文件',
             ];
         }
         else
@@ -578,13 +590,14 @@ class DK_Staff__ExportRepository {
                 'location_district'=>'行政区',
                 'teeth_count'=>'牙齿数量',
                 'description'=>'通话小结',
-                'recording_address'=>'录音地址',
+//                'recording_address'=>'录音地址',
+                'recording_file'=>'录音文件',
                 'is_repeat'=>'是否重复',
                 'inspector_name'=>'审核人',
                 'inspected_time'=>'审核时间',
                 'inspected_result'=>'审核结果',
                 'rejected_reason'=>'拒绝原因',
-                'recording_file'=>'录音文件',
+//                'recording_file'=>'录音文件',
             ];
         }
         array_unshift($cellData, $title_row);
@@ -2115,27 +2128,17 @@ class DK_Staff__ExportRepository {
 //                }
 //                else $cellData[$k]['recording_address'] = $v['recording_address'];
 //            }
-            if(!empty($v['recording_address_list']))
-            {
-                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['id'],'2024').'&phone='.$v['client_phone'];
-            }
-            else
-            {
-                $cellData[$k]['recording_address'] = '';
-            }
+//            if(!empty($v['recording_address_list']))
+//            {
+//                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['id'],'2024').'&phone='.$v['client_phone'];
+//            }
+//            else
+//            {
+//                $cellData[$k]['recording_address'] = '';
+//            }
 
-
-            // 是否重复
-            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
-            else $cellData[$k]['is_repeat'] = '--';
-
-            // 审核
-            $cellData[$k]['inspector_name'] = $v['inspector']['name'];
-            $cellData[$k]['inspected_time'] = date('Y-m-d H:i:s', $v['inspected_at']);
-            $cellData[$k]['inspected_result'] = $v['inspected_result'];
-            $cellData[$k]['rejected_reason'] = $v['rejected_reason'];
-
-//            $cellData[$k]['recording_file'] = '';
+            // 录音文件
+            $cellData[$k]['recording_file'] = '';
             if(!empty($v['recording_address_list']))
             {
                 $recording_file = "";
@@ -2149,7 +2152,17 @@ class DK_Staff__ExportRepository {
                     $cellData[$k]['recording_file'] = trim(rtrim($recording_file,"\r\n"), '"');
                 }
             }
-//            dd($cellData[$k]['recording_file']);
+
+
+            // 是否重复
+            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
+            else $cellData[$k]['is_repeat'] = '--';
+
+            // 审核
+            $cellData[$k]['inspector_name'] = $v['inspector']['name'];
+            $cellData[$k]['inspected_time'] = date('Y-m-d H:i:s', $v['inspected_at']);
+            $cellData[$k]['inspected_result'] = $v['inspected_result'];
+            $cellData[$k]['rejected_reason'] = $v['rejected_reason'];
         }
 
 
@@ -2177,13 +2190,14 @@ class DK_Staff__ExportRepository {
                 'location_district'=>'行政区',
                 'teeth_count'=>'牙齿数量',
                 'description'=>'通话小结',
-                'recording_address'=>'录音地址',
+//                'recording_address'=>'录音地址',
+                'recording_file'=>'录音文件',
                 'is_repeat'=>'是否重复',
                 'inspector_name'=>'审核人',
                 'inspected_time'=>'审核时间',
                 'inspected_result'=>'审核结果',
                 'rejected_reason'=>'拒绝原因',
-                'recording_file'=>'录音文件',
+//                'recording_file'=>'录音文件',
             ];
         }
         else
@@ -2209,13 +2223,14 @@ class DK_Staff__ExportRepository {
                 'location_district'=>'行政区',
                 'teeth_count'=>'牙齿数量',
                 'description'=>'通话小结',
-                'recording_address'=>'录音地址',
+//                'recording_address'=>'录音地址',
+                'recording_file'=>'录音文件',
                 'is_repeat'=>'是否重复',
                 'inspector_name'=>'审核人',
                 'inspected_time'=>'审核时间',
                 'inspected_result'=>'审核结果',
                 'rejected_reason'=>'拒绝原因',
-                'recording_file'=>'录音文件',
+//                'recording_file'=>'录音文件',
             ];
         }
         array_unshift($cellData, $title_row);
@@ -4796,26 +4811,17 @@ class DK_Staff__ExportRepository {
 //                }
 //                else $cellData[$k]['recording_address'] = $v['recording_address'];
 //            }
-            if(!empty($v['recording_address_list']))
-            {
-                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['id'],'2024').'&phone='.$v['client_phone'];
-            }
-            else
-            {
-                $cellData[$k]['recording_address'] = '';
-            }
+//            if(!empty($v['recording_address_list']))
+//            {
+//                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['id'],'2024').'&phone='.$v['client_phone'];
+//            }
+//            else
+//            {
+//                $cellData[$k]['recording_address'] = '';
+//            }
 
-
-            // 是否重复
-            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
-            else $cellData[$k]['is_repeat'] = '--';
-
-            // 审核
-            $cellData[$k]['inspector_name'] = $v['inspector']['name'];
-            $cellData[$k]['inspected_time'] = date('Y-m-d H:i:s', $v['inspected_at']);
-            $cellData[$k]['inspected_result'] = $v['inspected_result'];
-
-
+            // 录音文件
+            $cellData[$k]['recording_file'] = '';
             if(!empty($v['recording_address_list']))
             {
                 $recording_file = "";
@@ -4829,6 +4835,16 @@ class DK_Staff__ExportRepository {
                     $cellData[$k]['recording_file'] = trim(rtrim($recording_file,"\r\n"), '"');
                 }
             }
+
+
+            // 是否重复
+            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
+            else $cellData[$k]['is_repeat'] = '--';
+
+            // 审核
+            $cellData[$k]['inspector_name'] = $v['inspector']['name'];
+            $cellData[$k]['inspected_time'] = date('Y-m-d H:i:s', $v['inspected_at']);
+            $cellData[$k]['inspected_result'] = $v['inspected_result'];
         }
 
 
@@ -4885,12 +4901,13 @@ class DK_Staff__ExportRepository {
                 'location_district'=>'行政区',
                 'teeth_count'=>'牙齿数量',
                 'description'=>'通话小结',
-                'recording_address'=>'录音地址',
+//                'recording_address'=>'录音地址',
+                'recording_file'=>'录音文件',
                 'is_repeat'=>'是否重复',
                 'inspector_name'=>'审核人',
                 'inspected_time'=>'审核时间',
                 'inspected_result'=>'审核结果',
-                'recording_file'=>'录音文件',
+//                'recording_file'=>'录音文件',
             ];
         }
         array_unshift($cellData, $title_row);
