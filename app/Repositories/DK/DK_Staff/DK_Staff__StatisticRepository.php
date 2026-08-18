@@ -5167,7 +5167,8 @@ class DK_Staff__StatisticRepository {
         }
 
         // 工单统计
-        $query_order = DK_Common__Order::withTrashed()->select('project_id','creator_team_id')
+//        $query_order = DK_Common__Order::withTrashed()->select('project_id','creator_team_id')
+        $query_order = DK_Common__Order::select('project_id','creator_team_id')
             ->addSelect(DB::raw("
                     count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
