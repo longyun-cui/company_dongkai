@@ -930,9 +930,31 @@
             radioClass: 'iradio_minimal-blue'
         });
 
-        $('#'+$config.target).find('.select2-box-c').select2({
-            theme: 'classic'
+        // $('#'+$config.target).find('.select2-box-c').select2({
+        //     theme: 'classic',
+        //     placeholder: 'classic'
+        // });
+        //
+        $('#'+$config.target).find('.select2-box-c').each(function() {
+            var $that = $(this);
+            var $placeholder = $that.attr('data-placeholder');
+            // console.log($placeholder);
+
+            var $dropdownParent = $(document.body);
+            var $modalSelector = $that.data('modal');
+            if ($modalSelector)
+            {
+                $dropdownParent = $($modalSelector);
+            }
+
+            $that.select2({
+                theme: 'classic',
+                placeholder: $placeholder
+            });
         });
+
+
+
         $('#'+$config.target).find('.time-picker-c').datetimepicker({
             // 1. 格式控制是否显示时间
             format: 'YYYY-MM-DD HH:mm',  // 包含HH:mm自动启用时间选择

@@ -111,6 +111,72 @@
     tbody tr.merge-even { background-color: #ffffff !important; /* 白色 - 偶数合并块 */ }
 
 
+    .select2-container .select2-selection--multiple .select2-search--inline:only-child,
+    .select2-container .select2-selection--multiple .select2-search__field:placeholder-shown {
+        width: auto !important;
+    }
+
+    /* 未选中：让 placeholder 搜索框占满整行 */
+    .select2-container--classic.select2-container--focus .select2-selection--multiple .select2-search--inline:only-child,
+    .select2-container--classic .select2-selection--multiple .select2-search--inline:only-child .select2-search__field:placeholder-shown {
+        width: 100% !important;
+    }
+
+    /* 已选中至少一个：把搜索框收回去，别再抢 chip 的位置 */
+    .select2-container--classic .select2-selection--multiple li.select2-selection__choice ~ .select2-search--inline {
+        width: auto !important;
+    }
+    .select2-container--classic .select2-selection--multiple li.select2-selection__choice ~ .select2-search--inline .select2-search__field {
+        width: 0.75em !important;
+    }
+
+
+
+    /* 统一已选中项的视觉风格 */
+    .select2-container--classic .select2-results__option[aria-selected="true"] {
+        background: linear-gradient(135deg, #f0f9ff 0%, #e6f7ff 100%) !important;
+        border-left: 2px solid #1890ff !important;
+        padding-left: 28px !important;
+        position: relative;
+        font-weight: 500;
+        color: #1890ff !important;
+    }
+
+    .select2-container--classic .select2-results__option[aria-selected="true"]::before {
+        content: "✓";
+        position: absolute;
+        left: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #1890ff;
+        font-weight: bold;
+        background: white;
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    /* 确保多选框中的标签样式一致 */
+    .select2-container--classic .select2-selection--multiple .select2-selection__choice {
+        background: linear-gradient(135deg, #f0f9ff 0%, #e6f7ff 100%) !important;
+        border: 1px solid #91d5ff !important;
+        color: #1890ff !important;
+        padding-left: 8px !important;
+        border-radius: 4px !important;
+    }
+
+    .select2-container--classic .select2-selection--multiple .select2-selection__choice__remove {
+        color: #1890ff !important;
+        border-right: 1px solid #91d5ff !important;
+        margin-right: 5px;
+        padding-right: 5px;
+    }
+
 
 
 </style>

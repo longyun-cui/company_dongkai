@@ -76,6 +76,7 @@
                         data-team-category="41"
                         data-team-type="11"
                         multiple="multiple"
+                        data-placeholder="选择团队"
                 >
                     <option value="-1">选择团队</option>
                     @if(!empty($team_list) && count($team_list) > 0)
@@ -201,7 +202,7 @@
             </select>
 
             {{--审核结果--}}
-            <select class="search-filter form-filter filter-xl select2-box-c" name="order-inspected-result[]" multiple="multiple">
+            <select class="search-filter form-filter filter-xl select2-box-c" name="order-inspected-result[]" multiple="multiple" data-placeholder="审核结果">
                 <option value="-1">审核结果</option>
                 @if($me->department_district_id <= 0)
                     @foreach(config('dk.common-config.inspected_result') as $v)
@@ -215,7 +216,7 @@
             </select>
             {{--审核结果--}}
             @if(in_array($me->staff_category,[0,1,9,71]))
-                <select class="search-filter form-filter filter-xl select2-box-c" name="order-inspected-result-2[]" multiple="multiple">
+                <select class="search-filter form-filter filter-xl select2-box-c" name="order-inspected-result-2[]" multiple="multiple" data-placeholder="选择档位">
 {{--                    <option value="-1">审核结果2</option>--}}
                     @foreach(config('dk.common-config.inspected_result_2') as $v)
                         <option value="{{ $v }}">{{ $v }}</option>
@@ -224,7 +225,7 @@
             @endif
             {{--审核结果--}}
             @if(in_array($me->staff_category,[51]))
-            <select class="search-filter form-filter filter-xl select2-box-c" name="order-inspected-result-2[]" multiple="multiple">
+            <select class="search-filter form-filter filter-xl select2-box-c" name="order-inspected-result-2[]" multiple="multiple" data-placeholder="选择档位">
 {{--                <option value="-1">审核结果2</option>--}}
                 <option value="一档">一档</option>
                 <option value="二档">二档</option>
@@ -262,7 +263,7 @@
             @endif
             {{--交付结果--}}
             @if(in_array($me->staff_category,[0,1,9,71]))
-            <select class="search-filter form-filter filter-xl select2-box-c" name="order-delivered-result[]" multiple="multiple">
+            <select class="search-filter form-filter filter-xl select2-box-c" name="order-delivered-result[]" multiple="multiple"data-placeholder="交付结果">
                 <option value="-1">交付结果</option>
                 @foreach(config('dk.common-config.delivered_result') as $v)
                     <option value="{{ $v }}">{{ $v }}</option>
@@ -288,6 +289,7 @@
                     name="order-district[]"
                     data-item-category="11"
                     multiple="multiple"
+                    data-placeholder="选择区域"
             >
                 <option value="">选择区域</option>
             </select>
