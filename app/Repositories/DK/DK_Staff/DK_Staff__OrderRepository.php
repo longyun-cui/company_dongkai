@@ -3930,7 +3930,8 @@ class DK_Staff__OrderRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = DK_Common__Order::withTrashed()->find($id);
+//        $item = DK_Common__Order::withTrashed()->find($id);
+        $item = DK_Common__Order::find($id);
         if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
 
         if($item->created_type != 1)
@@ -4453,7 +4454,8 @@ class DK_Staff__OrderRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = DK_Common__Order::withTrashed()->find($id);
+//        $item = DK_Common__Order::withTrashed()->find($id);
+        $item = DK_Common__Order::find($id);
         if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
 
         $project_pre_id = $item->project_id;
@@ -4878,7 +4880,8 @@ class DK_Staff__OrderRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = DK_Common__Order::withTrashed()->find($id);
+//        $item = DK_Common__Order::withTrashed()->find($id);
+        $item = DK_Common__Order::find($id);
         if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
 
         $this->get_me();
@@ -5498,7 +5501,8 @@ class DK_Staff__OrderRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = DK_Common__Order::withTrashed()->find($id);
+//        $item = DK_Common__Order::withTrashed()->find($id);
+        $item = DK_Common__Order::find($id);
         if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
 
         $this->get_me();
@@ -5642,7 +5646,8 @@ class DK_Staff__OrderRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = DK_Common__Order::withTrashed()->find($id);
+//        $item = DK_Common__Order::withTrashed()->find($id);
+        $item = DK_Common__Order::find($id);
         if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
 
         $this->get_me();
@@ -5855,7 +5860,8 @@ class DK_Staff__OrderRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = DK_Common__Order::withTrashed()->find($id);
+//        $item = DK_Common__Order::withTrashed()->find($id);
+        $item = DK_Common__Order::find($id);
         if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
 
         $this->get_me();
@@ -6304,7 +6310,8 @@ class DK_Staff__OrderRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = DK_Common__Order::withTrashed()->find($id);
+//        $item = DK_Common__Order::withTrashed()->find($id);
+        $item = DK_Common__Order::find($id);
         if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
 
         $this->get_me();
@@ -6420,7 +6427,8 @@ class DK_Staff__OrderRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = DK_Common__Order::withTrashed()->find($id);
+//        $item = DK_Common__Order::withTrashed()->find($id);
+        $item = DK_Common__Order::find($id);
         if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
 
         $this->get_me();
@@ -6539,7 +6547,8 @@ class DK_Staff__OrderRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = DK_Common__Order::withTrashed()->find($id);
+//        $item = DK_Common__Order::withTrashed()->find($id);
+        $item = DK_Common__Order::find($id);
         if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
         $client_phone = $item->client_phone;
         $order_category = $item->order_category;
@@ -7066,7 +7075,8 @@ class DK_Staff__OrderRepository {
                 $non_delivered_result = '';
                 $non_delivery_reason = '';
 
-                $item = DK_Common__Order::withTrashed()->find($id);
+//                $item = DK_Common__Order::withTrashed()->find($id);
+                $item = DK_Common__Order::find($id);
                 if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
                 $client_phone = $item->client_phone;
                 $order_category = $item->order_category;
@@ -7599,7 +7609,8 @@ class DK_Staff__OrderRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = DK_Common__Order::withTrashed()->find($id);
+//        $item = DK_Common__Order::withTrashed()->find($id);
+        $item = DK_Common__Order::find($id);
         if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
         $client_phone = $item->client_phone;
         $order_category = $item->order_category;
@@ -8104,7 +8115,8 @@ class DK_Staff__OrderRepository {
                 $delivered_result = '';
                 $non_delivery_reason = '';
 
-                $item = DK_Common__Order::withTrashed()->find($id);
+//                $item = DK_Common__Order::withTrashed()->find($id);
+                $item = DK_Common__Order::find($id);
                 if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
                 $client_phone = $item->client_phone;
                 $order_category = $item->order_category;
@@ -8572,7 +8584,8 @@ class DK_Staff__OrderRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = DK_Common__Order::withTrashed()->find($id);
+//        $item = DK_Common__Order::withTrashed()->find($id);
+        $item = DK_Common__Order::find($id);
         if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
         $client_phone = $item->client_phone;
         $order_category = $item->order_category;
@@ -9057,7 +9070,8 @@ class DK_Staff__OrderRepository {
                 $non_delivered_result = '';
                 $non_delivery_reason = '';
 
-                $item = DK_Common__Order::withTrashed()->find($id);
+//                $item = DK_Common__Order::withTrashed()->find($id);
+                $item = DK_Common__Order::find($id);
                 if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
                 $client_phone = $item->client_phone;
                 $order_category = $item->order_category;
@@ -9780,7 +9794,8 @@ class DK_Staff__OrderRepository {
         }
 
 
-        $item = DK_Common__Order::withTrashed()->find($item_id);
+//        $item = DK_Common__Order::withTrashed()->find($item_id);
+        $item = DK_Common__Order::find($item_id);
         if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
 
 
@@ -10121,7 +10136,8 @@ class DK_Staff__OrderRepository {
 
             foreach($sorted as $key => $id)
             {
-                $item = DK_Common__Order::withTrashed()->find($id);
+//                $item = DK_Common__Order::withTrashed()->find($id);
+                $item = DK_Common__Order::find($id);
                 if($item)
                 {
                     $item->ai_inspected_status = 1;
@@ -10201,7 +10217,8 @@ class DK_Staff__OrderRepository {
         }
 
 
-        $item = DK_Common__Order::withTrashed()->find($item_id);
+//        $item = DK_Common__Order::withTrashed()->find($item_id);
+        $item = DK_Common__Order::find($item_id);
         if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
 
 
@@ -10640,7 +10657,8 @@ class DK_Staff__OrderRepository {
 
             foreach($sorted as $key => $id)
             {
-                $item = DK_Common__Order::withTrashed()->find($id);
+//                $item = DK_Common__Order::withTrashed()->find($id);
+                $item = DK_Common__Order::find($id);
                 if($item)
                 {
                     $item->ai_inspected_status = 1;
