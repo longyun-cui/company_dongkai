@@ -169,7 +169,7 @@
 
             {{--牙齿数量--}}
             @if(in_array($me->staff_category,[0,1,9,41,51,61,71]))
-                <select class="search-filter form-filter filter-smd select2-box-c" name="order-field-1">
+                <select class="search-filter form-filter filter-xl select2-box-c" name="order-field-1[]" multiple="multiple"data-placeholder="牙齿数量">
                     <option value="-1">牙齿数量</option>
                     @if(!empty(config('dk.common-config.teeth_count')))
                         @foreach(config('dk.common-config.teeth_count') as $k => $v)

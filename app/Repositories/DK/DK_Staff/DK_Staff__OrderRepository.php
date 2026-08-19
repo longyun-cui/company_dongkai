@@ -478,7 +478,7 @@ class DK_Staff__OrderRepository {
                 $query->whereIn('dk_common__order.inspected_result', $post_data['inspected_result']);
             }
         }
-        // 审核结果
+        // 审核结果[多选]
         if(!empty($post_data['inspected_result_2']))
         {
             if(count($post_data['inspected_result_2']))
@@ -564,13 +564,21 @@ class DK_Staff__OrderRepository {
         }
 
 
-        // 牙齿数量
-        if(isset($post_data['field_1']))
+        // 牙齿数量[单选]
+//        if(isset($post_data['field_1']))
+//        {
+//            $field_1_int = intval($post_data['field_1']);
+//            if(!in_array($field_1_int,[-1]))
+//            {
+//                $query->where('dk_common__order.field_1', $field_1_int);
+//            }
+//        }
+        // 牙齿数量[多选]
+        if(!empty($post_data['field_1']))
         {
-            $field_1_int = intval($post_data['field_1']);
-            if(!in_array($field_1_int,[-1]))
+            if(count($post_data['field_1']))
             {
-                $query->where('dk_common__order.field_1', $field_1_int);
+                $query->whereIn('dk_common__order.field_1', $post_data['field_1']);
             }
         }
 
