@@ -309,7 +309,7 @@
                         if (type === 'display')
                         {
                             // 显示时返回格式化字符串
-                            if(data > 0) return parseFloat((parseInt(row.call_time_sum) * 0.13) / data).toFixed(2);
+                            if(data > 0) return parseFloat((parseInt(row.call_time_sum) * 0.12) / data).toFixed(2);
                             else return '--';
                             // if(!data) return '--';
                             // return parseFloat((parseInt(row.call_time_sum) * 0.13) / data).toFixed(2);
@@ -317,13 +317,13 @@
                         else if (type === 'sort')
                         {
                             // 排序时返回数值
-                            if(data > 0) return parseFloat((parseInt(row.call_time_sum) * 0.13) / data).toFixed(2);
+                            if(data > 0) return parseFloat((parseInt(row.call_time_sum) * 0.12) / data).toFixed(2);
                             else return data;
                         }
                         else
                         {
                             // 过滤等其他操作使用原始值
-                            if(data > 0) return parseFloat((parseInt(row.call_time_sum) * 0.13) / data).toFixed(2);
+                            if(data > 0) return parseFloat((parseInt(row.call_time_sum) * 0.12) / data).toFixed(2);
                             else return data;
                         }
                     }
