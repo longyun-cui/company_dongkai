@@ -4632,6 +4632,13 @@ class DK_Staff__OrderRepository {
         // 更改项目
         if($item->project_id != $project_id)
         {
+            if($item->delivered_status > 0)
+            {
+                if(!in_array($me->staff_category,[0,1,71]))
+                {
+                    return response_error([],"工单已交付，请联系运营转单！");
+                }
+            }
 //            $project_old = DK_Common__Project::find($item->project_id);
 //            if(!$project_old) return response_error([],"工单所在项目不存在！");
             $project_new = DK_Common__Project::find($project_id);
@@ -5209,6 +5216,14 @@ class DK_Staff__OrderRepository {
         // 更改项目
         if($item->project_id != $project_id)
         {
+            if($item->delivered_status > 0)
+            {
+                if(!in_array($me->staff_category,[0,1,71]))
+                {
+                    return response_error([],"工单已交付，请联系运营转单！");
+                }
+            }
+
 //            $project_old = DK_Common__Project::find($item->project_id);
 //            if(!$project_old) return response_error([],"工单所在项目不存在！");
             $project_new = DK_Common__Project::find($project_id);
