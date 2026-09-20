@@ -375,6 +375,7 @@ class DK_Staff__ExportRepository {
                 return $query->where('team_id', $team_id);
             })
             ->where('delivered_status','>',0)
+            ->whereIn('delivered_result',['正常交付','折扣交付','郊区交付','隔日交付'])
             ->whereIn('id',$ids_array);
 
 //        if(in_array($me->staff_category,[77]))
@@ -5885,7 +5886,9 @@ class DK_Staff__ExportRepository {
 
 
         // 工单
-        $query_order = DK_Common__Order::select('client_phone')->where('delivered_status',1);
+        $query_order = DK_Common__Order::select('client_phone')
+            ->where('delivered_status',1);
+//            ->whereIn('delivered_result',['正常交付','折扣交付','郊区交付','隔日交付']);
         $query_delivery = DK_Common__Delivery::select('client_phone');
 
         if(!empty($project_id_int))
