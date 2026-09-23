@@ -24363,7 +24363,15 @@ EOF;
                 {
                     $reserve_1_value = $post_data['notify']['field']['reserve_1']['value'];
                     if(in_array($reserve_1_value,['超区','超龄','已种植','无声','语音助手']))
-                    {
+
+                        if($clientMark_data['type'] == '医美客户')
+                        {
+                            $order_exception_insert_data["order_category"] = 11;
+                        }
+                        else
+                        {
+                            $order_exception_insert_data["order_category"] = 1;
+                        }
                         $order_exception_insert_data["creator_id"] = $staff->id;
                         $order_exception_insert_data["exception_type"] = $reserve_1_value;
                         $order_exception_insert_data["client_phone"] = $phone_number;
