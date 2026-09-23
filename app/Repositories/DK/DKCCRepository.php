@@ -24363,6 +24363,7 @@ EOF;
                 {
                     $reserve_1_value = $post_data['notify']['field']['reserve_1']['value'];
                     if(in_array($reserve_1_value,['超区','超龄','已种植','无声','语音助手']))
+                    {
 
                         if($clientMark_data['type'] == '医美客户')
                         {
