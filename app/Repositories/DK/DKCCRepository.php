@@ -1,7 +1,6 @@
 <?php
 namespace App\Repositories\DK;
 
-use App\Models\DK\DK_Common\DK_Common__Staff;
 use App\Models\DK_A\DK_A_Order;
 
 use App\Models\DK_A\DK_Pool;
@@ -49,6 +48,8 @@ use App\Jobs\DK_CC\UpdatePoolsJob;
 use App\Jobs\DK_CC\UpdatePoolsScoreJob;
 
 use App\Models\DK\DK_Common\DK_Common__Order;
+use App\Models\DK\DK_Common\DK_Common__Order__Exception;
+use App\Models\DK\DK_Common\DK_Common__Staff;
 
 use App\Repositories\Common\CommonRepository;
 
@@ -24358,9 +24359,32 @@ EOF;
             DB::beginTransaction();
             try
             {
-                $mine = new DK_Common__Order;
-                $bool_o = $mine->fill($order_insert_data)->save();
-                if(!$bool_o) throw new Exception("DK_Common__Order--insert--fail");
+                if(!empty($post_data['notify']['field']['reserve_1']['value']))
+                {
+                    $reserve_1_value = $post_data['notify']['field']['reserve_1']['value'];
+                    if(in_array($reserve_1_value,['超区','超龄','已种植','无声','语音助手']))
+                    {
+                        $order_exception_insert_data["creator_id"] = $staff->id;
+                        $order_exception_insert_data["exception_type"] = $reserve_1_value;
+                        $order_exception_insert_data["client_phone"] = $phone_number;
+
+                        $mine = new DK_Common__Order__Exception;
+                        $bool_o = $mine->fill($order_exception_insert_data)->save();
+                        if(!$bool_o) throw new Exception("DK_Common__Order__Exception--insert--fail");
+                    }
+                    else
+                    {
+                        $mine = new DK_Common__Order;
+                        $bool_o = $mine->fill($order_insert_data)->save();
+                        if(!$bool_o) throw new Exception("DK_Common__Order--insert--fail");
+                    }
+                }
+                else
+                {
+                    $mine = new DK_Common__Order;
+                    $bool_o = $mine->fill($order_insert_data)->save();
+                    if(!$bool_o) throw new Exception("DK_Common__Order--insert--fail");
+                }
 
 
                 DB::commit();
