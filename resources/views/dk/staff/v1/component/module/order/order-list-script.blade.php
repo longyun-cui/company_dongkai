@@ -4238,6 +4238,12 @@
             var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
 
 
+            var $model = $datatable_wrapper.find('select[name="order--bulk-ai-inspect-model"]').val();
+            console.log($model);
+            if(!$model)
+            {
+                layer.msg('请选择ai模型！');
+            }
             var $ids = '';
             $datatable_wrapper.find('input[name="bulk-id"]:checked').each(function() {
                 $ids += $(this).val()+'-';
@@ -4272,6 +4278,7 @@
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: "bulk-inspecting--by-ai",
+                            model: $model,
                             ids: $ids
                         },
                         'json'

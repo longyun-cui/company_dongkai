@@ -749,6 +749,102 @@ class DK_Staff__CommonRepository {
 
     }
     //
+    public function o1__api__ai_inspecting__by__ali__qwen38_omni_flash($post_data)
+    {
+//        dd('o1__api__ai_inspecting__by__ali__qwen38_omni_flash');
+        $platform = $post_data['platform'];
+        $model = $post_data['model'];
+        $system_prompt = !empty($post_data['system_prompt']) ? $post_data['system_prompt'] : '';
+        $prompt = $post_data['prompt'];
+        $audio = $post_data['voice_record'];
+        $audio_list = $post_data['voice_record_list'];
+
+        $content_list = [];
+        foreach($audio_list as $k => $v)
+        {
+            $audio = [];
+            $audio['type'] = "input_audio";
+            $audio['input_audio']['data'] = $v;
+            $audio['input_audio']['format'] = "mp3";
+            $content_list[] = $audio;
+        }
+        {
+            $text = [];
+            $text['type'] = "text";
+            $text['text'] = $prompt;
+            $content_list[] = $text;
+        }
+
+        $workspaceId = env('WORKSPACE_ID');
+        // 设置请求的URL
+        $url = 'https://'.$workspaceId.'.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions';
+        // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：$apiKey = "sk-xxx";
+        $apiKey = env('DASHSCOPE_API_KEY');
+        // 设置请求头
+        $headers = [
+            'Authorization: Bearer ' . $apiKey,
+            'Content-Type: application/json'
+        ];
+        // 设置请求体
+        $data = [
+            // 模型列表：https://help.aliyun.com/model-studio/getting-started/models
+            "model" => $model,
+            "messages" => [
+                [
+                    "role" => "system",
+//                    "content" => "你是一名极其严谨的口腔医疗销售线索审核员。你的任务是严格按照提供的【审核规则】，对给定的【通话录音】进行合规性审核，并输出标准化的审核结果。返回结果请严格遵循JSON Schema输出，禁止使用Markdown格式，禁止包含json代码块标记，禁止换行，输出内容必须是单行的紧凑JSON字符串，每一个返回字段均为关联数组类型， :之后不要再有{、}、[、]等能够污染php程序的符号、特殊符号和保留字，务必将所有引号替换为中文全角符号，严禁出现半角英文引号，返回内容禁止使用英文引号，如需引用标注，务必使用中文引号或使用「」『』等中文符号，输出内容请遵循中文排版规范，使用中文引号「」和『』，禁止使用英文引号避免数据格式混乱。不要包含任何其他解释或文字。如果信息在录音中不存在，请对应字段填null！ 规则如下：".$system_prompt
+                    "content" => "你是一名极其严谨的口腔医疗销售线索审核员。你的任务是严格按照提供的【审核规则】，对给定的【通话录音】进行合规性审核，并输出标准化的审核结果。返回结果请严格遵循JSON Schema输出，禁止使用Markdown格式，禁止包含json代码块标记，禁止换行，输出内容必须是单行的紧凑JSON字符串， 键名不要有【】「」中文引号，只返回【】里的内容，:之后不要再有{、}、[、]等能够污染php程序的符号、特殊符号和保留字。不要包含任何其他解释或文字。如果信息在录音中不存在，请对应字段填null！ 规则如下：".$system_prompt
+                ],
+                [
+                    "role" => "user",
+                    "content" => $content_list
+                ]
+            ],
+//            "parameters" => [
+//                "response_format" => [
+//                    "type" => "json_object",
+//                    "schema" => [
+//                        "type" => "object",
+//                        "properties" => [
+//                        ],
+//                        "required" => []
+//                    ]
+//                ]
+//            ],
+//            "stream" => true,
+//            "stream_options" => [
+//                "include_usage" => true
+//            ],
+            "modalities" => ["text"],
+            "audio" => [
+                "format" => "mp3"
+            ]
+        ];
+//        dd($data);
+
+
+        // 初始化cURL会话
+        $ch = curl_init();
+        // 设置cURL选项
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        // 执行cURL会话
+        $response = curl_exec($ch);
+        // 检查是否有错误发生
+        if (curl_errno($ch)) {
+            echo 'Curl error: ' . curl_error($ch);
+        }
+        // 关闭cURL资源
+        curl_close($ch);
+        // 输出响应结果
+        return $response;
+
+
+    }
+    //
     public function o1__api__ai_converting__from__ali($post_data)
     {
         $platform = $post_data['platform'];

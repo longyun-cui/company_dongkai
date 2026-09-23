@@ -31,6 +31,7 @@ use App\Models\DK\DK_API_BY_Received;
 
 
 use App\Jobs\DK\DK_AI_Inspect_Job;
+use App\Jobs\DK\DK_AI_Inspect_Job__by__ali__Qwen38_Omni_Flash;
 use App\Jobs\DK\DK_AI_Convert_Job;
 use App\Jobs\DK\DK_Push_Oder_to_Vos_Data_Job;
 use App\Jobs\DK_Client\AutomaticDispatchingJob;
@@ -3970,6 +3971,7 @@ class DK_Staff__OrderRepository {
 
 
         // 自动AI质检
+        $ai_model = '';
         $inspecting_method = 0;
         $is_automatic_ai_converting = 0;
         $is_automatic_ai_inspecting = 0;
@@ -3991,6 +3993,7 @@ class DK_Staff__OrderRepository {
             if($project->is_automatic_ai_inspecting == 1)
             {
                 $is_automatic_ai_inspecting = 1;
+                $ai_model = $project->ai_model;
             }
 
             // 自动AI文字审核
@@ -4000,6 +4003,7 @@ class DK_Staff__OrderRepository {
             }
         }
         else return response_error([],"工单所选【项目】不存在！");
+//        dd($ai_model);
         // 判断项目与城市是否匹配
         if($project->location_city != $item->location_city)
         {
@@ -4199,7 +4203,14 @@ class DK_Staff__OrderRepository {
             //
             if($is_repeat == 0 && $is_automatic_ai_inspecting == 1)
             {
-                DK_AI_Inspect_Job::dispatch($ai_inspected->id);
+                if($ai_model == 'qwen3.8-omni-flash')
+                {
+                    DK_AI_Inspect_Job__by__ali__Qwen38_Omni_Flash::dispatch($ai_inspected->id);
+                }
+                else
+                {
+                    DK_AI_Inspect_Job::dispatch($ai_inspected->id);
+                }
             }
 
             if(env('APP_ENV') == "production" && $item->order_category == 1)
@@ -10055,7 +10066,8 @@ class DK_Staff__OrderRepository {
 
             $ai_data['created_date'] = $date;
             $ai_data['ai_platform'] = 'ali';
-            $ai_data['ai_model'] = $ai_model;
+//            $ai_data['ai_model'] = $ai_model;
+            $ai_data['ai_model'] = 'qwen3.8-omni-flash';
             $ai_data['ai_system_prompt'] = $ai_system_prompt;
             $ai_data['ai_prompt'] = $ai_prompt;
             $ai_data['order_id'] = $item_id;
@@ -10065,7 +10077,9 @@ class DK_Staff__OrderRepository {
             else
             {
                 $ai_inspecting_post_date['platform'] = $ai_data['ai_platform'];
-                $ai_inspecting_post_date['model'] = $ai_data['ai_model'];
+//                $ai_inspecting_post_date['model'] = $ai_data['ai_model'];
+//                $ai_inspecting_post_date['model'] = $ai_data['ai_model'];
+                $ai_inspecting_post_date['model'] = 'qwen3.8-omni-flash';
                 $ai_inspecting_post_date['system_prompt'] = $ai_data['ai_system_prompt'];
                 $ai_inspecting_post_date['prompt'] = $ai_data['ai_prompt'];
                 $ai_inspecting_post_date['voice_record'] = $voice_record_url;
@@ -10073,7 +10087,8 @@ class DK_Staff__OrderRepository {
 
                 $microtime_ai = microtime(true);
 //                $ai_inspecting_response = $this->o1__public__api__ai_inspecting__from__ali($ai_inspecting_post_date);
-                $ai_inspecting_response = $this->commonRepository->o1__api__ai_inspecting__from__ali($ai_inspecting_post_date);
+//                $ai_inspecting_response = $this->commonRepository->o1__api__ai_inspecting__from__ali($ai_inspecting_post_date);
+                $ai_inspecting_response = $this->commonRepository->o1__api__ai_inspecting__by__ali__qwen38_omni_flash($ai_inspecting_post_date);
                 $microtime_ended = microtime(true);
 
                 $ai_inspected->item_status = 9;
@@ -10134,6 +10149,7 @@ class DK_Staff__OrderRepository {
 
         $operate = $post_data["operate"];
         if($operate != 'bulk-inspecting--by-ai') return response_error([],"参数[operate]有误！");
+        $model = $post_data["model"];
         $ids = $post_data['ids'];
         $ids_array = explode("-", $ids);
 
@@ -10189,7 +10205,18 @@ class DK_Staff__OrderRepository {
 
             foreach($job_ids as $key => $id)
             {
-                DK_AI_Inspect_Job::dispatch($id);
+                if($model == 'qwen3.5')
+                {
+                    DK_AI_Inspect_Job::dispatch($id);
+                }
+                else if($model == 'qwen3.8')
+                {
+                    DK_AI_Inspect_Job__by__ali__Qwen38_Omni_Flash::dispatch($id);
+                }
+                else
+                {
+                    DK_AI_Inspect_Job::dispatch($id);
+                }
             }
 
             return response_success(['ids'=>$ids],$msg);

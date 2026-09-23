@@ -381,6 +381,14 @@
             @endif
 
 
+            {{--交付项目--}}
+            <select class="search-filter form-filter filter-md select2-box-c" name="order--bulk-ai-inspect-model">
+                <option value="">选择模型</option>
+                <option value="qwen3.5">qwen3.5</option>
+                <option value="qwen3.8">qwen3.8</option>
+            </select>
+
+
             @if(in_array($me->staff_position,[0,1,9,31]))
             <button type="button" onclick="" class="btn btn-default btn-filter order--bulk-ai-inspect-summit" data-order-category="1">
                 <i class="fa fa-download"></i> 批量·AI质检

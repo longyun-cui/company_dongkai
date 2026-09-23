@@ -20,7 +20,7 @@ use Response, Auth, Validator, DB, Exception, Cache, Blade, Carbon, DateTime;
 use QrCode, Excel;
 
 
-class DK_AI_Inspect_Job implements ShouldQueue
+class DK_AI_Inspect_Job__by__ali__Qwen38_Omni_Flash implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -43,7 +43,7 @@ class DK_AI_Inspect_Job implements ShouldQueue
         $this->id = $ai_inspected_record_id;
         $this->commonRepository = new DK_Staff__CommonRepository;
 
-        $this->onQueue('queue_shared');
+        $this->onQueue('queue_ali_qwen38_omni_flash');
     }
 
     /**
@@ -86,7 +86,7 @@ class DK_AI_Inspect_Job implements ShouldQueue
             if($project)
             {
                 $ai_platform = !empty($project->ai_platform) ? $project->ai_platform : $ai_platform;
-                $ai_model = !empty($project->ai_model) ? $project->ai_model : $ai_model;
+                $ai_model = 'qwen3.8-omni-flash';
                 $ai_prompt = !empty($project->ai_prompt) ? ($project->ai_prompt) : $ai_prompt;
 //                $ai_prompt = !empty($project->ai_prompt) ? ($project->ai_prompt) : $ai_prompt;
                 $ai_system_prompt = !empty($project->ai_system_prompt) ? $project->ai_system_prompt : $ai_system_prompt;
@@ -294,7 +294,7 @@ class DK_AI_Inspect_Job implements ShouldQueue
                 $ai_inspecting_post_date['voice_record_list'] = $recording_address_list;
 
                 $microtime_ai = microtime(true);
-                $ai_inspecting_response = $this->commonRepository->o1__api__ai_inspecting__from__ali($ai_inspecting_post_date);
+                $ai_inspecting_response = $this->commonRepository->o1__api__ai_inspecting__by__ali__qwen38_omni_flash($ai_inspecting_post_date);
                 $microtime_ended = microtime(true);
 
                 $item->item_status = 9;
