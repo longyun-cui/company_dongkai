@@ -444,6 +444,45 @@
                         }
                     }
                 },
+                {
+                    "title": "话费小计",
+                    "data": "call_time_sum",
+                    "type": "num",
+                    "className": "text-right bg-published",
+                    "width": "80px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.taskId == "统计")
+                        {
+                            $(nTd).addClass('text-red').addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(data > 0) return parseFloat(parseInt(data) * 0.12).toFixed(2);
+                            else return '--';
+                            // if(!data) return '--';
+                            // return parseFloat(parseInt(data) * 0.12).toFixed(2);
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            if(data > 0) return parseFloat(parseInt(data) * 0.12).toFixed(2);
+                            else return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            if(data > 0) return parseFloat(parseInt(data) * 0.12).toFixed(2);
+                            else return data;
+                        }
+                    }
+                },
                 // {
                 //     "title": "备注",
                 //     "data": "description",
