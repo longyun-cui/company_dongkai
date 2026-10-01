@@ -24206,6 +24206,9 @@ EOF;
     public function v3_operate_api_OKCC_receiving_result_by_clientMark($post_data)
     {
 
+        $time = time();
+        $date = date("Y-m-d");
+
         $serverFrom = $post_data['serverFrom'];
 
         if($serverFrom == 'FNJ')
@@ -24394,6 +24397,7 @@ EOF;
 //                $order_exception_insert_data["creator_team_unit_id"] = $staff->team_unit_id;
                 $order_exception_insert_data["exception_type"] = $reserve_1_value;
                 $order_exception_insert_data["client_phone"] = $phone_number;
+                $order_exception_insert_data["created_date"] = $date;
 
             }
             else
