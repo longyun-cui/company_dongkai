@@ -13,6 +13,7 @@ use App\Models\DK\DK_Common\DK_Common__Project;
 
 use App\Models\DK\DK_Common\DK_Common__Order;
 use App\Models\DK\DK_Common\DK_Common__Order__Import;
+use App\Models\DK\DK_Common\DK_Common__Order__Exception;
 use App\Models\DK\DK_Common\DK_Common__Order__Operation_Record;
 use App\Models\DK\DK_Common\DK_Common__Delivery;
 
@@ -9554,6 +9555,303 @@ class DK_Staff__OrderRepository {
 
 
 
+    // 【工单】返回-列表-数据
+    public function o1__order_exception__list__datatable_query($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+//        $query = DK_Common__Order::withTrashed()->select('dk_common__order.*');
+        $query = DK_Common__Order__Exception::select('*');
+
+
+        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
+
+        if(!empty($post_data['client_name'])) $query->where('client_name', $post_data['client_name']);
+        if(!empty($post_data['client_phone'])) $query->where('client_phone', $post_data['client_phone']);
+
+        // 发布日期
+        if(!empty($post_data['assign'])) $query->where('published_date', $post_data['assign']);
+        if(!empty($post_data['assign_start']) && !empty($post_data['assign_ended']))
+        {
+            $query->whereDate('published_date', '>=', $post_data['assign_start']);
+            $query->whereDate('published_date', '<=', $post_data['assign_ended']);
+        }
+        else if(!empty($post_data['assign_start']))
+        {
+            $query->where('published_date', $post_data['assign_start']);
+        }
+        else if(!empty($post_data['assign_ended']))
+        {
+            $query->where('published_date', $post_data['assign_ended']);
+        }
+
+
+
+        // 标签类型 []
+        if(isset($post_data['exception_type']))
+        {
+            $exception_type = strval($post_data['exception_type']);
+            if(!in_array($exception_type,['-1']))
+            {
+                $query->where('exception_type', $exception_type);
+            }
+        }
+
+
+
+
+        $total = $query->count();
+//        dd($total);
+
+        $draw  = isset($post_data['draw']) ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start']) ? $post_data['start'] : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 10;
+        if($limit > 200) $limit = 200;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy('id', "desc");
+
+        if($limit == -1) $list = $query->skip($skip)->take(200)->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+
+        $list->load([
+            'creator'=>function($query) { $query->select('id','name'); },
+//            'owner'=>function($query) { $query->select('id','name'); },
+            'creator_team_er'=>function($query) { $query->select('id','name'); },
+            'creator_team_group_er'=>function($query) { $query->select('id','name'); },
+        ]);
+
+
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id,'FNJ2026');
+
+            if($v->creator_id == $me->id)
+            {
+                $list[$k]->is_me = 1;
+                $v->is_me = 1;
+            }
+            else
+            {
+                $list[$k]->is_me = 0;
+                $v->is_me = 0;
+            }
+
+            if(in_array($me->staff_category,[0,1,9]))
+            {
+            }
+            else if(in_array($me->staff_category,[51]))
+            {
+//                $time = time();
+//                if(($v->published_at > 0) && (($time - $v->published_at) > 86400))
+                if( ($v->published_at > 0) && ($v->published_at < strtotime("yesterday")) )
+                {
+                    $client_phone = $v->client_phone;
+                    $v->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
+                }
+            }
+            else if(in_array($me->staff_category,[41]))
+            {
+//                $time = time();
+//                if(!$v->is_me || (($v->published_at > 0) && (($time - $v->published_at) > 86400)))
+                if($me->staff_position != 31)
+                {
+                    // 电话两天后不可见
+//                    if(!$v->is_me || (($v->published_at > 0) && ($v->published_at < strtotime("yesterday"))))
+//                    {
+//                        $client_phone = $v->client_phone;
+//                        if(is_numeric($client_phone))
+//                        {
+//                            $v->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
+//                        }
+//                    }
+                    // 电话不可见
+                    $client_phone = $v->client_phone;
+                    $v->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
+                }
+            }
+
+            $list[$k]->rejected_reason_text = '';
+            if(!empty($v->rejected_reason))
+            {
+                // 分割字符串并过滤空值
+                $ids = array_filter(explode('-', $v->rejected_reason));
+
+                $reasons = config('dk.common-config.rejected_reason');
+
+                // 使用集合映射并过滤无效ID
+                $result = collect($ids)
+                    ->map(function ($id) use ($reasons) {
+                        return $reasons[$id] ?? null;
+                    })
+                    ->filter()  // 移除null值
+                    ->implode('；');
+
+                $list[$k]->rejected_reason_text = $result . '；';
+            }
+
+        }
+//        dd($list->toArray());
+
+
+
+
+        return datatable_response($list, $draw, $total);
+    }
+
+    // 【导出】工单
+    public function o1__order_exception__export($post_data)
+    {
+//        dd($post_data);
+        $this->get_me();
+        $me = $this->me;
+
+        $time = time();
+        $date = date('Y-m-d');
+
+        if(!in_array($me->staff_category,[0,1,9,71])) return view($this->view_blade_403);
+
+        if(in_array($me->staff_category,[41,51]))
+        {
+            $team_id = $me->team_id;
+        }
+        else $team_id = 0;
+
+        $time = time();
+
+        $record_operate_type = 1;
+        $record_column_type = null;
+        $record_before = '';
+        $record_after = '';
+
+        $assign_start  = isset($post_data['assign_start']) ? $post_data['assign_start'] : null;
+        $assign_ended  = isset($post_data['assign_ended']) ? $post_data['assign_ended'] : null;
+
+
+
+        // 工单
+        $query = DK_Common__Order__Exception::select('client_phone')
+            ->when($team_id, function ($query) use ($team_id) {
+                return $query->where('team_id', $team_id);
+            });
+
+
+        if(!empty($post_data['assign_start']) && !empty($post_data['assign_ended']))
+        {
+            $query->whereDate('created_date', '>=', $post_data['assign_start']);
+            $query->whereDate('created_date', '<=', $post_data['assign_ended']);
+            $time_title = '【'.$post_data['assign_start'].' - '.$post_data['assign_ended'].'】';
+        }
+        else if(!empty($post_data['assign_start']))
+        {
+            $query->where('created_date', $post_data['assign_start']);
+            $time_title = '【'.$post_data['assign_start'].'】';
+        }
+        else if(!empty($post_data['assign_ended']))
+        {
+            $query->where('created_date', $post_data['assign_ended']);
+            $time_title = '【'.$post_data['assign_ended'].'】';
+        }
+        else
+        {
+            $time_title = '';
+        }
+
+
+        // 标签类型 []
+        $tag_title = '';
+        if(isset($post_data['exception_type']))
+        {
+            $exception_type = strval($post_data['exception_type']);
+            if(!in_array($exception_type,['-1']))
+            {
+                $query->where('exception_type', $exception_type);
+                $tag_title = '【'.$exception_type.'】';
+            }
+            else
+            {
+                $tag_title = '【全部】';
+            }
+        }
+
+
+        $data = $query->orderBy('id','desc')->get();
+//        $data = $data->toArray();
+
+
+
+
+
+//        $record = new DK_Common__Record__by_Operation;
+//
+//        $record_data["ip"] = Get_IP();
+//        $record_data["record_object"] = 21;
+//        $record_data["record_category"] = 11;
+//        $record_data["record_type"] = 1;
+//        $record_data["creator_id"] = $me->id;
+//        $record_data["operate_object"] = 71;
+//        $record_data["operate_category"] = 109;
+//        $record_data["operate_type"] = $record_operate_type;
+//        $record_data["column_type"] = $record_column_type;
+//        $record_data["before"] = $record_before;
+//        $record_data["after"] = $record_after;
+//        if($project_id)
+//        {
+//            $record_data["item_id"] = $project_id;
+//            $record_data["title"] = $record_data_title;
+//        }
+//
+//        $record->fill($record_data)->save();
+
+
+
+
+        $title = '【标签】'.date('Ymd.His').$time_title.$tag_title;
+
+        $upload_path = <<<EOF
+resource/dk/admin/telephone/$date/
+EOF;
+        $url_path = env('DOMAIN_CDN').'/dk/admin/telephone/'.$date.'/';
+
+        $storage_path = storage_path($upload_path);
+        if (!is_dir($storage_path))
+        {
+            mkdir($storage_path, 0766, true);
+        }
+        $filename = $title;
+        $extension = '.txt';
+
+        $file_name = $filename.$extension;
+        $file_url = $url_path.$file_name;
+        $file_path = $storage_path.$file_name;
+
+        // 打开文件准备写入
+        $file = fopen($file_path, 'w');
+
+        // 遍历电话号码数组，逐行写入文件
+        foreach ($data as $phoneNumber)
+        {
+            fwrite($file, $phoneNumber->client_phone . PHP_EOL);
+        }
+
+        // 关闭文件
+        fclose($file);
+
+
+        return response()->download($file_path);
+
+    }
 
 
 

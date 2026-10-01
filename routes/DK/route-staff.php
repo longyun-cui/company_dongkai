@@ -266,6 +266,13 @@ Route::group(['middleware' => ['dk.staff.user.login','dk.staff.user.password_cha
 
 
 
+    // 【工单】列表
+    Route::post('/o1/order-exception/order-exception-list/datatable-query', $controller.'@o1__order_exception__list__datatable_query');
+    Route::get('/o1/order-exception/order-exception-export', $controller.'@o1__order_exception__export');
+
+
+
+
     // 【交付】列表
     Route::post('/o1/delivery/delivery-list/datatable-query', $controller.'@o1__delivery__list__datatable_query');
     Route::post('/o1/delivery/delivery-duplicate-list/datatable-query', $controller.'@o1__delivery__duplicate__list__datatable_query');

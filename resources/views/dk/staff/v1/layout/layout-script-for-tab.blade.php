@@ -227,6 +227,10 @@
                 {
                     Datatable__for__Order_Dental_Different_List($config.id);
                 }
+                else if($id == "datatable-order-exception-list")
+                {
+                    Datatable__for__Order_Exception_List($config.id);
+                }
                 else if($id == "datatable-order-aesthetic-list")
                 {
                     Datatable__for__Order_Aesthetic_List($config.id);

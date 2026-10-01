@@ -24334,67 +24334,92 @@ EOF;
         }
         else
         {
-
-            if($clientMark_data['type'] == '医美客户')
+            $clientMark_type = '';
+            if(in_array($clientMark_data['type'],['意向客户','医美客户']))
             {
-                $order_insert_data["order_category"] = 11;
+                $clientMark_type = 'order';
             }
             else
             {
-                $order_insert_data["order_category"] = 1;
-            }
-            $order_insert_data["created_type"] = 99;
-            $order_insert_data["created_source"] = 11;
-            $order_insert_data["active"] = 1;
-            $order_insert_data["creator_id"] = $staff->id;
-            $order_insert_data["creator_company_id"] = $staff->company_id;
-            $order_insert_data["creator_department_id"] = $staff->department_id;
-            $order_insert_data["creator_team_id"] = $staff->team_id;
-            $order_insert_data["creator_team_sub_id"] = $staff->team_sub_id;
-            $order_insert_data["creator_team_group_id"] = $staff->team_group_id;
-            $order_insert_data["creator_team_unit_id"] = $staff->team_unit_id;
-            $order_insert_data["client_phone"] = $phone_number;
-
-            // 启动数据库事务
-            DB::beginTransaction();
-            try
-            {
+                $clientMark_type = 'null';
                 if(!empty($post_data['notify']['field']['reserve_1']['value']))
                 {
                     $reserve_1_value = $post_data['notify']['field']['reserve_1']['value'];
                     if(in_array($reserve_1_value,['超区','超龄','已种植','无声','语音助手']))
                     {
-
-                        if($clientMark_data['type'] == '医美客户')
-                        {
-                            $order_exception_insert_data["order_category"] = 11;
-                        }
-                        else
-                        {
-                            $order_exception_insert_data["order_category"] = 1;
-                        }
-                        $order_exception_insert_data["creator_id"] = $staff->id;
-                        $order_exception_insert_data["exception_type"] = $reserve_1_value;
-                        $order_exception_insert_data["client_phone"] = $phone_number;
-
-                        $mine = new DK_Common__Order__Exception;
-                        $bool_o = $mine->fill($order_exception_insert_data)->save();
-                        if(!$bool_o) throw new Exception("DK_Common__Order__Exception--insert--fail");
-                    }
-                    else
-                    {
-                        $mine = new DK_Common__Order;
-                        $bool_o = $mine->fill($order_insert_data)->save();
-                        if(!$bool_o) throw new Exception("DK_Common__Order--insert--fail");
+                        $clientMark_type = 'order-exception';
                     }
                 }
+            }
+
+
+            if($clientMark_type == 'order')
+            {
+                if($clientMark_data['type'] == '医美客户')
+                {
+                    $order_insert_data["order_category"] = 11;
+                }
                 else
+                {
+                    $order_insert_data["order_category"] = 1;
+                }
+                $order_insert_data["created_type"] = 99;
+                $order_insert_data["created_source"] = 11;
+                $order_insert_data["active"] = 1;
+                $order_insert_data["creator_id"] = $staff->id;
+                $order_insert_data["creator_company_id"] = $staff->company_id;
+                $order_insert_data["creator_department_id"] = $staff->department_id;
+                $order_insert_data["creator_team_id"] = $staff->team_id;
+                $order_insert_data["creator_team_sub_id"] = $staff->team_sub_id;
+                $order_insert_data["creator_team_group_id"] = $staff->team_group_id;
+                $order_insert_data["creator_team_unit_id"] = $staff->team_unit_id;
+                $order_insert_data["client_phone"] = $phone_number;
+            }
+            else if($clientMark_type == 'order-exception')
+            {
+                if($clientMark_data['type'] == '医美客户')
+                {
+                    $order_exception_insert_data["order_category"] = 11;
+                }
+                else
+                {
+                    $order_exception_insert_data["order_category"] = 1;
+                }
+                $order_exception_insert_data["creator_id"] = $staff->id;
+                $order_exception_insert_data["creator_company_id"] = $staff->company_id;
+                $order_exception_insert_data["creator_department_id"] = $staff->department_id;
+                $order_exception_insert_data["creator_team_id"] = $staff->team_id;
+//                $order_exception_insert_data["creator_team_sub_id"] = $staff->team_sub_id;
+                $order_exception_insert_data["creator_team_group_id"] = $staff->team_group_id;
+//                $order_exception_insert_data["creator_team_unit_id"] = $staff->team_unit_id;
+                $order_exception_insert_data["exception_type"] = $reserve_1_value;
+                $order_exception_insert_data["client_phone"] = $phone_number;
+
+            }
+            else
+            {
+                $return['result']['error'] = 1;
+                $return['result']['msg'] = '参数不符合录入！';
+                return json_encode($return);
+            }
+
+
+            // 启动数据库事务
+            DB::beginTransaction();
+            try
+            {
+                if($clientMark_type == 'order')
                 {
                     $mine = new DK_Common__Order;
                     $bool_o = $mine->fill($order_insert_data)->save();
                     if(!$bool_o) throw new Exception("DK_Common__Order--insert--fail");
                 }
-
+                else if($clientMark_type == 'order-exception')
+                {
+                    $mine = new DK_Common__Order__Exception;
+                    $bool_o = $mine->fill($order_exception_insert_data)->save();
+                    if(!$bool_o) throw new Exception("DK_Common__Order__Exception--insert--fail");
+                }
 
                 DB::commit();
 

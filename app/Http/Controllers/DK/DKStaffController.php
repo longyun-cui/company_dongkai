@@ -1142,6 +1142,15 @@ class DKStaffController extends Controller
 
 
 
+    // 【工单】datatable
+    public function o1__order_exception__list__datatable_query()
+    {
+        return $this->order_repo->o1__order_exception__list__datatable_query(request()->all());
+    }
+    public function o1__order_exception__export()
+    {
+        return $this->order_repo->o1__order_exception__export(request()->all());
+    }
 
 
 

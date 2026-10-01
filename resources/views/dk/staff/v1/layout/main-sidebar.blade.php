@@ -306,6 +306,27 @@
                 </a>
             </li>
             @endif
+            {{--口腔•标签--}}
+            @if(in_array($me->staff_category,[0,1,9,71]))
+            <li class="treeview _none-">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="order-exception-list"
+                   data-title='<i class="fa fa-file-image-o text-orange"></i> 口腔•标签'
+                   data-content=''
+
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-order-exception-list"
+                   data-datatable-target="order-exception-list"
+                   data-datatable-clone-object="order-exception-list-clone"
+                >
+                    <i class="fa fa-file-image-o text-orange"></i>
+                    <span>口腔•标签</span>
+                </a>
+            </li>
+            @endif
             {{--口腔•交付列表--}}
             @if(in_array($me->staff_category,[0,1,9,71]))
             <li class="treeview _none-">

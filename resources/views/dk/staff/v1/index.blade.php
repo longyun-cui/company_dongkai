@@ -116,12 +116,17 @@
     @endif
 
 
+    @if(in_array($me->staff_category,[0,1,9]))
+        @include(env('DK_STAFF__TEMPLATE').'component.module.order-exception.order-exception-list')
+    @endif
+
+
     {{--交付--}}
     @if(in_array($me->staff_category,[0,1,9,71]))
-    @include(env('DK_STAFF__TEMPLATE').'component.module.delivery.delivery-dental.delivery-dental-list')
-    @include(env('DK_STAFF__TEMPLATE').'component.module.delivery.delivery-aesthetic.delivery-aesthetic-list')
-    @include(env('DK_STAFF__TEMPLATE').'component.module.delivery.delivery-luxury.delivery-luxury-list')
-    @include(env('DK_STAFF__TEMPLATE').'component.module.delivery..delivery-duplicate-list')
+        @include(env('DK_STAFF__TEMPLATE').'component.module.delivery.delivery-dental.delivery-dental-list')
+        @include(env('DK_STAFF__TEMPLATE').'component.module.delivery.delivery-aesthetic.delivery-aesthetic-list')
+        @include(env('DK_STAFF__TEMPLATE').'component.module.delivery.delivery-luxury.delivery-luxury-list')
+        @include(env('DK_STAFF__TEMPLATE').'component.module.delivery..delivery-duplicate-list')
     @endif
 
 
@@ -388,6 +393,12 @@
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-operation-record-datatable')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-delivery-record-datatable')
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-ai-record-datatable')
+
+
+    @if(in_array($me->staff_category,[0,1,9]))
+        @include(env('DK_STAFF__TEMPLATE').'component.module.order-exception.order-exception-list-datatable')
+        @include(env('DK_STAFF__TEMPLATE').'component.module.order-exception.order-exception-list-script')
+    @endif
 
 
     {{--交付--}}
