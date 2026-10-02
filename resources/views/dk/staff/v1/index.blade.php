@@ -116,7 +116,7 @@
     @endif
 
 
-    @if(in_array($me->staff_category,[0,1,9]))
+    @if(in_array($me->staff_category,[0,1,9,71]))
         @include(env('DK_STAFF__TEMPLATE').'component.module.order-exception.order-exception-list')
     @endif
 
@@ -395,7 +395,7 @@
     @include(env('DK_STAFF__TEMPLATE').'component.module.order.order--item-ai-record-datatable')
 
 
-    @if(in_array($me->staff_category,[0,1,9]))
+    @if(in_array($me->staff_category,[0,1,9,71]))
         @include(env('DK_STAFF__TEMPLATE').'component.module.order-exception.order-exception-list-datatable')
         @include(env('DK_STAFF__TEMPLATE').'component.module.order-exception.order-exception-list-script')
     @endif
