@@ -7942,6 +7942,8 @@ class DK_Staff__StatisticRepository {
 
         $assign_date  = isset($post_data['assign_date']) ? $post_data['assign_date'] : date('Y-m-d');
 
+
+
         $query = DK_CC_Call_Record_Current::select('taskId','taskName','call_date')
 //            ->addSelectRaw("
 //                count(*) as call_count,
@@ -7963,10 +7965,14 @@ class DK_Staff__StatisticRepository {
 //                    ->whereDate('o.published_date', '=', DB::raw('DATE(dk_cc_call_record_of_current.call_date)'))
                     ->where('o.published_date',$assign_date);
             })
-            ->where('call_date', $assign_date)
-            ->groupBy('taskID');
+            ->where('dk_cc_call_record_of_current.call_date', $assign_date)
+            ->groupBy('taskId', 'taskName', 'call_date');
 
-        if(!empty($post_data['keyword'])) $query->where('taskName', 'like', "%{$post_data['keyword']}%");
+//        if(!empty($post_data['keyword'])) $query->where('taskName', 'like', "%{$post_data['keyword']}%");
+        if (isset($post_data['keyword']) && trim($post_data['keyword']) !== '') {
+            $keyword = trim($post_data['keyword']);
+            $query->where('dk_cc_call_record_of_current.taskName', 'like', "%{$keyword}%");
+        }
 //        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
 //        if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
 //        if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
