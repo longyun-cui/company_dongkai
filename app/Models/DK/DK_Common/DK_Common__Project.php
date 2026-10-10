@@ -45,6 +45,8 @@ class DK_Common__Project extends Model
         'ai_system_prompt',
         'ai_user_prompt',
 
+        'is_enable_thinking',
+
         'ai_platform_for_text_inspecting',
         'ai_model_for_text_inspecting',
         'ai_prompt_for_text_inspecting',

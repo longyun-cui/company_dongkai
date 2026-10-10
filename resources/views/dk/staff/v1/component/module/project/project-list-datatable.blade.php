@@ -432,6 +432,18 @@
                     }
                 },
                 {
+                    "title": "思考模式",
+                    "data": "is_enable_thinking",
+                    "className": "",
+                    "width": "50px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(data == 0) return '<small class="btn-xs btn-danger">否</small>';
+                        else if(data == 1) return '<small class="btn-xs btn-success">是</small>';
+                        else return '--';
+                    }
+                },
+                {
                     "title": "AI提示词",
                     "data": "ai_prompt",
                     "className": "",

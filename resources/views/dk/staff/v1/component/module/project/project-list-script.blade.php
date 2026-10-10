@@ -133,6 +133,10 @@
                         $modal.find('input[name="is_automatic_ai_inspecting"]').prop('checked', false);
                         $modal.find('input[name="is_automatic_ai_inspecting"][value="'+$response.data.is_automatic_ai_inspecting+'"]').prop('checked', true).trigger('change');
 
+                        // 思考模式
+                        $modal.find('input[name="is_enable_thinking"]').prop('checked', false);
+                        $modal.find('input[name="is_enable_thinking"][value="'+$response.data.is_enable_thinking+'"]').prop('checked', true).trigger('change');
+
 
 
                         if($response.data.client_er)

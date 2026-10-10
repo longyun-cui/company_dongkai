@@ -316,6 +316,30 @@
                         <input type="text" class="form-control" name="ai_model" placeholder="AI审核模型" value="">
                     </div>
                 </div>
+                {{--思考模式--}}
+                <div class="form-group form-type">
+                    <label class="control-label col-md-2">思考模式</label>
+                    <div class="col-md-9">
+                        <div class="btn-group">
+
+                            <button type="button" class="btn">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="is_enable_thinking" value="0"> 暂不启用
+                                    </label>
+                                </div>
+                            </button>
+                            <button type="button" class="btn">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="is_enable_thinking" value="1" checked="checked"> 启用
+                                    </label>
+                                </div>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
                 {{--AI审核提示词--}}
                 <div class="form-group">
                     <label class="control-label col-md-2">AI系统提示词</label>

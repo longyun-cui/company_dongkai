@@ -90,6 +90,7 @@ class DK_AI_Inspect_Job__by__ali__Qwen38_Omni_Flash implements ShouldQueue
                 $ai_prompt = !empty($project->ai_prompt) ? ($project->ai_prompt) : $ai_prompt;
 //                $ai_prompt = !empty($project->ai_prompt) ? ($project->ai_prompt) : $ai_prompt;
                 $ai_system_prompt = !empty($project->ai_system_prompt) ? $project->ai_system_prompt : $ai_system_prompt;
+                $is_enable_thinking = ($project->is_enable_thinking) ? true : false;
             }
             else
             {
@@ -292,6 +293,7 @@ class DK_AI_Inspect_Job__by__ali__Qwen38_Omni_Flash implements ShouldQueue
                 $ai_inspecting_post_date['prompt'] = $ai_data['ai_prompt'];
                 $ai_inspecting_post_date['voice_record'] = $voice_record_url;
                 $ai_inspecting_post_date['voice_record_list'] = $recording_address_list;
+                $ai_inspecting_post_date['is_enable_thinking'] = $is_enable_thinking;
 
                 $microtime_ai = microtime(true);
                 $ai_inspecting_response = $this->commonRepository->o1__api__ai_inspecting__by__ali__qwen38_omni_flash($ai_inspecting_post_date);
