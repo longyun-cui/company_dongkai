@@ -226,9 +226,9 @@
                 },
                 {
                     "title": "返回值",
-                    "className": "text-left",
-                    "width": "500px",
                     "data": "result",
+                    "className": "text-left",
+                    "width": "400px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         return data;
@@ -239,7 +239,7 @@
                     "name": "order_id",
                     "data": "order_id",
                     "className": "",
-                    "width": "380px",
+                    "width": "320px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1)
@@ -260,7 +260,7 @@
                                 $.each($recording_list, function(index, value)
                                 {
 
-                                    var $audio_html = '<audio controls controlsList="nodownload" style="width:360px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
+                                    var $audio_html = '<audio controls controlsList="nodownload" style="width:300px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
                                     $return_html += $audio_html;
                                 });
                                 return $return_html;
