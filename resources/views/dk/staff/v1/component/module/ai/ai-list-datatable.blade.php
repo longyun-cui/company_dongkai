@@ -200,10 +200,10 @@
                 //     }
                 // },
                 {
-                    "className": "text-left",
-                    "width": "500px",
                     "title": "返回结果",
                     "data": "content",
+                    "className": "text-left",
+                    "width": "500px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         var $error_html = '';
@@ -222,6 +222,16 @@
                             $return_html += '【'+ $index +'】' + $value + ' <br>';
                         });
                         return $error_html + $return_html;
+                    }
+                },
+                {
+                    "title": "返回值",
+                    "className": "text-left",
+                    "width": "500px",
+                    "data": "result",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return data;
                     }
                 },
                 {
