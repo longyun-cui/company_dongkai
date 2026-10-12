@@ -4223,7 +4223,7 @@ class DK_Staff__StatisticRepository {
             $team_id_int = (int)$post_data['team'];
             if(!in_array($team_id_int,[-1,0]))
             {
-                $query_order->where('team_id', $team_id_int);
+                $query_order->where('creator_team_id', $team_id_int);
             }
         }
         // 团队-小组
@@ -4232,7 +4232,7 @@ class DK_Staff__StatisticRepository {
             $group_id_int = (int)$post_data['group'];
             if(!in_array($group_id_int,[-1,0]))
             {
-                $query_order->where('team_group_id', $group_id_int);
+                $query_order->where('creator_team_group_id', $group_id_int);
             }
         }
 
