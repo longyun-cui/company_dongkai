@@ -4194,6 +4194,9 @@ class DK_Staff__StatisticRepository {
                     count(IF(inspected_result in ('通过','折扣通过','郊区通过','内部通过'), TRUE, NULL)) as order_count__for__accepted,
                     count(IF(inspected_result in ('通过','折扣通过'), TRUE, NULL)) as order_count__for__effective,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count__for__accepted_normal,
+                    count(IF(inspected_result = '通过' and inspected_result_2 = '一档', TRUE, NULL)) as order_count__for__accepted_normal_1,
+                    count(IF(inspected_result = '通过' and inspected_result_2 = '二档', TRUE, NULL)) as order_count__for__accepted_normal_2,
+                    count(IF(inspected_result = '通过' and inspected_result_2 = '三档', TRUE, NULL)) as order_count__for__accepted_normal_3,
                     count(IF(inspected_result = '折扣通过', TRUE, NULL)) as order_count__for__accepted_discount,
                     count(IF(inspected_result = '郊区通过', TRUE, NULL)) as order_count__for__accepted_suburb,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count__for__accepted_inside,
@@ -4363,6 +4366,9 @@ class DK_Staff__StatisticRepository {
                 $list[$k]->order_count__for__effective = $query_order[$v->id]['order_count__for__effective'];
                 $list[$k]->order_count__for__accepted = $query_order[$v->id]['order_count__for__accepted'];
                 $list[$k]->order_count__for__accepted_normal = $query_order[$v->id]['order_count__for__accepted_normal'];
+                $list[$k]->order_count__for__accepted_normal_1 = $query_order[$v->id]['order_count__for__accepted_normal_1'];
+                $list[$k]->order_count__for__accepted_normal_2 = $query_order[$v->id]['order_count__for__accepted_normal_2'];
+                $list[$k]->order_count__for__accepted_normal_3 = $query_order[$v->id]['order_count__for__accepted_normal_3'];
                 $list[$k]->order_count__for__accepted_discount = $query_order[$v->id]['order_count__for__accepted_discount'];
                 $list[$k]->order_count__for__accepted_suburb = $query_order[$v->id]['order_count__for__accepted_suburb'];
                 $list[$k]->order_count__for__accepted_inside = $query_order[$v->id]['order_count__for__accepted_inside'];
@@ -4376,6 +4382,9 @@ class DK_Staff__StatisticRepository {
                 $list[$k]->order_count__for__effective = 0;
                 $list[$k]->order_count__for__accepted = 0;
                 $list[$k]->order_count__for__accepted_normal = 0;
+                $list[$k]->order_count__for__accepted_normal_1 = 0;
+                $list[$k]->order_count__for__accepted_normal_2 = 0;
+                $list[$k]->order_count__for__accepted_normal_3 = 0;
                 $list[$k]->order_count__for__accepted_discount = 0;
                 $list[$k]->order_count__for__accepted_suburb = 0;
                 $list[$k]->order_count__for__accepted_inside = 0;

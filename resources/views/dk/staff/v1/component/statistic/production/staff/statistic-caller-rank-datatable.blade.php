@@ -154,6 +154,90 @@
                     }
                 },
                 {
+                    "title": "一档",
+                    "data": "order_count__for__accepted_normal_1",
+                    "className": "text-right bg-inspected",
+                    "width": "100px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    render: function(data, type, row, meta) {
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
+                    }
+                },
+                {
+                    "title": "二档",
+                    "data": "order_count__for__accepted_normal_2",
+                    "className": "text-right bg-inspected",
+                    "width": "100px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    render: function(data, type, row, meta) {
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
+                    }
+                },
+                {
+                    "title": "三档",
+                    "data": "order_count__for__accepted_normal_3",
+                    "className": "text-right bg-inspected",
+                    "width": "100px",
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
+                    render: function(data, type, row, meta) {
+                        // if(!data) return '--';
+                        // return data;
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
+                    }
+                },
+                {
                     "title": "折扣通过",
                     "data": "order_count__for__accepted_discount",
                     "className": "text-right bg-inspected",
