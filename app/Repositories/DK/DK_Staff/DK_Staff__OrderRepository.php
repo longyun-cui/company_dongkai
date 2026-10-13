@@ -4867,9 +4867,16 @@ class DK_Staff__OrderRepository {
 
             DB::commit();
 
-            if(isset($ai_inspected))
+            if(isset($project_new) && isset($ai_inspected))
             {
-                DK_AI_Inspect_Job::dispatch($ai_inspected->id);
+                if($project_new->ai_model == 'qwen3.8-omni-flash')
+                {
+                    DK_AI_Inspect_Job__by__ali__Qwen38_Omni_Flash::dispatch($ai_inspected->id);
+                }
+                else
+                {
+                    DK_AI_Inspect_Job::dispatch($ai_inspected->id);
+                }
             }
 
             return response_success([],"编辑成功!");
