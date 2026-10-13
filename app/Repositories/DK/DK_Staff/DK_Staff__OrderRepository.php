@@ -4208,6 +4208,10 @@ class DK_Staff__OrderRepository {
                 {
                     DK_AI_Inspect_Job__by__ali__Qwen38_Omni_Flash::dispatch($ai_inspected->id);
                 }
+                else if($ai_model == 'qwen3.5-omni-plus')
+                {
+                    DK_AI_Inspect_Job::dispatch($ai_inspected->id);
+                }
                 else
                 {
                     DK_AI_Inspect_Job::dispatch($ai_inspected->id);
@@ -4873,9 +4877,13 @@ class DK_Staff__OrderRepository {
                 {
                     DK_AI_Inspect_Job__by__ali__Qwen38_Omni_Flash::dispatch($ai_inspected->id);
                 }
-                else
+                else if($project_new->ai_model == 'qwen3.5-omni-plus')
                 {
                     DK_AI_Inspect_Job::dispatch($ai_inspected->id);
+                }
+                else
+                {
+                    DK_AI_Inspect_Job__by__ali__Qwen38_Omni_Flash::dispatch($ai_inspected->id);
                 }
             }
 
@@ -10520,7 +10528,7 @@ EOF;
                 }
                 else
                 {
-                    DK_AI_Inspect_Job::dispatch($id);
+                    DK_AI_Inspect_Job__by__ali__Qwen38_Omni_Flash::dispatch($id);
                 }
             }
 
