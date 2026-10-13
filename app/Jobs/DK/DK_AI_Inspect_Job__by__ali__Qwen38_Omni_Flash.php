@@ -441,7 +441,7 @@ class DK_AI_Inspect_Job__by__ali__Qwen38_Omni_Flash implements ShouldQueue
                                 $record_row['after'] = config('dk.common-config.ai_inspected_result_to_order_inspected_result.'.$content_decode->审核结果);
                                 $record_content[] = $record_row;
                             }
-                            if(true)
+                            if(isset($content_decode->判定理由))
                             {
                                 $record_row = [];
                                 $record_row['title'] = '判定理由';
