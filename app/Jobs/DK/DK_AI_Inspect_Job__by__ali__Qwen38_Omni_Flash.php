@@ -508,21 +508,18 @@ class DK_AI_Inspect_Job__by__ali__Qwen38_Omni_Flash implements ShouldQueue
 
             if($msg == "【result.choices[0].message.content】不存在！")
             {
-                if(isset($result->error) && isset($result->error->code))
+                if(isset($result->code) && in_array($result->code,['insufficient_quota','internal_server_error','limit_burst_rate','InternalError']))
                 {
-                    if(in_array($result->error->code,['insufficient_quota','internal_server_error','limit_burst_rate']))
-                    {
-                        $ai_inspected = new DK_Common__Order__AI_Inspected__Record;
-                        $ai_data['created_date'] = date('Y-m-d');
-                        $ai_data['item_status'] = 1;
-                        $ai_data['order_id'] = $order_id;
+                    $ai_inspected = new DK_Common__Order__AI_Inspected__Record;
+                    $ai_data['created_date'] = date('Y-m-d');
+                    $ai_data['item_status'] = 1;
+                    $ai_data['order_id'] = $order_id;
 
-                        $bool_ai = $ai_inspected->fill($ai_data)->save();
-                        if($bool_ai)
-                        {
-                            DK_AI_Inspect_Job::dispatch($ai_inspected->id);
-                            return;
-                        }
+                    $bool_ai = $ai_inspected->fill($ai_data)->save();
+                    if($bool_ai)
+                    {
+                        DK_AI_Inspect_Job__by__ali__Qwen38_Omni_Flash::dispatch($ai_inspected->id);
+                        return;
                     }
                 }
             }
