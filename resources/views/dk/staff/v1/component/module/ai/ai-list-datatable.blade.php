@@ -128,7 +128,7 @@
                             else if(row.ai_model == 'qwen3.8-omni-flash')
                             {
                                 var $cached_tokens = row.usage.prompt_tokens_details.cached_tokens;
-                                $fee = (($prompt_audio_tokens + $prompt_text_tokens) * 0.8) + ($cached_tokens * 0.1) + ($completion_tokens * 2.7);
+                                $fee = (($prompt_audio_tokens + $prompt_text_tokens - $cached_tokens) * 0.8) + ($cached_tokens * 0.1) + ($completion_tokens * 2.7);
                                 $fee = ($fee / 1000000).toFixed(4);
                             }
                             else
