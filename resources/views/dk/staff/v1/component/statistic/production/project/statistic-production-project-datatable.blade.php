@@ -208,6 +208,99 @@
                     }
                 },
                 {
+                    "title": "一档",
+                    "data": "order_count_for_accepted_1",
+                    "className": "text-right bg-inspected",
+                    "width": "60px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.id == "统计")
+                        {
+                            $(nTd).addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
+                    }
+                },
+                {
+                    "title": "二档",
+                    "data": "order_count_for_accepted_2",
+                    "className": "text-right bg-inspected",
+                    "width": "60px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.id == "统计")
+                        {
+                            $(nTd).addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
+                    }
+                },
+                {
+                    "title": "三挡",
+                    "data": "order_count_for_accepted_3",
+                    "className": "text-right bg-inspected",
+                    "width": "60px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.id == "统计")
+                        {
+                            $(nTd).addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        if (type === 'display')
+                        {
+                            // 显示时返回格式化字符串
+                            if(!data) return '--';
+                            return data;
+                        }
+                        else if (type === 'sort')
+                        {
+                            // 排序时返回数值
+                            return data;
+                        }
+                        else
+                        {
+                            // 过滤等其他操作使用原始值
+                            return data;
+                        }
+                    }
+                },
+                {
                     "title": "折扣通过",
                     "data": "order_count_for_accepted_discount",
                     "className": "text-right bg-inspected",

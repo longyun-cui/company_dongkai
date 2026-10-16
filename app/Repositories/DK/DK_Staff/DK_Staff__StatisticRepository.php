@@ -5182,6 +5182,9 @@ class DK_Staff__StatisticRepository {
                     count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
+                    count(IF(inspected_result = '通过' and inspected_result_2 = '一档', TRUE, NULL)) as order_count_for_accepted_1,
+                    count(IF(inspected_result = '通过' and inspected_result_2 = '二档', TRUE, NULL)) as order_count_for_accepted_2,
+                    count(IF(inspected_result = '通过' and inspected_result_2 = '三档', TRUE, NULL)) as order_count_for_accepted_3,
                     count(IF(inspected_result = '折扣通过', TRUE, NULL)) as order_count_for_accepted_discount,
                     count(IF(inspected_result = '郊区通过', TRUE, NULL)) as order_count_for_accepted_suburb,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
@@ -5338,6 +5341,9 @@ class DK_Staff__StatisticRepository {
         $total_data['order_count_for_all'] = 0;
         $total_data['order_count_for_inspected'] = 0;
         $total_data['order_count_for_accepted'] = 0;
+        $total_data['order_count_for_accepted_1'] = 0;
+        $total_data['order_count_for_accepted_2'] = 0;
+        $total_data['order_count_for_accepted_3'] = 0;
         $total_data['order_count_for_refused'] = 0;
         $total_data['order_count_for_repeated'] = 0;
         $total_data['order_count_for_accepted_discount'] = 0;
@@ -5375,6 +5381,9 @@ class DK_Staff__StatisticRepository {
                 $list[$k]->order_count_for_all = $query_order[$v->id]['order_count_for_all'];
                 $list[$k]->order_count_for_inspected = $query_order[$v->id]['order_count_for_inspected'];
                 $list[$k]->order_count_for_accepted = $query_order[$v->id]['order_count_for_accepted'];
+                $list[$k]->order_count_for_accepted_1 = $query_order[$v->id]['order_count_for_accepted_1'];
+                $list[$k]->order_count_for_accepted_2 = $query_order[$v->id]['order_count_for_accepted_2'];
+                $list[$k]->order_count_for_accepted_3 = $query_order[$v->id]['order_count_for_accepted_3'];
                 $list[$k]->order_count_for_refused = $query_order[$v->id]['order_count_for_refused'];
                 $list[$k]->order_count_for_repeated = $query_order[$v->id]['order_count_for_repeated'];
                 $list[$k]->order_count_for_accepted_discount = $query_order[$v->id]['order_count_for_accepted_discount'];
@@ -5396,6 +5405,9 @@ class DK_Staff__StatisticRepository {
                 $list[$k]->order_count_for_all = 0;
                 $list[$k]->order_count_for_inspected = 0;
                 $list[$k]->order_count_for_accepted = 0;
+                $list[$k]->order_count_for_accepted_1 = 0;
+                $list[$k]->order_count_for_accepted_2 = 0;
+                $list[$k]->order_count_for_accepted_3 = 0;
                 $list[$k]->order_count_for_refused = 0;
                 $list[$k]->order_count_for_repeated = 0;
                 $list[$k]->order_count_for_accepted_discount = 0;
@@ -5456,6 +5468,9 @@ class DK_Staff__StatisticRepository {
 
             $total_data['order_count_for_inspected'] += $v->order_count_for_inspected;
             $total_data['order_count_for_accepted'] += $v->order_count_for_accepted;
+            $total_data['order_count_for_accepted_1'] += $v->order_count_for_accepted_1;
+            $total_data['order_count_for_accepted_2'] += $v->order_count_for_accepted_2;
+            $total_data['order_count_for_accepted_3'] += $v->order_count_for_accepted_3;
             $total_data['order_count_for_refused'] += $v->order_count_for_refused;
             $total_data['order_count_for_repeated'] += $v->order_count_for_repeated;
             $total_data['order_count_for_accepted_discount'] += $v->order_count_for_accepted_discount;
