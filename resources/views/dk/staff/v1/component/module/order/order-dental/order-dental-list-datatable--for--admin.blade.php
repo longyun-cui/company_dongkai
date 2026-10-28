@@ -300,6 +300,10 @@
                         {
                             $result_html = '<small class="btn-xs bg-green">LXY</small>';
                         }
+                        else if(row.created_source == 13)
+                        {
+                            $result_html = '<small class="btn-xs bg-green">PSY</small>';
+                        }
                         return $result_html;
                     }
                 },

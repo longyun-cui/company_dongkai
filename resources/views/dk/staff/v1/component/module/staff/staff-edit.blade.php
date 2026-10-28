@@ -386,6 +386,13 @@
                         <input type="text" class="form-control" name="lxy_staffNo" placeholder="L-ID，没有添0" value="0" data-default="0">
                     </div>
                 </div>
+                {{--外呼系统坐席ID--}}
+                <div class="form-group psy-box">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> P-ID</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="psy_staffNo" placeholder="P-ID，没有添0" value="0" data-default="0">
+                    </div>
+                </div>
                 {{--描述--}}
                 <div class="form-group _none">
                     <label class="control-label col-md-2">描述</label>

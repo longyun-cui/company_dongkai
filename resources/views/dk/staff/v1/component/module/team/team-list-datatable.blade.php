@@ -242,6 +242,10 @@
                         {
                             return '<small class="btn-xs bg-blue">LXY</small>';
                         }
+                        else if(data == 21)
+                        {
+                            return '<small class="btn-xs bg-blue">PSY</small>';
+                        }
                         else if(data == 99)
                         {
                             return '<small class="btn-xs bg-blue">外部</small>';

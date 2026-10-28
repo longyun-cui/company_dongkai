@@ -125,26 +125,37 @@
                             {
                                 $modal.find('.okcc-box').show();
                                 $modal.find('.lxy-box').show();
+                                $modal.find('.psy-box').show();
                             }
                             else if($api_exclusive_type == 1)
                             {
                                 $modal.find('.okcc-box').show();
                                 $modal.find('.lxy-box').hide();
+                                $modal.find('.psy-box').hide();
                             }
                             else if($api_exclusive_type == 11)
                             {
                                 $modal.find('.okcc-box').hide();
                                 $modal.find('.lxy-box').show();
+                                $modal.find('.psy-box').hide();
+                            }
+                            else if($api_exclusive_type == 21)
+                            {
+                                $modal.find('.okcc-box').hide();
+                                $modal.find('.lxy-box').hide();
+                                $modal.find('.psy-box').show();
                             }
                             else if($api_exclusive_type == 99)
                             {
                                 $modal.find('.okcc-box').hide();
                                 $modal.find('.lxy-box').hide();
+                                $modal.find('.psy-box').hide();
                             }
                             else
                             {
                                 $modal.find('.okcc-box').show();
                                 $modal.find('.lxy-box').show();
+                                $modal.find('.psy-box').show();
                             }
                         }
                         // 小组
@@ -155,6 +166,7 @@
 
                         $modal.find('input[name="api_staffNo"]').val($response.data.api_staffNo);
                         $modal.find('input[name="lxy_staffNo"]').val($response.data.lxy_staffNo);
+                        $modal.find('input[name="psy_staffNo"]').val($response.data.psy_staffNo);
 
                         var $datatable_wrapper = $that.closest('.datatable-wrapper');
                         var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");

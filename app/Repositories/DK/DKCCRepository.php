@@ -19,6 +19,7 @@ use App\Models\DK_CC\DK_CC_Call_Record_Current;
 use App\Models\DK_CC\DK_CC_Call_Statistic;
 use App\Models\DK_CC\DK_CC_API_Received_From_OKCC;
 use App\Models\DK_CC\DK_CC_API_Received_From_LXY;
+use App\Models\DK_CC\DK_CC_API_Received_From_PSY;
 
 use App\Models\DK\DK_Department;
 use App\Models\DK\DK_District;
@@ -24542,6 +24543,104 @@ EOF;
                 return json_encode($return);
             }
 
+        }
+
+
+
+
+    }
+
+
+    public function v1_operate_api_PSY_receiving_result($post_data)
+    {
+//        dd($post_data);
+
+        $insert_data['content'] = json_encode($post_data);
+        $mine = new DK_CC_API_Received_From_PSY;
+        $bool_c = $mine->fill($insert_data)->save();
+//        $insert_data['telephone_number'] = $post_data['customerPhone'];
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+
+            $data_list = $post_data['data'];
+            foreach ($data_list as $data)
+            {
+
+                $phone_number = $data['telephone'];
+                $api_staffNo = $data['extno'];
+
+
+                $staff = DK_Common__Staff::with([])->where('psy_staffNo',$api_staffNo)->orderBy('id','desc')->first();
+                if(!$staff)
+                {
+                    $return['result']['error'] = 1;
+                    $return['result']['msg'] = '该坐席未绑定员工！';
+                    return json_encode($return);
+                }
+
+
+                $order_where['creator_id'] = $staff->id;
+                $order_where['client_phone'] = $phone_number;
+                $todayStart = strtotime("today");
+                $order = DK_Common__Order::select('*')->where($order_where)->where('created_at','>',$todayStart)->orderby('id','desc')->first();
+                if($order)
+                {
+                    $return['result']['error'] = 1;
+                    $return['result']['msg'] = '该号码当日已录单！';
+                    return json_encode($return);
+                }
+                else
+                {
+                    $order_insert_data["order_category"] = 1;
+                    $order_insert_data["created_type"] = 99;
+                    $order_insert_data["created_source"] = 13;
+                    $order_insert_data["active"] = 1;
+                    $order_insert_data["creator_id"] = $staff->id;
+                    $order_insert_data["creator_company_id"] = $staff->company_id;
+                    $order_insert_data["creator_department_id"] = $staff->department_id;
+                    $order_insert_data["creator_team_id"] = $staff->team_id;
+                    $order_insert_data["creator_team_sub_id"] = $staff->team_sub_id;
+                    $order_insert_data["creator_team_group_id"] = $staff->team_group_id;
+                    $order_insert_data["creator_team_unit_id"] = $staff->team_unit_id;
+                    $order_insert_data["client_phone"] = $phone_number;
+
+
+                    $file = [];
+                    if(!empty($data['record_file']))
+                    {
+                        $file[] = $data['record_file'];
+                        $order_insert_data["recording_address_list"] = json_encode($file);
+                    }
+
+                }
+
+                $mine = new DK_Common__Order;
+                $bool_o = $mine->fill($order_insert_data)->save();
+                if(!$bool_o) throw new Exception("DK_Common__Order--insert--fail");
+            }
+
+            DB::commit();
+
+            $return['result']['error'] = 0;
+            $return['result']['msg'] = '';
+            return json_encode($return);
+
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+//            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+//            return response_fail([],$msg);
+
+            $return['result']['error'] = 1;
+            $return['result']['msg'] = $msg;
+            return json_encode($return);
         }
 
 

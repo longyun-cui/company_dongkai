@@ -251,6 +251,7 @@
                             <option value="0">选择客服API专属类型</option>
                             <option value="1">OKCC</option>
                             <option value="11">励销云</option>
+                            <option value="21">磐石云</option>
                             <option value="99">外部团队</option>
                         </select>
                     </div>

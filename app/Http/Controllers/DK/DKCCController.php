@@ -1733,6 +1733,13 @@ class DKCCController extends Controller
     }
 
 
+    // 【API】PSY 磐石云
+    public function operate_api_PSY_receiving_result()
+    {
+        return $this->repo->v1_operate_api_PSY_receiving_result(request()->all());
+    }
+
+
 
 
 

@@ -262,6 +262,16 @@
                     }
                 },
                 {
+                    "title": "P-ID",
+                    "data": "psy_staffNo",
+                    "className": "",
+                    "width": "100px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return '<a href="javascript:void(0);">'+data+'</a>';
+                    }
+                },
+                {
                     "title": "创建人",
                     "data": "creator_id",
                     "className": "font-12px",

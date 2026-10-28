@@ -24,6 +24,7 @@ class VerifyCsrfToken extends Middleware
         'cc_api/receive/*',
         'cc_api/okcc/*',
         'cc_api/lxy/*',
+        'cc_api/psy/*',
         'choice_api/okcc/*'
     ];
 

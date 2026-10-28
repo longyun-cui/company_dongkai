@@ -14,6 +14,7 @@ Route::match(['get','post'], 'logout_without_token', $controller.'@logout_withou
 
 Route::match(['get','post'], '/cc_api/okcc/receiving-result', $controller.'@operate_api_OKCC_receiving_result');
 Route::match(['get','post'], '/cc_api/lxy/receiving-result', $controller.'@operate_api_LXY_receiving_result');
+Route::match(['get','post'], '/cc_api/psy/receiving-result', $controller.'@operate_api_PSY_receiving_result');
 
 /*
  * 超级管理员系统（后台）
