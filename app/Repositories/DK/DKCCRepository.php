@@ -24555,20 +24555,23 @@ EOF;
     {
 //        dd($post_data);
 
-        $insert_data['content'] = json_encode($post_data);
-        $mine = new DK_CC_API_Received_From_PSY;
-        $bool_c = $mine->fill($insert_data)->save();
-//        $insert_data['telephone_number'] = $post_data['customerPhone'];
-
-
         // 启动数据库事务
         DB::beginTransaction();
         try
         {
 
+            $insert_data['content'] = json_encode($post_data);
+            $mine = new DK_CC_API_Received_From_PSY;
+            $bool_c = $mine->fill($insert_data)->save();
+//        $insert_data['telephone_number'] = $post_data['customerPhone'];
+
             $data_list = $post_data['data'];
             foreach ($data_list as $data)
             {
+                if($data['status'] != 4)
+                {
+                    continue;
+                }
 
                 $phone_number = $data['telephone'];
                 $api_staffNo = $data['extno'];
@@ -24577,9 +24580,10 @@ EOF;
                 $staff = DK_Common__Staff::with([])->where('psy_staffNo',$api_staffNo)->orderBy('id','desc')->first();
                 if(!$staff)
                 {
-                    $return['result']['error'] = 1;
-                    $return['result']['msg'] = '该坐席未绑定员工！';
-                    return json_encode($return);
+//                    $return['result']['error'] = 1;
+//                    $return['result']['msg'] = '该坐席未绑定员工！';
+//                    return json_encode($return);
+                    continue;
                 }
 
 
@@ -24589,9 +24593,10 @@ EOF;
                 $order = DK_Common__Order::select('*')->where($order_where)->where('created_at','>',$todayStart)->orderby('id','desc')->first();
                 if($order)
                 {
-                    $return['result']['error'] = 1;
-                    $return['result']['msg'] = '该号码当日已录单！';
-                    return json_encode($return);
+//                    $return['result']['error'] = 1;
+//                    $return['result']['msg'] = '该号码当日已录单！';
+//                    return json_encode($return);
+                    continue;
                 }
                 else
                 {
