@@ -24559,11 +24559,9 @@ EOF;
         DB::beginTransaction();
         try
         {
-
             $insert_data['content'] = json_encode($post_data);
             $mine = new DK_CC_API_Received_From_PSY;
             $bool_c = $mine->fill($insert_data)->save();
-//        $insert_data['telephone_number'] = $post_data['customerPhone'];
 
             $data_list = $post_data['data'];
             foreach ($data_list as $data)
@@ -24575,6 +24573,10 @@ EOF;
 
                 $phone_number = $data['telephone'];
                 $api_staffNo = $data['extno'];
+                if(!$api_staffNo)
+                {
+                    continue;
+                }
 
 
                 $staff = DK_Common__Staff::with([])->where('psy_staffNo',$api_staffNo)->orderBy('id','desc')->first();
@@ -24617,7 +24619,7 @@ EOF;
                     $file = [];
                     if(!empty($data['record_file']))
                     {
-                        $file[] = $data['record_file'];
+                        $file[] = 'https://ai37.psycall.cn/proxy?url='.$data['record_file'];
                         $order_insert_data["recording_address_list"] = json_encode($file);
                     }
 
