@@ -38,6 +38,7 @@
                     <option value="1">人工</option>
                     <option value="11">OKCC</option>
                     <option value="12">LXY</option>
+                    <option value="13">PSY</option>
                 </select>
             @endif
 
