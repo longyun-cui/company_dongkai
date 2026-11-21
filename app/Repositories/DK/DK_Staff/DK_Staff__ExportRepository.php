@@ -488,24 +488,24 @@ class DK_Staff__ExportRepository {
 //                }
 //                else $cellData[$k]['recording_address'] = $v['recording_address'];
 //            }
-//            if(!empty($v['recording_address_list']))
-//            {
-//                $recording_address_list_text = "";
-//                $recording_address_list = json_decode($v['recording_address_list']);
-//                if(count($recording_address_list) > 0)
-//                {
-//                    foreach($recording_address_list as $key => $recording)
-//                    {
-//                        $recording_address_list_text .= $recording."\r\n";
-//                    }
-//                }
+            if(!empty($v['recording_address_list']))
+            {
+                $recording_address_list_text = "";
+                $recording_address_list = json_decode($v['recording_address_list']);
+                if(count($recording_address_list) > 0)
+                {
+                    foreach($recording_address_list as $key => $recording)
+                    {
+                        $recording_address_list_text .= $recording."\r\n";
+                    }
+                }
 //                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
-////                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['id'],'2024').'&phone='.$v['client_phone'];
-//            }
-//            else
-//            {
-//                $cellData[$k]['recording_address'] = '';
-//            }
+                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['id'],'2024').'&phone='.$v['client_phone'];
+            }
+            else
+            {
+                $cellData[$k]['recording_address'] = '';
+            }
 
             // 录音文件
             $cellData[$k]['recording_file'] = '';
@@ -559,8 +559,8 @@ class DK_Staff__ExportRepository {
                 'location_district'=>'行政区',
                 'teeth_count'=>'牙齿数量',
                 'description'=>'通话小结',
-//                'recording_address'=>'录音地址',
-                'recording_address'=>'录音文件',
+                'recording_address'=>'录音地址',
+                'recording_file'=>'录音文件',
                 'is_repeat'=>'是否重复',
                 'inspector_name'=>'审核人',
                 'inspected_time'=>'审核时间',
@@ -591,7 +591,7 @@ class DK_Staff__ExportRepository {
                 'location_district'=>'行政区',
                 'teeth_count'=>'牙齿数量',
                 'description'=>'通话小结',
-//                'recording_address'=>'录音地址',
+                'recording_address'=>'录音地址',
                 'recording_file'=>'录音文件',
                 'is_repeat'=>'是否重复',
                 'inspector_name'=>'审核人',
@@ -633,7 +633,7 @@ class DK_Staff__ExportRepository {
                     'A'=>10, 'B'=>20, 'C'=>20, 'D'=>20, 'E'=>20, 'F'=>20, 'G'=>20,
                     'H'=>20, 'I'=>20, 'J'=>20, 'K'=>20, 'L'=>20, 'M'=>20, 'N'=>20,
                     'O'=>20, 'P'=>20, 'Q'=>20, 'R'=>20, 'S'=>60, 'T'=>60,
-                    'U'=>20, 'V'=>20, 'W'=>20, 'X'=>20, 'Y'=>60, 'Z'=>20
+                    'U'=>60, 'V'=>20, 'W'=>20, 'X'=>20, 'Y'=>20, 'Z'=>20
                 ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
@@ -2129,14 +2129,14 @@ class DK_Staff__ExportRepository {
 //                }
 //                else $cellData[$k]['recording_address'] = $v['recording_address'];
 //            }
-//            if(!empty($v['recording_address_list']))
-//            {
-//                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['id'],'2024').'&phone='.$v['client_phone'];
-//            }
-//            else
-//            {
-//                $cellData[$k]['recording_address'] = '';
-//            }
+            if(!empty($v['recording_address_list']))
+            {
+                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['id'],'2024').'&phone='.$v['client_phone'];
+            }
+            else
+            {
+                $cellData[$k]['recording_address'] = '';
+            }
 
             // 录音文件
             $cellData[$k]['recording_file'] = '';
@@ -2191,7 +2191,7 @@ class DK_Staff__ExportRepository {
                 'location_district'=>'行政区',
                 'teeth_count'=>'牙齿数量',
                 'description'=>'通话小结',
-//                'recording_address'=>'录音地址',
+                'recording_address'=>'录音地址',
                 'recording_file'=>'录音文件',
                 'is_repeat'=>'是否重复',
                 'inspector_name'=>'审核人',
@@ -2224,7 +2224,7 @@ class DK_Staff__ExportRepository {
                 'location_district'=>'行政区',
                 'teeth_count'=>'牙齿数量',
                 'description'=>'通话小结',
-//                'recording_address'=>'录音地址',
+                'recording_address'=>'录音地址',
                 'recording_file'=>'录音文件',
                 'is_repeat'=>'是否重复',
                 'inspector_name'=>'审核人',
@@ -2300,7 +2300,7 @@ class DK_Staff__ExportRepository {
                     'A'=>10, 'B'=>20, 'C'=>20, 'D'=>20, 'E'=>20, 'F'=>20, 'G'=>20,
                     'H'=>20, 'I'=>20, 'J'=>20, 'K'=>20, 'L'=>20, 'M'=>20, 'N'=>20,
                     'O'=>20, 'P'=>20, 'Q'=>20, 'R'=>20, 'S'=>20, 'T'=>60,
-                    'U'=>60, 'V'=>20, 'W'=>20, 'X'=>20, 'Y'=>20, 'Z'=>20
+                    'U'=>60, 'V'=>60, 'W'=>20, 'X'=>20, 'Y'=>20, 'Z'=>20
                 ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
