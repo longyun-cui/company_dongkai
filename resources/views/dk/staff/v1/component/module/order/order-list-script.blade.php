@@ -1491,6 +1491,20 @@
                 }
             });
         });
+        // 【设置】【录音】播放速度
+        $(".main-wrapper").on('click', 'input[name="confirming--recording-speed"]', function() {
+            var $speed = $('input[name="confirming--recording-speed"]:checked').val();
+            console.log($speed);
+
+            $('input[name="recording-speed"]').val($speed);
+
+            $('#modal--for--order--item-appealed-confirming audio').each(function() {
+                if (this.played)
+                {
+                    this.playbackRate = $speed; // 默认值1.0，范围0.5-4.0
+                }
+            });
+        });
 
         // 【获取录音】
         $(".main-wrapper").on('click', ".order--item-recording-list-get-submit", function() {
